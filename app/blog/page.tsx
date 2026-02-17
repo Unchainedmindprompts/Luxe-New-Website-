@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 
@@ -34,12 +35,20 @@ export default function BlogPage() {
       />
 
       {/* Hero */}
-      <section className="bg-cream pb-12 md:pb-16">
-        <div className="container-luxe max-w-4xl">
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
+      <section className="relative pt-24 md:pt-32 pb-12 md:pb-16 overflow-hidden min-h-[350px] md:min-h-[400px] flex items-center">
+        <Image
+          src="/images/top-down-bottom-up-shades.jpeg"
+          alt="Living room with top-down bottom-up shades overlooking a lake"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-charcoal/55" />
+        <div className="container-luxe relative max-w-4xl">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white leading-tight">
             Window Treatment Insights
           </h1>
-          <p className="mt-4 text-lg text-warm-gray-600 leading-relaxed">
+          <p className="mt-4 text-lg text-warm-gray-200 leading-relaxed">
             Expert advice, buying guides, and design inspiration from nearly 20 years
             of hands-on experience in Northern Idaho homes.
           </p>
