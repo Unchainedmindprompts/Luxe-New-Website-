@@ -50,10 +50,19 @@ export default function ConciergeChat() {
         }),
       });
       const data = await res.json();
+      if (data.error) {
+        console.error("Chat API error:", data.error);
+      }
       if (data.message) {
         setMessages([initialUserMessage, { role: "assistant", content: data.message }]);
+      } else {
+        setMessages([initialUserMessage, {
+          role: "assistant",
+          content: `Hey there! Welcome to Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`,
+        }]);
       }
-    } catch {
+    } catch (err) {
+      console.error("Chat fetch error:", err);
       setMessages([initialUserMessage, {
         role: "assistant",
         content: `Hey there! Welcome to Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`,
@@ -79,10 +88,22 @@ export default function ConciergeChat() {
         body: JSON.stringify({ messages: updatedMessages }),
       });
       const data = await res.json();
+      if (data.error) {
+        console.error("Chat API error:", data.error);
+      }
       if (data.message) {
         setMessages([...updatedMessages, { role: "assistant", content: data.message }]);
+      } else {
+        setMessages([
+          ...updatedMessages,
+          {
+            role: "assistant",
+            content: `I'm having a little trouble right now. Why don't you give Mark a call at ${BUSINESS.phone}? He'd be happy to help you directly.`,
+          },
+        ]);
       }
-    } catch {
+    } catch (err) {
+      console.error("Chat fetch error:", err);
       setMessages([
         ...updatedMessages,
         {

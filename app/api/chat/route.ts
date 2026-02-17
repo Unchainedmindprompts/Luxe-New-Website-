@@ -1,6 +1,9 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 
+// Allow up to 30 seconds for Claude API responses on Vercel
+export const maxDuration = 30;
+
 const SYSTEM_PROMPT = `You are Mark's AI concierge assistant at Luxe Window Works, a premium custom window treatment business in Northern Idaho. You are NOT Mark — you're his knowledgeable assistant helping potential customers figure out what they need.
 
 Your personality: Warm, knowledgeable, unpretentious. Think of yourself as a friend who happens to know everything about window treatments. You never sound like a chatbot or a sales script.
@@ -55,8 +58,9 @@ export async function POST(request: NextRequest) {
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
+      console.error("ANTHROPIC_API_KEY is not set");
       return NextResponse.json(
-        { error: "API configuration error" },
+        { error: "API key not configured. Set ANTHROPIC_API_KEY in Vercel environment variables." },
         { status: 500 }
       );
     }
@@ -79,8 +83,28 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: text });
   } catch (error) {
     console.error("Chat API error:", error);
+
+    if (error instanceof Anthropic.AuthenticationError) {
+      return NextResponse.json(
+        { error: "Invalid API key. Check your ANTHROPIC_API_KEY in Vercel environment variables." },
+        { status: 401 }
+      );
+    }
+    if (error instanceof Anthropic.RateLimitError) {
+      return NextResponse.json(
+        { error: "Rate limited. Please try again in a moment." },
+        { status: 429 }
+      );
+    }
+    if (error instanceof Anthropic.BadRequestError) {
+      return NextResponse.json(
+        { error: `Bad request: ${error.message}` },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
-      { error: "Failed to get response" },
+      { error: "Failed to get response. Please try again." },
       { status: 500 }
     );
   }
