@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": ">=18.17.0"
+  },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.74.0",
     "next": "14.2.35",

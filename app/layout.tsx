@@ -11,10 +11,7 @@ const geistSans = localFont({
   display: "swap",
 });
 
-// Playfair Display will be loaded via Google Fonts CDN in production.
-// For local/build, we use the Geist font as a variable placeholder and
-// rely on the CSS fallback chain (Georgia, serif) defined in tailwind.config.ts.
-const playfairFallback = localFont({
+const geistSerif = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-playfair",
   weight: "100 900",
@@ -67,16 +64,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${playfairFallback.variable}`}>
-      <head>
-        {/* Load premium fonts from Google Fonts CDN in production */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`${geistSans.variable} ${geistSerif.variable}`}>
       <body className="font-sans antialiased bg-warm-white text-charcoal">
         <Header />
         <main className="min-h-screen">{children}</main>
