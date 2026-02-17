@@ -55,11 +55,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
     if (!apiKey) {
-      console.error("ANTHROPIC_API_KEY is not set in environment variables");
       return NextResponse.json(
-        { error: "API key not configured" },
+        { error: "ANTHROPIC_API_KEY not set" },
         { status: 500 }
       );
     }
