@@ -200,15 +200,13 @@ export default function HomePage() {
       <section className="py-20 md:py-28 bg-linen/40">
         <div className="container-luxe">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Photo placeholder */}
-            <div className="aspect-[4/5] bg-warm-gray-200 rounded-2xl flex items-center justify-center order-2 lg:order-1">
-              <div className="text-center p-8">
-                <svg className="w-16 h-16 text-warm-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <p className="text-warm-gray-500 text-sm font-medium">Professional photo of Mark</p>
-                <p className="text-warm-gray-400 text-xs mt-1">Real photography to be added</p>
-              </div>
+            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden order-2 lg:order-1">
+              <Image
+                src="/images/mark-photo.png"
+                alt="Mark, owner and installer at Luxe Window Works"
+                fill
+                className="object-cover"
+              />
             </div>
 
             <div className="order-1 lg:order-2">
