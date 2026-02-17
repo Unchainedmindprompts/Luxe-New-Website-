@@ -8,16 +8,12 @@ interface Message {
   content: string;
 }
 
-const FALLBACK_GREETING = `Hey there! Welcome to Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`;
-
-const FALLBACK_ERROR = `I'm having a little trouble right now. Why don't you give Mark a call at ${BUSINESS.phone}? He'd be happy to help you directly.`;
-
 const INITIAL_USER_MESSAGE: Message = {
   role: "user",
   content: "Hi, I'm interested in window treatments for my home.",
 };
 
-async function fetchChat(messages: Message[]): Promise<string> {
+async function fetchChat(messages: Message[]): Promise<{ reply: string; error: string }> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 25000);
 
@@ -29,19 +25,24 @@ async function fetchChat(messages: Message[]): Promise<string> {
       signal: controller.signal,
     });
 
-    const text = await res.text();
+    const rawText = await res.text();
     let data;
     try {
-      data = JSON.parse(text);
+      data = JSON.parse(rawText);
     } catch {
-      console.error("Non-JSON response from /api/chat:", text.slice(0, 200));
-      return "";
+      return { reply: "", error: `Non-JSON response (${res.status}): ${rawText.slice(0, 100)}` };
     }
 
-    if (data.error) {
-      console.error("Chat API error:", data.error);
+    if (data.message) {
+      return { reply: data.message, error: "" };
     }
-    return data.message || "";
+    return { reply: "", error: data.error || `Unexpected response (${res.status})` };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.includes("abort")) {
+      return { reply: "", error: "Request timed out (25s)" };
+    }
+    return { reply: "", error: `Network error: ${msg}` };
   } finally {
     clearTimeout(timeout);
   }
@@ -73,19 +74,35 @@ export default function ConciergeChat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
+  const getFallbackGreeting = (debugInfo?: string) => {
+    const base = `Hey there! Welcome to Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`;
+    if (debugInfo) {
+      return `${base}\n\n[Debug: ${debugInfo}]`;
+    }
+    return base;
+  };
+
+  const getFallbackError = (debugInfo?: string) => {
+    const base = `I'm having a little trouble right now. Why don't you give Mark a call at ${BUSINESS.phone}? He'd be happy to help you directly.`;
+    if (debugInfo) {
+      return `${base}\n\n[Debug: ${debugInfo}]`;
+    }
+    return base;
+  };
+
   const startConversation = async () => {
     setIsLoading(true);
     try {
-      const reply = await fetchChat([INITIAL_USER_MESSAGE]);
+      const { reply, error } = await fetchChat([INITIAL_USER_MESSAGE]);
       setMessages([
         INITIAL_USER_MESSAGE,
-        { role: "assistant", content: reply || FALLBACK_GREETING },
+        { role: "assistant", content: reply || getFallbackGreeting(error || undefined) },
       ]);
     } catch (err) {
-      console.error("Chat fetch error:", err);
+      const msg = err instanceof Error ? err.message : String(err);
       setMessages([
         INITIAL_USER_MESSAGE,
-        { role: "assistant", content: FALLBACK_GREETING },
+        { role: "assistant", content: getFallbackGreeting(msg) },
       ]);
     } finally {
       setIsLoading(false);
@@ -103,16 +120,16 @@ export default function ConciergeChat() {
     setIsLoading(true);
 
     try {
-      const reply = await fetchChat(updatedMessages);
+      const { reply, error } = await fetchChat(updatedMessages);
       setMessages([
         ...updatedMessages,
-        { role: "assistant", content: reply || FALLBACK_ERROR },
+        { role: "assistant", content: reply || getFallbackError(error || undefined) },
       ]);
     } catch (err) {
-      console.error("Chat fetch error:", err);
+      const msg = err instanceof Error ? err.message : String(err);
       setMessages([
         ...updatedMessages,
-        { role: "assistant", content: FALLBACK_ERROR },
+        { role: "assistant", content: getFallbackError(msg) },
       ]);
     } finally {
       setIsLoading(false);
@@ -162,7 +179,7 @@ export default function ConciergeChat() {
                 className={`chat-message-enter flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                  className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-line ${
                     msg.role === "user"
                       ? "bg-charcoal text-white rounded-br-md"
                       : "bg-white text-charcoal border border-warm-gray-200 rounded-bl-md shadow-sm"
