@@ -34,6 +34,11 @@ export default function ConciergeChat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
+  const initialUserMessage: Message = {
+    role: "user",
+    content: "Hi, I'm interested in window treatments for my home.",
+  };
+
   const startConversation = async () => {
     setIsLoading(true);
     try {
@@ -41,15 +46,15 @@ export default function ConciergeChat() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [{ role: "user", content: "Hi, I'm interested in window treatments for my home." }],
+          messages: [initialUserMessage],
         }),
       });
       const data = await res.json();
       if (data.message) {
-        setMessages([{ role: "assistant", content: data.message }]);
+        setMessages([initialUserMessage, { role: "assistant", content: data.message }]);
       }
     } catch {
-      setMessages([{
+      setMessages([initialUserMessage, {
         role: "assistant",
         content: `Hey there! Welcome to Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`,
       }]);
@@ -126,7 +131,7 @@ export default function ConciergeChat() {
 
           {/* Messages */}
           <div className="chat-messages h-80 sm:h-96 overflow-y-auto p-6 space-y-4 bg-cream/30">
-            {messages.map((msg, i) => (
+            {messages.slice(1).map((msg, i) => (
               <div
                 key={i}
                 className={`chat-message-enter flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
