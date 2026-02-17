@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import ConciergeChat from "@/components/ConciergeChat";
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 
@@ -55,15 +56,22 @@ export default function HomePage() {
       <LocalBusinessSchema />
 
       {/* Hero Section */}
-      <section className="relative bg-cream pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-linen/50 to-transparent" />
+      <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
+        <Image
+          src="/images/hero-living-room.png"
+          alt="Cozy living room with custom window treatments and a winter mountain view"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-charcoal/55" />
         <div className="container-luxe relative">
           <div className="max-w-3xl">
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-charcoal leading-[1.1] tracking-tight text-balance">
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight text-balance">
               Finally, Window Coverings That Actually Fit Your Home{" "}
-              <span className="italic text-warm-gray-600">and Your Life</span>
+              <span className="italic text-warm-gray-300">and Your Life</span>
             </h1>
-            <p className="mt-6 md:mt-8 text-lg md:text-xl text-warm-gray-600 leading-relaxed max-w-2xl">
+            <p className="mt-6 md:mt-8 text-lg md:text-xl text-warm-gray-200 leading-relaxed max-w-2xl">
               Free in-home consultation with Mark — nearly 20 years of hands-on expertise,
               not a sales pitch. He&apos;ll help you find exactly what works for your space,
               your style, and your budget.
@@ -80,7 +88,7 @@ export default function HomePage() {
               </a>
               <a
                 href={BUSINESS.phoneHref}
-                className="inline-flex items-center justify-center gap-2 border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-white font-semibold px-8 py-4 rounded-full text-lg transition-all"
+                className="inline-flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white hover:text-charcoal font-semibold px-8 py-4 rounded-full text-lg transition-all"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
