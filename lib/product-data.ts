@@ -46,6 +46,7 @@ export const productPages: Record<string, ProductPageData> = {
   "solar-shades": {
     slug: "solar-shades",
     name: "Solar Shades",
+    image: "/images/solar-shades.jpeg",
     headline: "Love Your View but Hate the Glare?",
     subheadline: "Solar shades let you keep the scenery while blocking the UV rays, heat gain, and glare that come with it.",
     problem: "Living in Northern Idaho means incredible views — Coeur d'Alene Lake, the Bitterroot Range, sunsets over the Rathdrum Prairie. But those west-facing and south-facing windows that give you those views also bring intense afternoon glare, UV damage to your furniture and floors, and serious heat gain in summer. You shouldn't have to choose between your view and your comfort.",
@@ -73,6 +74,7 @@ export const productPages: Record<string, ProductPageData> = {
   "roller-shades": {
     slug: "roller-shades",
     name: "Roller Shades",
+    image: "/images/roller-shades.jpeg",
     headline: "Clean Lines. Simple Function. No Fuss.",
     subheadline: "Roller shades deliver a sleek, modern look that works with any design style — without overcomplicating things.",
     problem: "Not every window needs a complex treatment. Sometimes you want something clean, functional, and understated that doesn't compete with your architecture or decor. But 'simple' doesn't have to mean cheap or boring — and it definitely shouldn't mean poorly made or poorly fitted.",
