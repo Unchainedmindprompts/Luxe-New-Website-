@@ -8,6 +8,45 @@ interface Message {
   content: string;
 }
 
+const FALLBACK_GREETING = `Hey there! Welcome to Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`;
+
+const FALLBACK_ERROR = `I'm having a little trouble right now. Why don't you give Mark a call at ${BUSINESS.phone}? He'd be happy to help you directly.`;
+
+const INITIAL_USER_MESSAGE: Message = {
+  role: "user",
+  content: "Hi, I'm interested in window treatments for my home.",
+};
+
+async function fetchChat(messages: Message[]): Promise<string> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 25000);
+
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages }),
+      signal: controller.signal,
+    });
+
+    const text = await res.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      console.error("Non-JSON response from /api/chat:", text.slice(0, 200));
+      return "";
+    }
+
+    if (data.error) {
+      console.error("Chat API error:", data.error);
+    }
+    return data.message || "";
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export default function ConciergeChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -34,41 +73,23 @@ export default function ConciergeChat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  const initialUserMessage: Message = {
-    role: "user",
-    content: "Hi, I'm interested in window treatments for my home.",
-  };
-
   const startConversation = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: [initialUserMessage],
-        }),
-      });
-      const data = await res.json();
-      if (data.error) {
-        console.error("Chat API error:", data.error);
-      }
-      if (data.message) {
-        setMessages([initialUserMessage, { role: "assistant", content: data.message }]);
-      } else {
-        setMessages([initialUserMessage, {
-          role: "assistant",
-          content: `Hey there! Welcome to Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`,
-        }]);
-      }
+      const reply = await fetchChat([INITIAL_USER_MESSAGE]);
+      setMessages([
+        INITIAL_USER_MESSAGE,
+        { role: "assistant", content: reply || FALLBACK_GREETING },
+      ]);
     } catch (err) {
       console.error("Chat fetch error:", err);
-      setMessages([initialUserMessage, {
-        role: "assistant",
-        content: `Hey there! Welcome to Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`,
-      }]);
+      setMessages([
+        INITIAL_USER_MESSAGE,
+        { role: "assistant", content: FALLBACK_GREETING },
+      ]);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const sendMessage = async (e: React.FormEvent) => {
@@ -82,37 +103,20 @@ export default function ConciergeChat() {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: updatedMessages }),
-      });
-      const data = await res.json();
-      if (data.error) {
-        console.error("Chat API error:", data.error);
-      }
-      if (data.message) {
-        setMessages([...updatedMessages, { role: "assistant", content: data.message }]);
-      } else {
-        setMessages([
-          ...updatedMessages,
-          {
-            role: "assistant",
-            content: `I'm having a little trouble right now. Why don't you give Mark a call at ${BUSINESS.phone}? He'd be happy to help you directly.`,
-          },
-        ]);
-      }
+      const reply = await fetchChat(updatedMessages);
+      setMessages([
+        ...updatedMessages,
+        { role: "assistant", content: reply || FALLBACK_ERROR },
+      ]);
     } catch (err) {
       console.error("Chat fetch error:", err);
       setMessages([
         ...updatedMessages,
-        {
-          role: "assistant",
-          content: `I'm having a little trouble right now. Why don't you give Mark a call at ${BUSINESS.phone}? He'd be happy to help you directly.`,
-        },
+        { role: "assistant", content: FALLBACK_ERROR },
       ]);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (

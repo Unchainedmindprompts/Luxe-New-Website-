@@ -1,4 +1,3 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 
 // Allow up to 30 seconds for Claude API responses on Vercel
@@ -58,53 +57,51 @@ export async function POST(request: NextRequest) {
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
-      console.error("ANTHROPIC_API_KEY is not set");
+      console.error("ANTHROPIC_API_KEY is not set in environment variables");
       return NextResponse.json(
-        { error: "API key not configured. Set ANTHROPIC_API_KEY in Vercel environment variables." },
+        { error: "API key not configured" },
         { status: 500 }
       );
     }
 
-    const client = new Anthropic({ apiKey });
-
-    const response = await client.messages.create({
-      model: "claude-sonnet-4-5-20250929",
-      max_tokens: 1024,
-      system: SYSTEM_PROMPT,
-      messages: messages.map((m: { role: string; content: string }) => ({
-        role: m.role as "user" | "assistant",
-        content: m.content,
-      })),
+    const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-5-20250929",
+        max_tokens: 1024,
+        system: SYSTEM_PROMPT,
+        messages: messages.map((m: { role: string; content: string }) => ({
+          role: m.role,
+          content: m.content,
+        })),
+      }),
     });
 
-    const textBlock = response.content.find((block) => block.type === "text");
-    const text = textBlock && "text" in textBlock ? textBlock.text : "";
+    if (!anthropicRes.ok) {
+      const errBody = await anthropicRes.text();
+      console.error(`Anthropic API ${anthropicRes.status}: ${errBody}`);
+      return NextResponse.json(
+        { error: `API error (${anthropicRes.status})` },
+        { status: anthropicRes.status }
+      );
+    }
+
+    const data = await anthropicRes.json();
+    const textBlock = data.content?.find(
+      (block: { type: string }) => block.type === "text"
+    );
+    const text = textBlock?.text || "";
 
     return NextResponse.json({ message: text });
   } catch (error) {
     console.error("Chat API error:", error);
-
-    if (error instanceof Anthropic.AuthenticationError) {
-      return NextResponse.json(
-        { error: "Invalid API key. Check your ANTHROPIC_API_KEY in Vercel environment variables." },
-        { status: 401 }
-      );
-    }
-    if (error instanceof Anthropic.RateLimitError) {
-      return NextResponse.json(
-        { error: "Rate limited. Please try again in a moment." },
-        { status: 429 }
-      );
-    }
-    if (error instanceof Anthropic.BadRequestError) {
-      return NextResponse.json(
-        { error: `Bad request: ${error.message}` },
-        { status: 400 }
-      );
-    }
-
     return NextResponse.json(
-      { error: "Failed to get response. Please try again." },
+      { error: "Failed to get response" },
       { status: 500 }
     );
   }
