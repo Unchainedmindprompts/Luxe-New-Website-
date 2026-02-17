@@ -74,20 +74,12 @@ export default function ConciergeChat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  const getFallbackGreeting = (debugInfo?: string) => {
-    const base = `Hey there! Welcome to Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`;
-    if (debugInfo) {
-      return `${base}\n\n[Debug: ${debugInfo}]`;
-    }
-    return base;
+  const getFallbackGreeting = () => {
+    return `Hey there! Welcome to Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`;
   };
 
-  const getFallbackError = (debugInfo?: string) => {
-    const base = `I'm having a little trouble right now. Why don't you give Mark a call at ${BUSINESS.phone}? He'd be happy to help you directly.`;
-    if (debugInfo) {
-      return `${base}\n\n[Debug: ${debugInfo}]`;
-    }
-    return base;
+  const getFallbackError = () => {
+    return `I'm having a little trouble right now. Why don't you give Mark a call at ${BUSINESS.phone}? He'd be happy to help you directly.`;
   };
 
   const startConversation = async () => {
@@ -96,13 +88,13 @@ export default function ConciergeChat() {
       const { reply, error } = await fetchChat([INITIAL_USER_MESSAGE]);
       setMessages([
         INITIAL_USER_MESSAGE,
-        { role: "assistant", content: reply || getFallbackGreeting(error || undefined) },
+        { role: "assistant", content: reply || getFallbackGreeting() },
       ]);
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       setMessages([
         INITIAL_USER_MESSAGE,
-        { role: "assistant", content: getFallbackGreeting(msg) },
+        { role: "assistant", content: getFallbackGreeting() },
       ]);
     } finally {
       setIsLoading(false);
@@ -123,13 +115,13 @@ export default function ConciergeChat() {
       const { reply, error } = await fetchChat(updatedMessages);
       setMessages([
         ...updatedMessages,
-        { role: "assistant", content: reply || getFallbackError(error || undefined) },
+        { role: "assistant", content: reply || getFallbackError() },
       ]);
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       setMessages([
         ...updatedMessages,
-        { role: "assistant", content: getFallbackError(msg) },
+        { role: "assistant", content: getFallbackError() },
       ]);
     } finally {
       setIsLoading(false);
