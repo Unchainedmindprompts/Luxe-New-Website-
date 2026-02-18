@@ -4,12 +4,12 @@ slug: why-you-should-never-inside-mount-corded-woven-wood-shades
 date: "2025-08-29T22:17:50.000Z"
 author: Mark Abplanalp
 excerpt: "Design Tip: Why You Should Never Inside-Mount a Waterfall Woven Wood Shade with Cords Design Tip: Why You Should Never Inside-Mount a Waterfall Woven Wood..."
-featuredImage: "/images/blog/2025-08/IMG_2968.jpeg"
+featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/08/IMG_2968.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle]
 wordCount: 1246
 ---
-<figure><img src="/images/blog/2025-08/IMG_2968.jpeg" alt="Design Tip: Why You Should Never Inside-Mount a Waterfall Woven Wood Shade with Cords" /></figure>
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/08/IMG_2968.jpeg" alt="Design Tip: Why You Should Never Inside-Mount a Waterfall Woven Wood Shade with Cords" /></figure>
 <h1><strong>Design Tip: Why You Should Never Inside-Mount a Waterfall Woven Wood Shade with Cords</strong></h1>
 <h2><strong>Design Tip: Why You Should Never Inside-Mount a Waterfall Woven Wood Shade with Cords</strong></h2>
 <p>Sarah and David had a vision for their new sunroom in Post Falls. They wanted something that felt organic and luxurious, a perfect blend of the indoors with the stunning Idaho outdoors. After some research, they fell in love with <strong>woven wood shades</strong>. The natural textures and rich colors seemed like the perfect fit.</p>

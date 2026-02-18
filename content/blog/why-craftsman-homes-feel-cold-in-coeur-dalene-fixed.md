@@ -4,12 +4,12 @@ slug: why-craftsman-homes-feel-cold-in-coeur-dalene-fixed
 date: "2025-10-08T13:36:01.000Z"
 author: Mark Abplanalp
 excerpt: "By Mark Abplanalp, Luxe Window Works Founder Here in North Idaho, we cherish our classic homes. They tell a story—from the sturdy Craftsman bungalows lining..."
-featuredImage: "/images/blog/2025-10/Gemini_Generated_Image_b89ctfb89ctfb89c.png"
+featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Gemini_Generated_Image_b89ctfb89ctfb89c.png"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle]
 wordCount: 1214
 ---
-<figure><img src="/images/blog/2025-10/Gemini_Generated_Image_b89ctfb89ctfb89c.png" alt="The Draft Trap: Why Your Beloved Craftsman Feels Cold, and How Energy Efficient Cellular Shades Coeur d'Alene Can Fix It" /></figure>
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Gemini_Generated_Image_b89ctfb89ctfb89c.png" alt="The Draft Trap: Why Your Beloved Craftsman Feels Cold, and How Energy Efficient Cellular Shades Coeur d'Alene Can Fix It" /></figure>
 <p><strong>By Mark Abplanalp, Luxe Window Works Founder</strong></p>
 <p>Here in North Idaho, we cherish our classic homes. They tell a story—from the sturdy Craftsman bungalows lining the streets of Coeur d'Alene's historic district to the century-old farmhouses tucked away in Post Falls. We fall in love with the deep porches, the wood trim, and the character that modern construction often lacks.</p>
 <p>But let’s be honest: that charm comes with a price, and that price is often paid in drafty rooms and surprisingly high winter energy bills.</p>

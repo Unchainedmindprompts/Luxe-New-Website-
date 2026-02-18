@@ -4,12 +4,12 @@ slug: u-block-blackout-shades-for-better-sleep-in-coeur-dalene
 date: "2025-09-28T21:17:32.000Z"
 author: Mark Abplanalp
 excerpt: "The Investment in Rest: Why Active Homeowners in Coeur d’Alene Choose U-Block Blackout Shades In the serene landscapes of Northern Idaho, where long summer..."
-featuredImage: "/images/blog/2025-09/IMG_3215.jpeg"
+featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/09/IMG_3215.jpeg"
 category: Custom Window Coverings
 tags: [Home Imrovement, home-decor]
 wordCount: 1122
 ---
-<figure><img src="/images/blog/2025-09/IMG_3215.jpeg" alt="The Secret to Your Best Sleep: How Luxe Window Works Masters Light Control with U-Block Blackout Shades" /></figure>
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/09/IMG_3215.jpeg" alt="The Secret to Your Best Sleep: How Luxe Window Works Masters Light Control with U-Block Blackout Shades" /></figure>
 <hr /><h1><strong>The Investment in Rest: Why Active Homeowners in Coeur d’Alene Choose U-Block Blackout Shades</strong></h1>
 <p>In the serene landscapes of Northern Idaho, where long summer days bleed into late evenings and winter mornings can be incredibly dark, our relationship with light is unique. At Luxe Window Works, we’ve spent years helping homeowners navigate this delicate balance—finding the perfect blend of natural light to invigorate spaces and optimal darkness to ensure peace and privacy.</p>
 <p>But there’s one area where precise light control isn’t just about aesthetics; it’s about your well-being: <strong>restorative sleep.</strong></p>
@@ -102,7 +102,7 @@ wordCount: 1122
       "@type": "LocalBusiness",
       "@id": "https://luxewindowworks.com/#localbusiness",
       "name": "Luxe Window Works",
-      "image": "/images/blog/2025-05/luxe-window-works-logo.png",
+      "image": "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/05/luxe-window-works-logo.png",
       "url": "https://luxewindowworks.com/",
       "telephone": "+1-208-660-8643",
       "priceRange": "$$",

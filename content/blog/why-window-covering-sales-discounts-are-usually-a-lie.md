@@ -4,12 +4,12 @@ slug: why-window-covering-sales-discounts-are-usually-a-lie
 date: "2025-10-14T15:04:08.000Z"
 author: Mark Abplanalp
 excerpt: "I'm going to tell you something that might make you mad. But you deserve to hear it. That \"70% off\" sale the national franchise is running? It's a lie. The..."
-featuredImage: "/images/blog/2025-10/Overwhelmed-by-Window-Treatment-Choices.png"
+featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Overwhelmed-by-Window-Treatment-Choices.png"
 category: Custom Window Coverings
 tags: [decor, home-decor, home-improvement, interior-design]
 wordCount: 2421
 ---
-<figure><img src="/images/blog/2025-10/Overwhelmed-by-Window-Treatment-Choices.png" alt="The Price is a Lie: Why Luxe Window Works Rejects the High-Pressure Sales Gimmicks Used in the Window Covering Industry" /></figure>
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Overwhelmed-by-Window-Treatment-Choices.png" alt="The Price is a Lie: Why Luxe Window Works Rejects the High-Pressure Sales Gimmicks Used in the Window Covering Industry" /></figure>
 <p>I'm going to tell you something that might make you mad. But you deserve to hear it.</p>
 <p>That "70% off" sale the national franchise is running? It's a lie. The "free shop card" your warehouse club offers? You're paying for it—every penny. And that sweaty, rushed feeling you get when a window covering salesperson shows up at your door with a three-ring binder and a "manager I need to call"? That's manufactured pressure, designed to separate you from your money before you have time to think.</p>
 <p>I spent 22 years in this industry. I've worked for the big names, the franchises, the "we're everywhere" brands. And I've watched good people—hardworking North Idaho families—get played by pricing games that would embarrass a used car lot.</p>

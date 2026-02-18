@@ -4,12 +4,12 @@ slug: smart-shade-motorization-guide-for-northern-idaho-homes
 date: "2025-10-18T15:34:53.000Z"
 author: Mark Abplanalp
 excerpt: "By Mark Abplanalp, Owner, Luxe Window Works I'll never forget the call I got from a homeowner in Post Falls last spring. She and her husband had just broken..."
-featuredImage: "/images/blog/2025-10/ChatGPT-Image-Oct-18-2025-at-08_17_54-AM-1024x683.png"
+featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/ChatGPT-Image-Oct-18-2025-at-08_17_54-AM-1024x683.png"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle, Motorized-shades]
 wordCount: 8296
 ---
-<figure><img src="/images/blog/2025-10/ChatGPT-Image-Oct-18-2025-at-08_17_54-AM-1024x683.png" alt="The Smart Shade Showdown: Hardwired vs. RF vs. IR vs. Z-Wave — What Northern Idaho Homeowners Really Need to Know" /></figure>
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/ChatGPT-Image-Oct-18-2025-at-08_17_54-AM-1024x683.png" alt="The Smart Shade Showdown: Hardwired vs. RF vs. IR vs. Z-Wave — What Northern Idaho Homeowners Really Need to Know" /></figure>
 <p><em>By Mark Abplanalp, Owner, Luxe Window Works</em></p>
 <p>I'll never forget the call I got from a homeowner in Post Falls last spring. She and her husband had just broken ground on their dream home—a stunning modern farmhouse with floor-to-ceiling windows overlooking the Spokane River. They'd budgeted $45,000 for motorized shades throughout the house because they wanted everything automated: Alexa control, schedules for energy management, one-touch scenes for movie nights.</p>
 <p>Their architect had spec'd Z-Wave motors. Their electrician was pushing hardwired. Their interior designer mentioned something about "RF compatibility." And their builder? He just wanted to know where to rough in the electrical before drywall went up.</p>
@@ -19,7 +19,7 @@ wordCount: 8296
 <p>Choose right, and motorized shades become the invisible luxury they're supposed to be—seamless, reliable, and genuinely making your life easier while saving energy in Northern Idaho's demanding climate.</p>
 <p>After nearly two decades installing motorized window treatments across the Pacific North West and the surrounding region, I've tested every platform, lived through every compatibility disaster, and learned exactly which technologies deliver and which ones leave homeowners frustrated. This is everything you need to know before you make a decision you'll live with for the next 15-20 years.</p>
 <h2><strong>The Motorization Mistake: Why "Smart" Doesn't Always Mean "Smart Choice"</strong></h2>
-<figure><img src="/images/blog/2025-07/img_2400-1.webp" alt="The Smart Shade Showdown: Hardwired vs. RF vs. IR vs. Z-Wave — What Northern Idaho Homeowners Really Need to Know" />
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/07/img_2400-1.webp" alt="The Smart Shade Showdown: Hardwired vs. RF vs. IR vs. Z-Wave — What Northern Idaho Homeowners Really Need to Know" />
 <figcaption>Banded shade in a modern living room—combining light control with elegant, layered design.</figcaption>
 </figure>
 <p>Here's what the big-box stores and online retailers won't tell you: <strong>most motorization failures aren't motor failures—they're platform mismatches</strong>.</p>

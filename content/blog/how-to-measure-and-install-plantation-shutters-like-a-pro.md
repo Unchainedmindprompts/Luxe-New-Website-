@@ -4,12 +4,12 @@ slug: how-to-measure-and-install-plantation-shutters-like-a-pro
 date: "2025-08-27T15:15:47.000Z"
 author: Mark Abplanalp
 excerpt: "How to Measure and Install Plantation Shutters Like a Pro When you see a home with plantation shutters, you know it's a home that's been thoughtfully designed...."
-featuredImage: "/images/blog/2025-07/2014_her_living-room.jpeg"
+featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/07/2014_her_living-room.jpeg"
 category: Custom Window Coverings
 tags: [home-decor, interior-design, lifestyle]
 wordCount: 1364
 ---
-<figure><img src="/images/blog/2025-07/2014_her_living-room.jpeg" alt="How to Measure and Install Plantation Shutters Like a Pro" /></figure>
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/07/2014_her_living-room.jpeg" alt="How to Measure and Install Plantation Shutters Like a Pro" /></figure>
 <h1><strong>How to Measure and Install Plantation Shutters Like a Pro</strong></h1>
 <p>When you see a home with plantation shutters, you know it's a home that's been thoughtfully designed. These aren't just window coverings; they're a timeless, elegant upgrade that adds instant curb appeal and lasting value. Here in Northern Idaho, where our summers can be bright and our winters cold, plantation shutters also offer a beautiful way to manage light, privacy, and energy efficiency.</p>
 <p>But what if you're a hands-on homeowner and you're thinking of tackling this project yourself? As someone who’s spent years measuring and installing these, I can tell you it's a project that a motivated DIYer can certainly handle. However, it's also a project where the details truly matter. I'll walk you through the key steps, from measuring to installation, and show you why professional installation from a trusted company like Luxe Window Works is the surest path to a flawless finish.</p>
@@ -102,7 +102,7 @@ wordCount: 1364
     {
       "@type": "LocalBusiness",
       "name": "Luxe Window Works",
-      "image": "/images/blog/2025-01/Luxe-Logo.png",
+      "image": "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/01/Luxe-Logo.png",
       "@id": "https://luxewindowworks.com/#localbusines
 
 </script>

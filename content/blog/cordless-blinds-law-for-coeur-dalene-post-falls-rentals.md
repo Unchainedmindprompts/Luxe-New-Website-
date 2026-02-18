@@ -4,12 +4,12 @@ slug: cordless-blinds-law-for-coeur-dalene-post-falls-rentals
 date: "2025-10-03T13:07:40.000Z"
 author: Mark Abplanalp
 excerpt: "When you invest in Coeur d'Alene or Post Falls rental property , you’re making a calculated wager on asset appreciation and steady income. You manage the..."
-featuredImage: "/images/blog/2025-10/Gemini_Generated_Image_kdk8bfkdk8bfkdk8.png"
+featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Gemini_Generated_Image_kdk8bfkdk8bfkdk8.png"
 category: Custom Window Coverings
 tags: [Child-safety, diy, energy-efficiency, home-improvement, interior-design]
 wordCount: 1367
 ---
-<figure><img src="/images/blog/2025-10/Gemini_Generated_Image_kdk8bfkdk8bfkdk8.png" alt="The $100,000 Cord: How a New Federal Safety Law Protects Your CDA &amp; Post Falls Rental Portfolio" /></figure>
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Gemini_Generated_Image_kdk8bfkdk8bfkdk8.png" alt="The $100,000 Cord: How a New Federal Safety Law Protects Your CDA &amp; Post Falls Rental Portfolio" /></figure>
 <p>When you invest in <strong>Coeur d'Alene</strong> or <strong>Post Falls rental property</strong>, you’re making a calculated wager on asset appreciation and steady income. You manage the mortgage, the maintenance, the tenant vetting—you control the known risks.</p>
 <p>But what about the hidden risks? The one piece of household hardware that is now federally deemed a "substantial product hazard," opening your portfolio up to significant, entirely avoidable litigation?</p>
 <p>I’m Mark Abplanalp, and at Luxe Window Works, we don't just upgrade homes; we mitigate your property risk. Right now, there is a legal and financial clock ticking on every corded blind in every one of your rental units. The law has changed, and ignorance is no longer a defense.</p>

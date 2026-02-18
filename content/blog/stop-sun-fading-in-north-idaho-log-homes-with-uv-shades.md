@@ -4,12 +4,12 @@ slug: stop-sun-fading-in-north-idaho-log-homes-with-uv-shades
 date: "2025-10-02T03:30:02.000Z"
 author: Mark Abplanalp
 excerpt: "By Mark Abplanalp If you own a custom log or timber frame home in Coeur d’Alene, Sandpoint, or anywhere in the scenic North Idaho region , you didn’t just buy..."
-featuredImage: "/images/blog/2025-10/Gemini_Generated_Image_q3mdf2q3mdf2q3md.png"
+featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Gemini_Generated_Image_q3mdf2q3mdf2q3md.png"
 category: Custom Window Coverings
 tags: [energy-efficiency, Home Imrovement, home-decor, interior-design, lifestyle]
 wordCount: 1000
 ---
-<figure><img src="/images/blog/2025-10/Gemini_Generated_Image_q3mdf2q3mdf2q3md.png" alt="Stopping Fading on Log Home Interiors: Permanent Asset Protection for Your North Idaho Retreat" /></figure>
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Gemini_Generated_Image_q3mdf2q3mdf2q3md.png" alt="Stopping Fading on Log Home Interiors: Permanent Asset Protection for Your North Idaho Retreat" /></figure>
 <p>By Mark Abplanalp</p>
 <p>If you own a custom log or timber frame home in <strong>Coeur d’Alene, Sandpoint, or anywhere in the scenic North Idaho region</strong>, you didn’t just buy a house—you invested in a legacy. You chose natural wood, vaulted ceilings, and sweeping views precisely because they embody the mountain lifestyle.</p>
 <p>But there’s a quiet, relentless enemy threatening that investment: the intense North Idaho sun.</p>

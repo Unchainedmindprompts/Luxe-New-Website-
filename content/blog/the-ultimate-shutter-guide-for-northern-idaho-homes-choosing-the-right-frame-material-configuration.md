@@ -4,12 +4,12 @@ slug: the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-fra
 date: "2025-10-30T21:07:54.000Z"
 author: Mark Abplanalp
 excerpt: "Living room shutters—classic appeal with customizable light control. By Mark Abplanalp, Owner of Luxe Window Works From lakeside humidity to deep winter..."
-featuredImage: "/images/blog/2025-07/img_2189.jpeg"
+featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/07/img_2189.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, Plantation-shutters]
 wordCount: 4293
 ---
-<figure><img src="/images/blog/2025-07/img_2189.jpeg" alt="The Ultimate Shutter Guide for Northern Idaho Homes: Choosing the Right Frame, Material &amp; Configuration" />
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/07/img_2189.jpeg" alt="The Ultimate Shutter Guide for Northern Idaho Homes: Choosing the Right Frame, Material &amp; Configuration" />
 <figcaption>Living room shutters—classic appeal with customizable light control.</figcaption>
 </figure>
 <p><strong>By Mark Abplanalp, Owner of Luxe Window Works</strong></p>
@@ -133,7 +133,7 @@ wordCount: 4293
 </ul>
 <p><strong>Best for:</strong> Modern builds, high-moisture areas, lakefront homes, and homeowners who want the most durable, low-maintenance option without a premium price jump over composite.</p>
 <h2><strong>Tilt Options, Divider Rails &amp; Panel Integrity</strong></h2>
-<figure><img src="/images/blog/2025-08/IMG_1863-768x1024.jpeg" alt="The Ultimate Shutter Guide for Northern Idaho Homes: Choosing the Right Frame, Material &amp; Configuration" /></figure>
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/08/IMG_1863-768x1024.jpeg" alt="The Ultimate Shutter Guide for Northern Idaho Homes: Choosing the Right Frame, Material &amp; Configuration" /></figure>
 <p>How you operate your shutters—and how the panels are structured—will affect both daily usability and long-term durability. Here's what you need to understand about tilt mechanisms and divider rails.</p>
 <h3><strong>Traditional Tilt Rod vs. Hidden Tilt</strong></h3>
 <p>The tilt rod is the vertical bar that runs down the center of the shutter panel. When you push or pull it, the louvers tilt open or closed.</p>

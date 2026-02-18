@@ -4,12 +4,12 @@ slug: made-in-usa-window-coverings-what-that-label-really-means-and-doesnt
 date: "2025-07-17T15:20:09.000Z"
 author: Mark Abplanalp
 excerpt: "When homeowners see \"Made in USA\" on window treatments, they think American craftsmanship, American jobs, and American quality standards. After nearly two..."
-featuredImage: "/images/blog/2025-09/Gemini_Generated_Image_nv95dhnv95dhnv95-1-1024x1024.png"
+featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/09/Gemini_Generated_Image_nv95dhnv95dhnv95-1-1024x1024.png"
 category: Custom Window Coverings
 tags: [china, economy, Home Imrovement, interior-design, politics, tariffs, trump]
 wordCount: 2968
 ---
-<figure><img src="/images/blog/2025-09/Gemini_Generated_Image_nv95dhnv95dhnv95-1-1024x1024.png" alt="What &quot;Made in USA&quot; Actually Means for Window Coverings (And What It Doesn't)"/></figure>
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/09/Gemini_Generated_Image_nv95dhnv95dhnv95-1-1024x1024.png" alt="What &quot;Made in USA&quot; Actually Means for Window Coverings (And What It Doesn't)"/></figure>
 
 <p>When homeowners see "Made in USA" on window treatments, they think American craftsmanship, American jobs, and American quality standards. After nearly two decades in this industry, I've watched how that label works in practice versus how consumers think it works—and the gap is bigger than most people realize.</p>
 <p>The window covering industry has become particularly skilled at appearing domestic while operating very differently behind the scenes. Federal labeling regulations create significant room for interpretation, trade agreements blur geographic boundaries, and strategic marketing language suggests American origin without technically claiming it.</p>

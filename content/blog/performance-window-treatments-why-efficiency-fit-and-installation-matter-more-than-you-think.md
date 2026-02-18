@@ -4,12 +4,12 @@ slug: performance-window-treatments-why-efficiency-fit-and-installation-matter-m
 date: "2025-07-17T15:24:40.000Z"
 author: Mark Abplanalp
 excerpt: "Most homeowners think window treatments are just about style—picking colors that match the sofa or finding something that \"looks nice.\" After nearly two..."
-featuredImage: "/images/blog/2025-08/IMG_0239-1024x768.jpeg"
+featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/08/IMG_0239-1024x768.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home, home-decor, home-improvement, interior-design]
 wordCount: 2731
 ---
-<figure><img src="/images/blog/2025-08/IMG_0239-1024x768.jpeg" alt="Performance Window Treatments: Why Efficiency, Fit, and Installation Matter More Than You Think"/></figure>
+<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/08/IMG_0239-1024x768.jpeg" alt="Performance Window Treatments: Why Efficiency, Fit, and Installation Matter More Than You Think"/></figure>
 <p>Most homeowners think window treatments are just about style—picking colors that match the sofa or finding something that "looks nice." After nearly two decades in this industry, here's what I've learned: your window coverings are actually a core part of your home's performance envelope, directly affecting light control, interior comfort, energy consumption, and how hard your HVAC system has to work.</p>
 <p>This isn't about upselling fancy features. It's about understanding that the right window treatment, properly installed, can transform how your home feels and functions year-round. In Northern Idaho's climate—with temperature swings from single digits in winter to 90s in summer—the difference between decorative shades and performance window treatments shows up every month in your utility bills and daily comfort.</p>
 <h2><strong>What Performance Window Treatments Actually Are</strong></h2>
@@ -132,7 +132,7 @@ wordCount: 2731
     {
       "@type": "LocalBusiness",
       "name": "Luxe Window Works",
-      "image": "/images/blog/2025-01/Luxe-Logo.png",
+      "image": "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/01/Luxe-Logo.png",
       "url": "https://luxewindowworks.com/",
       "telephone": "+1-208-917-3421",
       "address": {
