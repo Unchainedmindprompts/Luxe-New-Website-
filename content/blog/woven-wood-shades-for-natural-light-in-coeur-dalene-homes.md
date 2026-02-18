@@ -4,12 +4,12 @@ slug: woven-wood-shades-for-natural-light-in-coeur-dalene-homes
 date: "2025-09-23T17:29:46.000Z"
 author: Mark Abplanalp
 excerpt: "The Day I Fell in Love with Woven Woods It was a few years into my career, and I was on a consultation call with a new client, Sarah. She had just moved into..."
-featuredImage: "https://luxewindowworks.com/wp-content/uploads/2025/09/IMG_3197.jpeg"
+featuredImage: "/images/blog/2025-09/IMG_3197.jpeg"
 category: Custom Window Coverings
 tags: [decor, home-decor, Interior Design]
 wordCount: 379
 ---
-<figure><img src="https://luxewindowworks.com/wp-content/uploads/2025/09/IMG_3197.jpeg" alt="The Day I Fell in Love with Woven Woods" /></figure>
+<figure><img src="/images/blog/2025-09/IMG_3197.jpeg" alt="The Day I Fell in Love with Woven Woods" /></figure>
 <h3><strong>The Day I Fell in Love with Woven Woods</strong></h3>
 <p>It was a few years into my career, and I was on a consultation call with a new client, Sarah. She had just moved into her dream home—a place with big, beautiful windows overlooking a forested creek. She wanted something to soften the light without blocking that gorgeous view. She was looking for a solution that felt both natural and elegant.</p>
 <p>"I’ve looked at everything," she said, sounding a little defeated. "But nothing feels right. Blinds seem too harsh, and drapes just hide the windows."</p>

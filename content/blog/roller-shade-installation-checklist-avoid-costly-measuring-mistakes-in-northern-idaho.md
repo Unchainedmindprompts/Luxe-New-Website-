@@ -4,12 +4,12 @@ slug: roller-shade-installation-checklist-avoid-costly-measuring-mistakes-in-nor
 date: "2025-10-22T02:16:52.000Z"
 author: Mark Abplanalp
 excerpt: "By Mark Abplanalp, Owner, Luxe Window Works Last year I got a call from a homeowner in Post Falls with a problem that’s way more common than most people..."
-featuredImage: "https://luxewindowworks.com/wp-content/uploads/2025/08/IMG_6674.jpeg"
+featuredImage: "/images/blog/2025-08/IMG_6674.jpeg"
 category: Custom Window Coverings
 tags: [diy, energy-efficiency, home-decor, interior-design, lifestyle]
 wordCount: 4418
 ---
-<figure><img src="https://luxewindowworks.com/wp-content/uploads/2025/08/IMG_6674.jpeg" alt="The Installer's Secret: Your Pre-Order Checklist for Flawless Roller Shade Performance Every Time" /></figure>
+<figure><img src="/images/blog/2025-08/IMG_6674.jpeg" alt="The Installer's Secret: Your Pre-Order Checklist for Flawless Roller Shade Performance Every Time" /></figure>
 <p><strong>By Mark Abplanalp, Owner, Luxe Window Works</strong></p>
 <p>Last year I got a call from a homeowner in Post Falls with a problem that’s way more common than most people realize. She’d just moved into a beautiful modern farmhouse—black-framed windows, clean lines, the works. Wanting to keep that sleek look, she ordered custom roller shades online for her kitchen and dining room. Measured them herself, followed the instructions to the letter, and had them shipped straight to her door.</p>
 <p>"Mark, I triple-checked my measurements," she said. "The shades technically fit, but there’s a light gap on one side that shoots a sunbeam across my counter every afternoon—and the left one sounds like sandpaper when it rolls up."</p>

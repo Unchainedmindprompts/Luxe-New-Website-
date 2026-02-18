@@ -4,12 +4,12 @@ slug: faux-wood-vs-composite-blinds-which-holds-up-better-in-northern-idaho
 date: "2025-11-11T15:48:41.000Z"
 author: Mark Abplanalp
 excerpt: "The short answer: Both faux wood and composite blinds outperform real wood in Northern Idaho's extreme climate, but they're not identical. Faux wood (PVC or..."
-featuredImage: "https://luxewindowworks.com/wp-content/uploads/2025/11/ChatGPT-Image-Nov-11-2025-at-07_29_44-AM-1024x683.png"
+featuredImage: "/images/blog/2025-11/ChatGPT-Image-Nov-11-2025-at-07_29_44-AM-1024x683.png"
 category: Custom Window Coverings
 tags: [decor, energy-efficiency, Home Imrovement, home-decor, interior-design]
 wordCount: 1207
 ---
-<figure><img src="https://luxewindowworks.com/wp-content/uploads/2025/11/ChatGPT-Image-Nov-11-2025-at-07_29_44-AM-1024x683.png" alt="Faux Wood vs. Composite Blinds: Which Holds Up Better in Northern Idaho?" /></figure>
+<figure><img src="/images/blog/2025-11/ChatGPT-Image-Nov-11-2025-at-07_29_44-AM-1024x683.png" alt="Faux Wood vs. Composite Blinds: Which Holds Up Better in Northern Idaho?" /></figure>
 <p><strong>The short answer:</strong> Both faux wood and composite blinds outperform real wood in Northern Idaho's extreme climate, but they're not identical. Faux wood (PVC or vinyl) offers lighter weight and excellent moisture resistance, while composite (wood fiber + polymer blend) provides superior rigidity and heat tolerance. For most homeowners in Coeur d'Alene and Sandpoint, the choice comes down to window size, sun exposure, and specific room conditions.</p>
 <p>After installing window treatments across the Pacific North West for over two decades, I've seen both materials succeed—and fail—in ways that matter to your home's comfort and your wallet.</p>
 <h2><strong>What Are Faux Wood and Composite Blinds Made Of?</strong></h2>

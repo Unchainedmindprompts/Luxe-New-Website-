@@ -4,12 +4,12 @@ slug: norman-shutters-north-idaho
 date: "2026-01-23T17:30:27.000Z"
 author: Mark Abplanalp
 excerpt: "Since 2009, Luxe Window Works has specialized in one thing when it comes to interior shutters: Norman. As a long-time Norman partner, our team recommends these..."
-featuredImage: "https://luxewindowworks.com/wp-content/uploads/2025/11/2014_HER_Living-Room.jpeg"
+featuredImage: "/images/blog/2025-11/2014_HER_Living-Room.jpeg"
 category: Custom Window Coverings
 tags: [custom window coverings, energy efficient window treatments, interior shutters, Norman dealer, Norman shutters, North Idaho window treatments, Plantation-shutters, stained wood shutters, window shutters Post Falls, wood shutters]
 wordCount: 472
 ---
-<img class="alignnone wp-image-2929 size-full" src="https://luxewindowworks.com/wp-content/uploads/2025/11/2014_HER_Living-Room.jpeg" alt="Norman Shutters in North Idaho: Premium Craftsmanship from Luxe Window Works" width="8984" height="6732" />
+<img class="alignnone wp-image-2929 size-full" src="/images/blog/2025-11/2014_HER_Living-Room.jpeg" alt="Norman Shutters in North Idaho: Premium Craftsmanship from Luxe Window Works" width="8984" height="6732" />
 
 Since 2009, Luxe Window Works has specialized in one thing when it comes to interior shutters: Norman. As a long-time Norman partner, our team recommends these shutters for homeowners who want custom-crafted beauty, rock-solid performance, and responsive local service in one package.
 <h2>Why Luxe Window Works Chooses Norman Shutters</h2>

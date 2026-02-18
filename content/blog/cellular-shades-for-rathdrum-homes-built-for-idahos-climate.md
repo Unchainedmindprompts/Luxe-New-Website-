@@ -4,12 +4,12 @@ slug: cellular-shades-for-rathdrum-homes-built-for-idahos-climate
 date: "2025-09-01T14:43:09.000Z"
 author: Mark Abplanalp
 excerpt: "A Rathdrum Homeowner's Best Friend: Why Cellular Shades Are a Must-Have for Idaho's Climate If you live in Rathdrum, Idaho , you know the truth about our..."
-featuredImage: "https://luxewindowworks.com/wp-content/uploads/2025/09/Gemini_Generated_Image_nv95dhnv95dhnv95-1024x1024.png"
+featuredImage: "/images/blog/2025-09/Gemini_Generated_Image_nv95dhnv95dhnv95-1024x1024.png"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design]
 wordCount: 951
 ---
-<figure><img src="https://luxewindowworks.com/wp-content/uploads/2025/09/Gemini_Generated_Image_nv95dhnv95dhnv95-1024x1024.png" alt="A Rathdrum Homeowner's Best Friend: Why Cellular Shades Are a Must-Have for Idaho's Climate" /></figure>
+<figure><img src="/images/blog/2025-09/Gemini_Generated_Image_nv95dhnv95dhnv95-1024x1024.png" alt="A Rathdrum Homeowner's Best Friend: Why Cellular Shades Are a Must-Have for Idaho's Climate" /></figure>
 <h3><strong>A Rathdrum Homeowner's Best Friend: Why Cellular Shades Are a Must-Have for Idaho's Climate</strong></h3>
 <p>If you live in <strong>Rathdrum, Idaho</strong>, you know the truth about our weather. It’s a beautiful, unpredictable, and often extreme mix. One moment you're enjoying a crisp, sunny summer morning, and the next you’re feeling the full blast of heat on a west-facing window. A few months later, that same window is a source of a chilly draft on a freezing winter day.</p>
 <p>This is the story of living in the Inland Northwest. And as a local installer, I've seen firsthand how these dramatic temperature swings can affect your comfort and your energy bills. That's why I always tell homeowners that the single most effective window covering for our climate isn't just a blind—it's an insulator.</p>
@@ -101,7 +101,7 @@ wordCount: 951
       "provider": {
         "@type": "LocalBusiness",
         "name": "Luxe Window Works",
-        "image": "https://luxewindowworks.com/wp-content/uploads/2025/08/luxe-logo.png",
+        "image": "/images/blog/2025-08/luxe-logo.png",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Post Falls, Idaho",

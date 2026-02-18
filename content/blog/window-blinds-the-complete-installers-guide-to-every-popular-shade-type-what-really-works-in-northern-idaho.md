@@ -4,7 +4,7 @@ slug: window-blinds-the-complete-installers-guide-to-every-popular-shade-type-wh
 date: "2025-10-27T00:40:27.000Z"
 author: Mark Abplanalp
 excerpt: "Window Blinds: The Complete Installer's Guide to Every Popular Shade Type When homeowners mention \"window blinds,\" they're typically referring to an entire..."
-featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/IMG_2408.jpeg?ssl=1"
+featuredImage: "/images/blog/2025-10/IMG_2408.jpeg"
 category: Custom Window Coverings
 tags: [Cellular-Shades, energy-efficiency, Faux-Wood-Blinds, home-decor, interior-design, Plantation-shutters, Roller-Shades]
 wordCount: 4404
@@ -14,30 +14,30 @@ wordCount: 4404
 <div class="tiled-gallery__gallery">
 <div class="tiled-gallery__row">
 <div class="tiled-gallery__col" style="flex-basis: 40.51259%;">
-<figure class="tiled-gallery__item"><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/IMG_2408.jpeg?ssl=1" alt="The Installer's Secret: Your Pre-Order Checklist for Flawless Roller Shade Performance Every Time" data-height="316" data-id="1115" data-link="https://luxewindowworks.com/2025/10/21/the-installers-secret-your-pre-order-checklist-for-flawless-roller-shade-performance-every-time/img_2408-2/" data-url="https://luxewindowworks.com/wp-content/uploads/2025/10/IMG_2408.jpeg" data-width="316" data-amp-layout="responsive" /></figure>
+<figure class="tiled-gallery__item"><img src="/images/blog/2025-10/IMG_2408.jpeg" alt="The Installer's Secret: Your Pre-Order Checklist for Flawless Roller Shade Performance Every Time" data-height="316" data-id="1115" data-link="https://luxewindowworks.com/2025/10/21/the-installers-secret-your-pre-order-checklist-for-flawless-roller-shade-performance-every-time/img_2408-2/" data-url="/images/blog/2025-10/IMG_2408.jpeg" data-width="316" data-amp-layout="responsive" /></figure>
 </div>
 <div class="tiled-gallery__col" style="flex-basis: 27.05149%;">
-<figure class="tiled-gallery__item"><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/ChatGPT-Image-Oct-16-2025-at-07_08_38-AM-683x1024.png?ssl=1" alt="The Layered Luxe Look: Combining Shutters with Motorized Shades for Ultimate Light Control and Energy Efficiency" data-height="1536" data-id="1072" data-link="https://luxewindowworks.com/2025/10/16/the-layered-luxe-look-combining-shutters-with-motorized-shades-for-ultimate-light-control-and-energy-efficiency/chatgpt-image-oct-16-2025-at-07_08_38-am/" data-url="https://luxewindowworks.com/wp-content/uploads/2025/10/ChatGPT-Image-Oct-16-2025-at-07_08_38-AM-683x1024.png" data-width="1024" data-amp-layout="responsive" /></figure>
+<figure class="tiled-gallery__item"><img src="/images/blog/2025-10/ChatGPT-Image-Oct-16-2025-at-07_08_38-AM-683x1024.png" alt="The Layered Luxe Look: Combining Shutters with Motorized Shades for Ultimate Light Control and Energy Efficiency" data-height="1536" data-id="1072" data-link="https://luxewindowworks.com/2025/10/16/the-layered-luxe-look-combining-shutters-with-motorized-shades-for-ultimate-light-control-and-energy-efficiency/chatgpt-image-oct-16-2025-at-07_08_38-am/" data-url="/images/blog/2025-10/ChatGPT-Image-Oct-16-2025-at-07_08_38-AM-683x1024.png" data-width="1024" data-amp-layout="responsive" /></figure>
 </div>
 <div class="tiled-gallery__col" style="flex-basis: 32.43593%;">
-<figure class="tiled-gallery__item"><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/08/IMG_2470-819x1024.webp?ssl=1" alt="" data-height="1055" data-id="495" data-link="https://luxewindowworks.com/trends-in-window-coverings-2025/img_2470/" data-url="https://luxewindowworks.com/wp-content/uploads/2025/08/IMG_2470-819x1024.webp" data-width="844" data-amp-layout="responsive" /></figure>
+<figure class="tiled-gallery__item"><img src="/images/blog/2025-08/IMG_2470-819x1024.webp" alt="" data-height="1055" data-id="495" data-link="https://luxewindowworks.com/trends-in-window-coverings-2025/img_2470/" data-url="/images/blog/2025-08/IMG_2470-819x1024.webp" data-width="844" data-amp-layout="responsive" /></figure>
 </div>
 </div>
 <div class="tiled-gallery__row">
 <div class="tiled-gallery__col" style="flex-basis: 67.97353%;">
-<figure class="tiled-gallery__item"><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/08/IMG_6249-1024x819.jpeg?ssl=1" alt="Luxury Meets Efficiency: Why Custom Window Treatments Are a Must-Have for Northern Idaho Homes" data-height="960" data-id="497" data-link="https://luxewindowworks.com/trends-in-window-coverings-2025/img_6249/" data-url="https://luxewindowworks.com/wp-content/uploads/2025/08/IMG_6249-1024x819.jpeg" data-width="1200" data-amp-layout="responsive" /></figure>
+<figure class="tiled-gallery__item"><img src="/images/blog/2025-08/IMG_6249-1024x819.jpeg" alt="Luxury Meets Efficiency: Why Custom Window Treatments Are a Must-Have for Northern Idaho Homes" data-height="960" data-id="497" data-link="https://luxewindowworks.com/trends-in-window-coverings-2025/img_6249/" data-url="/images/blog/2025-08/IMG_6249-1024x819.jpeg" data-width="1200" data-amp-layout="responsive" /></figure>
 </div>
 <div class="tiled-gallery__col" style="flex-basis: 32.02647%;">
-<figure class="tiled-gallery__item"><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/07/img_2189.jpeg?ssl=1" alt="Window Coverings Coeur d'Alene" data-height="960" data-id="47" data-link="https://luxewindowworks.com/2025/07/22/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works/img_2189/" data-url="https://luxewindowworks.com/wp-content/uploads/2025/07/img_2189.jpeg" data-width="1200" data-amp-layout="responsive" /></figure>
-<figure class="tiled-gallery__item"><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/07/img_2327.jpeg?ssl=1" alt="Light filtering cellular shades on living room windows, softly diffusing sunlight." data-height="800" data-id="45" data-link="https://luxewindowworks.com/2025/07/22/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works/img_2327/" data-url="https://luxewindowworks.com/wp-content/uploads/2025/07/img_2327.jpeg" data-width="900" data-amp-layout="responsive" /></figure>
+<figure class="tiled-gallery__item"><img src="/images/blog/2025-07/img_2189.jpeg" alt="Window Coverings Coeur d'Alene" data-height="960" data-id="47" data-link="https://luxewindowworks.com/2025/07/22/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works/img_2189/" data-url="/images/blog/2025-07/img_2189.jpeg" data-width="1200" data-amp-layout="responsive" /></figure>
+<figure class="tiled-gallery__item"><img src="/images/blog/2025-07/img_2327.jpeg" alt="Light filtering cellular shades on living room windows, softly diffusing sunlight." data-height="800" data-id="45" data-link="https://luxewindowworks.com/2025/07/22/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works/img_2327/" data-url="/images/blog/2025-07/img_2327.jpeg" data-width="900" data-amp-layout="responsive" /></figure>
 </div>
 </div>
 <div class="tiled-gallery__row">
 <div class="tiled-gallery__col" style="flex-basis: 63.16161%;">
-<figure class="tiled-gallery__item"><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/07/img_2398.jpeg?ssl=1" alt="The Story of Our Partnership: Why Luxe Window Works Chose Lafayette Interior Fashions" data-height="780" data-id="42" data-link="https://luxewindowworks.com/2025/07/22/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works/img_2398/" data-url="https://luxewindowworks.com/wp-content/uploads/2025/07/img_2398.jpeg" data-width="900" data-amp-layout="responsive" /></figure>
+<figure class="tiled-gallery__item"><img src="/images/blog/2025-07/img_2398.jpeg" alt="The Story of Our Partnership: Why Luxe Window Works Chose Lafayette Interior Fashions" data-height="780" data-id="42" data-link="https://luxewindowworks.com/2025/07/22/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works/img_2398/" data-url="/images/blog/2025-07/img_2398.jpeg" data-width="900" data-amp-layout="responsive" /></figure>
 </div>
 <div class="tiled-gallery__col" style="flex-basis: 36.83839%;">
-<figure class="tiled-gallery__item"><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/07/img_2469.jpeg?ssl=1" alt="roman shades" data-height="1213" data-id="66" data-link="https://luxewindowworks.com/img_2469/" data-url="https://luxewindowworks.com/wp-content/uploads/2025/07/img_2469.jpeg" data-width="815" data-amp-layout="responsive" /></figure>
+<figure class="tiled-gallery__item"><img src="/images/blog/2025-07/img_2469.jpeg" alt="roman shades" data-height="1213" data-id="66" data-link="https://luxewindowworks.com/img_2469/" data-url="/images/blog/2025-07/img_2469.jpeg" data-width="815" data-amp-layout="responsive" /></figure>
 </div>
 </div>
 </div>
@@ -233,7 +233,7 @@ wordCount: 4404
       "@type": "Organization",
       "name": "Luxe Window Works",
       "url": "https://luxewindowworks.com/",
-      "logo": "https://luxewindowworks.com/wp-content/uploads/2024/06/luxe-window-works-logo.webp",
+      "logo": "/images/blog/2024-06/luxe-window-works-logo.webp",
       "sameAs": [
         "https://www.facebook.com/luxewindowworks",
         "https://www.instagram.com/luxewindowworks",

@@ -4,12 +4,12 @@ slug: how-to-clean-honeycomb-shades-safely-pro-installer-guide
 date: "2025-08-24T18:17:35.000Z"
 author: Mark Abplanalp
 excerpt: "How to Clean Honeycomb Shades: The Complete Guide from a Pro Installer Knowing how to clean honeycomb shades correctly is a simple skill that can save you a..."
-featuredImage: "https://luxewindowworks.com/wp-content/uploads/2025/07/img_0801.jpeg"
+featuredImage: "/images/blog/2025-07/img_0801.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, home-improvement, interior-design]
 wordCount: 1505
 ---
-<figure><img src="https://luxewindowworks.com/wp-content/uploads/2025/07/img_0801.jpeg" alt="How to Clean Honeycomb Shades: The Complete Guide from a Pro Installer" /></figure>
+<figure><img src="/images/blog/2025-07/img_0801.jpeg" alt="How to Clean Honeycomb Shades: The Complete Guide from a Pro Installer" /></figure>
 <h1><strong>How to Clean Honeycomb Shades: The Complete Guide from a Pro Installer</strong></h1>
 <p>Knowing how to clean honeycomb shades correctly is a simple skill that can save you a lot of time, money, and frustration. For most daily dust and grime, a soft vacuum brush or a simple microfiber cloth is all you need. For more stubborn spots, a gentle dabbing technique with a mild soap is the safest way to spot clean. The key is to avoid harsh chemicals, excessive moisture, or any method that could damage the unique pleated structure of these shades.</p>
 <h2><strong>Why It’s Important to Know How to Clean Honeycomb Shades Correctly</strong></h2>

@@ -4,7 +4,7 @@ slug: energy-efficient-shade-planning-for-northern-idaho-homes
 date: "2025-07-24T18:20:59.000Z"
 author: Mark Abplanalp
 excerpt: "Smarter Windows: Window Shade Planning for Maximum Energy Efficiency and Everyday Comfort Windows are a major source of energy loss in homes, accounting for up..."
-featuredImage: "https://luxewindowworks.com/wp-content/uploads/2025/07/img_2398.jpeg"
+featuredImage: "/images/blog/2025-07/img_2398.jpeg"
 category: Custom Window Coverings
 tags: [energy, energy-efficiency, home-improvement, sustainability, sustainable-living]
 wordCount: 1041
@@ -13,7 +13,7 @@ wordCount: 1041
 <p>Windows are a major source of energy loss in homes, accounting for up to 30% of heating and cooling inefficiency. In climates like Coeur d'Alene's—characterized by both cold winters and hot summers—unprotected windows force HVAC systems to work harder, driving up energy bills and reducing comfort. With Smarter Windows and the right window coverings, you can transform this liability into a valuable energy-saving and comfort-enhancing asset.</p>
 <h2>The Benefits of Smarter Windows in Energy-Efficient Shade Planning</h2>
 <p>By implementing Smarter Windows solutions, homeowners can significantly reduce their energy expenses and increase comfort year-round.</p>
-<figure><img src="https://luxewindowworks.com/wp-content/uploads/2025/07/img_2398.jpeg" alt="" /></figure>
+<figure><img src="/images/blog/2025-07/img_2398.jpeg" alt="" /></figure>
 <p>Utilizing Smarter Windows can make a significant difference in your home's energy efficiency.</p>
 <h2 id="why-an-effective-window-strategy-matters">Why an Effective Window Strategy Matters</h2>
 <h2>Exploring Smarter Windows for Enhanced Energy Savings</h2>
@@ -165,7 +165,7 @@ wordCount: 1041
       "provider": {
         "@type": "LocalBusiness",
         "name": "Luxe Window Works",
-        "image": "https://luxewindowworks.com/wp-content/uploads/2025/08/luxe-logo.png",
+        "image": "/images/blog/2025-08/luxe-logo.png",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Post Falls, Idaho",

@@ -4,12 +4,12 @@ slug: custom-crafted-in-the-u-s-a-thats-something-special
 date: "2025-10-25T23:41:03.000Z"
 author: Mark Abplanalp
 excerpt: "By Mark Abplanalp, Owner of Luxe Window Works It makes me smile every time we receive a new shipment of window treatments from Lafayette Interior Fashions...."
-featuredImage: "https://luxewindowworks.com/wp-content/uploads/2025/10/IMG_3393-1-1024x671.jpeg"
+featuredImage: "/images/blog/2025-10/IMG_3393-1-1024x671.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, home-improvement, interior-design, lifestyle, Made-In-The-USA]
 wordCount: 2588
 ---
-<figure><img src="https://luxewindowworks.com/wp-content/uploads/2025/10/IMG_3393-1-1024x671.jpeg" alt="Custom Crafted in the U.S.A. — That's Something Special" /></figure>
+<figure><img src="/images/blog/2025-10/IMG_3393-1-1024x671.jpeg" alt="Custom Crafted in the U.S.A. — That's Something Special" /></figure>
 <p><strong>By Mark Abplanalp, Owner of Luxe Window Works</strong></p>
 <p>It makes me smile every time we receive a new shipment of window treatments from Lafayette Interior Fashions. Every box carries the same small but powerful detail — a <strong>“Custom Crafted in America”</strong> sticker. It’s a reminder that behind every product we install is a team of skilled craftspeople right here in the United States, building something with care, precision, and pride.</p>
 <p>At Luxe Window Works, we represent manufacturers who share our values: quality, precision, and real craftsmanship. That's why we proudly partner with Lafayette Interior Fashions—a family-owned company that's been building custom window treatments right here in the United States since 1950.</p>
@@ -197,7 +197,7 @@ wordCount: 2588
     "url": "https://luxewindowworks.com",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://luxewindowworks.com/wp-content/uploads/2025/05/luxe-window-works-logo.png"
+      "url": "/images/blog/2025-05/luxe-window-works-logo.png"
     }
   }
 }

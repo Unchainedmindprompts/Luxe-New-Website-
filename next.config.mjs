@@ -18,13 +18,8 @@ const nextConfig = {
   },
 
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "luxewindowworks.com",
-        pathname: "/wp-content/uploads/**",
-      },
-    ],
+    // All blog images are now served locally from /public/images/blog/
+    // No remote patterns needed
   },
 
   async redirects() {

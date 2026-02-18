@@ -4,12 +4,12 @@ slug: norman-bifold-180-shutters-for-bi-folding-doors-in-north-idaho
 date: "2025-08-29T22:31:14.000Z"
 author: Mark Abplanalp
 excerpt: "Why the Norman® Shutter BiFold 180 Is the Perfect Solution for Bi-Folding Doors Imagine you've just finished building your dream home in Coeur d'Alene. You..."
-featuredImage: "https://luxewindowworks.com/wp-content/uploads/2025/08/IMG_2969.webp"
+featuredImage: "/images/blog/2025-08/IMG_2969.webp"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle]
 wordCount: 1357
 ---
-<figure><img src="https://luxewindowworks.com/wp-content/uploads/2025/08/IMG_2969.webp" alt="Why the Norman® Shutter BiFold 180 Is the Perfect Solution for Bi-Folding Doors" /></figure>
+<figure><img src="/images/blog/2025-08/IMG_2969.webp" alt="Why the Norman® Shutter BiFold 180 Is the Perfect Solution for Bi-Folding Doors" /></figure>
 <h1>Why the Norman® Shutter BiFold 180 Is the Perfect Solution for Bi-Folding Doors</h1>
 <p>Imagine you've just finished building your dream home in Coeur d'Alene. You have these beautiful, expansive bi-folding glass doors that open up to a stunning patio and an incredible view of the lake. They're the centerpiece of your living room, but you have a problem: how do you cover them?</p>
 <p>Finding the right solution for your bi-folding doors is essential, and the answer is clear: Why the Norman® Shutter BiFold 180 Is the Perfect Solution for Bi-Folding Doors.</p>
@@ -66,7 +66,7 @@ wordCount: 1357
   "@type": "Product",
   "name": "Norman® BiFold 180 Shutter",
   "description": "Innovative bi-folding shutter system by Norman®, designed for large glass openings and seamless 180° folding. Provides superior durability, light control, and energy efficiency for luxury homes in Northern Idaho.",
-  "image": "https://luxewindowworks.com/wp-content/uploads/IMG_2969.webp",
+  "image": "/images/blog/misc/IMG_2969.webp",
   "brand": {
     "@type": "Brand",
     "name": "Norman",

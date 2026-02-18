@@ -4,12 +4,12 @@ slug: moisture-proof-window-treatments-coeur-d-alene
 date: "2026-01-26T16:18:07.000Z"
 author: Mark Abplanalp
 excerpt: "Steam from your morning shower. Splashes from washing dishes. The constant humidity rolling off Lake Coeur d'Alene. If you've installed the wrong window..."
-featuredImage: "https://luxewindowworks.com/wp-content/uploads/2026/01/IMG_3306-300x227.jpeg"
+featuredImage: "/images/blog/2026-01/IMG_3306-300x227.jpeg"
 category: Custom Window Coverings
 tags: [Bathroom Window Treatments, "Coeur d'Alene Window Coverings", Faux-Wood-Blinds, Kitchen window treatments, Lake Home Window Treatments, Moisture-proof window treatments, moisture-resistant-window-treatments, Vinyl Shutters]
 wordCount: 2348
 ---
-<h1><img class="alignnone size-medium wp-image-3051" src="https://luxewindowworks.com/wp-content/uploads/2026/01/IMG_3306-300x227.jpeg" alt="Moisture-Proof Window Treatments for Kitchens, Bathrooms, and Lake Homes Around Coeur d'Alene" width="300" height="227" /></h1>
+<h1><img class="alignnone size-medium wp-image-3051" src="/images/blog/2026-01/IMG_3306-300x227.jpeg" alt="Moisture-Proof Window Treatments for Kitchens, Bathrooms, and Lake Homes Around Coeur d'Alene" width="300" height="227" /></h1>
 Steam from your morning shower. Splashes from washing dishes. The constant humidity rolling off Lake Coeur d'Alene. If you've installed the wrong window treatments in these spaces, you've probably already seen the damage: warped slats, peeling finishes, fabric that smells like mildew, or blinds that won't open smoothly anymore.
 
 Here in North Idaho, we deal with real four-season weather and plenty of moisture, whether it's steam in your primary bath, splashes over the kitchen sink, or the humid air that comes with living near the water. The big-box faux wood blinds that looked fine in the store? They start falling apart in six months. The fabric shades you loved? Now they're spotted and sagging.
