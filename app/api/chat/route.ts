@@ -55,11 +55,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
     if (!apiKey) {
-      console.error("ANTHROPIC_API_KEY is not set in environment variables");
       return NextResponse.json(
-        { error: "API key not configured" },
+        { error: "ANTHROPIC_API_KEY not set" },
         { status: 500 }
       );
     }
@@ -72,7 +71,7 @@ export async function POST(request: NextRequest) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-5-20250929",
+        model: "claude-3-5-sonnet-20241022",
         max_tokens: 1024,
         system: SYSTEM_PROMPT,
         messages: messages.map((m: { role: string; content: string }) => ({
@@ -85,8 +84,16 @@ export async function POST(request: NextRequest) {
     if (!anthropicRes.ok) {
       const errBody = await anthropicRes.text();
       console.error(`Anthropic API ${anthropicRes.status}: ${errBody}`);
+      // Surface the actual error for debugging
+      let detail = "";
+      try {
+        const parsed = JSON.parse(errBody);
+        detail = parsed?.error?.message || errBody.slice(0, 200);
+      } catch {
+        detail = errBody.slice(0, 200);
+      }
       return NextResponse.json(
-        { error: `API error (${anthropicRes.status})` },
+        { error: `API ${anthropicRes.status}: ${detail}` },
         { status: anthropicRes.status }
       );
     }

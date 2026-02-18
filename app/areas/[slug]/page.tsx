@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS, PRODUCTS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
@@ -43,15 +44,23 @@ export default function AreaPage({ params }: Props) {
       />
 
       {/* Hero */}
-      <section className="bg-cream pb-16 md:pb-24">
-        <div className="container-luxe max-w-4xl">
+      <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[400px] md:min-h-[500px] flex items-center">
+        <Image
+          src="/images/top-down-bottom-up-shades.jpeg"
+          alt="Living room with top-down bottom-up shades overlooking a lake"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-charcoal/55" />
+        <div className="container-luxe relative max-w-4xl">
           <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
             Serving {area.name}
           </p>
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-charcoal leading-tight text-balance">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-tight text-balance">
             {area.headline}
           </h1>
-          <p className="mt-6 text-lg md:text-xl text-warm-gray-600 leading-relaxed">
+          <p className="mt-6 text-lg md:text-xl text-warm-gray-200 leading-relaxed">
             {area.subheadline}
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
@@ -63,24 +72,10 @@ export default function AreaPage({ params }: Props) {
             </a>
             <a
               href={BUSINESS.phoneHref}
-              className="inline-flex items-center justify-center gap-2 border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-white font-semibold px-8 py-4 rounded-full text-lg transition-all"
+              className="inline-flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white hover:text-charcoal font-semibold px-8 py-4 rounded-full text-lg transition-all"
             >
               Call Mark: {BUSINESS.phone}
             </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Area photo placeholder */}
-      <section className="container-luxe -mt-4 mb-16">
-        <div className="max-w-4xl mx-auto aspect-[16/7] bg-warm-gray-200 rounded-2xl flex items-center justify-center">
-          <div className="text-center p-8">
-            <svg className="w-16 h-16 text-warm-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <p className="text-warm-gray-500 text-sm font-medium">{area.name} area photography</p>
-            <p className="text-warm-gray-400 text-xs mt-1">Local photography to be added</p>
           </div>
         </div>
       </section>

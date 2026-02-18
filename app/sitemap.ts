@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { PRODUCTS, SERVICE_AREAS } from "@/lib/constants";
+import { getAllPosts } from "@/lib/blog";
 
 const BASE_URL = "https://luxewindowworks.com";
 
@@ -39,5 +40,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...productPages, ...areaPages];
+  const blogPosts = getAllPosts().map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...productPages, ...areaPages, ...blogPosts];
 }

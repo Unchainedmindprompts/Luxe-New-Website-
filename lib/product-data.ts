@@ -1,6 +1,7 @@
 export interface ProductPageData {
   slug: string;
   name: string;
+  image?: string;
   headline: string;
   subheadline: string;
   problem: string;
@@ -17,6 +18,7 @@ export const productPages: Record<string, ProductPageData> = {
   "cellular-shades": {
     slug: "cellular-shades",
     name: "Cellular Shades",
+    image: "/images/cellular-shades.jpeg",
     headline: "Tired of Watching Your Energy Bills Climb Every Season?",
     subheadline: "Cellular shades are the most energy-efficient window covering available — and in Northern Idaho, that matters more than most places.",
     problem: "Northern Idaho doesn't do moderate weather. January mornings hit single digits. July afternoons push into the 90s. And through all of it, your windows are the weakest link in your home's insulation. Single-pane windows in older Coeur d'Alene homes bleed heat all winter long. Even newer double-pane windows in Post Falls subdivisions let more energy escape than most homeowners realize.",
@@ -44,6 +46,7 @@ export const productPages: Record<string, ProductPageData> = {
   "solar-shades": {
     slug: "solar-shades",
     name: "Solar Shades",
+    image: "/images/solar-shades.jpeg",
     headline: "Love Your View but Hate the Glare?",
     subheadline: "Solar shades let you keep the scenery while blocking the UV rays, heat gain, and glare that come with it.",
     problem: "Living in Northern Idaho means incredible views — Coeur d'Alene Lake, the Bitterroot Range, sunsets over the Rathdrum Prairie. But those west-facing and south-facing windows that give you those views also bring intense afternoon glare, UV damage to your furniture and floors, and serious heat gain in summer. You shouldn't have to choose between your view and your comfort.",
@@ -71,6 +74,7 @@ export const productPages: Record<string, ProductPageData> = {
   "roller-shades": {
     slug: "roller-shades",
     name: "Roller Shades",
+    image: "/images/roller-shades.jpeg",
     headline: "Clean Lines. Simple Function. No Fuss.",
     subheadline: "Roller shades deliver a sleek, modern look that works with any design style — without overcomplicating things.",
     problem: "Not every window needs a complex treatment. Sometimes you want something clean, functional, and understated that doesn't compete with your architecture or decor. But 'simple' doesn't have to mean cheap or boring — and it definitely shouldn't mean poorly made or poorly fitted.",
@@ -98,6 +102,7 @@ export const productPages: Record<string, ProductPageData> = {
   "banded-shades": {
     slug: "banded-shades",
     name: "Banded Shades",
+    image: "/images/banded-shades.webp",
     headline: "Control Your Light Without Closing Off the Room.",
     subheadline: "Banded shades give you the flexibility to shift between sheer filtered light and full privacy — with a distinctly modern look.",
     problem: "Most window treatments give you an either/or choice: open for light, closed for privacy. But life isn't that simple. Sometimes you want soft, diffused light in the morning and full privacy at night. Sometimes you want to see out without being seen. Traditional blinds can do this, but they collect dust, break easily, and look dated.",
@@ -125,6 +130,7 @@ export const productPages: Record<string, ProductPageData> = {
   "roman-shades": {
     slug: "roman-shades",
     name: "Roman Shades",
+    image: "/images/roman-shades.webp",
     headline: "Add Warmth and Character That Blinds Never Could.",
     subheadline: "Roman shades bring softness, texture, and timeless elegance to any room — crafted from real fabrics that transform the feel of your space.",
     problem: "Some rooms need more than a functional window covering — they need something that adds warmth, texture, and personality. Hard blinds and minimal shades work in some spaces, but living rooms, dining rooms, and primary bedrooms often call for something softer. Something that makes the room feel finished and intentional, not just covered.",
@@ -152,6 +158,7 @@ export const productPages: Record<string, ProductPageData> = {
   "shutters": {
     slug: "shutters",
     name: "Shutters",
+    image: "/images/shutters.jpeg",
     headline: "The One Window Treatment That Actually Adds Value to Your Home.",
     subheadline: "Plantation shutters are a permanent architectural upgrade — and with nearly 20 years of installation expertise, Mark ensures they're done right.",
     problem: "Window treatments typically depreciate the moment they're installed — they're decorating, not improving. And most of them need to be replaced every 5-10 years. If you're investing in your home, especially a home you plan to keep or a property where resale value matters, you want something that lasts and actually adds to the home's worth.",

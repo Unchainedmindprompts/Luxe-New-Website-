@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { productPages } from "@/lib/product-data";
@@ -96,17 +97,29 @@ export default function ProductPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Product image placeholder */}
+      {/* Product image */}
       <section className="container-luxe -mt-4 mb-16">
-        <div className="max-w-4xl mx-auto aspect-[16/7] bg-warm-gray-200 rounded-2xl flex items-center justify-center">
-          <div className="text-center p-8">
-            <svg className="w-16 h-16 text-warm-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <p className="text-warm-gray-500 text-sm font-medium">{product.name} — Professional photography</p>
-            <p className="text-warm-gray-400 text-xs mt-1">Real installation photos to be added</p>
+        {product.image ? (
+          <div className="max-w-4xl mx-auto relative aspect-[16/9] rounded-2xl overflow-hidden">
+            <Image
+              src={product.image}
+              alt={`${product.name} — installed by Luxe Window Works`}
+              fill
+              className="object-cover"
+              priority
+            />
           </div>
-        </div>
+        ) : (
+          <div className="max-w-4xl mx-auto aspect-[16/7] bg-warm-gray-200 rounded-2xl flex items-center justify-center">
+            <div className="text-center p-8">
+              <svg className="w-16 h-16 text-warm-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <p className="text-warm-gray-500 text-sm font-medium">{product.name} — Professional photography</p>
+              <p className="text-warm-gray-400 text-xs mt-1">Real installation photos to be added</p>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* The Problem */}
