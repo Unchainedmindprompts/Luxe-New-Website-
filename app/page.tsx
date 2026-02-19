@@ -58,8 +58,8 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
         <Image
-          src="/images/hero-living-room.png"
-          alt="Cozy living room with custom window treatments and a winter mountain view"
+          src="/images/hero-modern-living.jpeg"
+          alt="Modern living room with custom cellular shades and a mountain view"
           fill
           className="object-cover"
           priority
