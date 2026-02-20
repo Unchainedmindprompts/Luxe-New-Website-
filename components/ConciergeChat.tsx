@@ -86,12 +86,15 @@ export default function ConciergeChat() {
     setIsLoading(true);
     try {
       const { reply, error } = await fetchChat([INITIAL_USER_MESSAGE]);
+      if (error) {
+        console.error("[ConciergeChat] API error on greeting:", error);
+      }
       setMessages([
         INITIAL_USER_MESSAGE,
         { role: "assistant", content: reply || getFallbackGreeting() },
       ]);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
+      console.error("[ConciergeChat] Unexpected error on greeting:", err);
       setMessages([
         INITIAL_USER_MESSAGE,
         { role: "assistant", content: getFallbackGreeting() },
@@ -113,12 +116,15 @@ export default function ConciergeChat() {
 
     try {
       const { reply, error } = await fetchChat(updatedMessages);
+      if (error) {
+        console.error("[ConciergeChat] API error on message:", error);
+      }
       setMessages([
         ...updatedMessages,
         { role: "assistant", content: reply || getFallbackError() },
       ]);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
+      console.error("[ConciergeChat] Unexpected error on message:", err);
       setMessages([
         ...updatedMessages,
         { role: "assistant", content: getFallbackError() },
