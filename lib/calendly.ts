@@ -163,6 +163,7 @@ export async function createInvitee(params: {
   name: string;
   email: string;
   startTime: string; // ISO UTC string
+  address?: string;
 }): Promise<{ uri: string; name: string; email: string; start_time: string }> {
   const eventTypeUri = await getConsultationEventTypeUri();
   const data = await calendlyFetch<{
@@ -176,6 +177,11 @@ export async function createInvitee(params: {
         name: params.name,
         email: params.email,
         timezone: "America/Los_Angeles",
+      },
+      // In-home consultation requires the invitee's address as the location
+      location: {
+        kind: "ask_invitee",
+        location: params.address ?? "",
       },
     }),
   });
