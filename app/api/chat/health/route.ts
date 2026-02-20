@@ -8,7 +8,7 @@ export async function GET() {
     return NextResponse.json({
       status: "missing_key",
       keyPrefix: "NOT SET",
-      version: "2026-02-20-v5",
+      version: "2026-02-20-v6",
     });
   }
 
@@ -17,7 +17,7 @@ export async function GET() {
   try {
     const client = new Anthropic({ apiKey });
     await client.messages.create({
-      model: "claude-sonnet-4-5-20250929",
+      model: "claude-3-haiku-20240307",
       max_tokens: 5,
       messages: [{ role: "user", content: "Hi" }],
     });
@@ -26,7 +26,7 @@ export async function GET() {
       status: "ok",
       keyPrefix,
       model: "claude-sonnet-4-5-20250929",
-      version: "2026-02-20-v5",
+      version: "2026-02-20-v6",
     });
   } catch (err) {
     if (err instanceof Anthropic.APIError) {
@@ -36,7 +36,7 @@ export async function GET() {
         detail: err.message,
         keyPrefix,
         keyLength: apiKey.length,
-        version: "2026-02-20-v5",
+        version: "2026-02-20-v6",
       });
     }
 
@@ -44,7 +44,7 @@ export async function GET() {
       status: "network_error",
       detail: err instanceof Error ? err.message : String(err),
       keyPrefix,
-      version: "2026-02-20-v5",
+      version: "2026-02-20-v6",
     });
   }
 }
