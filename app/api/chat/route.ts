@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import Anthropic from "@anthropic-ai/sdk";
 
 // Allow up to 30 seconds for Claude API responses on Vercel
 export const maxDuration = 30;
@@ -44,6 +45,19 @@ Important guidelines:
 - If a question is outside your scope (pricing specifics, exact lead times), say Mark can cover that during the consultation
 - Never pressure or use sales tactics. Just be genuinely helpful.`;
 
+let client: Anthropic | null = null;
+
+function getClient(): Anthropic {
+  if (!client) {
+    const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
+    if (!apiKey) {
+      throw new Error("ANTHROPIC_API_KEY environment variable is not set");
+    }
+    client = new Anthropic({ apiKey });
+  }
+  return client;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { messages } = await request.json();
@@ -55,58 +69,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
-    if (!apiKey) {
+    let anthropic: Anthropic;
+    try {
+      anthropic = getClient();
+    } catch {
       return NextResponse.json(
         { error: "ANTHROPIC_API_KEY not set" },
         { status: 500 }
       );
     }
 
-    const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-3-5-sonnet-20241022",
-        max_tokens: 1024,
-        system: SYSTEM_PROMPT,
-        messages: messages.map((m: { role: string; content: string }) => ({
-          role: m.role,
-          content: m.content,
-        })),
-      }),
+    const response = await anthropic.messages.create({
+      model: "claude-3-5-sonnet-20241022",
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      messages: messages.map((m: { role: string; content: string }) => ({
+        role: m.role as "user" | "assistant",
+        content: m.content,
+      })),
     });
 
-    if (!anthropicRes.ok) {
-      const errBody = await anthropicRes.text();
-      console.error(`Anthropic API ${anthropicRes.status}: ${errBody}`);
-      // Surface the actual error for debugging
-      let detail = "";
-      try {
-        const parsed = JSON.parse(errBody);
-        detail = parsed?.error?.message || errBody.slice(0, 200);
-      } catch {
-        detail = errBody.slice(0, 200);
-      }
-      return NextResponse.json(
-        { error: `API ${anthropicRes.status}: ${detail}` },
-        { status: anthropicRes.status }
-      );
-    }
-
-    const data = await anthropicRes.json();
-    const textBlock = data.content?.find(
-      (block: { type: string }) => block.type === "text"
-    );
-    const text = textBlock?.text || "";
+    const textBlock = response.content.find((block) => block.type === "text");
+    const text = textBlock?.type === "text" ? textBlock.text : "";
 
     return NextResponse.json({ message: text });
   } catch (error) {
     console.error("Chat API error:", error);
+
+    if (error instanceof Anthropic.APIError) {
+      return NextResponse.json(
+        { error: `API ${error.status}: ${error.message}` },
+        { status: error.status ?? 500 }
+      );
+    }
+
     return NextResponse.json(
       { error: "Failed to get response" },
       { status: 500 }
