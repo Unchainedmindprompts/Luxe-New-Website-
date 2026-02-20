@@ -175,6 +175,7 @@ export async function createInvitee(params: {
       invitee: {
         name: params.name,
         email: params.email,
+        timezone: "America/Los_Angeles",
       },
     }),
   });
