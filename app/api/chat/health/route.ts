@@ -17,7 +17,7 @@ export async function GET() {
   try {
     const client = new Anthropic({ apiKey });
     await client.messages.create({
-      model: "claude-3-5-sonnet-20241022",
+      model: "claude-sonnet-4-5-20250929",
       max_tokens: 5,
       messages: [{ role: "user", content: "Hi" }],
     });
@@ -25,7 +25,7 @@ export async function GET() {
     return NextResponse.json({
       status: "ok",
       keyPrefix,
-      model: "claude-3-5-sonnet-20241022",
+      model: "claude-sonnet-4-5-20250929",
       version: "2026-02-20-v5",
     });
   } catch (err) {
