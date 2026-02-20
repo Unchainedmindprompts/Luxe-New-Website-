@@ -75,7 +75,7 @@ export default function ConciergeChat() {
   }, [isOpen]);
 
   const getFallbackGreeting = () => {
-    return `Hey there! Welcome to Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`;
+    return `Hey there! I'm Grace, Mark's window treatment concierge at Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`;
   };
 
   const getFallbackError = () => {
@@ -86,12 +86,15 @@ export default function ConciergeChat() {
     setIsLoading(true);
     try {
       const { reply, error } = await fetchChat([INITIAL_USER_MESSAGE]);
+      if (error) {
+        console.error("[ConciergeChat] API error on greeting:", error);
+      }
       setMessages([
         INITIAL_USER_MESSAGE,
         { role: "assistant", content: reply || getFallbackGreeting() },
       ]);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
+      console.error("[ConciergeChat] Unexpected error on greeting:", err);
       setMessages([
         INITIAL_USER_MESSAGE,
         { role: "assistant", content: getFallbackGreeting() },
@@ -113,12 +116,15 @@ export default function ConciergeChat() {
 
     try {
       const { reply, error } = await fetchChat(updatedMessages);
+      if (error) {
+        console.error("[ConciergeChat] API error on message:", error);
+      }
       setMessages([
         ...updatedMessages,
         { role: "assistant", content: reply || getFallbackError() },
       ]);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
+      console.error("[ConciergeChat] Unexpected error on message:", err);
       setMessages([
         ...updatedMessages,
         { role: "assistant", content: getFallbackError() },
@@ -149,7 +155,7 @@ export default function ConciergeChat() {
           {/* Chat header */}
           <div className="bg-charcoal text-white px-6 py-4 flex items-center justify-between">
             <div>
-              <h3 className="font-serif text-lg font-semibold">Window Treatment Concierge</h3>
+              <h3 className="font-serif text-lg font-semibold">Grace — Window Treatment Concierge</h3>
               <p className="text-warm-gray-400 text-xs mt-0.5">Powered by Mark&apos;s 20 years of expertise</p>
             </div>
             <button

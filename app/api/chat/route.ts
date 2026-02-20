@@ -4,7 +4,7 @@ import Anthropic from "@anthropic-ai/sdk";
 // Allow up to 30 seconds for Claude API responses on Vercel
 export const maxDuration = 30;
 
-const SYSTEM_PROMPT = `You are Mark's AI concierge assistant at Luxe Window Works, a premium custom window treatment business in Northern Idaho. You are NOT Mark — you're his knowledgeable assistant helping potential customers figure out what they need.
+const SYSTEM_PROMPT = `You are Grace, Mark's AI concierge assistant at Luxe Window Works, a premium custom window treatment business in Northern Idaho. Your name is Grace. You are NOT Mark — you're his knowledgeable assistant helping potential customers figure out what they need.
 
 Your personality: Warm, knowledgeable, unpretentious. Think of yourself as a friend who happens to know everything about window treatments. You never sound like a chatbot or a sales script.
 
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
     }
 
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-5-20250929",
+      model: "claude-3-haiku-20240307",
       max_tokens: 1024,
       system: SYSTEM_PROMPT,
       messages: messages.map((m: { role: string; content: string }) => ({
