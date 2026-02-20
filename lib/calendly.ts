@@ -73,8 +73,6 @@ export function formatSlotForDisplay(isoString: string): string {
 }
 
 export async function getAvailableSlots(date: string): Promise<string[]> {
-  // date: YYYY-MM-DD (customer's date in Pacific time)
-  // Use -08:00 offset to cover the full Pacific day regardless of DST
   const startOfDay = new Date(`${date}T00:00:00-08:00`);
   const endOfDay = new Date(`${date}T23:59:59-08:00`);
 
@@ -88,6 +86,56 @@ export async function getAvailableSlots(date: string): Promise<string[]> {
   return data.collection
     .filter((slot) => slot.status === "available")
     .map((slot) => slot.start_time);
+}
+
+// Fetch available slots grouped by date (YYYY-MM-DD Pacific) for a date range.
+// Handles the Calendly 7-day API limit by splitting into chunks internally.
+export async function getAvailableSlotsForRange(
+  startDate: string, // YYYY-MM-DD
+  endDate: string    // YYYY-MM-DD
+): Promise<Record<string, string[]>> {
+  const eventTypeUri = await getConsultationEventTypeUri();
+
+  const rangeStart = new Date(`${startDate}T00:00:00-08:00`);
+  const rangeEnd = new Date(`${endDate}T23:59:59-08:00`);
+
+  // Split into ≤7-day chunks and fetch in parallel
+  const fetches: Promise<{ collection: Array<{ status: string; start_time: string }> }>[] = [];
+  let cursor = new Date(rangeStart);
+
+  while (cursor < rangeEnd) {
+    const chunkEnd = new Date(cursor);
+    chunkEnd.setDate(chunkEnd.getDate() + 6);
+    if (chunkEnd > rangeEnd) chunkEnd.setTime(rangeEnd.getTime());
+
+    const s = encodeURIComponent(cursor.toISOString());
+    const e = encodeURIComponent(chunkEnd.toISOString());
+    fetches.push(
+      calendlyFetch<{ collection: Array<{ status: string; start_time: string }> }>(
+        `/event_type_available_times?event_type=${encodeURIComponent(eventTypeUri)}&start_time=${s}&end_time=${e}`
+      )
+    );
+
+    cursor = new Date(chunkEnd);
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  const results = await Promise.all(fetches);
+
+  const byDate: Record<string, string[]> = {};
+  for (const result of results) {
+    for (const slot of result.collection) {
+      if (slot.status !== "available") continue;
+      // en-CA locale returns YYYY-MM-DD format natively
+      const dateKey = new Date(slot.start_time).toLocaleDateString("en-CA", {
+        timeZone: "America/Los_Angeles",
+      });
+      if (!byDate[dateKey]) byDate[dateKey] = [];
+      byDate[dateKey].push(slot.start_time);
+    }
+  }
+
+  return byDate;
 }
 
 export async function createSchedulingLink(name: string, email: string): Promise<string> {
@@ -107,4 +155,28 @@ export async function createSchedulingLink(name: string, email: string): Promise
   url.searchParams.set("name", name);
   url.searchParams.set("email", email);
   return url.toString();
+}
+
+// Directly create a Calendly booking via the Scheduling API (no link required).
+// Requires a paid Calendly plan.
+export async function createInvitee(params: {
+  name: string;
+  email: string;
+  startTime: string; // ISO UTC string
+}): Promise<{ uri: string; name: string; email: string; start_time: string }> {
+  const eventTypeUri = await getConsultationEventTypeUri();
+  const data = await calendlyFetch<{
+    resource: { uri: string; name: string; email: string; start_time: string };
+  }>("/invitees", {
+    method: "POST",
+    body: JSON.stringify({
+      event_type: eventTypeUri,
+      start_time: params.startTime,
+      invitee: {
+        name: params.name,
+        email: params.email,
+      },
+    }),
+  });
+  return data.resource;
 }

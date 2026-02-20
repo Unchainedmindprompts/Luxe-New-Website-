@@ -2,6 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import { BUSINESS } from "@/lib/constants";
+import BookingPanel, { ConfirmedAppointment } from "@/components/BookingPanel";
+
+// ---------- message rendering ----------
 
 function BookingButton({ url, before, after }: { url: string; before: string; after: string }) {
   return (
@@ -20,37 +23,12 @@ function BookingButton({ url, before, after }: { url: string; before: string; af
   );
 }
 
-function renderMessageContent(content: string) {
-  // Explicit <booking_url> tags
-  const tagMatch = content.match(/<booking_url>(https?:\/\/[^<]+)<\/booking_url>/);
-  if (tagMatch) {
-    const url = tagMatch[1].trim();
-    const before = content.slice(0, tagMatch.index ?? 0);
-    const after = content.slice((tagMatch.index ?? 0) + tagMatch[0].length);
-    return <BookingButton url={url} before={before} after={after} />;
-  }
-
-  // Fallback: raw Calendly URL anywhere in the message
-  const rawMatch = content.match(/(https:\/\/calendly\.com\/[^\s\n]+)/);
-  if (rawMatch) {
-    const url = rawMatch[1];
-    const before = content.slice(0, rawMatch.index ?? 0);
-    const after = content.slice((rawMatch.index ?? 0) + url.length);
-    return <BookingButton url={url} before={before} after={after} />;
-  }
-
-  return <>{content}</>;
-}
-
 interface Message {
   role: "user" | "assistant";
   content: string;
 }
 
-const INITIAL_USER_MESSAGE: Message = {
-  role: "user",
-  content: "Hi, I'm interested in window treatments for my home.",
-};
+// ---------- API ----------
 
 async function fetchChat(messages: Message[]): Promise<{ reply: string; error: string }> {
   const controller = new AbortController();
@@ -72,72 +50,61 @@ async function fetchChat(messages: Message[]): Promise<{ reply: string; error: s
       return { reply: "", error: `Non-JSON response (${res.status}): ${rawText.slice(0, 100)}` };
     }
 
-    if (data.message) {
-      return { reply: data.message, error: "" };
-    }
+    if (data.message) return { reply: data.message, error: "" };
     return { reply: "", error: data.error || `Unexpected response (${res.status})` };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    if (msg.includes("abort")) {
-      return { reply: "", error: "Request timed out (25s)" };
-    }
+    if (msg.includes("abort")) return { reply: "", error: "Request timed out (25s)" };
     return { reply: "", error: `Network error: ${msg}` };
   } finally {
     clearTimeout(timeout);
   }
 }
 
+// ---------- component ----------
+
+const INITIAL_USER_MESSAGE: Message = {
+  role: "user",
+  content: "Hi, I'm interested in window treatments for my home.",
+};
+
 export default function ConciergeChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [showBookingPanel, setShowBookingPanel] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+
+  useEffect(() => { scrollToBottom(); }, [messages]);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      startConversation();
-    }
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 300);
-    }
+    if (isOpen && messages.length === 0) startConversation();
+    if (isOpen) setTimeout(() => inputRef.current?.focus(), 300);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  const getFallbackGreeting = () => {
-    return `Hey there! I'm Grace, Mark's window treatment concierge at Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`;
-  };
+  const getFallbackGreeting = () =>
+    `Hey there! I'm Grace, Mark's window treatment concierge at Luxe Window Works. I'd love to help you figure out the right window treatments for your home. What room or area are you thinking about? And if you'd rather talk to Mark directly, you can always call him at ${BUSINESS.phone}.`;
 
-  const getFallbackError = () => {
-    return `I'm having a little trouble right now. Why don't you give Mark a call at ${BUSINESS.phone}? He'd be happy to help you directly.`;
-  };
+  const getFallbackError = () =>
+    `I'm having a little trouble right now. Why don't you give Mark a call at ${BUSINESS.phone}? He'd be happy to help you directly.`;
 
   const startConversation = async () => {
     setIsLoading(true);
     try {
       const { reply, error } = await fetchChat([INITIAL_USER_MESSAGE]);
-      if (error) {
-        console.error("[ConciergeChat] API error on greeting:", error);
-      }
+      if (error) console.error("[ConciergeChat] API error on greeting:", error);
       setMessages([
         INITIAL_USER_MESSAGE,
         { role: "assistant", content: reply || getFallbackGreeting() },
       ]);
     } catch (err) {
       console.error("[ConciergeChat] Unexpected error on greeting:", err);
-      setMessages([
-        INITIAL_USER_MESSAGE,
-        { role: "assistant", content: getFallbackGreeting() },
-      ]);
+      setMessages([INITIAL_USER_MESSAGE, { role: "assistant", content: getFallbackGreeting() }]);
     } finally {
       setIsLoading(false);
     }
@@ -155,26 +122,89 @@ export default function ConciergeChat() {
 
     try {
       const { reply, error } = await fetchChat(updatedMessages);
-      if (error) {
-        console.error("[ConciergeChat] API error on message:", error);
-      }
-      setMessages([
-        ...updatedMessages,
-        { role: "assistant", content: reply || getFallbackError() },
-      ]);
+      if (error) console.error("[ConciergeChat] API error:", error);
+      setMessages([...updatedMessages, { role: "assistant", content: reply || getFallbackError() }]);
     } catch (err) {
-      console.error("[ConciergeChat] Unexpected error on message:", err);
-      setMessages([
-        ...updatedMessages,
-        { role: "assistant", content: getFallbackError() },
-      ]);
+      console.error("[ConciergeChat] Unexpected error:", err);
+      setMessages([...updatedMessages, { role: "assistant", content: getFallbackError() }]);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Called when booking panel successfully confirms
+  const handleBookingConfirmed = (details: ConfirmedAppointment) => {
+    setShowBookingPanel(false);
+
+    const displayTime = new Date(details.startTime).toLocaleString("en-US", {
+      timeZone: "America/Los_Angeles",
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    const confirmMsg =
+      `You're all set! Here's your confirmation:\n\n` +
+      `Date & Time: ${displayTime} Pacific\n` +
+      `Address: ${details.address}\n\n` +
+      `Mark will call before the visit to confirm. If anything comes up, reach him at ${BUSINESS.phone} or ${BUSINESS.email}. Looking forward to helping with your window treatments!`;
+
+    setMessages((prev) => [...prev, { role: "assistant", content: confirmMsg }]);
+  };
+
+  // Render a single message's content — handles booking panel trigger, booking URLs, and plain text
+  function renderMessageContent(content: string) {
+    // Booking panel trigger tag
+    if (content.includes("<open_booking_panel />")) {
+      const text = content.replace("<open_booking_panel />", "").trim();
+      return (
+        <>
+          {text && <span>{text}</span>}
+          <button
+            onClick={() => setShowBookingPanel(true)}
+            className="mt-3 flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-5 py-3 rounded-full text-sm transition-colors w-full"
+          >
+            Schedule My Free Consultation →
+          </button>
+        </>
+      );
+    }
+
+    // Explicit <booking_url> tags (legacy fallback)
+    const tagMatch = content.match(/<booking_url>(https?:\/\/[^<]+)<\/booking_url>/);
+    if (tagMatch) {
+      const url = tagMatch[1].trim();
+      const before = content.slice(0, tagMatch.index ?? 0);
+      const after = content.slice((tagMatch.index ?? 0) + tagMatch[0].length);
+      return <BookingButton url={url} before={before} after={after} />;
+    }
+
+    // Raw Calendly URL fallback
+    const rawMatch = content.match(/(https:\/\/calendly\.com\/[^\s\n]+)/);
+    if (rawMatch) {
+      const url = rawMatch[1];
+      const before = content.slice(0, rawMatch.index ?? 0);
+      const after = content.slice((rawMatch.index ?? 0) + url.length);
+      return <BookingButton url={url} before={before} after={after} />;
+    }
+
+    return <>{content}</>;
+  }
+
   return (
     <>
+      {/* Booking panel modal */}
+      {showBookingPanel && (
+        <BookingPanel
+          onClose={() => setShowBookingPanel(false)}
+          onConfirmed={handleBookingConfirmed}
+        />
+      )}
+
       {/* Chat trigger button */}
       {!isOpen && (
         <button
