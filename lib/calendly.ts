@@ -31,32 +31,50 @@ async function getCalendlyUserUri(): Promise<string> {
   return cachedUserUri;
 }
 
-let cachedEventTypeUri: string | null = null;
+interface LocationConfig {
+  kind: string;
+  location?: string;
+  additional_info?: string;
+}
 
-async function getConsultationEventTypeUri(): Promise<string> {
-  if (cachedEventTypeUri) return cachedEventTypeUri;
+interface EventTypeInfo {
+  uri: string;
+  locationConfigs: LocationConfig[];
+}
+
+let cachedEventType: EventTypeInfo | null = null;
+
+async function getConsultationEventType(): Promise<EventTypeInfo> {
+  if (cachedEventType) return cachedEventType;
   const userUri = await getCalendlyUserUri();
   const data = await calendlyFetch<{
-    collection: Array<{ name: string; uri: string }>;
+    collection: Array<{
+      name: string;
+      uri: string;
+      location_configurations?: LocationConfig[];
+      locations?: LocationConfig[];
+    }>;
   }>(`/event_types?user=${encodeURIComponent(userUri)}&active=true&count=100`);
 
-  const eventType = data.collection.find(
+  const match = data.collection.find(
     (et) =>
       et.name.toLowerCase().includes("consultation") ||
       et.name.toLowerCase().includes("in-home") ||
       et.name.toLowerCase().includes("in home")
-  );
+  ) ?? data.collection[0];
 
-  if (!eventType) {
-    if (data.collection.length > 0) {
-      cachedEventTypeUri = data.collection[0].uri;
-      return cachedEventTypeUri;
-    }
-    throw new Error("No active Calendly event types found");
-  }
+  if (!match) throw new Error("No active Calendly event types found");
 
-  cachedEventTypeUri = eventType.uri;
-  return cachedEventTypeUri;
+  cachedEventType = {
+    uri: match.uri,
+    locationConfigs: match.location_configurations ?? match.locations ?? [],
+  };
+  return cachedEventType;
+}
+
+// Keep a simple URI getter for the availability functions
+async function getConsultationEventTypeUri(): Promise<string> {
+  return (await getConsultationEventType()).uri;
 }
 
 export function formatSlotForDisplay(isoString: string): string {
@@ -157,6 +175,11 @@ export async function createSchedulingLink(name: string, email: string): Promise
   return url.toString();
 }
 
+// Returns the raw event type info so we can inspect it for debugging.
+export async function getEventTypeDebugInfo(): Promise<EventTypeInfo> {
+  return getConsultationEventType();
+}
+
 // Directly create a Calendly booking via the Scheduling API (no link required).
 // Requires a paid Calendly plan.
 export async function createInvitee(params: {
@@ -165,25 +188,29 @@ export async function createInvitee(params: {
   startTime: string; // ISO UTC string
   address?: string;
 }): Promise<{ uri: string; name: string; email: string; start_time: string }> {
-  const eventTypeUri = await getConsultationEventTypeUri();
+  const eventType = await getConsultationEventType();
+
+  // Use the first location kind actually configured on the event type.
+  // For in-home consultations this is typically "physical" or "custom".
+  // The location value is the invitee's address.
+  const firstLocation = eventType.locationConfigs[0];
+  const locationPayload = firstLocation
+    ? { kind: firstLocation.kind, location: params.address ?? "" }
+    : undefined;
+
+  const body: Record<string, unknown> = {
+    event_type: eventType.uri,
+    start_time: params.startTime,
+    invitee: {
+      name: params.name,
+      email: params.email,
+      timezone: "America/Los_Angeles",
+    },
+  };
+  if (locationPayload) body.location = locationPayload;
+
   const data = await calendlyFetch<{
     resource: { uri: string; name: string; email: string; start_time: string };
-  }>("/invitees", {
-    method: "POST",
-    body: JSON.stringify({
-      event_type: eventTypeUri,
-      start_time: params.startTime,
-      invitee: {
-        name: params.name,
-        email: params.email,
-        timezone: "America/Los_Angeles",
-      },
-      // In-home consultation requires the invitee's address as the location
-      location: {
-        kind: "ask_invitee",
-        location: params.address ?? "",
-      },
-    }),
-  });
+  }>("/invitees", { method: "POST", body: JSON.stringify(body) });
   return data.resource;
 }
