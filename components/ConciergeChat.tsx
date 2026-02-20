@@ -3,16 +3,10 @@
 import { useState, useRef, useEffect } from "react";
 import { BUSINESS } from "@/lib/constants";
 
-function renderMessageContent(content: string) {
-  const match = content.match(/<booking_url>(https?:\/\/[^<]+)<\/booking_url>/);
-  if (!match) return <>{content}</>;
-
-  const url = match[1].trim();
-  const cleanText = content.replace(/<booking_url>[^<]*<\/booking_url>/g, "").trim();
-
+function BookingButton({ url, before, after }: { url: string; before: string; after: string }) {
   return (
     <>
-      {cleanText && <span>{cleanText}</span>}
+      {before && <span>{before.trim()}</span>}
       <a
         href={url}
         target="_blank"
@@ -21,8 +15,31 @@ function renderMessageContent(content: string) {
       >
         Book My Consultation →
       </a>
+      {after && <span>{after.trim()}</span>}
     </>
   );
+}
+
+function renderMessageContent(content: string) {
+  // Explicit <booking_url> tags
+  const tagMatch = content.match(/<booking_url>(https?:\/\/[^<]+)<\/booking_url>/);
+  if (tagMatch) {
+    const url = tagMatch[1].trim();
+    const before = content.slice(0, tagMatch.index ?? 0);
+    const after = content.slice((tagMatch.index ?? 0) + tagMatch[0].length);
+    return <BookingButton url={url} before={before} after={after} />;
+  }
+
+  // Fallback: raw Calendly URL anywhere in the message
+  const rawMatch = content.match(/(https:\/\/calendly\.com\/[^\s\n]+)/);
+  if (rawMatch) {
+    const url = rawMatch[1];
+    const before = content.slice(0, rawMatch.index ?? 0);
+    const after = content.slice((rawMatch.index ?? 0) + url.length);
+    return <BookingButton url={url} before={before} after={after} />;
+  }
+
+  return <>{content}</>;
 }
 
 interface Message {
