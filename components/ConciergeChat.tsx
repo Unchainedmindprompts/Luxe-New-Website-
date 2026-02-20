@@ -3,6 +3,28 @@
 import { useState, useRef, useEffect } from "react";
 import { BUSINESS } from "@/lib/constants";
 
+function renderMessageContent(content: string) {
+  const match = content.match(/<booking_url>(https?:\/\/[^<]+)<\/booking_url>/);
+  if (!match) return <>{content}</>;
+
+  const url = match[1].trim();
+  const cleanText = content.replace(/<booking_url>[^<]*<\/booking_url>/g, "").trim();
+
+  return (
+    <>
+      {cleanText && <span>{cleanText}</span>}
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-3 flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-5 py-2.5 rounded-full text-sm transition-colors"
+      >
+        Book My Consultation →
+      </a>
+    </>
+  );
+}
+
 interface Message {
   role: "user" | "assistant";
   content: string;
@@ -183,7 +205,7 @@ export default function ConciergeChat() {
                       : "bg-white text-charcoal border border-warm-gray-200 rounded-bl-md shadow-sm"
                   }`}
                 >
-                  {msg.content}
+                  {renderMessageContent(msg.content)}
                 </div>
               </div>
             ))}
