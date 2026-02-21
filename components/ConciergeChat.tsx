@@ -133,33 +133,13 @@ export default function ConciergeChat() {
   };
 
   // Called when booking panel successfully confirms
-  const handleBookingConfirmed = (details: ConfirmedAppointment) => {
+  const handleBookingConfirmed = (_details: ConfirmedAppointment) => {
     setShowBookingPanel(false);
-
-    const confirmMsg = details.startTime
-      ? (() => {
-          const displayTime = new Date(details.startTime).toLocaleString("en-US", {
-            timeZone: "America/Los_Angeles",
-            weekday: "long",
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: true,
-          });
-          return (
-            `You're all set! Here's your confirmation:\n\n` +
-            `Date & Time: ${displayTime} Pacific\n` +
-            `Address: ${details.address}\n\n` +
-            `Mark will call before the visit to confirm. If anything comes up, reach him at ${BUSINESS.phone} or ${BUSINESS.email}. Looking forward to helping with your window treatments!`
-          );
-        })()
-      : // Booked via Calendly's embed widget — exact time is in the confirmation email
-        `You're all set! Your free in-home consultation with Mark has been booked.\n\n` +
-        `Address on file: ${details.address}\n\n` +
-        `A confirmation email with your appointment details is on its way to ${details.email}. Mark will also call ahead of the visit to confirm. If you have any questions, reach him at ${BUSINESS.phone} or ${BUSINESS.email}. Looking forward to helping with your window treatments!`;
-
+    const confirmMsg =
+      `Your consultation with Mark is confirmed! A confirmation email with your date, time, and details is on its way.\n\n` +
+      `Mark will call you before the visit to confirm your address and answer any questions. ` +
+      `If anything comes up in the meantime, reach him at ${BUSINESS.phone} or ${BUSINESS.email}.\n\n` +
+      `Looking forward to helping with your window treatments!`;
     setMessages((prev) => [...prev, { role: "assistant", content: confirmMsg }]);
   };
 
