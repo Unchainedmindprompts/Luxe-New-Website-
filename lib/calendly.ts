@@ -39,6 +39,7 @@ interface LocationConfig {
 
 interface EventTypeInfo {
   uri: string;
+  schedulingUrl: string;
   locationConfigs: LocationConfig[];
 }
 
@@ -51,6 +52,7 @@ async function getConsultationEventType(): Promise<EventTypeInfo> {
     collection: Array<{
       name: string;
       uri: string;
+      scheduling_url: string;
       location_configurations?: LocationConfig[];
       locations?: LocationConfig[];
     }>;
@@ -67,6 +69,7 @@ async function getConsultationEventType(): Promise<EventTypeInfo> {
 
   cachedEventType = {
     uri: match.uri,
+    schedulingUrl: match.scheduling_url ?? "",
     locationConfigs: match.location_configurations ?? match.locations ?? [],
   };
   return cachedEventType;
@@ -173,6 +176,12 @@ export async function createSchedulingLink(name: string, email: string): Promise
   url.searchParams.set("name", name);
   url.searchParams.set("email", email);
   return url.toString();
+}
+
+// Returns the public scheduling URL for the event type (no auth required to visit it).
+export async function getConsultationSchedulingUrl(): Promise<string> {
+  const et = await getConsultationEventType();
+  return et.schedulingUrl;
 }
 
 // Returns the raw event type info so we can inspect it for debugging.
