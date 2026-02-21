@@ -81,7 +81,7 @@ export default function BookingPanel({ onClose, onConfirmed }: BookingPanelProps
 
     function initWidget() {
       const container = document.getElementById("calendly-embed-container");
-      const Cal = (window as Record<string, unknown>).Calendly as
+      const Cal = (window as unknown as Record<string, unknown>).Calendly as
         | { initInlineWidget: (opts: Record<string, unknown>) => void }
         | undefined;
       if (container && Cal) {
@@ -89,7 +89,7 @@ export default function BookingPanel({ onClose, onConfirmed }: BookingPanelProps
       }
     }
 
-    const Cal = (window as Record<string, unknown>).Calendly;
+    const Cal = (window as unknown as Record<string, unknown>).Calendly;
     if (Cal) {
       initWidget();
       return;
@@ -106,7 +106,7 @@ export default function BookingPanel({ onClose, onConfirmed }: BookingPanelProps
     } else {
       // Script is loading — poll until ready
       const interval = setInterval(() => {
-        if ((window as Record<string, unknown>).Calendly) {
+        if ((window as unknown as Record<string, unknown>).Calendly) {
           clearInterval(interval);
           initWidget();
         }
