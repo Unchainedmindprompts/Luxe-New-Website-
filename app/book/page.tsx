@@ -102,7 +102,7 @@ export default function BookPage() {
             Mark personally visits your home to see your windows, understand
             your goals, and recommend the right solution. No pressure, no
             guesswork — just honest advice from someone who&apos;s been doing
-            this for nearly 20 years.
+            this for two decades.
           </p>
         </div>
       </div>

@@ -91,7 +91,7 @@ export default function BlogPage() {
             Window Treatment Insights
           </h1>
           <p className="mt-4 text-lg text-warm-gray-200 leading-relaxed">
-            Expert advice, buying guides, and design inspiration from nearly 20 years
+            Expert advice, buying guides, and design inspiration from two decades
             of hands-on experience in Northern Idaho homes.
           </p>
         </div>

@@ -29,7 +29,7 @@ export const productPages: Record<string, ProductPageData> = {
     subheadline: "Cellular shades are the most energy-efficient window covering available — and in Northern Idaho, that matters more than most places.",
     problem: "Northern Idaho doesn't do moderate weather. January mornings hit single digits. July afternoons push into the 90s. And through all of it, your windows are the weakest link in your home's insulation. Single-pane windows in older Coeur d'Alene homes bleed heat all winter long. Even newer double-pane windows in Post Falls subdivisions let more energy escape than most homeowners realize.",
     solution: "Cellular shades — sometimes called honeycomb shades — use a unique structure of air pockets that act as insulation right at the window. The honeycomb cells trap air, creating a barrier between the extreme outdoor temperatures and your living space. Available in single, double, or triple-cell designs, with options from sheer light-filtering to complete blackout.",
-    expertInsight: "After nearly 20 years of installing these, here's what most companies won't tell you: the cell size matters more than most people think. A 3/4-inch double cell is the sweet spot for most Northern Idaho homes — it gives you substantial insulation without looking bulky. And if you have large windows facing the lake or the mountains, a top-down/bottom-up option lets you keep your view while still insulating the lower portion of the window. I've installed these in everything from 1960s ranch homes in Coeur d'Alene to brand-new builds in Rathdrum, and the difference in comfort is something homeowners notice immediately.",
+    expertInsight: "After two decades of installing these, here's what most companies won't tell you: the cell size matters more than most people think. A 3/4-inch double cell is the sweet spot for most Northern Idaho homes — it gives you substantial insulation without looking bulky. And if you have large windows facing the lake or the mountains, a top-down/bottom-up option lets you keep your view while still insulating the lower portion of the window. I've installed these in everything from 1960s ranch homes in Coeur d'Alene to brand-new builds in Rathdrum, and the difference in comfort is something homeowners notice immediately.",
     features: [
       "Honeycomb cell structure traps air for superior insulation",
       "Available in single, double, and triple cell options",
@@ -65,7 +65,7 @@ export const productPages: Record<string, ProductPageData> = {
       },
     ],
     metaTitle: "Cellular Shades in Northern Idaho | Energy Efficient Window Treatments",
-    metaDescription: "Custom cellular shades for Northern Idaho homes. The most energy-efficient window covering for Coeur d'Alene, Post Falls, Hayden. Free in-home consultation with nearly 20 years installer expertise.",
+    metaDescription: "Custom cellular shades for Northern Idaho homes. The most energy-efficient window covering for Coeur d'Alene, Post Falls, Hayden. Free in-home consultation with extensive hands-on installer expertise.",
   },
   "solar-shades": {
     slug: "solar-shades",
@@ -240,10 +240,10 @@ export const productPages: Record<string, ProductPageData> = {
     name: "Shutters",
     image: "/images/shutters.jpeg",
     headline: "The One Window Treatment That Actually Adds Value to Your Home.",
-    subheadline: "Plantation shutters are a permanent architectural upgrade — and with nearly 20 years of installation expertise, Mark ensures they're done right.",
+    subheadline: "Plantation shutters are a permanent architectural upgrade — and with two decades of installation expertise, Mark ensures they're done right.",
     problem: "Window treatments typically depreciate the moment they're installed — they're decorating, not improving. And most of them need to be replaced every 5-10 years. If you're investing in your home, especially a home you plan to keep or a property where resale value matters, you want something that lasts and actually adds to the home's worth.",
     solution: "Plantation shutters are built to last decades. Made from premium hardwood or engineered composites, they become a permanent part of your home's architecture. They offer unmatched light control — from fully open to completely private — and they work in virtually any style of home. Shutters are consistently cited by real estate professionals as one of the window treatments that buyers notice and value.",
-    expertInsight: "Shutters are where my nearly 20 years of experience matters most. Here's why: shutters require the most precise measurement of any window treatment. Every frame is custom-built to fit your specific window opening, and the tolerances are incredibly tight. A shade can be off by 1/8 inch and nobody notices. A shutter frame that's off by 1/8 inch won't close properly. I've fixed installations from other companies where the frames were built from measurements that didn't account for window frames being out of square — which happens more often than you'd think, especially in Northern Idaho homes that settle with our freeze-thaw cycles. I also help clients choose between real wood (beautiful but can warp in high-humidity areas like bathrooms) and composite (better for moisture, equally attractive). The right material in the right room makes all the difference.",
+    expertInsight: "Shutters are where my extensive hands-on expertise matters most. Here's why: shutters require the most precise measurement of any window treatment. Every frame is custom-built to fit your specific window opening, and the tolerances are incredibly tight. A shade can be off by 1/8 inch and nobody notices. A shutter frame that's off by 1/8 inch won't close properly. I've fixed installations from other companies where the frames were built from measurements that didn't account for window frames being out of square — which happens more often than you'd think, especially in Northern Idaho homes that settle with our freeze-thaw cycles. I also help clients choose between real wood (beautiful but can warp in high-humidity areas like bathrooms) and composite (better for moisture, equally attractive). The right material in the right room makes all the difference.",
     features: [
       "Premium hardwood and engineered composite options",
       "Multiple louver sizes — 2.5\", 3.5\", and 4.5\"",
@@ -276,7 +276,7 @@ export const productPages: Record<string, ProductPageData> = {
       },
     ],
     metaTitle: "Plantation Shutters in Northern Idaho | Custom Installation",
-    metaDescription: "Custom plantation shutters for Northern Idaho homes. Expert installation with nearly 20 years experience. Serving Coeur d'Alene, Post Falls, Hayden. Lifetime installation guarantee.",
+    metaDescription: "Custom plantation shutters for Northern Idaho homes. Expert installation with two decades of experience. Serving Coeur d'Alene, Post Falls, Hayden. Lifetime installation guarantee.",
   },
   "motorization": {
     slug: "motorization",

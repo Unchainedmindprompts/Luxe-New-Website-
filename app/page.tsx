@@ -28,8 +28,7 @@ export default function HomePage() {
         <div className="container-luxe relative">
           <div className="max-w-3xl">
             <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight text-balance">
-              Finally, Window Coverings That Actually Fit Your Home{" "}
-              <span className="italic text-warm-gray-300">and Your Life</span>
+              Northern Idaho&apos;s Most Trusted Window Treatment Specialist
             </h1>
             <p className="mt-6 md:mt-8 text-lg md:text-xl text-warm-gray-200 leading-relaxed max-w-2xl">
               Free in-home consultation with Mark — nearly 20 years of hands-on expertise,
@@ -95,7 +94,7 @@ export default function HomePage() {
           </h2>
           <p className="mt-6 text-lg text-warm-gray-600 leading-relaxed">
             Most window treatment companies throw a catalog at you and hope something sticks.
-            That&apos;s not how Mark works. With nearly 20 years of installation experience, he knows
+            That&apos;s not how Mark works. With two decades of installation experience, he knows
             that the right window covering depends on your room, your light, your climate, and your life —
             not just what looks good in a brochure.
           </p>
@@ -174,11 +173,11 @@ export default function HomePage() {
                 Meet Your Installer
               </p>
               <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-                Mark Isn&apos;t a Salesperson. He&apos;s a Craftsman.
+                Your Neighbor. Your Expert. Your Installer.
               </h2>
               <div className="mt-6 space-y-4 text-warm-gray-600 leading-relaxed text-[17px]">
                 <p>
-                  With nearly 20 years of hands-on installation experience, Mark has seen every
+                  With 20 years of hands-on installations, Mark has seen every
                   type of window, every challenging angle, and every &ldquo;impossible&rdquo; situation
                   that Northern Idaho homes can throw at you.
                 </p>

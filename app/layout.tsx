@@ -44,13 +44,13 @@ export const metadata: Metadata = {
     siteName: "Luxe Window Works",
     title: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
     description:
-      "Premium custom window treatments with nearly 20 years of hands-on expertise. Free in-home consultation. Serving Northern Idaho.",
+      "Premium custom window treatments with two decades of hands-on expertise. Free in-home consultation. Serving Northern Idaho.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
     description:
-      "Premium custom window treatments with nearly 20 years of hands-on expertise. Free in-home consultation.",
+      "Premium custom window treatments with two decades of hands-on expertise. Free in-home consultation.",
   },
   robots: {
     index: true,
@@ -64,7 +64,7 @@ const localBusinessSchema = {
   "@id": "https://luxewindowworks.com/#business",
   name: "Luxe Window Works",
   description:
-    "Premium custom window treatments in Northern Idaho with nearly 20 years of hands-on expertise. Specializing in cellular shades, plantation shutters, solar shades, roller shades, and motorized window treatments. Serving Coeur d'Alene, Post Falls, Hayden, Sandpoint, and Rathdrum, Idaho.",
+    "Premium custom window treatments in Northern Idaho with extensive hands-on expertise. Specializing in cellular shades, plantation shutters, solar shades, roller shades, and motorized window treatments. Serving Coeur d'Alene, Post Falls, Hayden, Sandpoint, and Rathdrum, Idaho.",
   url: "https://luxewindowworks.com",
   telephone: "208-660-8643",
   email: "mark@luxewindowworks.com",
