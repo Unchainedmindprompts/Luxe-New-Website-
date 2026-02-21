@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
         name: invitee.name,
         email: invitee.email,
         startTime: invitee.start_time,
+        address: address ?? "",
         uri: invitee.uri,
       },
     });
