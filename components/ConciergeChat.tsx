@@ -1,34 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import { BUSINESS } from "@/lib/constants";
-import BookingPanel, { ConfirmedAppointment } from "@/components/BookingPanel";
-
-// ---------- message rendering ----------
-
-function BookingButton({ url, before, after }: { url: string; before: string; after: string }) {
-  return (
-    <>
-      {before && <span>{before.trim()}</span>}
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-3 flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-5 py-2.5 rounded-full text-sm transition-colors"
-      >
-        Book My Consultation →
-      </a>
-      {after && <span>{after.trim()}</span>}
-    </>
-  );
-}
 
 interface Message {
   role: "user" | "assistant";
   content: string;
 }
-
-// ---------- API ----------
 
 async function fetchChat(messages: Message[]): Promise<{ reply: string; error: string }> {
   const controller = new AbortController();
@@ -61,8 +40,6 @@ async function fetchChat(messages: Message[]): Promise<{ reply: string; error: s
   }
 }
 
-// ---------- component ----------
-
 const INITIAL_USER_MESSAGE: Message = {
   role: "user",
   content: "Hi, I'm interested in window treatments for my home.",
@@ -73,12 +50,10 @@ export default function ConciergeChat() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [showBookingPanel, setShowBookingPanel] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-
   useEffect(() => { scrollToBottom(); }, [messages]);
 
   useEffect(() => {
@@ -132,79 +107,30 @@ export default function ConciergeChat() {
     }
   };
 
-  // Called when booking panel successfully confirms
-  const handleBookingConfirmed = (details: ConfirmedAppointment) => {
-    setShowBookingPanel(false);
-
-    const displayTime = new Date(details.startTime).toLocaleString("en-US", {
-      timeZone: "America/Los_Angeles",
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-
-    const confirmMsg =
-      `You're all set! Here's your confirmation:\n\n` +
-      `Date & Time: ${displayTime} Pacific\n` +
-      `Address: ${details.address}\n\n` +
-      `Mark will call before the visit to confirm. If anything comes up, reach him at ${BUSINESS.phone} or ${BUSINESS.email}. Looking forward to helping with your window treatments!`;
-
-    setMessages((prev) => [...prev, { role: "assistant", content: confirmMsg }]);
-  };
-
-  // Render a single message's content — handles booking panel trigger, booking URLs, and plain text
+  // Render a message — detects Grace's booking trigger tag and renders a link to /book
   function renderMessageContent(content: string) {
-    // Booking panel trigger tag
-    if (content.includes("<open_booking_panel />")) {
-      const text = content.replace("<open_booking_panel />", "").trim();
+    if (content.includes("<open_booking_form />")) {
+      const text = content.replace("<open_booking_form />", "").trim();
       return (
         <>
           {text && <span>{text}</span>}
-          <button
-            onClick={() => setShowBookingPanel(true)}
+          <Link
+            href="/book"
             className="mt-3 flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-5 py-3 rounded-full text-sm transition-colors w-full"
           >
-            Schedule My Free Consultation →
-          </button>
+            Book My Free Consultation
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
         </>
       );
     }
-
-    // Explicit <booking_url> tags (legacy fallback)
-    const tagMatch = content.match(/<booking_url>(https?:\/\/[^<]+)<\/booking_url>/);
-    if (tagMatch) {
-      const url = tagMatch[1].trim();
-      const before = content.slice(0, tagMatch.index ?? 0);
-      const after = content.slice((tagMatch.index ?? 0) + tagMatch[0].length);
-      return <BookingButton url={url} before={before} after={after} />;
-    }
-
-    // Raw Calendly URL fallback
-    const rawMatch = content.match(/(https:\/\/calendly\.com\/[^\s\n]+)/);
-    if (rawMatch) {
-      const url = rawMatch[1];
-      const before = content.slice(0, rawMatch.index ?? 0);
-      const after = content.slice((rawMatch.index ?? 0) + url.length);
-      return <BookingButton url={url} before={before} after={after} />;
-    }
-
     return <>{content}</>;
   }
 
   return (
     <>
-      {/* Booking panel modal */}
-      {showBookingPanel && (
-        <BookingPanel
-          onClose={() => setShowBookingPanel(false)}
-          onConfirmed={handleBookingConfirmed}
-        />
-      )}
-
       {/* Chat trigger button */}
       {!isOpen && (
         <button
@@ -221,7 +147,7 @@ export default function ConciergeChat() {
       {/* Chat interface */}
       {isOpen && (
         <div className="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-xl border border-warm-gray-200/60 overflow-hidden">
-          {/* Chat header */}
+          {/* Header */}
           <div className="bg-charcoal text-white px-6 py-4 flex items-center justify-between">
             <div>
               <h3 className="font-serif text-lg font-semibold">Grace — Window Treatment Concierge</h3>
