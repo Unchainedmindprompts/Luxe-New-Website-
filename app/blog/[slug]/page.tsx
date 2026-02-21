@@ -221,49 +221,6 @@ function ArticleSchema({ post }: { post: BlogPost }) {
   );
 }
 
-function BreadcrumbSchema({ post }: { post: BlogPost }) {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "@id": `${BUSINESS.url}/blog/${post.slug}#breadcrumb`,
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: { "@type": "WebPage", "@id": BUSINESS.url, name: "Home" },
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Blog",
-        item: {
-          "@type": "WebPage",
-          "@id": `${BUSINESS.url}/blog`,
-          name: "Window Treatment Blog",
-        },
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: post.title,
-        item: {
-          "@type": "WebPage",
-          "@id": `${BUSINESS.url}/blog/${post.slug}`,
-          name: post.title,
-        },
-      },
-    ],
-  };
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
-}
-
 export default function BlogPostPage({ params }: Props) {
   const post = getPost(params.slug);
   if (!post) notFound();
@@ -271,7 +228,6 @@ export default function BlogPostPage({ params }: Props) {
   return (
     <>
       <ArticleSchema post={post} />
-      <BreadcrumbSchema post={post} />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },

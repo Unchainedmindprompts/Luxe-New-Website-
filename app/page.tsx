@@ -11,49 +11,9 @@ function StarIcon() {
   );
 }
 
-function LocalBusinessSchema() {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: BUSINESS.name,
-    telephone: BUSINESS.phone,
-    email: BUSINESS.email,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: BUSINESS.address.street,
-      addressLocality: BUSINESS.address.city,
-      addressRegion: BUSINESS.address.state,
-      postalCode: BUSINESS.address.zip,
-      addressCountry: "US",
-    },
-    url: BUSINESS.url,
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: BUSINESS.google.rating,
-      reviewCount: BUSINESS.google.reviewCount,
-      bestRating: 5,
-    },
-    areaServed: SERVICE_AREAS.map((area) => ({
-      "@type": "City",
-      name: area.name,
-    })),
-    priceRange: "$$",
-    description:
-      "Premium custom window treatments in Northern Idaho. Nearly 20 years of installer expertise. Free in-home consultation.",
-  };
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
-}
-
 export default function HomePage() {
   return (
     <>
-      <LocalBusinessSchema />
 
       {/* Hero Section */}
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">

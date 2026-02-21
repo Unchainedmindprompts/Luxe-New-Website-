@@ -63,46 +63,12 @@ function BlogListSchema() {
   );
 }
 
-function BlogBreadcrumbSchema() {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "@id": `${BUSINESS.url}/blog#breadcrumb`,
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: { "@type": "WebPage", "@id": BUSINESS.url, name: "Home" },
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Blog",
-        item: {
-          "@type": "WebPage",
-          "@id": `${BUSINESS.url}/blog`,
-          name: "Window Treatment Blog",
-        },
-      },
-    ],
-  };
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
-}
-
 export default function BlogPage() {
   const posts = getAllPosts();
 
   return (
     <>
       <BlogListSchema />
-      <BlogBreadcrumbSchema />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
