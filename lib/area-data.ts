@@ -24,7 +24,7 @@ export const areaPages: Record<string, AreaPageData> = {
     climateConsiderations: "Lake Coeur d'Alene creates its own microclimate. Homes near the water experience more humidity, which affects material choices (composite shutters over wood for lake-adjacent rooms). West-facing lakefront windows deal with intense afternoon sun reflecting off the water — solar shades with low openness factors are essential. In winter, the lake effect moderates temperatures slightly compared to inland areas, but older homes with original windows still benefit enormously from the insulating properties of cellular shades.",
     localCTA: "Ready to find the right window treatments for your Coeur d'Alene home? Mark offers free in-home consultations throughout the Coeur d'Alene area — from lakefront properties to downtown neighborhoods.",
     metaTitle: "Window Treatments Coeur d'Alene ID | Custom Blinds, Shades & Shutters",
-    metaDescription: "Custom window treatments for Coeur d'Alene homes. Specializing in lakefront properties, historic homes, and new construction. Free in-home consultation. Nearly 20 years experience.",
+    metaDescription: "Custom window treatments for Coeur d'Alene homes. Specializing in lakefront properties, historic homes, and new construction. Free in-home consultation with two decades of expertise.",
   },
   "post-falls": {
     slug: "post-falls",
@@ -37,7 +37,7 @@ export const areaPages: Record<string, AreaPageData> = {
     climateConsiderations: "Post Falls sits in the Spokane River corridor and tends to experience the full force of Northern Idaho's temperature extremes — single digits in winter, 90s in summer. Without the moderating effect of the lake that Coeur d'Alene enjoys, energy-efficient window treatments like cellular shades are especially valuable here. South and west-facing windows in newer homes with larger glass areas can generate significant heat gain in summer, making solar shades or quality roller shades a smart investment.",
     localCTA: "We're based right here in Post Falls and know these neighborhoods well. Schedule a free in-home consultation — Mark can usually get to Post Falls homes the fastest since it's his home base.",
     metaTitle: "Window Treatments Post Falls ID | Blinds, Shades & Shutters",
-    metaDescription: "Custom window treatments for Post Falls homes. Local business specializing in new construction and growing communities. Free in-home consultation. Nearly 20 years experience.",
+    metaDescription: "Custom window treatments for Post Falls homes. Local business specializing in new construction and growing communities. Free in-home consultation with two decades of expertise.",
   },
   "hayden": {
     slug: "hayden",
@@ -50,7 +50,7 @@ export const areaPages: Record<string, AreaPageData> = {
     climateConsiderations: "Hayden Lake properties deal with similar water-reflection glare issues as Coeur d'Alene lakefront homes, making solar shades a popular choice. Inland Hayden neighborhoods experience the full range of Northern Idaho temperature extremes without lake moderation. The area's elevation means slightly more snow and cold in winter than lower-lying Post Falls, making energy efficiency an important factor in window treatment selection.",
     localCTA: "Whether you're on Hayden Lake or in one of the family neighborhoods, Mark provides free in-home consultations throughout the Hayden area. Let's find the right solution for your space.",
     metaTitle: "Window Treatments Hayden ID | Custom Blinds, Shades & Shutters",
-    metaDescription: "Custom window treatments for Hayden, ID homes. Specializing in Hayden Lake properties and residential neighborhoods. Free in-home consultation. Nearly 20 years experience.",
+    metaDescription: "Custom window treatments for Hayden, ID homes. Specializing in Hayden Lake properties and residential neighborhoods. Free in-home consultation with two decades of expertise.",
   },
   "rathdrum": {
     slug: "rathdrum",
@@ -63,7 +63,7 @@ export const areaPages: Record<string, AreaPageData> = {
     climateConsiderations: "Rathdrum sits on the Rathdrum Prairie at a slightly higher elevation than Post Falls or Coeur d'Alene, which means colder winters and more exposure to weather. Wind can be a factor on the prairie, making well-fitted window treatments important for both insulation and comfort. The combination of newer construction (which tends to be more energy-efficient) and extreme temperatures makes cellular shades a particularly smart investment here — they complement modern insulation rather than fighting against drafty older windows.",
     localCTA: "Rathdrum is growing fast, and we're growing with it. Whether you're in a brand-new subdivision or one of the established neighborhoods, Mark offers free in-home consultations throughout the Rathdrum area.",
     metaTitle: "Window Treatments Rathdrum ID | Blinds, Shades & Shutters",
-    metaDescription: "Custom window treatments for Rathdrum, ID homes. Specializing in new construction and growing communities. Free in-home consultation. Nearly 20 years experience.",
+    metaDescription: "Custom window treatments for Rathdrum, ID homes. Specializing in new construction and growing communities. Free in-home consultation with two decades of expertise.",
   },
   "sandpoint": {
     slug: "sandpoint",
@@ -76,6 +76,6 @@ export const areaPages: Record<string, AreaPageData> = {
     climateConsiderations: "Sandpoint's northerly location means longer, colder winters and more snow than communities further south in the corridor. Lake Pend Oreille moderates temperatures somewhat for waterfront properties, but inland and mountain-area homes experience the full force of Northern Idaho winter. Summer brings long, warm days with intense sun that reflects brilliantly off the lake — making solar protection crucial for waterfront properties. The combination of extreme seasons and premium homes makes energy-efficient, high-quality window treatments not just a comfort issue but a home protection investment.",
     localCTA: "Mark serves the greater Sandpoint area including lakefront properties, downtown homes, and the Schweitzer corridor. Schedule a free in-home consultation — the drive to Sandpoint is one of his favorites.",
     metaTitle: "Window Treatments Sandpoint ID | Custom Blinds, Shades & Shutters",
-    metaDescription: "Luxury window treatments for Sandpoint, ID homes. Specializing in Lake Pend Oreille waterfront properties and mountain homes. Free consultation. Nearly 20 years experience.",
+    metaDescription: "Luxury window treatments for Sandpoint, ID homes. Specializing in Lake Pend Oreille waterfront properties and mountain homes. Free consultation with two decades of expertise.",
   },
 };

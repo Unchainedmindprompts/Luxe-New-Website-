@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | Luxe Window Works",
   },
   description:
-    "Premium custom window treatments in Northern Idaho. Nearly 20 years of installer expertise serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Free in-home consultation.",
+    "Premium custom window treatments in Northern Idaho. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint with two decades of installer expertise. Free in-home consultation.",
   keywords: [
     "window treatments",
     "custom blinds",

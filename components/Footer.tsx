@@ -17,7 +17,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-sm text-warm-gray-400 leading-relaxed">
-              Nearly 20 years of hands-on expertise in custom window treatments.
+              Two decades of hands-on expertise in custom window treatments.
               Serving Northern Idaho with premium products and a lifetime installation guarantee.
             </p>
             <div className="mt-6 space-y-2 text-sm">

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS, PRODUCTS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
+import type { AreaPageData } from "@/lib/area-data";
 
 interface Props {
   params: { slug: string };
@@ -29,12 +30,87 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+function AreaSchema({ area }: { area: AreaPageData }) {
+  const localBusiness = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://luxewindowworks.com/#business",
+    name: "Luxe Window Works",
+    url: "https://luxewindowworks.com",
+    telephone: "208-660-8643",
+    email: "mark@luxewindowworks.com",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "2972 N Pavo Ln",
+      addressLocality: "Post Falls",
+      addressRegion: "ID",
+      postalCode: "83854",
+      addressCountry: "US",
+    },
+    areaServed: {
+      "@type": "City",
+      name: area.name,
+      containedInPlace: {
+        "@type": "State",
+        name: "Idaho",
+      },
+    },
+  };
+
+  const service = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: `Custom Window Treatments in ${area.name}, Idaho`,
+    serviceType: "Custom Window Treatment Installation",
+    provider: {
+      "@type": "LocalBusiness",
+      "@id": "https://luxewindowworks.com/#business",
+      name: "Luxe Window Works",
+    },
+    areaServed: {
+      "@type": "City",
+      name: area.name,
+      containedInPlace: {
+        "@type": "State",
+        name: "Idaho",
+      },
+    },
+    description: area.description,
+    url: `https://luxewindowworks.com/areas/${area.slug}`,
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+      description: "Free in-home consultation and written quote — no obligation",
+      availability: "https://schema.org/InStock",
+    },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", ".area-description"],
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusiness) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(service) }}
+      />
+    </>
+  );
+}
+
 export default function AreaPage({ params }: Props) {
   const area = areaPages[params.slug];
   if (!area) notFound();
 
   return (
     <>
+      <AreaSchema area={area} />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
@@ -86,7 +162,7 @@ export default function AreaPage({ params }: Props) {
           <h2 className="font-serif text-2xl sm:text-3xl text-charcoal mb-6">
             Window Treatments in {area.name}
           </h2>
-          <p className="text-warm-gray-600 leading-relaxed text-lg">
+          <p className="area-description text-warm-gray-600 leading-relaxed text-lg">
             {area.description}
           </p>
         </div>
