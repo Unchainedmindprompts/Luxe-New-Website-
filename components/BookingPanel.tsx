@@ -7,7 +7,7 @@ export interface ConfirmedAppointment {
   email: string;
   phone: string;
   address: string;
-  /** ISO UTC string from Calendly, or empty string when booked via the embed widget */
+  /** ISO UTC string, or empty string when booked via the Calendly widget */
   startTime: string;
 }
 
@@ -58,7 +58,7 @@ export default function BookingPanel({ onClose, onConfirmed }: BookingPanelProps
           email: form.email.trim(),
           phone: form.phone.trim(),
           address: form.address.trim(),
-          startTime: "", // Calendly sends confirmation email with the exact time
+          startTime: "",
         });
       }
     }
@@ -66,11 +66,10 @@ export default function BookingPanel({ onClose, onConfirmed }: BookingPanelProps
     return () => window.removeEventListener("message", handleMessage);
   }, [form, onConfirmed]);
 
-  // Initialise the Calendly inline widget when entering the calendar step
+  // Load Calendly widget assets when entering the calendar step
   useEffect(() => {
-    if (step !== "calendar" || !calendlyUrl) return;
+    if (step !== "calendar") return;
 
-    // Load Calendly CSS once
     if (!document.querySelector("link[data-calendly-css]")) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
@@ -79,41 +78,14 @@ export default function BookingPanel({ onClose, onConfirmed }: BookingPanelProps
       document.head.appendChild(link);
     }
 
-    function initWidget() {
-      const container = document.getElementById("calendly-embed-container");
-      const Cal = (window as unknown as Record<string, unknown>).Calendly as
-        | { initInlineWidget: (opts: Record<string, unknown>) => void }
-        | undefined;
-      if (container && Cal) {
-        Cal.initInlineWidget({ url: calendlyUrl, parentElement: container });
-      }
-    }
-
-    const Cal = (window as unknown as Record<string, unknown>).Calendly;
-    if (Cal) {
-      initWidget();
-      return;
-    }
-
-    // Load widget script if not already loading/loaded
     if (!document.querySelector("script[data-calendly-js]")) {
       const script = document.createElement("script");
       script.src = "https://assets.calendly.com/assets/external/widget.js";
       script.setAttribute("data-calendly-js", "1");
       script.async = true;
-      script.onload = initWidget;
       document.body.appendChild(script);
-    } else {
-      // Script is loading — poll until ready
-      const interval = setInterval(() => {
-        if ((window as unknown as Record<string, unknown>).Calendly) {
-          clearInterval(interval);
-          initWidget();
-        }
-      }, 100);
-      return () => clearInterval(interval);
     }
-  }, [step, calendlyUrl]);
+  }, [step]);
 
   function validate(): boolean {
     const e: Record<string, string> = {};
@@ -172,7 +144,7 @@ export default function BookingPanel({ onClose, onConfirmed }: BookingPanelProps
           <div className="flex items-center gap-3">
             {step === "calendar" && (
               <button
-                onClick={() => setStep("form")}
+                onClick={() => { setStep("form"); setCalendlyUrl(null); confirmedRef.current = false; }}
                 className="text-warm-gray-400 hover:text-white transition-colors p-1 -ml-1"
                 aria-label="Back"
               >
@@ -206,77 +178,37 @@ export default function BookingPanel({ onClose, onConfirmed }: BookingPanelProps
           <>
             <div className="overflow-y-auto flex-1 p-6">
               <p className="text-sm text-warm-gray-500 mb-4">
-                Enter your details below, then we&apos;ll show you Mark&apos;s available times.
+                Enter your details, then we&apos;ll show you Mark&apos;s available times.
               </p>
               <div className="space-y-3">
-                <p className="text-xs font-semibold text-warm-gray-500 uppercase tracking-wide">
-                  Your Information
-                </p>
-
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <input
-                      className={inputCls("firstName")}
-                      placeholder="First Name"
-                      value={form.firstName}
-                      onChange={(e) => setForm((f) => ({ ...f, firstName: e.target.value }))}
-                    />
-                    {errors.firstName && (
-                      <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
-                    )}
+                    <input className={inputCls("firstName")} placeholder="First Name" value={form.firstName}
+                      onChange={(e) => setForm((f) => ({ ...f, firstName: e.target.value }))} />
+                    {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
                   </div>
                   <div>
-                    <input
-                      className={inputCls("lastName")}
-                      placeholder="Last Name"
-                      value={form.lastName}
-                      onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))}
-                    />
-                    {errors.lastName && (
-                      <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
-                    )}
+                    <input className={inputCls("lastName")} placeholder="Last Name" value={form.lastName}
+                      onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))} />
+                    {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
                   </div>
                 </div>
-
                 <div>
-                  <input
-                    type="email"
-                    className={inputCls("email")}
-                    placeholder="Email Address"
-                    value={form.email}
-                    onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                  />
-                  {errors.email && (
-                    <p className="text-red-500 text-xs mt-1">{errors.email}</p>
-                  )}
+                  <input type="email" className={inputCls("email")} placeholder="Email Address" value={form.email}
+                    onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} />
+                  {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                 </div>
-
                 <div>
-                  <input
-                    type="tel"
-                    className={inputCls("phone")}
-                    placeholder="Phone Number"
-                    value={form.phone}
-                    onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
-                  />
-                  {errors.phone && (
-                    <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
-                  )}
+                  <input type="tel" className={inputCls("phone")} placeholder="Phone Number" value={form.phone}
+                    onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} />
+                  {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                 </div>
-
                 <div>
-                  <input
-                    className={inputCls("address")}
-                    placeholder="Home Address (for the in-home visit)"
-                    value={form.address}
-                    onChange={(e) => setForm((f) => ({ ...f, address: e.target.value }))}
-                  />
-                  {errors.address && (
-                    <p className="text-red-500 text-xs mt-1">{errors.address}</p>
-                  )}
+                  <input className={inputCls("address")} placeholder="Home Address (for the in-home visit)" value={form.address}
+                    onChange={(e) => setForm((f) => ({ ...f, address: e.target.value }))} />
+                  {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
                 </div>
               </div>
-
               {linkError && (
                 <p className="text-red-500 text-sm bg-red-50 border border-red-200 rounded-lg p-3 mt-4">
                   {linkError}
@@ -314,20 +246,37 @@ export default function BookingPanel({ onClose, onConfirmed }: BookingPanelProps
           </>
         )}
 
-        {/* Step 2 — Calendly embed */}
-        {step === "calendar" && (
+        {/* Step 2 — Calendly widget */}
+        {step === "calendar" && calendlyUrl && (
           <div className="flex flex-col flex-1 overflow-hidden">
             <div className="px-4 py-2 bg-gold/5 border-b border-gold/20 flex-shrink-0 text-center">
               <p className="text-xs text-warm-gray-500">
-                Select a date &amp; time · Confirmation email will be sent to{" "}
+                Pick a date &amp; time · Confirmation emailed to{" "}
                 <span className="font-semibold text-charcoal">{form.email}</span>
               </p>
             </div>
-            {/* Calendly widget mounts here via initInlineWidget */}
+
+            {/* Calendly auto-initialises any .calendly-inline-widget div when its script loads */}
             <div
-              id="calendly-embed-container"
-              style={{ flex: 1, minHeight: 580 }}
+              className="calendly-inline-widget flex-1"
+              data-url={calendlyUrl}
+              style={{ minHeight: 580 }}
             />
+
+            {/* Fallback link in case the widget doesn't render */}
+            <div className="px-4 py-2 border-t border-warm-gray-100 text-center flex-shrink-0">
+              <p className="text-xs text-warm-gray-400">
+                Widget not loading?{" "}
+                <a
+                  href={calendlyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gold underline"
+                >
+                  Open Calendly directly
+                </a>
+              </p>
+            </div>
           </div>
         )}
       </div>
