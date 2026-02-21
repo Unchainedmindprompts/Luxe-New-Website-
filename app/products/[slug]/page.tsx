@@ -4,6 +4,7 @@ import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { productPages } from "@/lib/product-data";
+import type { ProductPageData } from "@/lib/product-data";
 
 interface Props {
   params: { slug: string };
@@ -28,13 +29,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function ServiceSchema({ product }: { product: typeof productPages[string] }) {
+function ServiceSchema({ product }: { product: ProductPageData }) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
     name: `${product.name} Installation`,
     provider: {
       "@type": "LocalBusiness",
+      "@id": "https://luxewindowworks.com/#business",
       name: BUSINESS.name,
       telephone: BUSINESS.phone,
     },
@@ -43,6 +45,32 @@ function ServiceSchema({ product }: { product: typeof productPages[string] }) {
       name: "Idaho",
     },
     description: product.solution,
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", ".product-subheadline"],
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+function FAQSchema({ product }: { product: ProductPageData }) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: product.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
   };
 
   return (
@@ -60,6 +88,7 @@ export default function ProductPage({ params }: Props) {
   return (
     <>
       <ServiceSchema product={product} />
+      <FAQSchema product={product} />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
@@ -77,7 +106,7 @@ export default function ProductPage({ params }: Props) {
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-charcoal leading-tight text-balance">
             {product.headline}
           </h1>
-          <p className="mt-6 text-lg md:text-xl text-warm-gray-600 leading-relaxed">
+          <p className="product-subheadline mt-6 text-lg md:text-xl text-warm-gray-600 leading-relaxed">
             {product.subheadline}
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
@@ -213,6 +242,27 @@ export default function ProductPage({ params }: Props) {
           <p className="text-warm-gray-600 leading-relaxed text-lg">
             {product.localContext}
           </p>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-16 md:py-20 bg-cream/50">
+        <div className="container-luxe max-w-3xl">
+          <h2 className="font-serif text-2xl sm:text-3xl text-charcoal mb-8">
+            Common Questions About {product.name}
+          </h2>
+          <div className="space-y-6">
+            {product.faqs.map((faq, i) => (
+              <div key={i} className="bg-white rounded-2xl p-6 md:p-8 border border-warm-gray-200/60">
+                <h3 className="font-serif text-lg font-semibold text-charcoal mb-3">
+                  {faq.question}
+                </h3>
+                <p className="text-warm-gray-600 leading-relaxed">
+                  {faq.answer}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

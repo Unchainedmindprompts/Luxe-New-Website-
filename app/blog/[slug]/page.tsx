@@ -204,6 +204,10 @@ function ArticleSchema({ post }: { post: BlogPost }) {
         name: BUSINESS.name,
       },
     },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", ".post-excerpt"],
+    },
     ...(post.featuredImage && {
       image: {
         "@type": "ImageObject",
@@ -260,7 +264,12 @@ export default function BlogPostPage({ params }: Props) {
             <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
               {post.title}
             </h1>
-            <p className="mt-4 text-lg text-warm-gray-600">
+            {post.excerpt && (
+              <p className="post-excerpt mt-4 text-lg text-warm-gray-500 leading-relaxed">
+                {post.excerpt}
+              </p>
+            )}
+            <p className="mt-3 text-sm text-warm-gray-400">
               By {post.author}
             </p>
           </div>
