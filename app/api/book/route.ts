@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const invitee = await createInvitee({ name, email, startTime });
+    const invitee = await createInvitee({ name, email, startTime, address });
 
     return NextResponse.json({
       success: true,
@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
         name: invitee.name,
         email: invitee.email,
         startTime: invitee.start_time,
+        address: address ?? "",
         uri: invitee.uri,
       },
     });
