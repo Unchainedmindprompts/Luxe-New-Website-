@@ -190,14 +190,12 @@ export async function createInvitee(params: {
 }): Promise<{ uri: string; name: string; email: string; start_time: string }> {
   const eventType = await getConsultationEventType();
 
-  // Use the first location kind actually configured on the event type.
-  // For in-home consultations this is typically "physical" or "custom".
-  // The location value is the invitee's address.
-  const firstLocation = eventType.locationConfigs[0];
-  const locationPayload = firstLocation
-    ? { kind: firstLocation.kind, location: params.address ?? "" }
-    : undefined;
-
+  // Note: we intentionally omit the `location` field from the API call.
+  // Calendly's location field requires an exact kind match with the event type's
+  // configured locations (physical, ask_invitee, etc.). Sending the wrong kind
+  // causes a 400 error. Omitting it lets Calendly use its default location
+  // behavior. The customer's address is captured in our booking panel form and
+  // shown in the chat confirmation message for Mark's reference.
   const body: Record<string, unknown> = {
     event_type: eventType.uri,
     start_time: params.startTime,
@@ -207,7 +205,6 @@ export async function createInvitee(params: {
       timezone: "America/Los_Angeles",
     },
   };
-  if (locationPayload) body.location = locationPayload;
 
   const data = await calendlyFetch<{
     resource: { uri: string; name: string; email: string; start_time: string };
