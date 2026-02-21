@@ -60,7 +60,7 @@ export const metadata: Metadata = {
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": "HomeAndConstructionBusiness",
+  "@type": "LocalBusiness",
   "@id": "https://luxewindowworks.com/#business",
   name: "Luxe Window Works",
   description:
