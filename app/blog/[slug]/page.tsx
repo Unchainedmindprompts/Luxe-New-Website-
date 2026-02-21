@@ -161,10 +161,33 @@ const markAuthorSchema = {
   ],
 };
 
+/** Per-post `about` and `mentions` entity arrays for schema strategy */
+const postSchemaEntities: Record<string, { about: object[]; mentions: object[] }> = {
+  "the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration": {
+    about: [
+      { "@type": "Thing", "name": "Plantation Shutters" },
+      { "@type": "Thing", "name": "Shutter Frame Types" },
+      { "@type": "Thing", "name": "Window Treatment Installation" },
+      { "@type": "Thing", "name": "Shutter Materials" },
+      { "@type": "Thing", "name": "Window Depth Requirements" },
+    ],
+    mentions: [
+      { "@type": "Brand", "name": "Norman" },
+      { "@type": "Brand", "name": "Aviner" },
+      { "@type": "Organization", "name": "The Window Outfitters" },
+      { "@type": "City", "name": "Coeur d'Alene", "addressRegion": "ID" },
+      { "@type": "City", "name": "Post Falls", "addressRegion": "ID" },
+      { "@type": "City", "name": "Sandpoint", "addressRegion": "ID" },
+      { "@type": "City", "name": "Hayden", "addressRegion": "ID" },
+    ],
+  },
+};
+
 function ArticleSchema({ post }: { post: BlogPost }) {
+  const entities = postSchemaEntities[post.slug];
   const schema = {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    "@type": "Article",
     "@id": `${BUSINESS.url}/blog/${post.slug}#article`,
     headline: post.title,
     description: post.excerpt,
@@ -176,19 +199,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     inLanguage: "en-US",
     author: markAuthorSchema,
     publisher: {
-      "@type": "LocalBusiness",
-      "@id": "https://luxewindowworks.com/#business",
-      name: BUSINESS.name,
-      url: BUSINESS.url,
-      telephone: BUSINESS.phone,
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: BUSINESS.address.street,
-        addressLocality: BUSINESS.address.city,
-        addressRegion: BUSINESS.address.state,
-        postalCode: BUSINESS.address.zip,
-        addressCountry: "US",
-      },
+      "@id": "https://luxewindowworks.com/#organization",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
@@ -196,12 +207,10 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     },
     isPartOf: {
       "@type": "Blog",
-      "@id": `${BUSINESS.url}/blog`,
+      "@id": `${BUSINESS.url}/blog#blog`,
       name: "Luxe Window Works Blog",
       publisher: {
-        "@type": "LocalBusiness",
-        "@id": "https://luxewindowworks.com/#business",
-        name: BUSINESS.name,
+        "@id": "https://luxewindowworks.com/#organization",
       },
     },
     speakable: {
@@ -211,10 +220,18 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     ...(post.featuredImage && {
       image: {
         "@type": "ImageObject",
-        url: post.featuredImage,
-        contentUrl: post.featuredImage,
+        url: post.featuredImage.startsWith("http")
+          ? post.featuredImage
+          : `${BUSINESS.url}${post.featuredImage}`,
+        contentUrl: post.featuredImage.startsWith("http")
+          ? post.featuredImage
+          : `${BUSINESS.url}${post.featuredImage}`,
+        width: 1200,
+        height: 630,
       },
     }),
+    ...(entities?.about && { about: entities.about }),
+    ...(entities?.mentions && { mentions: entities.mentions }),
   };
 
   return (
