@@ -1,3 +1,8 @@
+export interface FAQ {
+  question: string;
+  answer: string;
+}
+
 export interface ProductPageData {
   slug: string;
   name: string;
@@ -10,6 +15,7 @@ export interface ProductPageData {
   features: string[];
   idealFor: string[];
   localContext: string;
+  faqs: FAQ[];
   metaTitle: string;
   metaDescription: string;
 }
@@ -23,7 +29,7 @@ export const productPages: Record<string, ProductPageData> = {
     subheadline: "Cellular shades are the most energy-efficient window covering available — and in Northern Idaho, that matters more than most places.",
     problem: "Northern Idaho doesn't do moderate weather. January mornings hit single digits. July afternoons push into the 90s. And through all of it, your windows are the weakest link in your home's insulation. Single-pane windows in older Coeur d'Alene homes bleed heat all winter long. Even newer double-pane windows in Post Falls subdivisions let more energy escape than most homeowners realize.",
     solution: "Cellular shades — sometimes called honeycomb shades — use a unique structure of air pockets that act as insulation right at the window. The honeycomb cells trap air, creating a barrier between the extreme outdoor temperatures and your living space. Available in single, double, or triple-cell designs, with options from sheer light-filtering to complete blackout.",
-    expertInsight: "After nearly 20 years of installing these, here's what most companies won't tell you: the cell size matters more than most people think. A 3/4-inch double cell is the sweet spot for most Northern Idaho homes — it gives you substantial insulation without looking bulky. And if you have large windows facing the lake or the mountains, a top-down/bottom-up option lets you keep your view while still insulating the lower portion of the window. I've installed these in everything from 1960s ranch homes in Coeur d'Alene to brand-new builds in Rathdrum, and the difference in comfort is something homeowners notice immediately.",
+    expertInsight: "After two decades of installing these, here's what most companies won't tell you: the cell size matters more than most people think. A 3/4-inch double cell is the sweet spot for most Northern Idaho homes — it gives you substantial insulation without looking bulky. And if you have large windows facing the lake or the mountains, a top-down/bottom-up option lets you keep your view while still insulating the lower portion of the window. I've installed these in everything from 1960s ranch homes in Coeur d'Alene to brand-new builds in Rathdrum, and the difference in comfort is something homeowners notice immediately.",
     features: [
       "Honeycomb cell structure traps air for superior insulation",
       "Available in single, double, and triple cell options",
@@ -40,8 +46,26 @@ export const productPages: Record<string, ProductPageData> = {
       "Homes with kids or pets (cordless options eliminate safety concerns)",
     ],
     localContext: "In Northern Idaho, cellular shades aren't a luxury — they're practically a necessity. The temperature swings between seasons here are brutal on energy bills. Homeowners in Hayden and Rathdrum with newer construction often assume their windows are efficient enough, but adding cellular shades can make a noticeable difference in both comfort and monthly costs.",
+    faqs: [
+      {
+        question: "Are cellular shades really worth the investment for Northern Idaho homes?",
+        answer: "Yes — Northern Idaho's extreme temperature swings make cellular shades one of the most practical upgrades you can make. The honeycomb air-pocket cells act as insulation directly at the window, reducing heat loss in single-digit winter mornings and blocking heat gain through 90°F summers. Homeowners consistently notice a real difference in both comfort and monthly energy costs.",
+      },
+      {
+        question: "What is the difference between single, double, and triple cell shades?",
+        answer: "More cells means better insulation. Single-cell is the most affordable entry point. Double-cell is the sweet spot for most Northern Idaho homes — substantial insulation without looking bulky. Triple-cell offers maximum performance for extreme exposures or large unprotected windows. For most homes, a 3/4-inch double cell hits the right balance of value and performance.",
+      },
+      {
+        question: "What is a top-down/bottom-up cellular shade?",
+        answer: "A top-down/bottom-up shade can be opened from the top, the bottom, or both simultaneously. This lets you bring natural light in from the top of the window while maintaining privacy at eye level — especially valuable for large windows with lake or mountain views where you want both light and privacy.",
+      },
+      {
+        question: "Can cellular shades be motorized?",
+        answer: "Yes. All of the cellular shade brands we carry — Alta, Norman, and Lafayette — offer battery-powered motorization with no hardwiring required. You can control them via remote, smartphone app, or voice assistant (Alexa, Google Home, Apple HomeKit). Battery motors typically last 1–2 years per charge.",
+      },
+    ],
     metaTitle: "Cellular Shades in Northern Idaho | Energy Efficient Window Treatments",
-    metaDescription: "Custom cellular shades for Northern Idaho homes. The most energy-efficient window covering for Coeur d'Alene, Post Falls, Hayden. Free in-home consultation with nearly 20 years installer expertise.",
+    metaDescription: "Custom cellular shades for Northern Idaho homes. The most energy-efficient window covering for Coeur d'Alene, Post Falls, Hayden. Free in-home consultation with extensive hands-on installer expertise.",
   },
   "solar-shades": {
     slug: "solar-shades",
@@ -68,6 +92,20 @@ export const productPages: Record<string, ProductPageData> = {
       "Anyone who wants light control without losing their view",
     ],
     localContext: "If you live on the lake or anywhere with western exposure in Northern Idaho, solar shades should be near the top of your list. The summer sun here doesn't set until after 9 PM, and that low-angle evening light creates intense glare that standard curtains can't handle without blocking everything. Solar shades solve this elegantly.",
+    faqs: [
+      {
+        question: "Will I still be able to see outside through solar shades?",
+        answer: "Yes — solar shades are specifically engineered to maintain outward visibility while reducing glare and blocking UV rays. They work like sunglasses for your windows: you can see out clearly, but the harsh effects of direct sun are dramatically reduced. A 5% or 10% openness factor provides excellent view-through with strong glare control.",
+      },
+      {
+        question: "What openness factor should I choose for my solar shades?",
+        answer: "It depends on your window's sun exposure. South and west-facing windows that receive direct afternoon sun typically do best with 3%–5% openness. North-facing windows or shaded exposures can use 10%–14% for maximum view with lighter UV protection. Fabric color matters too — darker fabrics provide better outward visibility and cut glare more effectively than lighter ones.",
+      },
+      {
+        question: "Do solar shades protect furniture and floors from UV fading?",
+        answer: "Yes. Depending on the openness factor, solar shades block up to 99% of UV rays — the primary cause of fading in wood floors, furniture, and artwork. Even a 10% openness fabric provides significant UV protection compared to bare glass, making solar shades a smart investment for rooms with hardwood floors or valuable furnishings.",
+      },
+    ],
     metaTitle: "Solar Shades in Northern Idaho | Glare Reduction for Lake Views",
     metaDescription: "Custom solar shades for Northern Idaho homes. Reduce glare and UV damage while keeping your lake and mountain views. Serving Coeur d'Alene, Post Falls, Sandpoint. Free consultation.",
   },
@@ -96,6 +134,20 @@ export const productPages: Record<string, ProductPageData> = {
       "Minimalists who want function without visual clutter",
     ],
     localContext: "Roller shades are increasingly popular in the newer construction happening around Post Falls, Rathdrum, and Hayden. The clean-lined architecture in these communities pairs naturally with the streamlined look of a quality roller shade. They're also a smart choice for rental properties — durable, easy to maintain, and universally appealing.",
+    faqs: [
+      {
+        question: "What is the difference between light-filtering and blackout roller shades?",
+        answer: "Light-filtering roller shades diffuse incoming light, softening glare while keeping a warm glow in the room — ideal for living areas and kitchens. Blackout roller shades have an opaque fabric or backing that blocks virtually all light, making them the right choice for bedrooms, home theaters, and nurseries where sleep quality matters.",
+      },
+      {
+        question: "How important is precise measurement for roller shades?",
+        answer: "Extremely important. A roller shade that's even 1/4 inch off shows immediately — there's no overlap or softness to hide the gap the way drapery can. This is especially true in Northern Idaho homes, where freeze-thaw cycles cause window frames to shift slightly out of square over time. Getting measurement right is where professional installation makes the most difference.",
+      },
+      {
+        question: "Can roller shades be motorized?",
+        answer: "Yes. Roller shades are one of the most popular products to motorize because the clean aesthetic pairs naturally with the convenience of remote, app, or voice control. Battery-powered motors require no hardwiring and are installed in a single visit. They're particularly popular for hard-to-reach windows in vaulted great rooms.",
+      },
+    ],
     metaTitle: "Roller Shades in Northern Idaho | Modern Window Treatments",
     metaDescription: "Custom roller shades for Northern Idaho homes. Clean, modern window coverings in premium fabrics. Serving Coeur d'Alene, Post Falls, Hayden. Free in-home consultation.",
   },
@@ -124,6 +176,20 @@ export const productPages: Record<string, ProductPageData> = {
       "Anyone tired of traditional blinds but wanting similar light control",
     ],
     localContext: "Banded shades are a popular choice in the newer subdivisions around Post Falls and Hayden where contemporary design is the norm. They pair especially well with the open floor plans common in Northern Idaho new construction, where a single great room might have windows facing multiple directions with different light needs throughout the day.",
+    faqs: [
+      {
+        question: "What are banded shades, and how are they different from regular blinds?",
+        answer: "Banded shades (also called zebra shades or dual shades) use alternating horizontal bands of sheer and solid fabric on a continuous loop. When solid bands align, you get full privacy. Shift to align the sheer bands, and soft filtered light comes through beautifully. They offer the same light-control flexibility as traditional blinds but with a far more modern, elegant look — and no slats to collect dust.",
+      },
+      {
+        question: "How durable are banded shades over time?",
+        answer: "Quality varies enormously between brands. Budget banded shades sag and the bands fall out of alignment within months. The Lafayette and Norman brands carried by Luxe Window Works use tension systems engineered specifically to keep bands perfectly aligned through years of daily use. The difference in long-term performance between a premium and a budget banded shade is immediately obvious.",
+      },
+      {
+        question: "Do banded shades provide privacy from the street during the day?",
+        answer: "Yes — when the solid bands are fully aligned, banded shades provide complete privacy even in bright daylight. This makes them ideal for street-facing windows where you want daytime privacy without closing off the room to natural light entirely.",
+      },
+    ],
     metaTitle: "Banded Shades in Northern Idaho | Modern Zebra & Dual Shades",
     metaDescription: "Custom banded (zebra) shades for Northern Idaho homes. Flexible light control with modern style. Serving Coeur d'Alene, Post Falls, Hayden. Free in-home consultation.",
   },
@@ -152,6 +218,20 @@ export const productPages: Record<string, ProductPageData> = {
       "Kitchens — especially above the sink with a flat Roman in a wipeable fabric",
     ],
     localContext: "Roman shades work beautifully in the craftsman and lodge-style homes that are iconic to the Northern Idaho landscape. In Coeur d'Alene and Sandpoint especially, homeowners gravitate toward natural linen and textured fabrics that complement the wood and stone elements common in our local architecture. They add a layer of refinement without feeling out of place.",
+    faqs: [
+      {
+        question: "What fabric should I choose for Roman shades in my home?",
+        answer: "Bring samples into the actual room at different times of day before deciding — a fabric that looks warm in a showroom can read very differently with Northern Idaho morning light versus afternoon sun, especially near water. Natural linens and textured fabrics tend to complement the wood and stone elements common in Idaho craftsman and lodge-style homes. Mark always recommends in-room sample review before finalizing any fabric selection.",
+      },
+      {
+        question: "What is the difference between flat fold and hobbled Roman shades?",
+        answer: "Flat fold Roman shades stack in crisp, even horizontal pleats — a clean, tailored look that works in both modern and traditional settings and ages well. Hobbled (or relaxed) Roman shades have cascading, puffed folds even when lowered, creating a softer, more traditional appearance. Mark recommends flat fold for most of today's homes as it has a more contemporary feel and wears better over time.",
+      },
+      {
+        question: "Can Roman shades have a blackout lining?",
+        answer: "Yes. Most Roman shade fabrics can be backed with a blackout lining, which is particularly popular for bedrooms. The blackout lining doesn't change the exterior appearance of the shade but significantly reduces light transmission, making them a great choice when you want a fabric-rich look without sacrificing sleep quality.",
+      },
+    ],
     metaTitle: "Roman Shades in Northern Idaho | Elegant Fabric Window Treatments",
     metaDescription: "Custom Roman shades for Northern Idaho homes. Premium fabrics, expert installation. Serving Coeur d'Alene, Post Falls, Sandpoint. Free in-home consultation.",
   },
@@ -160,10 +240,10 @@ export const productPages: Record<string, ProductPageData> = {
     name: "Shutters",
     image: "/images/shutters.jpeg",
     headline: "The One Window Treatment That Actually Adds Value to Your Home.",
-    subheadline: "Plantation shutters are a permanent architectural upgrade — and with nearly 20 years of installation expertise, Mark ensures they're done right.",
+    subheadline: "Plantation shutters are a permanent architectural upgrade — and with two decades of installation expertise, Mark ensures they're done right.",
     problem: "Window treatments typically depreciate the moment they're installed — they're decorating, not improving. And most of them need to be replaced every 5-10 years. If you're investing in your home, especially a home you plan to keep or a property where resale value matters, you want something that lasts and actually adds to the home's worth.",
     solution: "Plantation shutters are built to last decades. Made from premium hardwood or engineered composites, they become a permanent part of your home's architecture. They offer unmatched light control — from fully open to completely private — and they work in virtually any style of home. Shutters are consistently cited by real estate professionals as one of the window treatments that buyers notice and value.",
-    expertInsight: "Shutters are where my nearly 20 years of experience matters most. Here's why: shutters require the most precise measurement of any window treatment. Every frame is custom-built to fit your specific window opening, and the tolerances are incredibly tight. A shade can be off by 1/8 inch and nobody notices. A shutter frame that's off by 1/8 inch won't close properly. I've fixed installations from other companies where the frames were built from measurements that didn't account for window frames being out of square — which happens more often than you'd think, especially in Northern Idaho homes that settle with our freeze-thaw cycles. I also help clients choose between real wood (beautiful but can warp in high-humidity areas like bathrooms) and composite (better for moisture, equally attractive). The right material in the right room makes all the difference.",
+    expertInsight: "Shutters are where my extensive hands-on expertise matters most. Here's why: shutters require the most precise measurement of any window treatment. Every frame is custom-built to fit your specific window opening, and the tolerances are incredibly tight. A shade can be off by 1/8 inch and nobody notices. A shutter frame that's off by 1/8 inch won't close properly. I've fixed installations from other companies where the frames were built from measurements that didn't account for window frames being out of square — which happens more often than you'd think, especially in Northern Idaho homes that settle with our freeze-thaw cycles. I also help clients choose between real wood (beautiful but can warp in high-humidity areas like bathrooms) and composite (better for moisture, equally attractive). The right material in the right room makes all the difference.",
     features: [
       "Premium hardwood and engineered composite options",
       "Multiple louver sizes — 2.5\", 3.5\", and 4.5\"",
@@ -181,8 +261,22 @@ export const productPages: Record<string, ProductPageData> = {
       "Historically or architecturally significant homes",
     ],
     localContext: "Northern Idaho's freeze-thaw cycles can cause window frames to shift subtly over time, which is why precision measurement is critical for shutters. Mark has installed shutters in everything from historic Coeur d'Alene lakefront homes to new construction in the growing communities of Post Falls and Hayden. His measurement process accounts for these local conditions, ensuring a fit that stays true for years.",
+    faqs: [
+      {
+        question: "Do plantation shutters actually add resale value to a home?",
+        answer: "Yes. Real estate professionals consistently identify plantation shutters as a window treatment that buyers notice and value at purchase. Unlike fabric shades and blinds that depreciate from the moment they're installed, shutters are a permanent architectural feature built into the home — one that improves perceived quality and often reccoups the investment at resale.",
+      },
+      {
+        question: "What is the difference between wood and composite plantation shutters?",
+        answer: "Real wood shutters are beautiful and can be painted or stained in any finish, but they can warp in high-humidity environments like bathrooms and laundry rooms. Composite (engineered wood) shutters are moisture-resistant and visually indistinguishable from real wood — the better choice for wet areas of the home. Mark helps every client select the right material for each specific room.",
+      },
+      {
+        question: "Why does professional measurement matter so much for plantation shutters?",
+        answer: "Shutters require tighter tolerances than any other window treatment. A shutter frame that's off by just 1/8 inch won't close properly. Northern Idaho's freeze-thaw cycles cause window frames to shift out of square over time — which is more common than most homeowners realize. Mark's measurement process specifically accounts for out-of-square frames to ensure a fit that stays true for years.",
+      },
+    ],
     metaTitle: "Plantation Shutters in Northern Idaho | Custom Installation",
-    metaDescription: "Custom plantation shutters for Northern Idaho homes. Expert installation with nearly 20 years experience. Serving Coeur d'Alene, Post Falls, Hayden. Lifetime installation guarantee.",
+    metaDescription: "Custom plantation shutters for Northern Idaho homes. Expert installation with two decades of experience. Serving Coeur d'Alene, Post Falls, Hayden. Lifetime installation guarantee.",
   },
   "motorization": {
     slug: "motorization",
@@ -210,6 +304,20 @@ export const productPages: Record<string, ProductPageData> = {
       "Vacation homes and rental properties for security (occupied appearance)",
     ],
     localContext: "Motorization is increasingly popular in Northern Idaho, especially in the new construction happening around Post Falls and Rathdrum. Many of these homes have great rooms with soaring ceilings and large windows that would be impractical to operate manually. For lakefront homes in Coeur d'Alene and Sandpoint, automated sunset schedules mean your privacy shades lower exactly when you need them without lifting a finger.",
+    faqs: [
+      {
+        question: "Do motorized shades require an electrician to install?",
+        answer: "Not typically. Battery-powered motors from Alta, Norman, and Lafayette require no hardwiring — Mark installs them in a single visit with no construction work needed. Battery motors last 1–2 years per charge. For new construction, Mark recommends having an electrician run power to window frames if you want hardwired motors, which last indefinitely without battery changes and handle heavier shade fabrics.",
+      },
+      {
+        question: "What smart home systems are compatible with motorized shades?",
+        answer: "Alta, Norman, and Lafayette all offer motorized models compatible with Amazon Alexa, Google Home, and Apple HomeKit — though exact compatibility varies by product line. Mark will confirm which specific motor system works with your existing smart home setup during the consultation and handles complete programming and integration after installation.",
+      },
+      {
+        question: "How long do battery-powered motorized shades last on a charge?",
+        answer: "Battery-powered motors typically last 1–2 years under normal daily use. When the battery needs replacing, an LED indicator on the motor or a notification in the app will alert you before it goes dead. The motors are whisper-quiet and perform identically to hardwired versions — the only difference is the occasional battery recharge.",
+      },
+    ],
     metaTitle: "Motorized Shades in Northern Idaho | Smart Window Treatments",
     metaDescription: "Smart motorized window treatments for Northern Idaho homes. Voice control, app control, automated schedules. Serving Coeur d'Alene, Post Falls, Hayden. Free consultation.",
   },
