@@ -27,35 +27,33 @@ export default function BookPage() {
     return Object.keys(e).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
     setSubmitting(true);
 
-    const subject = encodeURIComponent(
-      `Consultation Request — ${form.firstName} ${form.lastName}`
-    );
-    const body = encodeURIComponent(
-      [
-        `Name: ${form.firstName} ${form.lastName}`,
-        `Phone: ${form.phone}`,
-        `Email: ${form.email}`,
-        `Address: ${form.address || "—"}`,
-        "",
-        form.message ? `About their project:\n${form.message}` : "",
-      ]
-        .filter(Boolean)
-        .join("\n")
-    );
+    try {
+      const res = await fetch("https://formsubmit.co/ajax/mark@luxewindowworks.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: `Consultation Request — ${form.firstName} ${form.lastName}`,
+          name: `${form.firstName} ${form.lastName}`,
+          email: form.email,
+          phone: form.phone,
+          address: form.address || "—",
+          message: form.message || "—",
+          _captcha: "false",
+        }),
+      });
 
-    // Open the customer's email client with all details pre-filled
-    window.location.href = `mailto:mark@luxewindowworks.com?subject=${subject}&body=${body}`;
-
-    // Show success state after a brief pause
-    setTimeout(() => {
+      if (!res.ok) throw new Error("Submit failed");
       setSubmitted(true);
+    } catch {
+      setErrors({ form: "Something went wrong. Please call Mark directly at 208-660-8643 or email mark@luxewindowworks.com." });
+    } finally {
       setSubmitting(false);
-    }, 400);
+    }
   }
 
   function field(
@@ -131,17 +129,12 @@ export default function BookPage() {
                 </svg>
               </div>
               <h2 className="font-serif text-2xl font-bold text-charcoal mb-3">
-                Request Sent!
+                You&apos;re All Set!
               </h2>
-              <p className="text-warm-gray-600 leading-relaxed mb-2">
-                Your email client should have opened with your request
-                pre-filled. Just hit <strong>Send</strong> if it hasn&apos;t
-                gone yet.
-              </p>
               <p className="text-warm-gray-600 leading-relaxed mb-6">
-                Mark will personally reach out within{" "}
-                <strong>24 hours</strong> to schedule your free in-home
-                consultation.
+                Your request has been sent to Mark. He&apos;ll personally reach
+                out within <strong>24 hours</strong> to schedule your free
+                in-home consultation.
               </p>
               <p className="text-sm text-warm-gray-500 mb-8">
                 Prefer to reach out directly?{" "}
@@ -224,19 +217,20 @@ export default function BookPage() {
                 />
               </div>
 
+              {errors.form && (
+                <p className="text-red-500 text-sm text-center">{errors.form}</p>
+              )}
+
               <button
                 type="submit"
                 disabled={submitting}
                 className="w-full bg-gold hover:bg-gold-dark disabled:bg-warm-gray-200 disabled:text-warm-gray-400 text-white font-semibold py-4 rounded-xl text-base transition-colors"
               >
-                {submitting
-                  ? "Opening your email…"
-                  : "Request My Free Consultation"}
+                {submitting ? "Sending…" : "Request My Free Consultation"}
               </button>
 
               <p className="text-center text-xs text-warm-gray-400">
-                This opens your email app with everything pre-filled — just hit
-                Send.
+                Mark will personally reach out within 24 hours.
               </p>
             </form>
           )}
