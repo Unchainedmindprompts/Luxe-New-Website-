@@ -58,6 +58,154 @@ export const metadata: Metadata = {
   },
 };
 
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  "@id": "https://luxewindowworks.com/#business",
+  name: "Luxe Window Works",
+  description:
+    "Premium custom window treatments in Northern Idaho with nearly 20 years of hands-on expertise. Specializing in cellular shades, plantation shutters, solar shades, roller shades, and motorized window treatments. Serving Coeur d'Alene, Post Falls, Hayden, Sandpoint, and Rathdrum, Idaho.",
+  url: "https://luxewindowworks.com",
+  telephone: "208-660-8643",
+  email: "mark@luxewindowworks.com",
+  priceRange: "$$",
+  foundingDate: "2005",
+  founder: {
+    "@type": "Person",
+    name: "Mark Abplanalp",
+    jobTitle: "Owner & Window Treatment Specialist",
+    description:
+      "Mark Abplanalp founded Luxe Window Works with over 20 years of hands-on window treatment installation experience. He personally handles every consultation, measurement, and installation — serving homeowners across Northern Idaho with a lifetime installation guarantee.",
+    url: "https://luxewindowworks.com",
+    worksFor: { "@type": "LocalBusiness", name: "Luxe Window Works" },
+    knowsAbout: [
+      "custom window treatments",
+      "plantation shutters",
+      "cellular shades",
+      "motorized window treatments",
+      "solar shades",
+      "roller shades",
+      "window treatment installation",
+      "energy efficient window coverings",
+    ],
+    areaServed: [
+      "Coeur d'Alene, Idaho",
+      "Post Falls, Idaho",
+      "Hayden, Idaho",
+      "Sandpoint, Idaho",
+      "Northern Idaho",
+    ],
+  },
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "2972 N Pavo Ln",
+    addressLocality: "Post Falls",
+    addressRegion: "ID",
+    postalCode: "83854",
+    addressCountry: "US",
+  },
+  areaServed: [
+    {
+      "@type": "City",
+      name: "Coeur d'Alene",
+      containedInPlace: { "@type": "State", name: "Idaho" },
+    },
+    {
+      "@type": "City",
+      name: "Post Falls",
+      containedInPlace: { "@type": "State", name: "Idaho" },
+    },
+    {
+      "@type": "City",
+      name: "Hayden",
+      containedInPlace: { "@type": "State", name: "Idaho" },
+    },
+    {
+      "@type": "City",
+      name: "Sandpoint",
+      containedInPlace: { "@type": "State", name: "Idaho" },
+    },
+    {
+      "@type": "City",
+      name: "Rathdrum",
+      containedInPlace: { "@type": "State", name: "Idaho" },
+    },
+  ],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Custom Window Treatments",
+    itemListElement: [
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Custom Cellular Shades Installation",
+          description: "Energy-efficient honeycomb cellular shades custom-fitted for Northern Idaho homes.",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Plantation Shutter Installation",
+          description: "Custom-measured plantation shutters for lasting value and light control.",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Motorized Window Shade Installation",
+          description: "Smart motorized shades controllable by phone, voice, or wall switch.",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Solar Shade Installation",
+          description: "UV-blocking solar shades that preserve views while reducing glare.",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Roller Shade Installation",
+          description: "Sleek, minimal roller shades for modern Northern Idaho interiors.",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Free In-Home Consultation",
+          description:
+            "Mark personally visits your home, measures your windows, and recommends the right solution. No pressure, no upsell.",
+        },
+      },
+    ],
+  },
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "5.0",
+    reviewCount: "14",
+    bestRating: "5",
+    worstRating: "1",
+  },
+  knowsAbout: [
+    "window treatments",
+    "custom blinds",
+    "plantation shutters",
+    "motorized shades",
+    "cellular shades",
+    "solar shades",
+    "roller shades",
+    "energy efficient window coverings",
+    "Northern Idaho home design",
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -66,6 +214,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistSerif.variable}`}>
       <body className="font-sans antialiased bg-warm-white text-charcoal">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />

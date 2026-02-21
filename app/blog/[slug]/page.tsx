@@ -42,23 +42,142 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+/** Derive article-specific keywords from title + tags */
+function deriveKeywords(post: BlogPost): string {
+  const kw = new Set<string>();
+
+  // Existing tags (normalise hyphens)
+  post.tags.forEach((t) => kw.add(t.replace(/-/g, " ")));
+
+  // Always-present base terms
+  kw.add("window treatments");
+  kw.add("Northern Idaho");
+  kw.add("Luxe Window Works");
+  kw.add("Mark Abplanalp");
+  kw.add("custom window coverings");
+
+  const t = post.title.toLowerCase();
+
+  // Location signals
+  const locations: [string, string][] = [
+    ["coeur d'alene", "Coeur d'Alene Idaho"],
+    ["coeur dalene", "Coeur d'Alene Idaho"],
+    [" cda ", "Coeur d'Alene"],
+    ["post falls", "Post Falls Idaho"],
+    ["hayden", "Hayden Idaho"],
+    ["sandpoint", "Sandpoint Idaho"],
+    ["rathdrum", "Rathdrum Idaho"],
+    ["north idaho", "North Idaho"],
+    ["northern idaho", "Northern Idaho"],
+  ];
+  for (const [key, label] of locations) {
+    if (t.includes(key)) kw.add(label);
+  }
+
+  // Product signals
+  const products: [string, string][] = [
+    ["cellular shade", "cellular shades"],
+    ["honeycomb shade", "honeycomb shades"],
+    ["roller shade", "roller shades"],
+    ["solar shade", "solar shades"],
+    ["solar screen", "solar screens"],
+    ["plantation shutter", "plantation shutters"],
+    ["shutter", "shutters"],
+    ["motorized shade", "motorized shades"],
+    ["motorized", "motorized window treatments"],
+    ["roman shade", "roman shades"],
+    ["woven wood", "woven wood shades"],
+    ["wood blind", "wood blinds"],
+    ["faux wood", "faux wood blinds"],
+    ["aluminum shutter", "aluminum shutters"],
+    ["drape", "window drapes"],
+    ["banded shade", "banded shades"],
+    ["cordless blind", "cordless blinds"],
+    ["blackout shade", "blackout shades"],
+    ["smart shade", "smart home shades"],
+  ];
+  for (const [key, label] of products) {
+    if (t.includes(key)) kw.add(label);
+  }
+
+  // Topic signals
+  const topics: [string, string][] = [
+    ["energy efficient", "energy efficient window treatments"],
+    ["energy saving", "energy saving window coverings"],
+    ["install", "window treatment installation"],
+    ["measur", "window measuring guide"],
+    ["clean", "window treatment care"],
+    ["cost", "window treatment cost"],
+    ["price", "window treatment pricing"],
+    ["luxury", "luxury window treatments"],
+    ["custom", "custom window coverings"],
+    ["privacy", "privacy window coverings"],
+    ["blackout", "blackout window treatments"],
+    ["smart home", "smart home automation"],
+    ["motoriz", "home automation"],
+    ["battery", "battery operated shades"],
+    ["patio door", "patio door window treatments"],
+    ["made in usa", "made in USA window treatments"],
+  ];
+  for (const [key, label] of topics) {
+    if (t.includes(key)) kw.add(label);
+  }
+
+  return Array.from(kw).join(", ");
+}
+
+/** Full Person schema for Mark — reused in every post */
+const markAuthorSchema = {
+  "@type": "Person",
+  "@id": "https://luxewindowworks.com/#mark-abplanalp",
+  name: "Mark Abplanalp",
+  jobTitle: "Owner & Window Treatment Specialist",
+  description:
+    "Mark Abplanalp is the founder and owner of Luxe Window Works with over 20 years of hands-on window treatment installation experience. He personally handles every free in-home consultation, measurement, and installation, serving homeowners across Coeur d'Alene, Post Falls, Hayden, and Sandpoint, Idaho.",
+  url: "https://luxewindowworks.com",
+  worksFor: {
+    "@type": "LocalBusiness",
+    "@id": "https://luxewindowworks.com/#business",
+    name: "Luxe Window Works",
+    url: "https://luxewindowworks.com",
+  },
+  knowsAbout: [
+    "custom window treatments",
+    "plantation shutters",
+    "cellular shades",
+    "motorized window treatments",
+    "solar shades",
+    "roller shades",
+    "window treatment installation",
+    "energy efficient window coverings",
+    "Northern Idaho home design",
+  ],
+  areaServed: [
+    "Coeur d'Alene, Idaho",
+    "Post Falls, Idaho",
+    "Hayden, Idaho",
+    "Sandpoint, Idaho",
+    "Northern Idaho",
+  ],
+};
+
 function ArticleSchema({ post }: { post: BlogPost }) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    "@id": `${BUSINESS.url}/blog/${post.slug}#article`,
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
     dateModified: post.date,
     wordCount: post.wordCount,
     articleSection: post.category,
-    keywords: post.tags.join(", "),
-    author: {
-      "@type": "Person",
-      name: post.author,
-    },
+    keywords: deriveKeywords(post),
+    inLanguage: "en-US",
+    author: markAuthorSchema,
     publisher: {
       "@type": "LocalBusiness",
+      "@id": "https://luxewindowworks.com/#business",
       name: BUSINESS.name,
       url: BUSINESS.url,
       telephone: BUSINESS.phone,
@@ -68,16 +187,28 @@ function ArticleSchema({ post }: { post: BlogPost }) {
         addressLocality: BUSINESS.address.city,
         addressRegion: BUSINESS.address.state,
         postalCode: BUSINESS.address.zip,
+        addressCountry: "US",
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `${BUSINESS.url}/blog/${post.slug}`,
     },
+    isPartOf: {
+      "@type": "Blog",
+      "@id": `${BUSINESS.url}/blog`,
+      name: "Luxe Window Works Blog",
+      publisher: {
+        "@type": "LocalBusiness",
+        "@id": "https://luxewindowworks.com/#business",
+        name: BUSINESS.name,
+      },
+    },
     ...(post.featuredImage && {
       image: {
         "@type": "ImageObject",
         url: post.featuredImage,
+        contentUrl: post.featuredImage,
       },
     }),
   };
@@ -94,24 +225,33 @@ function BreadcrumbSchema({ post }: { post: BlogPost }) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `${BUSINESS.url}/blog/${post.slug}#breadcrumb`,
     itemListElement: [
       {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: BUSINESS.url,
+        item: { "@type": "WebPage", "@id": BUSINESS.url, name: "Home" },
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Blog",
-        item: `${BUSINESS.url}/blog`,
+        item: {
+          "@type": "WebPage",
+          "@id": `${BUSINESS.url}/blog`,
+          name: "Window Treatment Blog",
+        },
       },
       {
         "@type": "ListItem",
         position: 3,
         name: post.title,
-        item: `${BUSINESS.url}/blog/${post.slug}`,
+        item: {
+          "@type": "WebPage",
+          "@id": `${BUSINESS.url}/blog/${post.slug}`,
+          name: post.title,
+        },
       },
     ],
   };

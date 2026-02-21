@@ -19,12 +19,28 @@ function BlogListSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Blog",
+    "@id": `${BUSINESS.url}/blog`,
     name: "Luxe Window Works Blog",
     description:
-      "Expert window treatment advice, buying guides, and design inspiration from nearly 20 years of hands-on experience in Northern Idaho homes.",
+      "Expert window treatment advice, buying guides, and design inspiration from over 20 years of hands-on experience in Northern Idaho homes — by Mark Abplanalp, owner of Luxe Window Works.",
     url: `${BUSINESS.url}/blog`,
+    inLanguage: "en-US",
+    author: {
+      "@type": "Person",
+      "@id": "https://luxewindowworks.com/#mark-abplanalp",
+      name: "Mark Abplanalp",
+      jobTitle: "Owner & Window Treatment Specialist",
+      description:
+        "Founder of Luxe Window Works with over 20 years of hands-on window treatment installation experience, serving Coeur d'Alene, Post Falls, Hayden, and Sandpoint, Idaho.",
+      worksFor: {
+        "@type": "LocalBusiness",
+        "@id": "https://luxewindowworks.com/#business",
+        name: BUSINESS.name,
+      },
+    },
     publisher: {
       "@type": "LocalBusiness",
+      "@id": "https://luxewindowworks.com/#business",
       name: BUSINESS.name,
       url: BUSINESS.url,
       telephone: BUSINESS.phone,
@@ -34,8 +50,42 @@ function BlogListSchema() {
         addressLocality: BUSINESS.address.city,
         addressRegion: BUSINESS.address.state,
         postalCode: BUSINESS.address.zip,
+        addressCountry: "US",
       },
     },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+function BlogBreadcrumbSchema() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${BUSINESS.url}/blog#breadcrumb`,
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: { "@type": "WebPage", "@id": BUSINESS.url, name: "Home" },
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: {
+          "@type": "WebPage",
+          "@id": `${BUSINESS.url}/blog`,
+          name: "Window Treatment Blog",
+        },
+      },
+    ],
   };
 
   return (
@@ -52,6 +102,7 @@ export default function BlogPage() {
   return (
     <>
       <BlogListSchema />
+      <BlogBreadcrumbSchema />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
