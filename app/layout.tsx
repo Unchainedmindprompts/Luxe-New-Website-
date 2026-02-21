@@ -186,6 +186,25 @@ const localBusinessSchema = {
       },
     ],
   },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "17:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Saturday",
+      opens: "10:00",
+      closes: "14:00",
+    },
+  ],
+  sameAs: [
+    "https://www.yelp.com/biz/luxe-window-works-post-falls",
+    "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
+    "https://share.google/pRM5IoXZgRTksImvp",
+  ],
   aggregateRating: {
     "@type": "AggregateRating",
     ratingValue: "5.0",

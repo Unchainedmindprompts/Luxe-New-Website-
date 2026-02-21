@@ -81,28 +81,59 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Quick Links */}
+          {/* Hours & Reviews */}
           <div>
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">
-              Quick Links
+              Hours
             </h3>
-            <ul className="space-y-2.5">
-              <li>
-                <Link href="/contact" className="text-sm text-warm-gray-400 hover:text-gold transition-colors">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="text-sm text-warm-gray-400 hover:text-gold transition-colors">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link href="/#concierge" className="text-sm text-warm-gray-400 hover:text-gold transition-colors">
-                  Free Consultation
-                </Link>
-              </li>
+            <ul className="space-y-1.5 text-sm text-warm-gray-400">
+              {BUSINESS.hours.map((h) => (
+                <li key={h.day} className="flex justify-between gap-4">
+                  <span>{h.day.slice(0, 3)}</span>
+                  <span>{h.open ? `${h.open} – ${h.close}` : "Closed"}</span>
+                </li>
+              ))}
             </ul>
+
+            <div className="mt-6 pt-6 border-t border-warm-gray-800">
+              <p className="text-xs text-warm-gray-500 mb-3 uppercase tracking-wider">Reviews</p>
+              <div className="flex flex-col gap-2">
+                <a
+                  href={BUSINESS.google.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-warm-gray-400 hover:text-gold transition-colors flex items-center gap-1.5"
+                >
+                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                  </svg>
+                  Google · 5.0 ★ ({BUSINESS.google.reviewCount})
+                </a>
+                <a
+                  href={BUSINESS.yelp.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-warm-gray-400 hover:text-gold transition-colors flex items-center gap-1.5"
+                >
+                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                  </svg>
+                  Yelp Reviews
+                </a>
+                <a
+                  href={BUSINESS.bbb.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-warm-gray-400 hover:text-gold transition-colors flex items-center gap-1.5"
+                >
+                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm0-8h-2V7h2v2zm5 8h-3v-6h3c1.66 0 3 1.34 3 3s-1.34 3-3 3zm0-4h-1v2h1c.55 0 1-.45 1-1s-.45-1-1-1z"/>
+                  </svg>
+                  BBB Profile
+                </a>
+              </div>
+            </div>
+
             <div className="mt-6 pt-6 border-t border-warm-gray-800">
               <p className="text-xs text-warm-gray-500 mb-2">Brands We Carry</p>
               <div className="flex gap-4 text-sm text-warm-gray-400">

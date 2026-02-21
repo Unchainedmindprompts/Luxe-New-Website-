@@ -14,7 +14,23 @@ export const BUSINESS = {
   google: {
     rating: 5.0,
     reviewCount: 14,
+    mapsUrl: "https://share.google/pRM5IoXZgRTksImvp",
   },
+  yelp: {
+    url: "https://www.yelp.com/biz/luxe-window-works-post-falls",
+  },
+  bbb: {
+    url: "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
+  },
+  hours: [
+    { day: "Monday",    open: "9:00 AM", close: "5:00 PM" },
+    { day: "Tuesday",   open: "9:00 AM", close: "5:00 PM" },
+    { day: "Wednesday", open: "9:00 AM", close: "5:00 PM" },
+    { day: "Thursday",  open: "9:00 AM", close: "5:00 PM" },
+    { day: "Friday",    open: "9:00 AM", close: "5:00 PM" },
+    { day: "Saturday",  open: "10:00 AM", close: "2:00 PM" },
+    { day: "Sunday",    open: null,      close: null },
+  ],
   experience: "Nearly 20 Years",
   guarantee: "Lifetime Installation Guarantee",
   brands: ["Alta", "Norman", "Lafayette"],
