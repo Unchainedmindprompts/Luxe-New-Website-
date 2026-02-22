@@ -18,8 +18,9 @@ const BLOG_DIR = join(process.cwd(), "content", "blog");
 
 /** Parse YAML frontmatter from a markdown file's raw text */
 function parseFrontmatter(raw: string): { data: Record<string, string>; content: string } {
-  const match = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
-  if (!match) return { data: {}, content: raw };
+  const normalized = raw.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  const match = normalized.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  if (!match) return { data: {}, content: normalized };
 
   const frontmatter = match[1];
   const content = match[2].trim();

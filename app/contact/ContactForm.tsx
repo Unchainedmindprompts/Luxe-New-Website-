@@ -7,6 +7,10 @@ export default function ContactForm() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Fire Facebook Pixel Lead event on consultation form submission
+    if (typeof window !== "undefined" && typeof (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq === "function") {
+      (window as unknown as { fbq: (...args: unknown[]) => void }).fbq("track", "Lead");
+    }
     // In production, this would submit to an API endpoint or email service
     setSubmitted(true);
   };
