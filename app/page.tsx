@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import AnimateIn from "@/components/craig/AnimateIn";
@@ -122,11 +123,13 @@ function HeroSection() {
     >
       {/* Cinematic background */}
       <motion.div style={{ y: yParallax }} className="absolute inset-[-15%] z-0">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: "linear-gradient(180deg, #0a0a0a 0%, #0f0c07 20%, #140e06 40%, #0f0c07 60%, #0a0a0a 100%)",
-          }}
+        <Image
+          src="/craig-hero.png"
+          alt="Craig Abplanalp"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
         />
         <div
           className="absolute inset-0"
@@ -138,18 +141,13 @@ function HeroSection() {
           }}
         />
         <div
-          className="absolute inset-x-0"
-          style={{ top: "10%", height: "30%", background: "linear-gradient(180deg, rgba(60,45,20,0.12) 0%, transparent 100%)" }}
-        />
-        <div
           className="absolute inset-y-0 left-0 w-1/4"
-          style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.9) 0%, transparent 100%)" }}
+          style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.7) 0%, transparent 100%)" }}
         />
         <div
           className="absolute inset-y-0 right-0 w-1/4"
-          style={{ background: "linear-gradient(270deg, rgba(0,0,0,0.9) 0%, transparent 100%)" }}
+          style={{ background: "linear-gradient(270deg, rgba(0,0,0,0.7) 0%, transparent 100%)" }}
         />
-        <div className="absolute inset-0 grid-bg opacity-20" />
       </motion.div>
 
       {/* Overlay gradient */}
