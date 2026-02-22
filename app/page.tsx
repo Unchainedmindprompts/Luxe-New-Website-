@@ -115,22 +115,25 @@ function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
   const yParallax = useTransform(scrollY, [0, 600], [0, 120]);
+  const scrollIndicatorOpacity = useTransform(scrollY, [0, 150], [1, 0]);
 
   return (
     <section
       ref={heroRef}
-      className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden"
+      className="relative h-screen min-h-[700px] flex items-center overflow-hidden"
+      style={{ boxShadow: "inset 0 0 150px rgba(0,0,0,0.4)" }}
     >
       {/* Cinematic background */}
       <motion.div style={{ y: yParallax }} className="absolute inset-[-15%] z-0">
         <Image
           src="/craig-hero.png"
-          alt="Craig Abplanalp"
+          alt="Craig Abplanalp — custom home theater build"
           fill
           priority
-          className="object-cover object-center"
+          className="object-cover object-center hero-image"
           sizes="100vw"
         />
+        {/* Subtle gold atmospheric glow */}
         <div
           className="absolute inset-0"
           style={{
@@ -140,89 +143,120 @@ function HeroSection() {
             `,
           }}
         />
-        <div
-          className="absolute inset-y-0 left-0 w-1/4"
-          style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.7) 0%, transparent 100%)" }}
-        />
-        <div
-          className="absolute inset-y-0 right-0 w-1/4"
-          style={{ background: "linear-gradient(270deg, rgba(0,0,0,0.7) 0%, transparent 100%)" }}
-        />
       </motion.div>
 
-      {/* Overlay gradient */}
+      {/* Layer 1 — Navigation protection (always dark at top) */}
       <div
         className="absolute inset-0 z-10"
         style={{
-          background: "linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.5) 50%, rgba(10,10,10,0.95) 100%)",
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.4) 15%, rgba(0,0,0,0.0) 35%)",
         }}
       />
 
-      {/* Content */}
-      <div className="relative z-20 text-center max-w-4xl mx-auto px-6">
+      {/* Layer 2 — Content readability (dark where text lives) */}
+      <div
+        className="absolute inset-0 z-10"
+        style={{
+          background: "linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.2) 100%)",
+        }}
+      />
+
+      {/* Content — left aligned */}
+      <div className="relative z-20 w-full hero-content-left">
+        <div style={{ maxWidth: "750px" }}>
+          {/* CRAIG ABPLANALP label with inline gold line */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="flex items-center mb-8"
+          >
+            <span
+              style={{
+                display: "inline-block",
+                width: "40px",
+                height: "1px",
+                background: "#C9A84C",
+                marginRight: "16px",
+                flexShrink: 0,
+              }}
+            />
+            <span
+              className="uppercase font-sans"
+              style={{
+                color: "#C9A84C",
+                letterSpacing: "0.3em",
+                fontSize: "0.8rem",
+                fontWeight: 500,
+                textShadow: "0 0 20px rgba(0,0,0,0.8)",
+              }}
+            >
+              Craig Abplanalp
+            </span>
+          </motion.div>
+
+          {/* H1 Headline — left aligned */}
+          <motion.h1
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="font-serif text-pearl font-light mb-8"
+            style={{ fontSize: "clamp(2.5rem, 6.5vw, 5.5rem)", lineHeight: "1.1", letterSpacing: "-0.02em" }}
+          >
+            Some people buy home theaters.
+            <br />
+            <span className="italic">A few pursue something else entirely.</span>
+          </motion.h1>
+
+          {/* Subheadline — left aligned */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.75, ease: "easeOut" }}
+            className="text-mist font-sans mb-12"
+            style={{ fontSize: "1.0625rem", lineHeight: "1.7", letterSpacing: "0.01em" }}
+          >
+            Craig Abplanalp has spent four decades building the difference.
+          </motion.p>
+
+          {/* CTA Buttons — left aligned, side by side on desktop */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.95 }}
+            className="flex flex-col sm:flex-row gap-4 items-start"
+          >
+            <Link href="/contact" className="btn-hero-primary">
+              Start a Conversation
+            </Link>
+            <Link href="/philosophy" className="btn-hero-secondary">
+              The Philosophy <ArrowRight />
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Scroll indicator — centered, fades on scroll, pulses */}
+      <motion.div
+        style={{ opacity: scrollIndicatorOpacity }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
+      >
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="gold-divider mb-8"
-        />
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="text-gold uppercase tracking-widest text-xs font-sans mb-8"
-          style={{ letterSpacing: "0.28em" }}
+          transition={{ delay: 1.6, duration: 0.8 }}
+          className="scroll-indicator"
         >
-          Craig Abplanalp
-        </motion.p>
-        <motion.h1
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="font-serif text-pearl font-light mb-8 text-balance"
-          style={{ fontSize: "clamp(2.5rem, 6.5vw, 5.5rem)", lineHeight: "1.1", letterSpacing: "-0.02em" }}
-        >
-          Some people buy home theaters.
-          <br />
-          <span className="italic">A few pursue something else entirely.</span>
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.75, ease: "easeOut" }}
-          className="text-mist font-sans mb-12 max-w-xl mx-auto"
-          style={{ fontSize: "1.0625rem", lineHeight: "1.7", letterSpacing: "0.01em" }}
-        >
-          Craig Abplanalp has spent four decades building the difference.
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.95 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-        >
-          <Link href="/contact" className="btn-gold-solid">
-            Start a Conversation
-          </Link>
-          <Link href="/philosophy" className="btn-gold">
-            The Philosophy <ArrowRight />
-          </Link>
+          <div className="flex flex-col items-center gap-2">
+            <span
+              className="uppercase tracking-widest font-sans"
+              style={{ fontSize: "0.55rem", letterSpacing: "0.25em", color: "#C9A84C" }}
+            >
+              Scroll
+            </span>
+            <div className="w-px h-12 bg-gradient-to-b from-gold/30 to-transparent" />
+          </div>
         </motion.div>
-      </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 0.8 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 scroll-indicator"
-      >
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-mist/50 uppercase tracking-widest font-sans" style={{ fontSize: "0.55rem", letterSpacing: "0.25em" }}>
-            Scroll
-          </span>
-          <div className="w-px h-12 bg-gradient-to-b from-mist/30 to-transparent" />
-        </div>
       </motion.div>
     </section>
   );

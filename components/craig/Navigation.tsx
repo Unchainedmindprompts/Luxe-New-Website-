@@ -50,13 +50,13 @@ export default function Navigation() {
             <Link href="/" className="group flex flex-col leading-none">
               <span
                 className="font-serif text-gold tracking-wide transition-opacity duration-300 group-hover:opacity-80"
-                style={{ fontSize: "1.25rem", fontWeight: 400 }}
+                style={{ fontSize: "1.25rem", fontWeight: 400, textShadow: "0 1px 12px rgba(0,0,0,0.9)" }}
               >
                 Craig Abplanalp
               </span>
               <span
                 className="text-mist tracking-widest uppercase mt-0.5"
-                style={{ fontSize: "0.55rem", letterSpacing: "0.22em" }}
+                style={{ fontSize: "0.55rem", letterSpacing: "0.22em", textShadow: "0 1px 8px rgba(0,0,0,0.9)" }}
               >
                 Reference Audio Specialist
               </span>
@@ -76,7 +76,11 @@ export default function Navigation() {
               <Link
                 href="/contact"
                 className="btn-gold ml-4"
-                style={{ padding: "0.5rem 1.5rem", fontSize: "0.7rem" }}
+                style={{
+                  padding: "0.5rem 1.5rem",
+                  fontSize: "0.7rem",
+                  boxShadow: "0 0 0 1px rgba(201, 168, 76, 0.5)",
+                }}
               >
                 Start a Conversation
               </Link>

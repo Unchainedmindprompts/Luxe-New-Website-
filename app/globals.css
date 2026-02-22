@@ -185,6 +185,7 @@ body {
     position: relative;
     padding-bottom: 2px;
     transition: color 0.3s ease;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
   }
 
   .nav-link::after {
@@ -215,14 +216,96 @@ body {
   }
 }
 
-/* Hero section scroll indicator */
-@keyframes scrollBounce {
-  0%, 100% { transform: translateY(0); opacity: 0.7; }
-  50% { transform: translateY(8px); opacity: 1; }
+/* ── Hero layout ─────────────────────────────────────────────────────────── */
+
+/* Left-aligned hero content with responsive padding */
+.hero-content-left {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+@media (min-width: 768px) {
+  .hero-content-left {
+    padding-left: 6%;
+    padding-right: 10%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-content-left {
+    padding-left: 10%;
+    padding-right: 15%;
+  }
+}
+
+/* Hero image: shift to show center/right on mobile */
+@media (max-width: 767px) {
+  .hero-image {
+    object-position: 70% center !important;
+  }
+}
+
+/* ── Hero buttons ────────────────────────────────────────────────────────── */
+
+.btn-hero-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 16px 36px;
+  background: #A07830;
+  color: #0a0a0a;
+  border: none;
+  border-radius: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-hero-primary:hover {
+  background: #C9A84C;
+}
+
+.btn-hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 16px 36px;
+  background: transparent;
+  color: #C9A84C;
+  border: 1px solid #C9A84C;
+  border-radius: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-hero-secondary:hover {
+  background: rgba(201, 168, 76, 0.1);
+  border-color: #E8C96A;
+  color: #E8C96A;
+}
+
+/* ── Scroll indicator ────────────────────────────────────────────────────── */
+
+@keyframes scrollPulse {
+  0%, 100% { transform: scale(1.0); }
+  50% { transform: scale(1.2); }
 }
 
 .scroll-indicator {
-  animation: scrollBounce 2s ease-in-out infinite;
+  animation: scrollPulse 2s ease-in-out infinite;
 }
 
 /* Parallax container */
