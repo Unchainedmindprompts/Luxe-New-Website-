@@ -355,8 +355,8 @@ export default function HomePage() {
             <AnimateIn direction="left">
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src="/ascendo-speakers.png"
-                  alt="Ascendo Immersive Audio — luxury home theater installation"
+                  src="/ascendo-amp.jpeg"
+                  alt="Ascendo Immersive Audio amplifier with blue digital display"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
