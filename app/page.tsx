@@ -353,32 +353,17 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             {/* Image side */}
             <AnimateIn direction="left">
-              <div className="relative aspect-[4/3] overflow-hidden" style={{ background: "#1a1a1a" }}>
-                <div
-                  className="absolute inset-0 flex items-center justify-center"
-                  style={{ background: "linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%)" }}
-                >
-                  <div className="relative w-48 h-48 md:w-64 md:h-64">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div
-                        key={i}
-                        className="absolute inset-0 rounded-full border"
-                        style={{ borderColor: `rgba(201,168,76,${0.15 - i * 0.03})`, transform: `scale(${i * 0.28 + 0.16})` }}
-                      />
-                    ))}
-                    <div
-                      className="absolute inset-[35%] rounded-full"
-                      style={{
-                        background: "radial-gradient(circle, rgba(201,168,76,0.25) 0%, rgba(201,168,76,0.05) 60%, transparent 100%)",
-                        border: "1px solid rgba(201,168,76,0.3)",
-                      }}
-                    />
-                    <div className="absolute inset-[46%] rounded-full" style={{ background: "#C9A84C" }} />
-                  </div>
-                </div>
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image
+                  src="/ascendo-speakers.png"
+                  alt="Ascendo Immersive Audio — luxury home theater installation"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
                 <div
                   className="absolute inset-0"
-                  style={{ background: "linear-gradient(to right, rgba(10,10,10,0.4) 0%, transparent 50%)" }}
+                  style={{ background: "linear-gradient(to right, rgba(10,10,10,0.4) 0%, transparent 60%)" }}
                 />
                 <div className="absolute bottom-6 left-6">
                   <span className="text-mist/60 uppercase tracking-widest font-sans" style={{ fontSize: "0.6rem", letterSpacing: "0.25em" }}>
