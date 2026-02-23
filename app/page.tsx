@@ -1,476 +1,316 @@
-"use client";
-
-import { useRef } from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
-import AnimateIn from "@/components/craig/AnimateIn";
+import Image from "next/image";
+import ConciergeChat from "@/components/ConciergeChat";
+import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 
-// ── Icons ──────────────────────────────────────────────────────────────────
-function WaveformIcon() {
+function StarIcon() {
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="1" y="12" width="2" height="8" rx="1" fill="#C9A84C" />
-      <rect x="5" y="8" width="2" height="16" rx="1" fill="#C9A84C" />
-      <rect x="9" y="4" width="2" height="24" rx="1" fill="#C9A84C" />
-      <rect x="13" y="10" width="2" height="12" rx="1" fill="#C9A84C" />
-      <rect x="17" y="6" width="2" height="20" rx="1" fill="#C9A84C" />
-      <rect x="21" y="10" width="2" height="12" rx="1" fill="#C9A84C" />
-      <rect x="25" y="8" width="2" height="16" rx="1" fill="#C9A84C" />
-      <rect x="29" y="12" width="2" height="8" rx="1" fill="#C9A84C" />
+    <svg className="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
     </svg>
   );
 }
 
-function CertBadgeIcon() {
-  return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="16" cy="14" r="9" stroke="#C9A84C" strokeWidth="1.5" />
-      <path d="M11 14l3 3 6-6" stroke="#C9A84C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M10 22l-2 6 8-3 8 3-2-6" stroke="#C9A84C" strokeWidth="1.2" strokeLinejoin="round" fill="none" />
-    </svg>
-  );
-}
-
-function FilmFrameIcon() {
-  return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="2" y="6" width="28" height="20" rx="2" stroke="#C9A84C" strokeWidth="1.5" />
-      <rect x="2" y="10" width="5" height="12" rx="0" stroke="#C9A84C" strokeWidth="1.5" />
-      <rect x="25" y="10" width="5" height="12" rx="0" stroke="#C9A84C" strokeWidth="1.5" />
-      <line x1="9" y1="6" x2="9" y2="26" stroke="#C9A84C" strokeWidth="1" />
-      <line x1="23" y1="6" x2="23" y2="26" stroke="#C9A84C" strokeWidth="1" />
-      <rect x="12" y="12" width="8" height="8" rx="1" fill="none" stroke="#C9A84C" strokeWidth="1.5" />
-    </svg>
-  );
-}
-
-function ArrowRight() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-// ── Pillar Card ────────────────────────────────────────────────────────────
-interface PillarCardProps {
-  icon: React.ReactNode;
-  title: string;
-  body: string;
-  href: string;
-  delay?: number;
-}
-
-function PillarCard({ icon, title, body, href, delay = 0 }: PillarCardProps) {
-  return (
-    <AnimateIn delay={delay} direction="up">
-      <Link href={href} className="block group h-full">
-        <div
-          className="cinema-card relative p-8 md:p-10 h-full cursor-pointer"
-          style={{ borderTop: "1px solid #C9A84C" }}
-        >
-          <div
-            className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style={{ background: "linear-gradient(90deg, transparent, #C9A84C, transparent)" }}
-          />
-          <div className="mb-6">{icon}</div>
-          <h3
-            className="font-serif text-pearl mb-4 font-light"
-            style={{ fontSize: "1.625rem", letterSpacing: "-0.01em" }}
-          >
-            {title}
-          </h3>
-          <p className="text-mist text-sm leading-relaxed font-sans mb-6" style={{ lineHeight: "1.75" }}>
-            {body}
-          </p>
-          <span className="text-link-gold text-xs uppercase tracking-widest" style={{ letterSpacing: "0.14em" }}>
-            Explore <ArrowRight />
-          </span>
-        </div>
-      </Link>
-    </AnimateIn>
-  );
-}
-
-// ── Testimonial ────────────────────────────────────────────────────────────
-function TestimonialItem({ quote, delay }: { quote: string; delay?: number }) {
-  return (
-    <AnimateIn delay={delay} direction="up">
-      <div className="text-center px-4 py-8 md:px-8">
-        <div className="quote-mark mb-2">&ldquo;</div>
-        <p
-          className="font-serif italic text-pearl/90"
-          style={{ fontSize: "clamp(1.2rem, 2.5vw, 1.625rem)", lineHeight: "1.5", fontWeight: 300 }}
-        >
-          {quote}
-        </p>
-      </div>
-    </AnimateIn>
-  );
-}
-
-// ── Hero ───────────────────────────────────────────────────────────────────
-function HeroSection() {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
-  const yParallax = useTransform(scrollY, [0, 600], [0, 120]);
-
-  return (
-    <section
-      ref={heroRef}
-      className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden"
-    >
-      {/* Cinematic background */}
-      <motion.div style={{ y: yParallax }} className="absolute inset-[-15%] z-0">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: "linear-gradient(180deg, #0a0a0a 0%, #0f0c07 20%, #140e06 40%, #0f0c07 60%, #0a0a0a 100%)",
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(ellipse 100% 50% at 50% 20%, rgba(201,168,76,0.04) 0%, transparent 60%),
-              radial-gradient(ellipse 60% 40% at 50% 15%, rgba(201,168,76,0.06) 0%, transparent 50%)
-            `,
-          }}
-        />
-        <div
-          className="absolute inset-x-0"
-          style={{ top: "10%", height: "30%", background: "linear-gradient(180deg, rgba(60,45,20,0.12) 0%, transparent 100%)" }}
-        />
-        <div
-          className="absolute inset-y-0 left-0 w-1/4"
-          style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.9) 0%, transparent 100%)" }}
-        />
-        <div
-          className="absolute inset-y-0 right-0 w-1/4"
-          style={{ background: "linear-gradient(270deg, rgba(0,0,0,0.9) 0%, transparent 100%)" }}
-        />
-        <div className="absolute inset-0 grid-bg opacity-20" />
-      </motion.div>
-
-      {/* Overlay gradient */}
-      <div
-        className="absolute inset-0 z-10"
-        style={{
-          background: "linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.5) 50%, rgba(10,10,10,0.95) 100%)",
-        }}
-      />
-
-      {/* Content */}
-      <div className="relative z-20 text-center max-w-4xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="gold-divider mb-8"
-        />
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="text-gold uppercase tracking-widest text-xs font-sans mb-8"
-          style={{ letterSpacing: "0.28em" }}
-        >
-          Craig Abplanalp
-        </motion.p>
-        <motion.h1
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="font-serif text-pearl font-light mb-8 text-balance"
-          style={{ fontSize: "clamp(2.5rem, 6.5vw, 5.5rem)", lineHeight: "1.1", letterSpacing: "-0.02em" }}
-        >
-          Some people buy home theaters.
-          <br />
-          <span className="italic">A few pursue something else entirely.</span>
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.75, ease: "easeOut" }}
-          className="text-mist font-sans mb-12 max-w-xl mx-auto"
-          style={{ fontSize: "1.0625rem", lineHeight: "1.7", letterSpacing: "0.01em" }}
-        >
-          Craig Abplanalp has spent four decades building the difference.
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.95 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-        >
-          <Link href="/contact" className="btn-gold-solid">
-            Start a Conversation
-          </Link>
-          <Link href="/philosophy" className="btn-gold">
-            The Philosophy <ArrowRight />
-          </Link>
-        </motion.div>
-      </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 0.8 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 scroll-indicator"
-      >
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-mist/50 uppercase tracking-widest font-sans" style={{ fontSize: "0.55rem", letterSpacing: "0.25em" }}>
-            Scroll
-          </span>
-          <div className="w-px h-12 bg-gradient-to-b from-mist/30 to-transparent" />
-        </div>
-      </motion.div>
-    </section>
-  );
-}
-
-// ── Page ───────────────────────────────────────────────────────────────────
 export default function HomePage() {
   return (
     <>
-      <HeroSection />
 
-      {/* THREE PILLARS */}
-      <section className="bg-void section-padding border-t border-slate/30">
-        <div className="craig-container">
-          <AnimateIn>
-            <div className="text-center mb-16 md:mb-20">
-              <p className="text-gold uppercase tracking-widest font-sans mb-4" style={{ fontSize: "0.7rem", letterSpacing: "0.24em" }}>
-                The Foundation
-              </p>
-              <h2
-                className="font-serif text-pearl font-light"
-                style={{ fontSize: "clamp(1.875rem, 4vw, 3.25rem)", letterSpacing: "-0.01em" }}
-              >
-                Forty Years. One Standard.
-              </h2>
-            </div>
-          </AnimateIn>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <PillarCard
-              icon={<WaveformIcon />}
-              title="The Philosophy"
-              body="Zero compromise. Always. A belief system built over four decades that has never wavered. The world's finest audio brands. The most ambitious residential projects. One unbroken standard."
-              href="/philosophy"
-              delay={0}
-            />
-            <PillarCard
-              icon={<CertBadgeIcon />}
-              title="The Expertise"
-              body="THX certified. Trinnov trained. CEDIA board member. Forty years at the absolute frontier — from Audio Associates and Sound Components to building one of the Pacific Northwest's most respected firms."
-              href="/expertise"
-              delay={0.1}
-            />
-            <PillarCard
-              icon={<FilmFrameIcon />}
-              title="The Work"
-              body="Seven-figure residential projects. Reference-level results every time. The kind of work that earns editorial coverage in TechRadar and recognition at CEDIA Best of Show."
-              href="/work"
-              delay={0.2}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ORIGIN STORY TEASER */}
-      <section className="relative py-28 md:py-40 overflow-hidden" style={{ background: "#0d0d0d" }}>
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] rounded-full opacity-[0.03]"
-          style={{ background: "radial-gradient(ellipse, #C9A84C, transparent 70%)" }}
+      {/* Hero Section */}
+      <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
+        <Image
+          src="/images/hero-modern-living.jpeg"
+          alt="Modern living room with custom cellular shades and a mountain view"
+          fill
+          className="object-cover"
+          priority
         />
-        <div className="craig-container relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <AnimateIn>
-              <div className="flex items-center justify-center gap-6 mb-10">
-                <div className="gold-divider" style={{ width: "40px" }} />
-                <span className="text-gold uppercase tracking-widest font-sans" style={{ fontSize: "0.65rem", letterSpacing: "0.24em" }}>
-                  Origin
-                </span>
-                <div className="gold-divider" style={{ width: "40px" }} />
-              </div>
-            </AnimateIn>
-            <AnimateIn delay={0.1}>
-              <blockquote
-                className="pull-quote text-pearl mb-10"
-                style={{ fontSize: "clamp(1.125rem, 2.5vw, 1.5rem)", lineHeight: "1.7" }}
-              >
-                &ldquo;In the late 1990s, Craig was driving Wilson Audio Grand Slams with dedicated
-                Mark Levinson No.&nbsp;33 Monoblocks &mdash; one amplifier per speaker &mdash;
-                in a home theater at a time when most people had never heard the term.&rdquo;
-              </blockquote>
-            </AnimateIn>
-            <AnimateIn delay={0.2}>
-              <div className="gold-divider mb-10" />
-              <Link href="/philosophy" className="text-link-gold uppercase" style={{ letterSpacing: "0.15em", fontSize: "0.75rem" }}>
-                Read the full story <ArrowRight />
-              </Link>
-            </AnimateIn>
-          </div>
-        </div>
-      </section>
-
-      {/* ASCENDO FEATURE */}
-      <section className="section-padding" style={{ background: "#111111" }}>
-        <div className="craig-container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            {/* Image side */}
-            <AnimateIn direction="left">
-              <div className="relative aspect-[4/3] overflow-hidden" style={{ background: "#1a1a1a" }}>
-                <div
-                  className="absolute inset-0 flex items-center justify-center"
-                  style={{ background: "linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%)" }}
-                >
-                  <div className="relative w-48 h-48 md:w-64 md:h-64">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div
-                        key={i}
-                        className="absolute inset-0 rounded-full border"
-                        style={{ borderColor: `rgba(201,168,76,${0.15 - i * 0.03})`, transform: `scale(${i * 0.28 + 0.16})` }}
-                      />
-                    ))}
-                    <div
-                      className="absolute inset-[35%] rounded-full"
-                      style={{
-                        background: "radial-gradient(circle, rgba(201,168,76,0.25) 0%, rgba(201,168,76,0.05) 60%, transparent 100%)",
-                        border: "1px solid rgba(201,168,76,0.3)",
-                      }}
-                    />
-                    <div className="absolute inset-[46%] rounded-full" style={{ background: "#C9A84C" }} />
-                  </div>
-                </div>
-                <div
-                  className="absolute inset-0"
-                  style={{ background: "linear-gradient(to right, rgba(10,10,10,0.4) 0%, transparent 50%)" }}
-                />
-                <div className="absolute bottom-6 left-6">
-                  <span className="text-mist/60 uppercase tracking-widest font-sans" style={{ fontSize: "0.6rem", letterSpacing: "0.25em" }}>
-                    Ascendo Immersive Audio
-                  </span>
-                </div>
-              </div>
-            </AnimateIn>
-
-            {/* Text side */}
-            <AnimateIn direction="right" delay={0.15}>
-              <div>
-                <p className="text-gold uppercase tracking-widest font-sans mb-5" style={{ fontSize: "0.7rem", letterSpacing: "0.24em" }}>
-                  Current Partnership
-                </p>
-                <h2
-                  className="font-serif text-pearl font-light mb-8 leading-tight"
-                  style={{ fontSize: "clamp(1.875rem, 4vw, 3rem)", letterSpacing: "-0.01em" }}
-                >
-                  The Instrument Has Evolved.
-                  <br />
-                  <span className="italic" style={{ color: "rgba(201,168,76,0.9)" }}>The Standard Hasn&rsquo;t.</span>
-                </h2>
-                <div className="space-y-5 text-mist font-sans leading-relaxed" style={{ fontSize: "0.9375rem", lineHeight: "1.8" }}>
-                  <p>
-                    After decades working with the world&rsquo;s finest audio brands &mdash; Mark Levinson,
-                    Wilson Audio, Revel, Wisdom Audio, Kaleidescape &mdash; Craig has found in Ascendo
-                    Immersive Audio the most complete expression of everything he has pursued.
-                  </p>
-                  <p>
-                    Infrasonic bass that pressurizes the room. Coaxial precision that places every
-                    sound exactly where it belongs. Reference-level immersion without compromise.
-                  </p>
-                  <p style={{ color: "rgba(245,245,245,0.85)" }}>Not marketing. Physics.</p>
-                </div>
-                <div className="mt-10">
-                  <Link href="/work" className="text-link-gold uppercase" style={{ letterSpacing: "0.15em", fontSize: "0.75rem" }}>
-                    Discover what&rsquo;s possible <ArrowRight />
-                  </Link>
-                </div>
-              </div>
-            </AnimateIn>
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="py-24 md:py-32 relative overflow-hidden" style={{ background: "#0a0a0a" }}>
-        <div
-          className="absolute inset-x-0 top-0 h-px"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.2), transparent)" }}
-        />
-        <div
-          className="absolute inset-x-0 bottom-0 h-px"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.2), transparent)" }}
-        />
-        <div className="craig-container">
-          <AnimateIn>
-            <div className="text-center mb-12">
-              <p className="text-gold uppercase tracking-widest font-sans" style={{ fontSize: "0.65rem", letterSpacing: "0.25em" }}>
-                Client Experiences
-              </p>
-            </div>
-          </AnimateIn>
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate">
-            <TestimonialItem quote="I didn&rsquo;t know this was possible." delay={0} />
-            <TestimonialItem quote="It stopped being sound. It became physical." delay={0.1} />
-            <TestimonialItem quote="Nothing has been the same since." delay={0.2} />
-          </div>
-          <AnimateIn delay={0.3}>
-            <div className="text-center mt-14">
-              <Link href="/contact" className="btn-gold">
-                Begin the Conversation <ArrowRight />
-              </Link>
-            </div>
-          </AnimateIn>
-        </div>
-      </section>
-
-      {/* CREDENTIALS STRIP */}
-      <section className="py-12 border-t border-b border-slate/50" style={{ background: "#111111" }}>
-        <div className="craig-container">
-          <AnimateIn direction="none">
-            <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
-              {["THX Level 1 & 2 Certified", "Trinnov Optimizer Certified", "CEDIA RP22 Certified", "CEDIA Board Member", "40+ Years Experience", "Ascendo Authorized"].map((cred) => (
-                <div key={cred} className="flex items-center gap-3">
-                  <div className="w-1 h-1 rounded-full bg-gold" />
-                  <span className="text-mist font-sans uppercase tracking-widest" style={{ fontSize: "0.65rem", letterSpacing: "0.18em" }}>
-                    {cred}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </AnimateIn>
-        </div>
-      </section>
-
-      {/* FINAL CTA */}
-      <section className="py-28 md:py-40" style={{ background: "#0a0a0a" }}>
-        <div className="craig-container text-center">
-          <AnimateIn>
-            <div className="gold-divider mb-10" />
-            <h2
-              className="font-serif text-pearl font-light mb-6"
-              style={{ fontSize: "clamp(2rem, 5vw, 4rem)", letterSpacing: "-0.02em", lineHeight: "1.15" }}
-            >
-              Ready to pursue
-              <br />
-              <span className="italic" style={{ color: "rgba(201,168,76,0.9)" }}>something extraordinary?</span>
-            </h2>
-            <p className="text-mist font-sans mb-12 max-w-lg mx-auto" style={{ fontSize: "1rem", lineHeight: "1.75" }}>
-              Reference-level immersive audio begins with a conversation. No sales pitch. Just
-              an honest discussion about what&rsquo;s possible and whether it&rsquo;s right for your space.
+        <div className="absolute inset-0 bg-charcoal/55" />
+        <div className="container-luxe relative">
+          <div className="max-w-3xl">
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight text-balance">
+              Northern Idaho&apos;s Most Trusted Window Treatment Specialist
+            </h1>
+            <p className="mt-6 md:mt-8 text-lg md:text-xl text-warm-gray-200 leading-relaxed max-w-2xl">
+              Free in-home consultation with Mark — nearly 20 years of hands-on expertise,
+              not a sales pitch. He&apos;ll help you find exactly what works for your space,
+              your style, and your budget.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact" className="btn-gold-solid">
-                Start a Conversation
-              </Link>
-              <Link href="/expertise" className="btn-gold">
-                Explore the Expertise
-              </Link>
+            <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4">
+              <a
+                href="#concierge"
+                className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
+              >
+                Start the Consultation
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+              <a
+                href={BUSINESS.phoneHref}
+                className="inline-flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white hover:text-charcoal font-semibold px-8 py-4 rounded-full text-lg transition-all"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                Call Mark Now
+              </a>
             </div>
-            <div className="gold-divider mt-10" />
-          </AnimateIn>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Bar */}
+      <section className="bg-charcoal text-white py-5">
+        <div className="container-luxe">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm md:text-base">
+            <div className="flex items-center gap-2">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon key={i} />
+                ))}
+              </div>
+              <span className="text-warm-gray-300">
+                {BUSINESS.google.rating} Stars · {BUSINESS.google.reviewCount} Google Reviews
+              </span>
+            </div>
+            <span className="hidden md:inline text-warm-gray-600">|</span>
+            <span className="text-warm-gray-300">{BUSINESS.experience} Experience</span>
+            <span className="hidden md:inline text-warm-gray-600">|</span>
+            <span className="text-warm-gray-300">{BUSINESS.guarantee}</span>
+            <span className="hidden md:inline text-warm-gray-600">|</span>
+            <span className="text-warm-gray-300">Serving Northern Idaho</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Concierge Introduction */}
+      <section className="py-20 md:py-28 bg-warm-white">
+        <div className="container-luxe text-center max-w-3xl mx-auto">
+          <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
+            A Better Way to Shop for Window Treatments
+          </p>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
+            Skip the Overwhelming Showroom Experience
+          </h2>
+          <p className="mt-6 text-lg text-warm-gray-600 leading-relaxed">
+            Most window treatment companies throw a catalog at you and hope something sticks.
+            That&apos;s not how Mark works. With two decades of installation experience, he knows
+            that the right window covering depends on your room, your light, your climate, and your life —
+            not just what looks good in a brochure.
+          </p>
+          <p className="mt-4 text-lg text-warm-gray-600 leading-relaxed">
+            Start with our concierge consultation below. Answer a few simple questions,
+            and we&apos;ll help you narrow down exactly what makes sense for your home —
+            before anyone ever sets foot in your door.
+          </p>
+        </div>
+      </section>
+
+      {/* AI Concierge Chat */}
+      <section id="concierge" className="py-16 md:py-24 bg-cream/50 scroll-mt-20">
+        <div className="container-luxe text-center">
+          <h2 className="font-serif text-3xl sm:text-4xl text-charcoal mb-3">
+            Your Personal Window Treatment Concierge
+          </h2>
+          <p className="text-warm-gray-500 mb-10 max-w-lg mx-auto">
+            Tell us about your space, and we&apos;ll help you figure out the perfect solution.
+          </p>
+          <ConciergeChat />
+        </div>
+      </section>
+
+      {/* Social Proof / Reviews */}
+      <section className="py-20 md:py-28 bg-warm-white">
+        <div className="container-luxe">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
+              What Our Clients Say
+            </p>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
+              5.0 Stars Across Every Review
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {REVIEWS.map((review, i) => (
+              <div
+                key={i}
+                className={`bg-white rounded-2xl p-8 border border-warm-gray-200/60 shadow-sm ${
+                  i === 0 ? "md:col-span-2 lg:col-span-1" : ""
+                }`}
+              >
+                <div className="flex gap-1 mb-4">
+                  {[...Array(review.rating)].map((_, j) => (
+                    <StarIcon key={j} />
+                  ))}
+                </div>
+                <p className="text-charcoal leading-relaxed text-[15px]">
+                  &ldquo;{review.text}&rdquo;
+                </p>
+                <p className="mt-4 text-sm text-warm-gray-500 font-medium">
+                  — {review.author}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About Mark */}
+      <section className="py-20 md:py-28 bg-linen/40">
+        <div className="container-luxe">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden order-2 lg:order-1">
+              <Image
+                src="/images/mark-photo.png"
+                alt="Mark, owner and installer at Luxe Window Works"
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            <div className="order-1 lg:order-2">
+              <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
+                Meet Your Installer
+              </p>
+              <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
+                Your Neighbor. Your Expert. Your Installer.
+              </h2>
+              <div className="mt-6 space-y-4 text-warm-gray-600 leading-relaxed text-[17px]">
+                <p>
+                  With 20 years of hands-on installations, Mark has seen every
+                  type of window, every challenging angle, and every &ldquo;impossible&rdquo; situation
+                  that Northern Idaho homes can throw at you.
+                </p>
+                <p>
+                  He&apos;s not here to upsell you on the most expensive option. He&apos;s here to
+                  figure out what actually works — for your windows, your home, your family,
+                  and your budget. That&apos;s why every project starts with a free in-home consultation,
+                  not a sales pitch.
+                </p>
+                <p>
+                  From lakeside homes in Coeur d&apos;Alene to new construction in Post Falls,
+                  Mark knows the unique challenges that come with living in this part of Idaho —
+                  the extreme temperature swings, the intense summer sun off the lake, the
+                  need for real insulation when winter hits. And he backs every installation
+                  with a lifetime guarantee.
+                </p>
+              </div>
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                <a
+                  href="#concierge"
+                  className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-6 py-3 rounded-full transition-all"
+                >
+                  Start Your Consultation
+                </a>
+                <a
+                  href={BUSINESS.phoneHref}
+                  className="inline-flex items-center justify-center gap-2 text-charcoal font-semibold hover:text-gold transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  Call {BUSINESS.phone}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Products Overview */}
+      <section className="py-20 md:py-28 bg-warm-white">
+        <div className="container-luxe">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
+              Solutions, Not Just Products
+            </p>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
+              The Right Covering for Every Room
+            </h2>
+            <p className="mt-4 text-warm-gray-500 text-lg">
+              Each product solves a specific problem. Mark will help you match the right one to yours.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {PRODUCTS.map((product) => (
+              <Link
+                key={product.slug}
+                href={`/products/${product.slug}`}
+                className="group bg-white rounded-2xl border border-warm-gray-200/60 p-6 hover:shadow-lg hover:border-gold/30 transition-all"
+              >
+                <div className="w-12 h-12 bg-cream rounded-xl flex items-center justify-center mb-4 group-hover:bg-gold/10 transition-colors">
+                  <svg className="w-6 h-6 text-warm-gray-500 group-hover:text-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                  </svg>
+                </div>
+                <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold transition-colors">
+                  {product.name}
+                </h3>
+                <p className="mt-1 text-sm text-gold font-medium">{product.tagline}</p>
+                <p className="mt-2 text-sm text-warm-gray-500 leading-relaxed">
+                  {product.shortDescription}
+                </p>
+                <span className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
+                  Learn more
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Service Areas Strip */}
+      <section className="py-16 md:py-20 bg-cream">
+        <div className="container-luxe">
+          <div className="text-center mb-10">
+            <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">
+              Proudly Serving Northern Idaho
+            </h2>
+          </div>
+          <div className="flex flex-wrap justify-center gap-4">
+            {SERVICE_AREAS.map((area) => (
+              <Link
+                key={area.slug}
+                href={`/areas/${area.slug}`}
+                className="bg-white hover:bg-charcoal hover:text-white text-charcoal border border-warm-gray-200 px-6 py-3 rounded-full font-medium transition-all hover:shadow-md"
+              >
+                {area.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-20 md:py-28 bg-charcoal text-white">
+        <div className="container-luxe text-center max-w-3xl mx-auto">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl leading-tight">
+            Ready to Stop Guessing and Get It Right?
+          </h2>
+          <p className="mt-6 text-lg text-warm-gray-400 leading-relaxed">
+            Schedule your free in-home consultation with Mark. He&apos;ll measure your windows,
+            understand your needs, and recommend exactly what works — no pressure, no surprises.
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="#concierge"
+              className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
+            >
+              Start Your Free Consultation
+            </a>
+            <a
+              href={BUSINESS.phoneHref}
+              className="inline-flex items-center justify-center gap-2 border-2 border-warm-gray-600 text-white hover:border-white font-semibold px-8 py-4 rounded-full text-lg transition-all"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              {BUSINESS.phone}
+            </a>
+          </div>
         </div>
       </section>
     </>
