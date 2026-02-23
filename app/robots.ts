@@ -1,11 +1,12 @@
-import type { MetadataRoute } from "next";
+import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: ["/api/"],
     },
-    sitemap: "https://craigabplanalp.com/sitemap.xml",
+    sitemap: "https://luxewindowworks.com/sitemap.xml",
   };
 }
