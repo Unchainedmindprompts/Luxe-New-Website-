@@ -117,7 +117,7 @@ wordCount: 1303
     {
       "@type": "Product",
       "name": "Motorized Shades by Luxe Window Works",
-      "image": "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/09/Gemini_Generated_Image_ezyjxzezyjxzezyj-1-1024x1024.png",
+      "image": "https://luxewindowworks.com/images/IMG_0183.jpeg",
       "description": "Custom motorized window shades designed for performance, safety, and effortless control — handcrafted for North Idaho homes.",
       "brand": {
         "@type": "Brand",
