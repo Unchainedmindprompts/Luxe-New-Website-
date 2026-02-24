@@ -5,7 +5,7 @@ date: "2025-10-30T00:00:00-07:00"
 dateModified: "2026-02-21T00:00:00-07:00"
 author: Mark Abplanalp
 excerpt: "From lakeside humidity to deep winter temperature swings, Northern Idaho homes ask a lot from their window shutters. This guide breaks down the best frame types, materials, and configurations — so you can choose shutters that look beautiful, function perfectly, and last for decades."
-featuredImage: "/images/plantation-shutters-bright-room.jpeg"
+featuredImage: "/images/IMG_0042.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, Plantation-shutters]
 wordCount: 3700
