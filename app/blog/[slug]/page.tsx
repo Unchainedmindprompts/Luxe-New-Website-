@@ -21,12 +21,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Post Not Found" };
   }
 
+  const description = post.metaDescription || post.excerpt;
   return {
     title: post.title,
-    description: post.excerpt,
+    description,
     openGraph: {
       title: post.title,
-      description: post.excerpt,
+      description,
       type: "article",
       publishedTime: post.date,
       authors: [post.author],
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.excerpt,
+      description,
       images: post.featuredImage ? [post.featuredImage] : undefined,
     },
   };
@@ -169,7 +170,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.dateModified || post.date,
     wordCount: post.wordCount,
     articleSection: post.category,
     keywords: deriveKeywords(post),
@@ -281,7 +282,7 @@ export default function BlogPostPage({ params }: Props) {
             <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
               <Image
                 src={post.featuredImage}
-                alt={post.title}
+                alt={post.featuredImageAlt || post.title}
                 fill
                 className="object-cover"
                 priority
