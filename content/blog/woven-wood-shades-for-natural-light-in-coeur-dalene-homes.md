@@ -10,7 +10,7 @@ tags: [decor, home-decor, Interior Design]
 wordCount: 379
 ---
 <figure><img src="/images/IMG_0670.png" alt="Natural woven wood Roman shades in a warm rustic living room with exposed brick walls and hardwood floors" /></figure>
-<h3><strong>The Day I Fell in Love with Woven Woods</strong></h3>
+<h3><strong>A Client Who Changed How I Think About Window Treatments</strong></h3>
 <p>It was a few years into my career, and I was on a consultation call with a new client, Sarah. She had just moved into her dream home—a place with big, beautiful windows overlooking a forested creek. She wanted something to soften the light without blocking that gorgeous view. She was looking for a solution that felt both natural and elegant.</p>
 <p>"I’ve looked at everything," she said, sounding a little defeated. "But nothing feels right. Blinds seem too harsh, and drapes just hide the windows."</p>
 <p>I listened carefully, and then I pulled out my sample book for <strong>Lafayette Man Truc Woven Woods</strong>. She ran her fingers over the rich textures of bamboo, jute, and grasses. It wasn't just a fabric; you could feel the quality in the careful, intricate weave.</p>

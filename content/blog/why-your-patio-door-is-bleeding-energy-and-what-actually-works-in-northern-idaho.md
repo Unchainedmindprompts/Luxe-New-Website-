@@ -239,14 +239,14 @@ Unlike vertical blinds, which only rotate closed or open, cellular shades give y
 <hr />
 
 <h2>Measurable Outcomes: What You Can Expect After Installation</h2>
-<h3>Heating Season (November–March)</h3>
+<h3>Heating Season: Post-Installation Results (November–March)</h3>
 <ul>
  	<li><strong>Living room temperature stabilization</strong>: 6–10°F warmer near the slider without increasing thermostat settings</li>
  	<li><strong>Reduced furnace runtime</strong>: 15–25% shorter heating cycles</li>
  	<li><strong>Monthly heating cost reduction</strong>: $60–120 average (based on client reports and utility bill comparisons)</li>
  	<li><strong>Comfort improvement</strong>: Eliminated cold drafts within 5 feet of the slider</li>
 </ul>
-<h3>Cooling Season (June–September)</h3>
+<h3>Cooling Season: Post-Installation Results (June–September)</h3>
 <ul>
  	<li><strong>Afternoon heat reduction</strong>: 8–12°F cooler living room temps on west-facing sliders during peak sun (3–6 PM)</li>
  	<li><strong>AC runtime reduction</strong>: 10–20% shorter cooling cycles</li>
