@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0944.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle, Motorized-shades, Smart-Shades]
 wordCount: 4736
+metaDescription: "Why motorized shades lose signal or stop responding in Northern Idaho homes — the real causes and fixes, from a local installer who's seen every failure mode."
 ---
 <figure><img src="/images/IMG_0944.jpeg" alt="Motorized shade system installed on large windows in a northern Idaho home with wireless remote control" /></figure>
 <p><strong>By Mark Abplanalp, Owner, Luxe Window Works</strong></p>

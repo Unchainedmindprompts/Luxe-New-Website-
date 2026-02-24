@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0070.png"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle]
 wordCount: 1246
+metaDescription: "Why inside-mounting corded woven wood shades is a design mistake — what happens to the waterfall fabric and why outside mounting is always the right call."
 ---
 <figure><img src="/images/IMG_0070.png" alt="Woven Roman shades in a white farmhouse kitchen, showing natural texture and light filtering of woven wood material over the sink area" /></figure>
 <h1><strong>Design Tip: Why You Should Never Inside-Mount a Waterfall Woven Wood Shade with Cords</strong></h1>

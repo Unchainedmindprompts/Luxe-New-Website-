@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0806.jpeg"
 category: Custom Window Coverings
 tags: [Child-safety, diy, energy-efficiency, home-improvement, interior-design]
 wordCount: 1367
+metaDescription: "Federal law now requires cordless blinds in rental properties. What CDA and Post Falls landlords must know to stay compliant and protect their investment."
 ---
 <figure><img src="/images/IMG_0806.jpeg" alt="Cordless window blinds installed safely in a Coeur d'Alene rental property meeting federal child safety requirements" /></figure>
 <p>When you invest in <strong>Coeur d'Alene</strong> or <strong>Post Falls rental property</strong>, you’re making a calculated wager on asset appreciation and steady income. You manage the mortgage, the maintenance, the tenant vetting—you control the known risks.</p>

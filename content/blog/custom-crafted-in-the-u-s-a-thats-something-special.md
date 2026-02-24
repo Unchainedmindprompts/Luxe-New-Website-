@@ -8,6 +8,7 @@ featuredImage: ""
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, home-improvement, interior-design, lifestyle, Made-In-The-USA]
 wordCount: 2588
+metaDescription: "Why Luxe Window Works chooses American-made window treatments from Lafayette Interior Fashions — quality, craftsmanship, and the pride of U.S. manufacturing."
 ---
 <p><strong>By Mark Abplanalp, Owner of Luxe Window Works</strong></p>
 <p>It makes me smile every time we receive a new shipment of window treatments from Lafayette Interior Fashions. Every box carries the same small but powerful detail — a <strong>“Custom Crafted in America”</strong> sticker. It’s a reminder that behind every product we install is a team of skilled craftspeople right here in the United States, building something with care, precision, and pride.</p>

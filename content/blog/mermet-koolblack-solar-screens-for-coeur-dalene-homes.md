@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_2272.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-improvement, interior-design, lifestyle]
 wordCount: 1505
+metaDescription: "Mermet KoolBlack solar screens for Coeur d'Alene homes — preserve your lake and mountain views while blocking UV and heat. The solar screen upgrade CDA deserves."
 ---
 <figure><img src="/images/IMG_2272.jpeg" alt="Solar screen shades on large windows filtering sunlight while preserving the scenic view in a Coeur d'Alene home" /></figure>
 <p>In <strong>Coeur d'Alene</strong> and <strong>Post Falls</strong>, the view is everything. From the shimmering lake to the majestic pines, your windows are carefully framed canvases to nature’s masterpiece. But here's the paradox: the very windows that deliver those breathtaking vistas also serve as direct conduits for relentless heat gain and destructive UV radiation, especially during our long, bright Northern Idaho summers.</p>

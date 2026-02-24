@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0807.jpeg"
 category: Custom Window Coverings
 tags: [china, economy, Home Imrovement, interior-design, politics, tariffs, trump]
 wordCount: 2968
+metaDescription: "What 'Made in USA' really means for window coverings — and what it doesn't. A Northern Idaho installer breaks down the labels and what to actually look for."
 ---
 <figure><img src="/images/IMG_0807.jpeg" alt="American-made custom window coverings installed with quality craftsmanship in a northern Idaho home" /></figure>
 

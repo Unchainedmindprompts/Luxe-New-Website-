@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import ConciergeChat from "@/components/ConciergeChat";
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "Luxe Window Works — Northern Idaho's Window Treatment Specialist",
+  description:
+    "Custom window treatments for Northern Idaho homes. Free in-home consultation with Mark in Coeur d'Alene, Post Falls & Hayden. Nearly 20 years of expert installation.",
+};
 
 function StarIcon() {
   return (

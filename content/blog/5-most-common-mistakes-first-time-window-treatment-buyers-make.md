@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0804.jpeg"
 category: Custom Window Coverings
 tags: ["Blinds &amp; Shades", diy, home, Home Imrovement, home-decor, home-improvement, Interior Design, interior-design, Window Covering Mistakes, Window Treatments]
 wordCount: 1297
+metaDescription: "Avoid the 5 most costly window treatment mistakes. Northern Idaho installer explains measuring errors, DIY mishaps, and how to buy smart the first time."
 ---
 <figure><img src="/images/IMG_0804.jpeg" alt="Window treatment installation in a northern Idaho home showing common measuring and mounting considerations" /></figure>
 <h1>5 Most Common Mistakes First-Time Window Treatment Buyers Make</h1>

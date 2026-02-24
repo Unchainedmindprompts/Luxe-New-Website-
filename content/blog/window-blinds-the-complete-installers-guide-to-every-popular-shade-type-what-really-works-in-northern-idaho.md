@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0677.png"
 category: Custom Window Coverings
 tags: [Cellular-Shades, energy-efficiency, Faux-Wood-Blinds, home-decor, interior-design, Plantation-shutters, Roller-Shades]
 wordCount: 4404
+metaDescription: "The complete installer's guide to every window blind and shade type — what actually works in Northern Idaho's climate. Honest comparisons from Luxe Window Works."
 ---
 <figure><img src="/images/IMG_0335.jpeg" alt="Window blind installation options for northern Idaho homes" /></figure>
 <figure><img src="/images/IMG_0677.png" alt="Close-up of natural wood blind slats with warm afternoon light and shadow casting across their surface" /></figure>

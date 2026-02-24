@@ -8,6 +8,7 @@ featuredImage: ""
 category: Custom Window Coverings
 tags: [decor, home-decor, home-improvement, interior-design]
 wordCount: 2421
+metaDescription: "Why '70% off' window covering sales are usually a lie — how inflated MSRP tricks work, what honest pricing looks like, and how Luxe Window Works does it differently."
 ---
 <p>I'm going to tell you something that might make you mad. But you deserve to hear it.</p>
 <p>That "70% off" sale the national franchise is running? It's a lie. The "free shop card" your warehouse club offers? You're paying for it—every penny. And that sweaty, rushed feeling you get when a window covering salesperson shows up at your door with a three-ring binder and a "manager I need to call"? That's manufactured pressure, designed to separate you from your money before you have time to think.</p>

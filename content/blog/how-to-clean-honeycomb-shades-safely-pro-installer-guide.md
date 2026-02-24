@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0801.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, home-improvement, interior-design]
 wordCount: 1505
+metaDescription: "How to clean honeycomb cellular shades safely. A Northern Idaho installer's complete guide — dusting, spot cleaning, and deep cleaning without damage."
 ---
 <figure><img src="/images/IMG_0801.jpeg" alt="Cellular honeycomb shades in a cozy corner living room filtering soft natural light through cordless pleated fabric" /></figure>
 <h1><strong>How to Clean Honeycomb Shades: The Complete Guide from a Pro Installer</strong></h1>

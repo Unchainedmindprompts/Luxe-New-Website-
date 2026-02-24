@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0800.jpeg"
 category: Custom Window Coverings
 tags: [home-improvement, interior-design]
 wordCount: 920
+metaDescription: "Lafayette Allure transitional shades bring alternating sheer and opaque bands to Northern Idaho homes. Style, privacy, and light control — installed in Coeur d'Alene."
 ---
 <figure><img src="/images/IMG_0800.jpeg" alt="Lafayette Allure transitional shades in a bright airy living room layering natural light with alternating sheer and opaque fabric bands" /></figure>
 <h1><strong>Elevate Your Northern Idaho Home with Lafayette Allure® Transitional Shades: Style, Versatility, and American Craftsmanship</strong></h1>

@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0668.png"
 category: Custom Window Coverings
 tags: [decor, energy-efficiency, home-decor, interior-design, Roller-Shades, Solar-Shades]
 wordCount: 3489
+metaDescription: "Why large roller shades pucker and bow — and the installation and fabric solutions that actually fix it in Northern Idaho homes with wide, dramatic windows."
 ---
 <figure><img src="/images/IMG_0668.png" alt="Large woven roller shades in a bright minimalist white living room, demonstrating clean flat installation without puckering" /></figure>
 <p><strong>By Mark Abplanalp, Owner of Luxe Window Works</strong></p>

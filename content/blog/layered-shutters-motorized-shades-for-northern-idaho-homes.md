@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0873.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, Plantation-shutters, Shutters]
 wordCount: 2091
+metaDescription: "Combine plantation shutters with motorized shades for ultimate light control in Northern Idaho homes. Expert layered installation in Coeur d'Alene and Post Falls."
 ---
 <figure><img src="/images/IMG_0873.jpeg" alt="Motorized transitional sheer shades layered across large windows in a warm living room, showing combined light control effect in a Northern Idaho home" /></figure>
 <p><em>For homeowners in Coeur d'Alene and Post Falls who refuse to choose between architectural beauty and flawless performance</em></p>
