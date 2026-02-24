@@ -36,9 +36,7 @@ wordCount: 1699
 <p>Most homeowners don't think about what's inside their shade fabric, but it matters enormously. Performance fabrics use fiberglass core yarns instead of polyester, and here's why that's crucial:</p>
 <p>Fiberglass has a much higher melting point and won't stretch or deform under the intense heat that builds up between shades and window glass—especially on south and west-facing windows. Polyester fabrics can actually warp in these conditions, compromising both performance and appearance.</p>
 <p>It's the difference between a shade that maintains its comfort-providing properties for decades versus one that might start sagging or losing effectiveness after a few intense summers.</p>
-<h2>Customizing Your Comfort</h2>
-<h2>Choosing the Right Openness Factor for Your Needs</h2>
-<h3>Getting the Right Openness Factor for Your Needs</h3>
+<h2>Customizing Your Comfort: Choosing the Right Openness Factor</h2>
 <p>One of the biggest advantages of performance fabrics is customizable comfort through different openness factors:</p>
 <p><strong>1-3% openness:</strong>&nbsp;Maximum privacy and heat control with excellent glare reduction. Perfect for bedrooms or home offices where comfort is critical.</p>
 <p><strong>3-5% openness:</strong>&nbsp;The sweet spot for most living spaces—balanced performance that works for almost any comfort application.</p>
