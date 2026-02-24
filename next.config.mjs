@@ -28,11 +28,38 @@ const nextConfig = {
   },
 
   async redirects() {
-    return wpRedirects.map((r) => ({
-      source: r.source,
-      destination: r.destination,
-      permanent: true, // 301 redirect — preserves SEO juice
-    }));
+    const staticRedirects = [
+      {
+        source: '/explore-motorized-shades-plantation-shutters-have-a-question-lets-start-the-c',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/services',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/case-studies',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/',
+        has: [{ type: 'query', key: 'page_id' }],
+        destination: '/',
+        permanent: true,
+      },
+    ];
+
+    return [
+      ...staticRedirects,
+      ...wpRedirects.map((r) => ({
+        source: r.source,
+        destination: r.destination,
+        permanent: true, // 301 redirect — preserves SEO juice
+      })),
+    ];
   },
 };
 
