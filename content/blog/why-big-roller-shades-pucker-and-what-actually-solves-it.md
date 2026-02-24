@@ -4,12 +4,12 @@ slug: why-big-roller-shades-pucker-and-what-actually-solves-it
 date: "2025-11-15T00:20:03.000Z"
 author: Mark Abplanalp
 excerpt: "By Mark Abplanalp, Owner of Luxe Window Works If you're building or renovating a home in Northern Idaho, you know the value of those stunning wide windows...."
-featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/11/ChatGPT-Image-Nov-14-2025-at-04_03_57-PM-1.png"
+featuredImage: "/images/IMG_0668.png"
 category: Custom Window Coverings
 tags: [decor, energy-efficiency, home-decor, interior-design, Roller-Shades, Solar-Shades]
 wordCount: 3489
 ---
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/11/ChatGPT-Image-Nov-14-2025-at-04_03_57-PM-1.png" alt="Why Big Roller Shades Pucker—and What Actually Solves It." /></figure>
+<figure><img src="/images/IMG_0668.png" alt="Large woven roller shades in a bright minimalist white living room, demonstrating clean flat installation without puckering" /></figure>
 <p><strong>By Mark Abplanalp, Owner of Luxe Window Works</strong></p>
 <hr /><p>If you're building or renovating a home in Northern Idaho, you know the value of those stunning wide windows. Whether you're overlooking Lake Coeur d'Alene, framing a mountain view in Sandpoint, or capturing natural light in a Post Falls great room, expansive glass is a design statement that defines luxury living in our region.</p>
 <p>When it comes to covering those windows, many homeowners gravitate toward extra-wide roller shades. The appeal is obvious: clean lines, minimal hardware, motorized convenience, and a sleek, modern aesthetic that doesn't interrupt the view. But here's what most people don't realize until after installation—once you go beyond a certain width, even premium roller shades can develop a frustrating problem: the fabric doesn't hang flat. It ripples. It puckers. And no matter how much you paid or what brand you chose, it looks off.</p>
