@@ -170,7 +170,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.dateModified || post.date,
     wordCount: post.wordCount,
     articleSection: post.category,
     keywords: deriveKeywords(post),
