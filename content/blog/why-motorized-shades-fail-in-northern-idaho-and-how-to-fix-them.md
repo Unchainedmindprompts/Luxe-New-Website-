@@ -4,12 +4,12 @@ slug: why-motorized-shades-fail-in-northern-idaho-and-how-to-fix-them
 date: "2025-10-18T20:45:44.000Z"
 author: Mark Abplanalp
 excerpt: "By Mark Abplanalp, Owner, Luxe Window Works Okay, all your motorized shades are installed. They're programmed into the app. The Bond Bridge is talking to your..."
-featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/ChatGPT-Image-Oct-18-2025-at-01_04_21-PM.png"
+featuredImage: "/images/IMG_0944.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle, Motorized-shades, Smart-Shades]
 wordCount: 4736
 ---
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/ChatGPT-Image-Oct-18-2025-at-01_04_21-PM.png" alt="Why Your Motorized Shades Don't Respond Half the Time (And How to Actually Fix It)" /></figure>
+<figure><img src="/images/IMG_0944.jpeg" alt="Motorized shade system installed on large windows in a northern Idaho home with wireless remote control" /></figure>
 <p><strong>By Mark Abplanalp, Owner, Luxe Window Works</strong></p>
 <p>Okay, all your motorized shades are installed. They're programmed into the app. The Bond Bridge is talking to your Alexa. You've got scenes for sunrise, movie time, and away mode. Everything tested perfectly during installation.</p>
 <p>Then you live with the system for a week.</p>

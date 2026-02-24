@@ -52,7 +52,7 @@ wordCount: 2091
 <p><strong>Q: Which shade material offers the best noise reduction for a nursery?</strong></p>
 <p>Cellular shades, hands down. The honeycomb structure traps air and dampens sound better than any roller or Roman shade. If noise is a priority—street traffic, neighbors, barking dogs—go cellular. Pair it with shutters and you've got both sound dampening and near-blackout performance.</p>
 <hr /><h2>Mark's 3 Pro Tips for Layered Perfection in Northern Idaho</h2>
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/ChatGPT-Image-Oct-16-2025-at-07_08_38-AM-683x1024.png" alt="The Layered Luxe Look: Combining Shutters with Motorized Shades for Ultimate Light Control and Energy Efficiency" /></figure>
+<figure><img src="/images/IMG_0881.jpeg" alt="Layered shutters and motorized shades installed in a northern Idaho home for light control and energy efficiency" /></figure>
 <p><strong>Tip 1: Always choose motorized shades for a layered application.</strong><br />Manual operation defeats the purpose. You'll either stop using the shade or you'll get frustrated every time you adjust it. Motorization ensures the system works <em>with</em> your lifestyle, not against it.</p>
 <p><strong>Tip 2: Confirm your shutter style <em>before</em> ordering.</strong><br />If you're planning to layer, make sure your shutters are specified as outside-mount with an L-frame. This leaves the interior window opening clear for the shade. If your installer defaults to inside-mount shutters, speak up—you'll lose the ability to add a shade later.</p>
 <p><strong>Tip 3: For nurseries and bedrooms, choose cellular over roller.</strong><br />Cellular shades offer better insulation, superior sound dampening, and tighter light control when paired with shutters. Roller shades work fine for living rooms and light filtering, but if you're serious about blackout performance and energy efficiency, cellular is the only choice.</p>
@@ -109,7 +109,7 @@ wordCount: 2091
   "@context": "https://schema.org",
   "@type": "Product",
   "name": "Layered Shutters and Motorized Shade Systems",
-  "image": "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/ChatGPT-Image-Oct-16-2025-at-07_05_42-AM-1024x683.png",
+  "image": "https://luxewindowworks.com/images/IMG_0898.jpeg",
   "description": "A professional layered window treatment solution combining plantation shutters and motorized cellular or roller shades for superior light control, energy efficiency, and design harmony.",
   "brand": {
     "@type": "Brand",

@@ -4,12 +4,12 @@ slug: the-hidden-cost-of-consolidation-how-equity-buyouts-are-reshaping-the-wind
 date: "2025-07-17T14:18:24.000Z"
 author: Mark Abplanalp
 excerpt: "From an installer's perspective with two decades in the window treatment industry, I've watched the business model shift underneath familiar brand..."
-featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Gemini_Generated_Image_owzpg5owzpg5owzp.png"
+featuredImage: "/images/IMG_3453.jpeg"
 category: Custom Window Coverings
 tags: [business, digital-marketing, entrepreneurship, finance, home-decor, Interior Design, marketing]
 wordCount: 2525
 ---
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Gemini_Generated_Image_owzpg5owzpg5owzp.png" alt="Private Equity Consolidation in Window Coverings: What Dealers and Homeowners Need to Know"/></figure>
+<figure><img src="/images/IMG_3453.jpeg" alt="Premium custom window treatment installation representing quality craftsmanship in northern Idaho" /></figure>
 
 <p>From an installer's perspective with two decades in the window treatment industry, I've watched the business model shift underneath familiar brand names—and the changes aren't encouraging. The logos on product catalogs look the same, but the companies behind them have been bought, sold, and restructured by private equity firms focused on financial engineering rather than product quality or dealer relationships.</p>
 <p>Hunter Douglas, long considered the gold standard in motorized window treatments, was acquired by 3G Capital in a $7.1 billion transaction completed in February 2022. Springs Window Fashions—the company behind Graber, Bali, and Horizons—was acquired by Clearlake Capital in 2021, marking its fourth ownership change since 2001. These aren't isolated events. This is a fundamental reshaping of how window covering brands operate.</p>

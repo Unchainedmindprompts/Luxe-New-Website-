@@ -4,12 +4,12 @@ slug: stop-sun-fading-in-north-idaho-log-homes-with-uv-shades
 date: "2025-10-02T03:30:02.000Z"
 author: Mark Abplanalp
 excerpt: "By Mark Abplanalp If you own a custom log or timber frame home in Coeur d’Alene, Sandpoint, or anywhere in the scenic North Idaho region , you didn’t just buy..."
-featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Gemini_Generated_Image_q3mdf2q3mdf2q3md.png"
+featuredImage: "/images/IMG_3062.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, Home Imrovement, home-decor, interior-design, lifestyle]
 wordCount: 1000
 ---
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Gemini_Generated_Image_q3mdf2q3mdf2q3md.png" alt="Stopping Fading on Log Home Interiors: Permanent Asset Protection for Your North Idaho Retreat" /></figure>
+<figure><img src="/images/IMG_3062.jpeg" alt="UV-blocking solar shades protecting a north Idaho home interior from sun fading and heat gain" /></figure>
 <p>By Mark Abplanalp</p>
 <p>If you own a custom log or timber frame home in <strong>Coeur d’Alene, Sandpoint, or anywhere in the scenic North Idaho region</strong>, you didn’t just buy a house—you invested in a legacy. You chose natural wood, vaulted ceilings, and sweeping views precisely because they embody the mountain lifestyle.</p>
 <p>But there’s a quiet, relentless enemy threatening that investment: the intense North Idaho sun.</p>
@@ -31,6 +31,7 @@ wordCount: 1000
 <p>For the homeowner focused on long-term cost avoidance, this translates directly to two things: <strong>Lower Heating Bills</strong> (not losing precious, expensive heat to the ?20 degree nights) and <strong>Asset Security</strong> (preventing the wood itself from cracking and warping).</p>
 <p>Furthermore, a properly specified shade uses materials (often a Mylar or metallic liner inside the cells) that are rated to block up to <strong>99% of damaging UV rays</strong>. This is the non-negotiable defense that stops the expensive <strong>timber frame window fading</strong> in its tracks. You can still let soft, natural light in, but you eliminate the destructive UV spectrum. This isn't just a covering; it's preventative maintenance.</p>
 <p><a href="https://www.lafvb.com/parasol" data-type="link" data-id="https://www.lafvb.com/parasol">https://www.lafvb.com/parasol</a></p>
+<figure><img src="/images/IMG_3455.jpeg" alt="UV-blocking shades protecting north Idaho log home furnishings and hardwood floors from sun fading" /></figure>
 <hr /><h2>3. MOTORIZATION: The Essential Remote Security and Maintenance Hack for Second Homes</h2>
 <p>For our clients with second homes or those who travel frequently, the ultimate ROI is found in combining high-performance shades with motorization. This feature is an essential tool for <strong>Second Home window security</strong> and <strong>maintenance avoidance</strong>.</p>
 <h3>Effortless Security and Occupancy Simulation</h3>

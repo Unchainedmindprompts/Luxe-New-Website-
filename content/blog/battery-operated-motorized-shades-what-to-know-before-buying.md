@@ -4,12 +4,12 @@ slug: battery-operated-motorized-shades-what-to-know-before-buying
 date: "2025-09-08T15:21:02.000Z"
 author: Mark Abplanalp
 excerpt: "Essential Tips for Battery-Operated Motorized Shades: What You Need to Know Before You Buy Homeowners today are looking for more than just a beautiful..."
-featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/09/Gemini_Generated_Image_nv95dhnv95dhnv95-1-1024x1024.png"
+featuredImage: "/images/IMG_0942.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design]
 wordCount: 1270
 ---
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/09/Gemini_Generated_Image_nv95dhnv95dhnv95-1-1024x1024.png" alt="Essential Tips for Battery-Operated Motorized Shades: What You Need to Know Before You Buy" /></figure>
+<figure><img src="/images/IMG_0942.jpeg" alt="Battery-operated motorized shades installed on large windows in a modern northern Idaho home" /></figure>
 <h1><strong>Essential Tips for Battery-Operated Motorized Shades: What You Need to Know Before You Buy</strong></h1>
 <p>Homeowners today are looking for more than just a beautiful view—they want comfort, convenience, and a home that works for them. In Northern Idaho, where our summers can be warm and our winters can be chilly, adding smart, motorized window shades is one of the best ways to make your home more comfortable.</p>
 <p>But if you’re considering <strong>battery-operated motorized window shades</strong>, there’s more to think about than just color and style. After more than two decades in this business, I’ve seen what makes the difference between a good install and a great one. It all comes down to a few key details: understanding your home's Wi-Fi, planning for your layout, and knowing how to keep your shades running smoothly.</p>
@@ -27,6 +27,7 @@ wordCount: 1270
 <p>Many modern homes are now equipped with Wi-Fi mesh networks that create one seamless signal, or they use routers that broadcast both 2.4GHz and 5GHz at the same time. While this is great for streaming movies, it can sometimes cause issues for smart devices. A common pitfall is when your phone or smart hub connects to the faster 5GHz network, but your shades can't "see" the same network because they only use 2.4GHz. This can lead to connection drop-offs and commands that don’t go through.</p>
 <h3><strong>How to Check and Prepare Your Network Before Installation</strong></h3>
 <p>The best thing you can do is to check your router settings. Make sure your 2.4GHz network has a unique name (or SSID) that’s different from your 5GHz network. For example, you might have "MyHomeNetwork" for 5GHz and "MyHomeNetwork-2.4G" for the other. This simple step makes the installation of your <strong>2.4GHz smart shades setup</strong> much more reliable.</p>
+<figure><img src="/images/IMG_0842.jpeg" alt="Battery-operated motorized shade installation in a northern Idaho home showing wireless control setup" /></figure>
 <hr /><h2><strong>Planning for Larger Homes: Wi-Fi Repeaters &amp; Multiple Hubs</strong></h2>
 <p>The size and layout of a home in Northern Idaho can significantly impact how well your shades communicate with your smart hub. A large, sprawling home or a multi-story layout can create dead zones where the Wi-Fi signal simply can't reach.</p>
 <h3><strong>The Role of Wi-Fi Repeaters and Signal Boosters</strong></h3>
