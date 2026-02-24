@@ -24,6 +24,6 @@ wordCount: 658
 <h3><strong>Window Treatments That Increase Home Value</strong></h3>
 <p>Every decision you make for a luxury home is about preserving and increasing its value. Permanent fixtures like plantation shutters and custom shades are a huge selling point. Luxury buyers in Coeur d’Alene expect every detail to be both beautiful and functional—custom window treatments deliver both, showcasing an attention to detail that sets a home apart. They are considered a permanent upgrade, much like high-end cabinetry or flooring.</p>
 <p><a href="https://normanusa.com/product/save-money-on-window-treatments/" data-type="link" data-id="https://normanusa.com/product/save-money-on-window-treatments/">https://normanusa.com/product/save-money-on-window-treatments/</a></p>
-<h3><strong>Schedule a Complimentary In-Home Consultation</strong>, <strong>Luxury Meets Efficiency: Why Custom Window Treatments Are a Must-Have for Northern Idaho Homes</strong></h3>
+<h3><strong>Schedule a Complimentary In-Home Consultation</strong></h3>
 <p>The best way to understand the potential for your home is to see it firsthand. At Luxe Window Works, we offer a white-glove service that begins with a complimentary, in-home consultation. We'll bring samples to you, take precise measurements, and discuss your goals for comfort, style, and efficiency. It’s an easy, no-pressure way to explore the perfect fit for your home.</p>
 <p>&nbsp;</p>

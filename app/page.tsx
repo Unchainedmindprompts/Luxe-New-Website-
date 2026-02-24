@@ -90,18 +90,17 @@ export default function HomePage() {
             A Better Way to Shop for Window Treatments
           </p>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-            Skip the Overwhelming Showroom Experience
+            Find the Right Window Treatments Without the Guesswork
           </h2>
           <p className="mt-6 text-lg text-warm-gray-600 leading-relaxed">
-            Most window treatment companies throw a catalog at you and hope something sticks.
-            That&apos;s not how Mark works. With two decades of installation experience, he knows
-            that the right window covering depends on your room, your light, your climate, and your life —
-            not just what looks good in a brochure.
+            Most homeowners don&apos;t know where to start — and that&apos;s completely normal.
+            Window treatments depend on your room, your light exposure, your privacy needs, and your budget.
+            There&apos;s no one-size answer.
           </p>
           <p className="mt-4 text-lg text-warm-gray-600 leading-relaxed">
-            Start with our concierge consultation below. Answer a few simple questions,
-            and we&apos;ll help you narrow down exactly what makes sense for your home —
-            before anyone ever sets foot in your door.
+            That&apos;s why Mark built a simple consultation process that helps you figure out what actually
+            makes sense for your home before anyone shows up with samples. Answer a few questions below
+            and we&apos;ll point you in the right direction — no pressure, no catalog overwhelm.
           </p>
         </div>
       </section>

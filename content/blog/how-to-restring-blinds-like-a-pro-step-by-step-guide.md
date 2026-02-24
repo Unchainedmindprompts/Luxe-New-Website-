@@ -46,7 +46,6 @@ wordCount: 1344
 </ul>
 <h3><strong>Step 4: Cut the New Cord to Length</strong></h3>
 <p>A common mistake is not cutting a long enough cord. The general rule of thumb is to measure the length of your blinds (when fully lowered) and multiply that number by the number of cords you have. Then, add an extra foot or two for good measure and for tying off.</p>
-<h2><strong>How to Restring Blinds: The Complete DIY Guide from a Pro</strong></h2>
 <h3><strong>Step 5: Thread the New Cord</strong></h3>
 <p>This is the most tedious part of the process, but patience is key.</p>
 <ol><li><strong>Start at the Bottom:</strong> Tie a simple, secure knot at the bottom of the new cord, right where the cord will be secured to the bottom rail of your blind. If you're using a plastic or metal pin, thread the cord through the bottom rail's hole and tie a large knot so it can't slip through.</li>

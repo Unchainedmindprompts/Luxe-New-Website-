@@ -17,7 +17,6 @@ wordCount: 2588
 <hr /><h2><strong>Why American-Made Matters</strong></h2>
 <p>When you choose Lafayette Interior Fashions through Luxe Window Works, you're not just buying window treatments—you're investing in a legacy of quality and accountability that spans over seven decades.</p>
 <h3><strong>Craftsmanship Rooted in West Lafayette, Indiana</strong></h3>
-<p>Custom Crafted in the U.S.A. — That's Something Special</p>
 <p>Lafayette Interior Fashions operates from a 250,000-square-foot manufacturing facility in West Lafayette, Indiana, where every custom product is designed and crafted. The company was founded in 1950 by Joe Morgan Sr., who started in a one-room garage taking orders on Mondays, crafting products on Wednesdays, and hand-delivering them on Fridays. That same commitment to quality remains central to their operation today.</p>
 <p>Lafayette remains one of the few family-owned and operated window covering manufacturers in the United States, now run by Joe Morgan Sr.'s children and grandchildren. When a company stays in the family for three generations, you know they're doing something right.</p>
 <h3><strong>Quality Control That Starts Before Production</strong></h3>

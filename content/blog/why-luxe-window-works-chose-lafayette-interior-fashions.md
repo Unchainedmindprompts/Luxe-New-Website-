@@ -17,7 +17,6 @@ wordCount: 516
 <p>The story of Lafayette Interior Fashions isn't a flashy marketing tale—it's a genuine American story, one that started back in 1950. The Kester family began in a small shop in Indiana, and from the very beginning, they focused on one thing: <strong>building every product by hand, with care, right here in the U.S.A.</strong></p>
 <p>Over the years, while many companies moved production overseas, Lafayette doubled down on their commitment to American manufacturing. To them, "Made in America" isn't a slogan; it's a promise. It means that the people crafting your shades are part of a community, that quality control is a hands-on process, and that they stand behind every single product that leaves their factory.</p>
 <hr /><h3><strong>Why Family Ownership Matters to Your Home</strong>,</h3>
-<p><strong>The Story of Our Partnership: Why Luxe Window Works Chose Lafayette Interior Fashions</strong>.</p>
 <p>When a company is family-owned and operated, the business isn't just a number—it’s a legacy. The Kester family's values are woven into every part of Lafayette, from their customer service to their product design. This personal investment translates directly to you, the homeowner.</p>
 <ul><li><strong>Hands-On Quality Control:</strong> Every product is inspected with a level of personal care you just don’t find in corporate factories.</li>
 <li><strong>Long-Term Vision:</strong> A family company thinks in generations, not just quarterly profits, which means they invest in durable materials and timeless designs.</li>

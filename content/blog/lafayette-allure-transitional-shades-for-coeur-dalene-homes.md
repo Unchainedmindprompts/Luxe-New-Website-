@@ -24,7 +24,6 @@ wordCount: 920
 <figure><img src="/images/IMG_0669.png" alt="Lafayette Allure transitional shades in a sophisticated home study with wood paneling, offering privacy with natural light filtering" /></figure>
 <p><a href="https://www.lafvb.com/allure" data-type="link" data-id="https://www.lafvb.com/allure">https://www.lafvb.com/allure</a></p>
 <hr /><h3><strong>Crafted with Care: What "Made in America" Truly Means for Your Home</strong></h3>
-<p><strong>Elevate Your Northern Idaho Home with Lafayette Allure® Transitional Shades: Style, Versatility, and American Craftsmanship</strong></p>
 <p>In a world saturated with mass-produced goods, the term "Made in America" can sometimes feel like just another marketing phrase. But for Lafayette Interior Fashions, it's a foundational principle—a promise they've upheld since 1950. Every single Allure® Transitional Shade is meticulously crafted in their Indiana facility by skilled artisans.</p>
 <p>For homeowners in Northern Idaho, this commitment to American manufacturing offers distinct advantages:</p>
 <ul><li><strong>Uncompromising Quality Control:</strong> When products are made by hand, by people who are invested in their craft, the attention to detail is unmatched. This means fewer imperfections and a higher standard of finish.</li>
