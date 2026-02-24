@@ -4,7 +4,8 @@ slug: why-your-patio-door-is-bleeding-energy-and-what-actually-works-in-northern
 date: "2025-12-05T17:51:22.000Z"
 author: Mark Abplanalp
 excerpt: "From an installer's perspective with two decades installing window treatments, I've walked through hundreds of homes where the patio slider was the single..."
-featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/11/IMG_0897-300x225.jpeg"
+featuredImage: /images/patio-door-energy-north-idaho.jpeg
+featuredImageAlt: "Patio door with custom window treatment installed by Luxe Window Works in Northern Idaho"
 category: Custom Window Coverings
 tags: ["Coeur d'Alene window treatments", Energy saving window shades, Insulated window treatments, Northern Idaho window coverings, Patio door heat loss, Patio door insulation, Post Falls window coverings, Vertical cellular shades]
 wordCount: 3149
