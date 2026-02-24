@@ -7,7 +7,9 @@ export interface BlogPost {
   date: string;
   author: string;
   excerpt: string;
+  metaDescription: string;
   featuredImage: string;
+  featuredImageAlt: string;
   category: string;
   tags: string[];
   wordCount: number;
@@ -68,7 +70,9 @@ export function getPost(slug: string): BlogPost | null {
       date: data.date || "",
       author: data.author || "",
       excerpt: data.excerpt || "",
+      metaDescription: data.metaDescription || data.excerpt || "",
       featuredImage: data.featuredImage || "",
+      featuredImageAlt: data.featuredImageAlt || data.title || "",
       category: data.category || "Custom Window Coverings",
       tags: parseTags(data.tags),
       wordCount: parseInt(data.wordCount, 10) || 0,
