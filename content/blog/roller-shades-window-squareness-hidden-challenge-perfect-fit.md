@@ -14,7 +14,7 @@ wordCount: 1169
 <p>Roller shades are the sleek minimalist of the window covering world. Clean lines, smooth operation, and that satisfying "whoosh" when they roll up—what's not to love? But here's the hidden truth I've learned after 18 years in the industry:&nbsp;<strong>the beauty of roller shades relies entirely on the precision of your window frames</strong>.</p>
 <p>Unlike forgiving treatments like drapes or outside-mounted blinds, roller shades expose every imperfection in your windows. A frame that's even slightly out of square can turn your dream of clean, modern window coverings into a frustrating reality of light gaps, uneven edges, and fabric that shifts sideways every time you operate the shade. Let me walk you through why window squareness matters—and what to do when your windows aren't cooperating.</p>
 <h2>What Does "Square and Level" Actually Mean for Windows?</h2>
-<h2>Defining Square, Level, and Plumb in Window Frames</h2>
+<h3>Defining Square, Level, and Plumb in Window Frames</h3>
 <p>When we say a window is "square," we're talking about two things: the frame corners form perfect 90-degree angles, and the top and bottom rails are perfectly parallel. A "level" window means the sill sits horizontally—no sloping to one side.</p>
 <p>Here's the thing: your eye might not catch a window that's 1/4 inch out of square, but a roller shade will highlight that imperfection every single time. While other window treatments can hide these flaws, roller shades demand precision because they operate on tracks and guides that follow the exact shape of your window opening.</p>
 <p>Think of it like hanging a picture frame on a crooked wall—the frame itself might be perfect, but it's only as straight as the surface it's mounted to.</p>
