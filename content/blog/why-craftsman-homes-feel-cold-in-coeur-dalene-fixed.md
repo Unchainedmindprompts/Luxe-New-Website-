@@ -4,12 +4,12 @@ slug: why-craftsman-homes-feel-cold-in-coeur-dalene-fixed
 date: "2025-10-08T13:36:01.000Z"
 author: Mark Abplanalp
 excerpt: "By Mark Abplanalp, Luxe Window Works Founder Here in North Idaho, we cherish our classic homes. They tell a story—from the sturdy Craftsman bungalows lining..."
-featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Gemini_Generated_Image_b89ctfb89ctfb89c.png"
+featuredImage: "/images/IMG_0813.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle]
 wordCount: 1214
 ---
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/Gemini_Generated_Image_b89ctfb89ctfb89c.png" alt="The Draft Trap: Why Your Beloved Craftsman Feels Cold, and How Energy Efficient Cellular Shades Coeur d'Alene Can Fix It" /></figure>
+<figure><img src="/images/IMG_0813.jpeg" alt="Energy-efficient cellular shades installed in a craftsman-style home in Coeur d'Alene reducing drafts and winter heat loss" /></figure>
 <p><strong>By Mark Abplanalp, Luxe Window Works Founder</strong></p>
 <p>Here in North Idaho, we cherish our classic homes. They tell a story—from the sturdy Craftsman bungalows lining the streets of Coeur d'Alene's historic district to the century-old farmhouses tucked away in Post Falls. We fall in love with the deep porches, the wood trim, and the character that modern construction often lacks.</p>
 <p>But let’s be honest: that charm comes with a price, and that price is often paid in drafty rooms and surprisingly high winter energy bills.</p>
@@ -25,6 +25,7 @@ wordCount: 1214
 <li><strong>The Loop:</strong> This sinking cold air creates a vacuum, drawing in warmer air from the ceiling and central areas of the room to take its place near the glass. This perpetual circulation—the <strong>convective loop</strong>—ensures your heater runs continuously trying to warm the air that the window is constantly chilling.</li>
 </ol>
 <p>In an old <strong>Craftsman</strong> or historic building with tall windows, this effect is amplified because there is so much cold glass surface area and more distance for the air to circulate. The result? A cold, drafty feeling, regardless of how high you turn up the thermostat.</p>
+<figure><img src="/images/IMG_3456.jpeg" alt="Cellular shades installed on tall craftsman-style windows in a historic Coeur d'Alene home creating a thermal barrier" /></figure>
 <hr /><h2>The #1 Defense: Building an Invisible Thermal Barrier with <strong>Energy Efficient Cellular Shades Coeur d'Alene</strong></h2>
 <p>Since the problem is airflow and temperature transfer, the solution is to break that convective loop. You need to create a substantial, insulated barrier that separates the warm room air from the cold glass.</p>
 <p>This is where custom <strong>Cellular Shades</strong>—often called honeycomb shades—become the champion for North Idaho's classic homes. They are not merely an aesthetic choice; they are the most efficient, non-invasive home upgrade you can make to stop the draft.</p>

@@ -4,12 +4,12 @@ slug: motorized-shades-for-active-homeowners-in-coeur-dalene
 date: "2025-10-01T03:31:53.000Z"
 author: Mark Abplanalp
 excerpt: "The Investment that Pays You Back: Why Active Homeowners in Coeur d’Alene Are Choosing Motorized Shades Many homeowners are realizing that The Investment that..."
-featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/09/Gemini_Generated_Image_ezyjxzezyjxzezyj-1-1024x1024.png"
+featuredImage: "/images/IMG_0066.png"
 category: Custom Window Coverings
 tags: [home-improvement, interior-design, lifestyle]
 wordCount: 1303
 ---
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/09/Gemini_Generated_Image_ezyjxzezyjxzezyj-1-1024x1024.png" alt="The Investment that Pays You Back" /></figure>
+<figure><img src="/images/IMG_0066.png" alt="Blue-gray transitional sheer shades in a modern living room, ideal for motorized window treatment systems in Coeur d'Alene homes" /></figure>
 <h1><strong>The Investment that Pays You Back: Why Active Homeowners in Coeur d’Alene Are Choosing Motorized Shades</strong></h1>
 <p>Many homeowners are realizing that <strong>The Investment that Pays You Back</strong> is not just about aesthetics but functionality and safety.</p>
 <h2><strong>Effortless Comfort: A North Idaho Home Story</strong></h2>
@@ -117,7 +117,7 @@ wordCount: 1303
     {
       "@type": "Product",
       "name": "Motorized Shades by Luxe Window Works",
-      "image": "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/09/Gemini_Generated_Image_ezyjxzezyjxzezyj-1-1024x1024.png",
+      "image": "https://luxewindowworks.com/images/IMG_0183.jpeg",
       "description": "Custom motorized window shades designed for performance, safety, and effortless control — handcrafted for North Idaho homes.",
       "brand": {
         "@type": "Brand",

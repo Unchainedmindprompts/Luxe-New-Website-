@@ -4,12 +4,12 @@ slug: smart-shade-motorization-guide-for-northern-idaho-homes
 date: "2025-10-18T15:34:53.000Z"
 author: Mark Abplanalp
 excerpt: "By Mark Abplanalp, Owner, Luxe Window Works I'll never forget the call I got from a homeowner in Post Falls last spring. She and her husband had just broken..."
-featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/ChatGPT-Image-Oct-18-2025-at-08_17_54-AM-1024x683.png"
+featuredImage: "/images/IMG_0664.png"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle, Motorized-shades]
 wordCount: 8296
 ---
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/ChatGPT-Image-Oct-18-2025-at-08_17_54-AM-1024x683.png" alt="The Smart Shade Showdown: Hardwired vs. RF vs. IR vs. Z-Wave — What Northern Idaho Homeowners Really Need to Know" /></figure>
+<figure><img src="/images/IMG_0664.png" alt="Light-filtering sheer shades in a modern home office providing diffused natural light and glare control, ideal for smart motorized window systems" /></figure>
 <p><em>By Mark Abplanalp, Owner, Luxe Window Works</em></p>
 <p>I'll never forget the call I got from a homeowner in Post Falls last spring. She and her husband had just broken ground on their dream home—a stunning modern farmhouse with floor-to-ceiling windows overlooking the Spokane River. They'd budgeted $45,000 for motorized shades throughout the house because they wanted everything automated: Alexa control, schedules for energy management, one-touch scenes for movie nights.</p>
 <p>Their architect had spec'd Z-Wave motors. Their electrician was pushing hardwired. Their interior designer mentioned something about "RF compatibility." And their builder? He just wanted to know where to rough in the electrical before drywall went up.</p>
