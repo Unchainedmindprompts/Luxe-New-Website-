@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0813.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle]
 wordCount: 1214
+metaDescription: "Why Coeur d'Alene craftsman homes feel cold in winter — and how energy-efficient cellular shades eliminate window drafts and cut heating bills. Free consult available."
 ---
 <figure><img src="/images/IMG_0813.jpeg" alt="Energy-efficient cellular shades installed in a craftsman-style home in Coeur d'Alene reducing drafts and winter heat loss" /></figure>
 <p><strong>By Mark Abplanalp, Luxe Window Works Founder</strong></p>

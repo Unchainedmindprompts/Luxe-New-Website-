@@ -9,6 +9,7 @@ featuredImageAlt: "Blinds, shades, and shutters installed in a North Idaho home 
 category: Custom Window Coverings
 tags: [Cellular-Shades, "Coeur d'Alene window treatments", Insulated window treatments, Northern Idaho window coverings, Plantation-shutters, Post Falls window coverings, Window Blinds, Window Shades]
 wordCount: 668
+metaDescription: "Blinds, shades, and shutters — your North Idaho window covering questions answered by a local expert. Serving Coeur d'Alene, Post Falls & Hayden. Free consultation."
 ---
 <p data-start="439" data-end="689">If you’re shopping for window coverings in Coeur d’Alene, Post Falls, Hayden, Rathdrum, or Sandpoint, you probably have the same handful of questions everyone asks—about pricing, timelines, energy efficiency, and what the process actually looks like.</p>
 <p data-start="691" data-end="773">Here are the most common questions we hear at Luxe Window Works, answered clearly.</p>

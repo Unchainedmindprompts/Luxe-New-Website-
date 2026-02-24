@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0670.png"
 category: Custom Window Coverings
 tags: [decor, home-decor, Interior Design]
 wordCount: 379
+metaDescription: "Why woven wood shades are the perfect natural light filter for Coeur d'Alene homes — warmth, texture, and softness that no synthetic material can replicate."
 ---
 <figure><img src="/images/IMG_0670.png" alt="Natural woven wood Roman shades in a warm rustic living room with exposed brick walls and hardwood floors" /></figure>
 <h3><strong>A Client Who Changed How I Think About Window Treatments</strong></h3>

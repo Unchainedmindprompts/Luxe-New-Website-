@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_3452.jpeg"
 category: Custom Window Coverings
 tags: [decor, home-decor, home-improvement, interior-design]
 wordCount: 2729
+metaDescription: "High-pressure window treatment sales tactics exposed by a Northern Idaho installer. What to watch for, how to spot them, and why Luxe Window Works does it differently."
 ---
 <figure><img src="/images/IMG_3452.jpeg" alt="Professional no-pressure window treatment consultation with Luxe Window Works in a northern Idaho home" /></figure>
 <p><strong>By Mark Abplanalp, Owner of Luxe Window Works</strong></p>

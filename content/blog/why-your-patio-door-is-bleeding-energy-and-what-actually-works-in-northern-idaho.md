@@ -9,6 +9,7 @@ featuredImageAlt: "Patio door with custom window treatment installed by Luxe Win
 category: Custom Window Coverings
 tags: ["Coeur d'Alene window treatments", Energy saving window shades, Insulated window treatments, Northern Idaho window coverings, Patio door heat loss, Patio door insulation, Post Falls window coverings, Vertical cellular shades]
 wordCount: 3149
+metaDescription: "Patio doors are the biggest energy drain in most Northern Idaho homes. What actually works to stop heat loss and solar gain — from an installer with 20 years experience."
 ---
 From an installer's perspective with two decades installing window treatments, I've walked through hundreds of homes where the patio slider was the single biggest comfort problem—and the homeowner had no idea.
 

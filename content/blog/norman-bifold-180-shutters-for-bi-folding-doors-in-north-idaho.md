@@ -8,6 +8,7 @@ featuredImage: ""
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle]
 wordCount: 1357
+metaDescription: "Norman Shutter BiFold 180 — the perfect plantation shutter for bi-folding doors in Coeur d'Alene and North Idaho homes. Expert installation by Luxe Window Works."
 ---
 <h1>Why the Norman® Shutter BiFold 180 Is the Perfect Solution for Bi-Folding Doors</h1>
 <p>Imagine you've just finished building your dream home in Coeur d'Alene. You have these beautiful, expansive bi-folding glass doors that open up to a stunning patio and an incredible view of the lake. They're the centerpiece of your living room, but you have a problem: how do you cover them?</p>

@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_3062.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, Home Imrovement, home-decor, interior-design, lifestyle]
 wordCount: 1000
+metaDescription: "UV-blocking shades that protect log and timber frame homes in North Idaho from sun fading. Protect your hardwoods, furnishings, and art in Coeur d'Alene and Sandpoint."
 ---
 <figure><img src="/images/IMG_3062.jpeg" alt="UV-blocking solar shades protecting a north Idaho home interior from sun fading and heat gain" /></figure>
 <p>By Mark Abplanalp</p>

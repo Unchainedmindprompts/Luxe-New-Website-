@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0062.png"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle, Plantation-shutters, Shutters]
 wordCount: 1537
+metaDescription: "Avenir aluminum interior shutters for North Idaho's modern luxury homes. Moisture-resistant, sleek, and built to last. Free in-home consult in Coeur d'Alene."
 ---
 <figure><img src="/images/IMG_0062.png" alt="Dark aluminum interior shutters on a modern home window providing privacy and a sleek contemporary architectural look" /></figure>
 <p><strong>By Mark Abplanalp, Owner of Luxe Window Works</strong></p>

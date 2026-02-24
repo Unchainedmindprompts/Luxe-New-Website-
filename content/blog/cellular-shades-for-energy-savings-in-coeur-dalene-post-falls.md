@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0084.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, Home Imrovement, home-decor, interior-design, lifestyle]
 wordCount: 6320
+metaDescription: "Stop losing money through your windows. Expert guide to cellular shades for maximum ROI in Coeur d'Alene and Post Falls — from a local installer."
 ---
 <figure><img src="/images/IMG_0084.jpeg" alt="Large honeycomb cellular shades in a minimalist modern living room providing energy-efficient insulation for Northern Idaho homes" /></figure>
 <p><em>By Mark Abplanalp, Owner, Luxe Window Works</em></p>

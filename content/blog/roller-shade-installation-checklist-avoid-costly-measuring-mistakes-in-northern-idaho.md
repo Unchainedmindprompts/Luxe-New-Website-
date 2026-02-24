@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0069.png"
 category: Custom Window Coverings
 tags: [diy, energy-efficiency, home-decor, interior-design, lifestyle]
 wordCount: 4418
+metaDescription: "The pre-order roller shade checklist that prevents costly measuring mistakes in Northern Idaho homes. An installer's guide to a flawless fit every single time."
 ---
 <figure><img src="/images/IMG_0069.png" alt="Patterned decorative roller shades in a modern kitchen with wood countertops, showing precise inside-mount roller shade installation" /></figure>
 <p><strong>By Mark Abplanalp, Owner, Luxe Window Works</strong></p>

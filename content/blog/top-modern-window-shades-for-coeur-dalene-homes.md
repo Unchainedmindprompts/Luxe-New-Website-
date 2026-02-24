@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0063.png"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design]
 wordCount: 804
+metaDescription: "Top modern window shade picks for Coeur d'Alene homes — roller, solar, transitional, and sheer shades chosen for style and the unique Northern Idaho light."
 ---
 <figure><img src="/images/IMG_0063.png" alt="Sleek transitional sheer shades in a dark modern living room, showcasing top window shade picks for contemporary Coeur d'Alene homes" /></figure>
 <h1><strong>Modern Living, Modern Views: Top Shade Picks for Coeur d’Alene Homes</strong></h1>

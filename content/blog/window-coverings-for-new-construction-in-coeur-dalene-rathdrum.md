@@ -8,6 +8,7 @@ featuredImage: ""
 category: Custom Window Coverings
 tags: [energy-efficiency, home, home-decor, interior-design]
 wordCount: 1166
+metaDescription: "Window covering guide for new construction in Coeur d'Alene and Rathdrum — what to plan for, what to budget, and how to get it right the first time."
 ---
 <h3><strong>Getting Your Window Treatments Right from Day One</strong></h3>
 <p>There's nothing quite like the feeling of stepping into a brand new house. It has that fresh-paint smell, the pristine flooring, and a sense of endless possibility. It's a clean slate, ready for you to make your own.</p>

@@ -8,6 +8,7 @@ featuredImage: ""
 category: Custom Window Coverings
 tags: [Home Imrovement, home-decor, interior-design]
 wordCount: 516
+metaDescription: "Why Luxe Window Works chose Lafayette Interior Fashions as our primary supplier — quality, American manufacturing, and nearly two decades of trust in North Idaho."
 ---
 <h1><strong>The Story of Our Partnership: Why Luxe Window Works Chose Lafayette Interior Fashions</strong></h1>
 <p>For decades, I've had the pleasure of helping homeowners find the perfect window coverings for their spaces. I've worked with just about every brand out there, from the biggest names to small, independent makers. And while the product is always important, what I've learned is that the <strong>people and the story behind the brand</strong> matter even more.</p>

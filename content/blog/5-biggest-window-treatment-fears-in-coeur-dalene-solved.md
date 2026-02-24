@@ -8,6 +8,7 @@ featuredImage: "/images/IMG_0803.jpeg"
 category: Custom Window Coverings
 tags: [home-decor, home-improvement, interior-design, lifestyle]
 wordCount: 3550
+metaDescription: "The 5 biggest window treatment fears Coeur d'Alene homeowners have — wrong fit, wasted money, pressure sales — answered honestly by a local expert."
 ---
 <figure><img src="/images/IMG_0803.jpeg" alt="Custom window treatment consultation helping a Coeur d'Alene homeowner choose the right shades for their home" /></figure>
 <p>I'll never forget the phone call from a homeowner in Hayden who'd just ordered window treatments online. She was standing in her living room, staring at twelve boxes of cellular shades that had just been delivered, and her voice was shaking. "Mark, I measured three times, but now I'm terrified these won't fit. And I have no idea if I ordered inside or outside mount. The website asked, but I didn't really understand what that meant. This was three thousand dollars. What if I got it wrong?"</p>

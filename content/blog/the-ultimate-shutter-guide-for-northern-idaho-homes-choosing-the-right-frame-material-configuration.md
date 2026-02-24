@@ -9,6 +9,7 @@ featuredImage: "/images/IMG_0042.jpeg"
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, Plantation-shutters]
 wordCount: 3700
+metaDescription: "The complete shutter guide for Northern Idaho homes — frame types, materials, and configurations that handle our humidity swings and temperature extremes. Expert advice."
 ---
 <p><strong>Choosing the Right Frame, Material &amp; Configuration</strong></p>
 <p><strong>By Mark Abplanalp, Owner of Luxe Window Works</strong> &nbsp;|&nbsp; Custom Window Coverings &nbsp;|&nbsp; October 30, 2025 &nbsp;|&nbsp; 17 min read</p>
