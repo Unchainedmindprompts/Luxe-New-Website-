@@ -5,6 +5,7 @@ export interface BlogPost {
   slug: string;
   title: string;
   date: string;
+  dateModified: string;
   author: string;
   excerpt: string;
   metaDescription: string;
@@ -68,6 +69,7 @@ export function getPost(slug: string): BlogPost | null {
       slug: data.slug || slug,
       title: data.title || "",
       date: data.date || "",
+      dateModified: data.dateModified || data.date || "",
       author: data.author || "",
       excerpt: data.excerpt || "",
       metaDescription: data.metaDescription || data.excerpt || "",
