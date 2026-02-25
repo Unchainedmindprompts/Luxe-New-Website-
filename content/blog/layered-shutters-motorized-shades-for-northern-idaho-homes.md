@@ -118,9 +118,7 @@ wordCount: 2091
   "sku": "LUXE-LAYERED-SYSTEM-01",
   "offers": {
     "@type": "Offer",
-    "priceCurrency": "USD",
     "availability": "https://schema.org/InStock",
-    "price": "Request Quote",
     "url": "https://luxewindowworks.com/explore-motorized-shades-plantation-shutters-have-a-question-lets-start-the-conversation/"
   }
 }
