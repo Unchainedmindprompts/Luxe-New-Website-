@@ -4,12 +4,11 @@ slug: smartdrape-patio-door-shades-in-coeur-dalene-post-falls
 date: "2025-10-21T05:22:38.000Z"
 author: Mark Abplanalp
 excerpt: "The Patio Door Paradox: Why Standard Treatments Fail Northern Idaho Homeowners If you've invested in a home with stunning lake views or mountain vistas, your..."
-featuredImage: "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/IMG_3368.jpeg"
+featuredImage: ""
 category: Custom Window Coverings
 tags: [energy-efficiency, home-decor, interior-design, lifestyle]
 wordCount: 3827
 ---
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/IMG_3368.jpeg" alt="The Patio Door Problem Nobody Warned You About (And Why Northern Idaho Homeowners Are Switching to Norman SmartDrape Vertical Sheer Shades)" /></figure>
 <h2>The Patio Door Paradox: Why Standard Treatments Fail Northern Idaho Homeowners</h2>
 <p>If you've invested in a home with stunning lake views or mountain vistas, your sliding glass doors likely serve as the primary connection between indoor comfort and outdoor beauty. Yet most homeowners face a frustrating dilemma: traditional patio door treatments force you to choose between elegant aesthetics, practical functionality, and everyday convenience.</p>
 <p>The problem shows up within weeks of installation. Heavy drapery panels look beautiful but require full opening and closing every time you access your deck—a daily hassle when you're moving in and out 10 to 15 times. Standard vertical blinds provide adjustable light control but create noise, break easily, and still block door access unless fully opened. Either option leaves you managing window treatments constantly or living without the privacy and temperature control you need.</p>
@@ -27,7 +26,6 @@ wordCount: 3827
 <p>What Northern Idaho homeowners actually need is patio door coverage that delivers beauty AND function AND convenience simultaneously. Elegant aesthetic that complements high-end architecture. Adjustable light control and privacy without constant manual intervention. Easy door access without daily hassle. Energy efficiency for our extreme temperature swings between winter cold and summer heat.</p>
 <p>That combination didn't exist until Norman developed SmartDrape's walk-through innovation.</p>
 <h2>The SmartDrape Walk-Through Innovation: How Individual Vane Construction Changes Everything</h2>
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/IMG_3370.jpeg" alt="The Patio Door Problem Nobody Warned You About (And Why Northern Idaho Homeowners Are Switching to Norman SmartDrape Vertical Sheer Shades)" /></figure>
 <p>Norman SmartDrape vertical sheer shades solve the patio door paradox through fundamentally different construction. Instead of forcing compromise, this design delivers complete functionality across every requirement.</p>
 <h3>Individual Vane Construction: The Engineering Breakthrough</h3>
 <p>Traditional vertical treatments use rigidly connected vanes or continuous fabric panels. SmartDrape uses individual fabric vanes suspended in flowing sheer material that hangs in soft, undulating loops between each vane.</p>
@@ -47,7 +45,6 @@ wordCount: 3827
 <p>For living rooms, great rooms, primary bedrooms, and kitchens where you're constantly in and out—SmartDrape's individual vane construction provides transformative functionality. The machine-washable feature matters tremendously in our climate. Northern Idaho springs bring heavy pollen. Summers are dry and dusty. Patio door treatments collect grime faster than interior windows because they're constantly exposed to outdoor air circulation.</p>
 <p>Being able to detach and wash SmartDrape vanes yourself—30 minutes, mild detergent, delicate cycle—keeps them looking new for years. Compare that to professional drapery cleaning at $300 to $400 every few years.</p>
 <h2>Best Northern Idaho Applications for Norman SmartDrape</h2>
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/10/IMG_3369.jpeg" alt="The Patio Door Problem Nobody Warned You About (And Why Northern Idaho Homeowners Are Switching to Norman SmartDrape Vertical Sheer Shades)" /></figure>
 <h3>Lakefront Great Rooms (Hayden Lake, Coeur d'Alene)</h3>
 <p>These homes are built around the view—16 to 20-foot glass walls facing the water. SmartDrape split-stack configuration (two shades meeting at center, stacking outward) creates dramatic presentation that complements the architecture while maintaining constant deck access.</p>
 <p>Light filtering fabrics maintain your lake view while controlling afternoon glare. During summer entertaining, guests access outdoor spaces naturally while you maintain comfortable indoor temperature and lighting.</p>
