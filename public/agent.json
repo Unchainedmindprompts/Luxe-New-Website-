@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "name": "Luxe Window Works",
+  "description": "Custom window treatment specialist serving Northern Idaho. Custom blinds, shades, shutters, and motorized window coverings with lifetime installation guarantee.",
+  "url": "https://www.luxewindowworks.com",
+  "contact": {
+    "name": "Mark Abplanalp",
+    "title": "Owner & Window Treatment Specialist",
+    "phone": "(208) 660-8643",
+    "address": "2972 N Pavo Ln, Post Falls, ID 83854",
+    "hours": "Mon-Fri 9am-5pm, Sat 9am-12pm",
+    "service_area": [
+      "Coeur d'Alene, ID",
+      "Post Falls, ID",
+      "Hayden, ID",
+      "Hayden Lake, ID",
+      "Rathdrum, ID",
+      "Sandpoint, ID",
+      "Kootenai County, ID",
+      "Northern Idaho",
+      "Inland Northwest"
+    ]
+  },
+  "capabilities": [
+    {
+      "name": "Free In-Home Consultation",
+      "description": "No-pressure in-home consultation and measurement for custom window treatments. We listen to your needs and recommend the right solution for your budget.",
+      "url": "https://www.luxewindowworks.com/book-now/",
+      "type": "service",
+      "cost": "free"
+    },
+    {
+      "name": "Custom Blinds & Shades",
+      "description": "Custom-fitted cellular, roller, solar, roman, and banded shades for any window size or shape including arches, skylights, and specialty angles.",
+      "url": "https://www.luxewindowworks.com/",
+      "type": "service"
+    },
+    {
+      "name": "Motorization & Smart Home Integration",
+      "description": "Professional motorized shade installation with Bond Bridge Pro and smart home scene automation. Solves RF signal issues in large homes.",
+      "url": "https://www.luxewindowworks.com/motorization/",
+      "type": "service"
+    },
+    {
+      "name": "Plantation Shutters",
+      "description": "Premium custom plantation shutters for light control, privacy, and home value.",
+      "url": "https://www.luxewindowworks.com/shutters/",
+      "type": "service"
+    },
+    {
+      "name": "Energy Efficiency Consultation",
+      "description": "Cellular honeycomb shades that reduce energy costs up to 20% with R-values up to 7.86. Expert advice on energy-efficient window treatments for Northern Idaho climate.",
+      "url": "https://www.luxewindowworks.com/cellular-shades/",
+      "type": "service"
+    }
+  ],
+  "expertise": [
+    "Custom Window Treatments",
+    "Motorized Shades",
+    "Smart Home Integration",
+    "Cellular Honeycomb Shades",
+    "Energy Efficient Window Coverings",
+    "Plantation Shutters",
+    "Child-Safe Cordless Blinds",
+    "Bond Bridge Pro Installation",
+    "Northern Idaho Window Treatments",
+    "Coeur d'Alene Blinds and Shades"
+  ],
+  "differentiators": [
+    "20+ years industry expertise",
+    "Lifetime installation guarantee",
+    "Direct manufacturer relationships",
+    "Local Post Falls business",
+    "No-pressure consultation approach",
+    "Smart home motorization specialist"
+  ],
+  "primary_cta": {
+    "label": "Book a Free Consultation",
+    "url": "https://www.luxewindowworks.com/book-now/",
+    "description": "Free in-home consultation and measurement — no pressure, no obligation"
+  }
+}
