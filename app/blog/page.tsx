@@ -5,6 +5,22 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { getAllPosts, getReadingTime } from "@/lib/blog";
 
+function CategoryBadge({ category }: { category: string }) {
+  const filled = ["Custom Window Coverings"];
+  const isFilled = filled.includes(category);
+  return (
+    <span
+      className={
+        isFilled
+          ? "inline-block text-xs font-semibold px-3 py-1 rounded-full bg-gold text-white"
+          : "inline-block text-xs font-semibold px-3 py-1 rounded-full border border-gold text-gold"
+      }
+    >
+      {category}
+    </span>
+  );
+}
+
 export const metadata: Metadata = {
   title: "Blog | Window Treatment Tips & Guides",
   description: `Expert window treatment advice from ${BUSINESS.name}. Tips on choosing the right blinds, shades, and shutters for Northern Idaho homes.`,
@@ -105,51 +121,38 @@ export default function BlogPage() {
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="group bg-white rounded-2xl overflow-hidden border border-warm-gray-200/60 hover:border-gold/40 hover:shadow-lg transition-all duration-300"
+                className="group flex flex-col bg-white rounded-lg border border-warm-gray-200 hover:border-gold hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 p-7"
               >
-                {/* Image */}
-                {post.featuredImage ? (
-                  <div className="relative aspect-[16/10] overflow-hidden bg-cream">
-                    <Image
-                      src={post.featuredImage}
-                      alt={post.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  </div>
-                ) : (
-                  <div className="aspect-[16/10] bg-cream flex items-center justify-center">
-                    <svg className="w-12 h-12 text-warm-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                    </svg>
-                  </div>
-                )}
+                {/* Top row: category badge + read time */}
+                <div className="flex items-center justify-between mb-4">
+                  <CategoryBadge category={post.category} />
+                  <span className="text-warm-gray-400 text-xs">
+                    {getReadingTime(post.wordCount)}
+                  </span>
+                </div>
 
-                {/* Content */}
-                <div className="p-6">
-                  <div className="flex items-center gap-3 mb-3">
-                    <time
-                      className="text-warm-gray-400 text-sm"
-                      dateTime={post.date}
-                    >
-                      {new Date(post.date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </time>
-                    <span className="text-warm-gray-300">·</span>
-                    <span className="text-warm-gray-400 text-sm">
-                      {getReadingTime(post.wordCount)}
-                    </span>
-                  </div>
-                  <h2 className="font-serif text-lg text-charcoal leading-snug group-hover:text-gold transition-colors line-clamp-3">
-                    {post.title}
-                  </h2>
-                  <p className="mt-3 text-warm-gray-500 text-sm leading-relaxed line-clamp-3">
-                    {post.excerpt}
-                  </p>
+                {/* Title */}
+                <h2 className="font-serif text-lg text-charcoal leading-snug group-hover:text-gold transition-colors line-clamp-3 mb-3">
+                  {post.title}
+                </h2>
+
+                {/* Excerpt */}
+                <p className="text-warm-gray-500 text-sm leading-relaxed line-clamp-3 flex-1">
+                  {post.excerpt}
+                </p>
+
+                {/* Bottom row: date + read more */}
+                <div className="flex items-center justify-between mt-5 pt-4 border-t border-warm-gray-100">
+                  <time className="text-warm-gray-400 text-xs" dateTime={post.date}>
+                    {new Date(post.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </time>
+                  <span className="text-gold text-sm font-medium group-hover:underline">
+                    Read more →
+                  </span>
                 </div>
               </Link>
             ))}
