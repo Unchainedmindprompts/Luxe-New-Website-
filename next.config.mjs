@@ -34,6 +34,22 @@ const nextConfig = {
     ],
   },
 
+  async headers() {
+    return [
+      {
+        // Static images in /public/images — serve with 1-year immutable cache
+        // so CDN edges and browsers don't re-fetch on every visit/PageSpeed run
+        source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+    ];
+  },
+
   async redirects() {
     const staticRedirects = [
       {
