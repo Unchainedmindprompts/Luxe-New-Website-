@@ -240,6 +240,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfairDisplay.variable}`}>
       <head>
+        {/* Preload hero image so the browser fetches it immediately, before JS runs */}
+        <link
+          rel="preload"
+          as="image"
+          href="/images/hero-modern-living.webp"
+          fetchPriority="high"
+        />
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`!function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
