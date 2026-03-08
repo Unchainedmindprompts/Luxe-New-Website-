@@ -17,6 +17,11 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
 
+  experimental: {
+    // Inline critical CSS and defer non-critical styles to eliminate render-blocking
+    optimizeCss: true,
+  },
+
   images: {
     formats: ["image/webp"],
     minimumCacheTTL: 86400,
