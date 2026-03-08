@@ -1,7 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
-import ConciergeChat from "@/components/ConciergeChat";
+import dynamic from "next/dynamic";
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
+
+const ConciergeChat = dynamic(() => import("@/components/ConciergeChat"), {
+  ssr: false,
+  loading: () => (
+    <div className="inline-flex items-center gap-3 bg-gold text-white font-semibold px-8 py-4 rounded-full text-lg opacity-80">
+      Let&apos;s Figure Out What You Need
+    </div>
+  ),
+});
 
 function StarIcon() {
   return (
@@ -23,6 +32,7 @@ export default function HomePage() {
           fill
           className="object-cover"
           priority
+          sizes="100vw"
         />
         <div className="absolute inset-0 bg-charcoal/55" />
         <div className="container-luxe relative">
@@ -164,6 +174,7 @@ export default function HomePage() {
                 alt="Mark, owner and installer at Luxe Window Works"
                 fill
                 className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
 
