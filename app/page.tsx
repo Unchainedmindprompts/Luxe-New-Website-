@@ -27,12 +27,13 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
         <Image
-          src="/images/hero-modern-living.jpeg"
+          src="/images/hero-modern-living.webp"
           alt="Modern living room with custom cellular shades and a mountain view"
           fill
           className="object-cover"
           priority
           sizes="100vw"
+          unoptimized
         />
         <div className="absolute inset-0 bg-charcoal/55" />
         <div className="container-luxe relative">
@@ -170,11 +171,12 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden order-2 lg:order-1">
               <Image
-                src="/images/mark-photo.png"
+                src="/images/mark-photo.webp"
                 alt="Mark, owner and installer at Luxe Window Works"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
+                unoptimized
               />
             </div>
 
