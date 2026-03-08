@@ -23,6 +23,8 @@ export default function HomePage() {
           fill
           className="object-cover"
           priority
+          sizes="100vw"
+          quality={85}
         />
         <div className="absolute inset-0 bg-charcoal/55" />
         <div className="container-luxe relative">
@@ -164,6 +166,9 @@ export default function HomePage() {
                 alt="Mark, owner and installer at Luxe Window Works"
                 fill
                 className="object-cover"
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                quality={80}
               />
             </div>
 
