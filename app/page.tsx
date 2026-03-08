@@ -32,8 +32,7 @@ export default function HomePage() {
           fill
           className="object-cover"
           priority
-          sizes="100vw"
-          quality={85}
+          unoptimized
         />
         <div className="absolute inset-0 bg-charcoal/55" />
         <div className="container-luxe relative">
