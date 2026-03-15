@@ -388,6 +388,12 @@ wordCount: 1166
   "@type": "BlogPosting",
   "headline": "Window Coverings for New Construction in Coeur d'Alene & Rathdrum: What to Buy, When to Order, and What It Costs",
   "description": "For a new construction home in Coeur d'Alene or Rathdrum, prioritize bedrooms and main living areas first. A typical Northern Idaho new build needs $3,500–$8,000 for complete professional installation. Here is exactly how to approach it.",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://www.luxewindowworks.com/images/cellular-shades.jpeg",
+    "width": 1200,
+    "height": 675
+  },
   "datePublished": "2025-09-01",
   "dateModified": "2026-03-15",
   "author": {
