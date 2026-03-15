@@ -304,36 +304,6 @@ wordCount: 951
       ]
     },
     {
-      "@type": "FAQPage",
-      "@id": "https://luxewindowworks.com/#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Why are cellular shades ideal for Idaho's climate?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Cellular shades provide exceptional insulation for Idaho's hot summers and cold winters. Their honeycomb design traps air, creating a thermal barrier that keeps your home cooler in summer and warmer in winter."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do cellular shades help lower energy bills?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "By reducing heat transfer through windows, cellular shades help maintain indoor temperatures more efficiently. This means your HVAC system works less, saving you money on energy costs year-round."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are cellular shades a good option for homes in Rathdrum, Idaho?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Because of Rathdrum's wide temperature swings, cellular shades are one of the best investments you can make. They combine comfort, energy efficiency, and a clean modern look that fits any home style."
-          }
-        }
-      ]
-    },
-    {
       "@type": "Service",
       "@id": "https://luxewindowworks.com/#service",
       "serviceType": "Custom Cellular Shades Installation",
@@ -368,6 +338,12 @@ wordCount: 951
   "@type": "BlogPosting",
   "headline": "Cellular Shades for Rathdrum Homes: The Best Window Covering for Idaho's Climate",
   "description": "Cellular shades are the most effective window covering for Rathdrum homes. Rathdrum's higher elevation, greater wind exposure, and longer heating season make double or triple cell cellular shades the right choice for every exterior-facing window.",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://www.luxewindowworks.com/images/IMG_0065.png",
+    "width": 1200,
+    "height": 675
+  },
   "datePublished": "2025-09-01",
   "dateModified": "2026-03-15",
   "author": {
