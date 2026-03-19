@@ -414,8 +414,12 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     ...(post.featuredImage && {
       image: {
         "@type": "ImageObject",
-        url: post.featuredImage,
-        contentUrl: post.featuredImage,
+        url: post.featuredImage.startsWith("http")
+          ? post.featuredImage
+          : `https://www.luxewindowworks.com${post.featuredImage}`,
+        contentUrl: post.featuredImage.startsWith("http")
+          ? post.featuredImage
+          : `https://www.luxewindowworks.com${post.featuredImage}`,
       },
     }),
   };
