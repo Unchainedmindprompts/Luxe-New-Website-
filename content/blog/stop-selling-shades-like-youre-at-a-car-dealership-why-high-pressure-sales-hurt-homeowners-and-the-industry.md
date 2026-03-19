@@ -13,7 +13,7 @@ wordCount: 2729
 <p><strong>By Mark Abplanalp, Owner of Luxe Window Works</strong></p>
 <p>You've probably experienced it before—a sales rep arrives at your home for what you thought would be a helpful consultation. Instead, you're hit with time-limited offers, aggressive closing tactics, and that uncomfortable feeling that you're being pressured into a decision you're not ready to make.</p>
 <p>If you've heard lines like "This 50% discount ends the moment I walk out the door" or "Why aren't you ready to move forward today?"—you know exactly what I'm talking about. It's not a consultation. It's a high-pressure pitch, and it has no place in someone's living room.</p>
-<p>After more than 20 years in the window treatment industry, I've seen this approach damage trust, lead to poor decisions, and ultimately hurt homeowners who deserve better. The truth is, buying window treatments shouldn't feel like negotiating for a used car. It should feel like working with a trusted advisor who genuinely cares about solving your problem—not just closing a sale before lunch.</p>
+<p>After more than 23 years in the window treatment industry, I've seen this approach damage trust, lead to poor decisions, and ultimately hurt homeowners who deserve better. The truth is, buying window treatments shouldn't feel like negotiating for a used car. It should feel like working with a trusted advisor who genuinely cares about solving your problem—not just closing a sale before lunch.</p>
 <p>Let's talk about why this sales model persists, why it's harmful, and what a real consultation should look like when you're making decisions about your home.</p>
 <h2>The Problem: Pressure Tactics Don't Belong in Your Home</h2>
 <p>When a window treatment rep walks into your house with a scripted pitch and artificial urgency, something's already gone wrong. The focus has shifted from understanding your needs to manufacturing a sense of panic.</p>
@@ -103,7 +103,7 @@ wordCount: 2729
 <p>Here's the bottom line: if you're in the window treatment business, your job is to serve homeowners—not pressure them. Your clients are inviting you into their personal space, trusting you with their money, and relying on you to guide them toward a solution that will work for years to come.</p>
 <p>That's a responsibility, not a transaction.</p>
 <p>The high-pressure, quota-driven sales model might generate short-term numbers, but it damages long-term trust. And in an industry where referrals, reputation, and repeat business matter, trust is everything.</p>
-<p>If you're ready to work with a window treatment specialist who values your home as much as you do, we'd be honored to help. No scripts. No pressure. Just honest guidance from someone who's been doing this for over 20 years.</p>
+<p>If you're ready to work with a window treatment specialist who values your home as much as you do, we'd be honored to help. No scripts. No pressure. Just honest guidance from someone who's been doing this for over 23 years.</p>
 <p><strong>Ready to start your project the right way?</strong> Reach out to Luxe Window Works for a consultation that's built on trust, not tactics. Let's find the solution that's truly right for your home.</p>
 <p><strong>About the Author</strong></p>
 <p><strong>Mark Abplanalp</strong> is the founder and lead window treatment specialist at <strong>Luxe Window Works</strong>, serving all types of custom projects and customers across the Northern Idaho region.</p>
