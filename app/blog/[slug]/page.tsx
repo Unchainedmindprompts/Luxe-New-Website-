@@ -255,11 +255,112 @@ const installationHowToSchema = {
   ],
 };
 
+const highPressureFAQSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://luxewindowworks.com/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry#faq",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How can I tell if a window treatment sales rep is using high-pressure tactics?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Watch for artificial urgency, vague pricing, and resistance to letting you think things over. If you feel uncomfortable, rushed, or manipulated — trust that feeling. A good consultant gives you space and clarity, not stress and confusion.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is it normal to get a window treatment quote and take time before deciding?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Absolutely — and it's smart. Comparing quotes, researching products, and discussing options with your family are all part of making a confident decision. Any rep who pressures you to decide on the spot is prioritizing their timeline, not yours.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What should I ask during a window treatment consultation?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Ask about product durability, warranty terms, installation timelines, and whether the team has experience with your specific situation — oversized windows, motorization, historic homes, or unusual frame conditions. A knowledgeable consultant will welcome every one of those questions.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How do I know if a window treatment discount is real or just a sales tactic?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "If the offer expires the moment the rep leaves your house, it was a closing tactic — not a real promotion. Legitimate promotions have clear timelines and don't punish you for taking a few days to think. Ask for any offer in writing and confirm it's still valid if you follow up later.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What is the difference between a window treatment consultation and a sales pitch?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "A consultation is about discovery — understanding your needs, your space, and your goals. A pitch is about closing — getting you to commit as quickly as possible. A real consultation leaves you informed and confident. A pitch leaves you pressured and uncertain.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Should I get multiple quotes before choosing a window treatment company?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes, especially for larger projects. Two or three quotes help you understand pricing ranges, product options, and service quality. Just make sure you're comparing equivalent specs — fabric grade, motorization options, and installation quality all vary significantly between providers.",
+      },
+    },
+  ],
+};
+
+const highPressureHowToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "@id": "https://luxewindowworks.com/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry#howto",
+  name: "5 Tips for Navigating Window Treatment Sales Without Getting Pressured",
+  description: "How to protect yourself from high-pressure window treatment sales tactics and make a confident, informed decision.",
+  totalTime: "PT5M",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Never Sign on the First Visit",
+      text: "Take time to review the quote, compare options, and sleep on it. A trustworthy company will respect that. If they push back, that's your signal to walk away.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Ask About the Installer, Not Just the Product",
+      text: "Ask who performs the installation, whether they're employees or subcontractors, and what their experience level is. Poor installation ruins even the best product.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "Beware of Today-Only Pricing",
+      text: "If a discount evaporates the moment the rep leaves your house, it was a closing tactic. Legitimate offers have reasonable timelines and don't punish you for taking time to decide.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 4,
+      name: "Get Everything in Writing",
+      text: "Make sure your quote includes product specifications, fabric details, motorization options, installation timeline, and warranty terms. If it was discussed in the consultation, it should be in the contract.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 5,
+      name: "Trust Your Gut",
+      text: "If the conversation feels evasive, manipulative, or rushed — don't ignore that. There are professionals in this industry who will treat you with respect and transparency.",
+    },
+  ],
+};
+
 /** Slug-specific additional schema — add new entries here as needed */
 const SLUG_SCHEMA: Record<string, object[]> = {
   "your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works": [
     installationFAQSchema,
     installationHowToSchema,
+  ],
+  "stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry": [
+    highPressureFAQSchema,
+    highPressureHowToSchema,
   ],
 };
 
