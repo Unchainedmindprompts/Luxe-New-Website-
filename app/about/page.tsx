@@ -163,7 +163,7 @@ export default function AboutPage() {
               Luxe Window Works was built specifically to go the other direction. Mark carries products from manufacturers where the founding families are still the majority stakeholders — brands like Lafayette Interior Fashions and Norman Window Fashions — because those companies still care deeply about quality and the customer experience.
             </p>
             <p>
-              The mission is straightforward: high-quality products, competitive pricing, and the kind of locally owned service that actually shows up, measures right, installs clean, and stands behind the work. Every consultation is with Mark. Every installation is Mark. There is no crew you've never met, no franchise overhead, no national call center.
+              The mission is straightforward: high-quality products, competitive pricing, and the kind of locally owned service that actually shows up, measures right, installs clean, and stands behind the work. Every consultation is handled with the same level of care and expertise — no franchise overhead, no national call center, no shortcuts.
             </p>
           </div>
         </section>
