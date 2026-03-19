@@ -130,12 +130,12 @@ function deriveKeywords(post: BlogPost): string {
 /** Full Person schema for Mark — reused in every post */
 const markAuthorSchema = {
   "@type": "Person",
-  "@id": "https://luxewindowworks.com/#mark-abplanalp",
+  "@id": "https://luxewindowworks.com/about#mark-abplanalp",
   name: "Mark Abplanalp",
   jobTitle: "Owner & Window Treatment Specialist",
   description:
-    "Mark Abplanalp is the founder and owner of Luxe Window Works with over 20 years of hands-on window treatment installation experience. He personally handles every free in-home consultation, measurement, and installation, serving homeowners across Coeur d'Alene, Post Falls, Hayden, and Sandpoint, Idaho.",
-  url: "https://luxewindowworks.com",
+    "Mark Abplanalp has worked in the window treatment industry since 2002 — 23 years of hands-on sales, design, and installation experience. He launched Luxe Window Works in Post Falls, Idaho in March 2025, focused on family-owned manufacturers and locally owned service.",
+  url: "https://luxewindowworks.com/about",
   worksFor: {
     "@type": "LocalBusiness",
     "@id": "https://luxewindowworks.com/#business",
@@ -152,6 +152,8 @@ const markAuthorSchema = {
     "window treatment installation",
     "energy efficient window coverings",
     "Northern Idaho home design",
+    "fenestration design",
+    "commercial window treatments",
   ],
   areaServed: [
     "Coeur d'Alene, Idaho",
@@ -159,6 +161,105 @@ const markAuthorSchema = {
     "Hayden, Idaho",
     "Sandpoint, Idaho",
     "Northern Idaho",
+  ],
+};
+
+/** FAQPage schema — installation timeline post */
+const installationFAQSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id":
+    "https://luxewindowworks.com/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works#faq",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How long does window treatment installation take in Coeur d'Alene and Northern Idaho?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Most custom window treatment orders take 3 to 4 weeks from the time of ordering to installation in Northern Idaho. That includes order processing, manufacturing, and scheduling your installation appointment. Some products take longer — custom drapes and plantation shutters typically run 6 to 8 weeks depending on the manufacturer. Contact Luxe Window Works at 208-660-8643 for current lead times on your specific product.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How long do custom window treatments last compared to big box store blinds?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Custom window treatments from quality manufacturers typically last 15 to 20 years or more with proper care. Mass-produced blinds from big box stores typically last 3 to 7 years. The difference comes down to material quality, precision fit, and professional installation.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Does Luxe Window Works offer free consultations in Northern Idaho?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Luxe Window Works offers free in-home consultations throughout Northern Idaho including Coeur d'Alene, Post Falls, Hayden, Sandpoint, and Rathdrum. During the consultation we assess your windows, show product samples, and provide honest recommendations with no pressure and no hidden costs.",
+      },
+    },
+  ],
+};
+
+/** HowTo schema — 5-step installation process */
+const installationHowToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "@id":
+    "https://luxewindowworks.com/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works#howto",
+  name: "How to Get Custom Window Treatments Installed in Northern Idaho",
+  description:
+    "The Luxe Window Works 5-step process for getting custom window treatments measured, ordered, and professionally installed in Northern Idaho.",
+  totalTime: "P4W",
+  supply: [
+    {
+      "@type": "HowToSupply",
+      name: "Custom window treatments from family-owned manufacturers",
+    },
+  ],
+  tool: [
+    {
+      "@type": "HowToTool",
+      name: "Professional measuring tools",
+    },
+  ],
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Free In-Home Consultation",
+      text: "Mark visits your home to assess your windows, discuss your functional requirements, and explore design possibilities. This is a collaborative planning session — no pressure, no sales pitch.",
+      url: "https://luxewindowworks.com/book",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Expert Product Selection",
+      text: "With 23 years of hands-on experience, our team guides you through product selection based on your specific needs — whether energy-efficient cellular shades, blackout solutions, or motorized blinds for hard-to-reach windows.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "Precision Measuring",
+      text: "Our team uses professional-grade tools and follows manufacturer specifications to ensure every measurement is precise. We account for window depth, mounting preferences, and any architectural irregularities.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 4,
+      name: "Professional Installation",
+      text: "We handle every aspect of installation, from mounting hardware to final adjustments. We protect your walls, floors, and furnishings throughout and clean up completely before we leave. Every installation comes with a workmanship warranty.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 5,
+      name: "Ongoing Support and Service",
+      text: "Our relationship with you doesn't end at installation. We provide ongoing support for warranty claims, maintenance questions, and future window treatment needs. Direct manufacturer relationships mean faster service when you need assistance.",
+    },
+  ],
+};
+
+/** Slug-specific additional schema — add new entries here as needed */
+const SLUG_SCHEMA: Record<string, object[]> = {
+  "your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works": [
+    installationFAQSchema,
+    installationHowToSchema,
   ],
 };
 
@@ -218,11 +319,22 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     }),
   };
 
+  const additionalSchemas = SLUG_SCHEMA[post.slug] || [];
+
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+      {additionalSchemas.map((s, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }}
+        />
+      ))}
+    </>
   );
 }
 
@@ -335,7 +447,7 @@ export default function BlogPostPage({ params }: Props) {
               Have Questions About Your Windows?
             </h2>
             <p className="text-warm-gray-500 mb-8">
-              Mark offers free in-home consultations throughout Northern Idaho.
+              Our team offers free in-home consultations throughout Northern Idaho.
               Get personalized advice for your specific situation.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
