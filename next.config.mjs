@@ -68,6 +68,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/why-motorized-shades-fail-in-northern-idaho-and-how-to-fix-them',
+        destination: '/blog/why-motorized-shades-fail-in-northern-idaho-and-how-to-fix-them',
+        permanent: true,
+      },
+      {
         source: '/',
         has: [{ type: 'query', key: 'page_id' }],
         destination: '/',
