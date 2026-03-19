@@ -36,7 +36,7 @@ wordCount: 1923
 <p>Our process begins with understanding your specific needs, lifestyle, and aesthetic preferences. During our free in-home consultation, we assess your windows, discuss your functional requirements, and explore design possibilities that align with your home's architecture and your personal style.</p>
 <p>This isn't a high-pressure sales visit—it's a collaborative planning session where we listen more than we talk.</p>
 <h3>Step 2: Expert Product Selection</h3>
-<p>With over 18 years of combined experience in the window treatment industry, our team guides you through product selection based on your specific needs. Whether you're interested in energy-efficient cellular shades, blackout solutions for bedrooms, or motorized blinds for hard-to-reach windows, we match products to purposes.</p>
+<p>With over 23 years of hands-on experience in the window treatment industry, our team guides you through product selection based on your specific needs. Whether you're interested in energy-efficient cellular shades, blackout solutions for bedrooms, or motorized blinds for hard-to-reach windows, we match products to purposes.</p>
 <h3>Step 3: Precision Measuring</h3>
 <p><strong>Accurate measuring is critical for custom blinds success.</strong>&nbsp;Our technicians use professional-grade tools and follow manufacturer specifications to ensure every measurement is precise. We account for window depth, mounting preferences, and any architectural irregularities that could affect installation.</p>
 <p>Studies show that 73% of DIY window treatment failures stem from measurement errors.² Professional measuring eliminates this risk entirely.</p>
@@ -59,7 +59,7 @@ wordCount: 1923
 <h3>Local Expertise, National Quality</h3>
 <p>As a locally-owned business, we understand the specific challenges Northern Idaho homes face—from lake views that require glare control to energy efficiency needs during harsh winters. Our manufacturer relationships give us access to national-quality products while maintaining the personal service that only comes from local ownership.</p>
 <p>When issues arise, you're not calling a 1-800 number. You're working directly with the people who installed your treatments and have both the authority and expertise to resolve problems quickly.</p>
-<h2>Ready to Transform Your Windows?</h2>
+<h2>How Long Does Window Treatment Installation Take in Northern Idaho?</h2> <p>One of the most common questions we hear is: how long will this take from start to finish? On average, most custom window treatment orders take <strong>3 to 4 weeks</strong> from the time of ordering to installation. That includes order processing, manufacturing, and scheduling your installation appointment.</p> <p>Some products take longer by nature. Custom drapes and plantation shutters typically run <strong>6 to 8 weeks</strong> depending on the manufacturer and current production schedules. We always give you an honest timeline upfront — no surprises.</p> <p>Lead times can shift with demand and manufacturer schedules. For the most current timeline on your specific product, <a href="/contact">reach out to our team</a> or call <a href="tel:+12086608643">208-660-8643</a> and we'll give you an accurate estimate before you commit to anything.</p>  <h2>Ready to Transform Your Windows?</h2>
 <p>The difference between adequate window treatments and exceptional ones often comes down to working with the right partner. At Luxe Window Works, we've built our reputation on delivering both quality products and outstanding service to families throughout Northern Idaho.</p>
 <p><strong>Ready to transform your windows? Book your complimentary in-home consultation with Luxe Window Works today.</strong></p>
 <p>During your consultation, we'll:</p>
@@ -69,7 +69,7 @@ wordCount: 1923
 <li>Give you a detailed quote with no hidden costs or surprises</li>
 </ul>
 <h3>Contact Information</h3>
-<p>Call us at [phone number] or visit our website to schedule your free consultation. We're committed to making your window treatment investment one you'll love for years to come.</p>
+<p>Call us at <a href="tel:+12086608643">208-660-8643</a> or visit our website to schedule your free consultation. We're committed to making your window treatment investment one you'll love for years to come.</p>
 <h2>Your Partner for Beautiful, Long-Lasting Window Treatments</h2>
 <p>Choosing custom blinds installation in Northern Idaho means choosing between a transaction and a partnership. At Luxe Window Works, we're committed to being your long-term partner for beautiful, functional window treatments that enhance your home's comfort, efficiency, and style.</p>
 <p><strong>Luxe Window Works equals quality, trust, and personalized service—because your home deserves nothing less.</strong></p>
