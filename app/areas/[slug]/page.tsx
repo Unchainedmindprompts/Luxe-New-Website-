@@ -106,13 +106,6 @@ function AreaSchema({ area, slug }: { area: { name: string; metaDescription?: st
         },
       ],
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "5.0",
-      reviewCount: "14",
-      bestRating: "5",
-      worstRating: "1",
-    },
     sameAs: [
       "https://www.yelp.com/biz/luxe-window-works-post-falls",
       "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
