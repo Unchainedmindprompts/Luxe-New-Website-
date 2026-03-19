@@ -1,9 +1,22 @@
 import { MetadataRoute } from 'next'
-
+import { getAllSlugs, getPost } from '@/lib/blog'
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.luxewindowworks.com'
   const currentDate = new Date().toISOString()
-
+  // Dynamically generate all blog post URLs from content/blog
+  const blogPosts: MetadataRoute.Sitemap = getAllSlugs().map((slug) => {
+    const post = getPost(slug)
+    return {
+      url: `${baseUrl}/blog/${slug}`,
+      lastModified: post?.dateModified
+        ? new Date(post.dateModified).toISOString()
+        : post?.date
+        ? new Date(post.date).toISOString()
+        : currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    }
+  })
   return [
     // Core pages
     {
@@ -110,12 +123,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.7,
     },
-    // Blog posts
-    {
-      url: `${baseUrl}/why-motorized-shades-fail-in-northern-idaho-and-how-to-fix-them`,
-      lastModified: new Date('2025-12-07').toISOString(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
+    // All blog posts — dynamically generated from content/blog
+    ...blogPosts,
   ]
 }
