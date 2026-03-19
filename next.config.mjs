@@ -17,7 +17,14 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
 
+  experimental: {
+    // Inline critical CSS and defer non-critical styles to eliminate render-blocking
+    optimizeCss: true,
+  },
+
   images: {
+    formats: ["image/webp"],
+    minimumCacheTTL: 86400,
     remotePatterns: [
       {
         protocol: "https",
@@ -27,12 +34,55 @@ const nextConfig = {
     ],
   },
 
+  async headers() {
+    return [
+      {
+        // Static images in /public/images — serve with 1-year immutable cache
+        // so CDN edges and browsers don't re-fetch on every visit/PageSpeed run
+        source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+    ];
+  },
+
   async redirects() {
-    return wpRedirects.map((r) => ({
-      source: r.source,
-      destination: r.destination,
-      permanent: true, // 301 redirect — preserves SEO juice
-    }));
+    const staticRedirects = [
+      {
+        source: '/explore-motorized-shades-plantation-shutters-have-a-question-lets-start-the-c',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/services',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/case-studies',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/',
+        has: [{ type: 'query', key: 'page_id' }],
+        destination: '/',
+        permanent: true,
+      },
+    ];
+
+    return [
+      ...staticRedirects,
+      ...wpRedirects.map((r) => ({
+        source: r.source,
+        destination: r.destination,
+        permanent: true, // 301 redirect — preserves SEO juice
+      })),
+    ];
   },
 };
 

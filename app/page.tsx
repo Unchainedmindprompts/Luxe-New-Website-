@@ -1,7 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
-import ConciergeChat from "@/components/ConciergeChat";
+import dynamic from "next/dynamic";
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
+
+const ConciergeChat = dynamic(() => import("@/components/ConciergeChat"), {
+  ssr: false,
+  loading: () => (
+    <div className="inline-flex items-center gap-3 bg-gold text-white font-semibold px-8 py-4 rounded-full text-lg opacity-80">
+      Let&apos;s Figure Out What You Need
+    </div>
+  ),
+});
 
 function StarIcon() {
   return (
@@ -18,11 +27,13 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
         <Image
-          src="/images/hero-modern-living.jpeg"
+          src="/images/hero-modern-living.webp"
           alt="Modern living room with custom cellular shades and a mountain view"
           fill
           className="object-cover"
           priority
+          sizes="100vw"
+          quality={85}
         />
         <div className="absolute inset-0 bg-charcoal/55" />
         <div className="container-luxe relative">
@@ -160,10 +171,13 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden order-2 lg:order-1">
               <Image
-                src="/images/mark-photo.png"
+                src="/images/mark-photo.webp"
                 alt="Mark, owner and installer at Luxe Window Works"
                 fill
                 className="object-cover"
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                quality={80}
               />
             </div>
 

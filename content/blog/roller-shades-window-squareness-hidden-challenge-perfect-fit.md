@@ -27,7 +27,7 @@ wordCount: 1169
 <h3>Telescoping: The Sideways Shift Problem</h3>
 <p>Telescoping happens when the fabric gradually shifts sideways on the roller tube, creating an uneven edge that gets worse over time. While several factors contribute to telescoping, mounting a roller shade in an out-of-square frame is one of the biggest culprits. The uneven tension pulls the fabric to one side with every operation.</p>
 <h2>Inside Mount vs. Outside Mount: Why Precision Matters More for Interior Installations</h2>
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/07/img_0069.png" alt=""/></figure>
+<figure><img src="/images/IMG_0069.png" alt="Patterned roller shades in a Northern Idaho home demonstrating precise inside-mount installation on square window frames" /></figure>
 <p><strong>Inside mounts are the most vulnerable to squareness issues</strong>&nbsp;because they must work within the exact dimensions of your window opening. There's no room for adjustment—the shade either fits perfectly or it doesn't.</p>
 <p>Outside mounts offer more flexibility because they're attached to the wall or trim around the window. You have wiggle room to level the mounting brackets and create a square installation even if the window itself isn't perfect.</p>
 <p>Here's my decision framework: if your window opening varies more than 1/8 inch from square, or if you notice visible gaps between the frame and wall, consider an outside mount or alternative treatment altogether.</p>
