@@ -113,6 +113,85 @@ function AreaSchema({ area, slug }: { area: { name: string; metaDescription?: st
     ],
   };
 
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${areaUrl}#service`,
+    name: `Custom Window Treatments in ${areaName}, Idaho`,
+    serviceType: "Custom Window Treatments",
+    description: `Professional custom window treatment installation in ${areaName}, Idaho. Luxe Window Works offers cellular shades, plantation shutters, solar shades, roller shades, motorized window treatments, and free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities.`,
+    provider: {
+      "@type": "LocalBusiness",
+      "@id": `${BUSINESS.url}/#business`,
+      name: BUSINESS.name,
+      url: BUSINESS.url,
+      telephone: BUSINESS.phone,
+    },
+    areaServed: {
+      "@type": "City",
+      name: areaName,
+      containedInPlace: { "@type": "State", name: "Idaho" },
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `Window Treatment Services in ${areaName}`,
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Cellular Shade Installation in ${areaName}`,
+            description: `Energy-efficient honeycomb cellular shades custom-fitted for ${areaName} homes. Reduces energy costs and controls light year-round.`,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Plantation Shutter Installation in ${areaName}`,
+            description: `Custom-measured plantation shutters for ${areaName} homes. Lasting value, precise light control, and architectural character.`,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Solar Shade Installation in ${areaName}`,
+            description: `UV-blocking solar shades that preserve ${areaName} lake and mountain views while eliminating glare and heat gain.`,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Motorized Window Treatment Installation in ${areaName}`,
+            description: `Smart motorized shades for ${areaName} homes — controllable by phone, voice assistant, or wall switch.`,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Free In-Home Window Treatment Consultation in ${areaName}`,
+            description: `Free in-home consultation for ${areaName} homeowners. We assess your windows, show product samples, and recommend the right solution with no pressure.`,
+          },
+        },
+      ],
+    },
+    offers: {
+      "@type": "Offer",
+      name: "Free In-Home Consultation",
+      price: "0",
+      priceCurrency: "USD",
+      description: `Free in-home window treatment consultation for ${areaName} homeowners.`,
+      seller: {
+        "@type": "LocalBusiness",
+        name: BUSINESS.name,
+        telephone: BUSINESS.phone,
+      },
+    },
+  };
+
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -165,6 +244,11 @@ function AreaSchema({ area, slug }: { area: { name: string; metaDescription?: st
 
   return (
     <>
+      <Script
+        id={`area-service-schema-${slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
       <Script
         id={`area-localbusiness-schema-${slug}`}
         type="application/ld+json"
