@@ -8,6 +8,9 @@ import { getAllPosts, getReadingTime } from "@/lib/blog";
 export const metadata: Metadata = {
   title: "Blog | Window Treatment Tips & Guides",
   description: `Expert window treatment advice from ${BUSINESS.name}. Tips on choosing the right blinds, shades, and shutters for Northern Idaho homes.`,
+  alternates: {
+    canonical: "https://www.luxewindowworks.com/blog",
+  },
   openGraph: {
     title: "Blog | Luxe Window Works",
     description: "Expert window treatment advice for Northern Idaho homeowners.",

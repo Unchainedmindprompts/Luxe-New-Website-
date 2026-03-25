@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.luxewindowworks.com",
+  },
+};
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 
 const ConciergeChat = dynamic(() => import("@/components/ConciergeChat"), {
