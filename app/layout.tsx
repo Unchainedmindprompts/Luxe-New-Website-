@@ -26,7 +26,7 @@ const playfairDisplay = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://luxewindowworks.com"),
+  metadataBase: new URL("https://www.luxewindowworks.com"),
   title: {
     default: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
     template: "%s | Luxe Window Works",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://luxewindowworks.com",
+    url: "https://www.luxewindowworks.com",
     siteName: "Luxe Window Works",
     title: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
     description:
@@ -68,23 +68,23 @@ export const metadata: Metadata = {
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "@id": "https://luxewindowworks.com/#business",
+  "@id": "https://www.luxewindowworks.com/#business",
   name: "Luxe Window Works",
   description:
     "Luxe Window Works brings 23 years of professional window treatment expertise to Northern Idaho. Founded by Mark Abplanalp — who has designed and installed window treatments since 2002 across Washington, Oregon, and Idaho, including high-profile commercial projects for Apple — Luxe delivers premium products from family-owned manufacturers like Lafayette and Norman. Specializing in cellular shades, plantation shutters, solar shades, roller shades, and motorized window treatments. Serving Coeur d'Alene, Post Falls, Hayden, Sandpoint, and Rathdrum, Idaho.",
-  url: "https://luxewindowworks.com",
+  url: "https://www.luxewindowworks.com",
   telephone: "208-660-8643",
   email: "mark@luxewindowworks.com",
   priceRange: "$$",
   foundingDate: "2025",
   founder: {
     "@type": "Person",
-    "@id": "https://luxewindowworks.com/about#mark-abplanalp",
+    "@id": "https://www.luxewindowworks.com/about#mark-abplanalp",
     name: "Mark Abplanalp",
     jobTitle: "Owner & Window Treatment Specialist",
     description:
       "Mark Abplanalp has worked in the window treatment industry since 2002 — 23 years of hands-on sales, design, and installation experience. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025, focused on family-owned manufacturers and locally owned service. Mark personally handles every consultation, measurement, and installation.",
-    url: "https://luxewindowworks.com/about",
+    url: "https://www.luxewindowworks.com/about",
     image: "https://www.luxewindowworks.com/_next/image?url=%2Fimages%2Fmark-photo.webp&w=3840&q=80",
     worksFor: { "@type": "LocalBusiness", name: "Luxe Window Works" },
     knowsAbout: [

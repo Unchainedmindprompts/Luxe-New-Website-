@@ -34,7 +34,7 @@ export const BUSINESS = {
   experience: "23 Years of Experience",
   guarantee: "Lifetime Installation Guarantee",
   brands: ["Alta", "Norman", "Lafayette"],
-  url: "https://luxewindowworks.com",
+  url: "https://www.luxewindowworks.com",
 } as const;
 
 export const SERVICE_AREAS = [

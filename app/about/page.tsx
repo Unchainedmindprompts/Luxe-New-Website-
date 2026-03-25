@@ -7,11 +7,14 @@ export const metadata: Metadata = {
   title: "About Mark Abplanalp | 23 Years of Window Treatment Expertise | Luxe Window Works",
   description:
     "Mark Abplanalp has been designing and installing window treatments since 2002 — from Seattle to Bend to Apple retail locations nationwide. Now serving Northern Idaho from Post Falls with Luxe Window Works.",
+  alternates: {
+    canonical: "https://www.luxewindowworks.com/about",
+  },
   openGraph: {
     title: "About Mark Abplanalp | Luxe Window Works",
     description:
       "23 years of window treatment expertise. Apple Visitor Center. Union Square. Now Post Falls, Idaho.",
-    url: "https://luxewindowworks.com/about",
+    url: "https://www.luxewindowworks.com/about",
     images: [
       {
         url: "/images/mark-photo.webp",
