@@ -19,7 +19,6 @@ function StarIcon() {
 export default function HomePage() {
   return (
     <>
-
       {/* Hero Section */}
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
         <Image
@@ -35,19 +34,18 @@ export default function HomePage() {
         <div className="container-luxe relative">
           <div className="max-w-3xl">
             <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight text-balance">
-              Northern Idaho&apos;s Most Trusted Window Treatment Specialist
+              Premium Window Treatments for Northern Idaho Homes
             </h1>
             <p className="mt-6 md:mt-8 text-lg md:text-xl text-warm-gray-200 leading-relaxed max-w-2xl">
-              Free in-home consultation with Mark — 23 years of hands-on expertise,
-              not a sales pitch. He&apos;ll help you find exactly what works for your space,
-              your style, and your budget.
+              Custom solutions that solve real problems — energy efficiency, glare control, privacy,
+              and lasting beauty — installed with 23 years of local expertise.
             </p>
             <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4">
               <Link
                 href="/book"
                 className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
               >
-                Book a Free Consultation
+                Book Your Free In-Home Consultation
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -59,7 +57,7 @@ export default function HomePage() {
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                Call Mark Now
+                Call {BUSINESS.phone}
               </a>
             </div>
           </div>
@@ -126,14 +124,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* About Mark */}
+      {/* Built for Northern Idaho Homes */}
       <section className="py-20 md:py-28 bg-linen/40">
         <div className="container-luxe">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden order-2 lg:order-1">
               <Image
                 src="/images/mark-photo.webp"
-                alt="Mark, owner and installer at Luxe Window Works"
+                alt="Mark Abplanalp, owner and installer at Luxe Window Works"
                 fill
                 className="object-cover"
                 loading="lazy"
@@ -144,38 +142,38 @@ export default function HomePage() {
 
             <div className="order-1 lg:order-2">
               <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
-                Meet Your Installer
+                Why Luxe Window Works
               </p>
               <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-                Your Neighbor. Your Expert. Your Installer.
+                Built for Northern Idaho Homes
               </h2>
               <div className="mt-6 space-y-4 text-warm-gray-600 leading-relaxed text-[17px]">
                 <p>
-                  With 23 years of hands-on installations, Mark has seen every
-                  type of window, every challenging angle, and every &ldquo;impossible&rdquo; situation
-                  that Northern Idaho homes can throw at you.
+                  For 23 years, we&apos;ve specialized in window treatments that perform in our
+                  unique climate — from the intense summer sun reflecting off the lake to the
+                  freezing winters that demand real insulation. We don&apos;t just sell products.
+                  We engineer solutions that look beautiful and work hard for your specific home.
                 </p>
                 <p>
-                  He&apos;s not here to upsell you on the most expensive option. He&apos;s here to
-                  figure out what actually works — for your windows, your home, your family,
-                  and your budget. That&apos;s why every project starts with a free in-home consultation,
-                  not a sales pitch.
+                  Every consultation, measurement, and installation is handled by Mark Abplanalp —
+                  the owner, not a subcontractor. With 23 years of hands-on expertise and a
+                  lifetime installation guarantee on every project, you get the precision of a
+                  specialist and the accountability of a local business that stands behind its work.
                 </p>
                 <p>
-                  From lakeside homes in Coeur d&apos;Alene to new construction in Post Falls,
-                  Mark knows the unique challenges that come with living in this part of Idaho —
-                  the extreme temperature swings, the intense summer sun off the lake, the
-                  need for real insulation when winter hits. And he backs every installation
-                  with a lifetime guarantee.
+                  Homes throughout Coeur d&apos;Alene, Post Falls, Hayden, Rathdrum, and Sandpoint
+                  trust us because we know this region — the lake-view challenges, the temperature
+                  swings, the growing new-construction communities — and we deliver solutions
+                  built to last.
                 </p>
               </div>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <a
-                  href="#concierge"
+                <Link
+                  href="/book"
                   className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-6 py-3 rounded-full transition-all"
                 >
-                  Start Your Consultation
-                </a>
+                  Book a Free Consultation
+                </Link>
                 <a
                   href={BUSINESS.phoneHref}
                   className="inline-flex items-center justify-center gap-2 text-charcoal font-semibold hover:text-gold transition-colors"
@@ -199,10 +197,11 @@ export default function HomePage() {
               Solutions, Not Just Products
             </p>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-              The Right Covering for Every Room
+              The Right Treatment for Every Window
             </h2>
             <p className="mt-4 text-warm-gray-500 text-lg">
-              Each product solves a specific problem. Mark will help you match the right one to yours.
+              Each product solves a specific problem. We&apos;ll match the right one to your home,
+              your light conditions, and your lifestyle.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
@@ -262,19 +261,19 @@ export default function HomePage() {
       <section className="py-20 md:py-28 bg-charcoal text-white">
         <div className="container-luxe text-center max-w-3xl mx-auto">
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl leading-tight">
-            Ready to Stop Guessing and Get It Right?
+            Ready for Window Treatments That Actually Solve Your Problems?
           </h2>
           <p className="mt-6 text-lg text-warm-gray-400 leading-relaxed">
-            Schedule your free in-home consultation with Mark. He&apos;ll measure your windows,
-            understand your needs, and recommend exactly what works — no pressure, no surprises.
+            Get a free in-home consultation — no pressure, no surprises. We&apos;ll measure your
+            windows, understand your needs, and recommend exactly what works for your home.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="#concierge"
+            <Link
+              href="/book"
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
-              Start Your Free Consultation
-            </a>
+              Book Your Free Consultation
+            </Link>
             <a
               href={BUSINESS.phoneHref}
               className="inline-flex items-center justify-center gap-2 border-2 border-warm-gray-600 text-white hover:border-white font-semibold px-8 py-4 rounded-full text-lg transition-all"
