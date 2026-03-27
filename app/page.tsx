@@ -38,7 +38,7 @@ export default function HomePage() {
               Northern Idaho&apos;s Most Trusted Window Treatment Specialist
             </h1>
             <p className="mt-6 md:mt-8 text-lg md:text-xl text-warm-gray-200 leading-relaxed max-w-2xl">
-              Free in-home consultation with Mark — nearly 20 years of hands-on expertise,
+              Free in-home consultation with Mark — 23 years of hands-on expertise,
               not a sales pitch. He&apos;ll help you find exactly what works for your space,
               your style, and your budget.
             </p>
@@ -81,7 +81,7 @@ export default function HomePage() {
               </span>
             </div>
             <span className="hidden md:inline text-warm-gray-600">|</span>
-            <span className="text-warm-gray-300">{BUSINESS.experience} Experience</span>
+            <span className="text-warm-gray-300">{BUSINESS.experience}</span>
             <span className="hidden md:inline text-warm-gray-600">|</span>
             <span className="text-warm-gray-300">{BUSINESS.guarantee}</span>
             <span className="hidden md:inline text-warm-gray-600">|</span>
