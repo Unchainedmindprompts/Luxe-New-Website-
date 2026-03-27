@@ -1,23 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-
 export const metadata: Metadata = {
   alternates: {
     canonical: "https://www.luxewindowworks.com",
   },
 };
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
-
-const ConciergeChat = dynamic(() => import("@/components/ConciergeChat"), {
-  ssr: false,
-  loading: () => (
-    <div className="inline-flex items-center gap-3 bg-gold text-white font-semibold px-8 py-4 rounded-full text-lg opacity-80">
-      Let&apos;s Figure Out What You Need
-    </div>
-  ),
-});
 
 function StarIcon() {
   return (
@@ -54,15 +43,15 @@ export default function HomePage() {
               your style, and your budget.
             </p>
             <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4">
-              <a
-                href="#concierge"
+              <Link
+                href="/book"
                 className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
               >
-                Start the Consultation
+                Book a Free Consultation
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </a>
+              </Link>
               <a
                 href={BUSINESS.phoneHref}
                 className="inline-flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white hover:text-charcoal font-semibold px-8 py-4 rounded-full text-lg transition-all"
@@ -98,41 +87,6 @@ export default function HomePage() {
             <span className="hidden md:inline text-warm-gray-600">|</span>
             <span className="text-warm-gray-300">Serving Northern Idaho</span>
           </div>
-        </div>
-      </section>
-
-      {/* Concierge Introduction */}
-      <section className="py-20 md:py-28 bg-warm-white">
-        <div className="container-luxe text-center max-w-3xl mx-auto">
-          <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
-            A Better Way to Shop for Window Treatments
-          </p>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-            Find the Right Window Treatments Without the Guesswork
-          </h2>
-          <p className="mt-6 text-lg text-warm-gray-600 leading-relaxed">
-            Most homeowners don&apos;t know where to start — and that&apos;s completely normal.
-            Window treatments depend on your room, your light exposure, your privacy needs, and your budget.
-            There&apos;s no one-size answer.
-          </p>
-          <p className="mt-4 text-lg text-warm-gray-600 leading-relaxed">
-            That&apos;s why Mark built a simple consultation process that helps you figure out what actually
-            makes sense for your home before anyone shows up with samples. Answer a few questions below
-            and we&apos;ll point you in the right direction — no pressure, no catalog overwhelm.
-          </p>
-        </div>
-      </section>
-
-      {/* AI Concierge Chat */}
-      <section id="concierge" className="py-16 md:py-24 bg-cream/50 scroll-mt-20">
-        <div className="container-luxe text-center">
-          <h2 className="font-serif text-3xl sm:text-4xl text-charcoal mb-3">
-            Your Personal Window Treatment Concierge
-          </h2>
-          <p className="text-warm-gray-500 mb-10 max-w-lg mx-auto">
-            Tell us about your space, and we&apos;ll help you figure out the perfect solution.
-          </p>
-          <ConciergeChat />
         </div>
       </section>
 
