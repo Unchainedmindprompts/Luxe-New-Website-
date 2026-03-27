@@ -149,22 +149,21 @@ export default function HomePage() {
               </h2>
               <div className="mt-6 space-y-4 text-warm-gray-600 leading-relaxed text-[17px]">
                 <p>
-                  For 23 years, we&apos;ve specialized in window treatments that perform in our
-                  unique climate — from the intense summer sun reflecting off the lake to the
-                  freezing winters that demand real insulation. We don&apos;t just sell products.
-                  We engineer solutions that look beautiful and work hard for your specific home.
+                  For 23 years, owner Mark Abplanalp has specialized in window treatments that
+                  perform in our unique climate — from intense summer sun reflecting off the lake
+                  to freezing winters that demand real insulation.
                 </p>
                 <p>
-                  Every consultation, measurement, and installation is handled by Mark Abplanalp —
-                  the owner, not a subcontractor. With 23 years of hands-on expertise and a
-                  lifetime installation guarantee on every project, you get the precision of a
-                  specialist and the accountability of a local business that stands behind its work.
+                  Luxe Window Works was founded on that deep experience. We don&apos;t just sell
+                  products. We engineer complete solutions tailored to your home, your views, your
+                  lifestyle, and the specific challenges of Northern Idaho living. Every project
+                  includes precise measurements, expert recommendations, and professional
+                  installation backed by a lifetime guarantee.
                 </p>
                 <p>
                   Homes throughout Coeur d&apos;Alene, Post Falls, Hayden, Rathdrum, and Sandpoint
-                  trust us because we know this region — the lake-view challenges, the temperature
-                  swings, the growing new-construction communities — and we deliver solutions
-                  built to last.
+                  trust us because we understand this region — the lake-view glare, the temperature
+                  swings, and the practical needs of both new construction and established homes.
                 </p>
               </div>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
