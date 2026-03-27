@@ -25,7 +25,7 @@ function BlogListSchema() {
     "@id": `${BUSINESS.url}/blog`,
     name: "Luxe Window Works Blog",
     description:
-      "Expert window treatment advice, buying guides, and design inspiration from over 20 years of hands-on experience in Northern Idaho homes — by Mark Abplanalp, owner of Luxe Window Works.",
+      "Expert window treatment advice, buying guides, and design inspiration from 23 years of hands-on experience in Northern Idaho homes — by Mark Abplanalp, owner of Luxe Window Works.",
     url: `${BUSINESS.url}/blog`,
     inLanguage: "en-US",
     author: {
@@ -34,7 +34,7 @@ function BlogListSchema() {
       name: "Mark Abplanalp",
       jobTitle: "Owner & Window Treatment Specialist",
       description:
-        "Founder of Luxe Window Works with over 20 years of hands-on window treatment installation experience, serving Coeur d'Alene, Post Falls, Hayden, and Sandpoint, Idaho.",
+        "Founder of Luxe Window Works with 23 years of hands-on window treatment installation experience, serving Coeur d'Alene, Post Falls, Hayden, and Sandpoint, Idaho.",
       worksFor: {
         "@type": "LocalBusiness",
         "@id": "https://luxewindowworks.com/#business",
