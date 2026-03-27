@@ -151,7 +151,7 @@ export default function HomePage() {
               </h2>
               <div className="mt-6 space-y-4 text-warm-gray-600 leading-relaxed text-[17px]">
                 <p>
-                  With 20 years of hands-on installations, Mark has seen every
+                  With 23 years of hands-on installations, Mark has seen every
                   type of window, every challenging angle, and every &ldquo;impossible&rdquo; situation
                   that Northern Idaho homes can throw at you.
                 </p>

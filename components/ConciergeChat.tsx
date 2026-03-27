@@ -155,7 +155,7 @@ export default function ConciergeChat() {
           <div className="bg-charcoal text-white px-6 py-4 flex items-center justify-between">
             <div>
               <h3 className="font-serif text-lg font-semibold">Grace — Window Treatment Concierge</h3>
-              <p className="text-warm-gray-400 text-xs mt-0.5">Powered by Mark&apos;s 20 years of expertise</p>
+              <p className="text-warm-gray-400 text-xs mt-0.5">Powered by Mark&apos;s 23 years of expertise</p>
             </div>
             <button
               onClick={() => setIsOpen(false)}
