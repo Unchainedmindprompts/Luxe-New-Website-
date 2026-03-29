@@ -115,12 +115,8 @@ export default function AboutPage() {
               About Luxe Window Works
             </p>
             <h1 className="text-4xl md:text-5xl font-semibold text-stone-900 leading-tight mb-6">
-              The Business Is One Year Old.<br />
-              The Expertise Is 23 Years.
-            </h1>
-            <p className="text-xl text-stone-600 max-w-2xl">
               Mark Abplanalp has been designing and installing window treatments since 2002 — across three states, two decades, and some of the most recognizable buildings in the world.
-            </p>
+            </h1>
           </div>
         </section>
 
