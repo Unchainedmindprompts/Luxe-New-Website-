@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import YoutubeEmbed from "@/components/YoutubeEmbed";
 export const metadata: Metadata = {
   alternates: {
     canonical: "https://www.luxewindowworks.com",
@@ -124,45 +125,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Built for Northern Idaho Homes */}
-      <section className="py-20 md:py-28 bg-linen/40">
-        <div className="container-luxe">
-          <div className="max-w-3xl">
-            <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
-              Why Luxe Window Works
-            </p>
-            <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl text-charcoal leading-tight">
-              Built for Northern Idaho Homes
-            </h2>
-            <div className="mt-6 space-y-4 text-warm-gray-600 leading-relaxed text-[17px]">
-              <p>
-                For 23 years, owner Mark Abplanalp has specialized in window treatments that
-                perform in our unique climate — from intense summer sun reflecting off the lake
-                to freezing winters that demand real insulation.
-              </p>
-              <p>
-                Luxe Window Works was founded on that deep experience. We don&apos;t just sell
-                products. We engineer complete solutions tailored to your home, your views, your
-                lifestyle, and the specific challenges of Northern Idaho living. Every project
-                includes precise measurements, expert recommendations, and professional
-                installation backed by a lifetime guarantee.
-              </p>
-              <p>
-                Homes throughout Coeur d&apos;Alene, Post Falls, Hayden, Rathdrum, and Sandpoint
-                trust us because we understand this region — the lake-view glare, the temperature
-                swings, and the practical needs of both new construction and established homes.
-              </p>
-            </div>
-            <div className="mt-8">
-              <Link
-                href="/book"
-                className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-6 py-3 rounded-full transition-all"
-              >
-                Book a Free Consultation
-              </Link>
-            </div>
-          </div>
-        </div>
+      {/* Video Section */}
+      <section className="w-full">
+        <YoutubeEmbed
+          videoId="8FiVnMSHuc4"
+          title="Luxe Window Works — Premium Window Treatments for Northern Idaho Homes"
+        />
       </section>
 
       {/* Products Overview */}
