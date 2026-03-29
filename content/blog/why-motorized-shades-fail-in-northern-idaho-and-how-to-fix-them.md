@@ -258,7 +258,7 @@ wordCount: 4736
 <li>Manually assign shades to closest repeater for optimal signal path</li>
 </ul>
 <h2><strong>Mark's 5 Troubleshooting Pro Tips for Smart Shades That Actually Work</strong></h2>
-<p>After 18 years solving communication failures in Northern Idaho homes, these are my go-to diagnostic strategies:</p>
+<p>After 23 years solving communication failures in Northern Idaho homes, these are my go-to diagnostic strategies:</p>
 <h3><strong>Pro Tip #1: Start with Individual Testing, Not Scene Debugging</strong></h3>
 <p>When a scene fails, most people immediately start reprogramming the scene or rebooting everything. Wrong approach.</p>
 <p><strong>Always test each shade individually first.</strong> This tells you whether you have a shade problem (motor, battery, RF receiver) or an infrastructure problem (hub, network, repeater coverage). If every shade responds individually but scenes fail, you've eliminated 90% of potential causes and can focus on hub placement, repeater needs, or network configuration.</p>
