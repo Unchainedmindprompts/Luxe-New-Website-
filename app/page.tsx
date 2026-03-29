@@ -127,62 +127,39 @@ export default function HomePage() {
       {/* Built for Northern Idaho Homes */}
       <section className="py-20 md:py-28 bg-linen/40">
         <div className="container-luxe">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden order-2 lg:order-1">
-              <Image
-                src="/images/mark-photo.webp"
-                alt="Mark Abplanalp, owner and installer at Luxe Window Works"
-                fill
-                className="object-cover"
-                loading="lazy"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                quality={80}
-              />
-            </div>
-
-            <div className="order-1 lg:order-2">
-              <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
-                Why Luxe Window Works
+          <div className="max-w-3xl">
+            <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
+              Why Luxe Window Works
+            </p>
+            <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl text-charcoal leading-tight">
+              Built for Northern Idaho Homes
+            </h2>
+            <div className="mt-6 space-y-4 text-warm-gray-600 leading-relaxed text-[17px]">
+              <p>
+                For 23 years, owner Mark Abplanalp has specialized in window treatments that
+                perform in our unique climate — from intense summer sun reflecting off the lake
+                to freezing winters that demand real insulation.
               </p>
-              <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-                Built for Northern Idaho Homes
-              </h2>
-              <div className="mt-6 space-y-4 text-warm-gray-600 leading-relaxed text-[17px]">
-                <p>
-                  For 23 years, owner Mark Abplanalp has specialized in window treatments that
-                  perform in our unique climate — from intense summer sun reflecting off the lake
-                  to freezing winters that demand real insulation.
-                </p>
-                <p>
-                  Luxe Window Works was founded on that deep experience. We don&apos;t just sell
-                  products. We engineer complete solutions tailored to your home, your views, your
-                  lifestyle, and the specific challenges of Northern Idaho living. Every project
-                  includes precise measurements, expert recommendations, and professional
-                  installation backed by a lifetime guarantee.
-                </p>
-                <p>
-                  Homes throughout Coeur d&apos;Alene, Post Falls, Hayden, Rathdrum, and Sandpoint
-                  trust us because we understand this region — the lake-view glare, the temperature
-                  swings, and the practical needs of both new construction and established homes.
-                </p>
-              </div>
-              <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/book"
-                  className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-6 py-3 rounded-full transition-all"
-                >
-                  Book a Free Consultation
-                </Link>
-                <a
-                  href={BUSINESS.phoneHref}
-                  className="inline-flex items-center justify-center gap-2 text-charcoal font-semibold hover:text-gold transition-colors"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  Call {BUSINESS.phone}
-                </a>
-              </div>
+              <p>
+                Luxe Window Works was founded on that deep experience. We don&apos;t just sell
+                products. We engineer complete solutions tailored to your home, your views, your
+                lifestyle, and the specific challenges of Northern Idaho living. Every project
+                includes precise measurements, expert recommendations, and professional
+                installation backed by a lifetime guarantee.
+              </p>
+              <p>
+                Homes throughout Coeur d&apos;Alene, Post Falls, Hayden, Rathdrum, and Sandpoint
+                trust us because we understand this region — the lake-view glare, the temperature
+                swings, and the practical needs of both new construction and established homes.
+              </p>
+            </div>
+            <div className="mt-8">
+              <Link
+                href="/book"
+                className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-6 py-3 rounded-full transition-all"
+              >
+                Book a Free Consultation
+              </Link>
             </div>
           </div>
         </div>

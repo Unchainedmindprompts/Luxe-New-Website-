@@ -158,16 +158,27 @@ export default function AboutPage() {
         {/* Why Luxe */}
         <section className="bg-stone-50 border-t border-stone-200 py-16 px-6">
           <div className="max-w-3xl mx-auto space-y-6 text-stone-700 leading-relaxed">
-            <h2 className="text-3xl font-semibold text-stone-900">Why Luxe Window Works Exists</h2>
+            <p className="text-sm uppercase tracking-widest text-amber-700 font-medium">
+              Why Luxe Window Works
+            </p>
+            <h2 className="text-4xl md:text-5xl font-semibold text-stone-900 leading-tight">Built for Northern Idaho Homes</h2>
             <p>
-              Like many industries, private equity has moved into window treatments — buying up manufacturers and national brands, cutting quality, degrading customer service, and turning what was once a craft-driven trade into a race to the bottom.
+              For 23 years, owner Mark Abplanalp has specialized in window treatments that perform in our unique climate — from intense summer sun reflecting off the lake to freezing winters that demand real insulation.
             </p>
             <p>
-              Luxe Window Works was built specifically to go the other direction. Mark carries products from manufacturers where the founding families are still the majority stakeholders — brands like Lafayette Interior Fashions and Norman Window Fashions — because those companies still care deeply about quality and the customer experience.
+              Luxe Window Works was founded on that deep experience. We don&apos;t just sell products. We engineer complete solutions tailored to your home, your views, your lifestyle, and the specific challenges of Northern Idaho living. Every project includes precise measurements, expert recommendations, and professional installation backed by a lifetime guarantee.
             </p>
             <p>
-              The mission is straightforward: high-quality products, competitive pricing, and the kind of locally owned service that actually shows up, measures right, installs clean, and stands behind the work. Every consultation is handled with the same level of care and expertise — no franchise overhead, no national call center, no shortcuts.
+              Homes throughout Coeur d&apos;Alene, Post Falls, Hayden, Rathdrum, and Sandpoint trust us because we understand this region — the lake-view glare, the temperature swings, and the practical needs of both new construction and established homes.
             </p>
+            <div>
+              <Link
+                href="/book"
+                className="inline-flex items-center justify-center bg-amber-700 text-white px-8 py-4 rounded-lg font-medium hover:bg-amber-800 transition-colors"
+              >
+                Book a Free Consultation
+              </Link>
+            </div>
           </div>
         </section>
 
