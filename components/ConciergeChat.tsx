@@ -51,9 +51,13 @@ export default function ConciergeChat() {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToBottom = () => {
+    const el = messagesContainerRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  };
   useEffect(() => { scrollToBottom(); }, [messages]);
 
   useEffect(() => {
@@ -151,7 +155,7 @@ export default function ConciergeChat() {
           <div className="bg-charcoal text-white px-6 py-4 flex items-center justify-between">
             <div>
               <h3 className="font-serif text-lg font-semibold">Grace — Window Treatment Concierge</h3>
-              <p className="text-warm-gray-400 text-xs mt-0.5">Powered by Mark&apos;s 20 years of expertise</p>
+              <p className="text-warm-gray-400 text-xs mt-0.5">Powered by Mark&apos;s 23 years of expertise</p>
             </div>
             <button
               onClick={() => setIsOpen(false)}
@@ -165,7 +169,7 @@ export default function ConciergeChat() {
           </div>
 
           {/* Messages */}
-          <div className="chat-messages h-80 sm:h-96 overflow-y-auto p-6 space-y-4 bg-cream/30">
+          <div ref={messagesContainerRef} className="chat-messages h-80 sm:h-96 overflow-y-auto p-6 space-y-4 bg-cream/30">
             {messages.slice(1).map((msg, i) => (
               <div
                 key={i}
