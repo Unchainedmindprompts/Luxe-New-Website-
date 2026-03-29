@@ -17,9 +17,32 @@ function StarIcon() {
   );
 }
 
+const videoSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  name: "Premium Window Treatments for Northern Idaho Homes — Luxe Window Works",
+  description:
+    "Transform your view, elevate your lifestyle. At Luxe Window Works, we don't just cover windows—we craft custom solutions that enhance beauty, boost energy efficiency, and increase the value of your Northern Idaho home. From stunning shutters to smart shades, this showcase highlights what true window elegance looks like when design meets craftsmanship. Serving Post Falls, Coeur d'Alene, Hayden & beyond.",
+  thumbnailUrl: "https://img.youtube.com/vi/8FiVnMSHuc4/maxresdefault.jpg",
+  uploadDate: "2025-11-07",
+  duration: "PT1M6S",
+  embedUrl: "https://www.youtube.com/embed/8FiVnMSHuc4",
+  contentUrl: "https://www.youtube.com/watch?v=8FiVnMSHuc4",
+  publisher: {
+    "@type": "LocalBusiness",
+    "@id": "https://www.luxewindowworks.com/#business",
+    name: "Luxe Window Works",
+    url: "https://www.luxewindowworks.com",
+  },
+};
+
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema) }}
+      />
       {/* Hero Section */}
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
         <Image
