@@ -31,6 +31,10 @@ const nextConfig = {
         hostname: "i0.wp.com",
         pathname: "/luxewindowworks.com/wp-content/uploads/**",
       },
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+      },
     ],
   },
 
