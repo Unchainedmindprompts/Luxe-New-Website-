@@ -115,12 +115,8 @@ export default function AboutPage() {
               About Luxe Window Works
             </p>
             <h1 className="text-4xl md:text-5xl font-semibold text-stone-900 leading-tight mb-6">
-              The Business Is One Year Old.<br />
-              The Expertise Is 23 Years.
-            </h1>
-            <p className="text-xl text-stone-600 max-w-2xl">
               Mark Abplanalp has been designing and installing window treatments since 2002 — across three states, two decades, and some of the most recognizable buildings in the world.
-            </p>
+            </h1>
           </div>
         </section>
 
@@ -138,49 +134,33 @@ export default function AboutPage() {
               />
             </div>
             <div className="space-y-6 text-stone-700 leading-relaxed">
-              <h2 className="text-2xl font-semibold text-stone-900">Meet Mark</h2>
+              <p className="text-sm uppercase tracking-widest text-amber-700 font-medium">
+                Why Luxe Window Works
+              </p>
+              <h2 className="text-4xl md:text-5xl font-semibold text-stone-900 leading-tight">
+                Built for Northern Idaho Homes
+              </h2>
               <p>
-                Mark started his career in high-end audio and home theater in 1994 — back when custom home AV was a specialty few understood. That background in consultative sales and precision installation carried directly into window treatments when he opened his first company in Issaquah, Washington in April 2002.
+                For 23 years, owner Mark Abplanalp has specialized in window treatments that perform in our unique climate — from intense summer sun reflecting off the lake to freezing winters that demand real insulation.
               </p>
               <p>
-                Over the next two decades, he built and operated window treatment businesses serving the Seattle market and expanded into Bend, Oregon in 2015. Along the way he sold and installed products from Hunter Douglas, Alta, Norman, Graber, Lafayette, Insolroll, Lutron, and Corradi USA — including exterior solar shades, awnings, and aluminum pergola systems.
+                Luxe Window Works was founded on that deep experience. We don&apos;t just sell products. We engineer complete solutions tailored to your home, your views, your lifestyle, and the specific challenges of Northern Idaho living. Every project includes precise measurements, expert recommendations, and professional installation backed by a lifetime guarantee.
               </p>
               <p>
-                In 2023, Mark took on a unique role with Arjays Window Fashions, traveling the country to work on high-end commercial projects for Apple. That included the Apple Visitor Center in Cupertino, Apple Union Square in San Francisco, and notable Apple locations at Yale and across the US. Installing shades 17 feet wide and 40 feet long in some of the most iconic buildings in the world has a way of raising your standards permanently.
+                Homes throughout Coeur d&apos;Alene, Post Falls, Hayden, Rathdrum, and Sandpoint trust us because we understand this region — the lake-view glare, the temperature swings, and the practical needs of both new construction and established homes.
               </p>
-              <p>
-                In January 2025, Mark and his partner Shirin settled in Northern Idaho — their forever home. In March 2025, Luxe Window Works opened its doors in Post Falls.
-              </p>
+              <div>
+                <Link
+                  href="/book"
+                  className="inline-flex items-center justify-center bg-amber-700 text-white px-8 py-4 rounded-lg font-medium hover:bg-amber-800 transition-colors"
+                >
+                  Book a Free Consultation
+                </Link>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Why Luxe */}
-        <section className="bg-stone-50 border-t border-stone-200 py-16 px-6">
-          <div className="max-w-3xl mx-auto space-y-6 text-stone-700 leading-relaxed">
-            <p className="text-sm uppercase tracking-widest text-amber-700 font-medium">
-              Why Luxe Window Works
-            </p>
-            <h2 className="text-4xl md:text-5xl font-semibold text-stone-900 leading-tight">Built for Northern Idaho Homes</h2>
-            <p>
-              For 23 years, owner Mark Abplanalp has specialized in window treatments that perform in our unique climate — from intense summer sun reflecting off the lake to freezing winters that demand real insulation.
-            </p>
-            <p>
-              Luxe Window Works was founded on that deep experience. We don&apos;t just sell products. We engineer complete solutions tailored to your home, your views, your lifestyle, and the specific challenges of Northern Idaho living. Every project includes precise measurements, expert recommendations, and professional installation backed by a lifetime guarantee.
-            </p>
-            <p>
-              Homes throughout Coeur d&apos;Alene, Post Falls, Hayden, Rathdrum, and Sandpoint trust us because we understand this region — the lake-view glare, the temperature swings, and the practical needs of both new construction and established homes.
-            </p>
-            <div>
-              <Link
-                href="/book"
-                className="inline-flex items-center justify-center bg-amber-700 text-white px-8 py-4 rounded-lg font-medium hover:bg-amber-800 transition-colors"
-              >
-                Book a Free Consultation
-              </Link>
-            </div>
-          </div>
-        </section>
 
         {/* Expertise callouts */}
         <section className="py-16 px-6">
