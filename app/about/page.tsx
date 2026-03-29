@@ -108,18 +108,6 @@ export default function AboutPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
       />
       <main className="bg-white">
-        {/* Hero */}
-        <section className="bg-stone-50 border-b border-stone-200 py-16 px-6">
-          <div className="max-w-4xl mx-auto">
-            <p className="text-sm uppercase tracking-widest text-amber-700 font-medium mb-4">
-              About Luxe Window Works
-            </p>
-            <h1 className="text-4xl md:text-5xl font-semibold text-stone-900 leading-tight mb-6">
-              Mark Abplanalp has been designing and installing window treatments since 2002 — across three states, two decades, and some of the most recognizable buildings in the world.
-            </h1>
-          </div>
-        </section>
-
         {/* Main bio */}
         <section className="py-16 px-6">
           <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-start">
