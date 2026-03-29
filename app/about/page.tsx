@@ -61,7 +61,7 @@ const personSchema = {
       containedInPlace: { "@type": "State", name: "Idaho" },
     },
     skills:
-      "Custom window treatment design, plantation shutter installation, motorized shade systems, cellular shades, solar shades, roller shades, fenestration consulting, UV mitigation, commercial window treatments, Lutron motorization, exterior solar shades",
+      "Custom window treatment design, plantation shutter installation, motorized shade systems, cellular shades, solar shades, roller shades, fenestration consulting, UV mitigation, commercial window treatments, exterior solar shades",
   },
   knowsAbout: [
     "custom window treatments",
@@ -76,9 +76,7 @@ const personSchema = {
     "commercial window treatments",
     "UV mitigation",
     "heat reduction window coverings",
-    "Lutron motorization",
     "exterior solar shades",
-    "Hunter Douglas",
     "Alta Window Fashions",
     "Norman Window Fashions",
     "Lafayette Interior Fashions",
@@ -194,10 +192,6 @@ export default function AboutPage() {
                 "Lafayette Interior Fashions",
                 "Norman Window Fashions",
                 "Alta Window Fashions",
-                "Hunter Douglas",
-                "Graber",
-                "Insolroll",
-                "Lutron",
                 "Corradi USA",
               ].map((brand) => (
                 <span
