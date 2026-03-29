@@ -2,7 +2,33 @@
 
 > Northern Idaho's trusted source for custom blinds, shades, shutters, and motorized window treatments. Local service, lifetime installation guarantee.
 
-Luxe Window Works is a custom window treatment specialist based in Post Falls, Idaho, serving the greater Coeur d'Alene area and Inland Northwest. Founded by Mark Abplanalp — a 20+ year industry veteran — Luxe Window Works specializes in energy-efficient window coverings, motorized smart home integration, and white-glove installation service.
+Luxe Window Works is a custom window treatment specialist based in Post Falls, Idaho, serving the greater Coeur d'Alene area and Inland Northwest. Founded by Mark Abplanalp — a 23-year industry veteran — Luxe Window Works specializes in energy-efficient window coverings, motorized smart home integration, and white-glove installation service.
+
+## Core Pages
+
+- Homepage: https://www.luxewindowworks.com/
+- About: https://www.luxewindowworks.com/about
+- Blog: https://www.luxewindowworks.com/blog
+- Book a Free Consultation: https://www.luxewindowworks.com/book
+- Contact: https://www.luxewindowworks.com/contact
+
+## Products
+
+- Cellular Shades (Honeycomb): https://www.luxewindowworks.com/products/cellular-shades
+- Solar Shades: https://www.luxewindowworks.com/products/solar-shades
+- Roller Shades: https://www.luxewindowworks.com/products/roller-shades
+- Roman Shades: https://www.luxewindowworks.com/products/roman-shades
+- Banded Shades: https://www.luxewindowworks.com/products/banded-shades
+- Motorization & Smart Home Integration: https://www.luxewindowworks.com/products/motorization
+- Plantation Shutters: https://www.luxewindowworks.com/products/shutters
+
+## Service Areas
+
+- Coeur d'Alene, ID: https://www.luxewindowworks.com/areas/coeur-d-alene
+- Post Falls, ID: https://www.luxewindowworks.com/areas/post-falls
+- Hayden, ID: https://www.luxewindowworks.com/areas/hayden
+- Rathdrum, ID: https://www.luxewindowworks.com/areas/rathdrum
+- Sandpoint, ID: https://www.luxewindowworks.com/areas/sandpoint
 
 ## What We Do
 
@@ -13,49 +39,84 @@ Luxe Window Works is a custom window treatment specialist based in Post Falls, I
 - **Child Safety**: Cordless and motorized options eliminating cord hazards
 - **Free Consultation**: No-pressure in-home consultation and measurement
 
-## Products
-
-- Cellular Shades (Honeycomb): https://www.luxewindowworks.com/cellular-shades/
-- Solar Shades: https://www.luxewindowworks.com/solar-shades/
-- Roller Shades: https://www.luxewindowworks.com/roller-shades/
-- Roman Shades: https://www.luxewindowworks.com/roman-shades/
-- Banded Shades: https://www.luxewindowworks.com/banded-shades/
-- Motorization: https://www.luxewindowworks.com/motorization/
-- Shutters: https://www.luxewindowworks.com/shutters/
-
-## Service Areas
-
-- Coeur d'Alene, ID: https://www.luxewindowworks.com/window-coverings-coeur-d-alene/
-- Post Falls, ID: https://www.luxewindowworks.com/window-coverings-post-falls-id/
-- Hayden, ID: https://www.luxewindowworks.com/window-coverings-hayden-id/
-- Rathdrum, ID: https://www.luxewindowworks.com/window-coverings-rathdrum-id/
-- Sandpoint, ID: https://www.luxewindowworks.com/window-coverings-sandpoint-id/
-
-## Key Pages
-
-- Homepage: https://www.luxewindowworks.com/
-- About: https://www.luxewindowworks.com/about-us/
-- Recent Projects: https://www.luxewindowworks.com/recent-projects/
-- Blog: https://www.luxewindowworks.com/blog/
-- Book Now: https://www.luxewindowworks.com/book-now/
-- Contact: https://www.luxewindowworks.com/contact-us/
-
 ## Blog & Expert Content
 
-- Why Motorized Shades Don't Respond Half the Time (And How to Fix It): https://www.luxewindowworks.com/why-motorized-shades-fail-in-northern-idaho-and-how-to-fix-them/
+- Upgrade Your Windows: Why 2.5-Inch Wood or Faux Wood Blinds Are Better Than Standard 2-Inch: https://www.luxewindowworks.com/blog/2%c2%bd-inch-wood-vs-2-inch-blinds-the-smarter-upgrade-for-idaho-homes
+- Zero Worry Windows: The 5 Biggest Fears Coeur d'Alene Homeowners Have When Buying Custom Window Treatments: https://www.luxewindowworks.com/blog/5-biggest-window-treatment-fears-in-coeur-dalene-solved
+- 5 Most Common Mistakes First-Time Window Treatment Buyers Make: https://www.luxewindowworks.com/blog/5-most-common-mistakes-first-time-window-treatment-buyers-make
+- The Future is Aluminum: Why North Idaho's Modern Luxury Homes Demand Highprofile Avenir Interior Shutters: https://www.luxewindowworks.com/blog/aluminum-interior-shutters-for-modern-north-idaho-homes
+- Are Cellular Shades Worth It for Northern Idaho Homeowners?: https://www.luxewindowworks.com/blog/are-cellular-shades-worth-it-for-northern-idaho-homes
+- Essential Tips for Battery-Operated Motorized Shades: What You Need to Know Before You Buy: https://www.luxewindowworks.com/blog/battery-operated-motorized-shades-what-to-know-before-buying
+- Blinds, Shades, and Shutters in North Idaho: Your Questions Answered: https://www.luxewindowworks.com/blog/blinds-shades-and-shutters-in-north-idaho-your-questions-answered
+- The Expert's Guide to Choosing Cellular Shades for Maximum ROI in Coeur d'Alene & Post Falls: https://www.luxewindowworks.com/blog/cellular-shades-for-energy-savings-in-coeur-dalene-post-falls
+- A Rathdrum Homeowner's Best Friend: Why Cellular Shades Are a Must-Have for Idaho's Climate: https://www.luxewindowworks.com/blog/cellular-shades-for-rathdrum-homes-built-for-idahos-climate
+- Cellular vs. Roller Shades: Maximizing Comfort and Style in Every Room of Your Northern Idaho Home: https://www.luxewindowworks.com/blog/cellular-vs-roller-shades-for-northern-idaho-homes
+- The $100,000 Cord: How a New Federal Safety Law Protects Your CDA & Post Falls Rental Portfolio: https://www.luxewindowworks.com/blog/cordless-blinds-law-for-coeur-dalene-post-falls-rentals
+- Custom Crafted in the U.S.A. — That's Something Special: https://www.luxewindowworks.com/blog/custom-crafted-in-the-u-s-a-thats-something-special
+- Luxury Meets Efficiency: Why Custom Window Treatments Are a Must-Have for Northern Idaho Homes: https://www.luxewindowworks.com/blog/custom-window-treatments-for-luxury-efficiency-in-north-idaho
+- Smarter Windows, Lower Bills: The Ultimate Guide to Energy-Efficient Shade Planning: https://www.luxewindowworks.com/blog/energy-efficient-shade-planning-for-northern-idaho-homes
+- The Science of Savings: Why Energy Efficient Window Treatments Solve Your Northern Idaho Climate & HVAC Stress: https://www.luxewindowworks.com/blog/energy-efficient-window-treatments-for-northern-idaho-homes
+- Faux Wood vs. Composite Blinds: Which Holds Up Better in Northern Idaho?: https://www.luxewindowworks.com/blog/faux-wood-vs-composite-blinds-which-holds-up-better-in-northern-idaho
+- How CDA Homeowners Use Drapes to Get Taller Ceilings, Wider Rooms, and Lower Energy Bills: https://www.luxewindowworks.com/blog/how-drapes-make-ceilings-taller-in-coeur-dalene-homes
+- How Much Does Battery-Operated Motorized Shades Installation Cost in Post Falls & Coeur d'Alene, ID?: https://www.luxewindowworks.com/blog/how-much-does-battery-operated-motorized-shades-installation-cost-in-post-falls-coeur-dalene-id
+- How to Clean Honeycomb Shades: The Complete Guide from a Pro Installer: https://www.luxewindowworks.com/blog/how-to-clean-honeycomb-shades-safely-pro-installer-guide
+- How to Measure and Install Plantation Shutters Like a Pro: https://www.luxewindowworks.com/blog/how-to-measure-and-install-plantation-shutters-like-a-pro
+- How to Restring Blinds: The Complete DIY Guide from a Pro: https://www.luxewindowworks.com/blog/how-to-restring-blinds-like-a-pro-step-by-step-guide
+- Elevate Your Northern Idaho Home with Lafayette Allure Transitional Shades: https://www.luxewindowworks.com/blog/lafayette-allure-transitional-shades-for-coeur-dalene-homes
+- The Layered Luxe Look: Combining Shutters with Motorized Shades for Ultimate Light Control: https://www.luxewindowworks.com/blog/layered-shutters-motorized-shades-for-northern-idaho-homes
+- The North Idaho Secret to a 4-Season Patio: Lockable Aluminum Shutters: https://www.luxewindowworks.com/blog/lockable-aluminum-shutters-for-4-season-patios-in-north-idaho
+- What "Made in USA" Actually Means for Window Coverings (And What It Doesn't): https://www.luxewindowworks.com/blog/made-in-usa-window-coverings-what-that-label-really-means-and-doesnt
+- Why Your CDA View Needs Mermet KoolBlack Technology, Not Just Any Screen: https://www.luxewindowworks.com/blog/mermet-koolblack-solar-screens-for-coeur-dalene-homes
+- Why Coeur d'Alene Homes Need Smart, Moisture-Proof Window Treatments for Bathrooms & Spas: https://www.luxewindowworks.com/blog/moisture-proof-window-treatments-for-coeur-dalene-bathrooms
+- Moisture-Proof Window Treatments for Kitchens, Bathrooms, and Lake Homes in Northern Idaho: https://www.luxewindowworks.com/blog/moisture-proof-window-treatments-kitchens-bathrooms-lake-homes
+- Why Active Homeowners in Coeur d'Alene Are Choosing Motorized Shades: https://www.luxewindowworks.com/blog/motorized-shades-for-active-homeowners-in-coeur-dalene
+- Why the Norman Shutter BiFold 180 Is the Perfect Solution for Bi-Folding Doors: https://www.luxewindowworks.com/blog/norman-bifold-180-shutters-for-bi-folding-doors-in-north-idaho
+- Recharging Made Easy: Norman Motorized Shades with Innovative Charging Wand: https://www.luxewindowworks.com/blog/norman-motorized-shades-with-easy-charging-in-coeur-dalene
+- Why Norman PerfectSheer Shades Are the Ultimate Window Treatment for Luxury Living: https://www.luxewindowworks.com/blog/norman-perfectsheer-shades-for-luxury-homes-in-north-idaho
+- Norman Shutters in North Idaho: Premium Craftsmanship from Luxe Window Works: https://www.luxewindowworks.com/blog/norman-shutters-in-north-idaho-premium-craftsmanship-from-luxe-window-works
+- Performance Window Treatments: Why Efficiency, Fit, and Installation Matter More Than Style: https://www.luxewindowworks.com/blog/performance-window-treatments-why-efficiency-fit-and-installation-matter-more-than-you-think
+- The Installer's Secret: Your Pre-Order Checklist for Flawless Roller Shade Performance: https://www.luxewindowworks.com/blog/roller-shade-installation-checklist-avoid-costly-measuring-mistakes-in-northern-idaho
+- The Hidden Challenge of Roller Shades: Why Window Squareness Matters for a Perfect Fit: https://www.luxewindowworks.com/blog/roller-shades-window-squareness-hidden-challenge-perfect-fit
+- The Smart Shade Showdown: Hardwired vs. RF vs. IR vs. Z-Wave for Northern Idaho Homeowners: https://www.luxewindowworks.com/blog/smart-shade-motorization-guide-for-northern-idaho-homes
+- The Patio Door Problem: Why Northern Idaho Homeowners Are Switching to Norman SmartDrape Vertical Sheer Shades: https://www.luxewindowworks.com/blog/smartdrape-patio-door-shades-in-coeur-dalene-post-falls
+- Why High-Pressure Window Treatment Sales Hurt Homeowners (And How to Spot Them): https://www.luxewindowworks.com/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry
+- Stopping Fading on Log Home Interiors: Asset Protection for Your North Idaho Retreat: https://www.luxewindowworks.com/blog/stop-sun-fading-in-north-idaho-log-homes-with-uv-shades
+- Private Equity Consolidation in Window Coverings: What Dealers and Homeowners Need to Know: https://www.luxewindowworks.com/blog/the-hidden-cost-of-consolidation-how-equity-buyouts-are-reshaping-the-window-covering-industry-the-hidden-cost-of-consolidation-how-equity-buyouts-are-reshaping-the-window-covering-industry
+- The Hidden Value of Plantation Shutters: Why They're the Smartest Upgrade for Luxury Homes in Northern Idaho: https://www.luxewindowworks.com/blog/the-hidden-value-of-plantation-shutters-in-northern-idaho-homes
+- The Ultimate Shutter Guide for Northern Idaho Homes: Choosing the Right Frame, Material & Configuration: https://www.luxewindowworks.com/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration
+- Modern Living, Modern Views: Top Shade Picks for Coeur d'Alene Homes: https://www.luxewindowworks.com/blog/top-modern-window-shades-for-coeur-dalene-homes
+- Why Active Homeowners in Coeur d'Alene Choose U-Block Blackout Shades: https://www.luxewindowworks.com/blog/u-block-blackout-shades-for-better-sleep-in-coeur-dalene
+- Why Are Window Treatments So Expensive? A First-Time Buyer's Guide to Smart, Stylish, and Budget-Friendly Choices: https://www.luxewindowworks.com/blog/why-are-window-treatments-so-expensive-a-first-time-buyers-guide-to-smart-stylish-and-budget-friendly-choices
+- Why Big Roller Shades Pucker — and What Actually Solves It: https://www.luxewindowworks.com/blog/why-big-roller-shades-pucker-and-what-actually-solves-it
+- Why Cellular Shades Are the Smart Choice for Northern Idaho Homes: https://www.luxewindowworks.com/blog/why-cellular-shades-are-the-smart-choice-for-northern-idaho-homes
+- The Draft Trap: Why Your Beloved Craftsman Feels Cold, and How Cellular Shades Can Fix It: https://www.luxewindowworks.com/blog/why-craftsman-homes-feel-cold-in-coeur-dalene-fixed
+- The Story of Our Partnership: Why Luxe Window Works Chose Lafayette Interior Fashions: https://www.luxewindowworks.com/blog/why-luxe-window-works-chose-lafayette-interior-fashions
+- Why Your Motorized Shades Don't Respond Half the Time (And How to Actually Fix It): https://www.luxewindowworks.com/blog/why-motorized-shades-fail-in-northern-idaho-and-how-to-fix-them
+- Why Performance Solar Shade Fabrics Are Worth Every Penny: A Window Pro's Honest Take: https://www.luxewindowworks.com/blog/why-performance-solar-shade-fabrics-are-worth-every-penny-a-window-pros-honest-take
+- The Price is a Lie: Why Luxe Window Works Rejects High-Pressure Sales Gimmicks: https://www.luxewindowworks.com/blog/why-window-covering-sales-discounts-are-usually-a-lie
+- Why Woodlore Plus Shutters Deliver Unrivaled Strength & Energy Efficiency: https://www.luxewindowworks.com/blog/why-woodlore-plus-shutters-deliver-unrivaled-strength-energy-efficiency
+- Design Tip: Why You Should Never Inside-Mount a Waterfall Woven Wood Shade with Cords: https://www.luxewindowworks.com/blog/why-you-should-never-inside-mount-corded-woven-wood-shades
+- Why Your Patio Door is Bleeding Energy (And What Actually Works in Northern Idaho): https://www.luxewindowworks.com/blog/why-your-patio-door-is-bleeding-energy-and-what-actually-works-in-northern-idaho
+- Window Blinds: The Complete Installer's Guide to Every Popular Shade Type (What Really Works in Northern Idaho): https://www.luxewindowworks.com/blog/window-blinds-the-complete-installers-guide-to-every-popular-shade-type-what-really-works-in-northern-idaho
+- Your Guide to Window Coverings for New Construction in Coeur d'Alene & Rathdrum: https://www.luxewindowworks.com/blog/window-coverings-for-new-construction-in-coeur-dalene-rathdrum
+- The Day I Fell in Love with Woven Woods: https://www.luxewindowworks.com/blog/woven-wood-shades-for-natural-light-in-coeur-dalene-homes
+- Your Complete Guide to Custom Blinds Installation in Northern Idaho with Luxe Window Works: https://www.luxewindowworks.com/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works
+- Why Your Window Shade is Your True HVAC Regulator in CDA & Post Falls: https://www.luxewindowworks.com/blog/your-window-shades-are-the-real-hvac-regulator-in-cda-post-falls
 
 ## Contact & Business Info
 
-- Owner: Mark Abplanalp — 20+ year window treatment industry expert
+- Owner: Mark Abplanalp — 23-year window treatment industry expert
 - Phone: (208) 660-8643
+- Email: mark@luxewindowworks.com
 - Address: 2972 N Pavo Ln, Post Falls, ID 83854
 - Hours: Mon–Fri 9am–5pm, Sat 9am–12pm, Sun Closed
 - Service Area: Coeur d'Alene, Post Falls, Hayden, Hayden Lake, Rathdrum, Sandpoint, Kootenai County
 
 ## Authority Signals
 
-- 20+ years industry expertise
+- 23 years industry expertise (since 2002)
 - Lifetime installation guarantee
-- Direct manufacturer relationships for better materials and accountability
+- Direct manufacturer relationships (Lafayette Interior Fashions, Norman Window Fashions)
 - Specialization in smart home motorization and energy efficiency
-- Serving Northern Idaho homeowners since 2002
+- Commercial experience including Apple retail locations (Apple Visitor Center Cupertino, Apple Union Square San Francisco)
+- Serving Northern Idaho homeowners since launching in Post Falls, March 2025
