@@ -233,18 +233,18 @@ export default function HomePage() {
       <section className="py-20 md:py-28 bg-charcoal text-white">
         <div className="container-luxe text-center max-w-3xl mx-auto">
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl leading-tight">
-            Ready for Window Treatments That Actually Solve Your Problems?
+            Let&apos;s Find What Works for Your Home
           </h2>
           <p className="mt-6 text-lg text-warm-gray-400 leading-relaxed">
-            Get a free in-home consultation — no pressure, no surprises. We&apos;ll measure your
-            windows, understand your needs, and recommend exactly what works for your home.
+            23 years of expertise, zero pressure. We come to you, measure everything, and recommend
+            exactly what fits your space, your style, and your budget.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/book"
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
-              Book Your Free Consultation
+              Schedule Your Free Consultation
             </Link>
             <a
               href={BUSINESS.phoneHref}
