@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 
 interface YoutubeEmbedProps {
@@ -10,20 +10,34 @@ interface YoutubeEmbedProps {
 
 export default function YoutubeEmbed({ videoId, title }: YoutubeEmbedProps) {
   const [playing, setPlaying] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const handlePlay = () => {
+    setPlaying(true);
+    // Send play command directly in response to user gesture —
+    // this is required for iOS Safari to allow playback with sound.
+    iframeRef.current?.contentWindow?.postMessage(
+      JSON.stringify({ event: "command", func: "playVideo", args: [] }),
+      "https://www.youtube.com"
+    );
+  };
 
   return (
     <div className="relative w-full aspect-video bg-charcoal">
-      {playing ? (
-        <iframe
-          className="absolute inset-0 w-full h-full"
-          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1`}
-          title={title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      ) : (
+      {/* iframe always present so iOS considers play a direct user gesture response */}
+      <iframe
+        ref={iframeRef}
+        className="absolute inset-0 w-full h-full"
+        src={`https://www.youtube.com/embed/${videoId}?rel=0&playsinline=1&enablejsapi=1`}
+        title={title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        loading="lazy"
+      />
+      {/* Thumbnail overlay — sits on top until user taps play */}
+      {!playing && (
         <button
-          onClick={() => setPlaying(true)}
+          onClick={handlePlay}
           className="group absolute inset-0 w-full h-full"
           aria-label={`Play video: ${title}`}
         >
