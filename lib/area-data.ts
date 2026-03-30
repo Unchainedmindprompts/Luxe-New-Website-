@@ -85,6 +85,43 @@ export const areaPages: Record<string, AreaPageData> = {
     neighborhoods: ["Riverview Estates", "Centennial Trail area", "Prairie Falls", "Pointe Meadows", "Cabernet Estates", "West Post Falls", "Syringa Heights", "Ross Point"],
     housingTypes: "Post Falls has experienced a building boom, meaning a significant portion of homes feature modern construction with open floor plans, large picture windows, and contemporary design. There's also a healthy mix of established ranch-style homes from the 1990s and 2000s, townhomes, and multi-family properties. New builds often have specialty window shapes — arches, angles, and floor-to-ceiling glass — that require precise custom measurement.",
     climateConsiderations: "Post Falls sits in the Spokane River corridor and tends to experience the full force of Northern Idaho's temperature extremes — single digits in winter, 90s in summer. Without the moderating effect of the lake that Coeur d'Alene enjoys, energy-efficient window treatments like cellular shades are especially valuable here. South and west-facing windows in newer homes with larger glass areas can generate significant heat gain in summer, making solar shades or quality roller shades a smart investment.",
+    markInsight: "Post Falls is our home base, so I know these neighborhoods street by street. The new construction boom here has been remarkable — and it's created a very specific set of challenges. Builder-grade windows are larger than they used to be, open floor plans mean you're often treating a wall of glass rather than individual windows, and specialty shapes like arched transoms are everywhere in the newer subdivisions. The other thing I see constantly in Post Falls new builds: buyers move in and realize they have zero privacy and zero light control because the builder doesn't include window treatments. Getting in early — ideally before you're fully moved in — makes the job easier and the result cleaner. Post Falls also hits temperature extremes harder than CDA without the lake to moderate things, so cellular shades are almost always part of the conversation.",
+    faqs: [
+      {
+        question: "When is the best time to order window treatments for a new construction home in Post Falls?",
+        answer: "The best time is before you move in, if possible. Once furniture is in place, installation gets harder — especially on large windows or specialty shapes. Ideally, schedule a consultation shortly after you close or get your move-in date. That gives enough time to measure, order, and have treatments installed before or during the first week you're in the home. Custom orders typically take 3–4 weeks; plantation shutters and custom drapes run 6–8 weeks. If you're already moved in, no problem — it just takes a bit more coordination on install day.",
+      },
+      {
+        question: "My new Post Falls home has an arched transom window above the front door — can you treat that?",
+        answer: "Yes. Arched and specialty-shaped windows are common in Post Falls new construction, and they're very treatable. The options depend on the shape and size: some arches work well with a fabric shade that follows the curve, others are better left untreated to let in light while the lower rectangular section gets a shade or shutter. For arched windows that need light control or privacy, we can fit a custom shutter with an arched top panel. During the consultation I'll assess each specialty window and give you honest options — including when leaving it bare is actually the right call.",
+      },
+      {
+        question: "Are cellular shades worth it in a newer Post Falls home that's already well-insulated?",
+        answer: "Yes, and here's why: Post Falls hits temperature extremes harder than Coeur d'Alene because there's no lake to moderate the climate. Even in a well-insulated new build, glass is always the weakest thermal link — and windows can account for 25–30% of heating and cooling loss. Cellular shades add a meaningful insulating layer at the glass itself, which complements your wall and attic insulation rather than replacing it. In a home with a lot of south or west-facing glass — which is common in Post Falls new construction — the energy impact is especially noticeable in summer.",
+      },
+      {
+        question: "How do I get window treatments that match the style of my new Post Falls home without it looking builder-basic?",
+        answer: "The biggest upgrade from builder-basic is custom sizing and layering. Off-the-shelf treatments are cut to standard sizes and rarely fit new construction windows cleanly — you'll see light gaps, awkward proportions, or treatments that just look like they don't belong. Custom-measured treatments fill the opening precisely, which immediately looks more intentional and finished. Beyond fit, layering a sheer roller shade with blackout or pairing a solar shade with side panels gives the room depth that a single product can't. During the consultation I bring samples and we look at the whole room, not just the window.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "Window Coverings for New Construction in Coeur d'Alene & Rathdrum",
+        slug: "window-coverings-for-new-construction-in-coeur-dalene-rathdrum",
+      },
+      {
+        title: "Cellular Shades for Energy Savings in Coeur d'Alene & Post Falls",
+        slug: "cellular-shades-for-energy-savings-in-coeur-dalene-post-falls",
+      },
+      {
+        title: "Your Window Shades Are the Real HVAC Regulator in CDA & Post Falls",
+        slug: "your-window-shades-are-the-real-hvac-regulator-in-cda-post-falls",
+      },
+      {
+        title: "How Much Does Battery-Operated Motorized Shade Installation Cost in Post Falls?",
+        slug: "how-much-does-battery-operated-motorized-shades-installation-cost-in-post-falls-coeur-dalene-id",
+      },
+    ],
     localCTA: "We're based right here in Post Falls and know these neighborhoods well. Schedule a free in-home consultation — Mark can usually get to Post Falls homes the fastest since it's his home base.",
     metaTitle: "Window Treatments Post Falls ID | Blinds, Shades & Shutters",
     metaDescription: "Custom window treatments for Post Falls homes. Local business specializing in new construction and growing communities. Free in-home consultation. 23 years of experience.",
