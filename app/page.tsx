@@ -60,7 +60,7 @@ export default function HomePage() {
             <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight text-balance">
               Premium Window Treatments for Northern Idaho Homes
             </h1>
-            <p className="mt-6 md:mt-8 text-gold font-medium text-sm uppercase tracking-widest">
+            <p className="mt-6 md:mt-8 text-yellow-300 font-semibold text-base md:text-lg uppercase tracking-widest">
               Free In-Home Consultation
             </p>
             <p className="mt-3 text-lg md:text-xl text-warm-gray-200 leading-relaxed max-w-2xl">
