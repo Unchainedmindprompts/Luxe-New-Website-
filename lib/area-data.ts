@@ -1,3 +1,13 @@
+export interface AreaFAQ {
+  question: string;
+  answer: string;
+}
+
+export interface AreaRelatedPost {
+  title: string;
+  slug: string;
+}
+
 export interface AreaPageData {
   slug: string;
   name: string;
@@ -7,6 +17,9 @@ export interface AreaPageData {
   neighborhoods: string[];
   housingTypes: string;
   climateConsiderations: string;
+  markInsight?: string;
+  faqs?: AreaFAQ[];
+  relatedPosts?: AreaRelatedPost[];
   localCTA: string;
   metaTitle: string;
   metaDescription: string;
@@ -22,6 +35,43 @@ export const areaPages: Record<string, AreaPageData> = {
     neighborhoods: ["Downtown Coeur d'Alene", "Sanders Beach", "Fernan Hill", "Coeur d'Alene Place", "Riverstone", "Northwest Boulevard", "Canfield Mountain", "Best Hill"],
     housingTypes: "Coeur d'Alene features an eclectic mix of housing — historic craftsman homes downtown, mid-century ranches in established neighborhoods, newer construction in planned communities, and premium lakefront and view properties. Each style has its own window treatment considerations, from the charming but uneven window frames of 1920s bungalows to the massive window walls in contemporary lakefront builds.",
     climateConsiderations: "Lake Coeur d'Alene creates its own microclimate. Homes near the water experience more humidity, which affects material choices (composite shutters over wood for lake-adjacent rooms). West-facing lakefront windows deal with intense afternoon sun reflecting off the water — solar shades with low openness factors are essential. In winter, the lake effect moderates temperatures slightly compared to inland areas, but older homes with original windows still benefit enormously from the insulating properties of cellular shades.",
+    markInsight: "Lakefront properties are some of the most rewarding to work on — and the most unforgiving if you get the materials wrong. I've seen wood shutters warp in rooms that face Lake Coeur d'Alene within a couple of seasons. Composite is the call every time near the water. And west-facing lake windows are in a category of their own — the sun reflecting off the lake is intense in a way that surprises people. I typically spec 3% or 5% openness solar shades on those exposures, and the difference is dramatic. The other thing that comes up constantly in CDA is older homes with window frames that have settled over decades. They're not square, they're not plumb, and a lot of installers just force a standard product in there. I measure every window individually, every time.",
+    faqs: [
+      {
+        question: "Do wood or composite shutters hold up better near Lake Coeur d'Alene?",
+        answer: "Composite shutters every time for rooms near the lake. Wood shutters are beautiful, but the humidity variations near Lake Coeur d'Alene — especially in lake-facing and waterfront rooms — cause them to expand, contract, and eventually warp or crack. Composite shutters like Norman's Woodlore Plus look identical to real wood, carry a lifetime warranty, and won't be affected by the moisture cycle. For interior rooms farther from the water, real wood is fine. But on any lake-facing exposure, composite is the professional recommendation.",
+      },
+      {
+        question: "My lakefront windows face west and get blinding afternoon sun off the water — what actually works?",
+        answer: "West-facing windows that catch afternoon sun reflecting off Lake Coeur d'Alene are one of the most common challenges I see. A 3% or 5% openness solar shade is the right tool — it cuts glare by 95%+ while keeping your lake view intact. A 3% fabric nearly eliminates glare; a 5% fabric lets in slightly more light with a small tradeoff in glare reduction. Both options look clean and modern and are available in motorized versions so you can adjust them from your phone when the afternoon glare kicks in.",
+      },
+      {
+        question: "I have a 1920s craftsman home in downtown CDA with original window frames that aren't square — can you still get a proper fit?",
+        answer: "Yes, and this is one of the most common situations in the historic downtown neighborhoods. Original window frames in craftsman-era homes often have significant variation from top to bottom and side to side — sometimes a quarter inch or more out of square. The key is measuring at multiple points and building the treatment to fit the actual opening, not a standard size. I measure every window individually on every job. It takes longer, but it's the only way to get a clean result in an older home.",
+      },
+      {
+        question: "Are there window treatment options that work in high-humidity rooms in a Coeur d'Alene lake home?",
+        answer: "Yes. For bathrooms, kitchens, and any rooms adjacent to the lake with high moisture exposure, the right material choices are critical. Composite or faux-wood shutters, aluminum blinds, and synthetic roller shade fabrics all hold up well in humid environments. Avoid real wood blinds and shutters, fabric Roman shades, and woven wood shades in these spaces — they'll absorb moisture, warp, or develop mildew over time. During the consultation I'll flag any high-humidity areas and steer you toward materials that will last.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "5 Biggest Window Treatment Fears Coeur d'Alene Homeowners Have — Solved",
+        slug: "5-biggest-window-treatment-fears-in-coeur-dalene-solved",
+      },
+      {
+        title: "Why Your Craftsman Home Feels Cold — and How Cellular Shades Fix It",
+        slug: "why-craftsman-homes-feel-cold-in-coeur-dalene-fixed",
+      },
+      {
+        title: "Mermet KoolBlack® Solar Screens for Coeur d'Alene Lake Views",
+        slug: "mermet-koolblack-solar-screens-for-coeur-dalene-homes",
+      },
+      {
+        title: "Moisture-Proof Window Treatments for Lake Homes, Kitchens & Bathrooms",
+        slug: "moisture-proof-window-treatments-kitchens-bathrooms-lake-homes",
+      },
+    ],
     localCTA: "Ready to find the right window treatments for your Coeur d'Alene home? Mark offers free in-home consultations throughout the Coeur d'Alene area — from lakefront properties to downtown neighborhoods.",
     metaTitle: "Window Treatments Coeur d'Alene ID | Custom Blinds, Shades & Shutters",
     metaDescription: "Custom window treatments for Coeur d'Alene homes. Specializing in lakefront properties, historic homes, and new construction. Free in-home consultation. 23 years of experience.",
