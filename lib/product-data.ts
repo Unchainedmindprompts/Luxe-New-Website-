@@ -3,10 +3,19 @@ export interface FAQ {
   answer: string;
 }
 
+export interface ProductVideo {
+  youtubeId: string;
+  title: string;
+  description: string;
+  uploadDate: string;
+  duration: string;
+}
+
 export interface ProductPageData {
   slug: string;
   name: string;
   image?: string;
+  video?: ProductVideo;
   headline: string;
   subheadline: string;
   problem: string;
@@ -329,6 +338,13 @@ export const productPages: Record<string, ProductPageData> = {
   "motorization": {
     slug: "motorization",
     name: "Motorization",
+    video: {
+      youtubeId: "BTVQo6bRGEw",
+      title: "Motorized Window Treatments — Luxe Window Works",
+      description: "See motorized window treatments in action — installed by Luxe Window Works in Northern Idaho. One tap controls every shade in the room. Battery-powered motors, no hardwiring required. Serving Post Falls, Coeur d'Alene, Hayden, and Sandpoint.",
+      uploadDate: "2025-08-30",
+      duration: "PT53S",
+    },
     headline: "One Tap. Every Shade. Perfect Position.",
     subheadline: "Smart motorized shades you can control from your phone, your voice, or the wall — because some things should just be easy.",
     problem: "You've got windows you can't easily reach — above the stairs, in a vaulted ceiling, behind furniture. Or maybe you want all your shades to go down at sunset without getting up from the couch. Or you travel and want your home to look occupied. Manual shades are fine for accessible windows, but modern homes — and modern life — call for something smarter.",
