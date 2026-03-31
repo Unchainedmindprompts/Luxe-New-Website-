@@ -6,6 +6,7 @@ import Script from "next/script";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS, PRODUCTS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
+import type { AreaPageData } from "@/lib/area-data";
 
 interface Props {
   params: { slug: string };
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function AreaSchema({ area, slug }: { area: { name: string; metaDescription?: string; description?: string }, slug: string }) {
+function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
   const areaName = area.name;
   const areaUrl = `${BUSINESS.url}/areas/${slug}`;
 
@@ -57,57 +58,6 @@ function AreaSchema({ area, slug }: { area: { name: string; metaDescription?: st
       "@type": "City",
       name: areaName,
       containedInPlace: { "@type": "State", name: "Idaho" },
-    },
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: `Custom Window Treatments in ${areaName}`,
-      itemListElement: [
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Custom Cellular Shades Installation in ${areaName}`,
-            description: `Energy-efficient honeycomb cellular shades custom-fitted for ${areaName} homes.`,
-            areaServed: areaName,
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Plantation Shutter Installation in ${areaName}`,
-            description: `Custom-measured plantation shutters for ${areaName} homes — lasting value and precise light control.`,
-            areaServed: areaName,
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Motorized Window Shade Installation in ${areaName}`,
-            description: `Smart motorized shades for ${areaName} homes, controllable by phone, voice, or wall switch.`,
-            areaServed: areaName,
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Solar Shade Installation in ${areaName}`,
-            description: `UV-blocking solar shades that preserve ${areaName} views while reducing glare and heat gain.`,
-            areaServed: areaName,
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Free In-Home Window Treatment Consultation in ${areaName}`,
-            description: `Free in-home consultation for ${areaName} homeowners. We assess your windows and recommend the right solution with no pressure and no hidden costs.`,
-            areaServed: areaName,
-          },
-        },
-      ],
     },
     sameAs: [
       "https://www.yelp.com/biz/luxe-window-works-post-falls",
@@ -205,44 +155,56 @@ function AreaSchema({ area, slug }: { area: { name: string; metaDescription?: st
     ],
   };
 
+  const faqItems = area.faqs && area.faqs.length > 0
+    ? area.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      }))
+    : [
+        {
+          "@type": "Question",
+          name: `Who does custom window treatments in ${areaName}, Idaho?`,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `Luxe Window Works provides custom window treatment installation in ${areaName}, Idaho. Founded by Mark Abplanalp — who has worked in the window treatment industry since 2002 — Luxe offers free in-home consultations, professional installation, and a lifetime workmanship guarantee. Call 208-660-8643 to schedule.`,
+          },
+        },
+        {
+          "@type": "Question",
+          name: `What window treatments work best for ${areaName} homes?`,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `For ${areaName} homes, cellular shades are the top choice for energy efficiency given Northern Idaho's extreme temperature swings. Solar shades are essential for lake and mountain-view properties to control glare without losing the view. Plantation shutters add long-term value and work well in both historic and newer construction. Motorized shades are increasingly popular for hard-to-reach windows and smart home integration.`,
+          },
+        },
+        {
+          "@type": "Question",
+          name: `Does Luxe Window Works offer free consultations in ${areaName}?`,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `Yes. Luxe Window Works offers free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities. During the consultation we assess your windows, show product samples, and provide honest recommendations with no pressure and no hidden costs. Call 208-660-8643 or book online to schedule.`,
+          },
+        },
+        {
+          "@type": "Question",
+          name: `How long does window treatment installation take in ${areaName}?`,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `Most custom window treatment orders take 3 to 4 weeks from ordering to installation in ${areaName}. Custom drapes and plantation shutters typically run 6 to 8 weeks depending on the manufacturer. Contact Luxe Window Works at 208-660-8643 for current lead times on your specific product.`,
+          },
+        },
+      ];
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "@id": `${areaUrl}#faq`,
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: `Who does custom window treatments in ${areaName}, Idaho?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: `Luxe Window Works provides custom window treatment installation in ${areaName}, Idaho. Founded by Mark Abplanalp — who has worked in the window treatment industry since 2002 — Luxe offers free in-home consultations, professional installation, and a lifetime workmanship guarantee. Call 208-660-8643 to schedule.`,
-        },
-      },
-      {
-        "@type": "Question",
-        name: `What window treatments work best for ${areaName} homes?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: `For ${areaName} homes, cellular shades are the top choice for energy efficiency given Northern Idaho's extreme temperature swings. Solar shades are essential for lake and mountain-view properties to control glare without losing the view. Plantation shutters add long-term value and work well in both historic and newer construction. Motorized shades are increasingly popular for hard-to-reach windows and smart home integration.`,
-        },
-      },
-      {
-        "@type": "Question",
-        name: `Does Luxe Window Works offer free consultations in ${areaName}?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: `Yes. Luxe Window Works offers free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities. During the consultation we assess your windows, show product samples, and provide honest recommendations with no pressure and no hidden costs. Call 208-660-8643 or book online to schedule.`,
-        },
-      },
-      {
-        "@type": "Question",
-        name: `How long does window treatment installation take in ${areaName}?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: `Most custom window treatment orders take 3 to 4 weeks from ordering to installation in ${areaName}. Custom drapes and plantation shutters typically run 6 to 8 weeks depending on the manufacturer. Contact Luxe Window Works at 208-660-8643 for current lead times on your specific product.`,
-        },
-      },
-    ],
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".area-faqs"],
+    },
+    mainEntity: faqItems,
   };
 
   return (
@@ -389,6 +351,82 @@ export default function AreaPage({ params }: Props) {
           </div>
         </div>
       </section>
+
+      {/* Mark's Local Insight */}
+      {area.markInsight && (
+        <section className="py-16 md:py-20 bg-cream/50">
+          <div className="container-luxe max-w-3xl">
+            <div className="bg-linen/60 border border-warm-gray-200/60 rounded-2xl p-8 md:p-12">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-gold/20 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">
+                  Mark&apos;s Local Insight
+                </h2>
+              </div>
+              <p className="text-warm-gray-600 leading-relaxed text-[17px] italic">
+                &ldquo;{area.markInsight}&rdquo;
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* FAQs */}
+      {area.faqs && area.faqs.length > 0 && (
+        <section className="area-faqs py-16 md:py-20 bg-warm-white">
+          <div className="container-luxe max-w-3xl">
+            <h2 className="font-serif text-2xl sm:text-3xl text-charcoal mb-8">
+              Common Questions About Window Treatments in {area.name}
+            </h2>
+            <div className="space-y-6">
+              {area.faqs.map((faq, i) => (
+                <div key={i} className="bg-white rounded-2xl p-6 md:p-8 border border-warm-gray-200/60">
+                  <h3 className="font-serif text-lg font-semibold text-charcoal mb-3">
+                    {faq.question}
+                  </h3>
+                  <p className="text-warm-gray-600 leading-relaxed">
+                    {faq.answer}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Related Blog Posts */}
+      {area.relatedPosts && area.relatedPosts.length > 0 && (
+        <section className="py-16 md:py-20 bg-cream/50">
+          <div className="container-luxe max-w-3xl">
+            <h2 className="font-serif text-2xl sm:text-3xl text-charcoal mb-8">
+              Further Reading for {area.name} Homeowners
+            </h2>
+            <div className="space-y-3">
+              {area.relatedPosts.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="flex items-center gap-3 bg-white rounded-xl p-5 border border-warm-gray-200/60 hover:border-gold/30 hover:shadow-md transition-all group"
+                >
+                  <svg className="w-5 h-5 text-gold shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span className="text-charcoal font-medium group-hover:text-gold transition-colors">
+                    {post.title}
+                  </span>
+                  <svg className="w-4 h-4 text-warm-gray-400 group-hover:text-gold group-hover:translate-x-1 transition-all ml-auto shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Products Available */}
       <section className="py-16 md:py-20 bg-cream/50">
