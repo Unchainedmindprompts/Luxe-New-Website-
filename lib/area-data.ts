@@ -135,6 +135,43 @@ export const areaPages: Record<string, AreaPageData> = {
     neighborhoods: ["Hayden Lake waterfront", "Honeysuckle Beach area", "Government Way corridor", "Atlas Road neighborhoods", "Hayden Meadows", "Lancaster Road area"],
     housingTypes: "Hayden offers everything from luxury lakefront properties on Hayden Lake — often with expansive windows designed to showcase water views — to comfortable family homes in established neighborhoods and newer construction in developing areas. The lakefront and near-lake properties tend toward larger, more architecturally distinctive homes that benefit from premium treatments like shutters and motorized solutions.",
     climateConsiderations: "Hayden Lake properties deal with similar water-reflection glare issues as Coeur d'Alene lakefront homes, making solar shades a popular choice. Inland Hayden neighborhoods experience the full range of Northern Idaho temperature extremes without lake moderation. The area's elevation means slightly more snow and cold in winter than lower-lying Post Falls, making energy efficiency an important factor in window treatment selection.",
+    markInsight: "Hayden is interesting because it's two very different markets in the same city. Hayden Lake properties are some of the most architecturally distinctive homes I work in — large windows, premium finishes, owners who have strong opinions about what they want. Then a few miles away you have the family neighborhoods along Government Way and Atlas Road where the priorities are completely different: privacy, light control, durability for kids and pets. I approach those two conversations very differently. On the lake properties, motorized shades come up constantly — especially for clerestory windows and high installations where manual operation just isn't practical. In the family neighborhoods, it's usually about finding something that looks great, holds up, and doesn't require a lot of fuss.",
+    faqs: [
+      {
+        question: "What window treatments work best for Hayden Lake waterfront properties with large view windows?",
+        answer: "Solar shades are the go-to for lake-view windows — they cut glare and UV while keeping the view intact, which is exactly what you want on Hayden Lake. For openness factor, most lakefront clients land on 3% or 5% fabric depending on how much direct sun the window gets. On larger window walls or hard-to-reach installations, motorized solar shades are worth the investment — you can adjust them from your phone as the sun moves without touching them. For rooms where you also need full privacy at night, a layered approach works well: solar shade for daytime glare control, blackout roller behind it for evenings.",
+      },
+      {
+        question: "Are plantation shutters a good fit for a home near Hayden Lake?",
+        answer: "Shutters are one of the strongest choices for Hayden Lake properties — they add architectural character that matches the quality of the home, they provide precise light control, and they hold their value well. For rooms directly adjacent to the lake or with high humidity exposure, the same material guidance applies as with any lake property: Norman's Osmo-finished wood or a composite like Woodlore Plus will hold up better than standard wood. For interior rooms away from direct moisture, real wood shutters are a beautiful option. The premium look of shutters also photographs well, which matters for higher-value lake homes.",
+      },
+      {
+        question: "I have a vacation home on Hayden Lake — is it worth getting motorized shades for a property I only use part of the year?",
+        answer: "It's actually one of the best use cases for motorization. Motorized shades let you control your home remotely — you can lower shades before you arrive to keep the house cool in summer, raise them to check in on the property, or set schedules so treatments are in the right position when you get there. For a vacation home, manual treatments mean either leaving them in one position for months or arriving to a house that's been in full sun all summer. Motorized shades via a phone app solve that completely. Battery-operated motors are also easy to install in a vacation home since there's no hardwiring required.",
+      },
+      {
+        question: "How do I choose window treatments for a Hayden home with a mix of lake-view rooms and standard interior rooms?",
+        answer: "You don't have to use the same product everywhere, and you usually shouldn't. The lake-facing rooms are a different problem than the bedrooms or home office — they need glare control and view preservation more than blackout. A common approach: solar shades on the lake-view windows, cellular or roller shades in bedrooms for privacy and light control, and shutters in bathrooms or rooms where you want something that looks built-in and permanent. During the consultation I'll go room by room and make sure each window gets the treatment that actually fits what that space needs.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "Smart Shade Motorization Guide for Northern Idaho Homes",
+        slug: "smart-shade-motorization-guide-for-northern-idaho-homes",
+      },
+      {
+        title: "Layered Shutters & Motorized Shades for Northern Idaho Homes",
+        slug: "layered-shutters-motorized-shades-for-northern-idaho-homes",
+      },
+      {
+        title: "The Hidden Value of Plantation Shutters in Northern Idaho Homes",
+        slug: "the-hidden-value-of-plantation-shutters-in-northern-idaho-homes",
+      },
+      {
+        title: "Norman Motorized Shades with Easy Charging in Coeur d'Alene",
+        slug: "norman-motorized-shades-with-easy-charging-in-coeur-dalene",
+      },
+    ],
     localCTA: "Whether you're on Hayden Lake or in one of the family neighborhoods, Mark provides free in-home consultations throughout the Hayden area. Let's find the right solution for your space.",
     metaTitle: "Window Treatments Hayden ID | Custom Blinds, Shades & Shutters",
     metaDescription: "Custom window treatments for Hayden, ID homes. Specializing in Hayden Lake properties and residential neighborhoods. Free in-home consultation. 23 years of experience.",
