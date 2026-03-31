@@ -185,6 +185,43 @@ export const areaPages: Record<string, AreaPageData> = {
     neighborhoods: ["Rathdrum proper", "Westmond area", "Twin Lakes vicinity", "Highway 41 corridor", "Spirit Lake cutoff area", "Prairie developments"],
     housingTypes: "Rathdrum's housing is predominantly newer construction — ranch-style and two-story homes in planned subdivisions, many featuring open floor plans with large windows. There's also a mix of established small-town homes near Rathdrum's downtown core and larger rural properties on the outskirts. New builds typically have modern window sizes and shapes that work well with contemporary treatments like banded shades and roller shades.",
     climateConsiderations: "Rathdrum sits on the Rathdrum Prairie at a slightly higher elevation than Post Falls or Coeur d'Alene, which means colder winters and more exposure to weather. Wind can be a factor on the prairie, making well-fitted window treatments important for both insulation and comfort. The combination of newer construction (which tends to be more energy-efficient) and extreme temperatures makes cellular shades a particularly smart investment here — they complement modern insulation rather than fighting against drafty older windows.",
+    markInsight: "Rathdrum surprises people. The growth out here has been fast — new subdivisions that didn't exist five years ago are now full neighborhoods. But the prairie setting changes things in ways that new homeowners don't always anticipate. Wind is a real factor out here in a way it isn't in CDA or Post Falls. Well-fitted window treatments aren't just about looks — on the prairie, a cellular shade that seals properly at the frame makes a noticeable difference in how the house feels on a windy winter day. The other thing I tell Rathdrum homeowners: newer construction doesn't mean your windows are already handled. Builder-grade windows are more energy-efficient than they used to be, but glass is still glass, and the temperature swings on the prairie are serious. Cellular shades are almost always the right starting point here.",
+    faqs: [
+      {
+        question: "Does the wind on the Rathdrum Prairie affect what window treatments I should choose?",
+        answer: "It can, yes — and it's something a lot of new Rathdrum homeowners don't think about until their first winter. On the Rathdrum Prairie, wind-driven cold infiltration around window frames is more common than in sheltered neighborhoods closer to the lakes. A properly fitted cellular shade that makes contact with the frame on all sides creates an additional barrier that makes a real difference on windy days. Fit matters as much as the product itself — which is why precise custom measurement is important, not just picking the right shade. Sloppy sizing that leaves gaps defeats the purpose.",
+      },
+      {
+        question: "My Rathdrum home was built recently and is well-insulated — do I still need energy-efficient window treatments?",
+        answer: "Yes. Even in a new build with good insulation, windows are the thermal weak point — glass conducts heat and cold far more readily than an insulated wall. Modern energy-efficient windows are better than they used to be, but adding a cellular shade at the glass itself is a meaningful additional layer. Think of it like a good jacket over a good sweater — both matter. In Rathdrum specifically, where winters are colder and windier than in lower-elevation communities in the corridor, cellular shades on south, east, and west exposures are a smart investment regardless of how new the home is.",
+      },
+      {
+        question: "What's the best window treatment for the large windows in my Rathdrum new construction home?",
+        answer: "It depends on the room and orientation, but for Rathdrum new builds the most common starting point is cellular shades for bedrooms and main living areas — they handle the energy efficiency piece and look clean and modern. For south and west-facing windows that get strong afternoon sun, a solar shade is worth layering in if you want to keep the light without the heat. Open floor plans with large picture windows often do well with a roller shade in a neutral fabric — it keeps things visually clean while giving you light control. I'll go window by window during the consultation rather than pushing one product across the whole house.",
+      },
+      {
+        question: "Are there window treatment options that hold up well with kids and pets in a Rathdrum family home?",
+        answer: "Yes, and it's one of the most common conversations I have with Rathdrum families. Cordless and motorized options are the safest choice for households with young kids — no cords means no hazard, and it's now the standard I recommend regardless. For durability, faux-wood blinds and composite shutters hold up to bumps, humidity, and general family life better than fabric-only options. Roller shades in performance fabrics are also surprisingly durable and easy to wipe down. The products I carry are made by manufacturers — Lafayette Interior Fashions, Norman Window Fashions, Alta — who back them with real warranties, so if something does get damaged, there's a path to resolution.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "Cellular Shades for Rathdrum Homes Built for Idaho's Climate",
+        slug: "cellular-shades-for-rathdrum-homes-built-for-idahos-climate",
+      },
+      {
+        title: "Window Coverings for New Construction in Coeur d'Alene & Rathdrum",
+        slug: "window-coverings-for-new-construction-in-coeur-dalene-rathdrum",
+      },
+      {
+        title: "Why Cellular Shades Are the Smart Choice for Northern Idaho Homes",
+        slug: "why-cellular-shades-are-the-smart-choice-for-northern-idaho-homes",
+      },
+      {
+        title: "Energy-Efficient Window Treatments for Northern Idaho Homes",
+        slug: "energy-efficient-window-treatments-for-northern-idaho-homes",
+      },
+    ],
     localCTA: "Rathdrum is growing fast, and we're growing with it. Whether you're in a brand-new subdivision or one of the established neighborhoods, Mark offers free in-home consultations throughout the Rathdrum area.",
     metaTitle: "Window Treatments Rathdrum ID | Blinds, Shades & Shutters",
     metaDescription: "Custom window treatments for Rathdrum, ID homes. Specializing in new construction and growing communities. Free in-home consultation. 23 years of experience.",
