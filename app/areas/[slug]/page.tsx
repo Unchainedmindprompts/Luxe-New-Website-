@@ -59,57 +59,6 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
       name: areaName,
       containedInPlace: { "@type": "State", name: "Idaho" },
     },
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: `Custom Window Treatments in ${areaName}`,
-      itemListElement: [
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Custom Cellular Shades Installation in ${areaName}`,
-            description: `Energy-efficient honeycomb cellular shades custom-fitted for ${areaName} homes.`,
-            areaServed: areaName,
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Plantation Shutter Installation in ${areaName}`,
-            description: `Custom-measured plantation shutters for ${areaName} homes — lasting value and precise light control.`,
-            areaServed: areaName,
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Motorized Window Shade Installation in ${areaName}`,
-            description: `Smart motorized shades for ${areaName} homes, controllable by phone, voice, or wall switch.`,
-            areaServed: areaName,
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Solar Shade Installation in ${areaName}`,
-            description: `UV-blocking solar shades that preserve ${areaName} views while reducing glare and heat gain.`,
-            areaServed: areaName,
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Free In-Home Window Treatment Consultation in ${areaName}`,
-            description: `Free in-home consultation for ${areaName} homeowners. We assess your windows and recommend the right solution with no pressure and no hidden costs.`,
-            areaServed: areaName,
-          },
-        },
-      ],
-    },
     sameAs: [
       "https://www.yelp.com/biz/luxe-window-works-post-falls",
       "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
@@ -251,6 +200,10 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "@id": `${areaUrl}#faq`,
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".area-faqs"],
+    },
     mainEntity: faqItems,
   };
 
@@ -424,7 +377,7 @@ export default function AreaPage({ params }: Props) {
 
       {/* FAQs */}
       {area.faqs && area.faqs.length > 0 && (
-        <section className="py-16 md:py-20 bg-warm-white">
+        <section className="area-faqs py-16 md:py-20 bg-warm-white">
           <div className="container-luxe max-w-3xl">
             <h2 className="font-serif text-2xl sm:text-3xl text-charcoal mb-8">
               Common Questions About Window Treatments in {area.name}
