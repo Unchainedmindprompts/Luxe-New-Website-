@@ -18,7 +18,7 @@ export default function YoutubeEmbed({ videoId, title }: YoutubeEmbedProps) {
     // this is required for iOS Safari to allow playback with sound.
     iframeRef.current?.contentWindow?.postMessage(
       JSON.stringify({ event: "command", func: "playVideo", args: [] }),
-      "https://www.youtube.com"
+      "https://www.youtube-nocookie.com"
     );
   };
 
@@ -28,7 +28,7 @@ export default function YoutubeEmbed({ videoId, title }: YoutubeEmbedProps) {
       <iframe
         ref={iframeRef}
         className="absolute inset-0 w-full h-full"
-        src={`https://www.youtube.com/embed/${videoId}?rel=0&playsinline=1&enablejsapi=1`}
+        src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&playsinline=1&enablejsapi=1`}
         title={title}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
