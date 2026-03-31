@@ -235,6 +235,43 @@ export const areaPages: Record<string, AreaPageData> = {
     neighborhoods: ["Downtown Sandpoint", "Lake Pend Oreille waterfront", "Bottle Bay", "Sagle area", "Ponder Point", "Gold Hill", "Schweitzer Mountain area"],
     housingTypes: "Sandpoint features some of Northern Idaho's most architecturally distinctive homes. Lakefront properties often have massive window walls designed to maximize lake and mountain views. Mountain homes near Schweitzer may feature lodge-style architecture with soaring ceilings and dramatic window configurations. Downtown Sandpoint has charming older homes with character and quirky window shapes. Each requires a tailored approach.",
     climateConsiderations: "Sandpoint's northerly location means longer, colder winters and more snow than communities further south in the corridor. Lake Pend Oreille moderates temperatures somewhat for waterfront properties, but inland and mountain-area homes experience the full force of Northern Idaho winter. Summer brings long, warm days with intense sun that reflects brilliantly off the lake — making solar protection crucial for waterfront properties. The combination of extreme seasons and premium homes makes energy-efficient, high-quality window treatments not just a comfort issue but a home protection investment.",
+    markInsight: "Sandpoint is genuinely one of my favorite places to work. The drive is beautiful, and the homes up there are some of the most architecturally interesting in the whole region. Lake Pend Oreille is massive — the views are in a completely different category than anywhere else I serve. That changes the conversation around window treatments significantly. Nobody up there wants to block the view. So the question is always how do we manage the sun and protect the home without taking away the reason you bought the place. Motorization also comes up more in Sandpoint than anywhere else — lodge-style homes with 18 or 20-foot ceilings and clerestory windows aren't something you can treat manually. You need a motorized solution, and often a longer rod or specialty lift system. I've done enough of these to know what works.",
+    faqs: [
+      {
+        question: "What window treatments let me keep my view of Lake Pend Oreille while controlling glare?",
+        answer: "Solar shades are the right product for lake-view windows in Sandpoint. The key is choosing the correct openness factor — the percentage of light that passes through the fabric. A 3% fabric cuts the overwhelming majority of glare while keeping the view fully visible; a 5% fabric lets in a bit more light with a slight tradeoff. Both options look clean and nearly invisible from inside when looking out. For windows that also need full privacy at night, a dual shade system — solar shade in front, blackout or privacy roller behind — gives you control at any time of day without sacrificing the daytime view. Lake Pend Oreille is too good a view to compromise.",
+      },
+      {
+        question: "I have a lodge-style home near Schweitzer with very tall windows — what are my options?",
+        answer: "Motorization is the practical answer for tall windows in lodge-style homes, and it's what I recommend almost universally for these installations. Manual operation on a 16 or 20-foot window isn't realistic — the cords are unwieldy and the operation wears out over time. Motorized shades on a battery or hardwired motor can be operated by phone, remote, or voice, and can be set on schedules. For clerestory windows that are purely decorative and don't need covering, sometimes the right answer is to leave them as-is and focus treatment on the lower operable windows. I'll assess each window during the consultation and give you an honest take on what's worth treating and how.",
+      },
+      {
+        question: "How do I protect furniture and floors from sun damage in a Sandpoint home with big windows?",
+        answer: "UV protection is one of the strongest arguments for solar shades on Lake Pend Oreille waterfront and view properties. Summer days in Sandpoint are long and the sun angle off the lake intensifies UV exposure significantly. Solar shade fabrics block 95–99% of UV rays depending on the fabric and openness factor — even a 10% open fabric blocks the vast majority of damaging UV while letting in diffused natural light. Hardwood floors, rugs, upholstery, and artwork are all vulnerable to fading without UV protection at the glass. The investment in good solar shades typically costs far less than refinishing floors or replacing furniture.",
+      },
+      {
+        question: "Is it worth investing in quality window treatments for a Sandpoint vacation home I use seasonally?",
+        answer: "Yes — possibly more so than a primary residence. A vacation home sits empty and unmonitored for long stretches, which means windows that face south or west are taking full sun exposure with no one there to close a shade. UV damage, heat buildup, and fading happen whether you're home or not. Quality solar shades on those exposures protect your investment year-round. Motorized shades add another layer of value for a vacation property — you can control them remotely, lower them before you arrive to keep the house at a reasonable temperature, and set schedules so the home is always in the right position. For a home at Sandpoint's price point, the treatment cost is a small fraction of what you're protecting.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "Stop Sun Fading in North Idaho Log Homes with UV Shades",
+        slug: "stop-sun-fading-in-north-idaho-log-homes-with-uv-shades",
+      },
+      {
+        title: "Smart Shade Motorization Guide for Northern Idaho Homes",
+        slug: "smart-shade-motorization-guide-for-northern-idaho-homes",
+      },
+      {
+        title: "Custom Window Treatments for Luxury & Efficiency in North Idaho",
+        slug: "custom-window-treatments-for-luxury-efficiency-in-north-idaho",
+      },
+      {
+        title: "Why Performance Solar Shade Fabrics Are Worth Every Penny",
+        slug: "why-performance-solar-shade-fabrics-are-worth-every-penny-a-window-pros-honest-take",
+      },
+    ],
     localCTA: "Mark serves the greater Sandpoint area including lakefront properties, downtown homes, and the Schweitzer corridor. Schedule a free in-home consultation — the drive to Sandpoint is one of his favorites.",
     metaTitle: "Window Treatments Sandpoint ID | Custom Blinds, Shades & Shutters",
     metaDescription: "Luxury window treatments for Sandpoint, ID homes. Specializing in Lake Pend Oreille waterfront properties and mountain homes. Free consultation. 23 years of experience.",
