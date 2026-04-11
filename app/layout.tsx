@@ -239,6 +239,8 @@ const localBusinessSchema = {
     "https://www.yelp.com/biz/luxe-window-works-post-falls",
     "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
     "https://www.yellowpages.com/post-falls-id/mip/luxe-window-works-llc-579719675",
+    "https://www.instagram.com/luxewindowworks",
+    "https://www.facebook.com/profile.php?id=61573190815920",
   ],
   aggregateRating: {
     "@type": "AggregateRating",
