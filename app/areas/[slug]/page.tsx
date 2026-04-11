@@ -46,34 +46,6 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
   const areaName = area.name;
   const areaUrl = `${BUSINESS.url}/areas/${slug}`;
 
-  const localBusinessSchema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "@id": `${BUSINESS.url}/#business`,
-    name: BUSINESS.name,
-    url: BUSINESS.url,
-    telephone: BUSINESS.phone,
-    email: "mark@luxewindowworks.com",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: BUSINESS.address.street,
-      addressLocality: BUSINESS.address.city,
-      addressRegion: BUSINESS.address.state,
-      postalCode: BUSINESS.address.zip,
-      addressCountry: "US",
-    },
-    areaServed: {
-      "@type": "City",
-      name: areaName,
-      containedInPlace: { "@type": "State", name: "Idaho" },
-    },
-    sameAs: [
-      "https://www.yelp.com/biz/luxe-window-works-post-falls",
-      "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
-      "https://share.google/pRM5IoXZgRTksImvp",
-    ],
-  };
-
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -81,13 +53,7 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
     name: `Custom Window Treatments in ${areaName}, Idaho`,
     serviceType: "Custom Window Treatments",
     description: `Professional custom window treatment installation in ${areaName}, Idaho. Luxe Window Works offers cellular shades, plantation shutters, solar shades, roller shades, motorized window treatments, and free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities.`,
-    provider: {
-      "@type": "LocalBusiness",
-      "@id": `${BUSINESS.url}/#business`,
-      name: BUSINESS.name,
-      url: BUSINESS.url,
-      telephone: BUSINESS.phone,
-    },
+    provider: { "@id": `${BUSINESS.url}/#business` },
     areaServed: {
       "@type": "City",
       name: areaName,
@@ -145,11 +111,7 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
       price: "0",
       priceCurrency: "USD",
       description: `Free in-home window treatment consultation for ${areaName} homeowners.`,
-      seller: {
-        "@type": "LocalBusiness",
-        name: BUSINESS.name,
-        telephone: BUSINESS.phone,
-      },
+      seller: { "@id": `${BUSINESS.url}/#business` },
     },
   };
 
@@ -221,11 +183,6 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
         id={`area-service-schema-${slug}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
-      />
-      <Script
-        id={`area-localbusiness-schema-${slug}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
       />
       <Script
         id={`area-breadcrumb-schema-${slug}`}
