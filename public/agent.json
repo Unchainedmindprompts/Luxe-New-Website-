@@ -25,7 +25,7 @@
     {
       "name": "Free In-Home Consultation",
       "description": "No-pressure in-home consultation and measurement for custom window treatments. We listen to your needs and recommend the right solution for your budget.",
-      "url": "https://www.luxewindowworks.com/book-now/",
+      "url": "https://www.luxewindowworks.com/book",
       "type": "service",
       "cost": "free"
     },
@@ -38,19 +38,19 @@
     {
       "name": "Motorization & Smart Home Integration",
       "description": "Professional motorized shade installation with Bond Bridge Pro and smart home scene automation. Solves RF signal issues in large homes.",
-      "url": "https://www.luxewindowworks.com/motorization/",
+      "url": "https://www.luxewindowworks.com/products/motorization",
       "type": "service"
     },
     {
       "name": "Plantation Shutters",
       "description": "Premium custom plantation shutters for light control, privacy, and home value.",
-      "url": "https://www.luxewindowworks.com/shutters/",
+      "url": "https://www.luxewindowworks.com/products/shutters",
       "type": "service"
     },
     {
       "name": "Energy Efficiency Consultation",
       "description": "Cellular honeycomb shades that reduce energy costs up to 20% with R-values up to 7.86. Expert advice on energy-efficient window treatments for Northern Idaho climate.",
-      "url": "https://www.luxewindowworks.com/cellular-shades/",
+      "url": "https://www.luxewindowworks.com/products/cellular-shades",
       "type": "service"
     }
   ],
@@ -67,7 +67,7 @@
     "Coeur d'Alene Blinds and Shades"
   ],
   "differentiators": [
-    "20+ years industry expertise",
+    "23 years industry expertise",
     "Lifetime installation guarantee",
     "Direct manufacturer relationships",
     "Local Post Falls business",
@@ -76,7 +76,7 @@
   ],
   "primary_cta": {
     "label": "Book a Free Consultation",
-    "url": "https://www.luxewindowworks.com/book-now/",
+    "url": "https://www.luxewindowworks.com/book",
     "description": "Free in-home consultation and measurement — no pressure, no obligation"
   }
 }
