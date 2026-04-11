@@ -15,6 +15,14 @@ export const metadata: Metadata = {
     title: "Blog | Luxe Window Works",
     description: "Expert window treatment advice for Northern Idaho homeowners.",
     type: "website",
+    images: [
+      {
+        url: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
+        width: 1200,
+        height: 630,
+        alt: "Luxe Window Works — Custom Window Treatments in Northern Idaho",
+      },
+    ],
   },
 };
 

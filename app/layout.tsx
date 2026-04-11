@@ -52,12 +52,21 @@ export const metadata: Metadata = {
     title: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
     description:
       "Premium custom window treatments with two decades of hands-on expertise. Free in-home consultation. Serving Northern Idaho.",
+    images: [
+      {
+        url: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
+        width: 1200,
+        height: 630,
+        alt: "Luxe Window Works — Custom Window Treatments in Northern Idaho",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
     description:
       "Premium custom window treatments with two decades of hands-on expertise. Free in-home consultation.",
+    images: ["https://www.luxewindowworks.com/images/hero-modern-living.webp"],
   },
   robots: {
     index: true,
