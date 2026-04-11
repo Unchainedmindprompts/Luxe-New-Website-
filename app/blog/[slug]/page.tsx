@@ -130,42 +130,8 @@ function deriveKeywords(post: BlogPost): string {
   return Array.from(kw).join(", ");
 }
 
-/** Full Person schema for Mark — reused in every post */
-const markAuthorSchema = {
-  "@type": "Person",
-  "@id": "https://www.luxewindowworks.com/about#mark-abplanalp",
-  name: "Mark Abplanalp",
-  jobTitle: "Owner & Window Treatment Specialist",
-  description:
-    "Mark Abplanalp has worked in the window treatment industry since 2002 — 23 years of hands-on sales, design, and installation experience. He launched Luxe Window Works in Post Falls, Idaho in March 2025, focused on family-owned manufacturers and locally owned service.",
-  url: "https://www.luxewindowworks.com/about",
-  worksFor: {
-    "@type": "LocalBusiness",
-    "@id": "https://www.luxewindowworks.com/#business",
-    name: "Luxe Window Works",
-    url: "https://www.luxewindowworks.com",
-  },
-  knowsAbout: [
-    "custom window treatments",
-    "plantation shutters",
-    "cellular shades",
-    "motorized window treatments",
-    "solar shades",
-    "roller shades",
-    "window treatment installation",
-    "energy efficient window coverings",
-    "Northern Idaho home design",
-    "fenestration design",
-    "commercial window treatments",
-  ],
-  areaServed: [
-    "Coeur d'Alene, Idaho",
-    "Post Falls, Idaho",
-    "Hayden, Idaho",
-    "Sandpoint, Idaho",
-    "Northern Idaho",
-  ],
-};
+/** Author reference — full entity defined in layout.tsx LocalBusiness founder */
+const markAuthorRef = { "@id": "https://www.luxewindowworks.com/#owner" };
 
 /** FAQPage schema — installation timeline post */
 const installationFAQSchema = {
@@ -380,22 +346,8 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     articleSection: post.category,
     keywords: deriveKeywords(post),
     inLanguage: "en-US",
-    author: markAuthorSchema,
-    publisher: {
-      "@type": "LocalBusiness",
-      "@id": "https://www.luxewindowworks.com/#business",
-      name: BUSINESS.name,
-      url: BUSINESS.url,
-      telephone: BUSINESS.phone,
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: BUSINESS.address.street,
-        addressLocality: BUSINESS.address.city,
-        addressRegion: BUSINESS.address.state,
-        postalCode: BUSINESS.address.zip,
-        addressCountry: "US",
-      },
-    },
+    author: markAuthorRef,
+    publisher: { "@id": "https://www.luxewindowworks.com/#business" },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `${BUSINESS.url}/blog/${post.slug}`,
@@ -404,11 +356,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
       "@type": "Blog",
       "@id": `${BUSINESS.url}/blog`,
       name: "Luxe Window Works Blog",
-      publisher: {
-        "@type": "LocalBusiness",
-        "@id": "https://www.luxewindowworks.com/#business",
-        name: BUSINESS.name,
-      },
+      publisher: { "@id": "https://www.luxewindowworks.com/#business" },
     },
     speakable: {
       "@type": "SpeakableSpecification",

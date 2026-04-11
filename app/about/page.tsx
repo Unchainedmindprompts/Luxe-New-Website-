@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
-  "@id": "https://www.luxewindowworks.com/about#mark-abplanalp",
+  "@id": "https://www.luxewindowworks.com/#owner",
   name: "Mark Abplanalp",
   jobTitle: "Owner & Window Treatment Specialist",
   description:
@@ -45,12 +45,7 @@ const personSchema = {
     postalCode: "83854",
     addressCountry: "US",
   },
-  worksFor: {
-    "@type": "LocalBusiness",
-    "@id": "https://www.luxewindowworks.com/#business",
-    name: "Luxe Window Works",
-    url: "https://www.luxewindowworks.com",
-  },
+  worksFor: { "@id": "https://www.luxewindowworks.com/#business" },
   foundingDate: "2002",
   hasOccupation: {
     "@type": "Occupation",
