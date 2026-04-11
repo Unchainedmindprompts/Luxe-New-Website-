@@ -30,6 +30,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: area.metaTitle,
       description: area.metaDescription,
       type: "website",
+      images: [
+        {
+          url: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
+          width: 1200,
+          height: 630,
+          alt: "Luxe Window Works — Custom Window Treatments in Northern Idaho",
+        },
+      ],
     },
   };
 }

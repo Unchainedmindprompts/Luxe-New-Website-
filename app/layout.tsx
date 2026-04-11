@@ -52,12 +52,21 @@ export const metadata: Metadata = {
     title: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
     description:
       "Premium custom window treatments with two decades of hands-on expertise. Free in-home consultation. Serving Northern Idaho.",
+    images: [
+      {
+        url: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
+        width: 1200,
+        height: 630,
+        alt: "Luxe Window Works — Custom Window Treatments in Northern Idaho",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
     description:
       "Premium custom window treatments with two decades of hands-on expertise. Free in-home consultation.",
+    images: ["https://www.luxewindowworks.com/images/hero-modern-living.webp"],
   },
   robots: {
     index: true,
@@ -67,7 +76,7 @@ export const metadata: Metadata = {
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
   "@id": "https://www.luxewindowworks.com/#business",
   name: "Luxe Window Works",
   description:
@@ -79,14 +88,14 @@ const localBusinessSchema = {
   foundingDate: "2025",
   founder: {
     "@type": "Person",
-    "@id": "https://www.luxewindowworks.com/about#mark-abplanalp",
+    "@id": "https://www.luxewindowworks.com/#owner",
     name: "Mark Abplanalp",
     jobTitle: "Owner & Window Treatment Specialist",
     description:
       "Mark Abplanalp has worked in the window treatment industry since 2002 — 23 years of hands-on sales, design, and installation experience. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025, focused on family-owned manufacturers and locally owned service. Mark personally handles every consultation, measurement, and installation.",
     url: "https://www.luxewindowworks.com/about",
     image: "https://www.luxewindowworks.com/_next/image?url=%2Fimages%2Fmark-photo.webp&w=3840&q=80",
-    worksFor: { "@type": "LocalBusiness", name: "Luxe Window Works" },
+    worksFor: { "@id": "https://www.luxewindowworks.com/#business" },
     knowsAbout: [
       "custom window treatments",
       "plantation shutters",
@@ -120,6 +129,12 @@ const localBusinessSchema = {
     addressRegion: "ID",
     postalCode: "83854",
     addressCountry: "US",
+  },
+  image: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: "47.736435",
+    longitude: "-116.879122",
   },
   areaServed: [
     {
@@ -213,7 +228,7 @@ const localBusinessSchema = {
     {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: "Saturday",
-      opens: "10:00",
+      opens: "09:00",
       closes: "14:00",
     },
   ],
@@ -224,6 +239,8 @@ const localBusinessSchema = {
     "https://www.yelp.com/biz/luxe-window-works-post-falls",
     "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
     "https://www.yellowpages.com/post-falls-id/mip/luxe-window-works-llc-579719675",
+    "https://www.instagram.com/luxewindowworks",
+    "https://www.facebook.com/profile.php?id=61573190815920",
   ],
   aggregateRating: {
     "@type": "AggregateRating",
