@@ -341,7 +341,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
-    dateModified: post.dateModified || post.date,
+    dateModified: (() => { const d = post.dateModified || post.date; return d.includes("T") ? d : `${d}T00:00:00Z`; })(),
     wordCount: post.wordCount,
     articleSection: post.category,
     keywords: deriveKeywords(post),
