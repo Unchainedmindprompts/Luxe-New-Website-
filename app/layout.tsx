@@ -121,6 +121,7 @@ const localBusinessSchema = {
     postalCode: "83854",
     addressCountry: "US",
   },
+  image: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
   geo: {
     "@type": "GeoCoordinates",
     latitude: "47.736435",
