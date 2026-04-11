@@ -121,6 +121,11 @@ const localBusinessSchema = {
     postalCode: "83854",
     addressCountry: "US",
   },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: "47.736435",
+    longitude: "-116.879122",
+  },
   areaServed: [
     {
       "@type": "City",
