@@ -40,7 +40,7 @@ function ServiceSchema({ product }: { product: ProductPageData }) {
     name: `${product.name} Installation`,
     provider: {
       "@type": "LocalBusiness",
-      "@id": "https://luxewindowworks.com/#business",
+      "@id": "https://www.luxewindowworks.com/#business",
       name: BUSINESS.name,
       telephone: BUSINESS.phone,
     },

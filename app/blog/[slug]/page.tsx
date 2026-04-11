@@ -133,17 +133,17 @@ function deriveKeywords(post: BlogPost): string {
 /** Full Person schema for Mark — reused in every post */
 const markAuthorSchema = {
   "@type": "Person",
-  "@id": "https://luxewindowworks.com/about#mark-abplanalp",
+  "@id": "https://www.luxewindowworks.com/about#mark-abplanalp",
   name: "Mark Abplanalp",
   jobTitle: "Owner & Window Treatment Specialist",
   description:
     "Mark Abplanalp has worked in the window treatment industry since 2002 — 23 years of hands-on sales, design, and installation experience. He launched Luxe Window Works in Post Falls, Idaho in March 2025, focused on family-owned manufacturers and locally owned service.",
-  url: "https://luxewindowworks.com/about",
+  url: "https://www.luxewindowworks.com/about",
   worksFor: {
     "@type": "LocalBusiness",
-    "@id": "https://luxewindowworks.com/#business",
+    "@id": "https://www.luxewindowworks.com/#business",
     name: "Luxe Window Works",
-    url: "https://luxewindowworks.com",
+    url: "https://www.luxewindowworks.com",
   },
   knowsAbout: [
     "custom window treatments",
@@ -172,7 +172,7 @@ const installationFAQSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "@id":
-    "https://luxewindowworks.com/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works#faq",
+    "https://www.luxewindowworks.com/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works#faq",
   mainEntity: [
     {
       "@type": "Question",
@@ -206,7 +206,7 @@ const installationHowToSchema = {
   "@context": "https://schema.org",
   "@type": "HowTo",
   "@id":
-    "https://luxewindowworks.com/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works#howto",
+    "https://www.luxewindowworks.com/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works#howto",
   name: "How to Get Custom Window Treatments Installed in Northern Idaho",
   description:
     "The Luxe Window Works 5-step process for getting custom window treatments measured, ordered, and professionally installed in Northern Idaho.",
@@ -229,7 +229,7 @@ const installationHowToSchema = {
       position: 1,
       name: "Free In-Home Consultation",
       text: "Mark visits your home to assess your windows, discuss your functional requirements, and explore design possibilities. This is a collaborative planning session — no pressure, no sales pitch.",
-      url: "https://luxewindowworks.com/book",
+      url: "https://www.luxewindowworks.com/book",
     },
     {
       "@type": "HowToStep",
@@ -261,7 +261,7 @@ const installationHowToSchema = {
 const highPressureFAQSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "@id": "https://luxewindowworks.com/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry#faq",
+  "@id": "https://www.luxewindowworks.com/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry#faq",
   mainEntity: [
     {
       "@type": "Question",
@@ -317,7 +317,7 @@ const highPressureFAQSchema = {
 const highPressureHowToSchema = {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "@id": "https://luxewindowworks.com/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry#howto",
+  "@id": "https://www.luxewindowworks.com/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry#howto",
   name: "5 Tips for Navigating Window Treatment Sales Without Getting Pressured",
   description: "How to protect yourself from high-pressure window treatment sales tactics and make a confident, informed decision.",
   totalTime: "PT5M",
@@ -383,7 +383,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     author: markAuthorSchema,
     publisher: {
       "@type": "LocalBusiness",
-      "@id": "https://luxewindowworks.com/#business",
+      "@id": "https://www.luxewindowworks.com/#business",
       name: BUSINESS.name,
       url: BUSINESS.url,
       telephone: BUSINESS.phone,
@@ -406,7 +406,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
       name: "Luxe Window Works Blog",
       publisher: {
         "@type": "LocalBusiness",
-        "@id": "https://luxewindowworks.com/#business",
+        "@id": "https://www.luxewindowworks.com/#business",
         name: BUSINESS.name,
       },
     },
