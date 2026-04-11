@@ -10,23 +10,8 @@ interface BreadcrumbsProps {
 }
 
 export default function Breadcrumbs({ items }: BreadcrumbsProps) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: items.map((item, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      name: item.label,
-      ...(item.href ? { item: `https://luxewindowworks.com${item.href}` } : {}),
-    })),
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       <nav aria-label="Breadcrumb" className="container-luxe pt-24 md:pt-28 pb-4">
         <ol className="flex items-center gap-2 text-sm text-warm-gray-500">
           {items.map((item, i) => (
