@@ -1,5 +1,10 @@
-import { readFileSync, readdirSync } from "fs";
+import { readFileSync, readdirSync, existsSync } from "fs";
 import { join } from "path";
+
+export interface FAQ {
+  question: string;
+  answer: string;
+}
 
 export interface BlogPost {
   slug: string;
@@ -15,6 +20,7 @@ export interface BlogPost {
   tags: string[];
   wordCount: number;
   content: string;
+  faqs: FAQ[];
 }
 
 const BLOG_DIR = join(process.cwd(), "content", "blog");
@@ -65,6 +71,17 @@ export function getPost(slug: string): BlogPost | null {
     const raw = readFileSync(filePath, "utf-8");
     const { data, content } = parseFrontmatter(raw);
 
+    // Load companion FAQ file if it exists
+    let faqs: FAQ[] = [];
+    try {
+      const faqPath = join(BLOG_DIR, `${slug}.faqs.json`);
+      if (existsSync(faqPath)) {
+        faqs = JSON.parse(readFileSync(faqPath, "utf-8"));
+      }
+    } catch {
+      // no-op — faqs remain empty
+    }
+
     return {
       slug: data.slug || slug,
       title: data.title || "",
@@ -79,6 +96,7 @@ export function getPost(slug: string): BlogPost | null {
       tags: parseTags(data.tags),
       wordCount: parseInt(data.wordCount, 10) || 0,
       content,
+      faqs,
     };
   } catch {
     return null;

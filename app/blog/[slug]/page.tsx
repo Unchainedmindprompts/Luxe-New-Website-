@@ -133,40 +133,6 @@ function deriveKeywords(post: BlogPost): string {
 /** Author reference — full entity defined in layout.tsx LocalBusiness founder */
 const markAuthorRef = { "@id": "https://www.luxewindowworks.com/#owner" };
 
-/** FAQPage schema — installation timeline post */
-const installationFAQSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "@id":
-    "https://www.luxewindowworks.com/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works#faq",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "How long does window treatment installation take in Coeur d'Alene and Northern Idaho?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Most custom window treatment orders take 3 to 4 weeks from the time of ordering to installation in Northern Idaho. That includes order processing, manufacturing, and scheduling your installation appointment. Some products take longer — custom drapes and plantation shutters typically run 6 to 8 weeks depending on the manufacturer. Contact Luxe Window Works at 208-660-8643 for current lead times on your specific product.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How long do custom window treatments last compared to big box store blinds?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Custom window treatments from quality manufacturers typically last 15 to 20 years or more with proper care. Mass-produced blinds from big box stores typically last 3 to 7 years. The difference comes down to material quality, precision fit, and professional installation.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Does Luxe Window Works offer free consultations in Northern Idaho?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes. Luxe Window Works offers free in-home consultations throughout Northern Idaho including Coeur d'Alene, Post Falls, Hayden, Sandpoint, and Rathdrum. During the consultation we assess your windows, show product samples, and provide honest recommendations with no pressure and no hidden costs.",
-      },
-    },
-  ],
-};
-
 /** HowTo schema — 5-step installation process */
 const installationHowToSchema = {
   "@context": "https://schema.org",
@@ -224,62 +190,6 @@ const installationHowToSchema = {
   ],
 };
 
-const highPressureFAQSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "@id": "https://www.luxewindowworks.com/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry#faq",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "How can I tell if a window treatment sales rep is using high-pressure tactics?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Watch for artificial urgency, vague pricing, and resistance to letting you think things over. If you feel uncomfortable, rushed, or manipulated — trust that feeling. A good consultant gives you space and clarity, not stress and confusion.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Is it normal to get a window treatment quote and take time before deciding?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Absolutely — and it's smart. Comparing quotes, researching products, and discussing options with your family are all part of making a confident decision. Any rep who pressures you to decide on the spot is prioritizing their timeline, not yours.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What should I ask during a window treatment consultation?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Ask about product durability, warranty terms, installation timelines, and whether the team has experience with your specific situation — oversized windows, motorization, historic homes, or unusual frame conditions. A knowledgeable consultant will welcome every one of those questions.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How do I know if a window treatment discount is real or just a sales tactic?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "If the offer expires the moment the rep leaves your house, it was a closing tactic — not a real promotion. Legitimate promotions have clear timelines and don't punish you for taking a few days to think. Ask for any offer in writing and confirm it's still valid if you follow up later.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What is the difference between a window treatment consultation and a sales pitch?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "A consultation is about discovery — understanding your needs, your space, and your goals. A pitch is about closing — getting you to commit as quickly as possible. A real consultation leaves you informed and confident. A pitch leaves you pressured and uncertain.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Should I get multiple quotes before choosing a window treatment company?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes, especially for larger projects. Two or three quotes help you understand pricing ranges, product options, and service quality. Just make sure you're comparing equivalent specs — fabric grade, motorization options, and installation quality all vary significantly between providers.",
-      },
-    },
-  ],
-};
-
 const highPressureHowToSchema = {
   "@context": "https://schema.org",
   "@type": "HowTo",
@@ -321,14 +231,12 @@ const highPressureHowToSchema = {
   ],
 };
 
-/** Slug-specific additional schema — add new entries here as needed */
+/** Slug-specific HowTo schema — FAQPage is now generated dynamically from [slug].faqs.json */
 const SLUG_SCHEMA: Record<string, object[]> = {
   "your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works": [
-    installationFAQSchema,
     installationHowToSchema,
   ],
   "stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry": [
-    highPressureFAQSchema,
     highPressureHowToSchema,
   ],
 };
@@ -379,26 +287,25 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://www.luxewindowworks.com",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Blog",
-        item: "https://www.luxewindowworks.com/blog",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: post.title,
-        item: `https://www.luxewindowworks.com/blog/${post.slug}`,
-      },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.luxewindowworks.com" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.luxewindowworks.com/blog" },
+      { "@type": "ListItem", position: 3, name: post.title, item: `https://www.luxewindowworks.com/blog/${post.slug}` },
     ],
   };
+
+  const faqSchema = post.faqs.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `https://www.luxewindowworks.com/blog/${post.slug}#faq`,
+    mainEntity: post.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  } : null;
 
   const additionalSchemas = SLUG_SCHEMA[post.slug] || [];
 
@@ -412,6 +319,12 @@ function ArticleSchema({ post }: { post: BlogPost }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
       {additionalSchemas.map((s, i) => (
         <script
           key={i}
@@ -476,16 +389,15 @@ export default function BlogPostPage({ params }: Props) {
         {/* Featured Image */}
         {post.featuredImage && (
           <section className="container-luxe max-w-3xl -mt-2 mb-8">
-            <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
-              <Image
-                src={post.featuredImage}
-                alt={post.featuredImageAlt || post.title}
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 768px) 100vw, 768px"
-              />
-            </div>
+            <Image
+              src={post.featuredImage}
+              alt={post.featuredImageAlt || post.title}
+              width={0}
+              height={0}
+              sizes="(max-width: 768px) 100vw, 768px"
+              className="w-full h-auto rounded-2xl"
+              priority
+            />
           </section>
         )}
 
