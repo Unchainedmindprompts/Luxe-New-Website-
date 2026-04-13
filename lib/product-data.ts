@@ -3,10 +3,19 @@ export interface FAQ {
   answer: string;
 }
 
+export interface ProductVideo {
+  youtubeId: string;
+  title: string;
+  description: string;
+  uploadDate: string;
+  duration: string;
+}
+
 export interface ProductPageData {
   slug: string;
   name: string;
   image?: string;
+  video?: ProductVideo;
   headline: string;
   subheadline: string;
   problem: string;
@@ -63,6 +72,14 @@ export const productPages: Record<string, ProductPageData> = {
         question: "Can cellular shades be motorized?",
         answer: "Yes. All of the cellular shade brands we carry — Alta, Norman, and Lafayette — offer battery-powered motorization with no hardwiring required. You can control them via remote, smartphone app, or voice assistant (Alexa, Google Home, Apple HomeKit). Battery motors typically last 1–2 years per charge.",
       },
+      {
+        question: "Should I choose cordless or motorized cellular shades for a home with young children?",
+        answer: "Both eliminate cord hazards, but they work differently. Cordless shades use a spring-tension mechanism — you push up or pull down by hand with no cord exposed. It's a straightforward, affordable safety upgrade. Motorized shades go further: no physical contact needed at all, and you can set schedules so shades lower automatically at naptime or bedtime. For most families, cordless is the practical starting point. Motorization is worth the investment if you have multiple windows or want the automation long-term.",
+      },
+      {
+        question: "Does the color of cellular shades affect how they perform?",
+        answer: "Yes, in two ways. Lighter colors reflect more heat back into the room during winter, which can slightly reduce their insulating benefit. Darker colors absorb more solar heat in summer, which can be an advantage or drawback depending on the window's orientation. More practically: lighter fabrics show dust more readily. For Northern Idaho homes with intense sun exposure, a mid-tone fabric in the color family that works with your interior is usually the best balance of performance and maintenance.",
+      },
     ],
     metaTitle: "Cellular Shades in Northern Idaho | Energy Efficient Window Treatments",
     metaDescription: "Custom cellular shades for Northern Idaho homes. The most energy-efficient window covering for Coeur d'Alene, Post Falls, Hayden. Free in-home consultation with extensive hands-on installer expertise.",
@@ -104,6 +121,14 @@ export const productPages: Record<string, ProductPageData> = {
       {
         question: "Do solar shades protect furniture and floors from UV fading?",
         answer: "Yes. Depending on the openness factor, solar shades block up to 99% of UV rays — the primary cause of fading in wood floors, furniture, and artwork. Even a 10% openness fabric provides significant UV protection compared to bare glass, making solar shades a smart investment for rooms with hardwood floors or valuable furnishings.",
+      },
+      {
+        question: "Do solar shades provide privacy at night?",
+        answer: "No — and this is the most important thing to understand before buying solar shades. During daylight hours, the brighter exterior makes it harder to see in from outside. But at night, when your interior lights are on and it's dark outside, that contrast reverses completely — people outside can see in clearly. For rooms where nighttime privacy matters, solar shades are typically paired with a blackout roller shade or drapery on the same window. Mark will always flag this during a consultation if privacy is a concern.",
+      },
+      {
+        question: "How do solar shade fabrics hold up in Northern Idaho's climate?",
+        answer: "Very well. Solar shade fabrics are typically woven from fiberglass or polyester coated to resist UV degradation — the same sun that damages your floors won't break down the fabric. Northern Idaho's freeze-thaw cycles don't affect them the way they affect wood products. The bigger maintenance consideration is dust: in drier summer months, a light vacuuming with a brush attachment every few months keeps them looking sharp.",
       },
     ],
     metaTitle: "Solar Shades in Northern Idaho | Glare Reduction for Lake Views",
@@ -147,6 +172,14 @@ export const productPages: Record<string, ProductPageData> = {
         question: "Can roller shades be motorized?",
         answer: "Yes. Roller shades are one of the most popular products to motorize because the clean aesthetic pairs naturally with the convenience of remote, app, or voice control. Battery-powered motors require no hardwiring and are installed in a single visit. They're particularly popular for hard-to-reach windows in vaulted great rooms.",
       },
+      {
+        question: "Should roller shades be inside mounted or outside mounted?",
+        answer: "Inside mount fits the shade within the window frame for a clean, architectural look. Outside mount covers the full frame and typically hangs higher, which makes windows appear larger and provides better light blockage at the edges. In Northern Idaho homes — especially older construction in Coeur d'Alene where freeze-thaw cycles have caused frames to shift out of square — outside mount often produces a more polished result because it hides frame imperfections. Mark evaluates each window and recommends based on the actual frame condition and the look you're after.",
+      },
+      {
+        question: "How do I clean roller shades without damaging the fabric?",
+        answer: "Light dusting with a soft brush or vacuum brush attachment handles most routine maintenance. For spot cleaning, blot — don't scrub — with a lightly dampened cloth and mild soap. Never soak the fabric or submerge it in water, which can damage the finish and corrode the roller hardware. The specialty textured fabrics we carry are all treated for durability, but professional cleaning is worth considering for heavily soiled shades rather than risking damage with DIY methods.",
+      },
     ],
     metaTitle: "Roller Shades in Northern Idaho | Modern Window Treatments",
     metaDescription: "Custom roller shades for Northern Idaho homes. Clean, modern window coverings in premium fabrics. Serving Coeur d'Alene, Post Falls, Hayden. Free in-home consultation.",
@@ -189,6 +222,14 @@ export const productPages: Record<string, ProductPageData> = {
         question: "Do banded shades provide privacy from the street during the day?",
         answer: "Yes — when the solid bands are fully aligned, banded shades provide complete privacy even in bright daylight. This makes them ideal for street-facing windows where you want daytime privacy without closing off the room to natural light entirely.",
       },
+      {
+        question: "Are banded shades a good choice for bedrooms?",
+        answer: "It depends on how light-sensitive you are. When the solid bands are fully aligned, banded shades block most light and provide strong privacy — enough for comfortable sleep in most bedrooms. However, they're not true blackout. Light leaks slightly through the transition zones between solid and sheer bands. For shift workers, young children, or anyone who needs complete darkness to sleep well, a dedicated blackout shade is the more reliable choice. Banded shades shine in bedrooms where you want flexible light control and a modern look but complete blackout isn't critical.",
+      },
+      {
+        question: "Can banded shades be motorized?",
+        answer: "Yes, and motorization pairs especially well with banded shades because the adjustment is so nuanced. Manually finding the exact alignment where the bands are perfectly open or closed requires a little practice. With motorization, you set the precise positions once — fully open, privacy mode, fully closed — and recall them with one tap. It removes any guesswork and makes the light-control flexibility that defines banded shades effortless to use every day.",
+      },
     ],
     metaTitle: "Banded Shades in Northern Idaho | Modern Zebra & Dual Shades",
     metaDescription: "Custom banded (zebra) shades for Northern Idaho homes. Flexible light control with modern style. Serving Coeur d'Alene, Post Falls, Hayden. Free in-home consultation.",
@@ -230,6 +271,14 @@ export const productPages: Record<string, ProductPageData> = {
       {
         question: "Can Roman shades have a blackout lining?",
         answer: "Yes. Most Roman shade fabrics can be backed with a blackout lining, which is particularly popular for bedrooms. The blackout lining doesn't change the exterior appearance of the shade but significantly reduces light transmission, making them a great choice when you want a fabric-rich look without sacrificing sleep quality.",
+      },
+      {
+        question: "Can Roman shades be paired with drapery panels?",
+        answer: "Yes — and it's one of the most refined looks in residential window design. A flat Roman shade in a solid or subtly textured fabric, flanked by floor-to-ceiling drapery panels, creates a layered look that's particularly popular in primary bedrooms and formal living rooms in Coeur d'Alene and Sandpoint homes. The Roman shade handles the functional light control and privacy while the drapery adds height, softness, and architectural framing. It's a combination that works especially well when you want to frame a strong view without losing the ability to cover it.",
+      },
+      {
+        question: "How durable are Roman shades compared to hard blinds?",
+        answer: "Roman shades involve a fabric and a mechanical lift system, which means the fabric will show wear before composite or aluminum products do. That said, quality Roman shades from reputable manufacturers last 10–15 years with normal use. The failure points are typically the lift cords and the lining — both repairable. The fabric itself, if it's a quality woven or linen-type material, holds up well. Where Roman shades genuinely underperform hard blinds is in high-humidity rooms like bathrooms; for those spaces, a moisture-resistant alternative is a smarter call.",
       },
     ],
     metaTitle: "Roman Shades in Northern Idaho | Elegant Fabric Window Treatments",
@@ -274,6 +323,14 @@ export const productPages: Record<string, ProductPageData> = {
         question: "Why does professional measurement matter so much for plantation shutters?",
         answer: "Shutters require tighter tolerances than any other window treatment. A shutter frame that's off by just 1/8 inch won't close properly. Northern Idaho's freeze-thaw cycles cause window frames to shift out of square over time — which is more common than most homeowners realize. Mark's measurement process specifically accounts for out-of-square frames to ensure a fit that stays true for years.",
       },
+      {
+        question: "What louver size should I choose for plantation shutters?",
+        answer: "Louver size is largely an aesthetic choice, but it affects function too. Smaller 2.5-inch louvers suit traditional styling and smaller windows — they have a classic, fine-grained look. Larger 3.5-inch and 4.5-inch louvers work better on larger windows and create a more contemporary feel, and they let in significantly more light when open. For the larger windows and lake-view homes common in Northern Idaho, Mark typically recommends 3.5-inch as the practical sweet spot — it scales well, looks current, and gives you a clear view through the window when the louvers are fully open.",
+      },
+      {
+        question: "How do I clean and maintain plantation shutters over time?",
+        answer: "Shutters are among the easiest window treatments to maintain. Routine dusting with a soft cloth or a microfiber duster between the louvers handles most upkeep. For deeper cleaning, a slightly damp cloth works well on painted composite shutters. Real wood shutters should be cleaned with minimal moisture to avoid swelling. Unlike fabric shades that eventually need replacing, a well-maintained set of shutters can look sharp for 20–30 years with minimal effort — which is part of why they hold their value so well.",
+      },
     ],
     metaTitle: "Plantation Shutters in Northern Idaho | Custom Installation",
     metaDescription: "Custom plantation shutters for Northern Idaho homes. Expert installation with two decades of experience. Serving Coeur d'Alene, Post Falls, Hayden. Lifetime installation guarantee.",
@@ -281,6 +338,13 @@ export const productPages: Record<string, ProductPageData> = {
   "motorization": {
     slug: "motorization",
     name: "Motorization",
+    video: {
+      youtubeId: "BTVQo6bRGEw",
+      title: "Motorized Window Treatments — Luxe Window Works",
+      description: "See motorized window treatments in action — installed by Luxe Window Works in Northern Idaho. One tap controls every shade in the room. Battery-powered motors, no hardwiring required. Serving Post Falls, Coeur d'Alene, Hayden, and Sandpoint.",
+      uploadDate: "2025-08-30",
+      duration: "PT53S",
+    },
     headline: "One Tap. Every Shade. Perfect Position.",
     subheadline: "Smart motorized shades you can control from your phone, your voice, or the wall — because some things should just be easy.",
     problem: "You've got windows you can't easily reach — above the stairs, in a vaulted ceiling, behind furniture. Or maybe you want all your shades to go down at sunset without getting up from the couch. Or you travel and want your home to look occupied. Manual shades are fine for accessible windows, but modern homes — and modern life — call for something smarter.",
@@ -316,6 +380,14 @@ export const productPages: Record<string, ProductPageData> = {
       {
         question: "How long do battery-powered motorized shades last on a charge?",
         answer: "Battery-powered motors typically last 1–2 years under normal daily use. When the battery needs replacing, an LED indicator on the motor or a notification in the app will alert you before it goes dead. The motors are whisper-quiet and perform identically to hardwired versions — the only difference is the occasional battery recharge.",
+      },
+      {
+        question: "Can I control all my motorized shades in a room with a single command?",
+        answer: "Yes — group control is one of the most useful features of a well-designed motorization setup. You can group shades by room, floor, or the entire house and control them together. A single 'good morning' command raises every shade at once. 'Movie time' lowers the great room shades without touching anything else. Mark programs all group scenes and schedules during installation, so everything is working correctly from day one — no technical setup required on your end.",
+      },
+      {
+        question: "What happens if a motorized shade stops working?",
+        answer: "The most common issues — dead batteries or a dropped wireless connection — are easy to fix. True motor failure is rare in quality brands, but if it does happen, virtually every motor we install can still be operated manually as a backup, so you're never stuck with a shade you can't move. Mark handles warranty claims and service on every installation, so you're not left troubleshooting alone. The motors we use typically outlast the shade fabric itself, which is why we treat motorization as a long-term system investment, not just an add-on.",
       },
     ],
     metaTitle: "Motorized Shades in Northern Idaho | Smart Window Treatments",

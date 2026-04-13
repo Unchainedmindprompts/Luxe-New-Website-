@@ -5,6 +5,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { productPages } from "@/lib/product-data";
 import type { ProductPageData } from "@/lib/product-data";
+import YoutubeEmbed from "@/components/YoutubeEmbed";
 
 interface Props {
   params: { slug: string };
@@ -21,6 +22,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: product.metaTitle,
     description: product.metaDescription,
+    alternates: {
+      canonical: `https://www.luxewindowworks.com/products/${params.slug}`,
+    },
     openGraph: {
       title: product.metaTitle,
       description: product.metaDescription,
@@ -59,6 +63,33 @@ function ServiceSchema({ product }: { product: ProductPageData }) {
   );
 }
 
+function VideoSchema({ product }: { product: ProductPageData }) {
+  if (!product.video) return null;
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: product.video.title,
+    description: product.video.description,
+    thumbnailUrl: `https://img.youtube.com/vi/${product.video.youtubeId}/maxresdefault.jpg`,
+    uploadDate: product.video.uploadDate,
+    duration: product.video.duration,
+    embedUrl: `https://www.youtube.com/embed/${product.video.youtubeId}`,
+    contentUrl: `https://www.youtube.com/watch?v=${product.video.youtubeId}`,
+    publisher: {
+      "@type": "LocalBusiness",
+      "@id": "https://www.luxewindowworks.com/#business",
+      name: BUSINESS.name,
+      url: BUSINESS.url,
+    },
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
 function FAQSchema({ product }: { product: ProductPageData }) {
   const schema = {
     "@context": "https://schema.org",
@@ -89,6 +120,7 @@ export default function ProductPage({ params }: Props) {
     <>
       <ServiceSchema product={product} />
       <FAQSchema product={product} />
+      <VideoSchema product={product} />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
@@ -126,9 +158,13 @@ export default function ProductPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Product image */}
+      {/* Product image or video */}
       <section className="container-luxe -mt-4 mb-16">
-        {product.image ? (
+        {product.video ? (
+          <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden">
+            <YoutubeEmbed videoId={product.video.youtubeId} title={product.video.title} />
+          </div>
+        ) : product.image ? (
           <div className="max-w-4xl mx-auto relative aspect-[16/9] rounded-2xl overflow-hidden">
             <Image
               src={product.image}

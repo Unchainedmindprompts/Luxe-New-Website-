@@ -5,28 +5,34 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
+const inter = localFont({
+  src: [
+    { path: "../node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2", weight: "500", style: "normal" },
+    { path: "../node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2", weight: "600", style: "normal" },
+    { path: "../node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2", weight: "700", style: "normal" },
+  ],
   variable: "--font-inter",
-  weight: "100 900",
   display: "swap",
 });
 
-const geistSerif = localFont({
-  src: "./fonts/GeistVF.woff",
+const playfairDisplay = localFont({
+  src: [
+    { path: "../node_modules/@fontsource/playfair-display/files/playfair-display-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../node_modules/@fontsource/playfair-display/files/playfair-display-latin-700-normal.woff2", weight: "700", style: "normal" },
+  ],
   variable: "--font-playfair",
-  weight: "100 900",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://luxewindowworks.com"),
+  metadataBase: new URL("https://www.luxewindowworks.com"),
   title: {
     default: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
     template: "%s | Luxe Window Works",
   },
   description:
-    "Premium custom window treatments in Northern Idaho. Nearly 20 years of installer expertise serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Free in-home consultation.",
+    "Premium custom window treatments in Northern Idaho. 23 years of installer expertise serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Free in-home consultation.",
   keywords: [
     "window treatments",
     "custom blinds",
@@ -41,7 +47,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://luxewindowworks.com",
+    url: "https://www.luxewindowworks.com",
     siteName: "Luxe Window Works",
     title: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
     description:
@@ -62,22 +68,24 @@ export const metadata: Metadata = {
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "@id": "https://luxewindowworks.com/#business",
+  "@id": "https://www.luxewindowworks.com/#business",
   name: "Luxe Window Works",
   description:
-    "Premium custom window treatments in Northern Idaho with extensive hands-on expertise. Specializing in cellular shades, plantation shutters, solar shades, roller shades, and motorized window treatments. Serving Coeur d'Alene, Post Falls, Hayden, Sandpoint, and Rathdrum, Idaho.",
-  url: "https://luxewindowworks.com",
+    "Luxe Window Works brings 23 years of professional window treatment expertise to Northern Idaho. Founded by Mark Abplanalp — who has designed and installed window treatments since 2002 across Washington, Oregon, and Idaho, including high-profile commercial projects for Apple — Luxe delivers premium products from family-owned manufacturers like Lafayette and Norman. Specializing in cellular shades, plantation shutters, solar shades, roller shades, and motorized window treatments. Serving Coeur d'Alene, Post Falls, Hayden, Sandpoint, and Rathdrum, Idaho.",
+  url: "https://www.luxewindowworks.com",
   telephone: "208-660-8643",
   email: "mark@luxewindowworks.com",
   priceRange: "$$",
-  foundingDate: "2005",
+  foundingDate: "2025",
   founder: {
     "@type": "Person",
+    "@id": "https://www.luxewindowworks.com/about#mark-abplanalp",
     name: "Mark Abplanalp",
     jobTitle: "Owner & Window Treatment Specialist",
     description:
-      "Mark Abplanalp founded Luxe Window Works with over 20 years of hands-on window treatment installation experience. He personally handles every consultation, measurement, and installation — serving homeowners across Northern Idaho with a lifetime installation guarantee.",
-    url: "https://luxewindowworks.com",
+      "Mark Abplanalp has worked in the window treatment industry since 2002 — 23 years of hands-on sales, design, and installation experience. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025, focused on family-owned manufacturers and locally owned service. Mark personally handles every consultation, measurement, and installation.",
+    url: "https://www.luxewindowworks.com/about",
+    image: "https://www.luxewindowworks.com/_next/image?url=%2Fimages%2Fmark-photo.webp&w=3840&q=80",
     worksFor: { "@type": "LocalBusiness", name: "Luxe Window Works" },
     knowsAbout: [
       "custom window treatments",
@@ -88,6 +96,14 @@ const localBusinessSchema = {
       "roller shades",
       "window treatment installation",
       "energy efficient window coverings",
+      "fenestration design",
+      "commercial window treatments",
+      "UV mitigation",
+      "heat reduction window coverings",
+      "exterior solar shades",
+      "Alta Window Fashions",
+      "Norman Window Fashions",
+      "Lafayette Interior Fashions",
     ],
     areaServed: [
       "Coeur d'Alene, Idaho",
@@ -202,9 +218,12 @@ const localBusinessSchema = {
     },
   ],
   sameAs: [
+    "https://share.google/9kubt3XEi6TrNzGKe",
+    "https://www.bing.com/maps/search?toWww=1&redig=2BC026B2E32B45528048B81FC45876EE&style=r&q=Luxe+Window+Works+LLC%2C+2972+N+Pavo+Ln%2C+Post+Falls%2C+ID+83854%2C+United+States&ss=id.local_ypid%3A%22YN6F9E5AD2DAFE5C39%22&st=Luxe+Window+Works+LLC&sfa=2972+N+Pavo+Ln%2C+Post+Falls%2C+ID+83854%2C+United+States&cp=47.736435%7E-116.879120&lvl=16",
+    "https://maps.apple.com/place?place-id=I907802082955E66F&address=2972+N+Pavo+Ln%2C+Post+Falls%2C+ID++83854%2C+United+States&coordinate=47.736435%2C-116.879122&name=Luxe+Window+Works&_provider=9902",
     "https://www.yelp.com/biz/luxe-window-works-post-falls",
     "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
-    "https://share.google/pRM5IoXZgRTksImvp",
+    "https://www.yellowpages.com/post-falls-id/mip/luxe-window-works-llc-579719675",
   ],
   aggregateRating: {
     "@type": "AggregateRating",
@@ -232,8 +251,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistSerif.variable}`}>
+    <html lang="en" className={`${inter.variable} ${playfairDisplay.variable}`}>
       <head>
+        {/* Preload hero image so the browser fetches it immediately, before JS runs */}
+        <link
+          rel="preload"
+          as="image"
+          href="/images/hero-modern-living.webp"
+          fetchPriority="high"
+        />
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`!function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

@@ -12,16 +12,24 @@
     "node": ">=18.17.0"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.74.0",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/playfair-display": "^5.2.8",
     "next": "14.2.35",
     "react": "^18",
     "react-dom": "^18"
   },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions"
+  ],
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "critters": "^0.0.23",
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
     "postcss": "^8",
