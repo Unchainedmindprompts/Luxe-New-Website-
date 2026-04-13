@@ -15,6 +15,14 @@ export const metadata: Metadata = {
     title: "Blog | Luxe Window Works",
     description: "Expert window treatment advice for Northern Idaho homeowners.",
     type: "website",
+    images: [
+      {
+        url: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
+        width: 1200,
+        height: 630,
+        alt: "Luxe Window Works — Custom Window Treatments in Northern Idaho",
+      },
+    ],
   },
 };
 
@@ -28,34 +36,8 @@ function BlogListSchema() {
       "Expert window treatment advice, buying guides, and design inspiration from 23 years of hands-on experience in Northern Idaho homes — by Mark Abplanalp, owner of Luxe Window Works.",
     url: `${BUSINESS.url}/blog`,
     inLanguage: "en-US",
-    author: {
-      "@type": "Person",
-      "@id": "https://luxewindowworks.com/#mark-abplanalp",
-      name: "Mark Abplanalp",
-      jobTitle: "Owner & Window Treatment Specialist",
-      description:
-        "Founder of Luxe Window Works with 23 years of hands-on window treatment installation experience, serving Coeur d'Alene, Post Falls, Hayden, and Sandpoint, Idaho.",
-      worksFor: {
-        "@type": "LocalBusiness",
-        "@id": "https://luxewindowworks.com/#business",
-        name: BUSINESS.name,
-      },
-    },
-    publisher: {
-      "@type": "LocalBusiness",
-      "@id": "https://luxewindowworks.com/#business",
-      name: BUSINESS.name,
-      url: BUSINESS.url,
-      telephone: BUSINESS.phone,
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: BUSINESS.address.street,
-        addressLocality: BUSINESS.address.city,
-        addressRegion: BUSINESS.address.state,
-        postalCode: BUSINESS.address.zip,
-        addressCountry: "US",
-      },
-    },
+    author: { "@id": "https://www.luxewindowworks.com/#owner" },
+    publisher: { "@id": "https://www.luxewindowworks.com/#business" },
   };
 
   return (

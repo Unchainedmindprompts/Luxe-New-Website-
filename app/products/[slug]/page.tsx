@@ -29,6 +29,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: product.metaTitle,
       description: product.metaDescription,
       type: "website",
+      images: [
+        {
+          url: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
+          width: 1200,
+          height: 630,
+          alt: "Luxe Window Works — Custom Window Treatments in Northern Idaho",
+        },
+      ],
     },
   };
 }
@@ -38,12 +46,7 @@ function ServiceSchema({ product }: { product: ProductPageData }) {
     "@context": "https://schema.org",
     "@type": "Service",
     name: `${product.name} Installation`,
-    provider: {
-      "@type": "LocalBusiness",
-      "@id": "https://luxewindowworks.com/#business",
-      name: BUSINESS.name,
-      telephone: BUSINESS.phone,
-    },
+    provider: { "@id": "https://www.luxewindowworks.com/#business" },
     areaServed: {
       "@type": "State",
       name: "Idaho",
@@ -75,12 +78,7 @@ function VideoSchema({ product }: { product: ProductPageData }) {
     duration: product.video.duration,
     embedUrl: `https://www.youtube.com/embed/${product.video.youtubeId}`,
     contentUrl: `https://www.youtube.com/watch?v=${product.video.youtubeId}`,
-    publisher: {
-      "@type": "LocalBusiness",
-      "@id": "https://www.luxewindowworks.com/#business",
-      name: BUSINESS.name,
-      url: BUSINESS.url,
-    },
+    publisher: { "@id": "https://www.luxewindowworks.com/#business" },
   };
   return (
     <script
