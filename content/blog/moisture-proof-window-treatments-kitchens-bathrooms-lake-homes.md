@@ -143,71 +143,6 @@ wordCount: 2250
 
 <p>You also get real manufacturer warranties backed by a local installer who will come out if there's ever an issue. That kind of support doesn't exist when you order online or from a big-box store.</p>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Can I use real wood blinds in my bathroom?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. Real wood blinds absorb moisture from steam and humidity, which causes slats to warp, crack, and eventually fall apart. Even with an exhaust fan, bathroom moisture is too much for wood. Use faux wood blinds or vinyl shutters instead."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What's the best window treatment for a window above the kitchen sink?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "High-quality faux wood blinds made from solid polymer are your best option. They handle direct splashes and steam without warping or peeling, and you can wipe them down as needed. Vinyl shutters are also excellent if you want a more permanent solution."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Are faux wood blinds actually waterproof?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Premium faux wood blinds made from solid polymer or high-grade composite are moisture-resistant throughout the entire slat, not just on the surface. Cheap big-box faux wood has a thin vinyl coating over a particle board core that fails quickly in wet conditions. Quality brands like Alta, Norman, and Lafayette are built differently."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What window treatments work best in a lake home with large view windows?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Solar or screen shades made from moisture-resistant materials give you UV protection and glare control while preserving your lake views. For privacy at night, add motorized roller shades or drapery. Choose materials specifically rated for moisture exposure since lake homes have higher ambient humidity year-round."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do I prevent mildew on my window coverings?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Use non-porous materials like vinyl, solid polymer faux wood, or moisture-resistant fabrics. Avoid real wood, untreated fabric, and woven materials in bathrooms, kitchens, and other high-moisture areas. Make sure exhaust fans are working properly, and wipe down your window treatments periodically to prevent buildup."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Do vinyl shutters look cheap compared to wood shutters?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Quality vinyl or composite shutters have a smooth, painted finish that looks virtually identical to painted wood shutters. Most people can't tell the difference in person. The advantage is they maintain that appearance permanently — no warping, cracking, or peeling, even in bathrooms and kitchens."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can motorized shades be moisture-resistant?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Motorized roller shades can be ordered with moisture-resistant fabrics and sealed mechanisms that protect the motor from humidity. This is especially popular in lake homes with large window expanses where you want convenient control without sacrificing durability."
-      }
-    }
-  ]
-}
-</script>
-
 <h2>FAQs: Moisture-Proof Window Treatments in North Idaho</h2>
 
 <h3>Can I use real wood blinds in my bathroom?</h3>
@@ -253,24 +188,6 @@ wordCount: 2250
 <p><strong>Brands we trust: Alta • Norman • Lafayette</strong></p>
 
 <h2>About the Author</h2>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Mark Abplanalp",
-  "jobTitle": "Owner",
-  "worksFor": {
-    "@type": "LocalBusiness",
-    "name": "Luxe Window Works",
-    "url": "https://luxewindowworks.com"
-  },
-  "description": "23 years of hands-on experience measuring, specifying, and installing window treatments in Northern Idaho homes.",
-  "telephone": "+12086608643",
-  "email": "mark@luxewindowworks.com",
-  "url": "https://luxewindowworks.com"
-}
-</script>
 
 <h3>Mark Abplanalp</h3>
 
