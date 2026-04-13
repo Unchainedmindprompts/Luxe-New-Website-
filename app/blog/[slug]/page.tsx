@@ -394,7 +394,7 @@ export default function BlogPostPage({ params }: Props) {
                 src={post.featuredImage}
                 alt={post.featuredImageAlt || post.title}
                 fill
-                className="object-cover"
+                className="object-cover object-top"
                 priority
                 sizes="(max-width: 768px) 100vw, 768px"
               />
