@@ -47,37 +47,3 @@ wordCount: 1357
 <p>&nbsp;</p>
 <p><a href="https://normanusa.com/window-treatments/shutters/" data-type="link" data-id="https://normanusa.com/window-treatments/shutters/">https://normanusa.com/window-treatments/shutters/</a></p>
 <p><a href="https://luxewindowworks.com/trends-in-window-coverings-2025/" data-type="link" data-id="https://luxewindowworks.com/trends-in-window-coverings-2025/">https://luxewindowworks.com/trends-in-window-coverings-2025/</a></p>
-<p><script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "Product",
-  "name": "Norman® BiFold 180 Shutter",
-  "description": "Innovative bi-folding shutter system by Norman®, designed for large glass openings and seamless 180° folding. Provides superior durability, light control, and energy efficiency for luxury homes in Northern Idaho.",
-  "image": "https://i0.wp.com/luxewindowworks.com/wp-content/uploads/IMG_2969.webp",
-  "brand": {
-    "@type": "Brand",
-    "name": "Norman",
-    "url": "https://normanusa.com/"
-  },
-  "url": "https://luxewindowworks.com/2025/08/29/why-the-norman-shutter-bifold-180-is-the-perfect-solution-for-bi-folding-doors/",
-  "offers": {
-    "@type": "Offer",
-    "availability": "https://schema.org/InStock",
-    "url": "https://luxewindowworks.com/contact/"
-  },
-  "review": {
-    "@type": "Review",
-    "author": {
-      "@type": "Person",
-      "name": "Mark Abplanalp"
-    },
-    "reviewRating": {
-      "@type": "Rating",
-      "ratingValue": "5",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
-    "reviewBody": "As a Lafayette and Norman dealer in Northern Idaho, I've seen the BiFold 180 outperform every other solution for large sliding and folding glass doors—superb craftsmanship, durability, and seamless operation."
-  }
-}
-</script></p>
