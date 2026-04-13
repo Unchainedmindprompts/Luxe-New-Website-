@@ -6,13 +6,13 @@ dateModified: "2026-04-13"
 author: Mark Abplanalp
 excerpt: "Roman shades are fabric window coverings that stack into clean horizontal folds when raised and lie flat when lowered. They're the most design-forward window treatment in most homes — softer than shutters, more tailored than drapes, and more elegant than a roller shade. Here's everything you need to know before you buy."
 metaDescription: "Complete buyer's guide to roman shades for Northern Idaho homes. Learn about the 5 types of roman shades, fabric options, mounting, motorization, and real pricing from a local expert."
-featuredImage: /images/IMG_2473.jpeg
+featuredImage: /images/IMG_2469.jpeg
 featuredImageAlt: "Relaxed roman shade with bold horizontal stripes in a kitchen with white subway tile backsplash and brass pendant light"
 category: Custom Window Coverings
 tags: [roman-shades, window-treatments, buyer-guide, Northern Idaho, custom-window-coverings, motorized-shades, bedroom-windows, kitchen-windows]
 wordCount: 2850
 ---
-<figure><img src="/images/IMG_2473.jpeg" alt="Relaxed roman shade with bold horizontal stripes in a kitchen with white subway tile backsplash and brass pendant light" /></figure>
+<figure><img src="/images/IMG_2469.jpeg" alt="Relaxed roman shade with bold horizontal stripes in a kitchen with white subway tile backsplash and brass pendant light" /></figure>
 
 <p>Roman shades are fabric window coverings that stack into clean horizontal folds when raised and lie flat when lowered. They&apos;re the most design-forward window treatment in most homes — softer than shutters, more tailored than drapes, and more elegant than a roller shade. If you&apos;re considering them for your Northern Idaho home, here&apos;s everything you need to know before you buy.</p>
 
