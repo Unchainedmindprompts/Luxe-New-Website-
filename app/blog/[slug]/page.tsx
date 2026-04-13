@@ -389,16 +389,15 @@ export default function BlogPostPage({ params }: Props) {
         {/* Featured Image */}
         {post.featuredImage && (
           <section className="container-luxe max-w-3xl -mt-2 mb-8">
-            <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
-              <Image
-                src={post.featuredImage}
-                alt={post.featuredImageAlt || post.title}
-                fill
-                className="object-cover object-top"
-                priority
-                sizes="(max-width: 768px) 100vw, 768px"
-              />
-            </div>
+            <Image
+              src={post.featuredImage}
+              alt={post.featuredImageAlt || post.title}
+              width={0}
+              height={0}
+              sizes="(max-width: 768px) 100vw, 768px"
+              className="w-full h-auto rounded-2xl"
+              priority
+            />
           </section>
         )}
 
