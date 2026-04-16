@@ -13,6 +13,7 @@ const CANONICAL = `https://www.luxewindowworks.com/blog/${SLUG}`;
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  keywords: "custom window coverings near me, window coverings near me, custom blinds near me, blind near me, window blinds near me, window treatments near me, Post Falls Idaho, Coeur d'Alene, Northern Idaho, buying guide, local expertise, Luxe Window Works, Mark Abplanalp",
   alternates: { canonical: CANONICAL },
   openGraph: {
     title: TITLE,
