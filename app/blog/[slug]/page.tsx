@@ -271,7 +271,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     isPartOf: {
       "@type": "Blog",
       "@id": `${BUSINESS.url}/blog`,
-      name: "Luxe Window Works Blog",
+      name: "Window Treatment Insights",
       publisher: { "@id": "https://www.luxewindowworks.com/#business" },
     },
     speakable: {
