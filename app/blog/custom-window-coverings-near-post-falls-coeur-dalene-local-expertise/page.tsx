@@ -8,7 +8,8 @@ const SLUG = "custom-window-coverings-near-post-falls-coeur-dalene-local-experti
 const TITLE = "Custom Window Coverings Near Post Falls and Coeur d'Alene: Why Local Expertise Makes All the Difference";
 const DESCRIPTION = "Looking for custom window coverings near Post Falls or Coeur d'Alene? A local window treatment specialist explains why independent expertise beats a franchise catalog — and what to ask before you hire anyone.";
 const HERO = "/images/IMG_6457.jpeg";
-const CANONICAL = `https://www.luxewindowworks.com/blog/${SLUG}`;
+const BASE = "https://www.luxewindowworks.com";
+const CANONICAL = `${BASE}/blog/${SLUG}`;
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -38,13 +39,13 @@ function ArticleSchema() {
     "@type": "Article",
     headline: TITLE,
     description: DESCRIPTION,
-    url: `https://luxewindowworks.com/blog/${SLUG}`,
+    url: `https://www.luxewindowworks.com/blog/${SLUG}`,
     datePublished: "2026-04-16T00:00:00Z",
     dateModified: "2026-04-16T00:00:00Z",
-    author: { "@type": "Person", "@id": "https://luxewindowworks.com/#mark", name: "Mark Abplanalp", url: "https://www.luxewindowworks.com/about" },
-    publisher: { "@id": "https://luxewindowworks.com/#business" },
+    author: { "@type": "Person", "@id": "https://www.luxewindowworks.com/#mark", name: "Mark Abplanalp", url: "https://www.luxewindowworks.com/about" },
+    publisher: { "@id": "https://www.luxewindowworks.com/#business" },
     image: { "@type": "ImageObject", url: "https://www.luxewindowworks.com/images/IMG_6457.jpeg", contentUrl: "https://www.luxewindowworks.com/images/IMG_6457.jpeg" },
-    mainEntityOfPage: { "@type": "WebPage", "@id": `https://luxewindowworks.com/blog/${SLUG}` },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `https://www.luxewindowworks.com/blog/${SLUG}` },
     mentions: [
       { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
       { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
@@ -58,9 +59,9 @@ function ArticleSchema() {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://luxewindowworks.com" },
-      { "@type": "ListItem", position: 2, name: "Blog", item: "https://luxewindowworks.com/blog" },
-      { "@type": "ListItem", position: 3, name: TITLE, item: `https://luxewindowworks.com/blog/${SLUG}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.luxewindowworks.com" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.luxewindowworks.com/blog" },
+      { "@type": "ListItem", position: 3, name: TITLE, item: `https://www.luxewindowworks.com/blog/${SLUG}` },
     ],
   };
 
