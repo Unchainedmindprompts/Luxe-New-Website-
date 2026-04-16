@@ -11,6 +11,12 @@ interface Props {
   params: { slug: string };
 }
 
+/** Per-slug keyword overrides for articles that need exact keyword targeting */
+const SLUG_KEYWORDS: Record<string, string> = {
+  "custom-window-coverings-near-post-falls-coeur-dalene-local-expertise":
+    "custom window coverings near me, window coverings near me, custom blinds near me, blind near me, window blinds near me, window treatments near me, Post Falls Idaho, Coeur d'Alene, Northern Idaho, buying guide, local expertise, Luxe Window Works, Mark Abplanalp",
+};
+
 export async function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
 }
@@ -22,9 +28,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const description = post.metaDescription || post.excerpt;
+  const keywords = SLUG_KEYWORDS[params.slug];
   return {
     title: post.title,
     description,
+    ...(keywords && { keywords }),
     alternates: {
       canonical: `https://www.luxewindowworks.com/blog/${params.slug}`,
     },
