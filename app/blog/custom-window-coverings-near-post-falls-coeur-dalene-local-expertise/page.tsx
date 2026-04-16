@@ -36,16 +36,17 @@ export const metadata: Metadata = {
 function ArticleSchema() {
   const articleSchema = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
+    "@id": `https://www.luxewindowworks.com/blog/${SLUG}#article`,
     headline: TITLE,
     description: DESCRIPTION,
-    url: `https://www.luxewindowworks.com/blog/${SLUG}`,
     datePublished: "2026-04-16T00:00:00Z",
     dateModified: "2026-04-16T00:00:00Z",
-    author: { "@type": "Person", "@id": "https://www.luxewindowworks.com/#mark", name: "Mark Abplanalp", url: "https://www.luxewindowworks.com/about" },
+    author: { "@id": "https://www.luxewindowworks.com/#owner" },
     publisher: { "@id": "https://www.luxewindowworks.com/#business" },
     image: { "@type": "ImageObject", url: "https://www.luxewindowworks.com/images/IMG_6457.jpeg", contentUrl: "https://www.luxewindowworks.com/images/IMG_6457.jpeg" },
     mainEntityOfPage: { "@type": "WebPage", "@id": `https://www.luxewindowworks.com/blog/${SLUG}` },
+    isPartOf: { "@type": "Blog", "@id": "https://www.luxewindowworks.com/blog", name: "Window Treatment Insights", publisher: { "@id": "https://www.luxewindowworks.com/#business" } },
     mentions: [
       { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
       { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
