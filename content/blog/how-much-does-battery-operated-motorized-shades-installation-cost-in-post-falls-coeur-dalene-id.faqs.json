@@ -1,0 +1,26 @@
+[
+  {
+    "question": "How much do battery-operated motorized shades cost per window in Post Falls and Coeur d'Alene?",
+    "answer": "Battery-operated motorized shades typically run $300–800 per window installed, depending on shade size, fabric type, and motor brand. Basic battery motors add $100–200 to the cost of a manual shade. Premium motors with smart home integration run $200–400 per shade. For a typical Northern Idaho home with 10–15 windows, a complete motorized installation runs $3,500–9,000 depending on product selection."
+  },
+  {
+    "question": "How long do the batteries last, and how often do I need to replace or recharge them?",
+    "answer": "Most battery-operated shade motors run 1–3 years per charge or battery change depending on usage frequency and motor quality. Premium rechargeable motors (like those from Somfy or Lutron) typically last 12–18 months between charges with average daily operation. Shades operated multiple times per day will drain batteries faster than those operated once or twice. Most modern motors include low-battery alerts through their app or a warning blink/beep before power drops."
+  },
+  {
+    "question": "Do battery-operated motors work with smart home systems like Alexa, Google Home, or Apple HomeKit?",
+    "answer": "It depends on the motor brand. Premium motors from Somfy, Lutron, and Hunter Douglas integrate directly with major smart home platforms. More affordable motors often require a separate hub or bridge device for voice control and scheduling. When planning a smart home integration, verify compatibility before purchasing—not all motors work with all systems, and retrofitting incompatible hardware is frustrating and expensive."
+  },
+  {
+    "question": "Are battery-operated shades reliable, or will the motors fail quickly?",
+    "answer": "Quality battery motors from established brands (Somfy, Lutron, Hunter Douglas, Norman) are highly reliable and typically last 10–15 years with normal use. Budget motors from unknown brands have higher failure rates and limited warranty support. The motor's failure point is usually the gear mechanism rather than the battery system, and quality brands design their gears for tens of thousands of cycles. Stick with established brands and you'll rarely have reliability issues."
+  },
+  {
+    "question": "Can I mix motorized and manual shades in the same room?",
+    "answer": "Yes, and this is a common approach for managing budget while still getting motorization where it matters most. High-traffic or difficult-to-reach windows get motorized; accessible, infrequently used windows stay manual. The main consideration is visual consistency—shades should look similar even if operation differs. Most shade manufacturers offer the same fabric and color options in both manual and motorized versions."
+  },
+  {
+    "question": "What is the installation process like for battery-operated shades? Do I need an electrician?",
+    "answer": "No electrician required—that's one of the main advantages of battery-operated over hardwired motors. The physical installation is nearly identical to manual shades: mount brackets, hang the shade, connect to the headrail. The additional steps are programming the motor limits (upper and lower travel positions) and connecting to your chosen control system. Most motors can be programmed in 15–30 minutes following manufacturer instructions. Professional installation typically takes 30–45 minutes per shade including programming."
+  }
+]
