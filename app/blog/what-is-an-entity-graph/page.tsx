@@ -224,11 +224,17 @@ export default function Page() {
 
               <p>Here is the uncomfortable truth about schema in 2026: most websites that have it are doing it wrong. And most digital marketing practitioners selling schema services either don&apos;t understand the depth of what&apos;s possible or don&apos;t have the technical ability to implement it correctly.</p>
 
+              <h3>The Template Schema Problem</h3>
+
               <p>The most common failure is template schema — the same generic block copy-pasted across every page of a site with a few variables swapped in. A business name here. A phone number there. Maybe an address. The result is schema that technically validates but communicates almost nothing useful. It tells machines you exist. It doesn&apos;t tell them who you are.</p>
+
+              <h3>The Disconnected Schema Problem</h3>
 
               <p>The second most common failure is disconnected schema — multiple blocks on the same site that don&apos;t reference each other. A LocalBusiness block that doesn&apos;t connect to the Person who owns it. Blog articles with author fields that point to a flat name string rather than a verified identity. An Organization block that has no relationship to the services it offers or the expert behind them.</p>
 
               <p>Disconnected schema is the digital equivalent of a business card with no name on it. The information is present. The identity isn&apos;t.</p>
+
+              <h3>The Conflicting Schema Problem</h3>
 
               <p>The third failure — and this one is especially common among WordPress sites using plugins like Yoast or RankMath — is conflicting schema. Multiple plugins attempting to mark up the same page simultaneously, producing contradictory structured data that confuses rather than clarifies. Google&apos;s Rich Results Test flags errors and warnings on the majority of plugin-generated schema implementations. The practitioners selling these implementations rarely check.</p>
 
@@ -256,7 +262,11 @@ export default function Page() {
 
               <p>Because the systems processing your structured data changed fundamentally.</p>
 
+              <h3>When Google Was the Only Consumer</h3>
+
               <p>For most of schema&apos;s history, the primary consumer was Google&apos;s ranking algorithm. Schema helped you qualify for rich results — the star ratings, FAQ dropdowns, and breadcrumb trails that made your listing stand out in search results. Valuable, but ultimately incremental.</p>
+
+              <h3>When AI Engines Entered the Picture</h3>
 
               <p>Then large language models entered the picture.</p>
 
@@ -272,9 +282,15 @@ export default function Page() {
 
               <p>A complete entity graph for a local service business has a small number of core components, but every one of them has to be built correctly and connected to the others.</p>
 
+              <h3>The Foundation: Your Business Entity</h3>
+
               <p>The foundation is a LocalBusiness or Organization block at the layout level — meaning it appears on every page of the site — with a stable <code>@id</code> anchor that every other block on the site can reference. This block includes the business name, contact information, service area, hours, offer catalog, and a <code>sameAs</code> array pointing to every verified external profile where the business has a presence.</p>
 
+              <h3>The Owner Entity</h3>
+
               <p>Nested inside that block — or connected to it through a separate Person block — is the owner entity. A real named person with their own <code>@id</code>, their job title, a description of their expertise, a <code>knowsAbout</code> array covering every topic they have genuine authority on, and their own <code>sameAs</code> array pointing to their LinkedIn profile, their professional social presence, and any other verifiable external identity.</p>
+
+              <h3>The Article Layer</h3>
 
               <p>Every blog article published on the site connects to both of these entities. The author field doesn&apos;t say &ldquo;Mark Abplanalp.&rdquo; It references the <code>@id</code> of the Person block. The publisher field doesn&apos;t say &ldquo;Luxe Window Works.&rdquo; It references the <code>@id</code> of the business block. The <code>isPartOf</code> field connects the article to the site&apos;s blog entity, which in turn connects back to the business.</p>
 
