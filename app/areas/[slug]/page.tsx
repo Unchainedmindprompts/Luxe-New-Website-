@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import Script from "next/script";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS, PRODUCTS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
@@ -21,6 +22,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: area.metaTitle,
     description: area.metaDescription,
+    alternates: {
+      canonical: `https://www.luxewindowworks.com/areas/${params.slug}`,
+    },
     openGraph: {
       title: area.metaTitle,
       description: area.metaDescription,
@@ -29,12 +33,251 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+function AreaSchema({ area, slug }: { area: { name: string; metaDescription?: string; description?: string }, slug: string }) {
+  const areaName = area.name;
+  const areaUrl = `${BUSINESS.url}/areas/${slug}`;
+
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": `${BUSINESS.url}/#business`,
+    name: BUSINESS.name,
+    url: BUSINESS.url,
+    telephone: BUSINESS.phone,
+    email: "mark@luxewindowworks.com",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: BUSINESS.address.street,
+      addressLocality: BUSINESS.address.city,
+      addressRegion: BUSINESS.address.state,
+      postalCode: BUSINESS.address.zip,
+      addressCountry: "US",
+    },
+    areaServed: {
+      "@type": "City",
+      name: areaName,
+      containedInPlace: { "@type": "State", name: "Idaho" },
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `Custom Window Treatments in ${areaName}`,
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Custom Cellular Shades Installation in ${areaName}`,
+            description: `Energy-efficient honeycomb cellular shades custom-fitted for ${areaName} homes.`,
+            areaServed: areaName,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Plantation Shutter Installation in ${areaName}`,
+            description: `Custom-measured plantation shutters for ${areaName} homes — lasting value and precise light control.`,
+            areaServed: areaName,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Motorized Window Shade Installation in ${areaName}`,
+            description: `Smart motorized shades for ${areaName} homes, controllable by phone, voice, or wall switch.`,
+            areaServed: areaName,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Solar Shade Installation in ${areaName}`,
+            description: `UV-blocking solar shades that preserve ${areaName} views while reducing glare and heat gain.`,
+            areaServed: areaName,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Free In-Home Window Treatment Consultation in ${areaName}`,
+            description: `Free in-home consultation for ${areaName} homeowners. We assess your windows and recommend the right solution with no pressure and no hidden costs.`,
+            areaServed: areaName,
+          },
+        },
+      ],
+    },
+    sameAs: [
+      "https://www.yelp.com/biz/luxe-window-works-post-falls",
+      "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
+      "https://share.google/pRM5IoXZgRTksImvp",
+    ],
+  };
+
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${areaUrl}#service`,
+    name: `Custom Window Treatments in ${areaName}, Idaho`,
+    serviceType: "Custom Window Treatments",
+    description: `Professional custom window treatment installation in ${areaName}, Idaho. Luxe Window Works offers cellular shades, plantation shutters, solar shades, roller shades, motorized window treatments, and free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities.`,
+    provider: {
+      "@type": "LocalBusiness",
+      "@id": `${BUSINESS.url}/#business`,
+      name: BUSINESS.name,
+      url: BUSINESS.url,
+      telephone: BUSINESS.phone,
+    },
+    areaServed: {
+      "@type": "City",
+      name: areaName,
+      containedInPlace: { "@type": "State", name: "Idaho" },
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `Window Treatment Services in ${areaName}`,
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Cellular Shade Installation in ${areaName}`,
+            description: `Energy-efficient honeycomb cellular shades custom-fitted for ${areaName} homes. Reduces energy costs and controls light year-round.`,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Plantation Shutter Installation in ${areaName}`,
+            description: `Custom-measured plantation shutters for ${areaName} homes. Lasting value, precise light control, and architectural character.`,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Solar Shade Installation in ${areaName}`,
+            description: `UV-blocking solar shades that preserve ${areaName} lake and mountain views while eliminating glare and heat gain.`,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Motorized Window Treatment Installation in ${areaName}`,
+            description: `Smart motorized shades for ${areaName} homes — controllable by phone, voice assistant, or wall switch.`,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Free In-Home Window Treatment Consultation in ${areaName}`,
+            description: `Free in-home consultation for ${areaName} homeowners. We assess your windows, show product samples, and recommend the right solution with no pressure.`,
+          },
+        },
+      ],
+    },
+    offers: {
+      "@type": "Offer",
+      name: "Free In-Home Consultation",
+      price: "0",
+      priceCurrency: "USD",
+      description: `Free in-home window treatment consultation for ${areaName} homeowners.`,
+      seller: {
+        "@type": "LocalBusiness",
+        name: BUSINESS.name,
+        telephone: BUSINESS.phone,
+      },
+    },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
+      { "@type": "ListItem", position: 2, name: "Service Areas", item: `${BUSINESS.url}/areas/coeur-d-alene` },
+      { "@type": "ListItem", position: 3, name: areaName, item: areaUrl },
+    ],
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${areaUrl}#faq`,
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `Who does custom window treatments in ${areaName}, Idaho?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `Luxe Window Works provides custom window treatment installation in ${areaName}, Idaho. Founded by Mark Abplanalp — who has worked in the window treatment industry since 2002 — Luxe offers free in-home consultations, professional installation, and a lifetime workmanship guarantee. Call 208-660-8643 to schedule.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `What window treatments work best for ${areaName} homes?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `For ${areaName} homes, cellular shades are the top choice for energy efficiency given Northern Idaho's extreme temperature swings. Solar shades are essential for lake and mountain-view properties to control glare without losing the view. Plantation shutters add long-term value and work well in both historic and newer construction. Motorized shades are increasingly popular for hard-to-reach windows and smart home integration.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `Does Luxe Window Works offer free consultations in ${areaName}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `Yes. Luxe Window Works offers free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities. During the consultation we assess your windows, show product samples, and provide honest recommendations with no pressure and no hidden costs. Call 208-660-8643 or book online to schedule.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `How long does window treatment installation take in ${areaName}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `Most custom window treatment orders take 3 to 4 weeks from ordering to installation in ${areaName}. Custom drapes and plantation shutters typically run 6 to 8 weeks depending on the manufacturer. Contact Luxe Window Works at 208-660-8643 for current lead times on your specific product.`,
+        },
+      },
+    ],
+  };
+
+  return (
+    <>
+      <Script
+        id={`area-service-schema-${slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <Script
+        id={`area-localbusiness-schema-${slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
+      <Script
+        id={`area-breadcrumb-schema-${slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <Script
+        id={`area-faq-schema-${slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+    </>
+  );
+}
+
 export default function AreaPage({ params }: Props) {
   const area = areaPages[params.slug];
   if (!area) notFound();
 
   return (
     <>
+      <AreaSchema area={area} slug={params.slug} />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
@@ -74,7 +317,7 @@ export default function AreaPage({ params }: Props) {
               href={BUSINESS.phoneHref}
               className="inline-flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white hover:text-charcoal font-semibold px-8 py-4 rounded-full text-lg transition-all"
             >
-              Call Mark: {BUSINESS.phone}
+              Call Us: {BUSINESS.phone}
             </a>
           </div>
         </div>

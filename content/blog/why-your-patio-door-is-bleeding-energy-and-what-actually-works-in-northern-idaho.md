@@ -10,7 +10,6 @@ category: Custom Window Coverings
 tags: ["Coeur d'Alene window treatments", Energy saving window shades, Insulated window treatments, Northern Idaho window coverings, Patio door heat loss, Patio door insulation, Post Falls window coverings, Vertical cellular shades]
 wordCount: 3149
 ---
-<h1><img class="alignnone size-medium wp-image-2873" src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/11/IMG_0897-300x225.jpeg" alt="Why Your Patio Door is Bleeding Energy (And What Actually Works in Northern Idaho)" width="300" height="225" /></h1>
 From an installer's perspective with two decades installing window treatments, I've walked through hundreds of homes where the patio slider was the single biggest comfort problem—and the homeowner had no idea.
 
 They'd complain about cold drafts near the door in January. About the living room being 8 degrees colder than the rest of the house. About curtains that never close all the way or plastic vertical blinds that rattle every time the furnace kicks on.
@@ -388,4 +387,4 @@ Schedule a free in-home consultation with Luxe Window Works. I'll measure your s
 <h2>About the Author</h2>
 <strong>Mark Abplanalp</strong>, Owner of Luxe Window Works
 
-With 20 years installing window treatments Mark specializes in matching products to regional climate challenges. He developed The Northern Idaho Climate Protocol™ after analyzing performance data from hundreds of installations in extreme temperature conditions. Mark prioritizes long-term performance and measurable energy outcomes over sales-driven recommendations. Luxe Window Works serves Coeur d'Alene, Post Falls, Hayden, Sandpoint, and surrounding communities.
+With 23 years installing window treatments Mark specializes in matching products to regional climate challenges. He developed The Northern Idaho Climate Protocol™ after analyzing performance data from hundreds of installations in extreme temperature conditions. Mark prioritizes long-term performance and measurable energy outcomes over sales-driven recommendations. Luxe Window Works serves Coeur d'Alene, Post Falls, Hayden, Sandpoint, and surrounding communities.
