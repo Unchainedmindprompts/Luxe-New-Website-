@@ -1,13 +1,12 @@
 import path from "path";
-import { fileURLToPath } from "url";
 import { buildConfig } from "payload";
 import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import Partners from "@/collections/Partners";
+import Partners from "./collections/Partners.js";
+import * as migration_20240101_000000_init from "./migrations/20240101_000000_init.js";
 
-const filename = fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
+const dirname = process.cwd();
 
 export default buildConfig({
   admin: {
@@ -52,7 +51,8 @@ export default buildConfig({
       connectionString:
         process.env.POSTGRES_URL || process.env.DATABASE_URL || "",
     },
-    push: true,
+    prodMigrations: [migration_20240101_000000_init],
+    migrationDir: path.resolve(dirname, "migrations"),
   }),
   plugins: [
     vercelBlobStorage({
