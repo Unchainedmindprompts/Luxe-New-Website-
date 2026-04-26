@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import "./globals.css";
+import { ConditionalLayout } from "./ConditionalLayout";
 
 const inter = localFont({
   src: [
@@ -305,9 +304,7 @@ fbq('track','PageView');`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
-        <Header />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        <ConditionalLayout>{children}</ConditionalLayout>
       </body>
     </html>
   );

@@ -8,7 +8,7 @@ import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
 import type { BlogPost } from "@/lib/blog";
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 /** Per-slug keyword overrides for articles that need exact keyword targeting */
@@ -22,19 +22,20 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = getPost(params.slug);
+  const { slug } = await params;
+  const post = getPost(slug);
   if (!post) {
     return { title: "Post Not Found" };
   }
 
   const description = post.metaDescription || post.excerpt;
-  const keywords = SLUG_KEYWORDS[params.slug];
+  const keywords = SLUG_KEYWORDS[slug];
   return {
     title: post.title,
     description,
     ...(keywords && { keywords }),
     alternates: {
-      canonical: `https://www.luxewindowworks.com/blog/${params.slug}`,
+      canonical: `https://www.luxewindowworks.com/blog/${slug}`,
     },
     openGraph: {
       title: post.title,
@@ -344,8 +345,9 @@ function ArticleSchema({ post }: { post: BlogPost }) {
   );
 }
 
-export default function BlogPostPage({ params }: Props) {
-  const post = getPost(params.slug);
+export default async function BlogPostPage({ params }: Props) {
+  const { slug } = await params;
+  const post = getPost(slug);
   if (!post) notFound();
 
   return (

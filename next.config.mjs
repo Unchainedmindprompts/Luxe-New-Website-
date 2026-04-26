@@ -1,3 +1,4 @@
+import { withPayload } from "@payloadcms/next";
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -95,4 +96,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withPayload(nextConfig);

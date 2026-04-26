@@ -14,9 +14,16 @@
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
     "@fontsource/playfair-display": "^5.2.8",
-    "next": "14.2.35",
-    "react": "^18",
-    "react-dom": "^18"
+    "@payloadcms/db-vercel-postgres": "^3.84.1",
+    "@payloadcms/next": "^3.84.1",
+    "@payloadcms/richtext-lexical": "^3.84.1",
+    "@payloadcms/storage-vercel-blob": "^3.84.1",
+    "graphql": "^16.13.2",
+    "next": "^16.2.4",
+    "payload": "^3.84.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "sharp": "^0.34.5"
   },
   "browserslist": [
     "last 2 Chrome versions",
@@ -27,8 +34,8 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "critters": "^0.0.23",
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
