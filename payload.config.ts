@@ -4,6 +4,7 @@ import { buildConfig } from "payload";
 import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import Partners from "@/collections/Partners";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -11,6 +12,9 @@ const dirname = path.dirname(filename);
 export default buildConfig({
   admin: {
     user: "users",
+    meta: {
+      robots: "noindex, nofollow",
+    },
   },
   collections: [
     {
@@ -33,6 +37,7 @@ export default buildConfig({
         },
       ],
     },
+    Partners,
   ],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "",
