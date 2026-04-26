@@ -16,7 +16,7 @@ export default buildConfig({
       robots: "noindex, nofollow",
     },
     importMap: {
-      baseDir: path.resolve(dirname, "app/(admin)/admin"),
+      baseDir: path.resolve(dirname, "app/(payload)/admin"),
     },
   },
   collections: [
@@ -49,7 +49,8 @@ export default buildConfig({
   },
   db: vercelPostgresAdapter({
     pool: {
-      connectionString: process.env.POSTGRES_URL || "",
+      connectionString:
+        process.env.POSTGRES_URL || process.env.DATABASE_URL || "",
     },
   }),
   plugins: [
