@@ -15,6 +15,9 @@ export default buildConfig({
     meta: {
       robots: "noindex, nofollow",
     },
+    importMap: {
+      baseDir: path.resolve(dirname, "app/(admin)/admin"),
+    },
   },
   collections: [
     {
