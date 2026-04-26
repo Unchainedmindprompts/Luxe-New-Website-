@@ -3,8 +3,8 @@ import { buildConfig } from "payload";
 import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import Partners from "./collections/Partners.js";
-import * as migration_20240101_000000_init from "./migrations/20240101_000000_init.js";
+import Partners from "./collections/Partners";
+import * as migration_20240101_000000_init from "./migrations/20240101_000000_init";
 
 const dirname = process.cwd();
 

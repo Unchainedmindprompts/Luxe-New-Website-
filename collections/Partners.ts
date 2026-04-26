@@ -1,5 +1,5 @@
 import type { CollectionConfig, CollectionAfterChangeHook } from "payload";
-import { cmsId } from "../lib/payload-schema.js";
+import { cmsId } from "../lib/payload-schema";
 
 type PartnerDoc = {
   id: string;
