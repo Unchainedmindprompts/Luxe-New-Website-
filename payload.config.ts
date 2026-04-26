@@ -4,7 +4,6 @@ import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import Partners from "./collections/Partners";
-import * as migration_20240101_000000_init from "./migrations/20240101_000000_init";
 
 const dirname = process.cwd();
 
@@ -51,8 +50,6 @@ export default buildConfig({
       connectionString:
         process.env.POSTGRES_URL || process.env.DATABASE_URL || "",
     },
-    prodMigrations: [migration_20240101_000000_init],
-    migrationDir: path.resolve(dirname, "migrations"),
   }),
   plugins: [
     vercelBlobStorage({
