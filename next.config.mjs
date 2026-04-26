@@ -1,4 +1,4 @@
-import { withPayload } from "@payloadcms/next";
+import { withPayload } from "@payloadcms/next/withPayload";
 import { readFileSync } from "fs";
 import { join } from "path";
 
