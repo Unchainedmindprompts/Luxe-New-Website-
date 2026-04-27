@@ -4,6 +4,7 @@ import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import Partners from "./collections/Partners";
+import Posts from "./collections/Posts";
 
 const dirname = process.cwd();
 
@@ -39,6 +40,7 @@ export default buildConfig({
       ],
     },
     Partners,
+    Posts,
   ],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "",
