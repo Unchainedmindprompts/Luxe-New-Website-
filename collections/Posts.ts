@@ -113,6 +113,17 @@ const Posts: CollectionConfig = {
     listSearchableFields: ["title", "slug"],
   },
   hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        if (data && !data.slug && data.title) {
+          data.slug = (data.title as string)
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "");
+        }
+        return data;
+      },
+    ],
     afterChange: [schemaHook],
   },
   fields: [
@@ -128,7 +139,7 @@ const Posts: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
-        description: "URL-safe, lowercase, hyphens only. e.g. best-blinds-for-coeur-dalene",
+        description: "Auto-generated from title — leave blank and it fills in automatically.",
       },
     },
     {
