@@ -8,7 +8,7 @@ import type { ProductPageData } from "@/lib/product-data";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -16,14 +16,15 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const product = productPages[params.slug];
+  const { slug } = await params;
+  const product = productPages[slug];
   if (!product) return {};
 
   return {
     title: product.metaTitle,
     description: product.metaDescription,
     alternates: {
-      canonical: `https://www.luxewindowworks.com/products/${params.slug}`,
+      canonical: `https://www.luxewindowworks.com/products/${slug}`,
     },
     openGraph: {
       title: product.metaTitle,
@@ -110,8 +111,9 @@ function FAQSchema({ product }: { product: ProductPageData }) {
   );
 }
 
-export default function ProductPage({ params }: Props) {
-  const product = productPages[params.slug];
+export default async function ProductPage({ params }: Props) {
+  const { slug } = await params;
+  const product = productPages[slug];
   if (!product) notFound();
 
   return (

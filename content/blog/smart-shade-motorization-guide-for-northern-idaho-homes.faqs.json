@@ -1,0 +1,26 @@
+[
+  {
+    "question": "What's the actual energy savings from motorized shades in Northern Idaho?",
+    "answer": "The energy savings come from consistency, not the motor itself. Manual shades often stay in one position for days because adjusting them requires attention and effort. Motorized shades operate on schedule, closing west-facing windows before peak afternoon heat and opening them at sunset in winter to capture passive solar gain. Pacific Northwest National Laboratory research documented 17.6% HVAC energy reductions during heating season and 13.3% during cooling season with automated cellular shades compared to manually operated vinyl blinds. Those numbers require actual daily shade operation—which is exactly what automation provides."
+  },
+  {
+    "question": "How does the integration work with smart home systems like Alexa, Google Home, or Apple HomeKit?",
+    "answer": "Most premium motorized shade systems—Somfy, Lutron Serena, Hunter Douglas PowerView—offer native integration with major smart home platforms. The process typically involves installing a hub or bridge device that connects your shade motors to your home network, then linking that hub to your preferred smart home platform through their respective apps. Once connected, you can control shades by voice, set schedules through the smart home app, and create scenes that coordinate multiple shades simultaneously. The exact setup varies by brand, and compatibility matters—not all motors work with all platforms, so verify compatibility before purchasing."
+  },
+  {
+    "question": "What happens if the motor fails or I lose power?",
+    "answer": "Battery-powered motors simply stop working when batteries die—you'll typically get low-battery warnings well in advance through the control app. Most motorized shades can also be operated manually during a power outage or motor failure: there's usually an emergency cord or the ability to manually push the shade up or down. Hardwired motors in smart home systems often include battery backup to maintain basic operation during power outages. Motor failure is rare in quality systems—leading brands design their motors for tens of thousands of cycles—but it does happen, and professional-grade systems are designed with manual override in mind."
+  },
+  {
+    "question": "Can I motorize my existing shades, or do I need to buy new ones?",
+    "answer": "It depends on the shade brand and type. Some manufacturers offer retrofit motor kits that replace the existing lift mechanism without replacing the shade itself. Hunter Douglas, Somfy, and others offer retrofit options for compatible models. However, many shades—particularly older or budget models—aren't designed for retrofit motorization. In most cases, motorizing existing shades is only feasible if they're from a brand with available retrofit kits, they're in good condition (motors don't fix worn-out fabrics or mechanisms), and the shade size falls within the motor's weight capacity. For most homeowners, purchasing new motorized shades is more practical than attempting retrofits."
+  },
+  {
+    "question": "What's the difference between radio frequency (RF) and Bluetooth motor control?",
+    "answer": "RF motors communicate via radio signals that can pass through walls, floors, and furniture, giving you control range of 50–100 feet depending on the system. Bluetooth motors require your phone or control device to be within 30 feet and in relatively direct line-of-sight with the motor. For whole-home automation or controlling shades in rooms you're not currently in, RF systems are significantly more reliable. Bluetooth is adequate for single-room applications where you're always nearby. Most professional-grade motorized shade systems use RF for exactly this reason—reliability across distance matters more than the marginal cost savings of Bluetooth components."
+  },
+  {
+    "question": "Is motorization worth it for just a few windows, or does it only make sense for whole-home systems?",
+    "answer": "Motorization delivers value even for single windows in the right situations: windows that are hard to reach (high transom windows, skylights, windows behind furniture), windows that need daily operation for energy management, and windows where consistent operation matters for sleep quality (bedroom blackout shades). You don't need a whole-home system to benefit. A single motorized blackout shade in a bedroom controlled by a bedside remote delivers real daily value at modest cost. The return on investment scales with how often you'd actually use the shade—if you'd manually operate it multiple times daily, motorization pays for itself quickly in convenience and consistent performance."
+  }
+]

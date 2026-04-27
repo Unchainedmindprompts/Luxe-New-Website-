@@ -9,7 +9,7 @@ import { areaPages } from "@/lib/area-data";
 import type { AreaPageData } from "@/lib/area-data";
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -17,14 +17,15 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const area = areaPages[params.slug];
+  const { slug } = await params;
+  const area = areaPages[slug];
   if (!area) return {};
 
   return {
     title: area.metaTitle,
     description: area.metaDescription,
     alternates: {
-      canonical: `https://www.luxewindowworks.com/areas/${params.slug}`,
+      canonical: `https://www.luxewindowworks.com/areas/${slug}`,
     },
     openGraph: {
       title: area.metaTitle,
@@ -198,13 +199,14 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
   );
 }
 
-export default function AreaPage({ params }: Props) {
-  const area = areaPages[params.slug];
+export default async function AreaPage({ params }: Props) {
+  const { slug } = await params;
+  const area = areaPages[slug];
   if (!area) notFound();
 
   return (
     <>
-      <AreaSchema area={area} slug={params.slug} />
+      <AreaSchema area={area} slug={slug} />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },

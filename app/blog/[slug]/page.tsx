@@ -7,8 +7,13 @@ import { BUSINESS } from "@/lib/constants";
 import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
 import type { BlogPost } from "@/lib/blog";
 
+// Re-render pages at most once per hour; new Payload posts appear within ~60 min
+export const revalidate = 3600;
+// Allow slugs not known at build time (new Payload posts) to render on demand
+export const dynamicParams = true;
+
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 /** Per-slug keyword overrides for articles that need exact keyword targeting */
@@ -18,23 +23,24 @@ const SLUG_KEYWORDS: Record<string, string> = {
 };
 
 export async function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
+  return (await getAllSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = getPost(params.slug);
+  const { slug } = await params;
+  const post = await getPost(slug);
   if (!post) {
     return { title: "Post Not Found" };
   }
 
   const description = post.metaDescription || post.excerpt;
-  const keywords = SLUG_KEYWORDS[params.slug];
+  const keywords = SLUG_KEYWORDS[slug];
   return {
     title: post.title,
     description,
     ...(keywords && { keywords }),
     alternates: {
-      canonical: `https://www.luxewindowworks.com/blog/${params.slug}`,
+      canonical: `https://www.luxewindowworks.com/blog/${slug}`,
     },
     openGraph: {
       title: post.title,
@@ -344,8 +350,9 @@ function ArticleSchema({ post }: { post: BlogPost }) {
   );
 }
 
-export default function BlogPostPage({ params }: Props) {
-  const post = getPost(params.slug);
+export default async function BlogPostPage({ params }: Props) {
+  const { slug } = await params;
+  const post = await getPost(slug);
   if (!post) notFound();
 
   return (
