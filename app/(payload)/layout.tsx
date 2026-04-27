@@ -76,7 +76,11 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   return (
     <>
-      <style>{`@layer payload-default, payload;`}</style>
+      <style>{`
+        @layer payload-default, payload;
+        /* Reset site Tailwind classes that leak into the admin and break button colours */
+        body { color: unset !important; background-color: unset !important; font-family: unset !important; }
+      `}</style>
       <RootProvider
         config={clientConfig}
         dateFNSKey={i18n.dateFNSKey}
