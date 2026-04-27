@@ -53,11 +53,11 @@ export default buildConfig({
   }),
   plugins: [
     vercelBlobStorage({
-      enabled: true,
+      enabled: process.env.BLOB_READ_WRITE_TOKEN?.startsWith("vercel_blob_rw_") === true,
       collections: {
         media: true,
       },
-      token: process.env.BLOB_READ_WRITE_TOKEN || "",
+      token: process.env.BLOB_READ_WRITE_TOKEN ?? "",
     }),
   ],
 });
