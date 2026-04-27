@@ -139,7 +139,7 @@ const Posts: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
-        description: "Auto-generated from title — leave blank and it fills in automatically.",
+        description: "Leave blank — auto-generated from title when you click Save.",
       },
     },
     {
