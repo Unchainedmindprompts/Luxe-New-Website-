@@ -1,5 +1,4 @@
 import type { CollectionConfig, CollectionAfterChangeHook } from "payload";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
 
 const BASE_URL = "https://www.luxewindowworks.com";
 
@@ -143,9 +142,11 @@ const Posts: CollectionConfig = {
     },
     {
       name: "content",
-      type: "richText",
-      label: "Body Content",
-      editor: lexicalEditor({}),
+      type: "textarea",
+      label: "Body Content (Markdown supported)",
+      admin: {
+        description: "Write in plain text or Markdown. Headings: ## H2, ### H3. Bold: **text**. Lists: - item.",
+      },
     },
     {
       name: "featuredImage",

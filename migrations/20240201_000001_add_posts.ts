@@ -32,7 +32,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       "title"               varchar NOT NULL,
       "slug"                varchar NOT NULL,
       "excerpt"             varchar,
-      "content"             jsonb,
+      "content"             varchar,
       "featured_image_id"   integer,
       "published"           boolean DEFAULT false,
       "published_date"      timestamp(3) with time zone,
