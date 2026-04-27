@@ -95,6 +95,16 @@ const schemaHook: CollectionAfterChangeHook<PostDoc> = async ({ doc, req, contex
 
 const Posts: CollectionConfig = {
   slug: "posts",
+  access: {
+    // Logged-in users see everything; public only sees published posts
+    read: ({ req: { user } }) => {
+      if (user) return true;
+      return { published: { equals: true } };
+    },
+    create: ({ req: { user } }) => Boolean(user),
+    update: ({ req: { user } }) => Boolean(user),
+    delete: ({ req: { user } }) => Boolean(user),
+  },
   admin: {
     useAsTitle: "title",
     description: "Blog posts for Luxe Window Works. FAQs drive AEO — add at least 3 per post.",

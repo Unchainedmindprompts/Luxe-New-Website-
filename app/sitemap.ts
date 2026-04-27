@@ -1,11 +1,17 @@
 import { MetadataRoute } from 'next'
 import { getAllSlugs, getPost } from '@/lib/blog'
-export default function sitemap(): MetadataRoute.Sitemap {
+
+export const revalidate = 3600
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.luxewindowworks.com'
   const currentDate = new Date().toISOString()
-  // Dynamically generate all blog post URLs from content/blog
-  const blogPosts: MetadataRoute.Sitemap = getAllSlugs().map((slug) => {
-    const post = getPost(slug)
+
+  const slugs = await getAllSlugs()
+  const posts = await Promise.all(slugs.map((s) => getPost(s)))
+
+  const blogPosts: MetadataRoute.Sitemap = slugs.map((slug, i) => {
+    const post = posts[i]
     return {
       url: `${baseUrl}/blog/${slug}`,
       lastModified: post?.dateModified
