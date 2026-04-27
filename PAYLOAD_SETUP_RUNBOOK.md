@@ -449,6 +449,26 @@ ALTER TABLE "payload_locked_documents_rels"
 > `Error: Failed query: relation "users_sessions" does not exist`
 > Fix: run just the `users_sessions` block from the SQL above.
 
+> **GOTCHA #9 — `payload_kv` table is NEW in Payload 3.84+ (always required)**
+> Payload 3.84+ automatically adds an internal `payload-kv` collection to the
+> config for server-side key-value storage. The matching `payload_kv` table
+> MUST exist even if you never call `payload.kv.*` directly.
+> You must also add every collection you create to the
+> `payload_locked_documents_rels` table, or the list view can break.
+
+Add these to your base SQL and run on both Neon branches:
+
+```sql
+-- payload_kv (internal KV store — NEW in Payload 3.84+, no timestamps)
+CREATE TABLE IF NOT EXISTS "payload_kv" (
+  "id"   serial PRIMARY KEY NOT NULL,
+  "key"  varchar NOT NULL,
+  "data" jsonb NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS "payload_kv_key_idx"
+  ON "payload_kv" USING btree ("key");
+```
+
 ---
 
 ## 11. Adding a new collection
@@ -528,6 +548,7 @@ ALTER TABLE "payload_locked_documents_rels"
 | `relation "users_sessions" does not exist` | Table missing for Payload 3.84+ | Run `users_sessions` SQL block on Neon |
 | `Error: Invalid token format` (vercelBlobStorage) | `BLOB_READ_WRITE_TOKEN` set but wrong format | Add the `enabled:` guard in `payload.config.ts` |
 | Admin returns 500 / nested `<html>` crash | Using `RootLayout` inside nested Next.js layout | Use custom `RootProvider` layout (Section 5) |
+| Collection list page is blank / `$L27 = "$undefined"` | `posts` table missing OR `payload_kv` table missing | Run complete SQL (Section 10 + collection SQL) on both Neon branches |
 | Collection list page is blank | `user: null` passed to `RootProvider` | Use `executeAuthStrategies` server-side (Section 5) |
 | Rich text editor invisible | `theme="light"` hardcoded | Detect theme from cookie/header (Section 5) |
 | `/api/health` returns Payload 404 | Payload intercepts all `/api/*` routes | Move health checks outside `/api/` path |
