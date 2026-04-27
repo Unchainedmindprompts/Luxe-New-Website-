@@ -50,6 +50,16 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   const permissions = await getAccessResults({ req });
 
+  // Detect theme from cookie → system header → default
+  const prefix = resolvedConfig.cookiePrefix || "payload";
+  const themeCookie = cookies.get(`${prefix}-theme`);
+  const themeFromCookie = typeof themeCookie === "string" ? themeCookie : (themeCookie as any)?.value;
+  const themeFromHeader = headers.get("Sec-CH-Prefers-Color-Scheme");
+  const theme =
+    (themeFromCookie === "dark" || themeFromCookie === "light" ? themeFromCookie : null) ??
+    (themeFromHeader === "dark" || themeFromHeader === "light" ? themeFromHeader : null) ??
+    "light";
+
   const languageOptions: LanguageOptions = Object.entries(
     resolvedConfig.i18n.supportedLanguages ?? {}
   ).map(([lang, langConfig]: [string, any]) => ({
@@ -77,7 +87,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         locale={undefined}
         permissions={permissions as unknown as SanitizedPermissions}
         serverFunction={serverFunction}
-        theme="light"
+        theme={theme as "light" | "dark"}
         translations={i18n.translations}
         user={user}
       >
