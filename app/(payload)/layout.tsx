@@ -1,3 +1,4 @@
+import "@payloadcms/next/css";
 import { handleServerFunctions } from "@payloadcms/next/layouts";
 import config from "@payload-config";
 import type { LanguageOptions, SanitizedPermissions, ServerFunctionClient } from "payload";
