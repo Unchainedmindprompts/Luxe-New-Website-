@@ -2,12 +2,19 @@ import "@payloadcms/next/css";
 import { handleServerFunctions } from "@payloadcms/next/layouts";
 import config from "@payload-config";
 import type { LanguageOptions, SanitizedPermissions, ServerFunctionClient } from "payload";
-import { getPayload } from "payload";
+import {
+  createLocalReq,
+  executeAuthStrategies,
+  getAccessResults,
+  getPayload,
+  getRequestLanguage,
+  parseCookies,
+} from "payload";
 import type { AcceptedLanguages } from "@payloadcms/translations";
 import { ProgressBar, RootProvider } from "@payloadcms/ui";
 import { getClientConfig } from "@payloadcms/ui/utilities/getClientConfig";
 import { initI18n } from "@payloadcms/translations";
-import { cookies } from "next/headers";
+import { headers as getHeaders } from "next/headers";
 import { importMap } from "./admin/importMap";
 
 const serverFunction: ServerFunctionClient = async (args) => {
@@ -16,19 +23,32 @@ const serverFunction: ServerFunctionClient = async (args) => {
 };
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
+  const headers = await getHeaders();
+  const cookies = parseCookies(headers);
+
   const payload = await getPayload({ config, importMap });
   const resolvedConfig = payload.config;
 
-  const cookieStore = await cookies();
-  const prefix = resolvedConfig.cookiePrefix || "payload";
-  const langCookie = cookieStore.get(`${prefix}-lng`);
-  const languageCode = (langCookie?.value ?? resolvedConfig.i18n.fallbackLanguage ?? "en") as AcceptedLanguages;
+  const languageCode = getRequestLanguage({
+    config: resolvedConfig,
+    cookies,
+    headers,
+  }) as AcceptedLanguages;
 
   const i18n = await initI18n({
     config: resolvedConfig.i18n,
     context: "client",
     language: languageCode,
   });
+
+  const { user } = await executeAuthStrategies({ headers, payload });
+
+  const req = await createLocalReq(
+    { req: { headers, host: headers.get("host") ?? "", i18n, user } },
+    payload
+  );
+
+  const permissions = await getAccessResults({ req });
 
   const languageOptions: LanguageOptions = Object.entries(
     resolvedConfig.i18n.supportedLanguages ?? {}
@@ -41,7 +61,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     config: resolvedConfig,
     i18n,
     importMap,
-    user: true,
+    user: user ?? true,
   });
 
   return (
@@ -55,11 +75,11 @@ export default async function Layout({ children }: { children: React.ReactNode }
         languageCode={languageCode}
         languageOptions={languageOptions}
         locale={undefined}
-        permissions={null as unknown as SanitizedPermissions}
+        permissions={permissions as unknown as SanitizedPermissions}
         serverFunction={serverFunction}
         theme="light"
         translations={i18n.translations}
-        user={null}
+        user={user}
       >
         <ProgressBar />
         {children}
