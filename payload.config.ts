@@ -52,6 +52,7 @@ export default buildConfig({
       connectionString:
         process.env.POSTGRES_URL || process.env.DATABASE_URL || "",
     },
+    push: true,
   }),
   plugins: [
     vercelBlobStorage({
