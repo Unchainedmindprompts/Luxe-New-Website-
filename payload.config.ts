@@ -30,7 +30,9 @@ export default buildConfig({
     },
     {
       slug: "media",
-      upload: true,
+      upload: {
+        disableLocalStorage: true,
+      },
       fields: [
         {
           name: "alt",
