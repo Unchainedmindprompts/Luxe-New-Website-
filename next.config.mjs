@@ -36,6 +36,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "img.youtube.com",
       },
+      {
+        // Vercel Blob Storage — for images uploaded via Payload CMS admin
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+      },
     ],
   },
 

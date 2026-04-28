@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export const revalidate = 3600;
 import Link from "next/link";
@@ -50,9 +51,105 @@ function BlogListSchema() {
   );
 }
 
-export default async function BlogPage() {
+async function PostGrid() {
   const posts = await getAllPosts();
 
+  if (posts.length === 0) {
+    return (
+      <section className="py-16 md:py-24 bg-warm-white">
+        <div className="container-luxe text-center text-warm-gray-400">
+          No posts yet — check back soon.
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="py-16 md:py-24 bg-warm-white">
+      <div className="container-luxe">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post) => (
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}`}
+              className="group bg-white rounded-2xl overflow-hidden border border-warm-gray-200/60 hover:border-gold/40 hover:shadow-lg transition-all duration-300"
+            >
+              {/* Image */}
+              {post.featuredImage ? (
+                <div className="relative aspect-[16/10] overflow-hidden bg-cream">
+                  <Image
+                    src={post.featuredImage}
+                    alt={post.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                </div>
+              ) : (
+                <div className="aspect-[16/10] bg-cream flex items-center justify-center">
+                  <svg className="w-12 h-12 text-warm-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                  </svg>
+                </div>
+              )}
+
+              {/* Content */}
+              <div className="p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <time
+                    className="text-warm-gray-400 text-sm"
+                    dateTime={post.date}
+                  >
+                    {new Date(post.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </time>
+                  <span className="text-warm-gray-300">·</span>
+                  <span className="text-warm-gray-400 text-sm">
+                    {getReadingTime(post.wordCount)}
+                  </span>
+                </div>
+                <h2 className="font-serif text-lg text-charcoal leading-snug group-hover:text-gold transition-colors line-clamp-3">
+                  {post.title}
+                </h2>
+                <p className="mt-3 text-warm-gray-500 text-sm leading-relaxed line-clamp-3">
+                  {post.excerpt}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PostGridSkeleton() {
+  return (
+    <section className="py-16 md:py-24 bg-warm-white">
+      <div className="container-luxe">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="bg-white rounded-2xl overflow-hidden border border-warm-gray-200/60 animate-pulse">
+              <div className="aspect-[16/10] bg-cream" />
+              <div className="p-6">
+                <div className="h-3 bg-warm-gray-200 rounded w-1/2 mb-4" />
+                <div className="h-4 bg-warm-gray-200 rounded w-full mb-2" />
+                <div className="h-4 bg-warm-gray-200 rounded w-4/5 mb-4" />
+                <div className="h-3 bg-warm-gray-200 rounded w-full mb-1" />
+                <div className="h-3 bg-warm-gray-200 rounded w-3/4" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default function BlogPage() {
   return (
     <>
       <BlogListSchema />
@@ -63,7 +160,7 @@ export default async function BlogPage() {
         ]}
       />
 
-      {/* Hero */}
+      {/* Hero — renders immediately before the DB query completes */}
       <section className="relative pt-24 md:pt-32 pb-12 md:pb-16 overflow-hidden min-h-[350px] md:min-h-[400px] flex items-center">
         <Image
           src="/images/top-down-bottom-up-shades.jpeg"
@@ -84,65 +181,10 @@ export default async function BlogPage() {
         </div>
       </section>
 
-      {/* Post Grid */}
-      <section className="py-16 md:py-24 bg-warm-white">
-        <div className="container-luxe">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts.map((post) => (
-              <Link
-                key={post.slug}
-                href={`/blog/${post.slug}`}
-                className="group bg-white rounded-2xl overflow-hidden border border-warm-gray-200/60 hover:border-gold/40 hover:shadow-lg transition-all duration-300"
-              >
-                {/* Image */}
-                {post.featuredImage ? (
-                  <div className="relative aspect-[16/10] overflow-hidden bg-cream">
-                    <Image
-                      src={post.featuredImage}
-                      alt={post.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  </div>
-                ) : (
-                  <div className="aspect-[16/10] bg-cream flex items-center justify-center">
-                    <svg className="w-12 h-12 text-warm-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                    </svg>
-                  </div>
-                )}
-
-                {/* Content */}
-                <div className="p-6">
-                  <div className="flex items-center gap-3 mb-3">
-                    <time
-                      className="text-warm-gray-400 text-sm"
-                      dateTime={post.date}
-                    >
-                      {new Date(post.date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </time>
-                    <span className="text-warm-gray-300">·</span>
-                    <span className="text-warm-gray-400 text-sm">
-                      {getReadingTime(post.wordCount)}
-                    </span>
-                  </div>
-                  <h2 className="font-serif text-lg text-charcoal leading-snug group-hover:text-gold transition-colors line-clamp-3">
-                    {post.title}
-                  </h2>
-                  <p className="mt-3 text-warm-gray-500 text-sm leading-relaxed line-clamp-3">
-                    {post.excerpt}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Post Grid — streams in after Payload/Neon query, hero already visible */}
+      <Suspense fallback={<PostGridSkeleton />}>
+        <PostGrid />
+      </Suspense>
 
       {/* CTA */}
       <section className="py-16 bg-cream">
