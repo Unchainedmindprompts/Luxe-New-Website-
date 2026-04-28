@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
@@ -419,17 +420,16 @@ export default async function BlogPostPage({ params }: Props) {
         {/* Content */}
         <section className="py-12 md:py-16 bg-warm-white">
           <div className="container-luxe max-w-3xl">
-            <div
-              className="prose prose-lg prose-warm-gray max-w-none
+            <div className="prose prose-lg prose-warm-gray max-w-none
                 prose-headings:font-serif prose-headings:text-charcoal
                 prose-p:text-warm-gray-600 prose-p:leading-relaxed
                 prose-a:text-gold prose-a:no-underline hover:prose-a:underline
                 prose-strong:text-charcoal
                 prose-img:rounded-xl prose-img:mx-auto
                 prose-figure:my-8
-                prose-li:text-warm-gray-600"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
+                prose-li:text-warm-gray-600">
+              <ReactMarkdown>{post.content}</ReactMarkdown>
+            </div>
           </div>
         </section>
 
