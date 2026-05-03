@@ -239,85 +239,78 @@ const Posts: CollectionConfig = {
 
     // ── Geographic & entity references (optional) ──────────────────────────
     {
-      type: "collapsible",
-      label: "Geographic & Entity References — optional, for geographically-focused articles",
-      admin: { initCollapsed: true },
+      name: "geographicFocus",
+      type: "select",
+      label: "Geographic Focus (optional)",
+      admin: {
+        description:
+          "Geographic & Entity References — optional, for geographically-focused articles. Select the primary city or region this article covers. Adds spatialCoverage + contentLocation to the article schema.",
+      },
+      options: [
+        { label: "Coeur d'Alene", value: "Coeur d'Alene" },
+        { label: "Post Falls", value: "Post Falls" },
+        { label: "Hayden", value: "Hayden" },
+        { label: "Rathdrum", value: "Rathdrum" },
+        { label: "Spirit Lake", value: "Spirit Lake" },
+        { label: "Sandpoint", value: "Sandpoint" },
+        { label: "Kootenai County", value: "Kootenai County" },
+        { label: "North Idaho", value: "North Idaho" },
+      ],
+    },
+    {
+      name: "mentionedEntities",
+      type: "array",
+      label: "Mentioned Entities (optional)",
+      admin: {
+        description:
+          "Civic, government, or business entities referenced in this article. Each becomes a schema.org mention.",
+        initCollapsed: true,
+      },
       fields: [
         {
-          name: "geographicFocus",
+          name: "entityType",
           type: "select",
-          label: "Geographic Focus",
-          admin: {
-            description:
-              "Primary city or region this article is about. Adds spatialCoverage and contentLocation to the article schema.",
-          },
+          required: true,
+          label: "Entity Type",
           options: [
-            { label: "Coeur d'Alene", value: "Coeur d'Alene" },
-            { label: "Post Falls", value: "Post Falls" },
-            { label: "Hayden", value: "Hayden" },
-            { label: "Rathdrum", value: "Rathdrum" },
-            { label: "Spirit Lake", value: "Spirit Lake" },
-            { label: "Sandpoint", value: "Sandpoint" },
-            { label: "Kootenai County", value: "Kootenai County" },
-            { label: "North Idaho", value: "North Idaho" },
+            { label: "Place", value: "Place" },
+            { label: "Government Organization", value: "GovernmentOrganization" },
+            { label: "Organization", value: "Organization" },
+            { label: "Local Business", value: "LocalBusiness" },
           ],
         },
+        { name: "name", type: "text", required: true, label: "Name" },
         {
-          name: "mentionedEntities",
-          type: "array",
-          label: "Mentioned Entities",
-          admin: {
-            description:
-              "Civic, government, or business entities referenced in this article. Each becomes a schema.org mention.",
-            initCollapsed: true,
-          },
-          fields: [
-            {
-              name: "entityType",
-              type: "select",
-              required: true,
-              label: "Entity Type",
-              options: [
-                { label: "Place", value: "Place" },
-                { label: "Government Organization", value: "GovernmentOrganization" },
-                { label: "Organization", value: "Organization" },
-                { label: "Local Business", value: "LocalBusiness" },
-              ],
-            },
-            { name: "name", type: "text", required: true, label: "Name" },
-            {
-              name: "url",
-              type: "text",
-              label: "URL",
-              admin: { description: "Official website or authoritative reference URL." },
-            },
-            {
-              name: "description",
-              type: "textarea",
-              label: "Description (optional)",
-            },
-          ],
+          name: "url",
+          type: "text",
+          label: "URL",
+          admin: { description: "Official website or authoritative reference URL." },
         },
         {
-          name: "citedSources",
-          type: "array",
-          label: "Cited Sources",
-          admin: {
-            description:
-              "External sources cited in this article. Each becomes a schema.org citation.",
-            initCollapsed: true,
-          },
-          fields: [
-            { name: "name", type: "text", required: true, label: "Source Name" },
-            { name: "url", type: "text", required: true, label: "URL" },
-            { name: "publisher", type: "text", label: "Publisher (optional)" },
-            {
-              name: "dateAccessed",
-              type: "date",
-              label: "Date Accessed (optional)",
-              admin: { date: { pickerAppearance: "dayOnly", displayFormat: "MMM d, yyyy" } },
-            },
-          ],
+          name: "description",
+          type: "textarea",
+          label: "Description (optional)",
+        },
+      ],
+    },
+    {
+      name: "citedSources",
+      type: "array",
+      label: "Cited Sources (optional)",
+      admin: {
+        description:
+          "External sources cited in this article. Each becomes a schema.org citation.",
+        initCollapsed: true,
+      },
+      fields: [
+        { name: "name", type: "text", required: true, label: "Source Name" },
+        { name: "url", type: "text", required: true, label: "URL" },
+        { name: "publisher", type: "text", label: "Publisher (optional)" },
+        {
+          name: "dateAccessed",
+          type: "date",
+          label: "Date Accessed (optional)",
+          admin: { date: { pickerAppearance: "dayOnly", displayFormat: "MMM d, yyyy" } },
         },
       ],
     },
