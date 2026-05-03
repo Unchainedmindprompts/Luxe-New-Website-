@@ -11,6 +11,19 @@ export interface FAQ {
   answer: string;
 }
 
+export interface MentionedEntity {
+  entityType: "Place" | "GovernmentOrganization" | "Organization" | "LocalBusiness";
+  name: string;
+  url?: string;
+  description?: string;
+}
+
+export interface CitedSource {
+  name: string;
+  url: string;
+  publisher?: string;
+}
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -26,6 +39,9 @@ export interface BlogPost {
   wordCount: number;
   content: string;
   faqs: FAQ[];
+  geographicFocus?: string;
+  mentionedEntities?: MentionedEntity[];
+  citedSources?: CitedSource[];
 }
 
 const BLOG_DIR = join(process.cwd(), "content", "blog");
@@ -108,6 +124,9 @@ function getMarkdownPost(slug: string): BlogPost | null {
       wordCount: parseInt(data.wordCount, 10) || 0,
       content,
       faqs,
+      geographicFocus: undefined,
+      mentionedEntities: [],
+      citedSources: [],
     };
   } catch {
     return null;
