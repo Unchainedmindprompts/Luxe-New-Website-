@@ -296,6 +296,44 @@ function ArticleSchema({ post }: { post: BlogPost }) {
           : `https://www.luxewindowworks.com${post.featuredImage}`,
       },
     }),
+    ...(post.geographicFocus && {
+      spatialCoverage: {
+        "@type": "Place",
+        name: post.geographicFocus,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: post.geographicFocus,
+          addressRegion: "ID",
+          addressCountry: "US",
+        },
+      },
+      contentLocation: {
+        "@type": "Place",
+        name: post.geographicFocus,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: post.geographicFocus,
+          addressRegion: "ID",
+          addressCountry: "US",
+        },
+      },
+    }),
+    ...(post.mentionedEntities && post.mentionedEntities.length > 0 && {
+      mentions: post.mentionedEntities.map((e) => ({
+        "@type": e.entityType,
+        name: e.name,
+        ...(e.url && { url: e.url }),
+        ...(e.description && { description: e.description }),
+      })),
+    }),
+    ...(post.citedSources && post.citedSources.length > 0 && {
+      citation: post.citedSources.map((s) => ({
+        "@type": "CreativeWork",
+        name: s.name,
+        url: s.url,
+        ...(s.publisher && { publisher: { "@type": "Organization", name: s.publisher } }),
+      })),
+    }),
   };
 
   const breadcrumbSchema = {
