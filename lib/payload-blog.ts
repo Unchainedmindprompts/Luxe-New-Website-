@@ -1,7 +1,7 @@
 import "server-only";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import type { BlogPost, FAQ, MentionedEntity, CitedSource } from "./blog";
+import type { BlogPost, FAQ } from "./blog";
 
 const AUTHOR = "Mark Abplanalp";
 
@@ -32,9 +32,6 @@ async function toPost(doc: any): Promise<BlogPost> {
     wordCount: estimateWordCount(content),
     content,
     faqs: (doc.faqs ?? []) as FAQ[],
-    geographicFocus: (doc.geographicFocus as string | undefined) ?? undefined,
-    mentionedEntities: (doc.mentionedEntities ?? []) as MentionedEntity[],
-    citedSources: (doc.citedSources ?? []) as CitedSource[],
   };
 }
 
