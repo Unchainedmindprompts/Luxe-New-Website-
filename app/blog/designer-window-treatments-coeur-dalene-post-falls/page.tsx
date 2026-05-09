@@ -47,7 +47,6 @@ function ArticleSchema() {
     image: { "@type": "ImageObject", url: `${BASE}${HERO}`, contentUrl: `${BASE}${HERO}` },
     mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE}/blog/${SLUG}` },
     isPartOf: { "@type": "Blog", "@id": `${BASE}/blog`, name: "Window Treatment Insights", publisher: { "@id": `${BASE}/#business` } },
-    review: { "@id": "https://www.luxewindowworks.com/#review-caroline-didiego" },
     mentions: [
       { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
       { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
