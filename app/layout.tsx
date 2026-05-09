@@ -266,7 +266,6 @@ const localBusinessSchema = {
         name: "Caroline Di Diego",
         jobTitle: "Interior Designer",
       },
-      itemReviewed: { "@id": "https://www.luxewindowworks.com/#business" },
     },
   ],
   knowsAbout: [
