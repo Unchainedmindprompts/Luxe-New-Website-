@@ -1,7 +1,7 @@
 import "server-only";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import type { BlogPost, FAQ } from "./blog";
+import type { BlogPost, FAQ, ReviewData } from "./blog";
 
 const AUTHOR = "Mark Abplanalp";
 
@@ -32,6 +32,16 @@ async function toPost(doc: any): Promise<BlogPost> {
     wordCount: estimateWordCount(content),
     content,
     faqs: (doc.faqs ?? []) as FAQ[],
+    review: doc.review?.reviewerName
+      ? ({
+          reviewerName: doc.review.reviewerName,
+          reviewerJobTitle: doc.review.reviewerJobTitle ?? undefined,
+          reviewBody: doc.review.reviewBody ?? "",
+          reviewRating: doc.review.reviewRating ?? 5,
+          reviewDate: doc.review.reviewDate ?? "",
+          reviewUrl: doc.review.reviewUrl ?? undefined,
+        } as ReviewData)
+      : undefined,
   };
 }
 

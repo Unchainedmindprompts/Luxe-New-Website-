@@ -326,6 +326,34 @@ function ArticleSchema({ post }: { post: BlogPost }) {
 
   const additionalSchemas = SLUG_SCHEMA[post.slug] || [];
 
+  const reviewSchema = post.review?.reviewerName
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Review",
+        "@id": `https://www.luxewindowworks.com/#review-${post.slug}`,
+        ...(post.review.reviewUrl && { url: post.review.reviewUrl }),
+        ...(post.review.reviewDate && { datePublished: post.review.reviewDate }),
+        reviewBody: post.review.reviewBody,
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: String(post.review.reviewRating ?? 5),
+          bestRating: "5",
+          worstRating: "1",
+        },
+        author: {
+          "@type": "Person",
+          name: post.review.reviewerName,
+          ...(post.review.reviewerJobTitle && { jobTitle: post.review.reviewerJobTitle }),
+        },
+        itemReviewed: {
+          "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
+          "@id": "https://www.luxewindowworks.com/#business",
+          name: "Luxe Window Works",
+        },
+        subjectOf: { "@id": `https://www.luxewindowworks.com/blog/${post.slug}` },
+      }
+    : null;
+
   return (
     <>
       <script
@@ -340,6 +368,12 @@ function ArticleSchema({ post }: { post: BlogPost }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
+      {reviewSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
         />
       )}
       {additionalSchemas.map((s, i) => (
