@@ -11,6 +11,15 @@ export interface FAQ {
   answer: string;
 }
 
+export interface ReviewData {
+  reviewerName: string;
+  reviewerJobTitle?: string;
+  reviewBody: string;
+  reviewRating: number;
+  reviewDate: string;
+  reviewUrl?: string;
+}
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -26,6 +35,7 @@ export interface BlogPost {
   wordCount: number;
   content: string;
   faqs: FAQ[];
+  review?: ReviewData;
 }
 
 const BLOG_DIR = join(process.cwd(), "content", "blog");

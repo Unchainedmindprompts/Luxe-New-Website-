@@ -3,6 +3,15 @@ import type { CollectionConfig, CollectionAfterChangeHook } from "payload";
 const BASE_URL = "https://www.luxewindowworks.com";
 
 type FAQ = { question: string; answer: string };
+type ReviewGroup = {
+  reviewerName?: string;
+  reviewerJobTitle?: string;
+  reviewBody?: string;
+  reviewRating?: number;
+  reviewDate?: string;
+  reviewUrl?: string;
+};
+
 type PostDoc = {
   id: string;
   title: string;
@@ -12,6 +21,7 @@ type PostDoc = {
   category?: string;
   tags?: { tag: string }[];
   faqs?: FAQ[];
+  review?: ReviewGroup;
   publishedDate?: string;
   dateModified?: string;
   updatedAt?: string;
@@ -83,7 +93,37 @@ const schemaHook: CollectionAfterChangeHook<PostDoc> = async ({ doc, req, contex
         }
       : null;
 
-  const schemas = [articleSchema, ...(faqSchema ? [faqSchema] : [])];
+  const review = doc.review;
+  const reviewSchema =
+    review?.reviewerName
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Review",
+          "@id": `${BASE_URL}/#review-${doc.slug}`,
+          ...(review.reviewUrl && { url: review.reviewUrl }),
+          ...(review.reviewDate && { datePublished: review.reviewDate }),
+          reviewBody: review.reviewBody,
+          reviewRating: {
+            "@type": "Rating",
+            ratingValue: String(review.reviewRating ?? 5),
+            bestRating: "5",
+            worstRating: "1",
+          },
+          author: {
+            "@type": "Person",
+            name: review.reviewerName,
+            ...(review.reviewerJobTitle && { jobTitle: review.reviewerJobTitle }),
+          },
+          itemReviewed: {
+            "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
+            "@id": `${BASE_URL}/#business`,
+            name: "Luxe Window Works",
+          },
+          subjectOf: { "@id": `${BASE_URL}/blog/${doc.slug}` },
+        }
+      : null;
+
+  const schemas = [articleSchema, ...(faqSchema ? [faqSchema] : []), ...(reviewSchema ? [reviewSchema] : [])];
 
   await req.payload.update({
     collection: "posts",
@@ -191,6 +231,29 @@ const Posts: CollectionConfig = {
             description: "Write a complete, self-contained answer (2–5 sentences).",
           },
         },
+      ],
+    },
+
+    // ── Customer review (optional — only for review-focused articles) ────────
+    {
+      name: "review",
+      type: "group",
+      label: "Customer Review Schema (optional)",
+      admin: {
+        description: "Only fill this in when the article features a specific customer review. Leave blank for all other posts.",
+      },
+      fields: [
+        { name: "reviewerName", type: "text", label: "Reviewer Full Name" },
+        { name: "reviewerJobTitle", type: "text", label: "Job Title (optional, e.g. Interior Designer)" },
+        { name: "reviewBody", type: "textarea", label: "Review Text (paste the full review)" },
+        { name: "reviewRating", type: "number", label: "Rating (1–5)", defaultValue: 5, min: 1, max: 5 },
+        {
+          name: "reviewDate",
+          type: "date",
+          label: "Review Date",
+          admin: { date: { pickerAppearance: "dayOnly", displayFormat: "MMM d, yyyy" } },
+        },
+        { name: "reviewUrl", type: "text", label: "Review URL (Google Maps link — optional)" },
       ],
     },
 
