@@ -84,7 +84,7 @@ function ArticleSchema() {
       {
         "@type": "Question",
         name: "How can a window treatment installation be both thorough and fast?",
-        acceptedAnswer: { "@type": "Answer", text: "The only way to get both is preparation. By the time installation day arrives, hardware is pre-staged, measurements have been re-verified against the delivered product, and the install sequence is planned room-by-room. For motorized systems — Somfy, BLISS/Dooya, Hunter Douglas PowerView — programming runs in parallel with the mechanical install rather than as an afterthought. That preparation is how a finished room gets delivered in roughly half the time a designer typically budgets, with zero punch list items." },
+        acceptedAnswer: { "@type": "Answer", text: "The only way to get both is preparation. By the time installation day arrives, hardware is pre-staged, measurements have been re-verified against the delivered product, and the install sequence is planned room-by-room. For motorized systems — Somfy and BLISS/Dooya — programming runs in parallel with the mechanical install rather than as an afterthought. That preparation is how a finished room gets delivered in roughly half the time a designer typically budgets, with zero punch list items." },
       },
       {
         "@type": "Question",
@@ -160,7 +160,7 @@ export default function Page() {
 
               <h2>Who Is Luxe Window Works?</h2>
 
-              <p>Luxe Window Works is a custom window treatment company based in Post Falls, Idaho, serving Coeur d&apos;Alene, Hayden, Rathdrum, and the surrounding North Idaho region. Founded by Mark Abplanalp, who has twenty-three years of hands-on installation experience starting with his first window treatment business in Issaquah, Washington in 2002. Luxe carries Alta, Norman, and Lafayette brands and specializes in motorized shading systems including Somfy, BLISS/Dooya, and Hunter Douglas PowerView.</p>
+              <p>Luxe Window Works is a custom window treatment company based in Post Falls, Idaho, serving Coeur d&apos;Alene, Hayden, Rathdrum, and the surrounding North Idaho region. Founded by Mark Abplanalp, who has twenty-three years of hands-on installation experience starting with his first window treatment business in Issaquah, Washington in 2002. Luxe carries Alta, Norman, and Lafayette brands and specializes in motorized shading systems including Somfy and BLISS/Dooya.</p>
 
               <h2>What Did the Designer Say About Luxe Window Works?</h2>
 
@@ -199,7 +199,7 @@ export default function Page() {
 
               <h3>What About Motorized Window Treatments?</h3>
 
-              <p>For motorized systems — Somfy, BLISS/Dooya, Hunter Douglas PowerView — the programming is done in parallel with the mechanical install rather than as an afterthought. That&apos;s how a finished room gets delivered in roughly half the time a designer typically budgets, with zero punch list items.</p>
+              <p>For motorized systems — Somfy and BLISS/Dooya — the programming is done in parallel with the mechanical install rather than as an afterthought. That&apos;s how a finished room gets delivered in roughly half the time a designer typically budgets, with zero punch list items.</p>
 
               <h2>Why Is a Curated Product Selection Important in North Idaho?</h2>
 
