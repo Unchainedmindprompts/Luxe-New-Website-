@@ -294,6 +294,8 @@ function ArticleSchema({ post }: { post: BlogPost }) {
         contentUrl: post.featuredImage.startsWith("http")
           ? post.featuredImage
           : `https://www.luxewindowworks.com${post.featuredImage}`,
+        width: 1200,
+        height: 630,
       },
     }),
   };
