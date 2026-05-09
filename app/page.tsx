@@ -30,14 +30,14 @@ const localBusinessSchema = {
   email: "mark@luxewindowworks.com",
   priceRange: "$$",
   foundingDate: "2025",
-  image: `${BASE}/images/hero-modern-living.webp`,
+  image: { "@type": "ImageObject", url: `${BASE}/images/hero-modern-living.webp`, contentUrl: `${BASE}/images/hero-modern-living.webp`, width: 900, height: 780 },
   founder: {
     "@type": "Person",
     "@id": `${BASE}/#owner`,
     name: "Mark Abplanalp",
     jobTitle: "Owner & Window Treatment Specialist",
     url: `${BASE}/about`,
-    image: `${BASE}/_next/image?url=%2Fimages%2Fmark-photo.webp&w=3840&q=80`,
+    image: `${BASE}/images/mark-photo.webp`,
     worksFor: { "@id": `${BASE}/#business` },
   },
   address: {

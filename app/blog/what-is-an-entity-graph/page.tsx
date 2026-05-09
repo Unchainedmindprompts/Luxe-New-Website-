@@ -44,11 +44,7 @@ function ArticleSchema() {
     dateModified: "2026-04-17T00:00:00Z",
     author: { "@id": `${BASE}/#owner` },
     publisher: { "@id": `${BASE}/#business` },
-    image: {
-      "@type": "ImageObject",
-      url: `${BASE}${HERO}`,
-      contentUrl: `${BASE}${HERO}`,
-    },
+    image: { "@type": "ImageObject", url: `${BASE}${HERO}`, contentUrl: `${BASE}${HERO}`, width: 900, height: 780 },
     mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE}/blog/${SLUG}` },
     isPartOf: {
       "@type": "Blog",

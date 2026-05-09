@@ -44,7 +44,7 @@ function ArticleSchema() {
     dateModified: "2026-05-09T00:00:00Z",
     author: { "@id": `${BASE}/#owner` },
     publisher: { "@id": `${BASE}/#business` },
-    image: { "@type": "ImageObject", url: `${BASE}${HERO}`, contentUrl: `${BASE}${HERO}` },
+    image: { "@type": "ImageObject", url: `${BASE}${HERO}`, contentUrl: `${BASE}${HERO}`, width: 1672, height: 941 },
     mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE}/blog/${SLUG}` },
     isPartOf: { "@type": "Blog", "@id": `${BASE}/blog`, name: "Window Treatment Insights", publisher: { "@id": `${BASE}/#business` } },
     about: { "@id": `${BASE}/#business` },
