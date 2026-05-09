@@ -44,7 +44,7 @@ function ArticleSchema() {
     dateModified: "2026-04-16T00:00:00Z",
     author: { "@id": "https://www.luxewindowworks.com/#owner" },
     publisher: { "@id": "https://www.luxewindowworks.com/#business" },
-    image: { "@type": "ImageObject", url: "https://www.luxewindowworks.com/images/IMG_6457.jpeg", contentUrl: "https://www.luxewindowworks.com/images/IMG_6457.jpeg" },
+    image: { "@type": "ImageObject", url: "https://www.luxewindowworks.com/images/IMG_6457.jpeg", contentUrl: "https://www.luxewindowworks.com/images/IMG_6457.jpeg", width: 1000, height: 784 },
     mainEntityOfPage: { "@type": "WebPage", "@id": `https://www.luxewindowworks.com/blog/${SLUG}` },
     isPartOf: { "@type": "Blog", "@id": "https://www.luxewindowworks.com/blog", name: "Window Treatment Insights", publisher: { "@id": "https://www.luxewindowworks.com/#business" } },
     mentions: [
