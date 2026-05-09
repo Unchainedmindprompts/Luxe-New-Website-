@@ -7,7 +7,7 @@ import { BUSINESS } from "@/lib/constants";
 const SLUG = "designer-window-treatments-coeur-dalene-post-falls";
 const TITLE = "Designer Window Treatments in Coeur d'Alene & Post Falls: What \"Custom\" Actually Means";
 const DESCRIPTION = "Why interior designers in Coeur d'Alene and Post Falls trust Luxe Window Works for custom window treatment installation. A designer's perspective on what 'custom' really means.";
-const HERO = "/images/IMG_6457.jpeg";
+const HERO = "/images/designer-window-treatments-hero.png";
 const BASE = "https://www.luxewindowworks.com";
 const CANONICAL = `${BASE}/blog/${SLUG}`;
 
