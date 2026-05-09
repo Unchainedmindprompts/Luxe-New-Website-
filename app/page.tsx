@@ -17,28 +17,92 @@ function StarIcon() {
   );
 }
 
+const BASE = "https://www.luxewindowworks.com";
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
+  "@id": `${BASE}/#business`,
+  name: "Luxe Window Works",
+  description: "Premium custom window treatments in Northern Idaho. 23 years of installation expertise serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Free in-home consultation.",
+  url: BASE,
+  telephone: "208-660-8643",
+  email: "mark@luxewindowworks.com",
+  priceRange: "$$",
+  foundingDate: "2025",
+  image: `${BASE}/images/hero-modern-living.webp`,
+  founder: {
+    "@type": "Person",
+    "@id": `${BASE}/#owner`,
+    name: "Mark Abplanalp",
+    jobTitle: "Owner & Window Treatment Specialist",
+    url: `${BASE}/about`,
+    image: `${BASE}/_next/image?url=%2Fimages%2Fmark-photo.webp&w=3840&q=80`,
+    worksFor: { "@id": `${BASE}/#business` },
+  },
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "2972 N Pavo Ln",
+    addressLocality: "Post Falls",
+    addressRegion: "ID",
+    postalCode: "83854",
+    addressCountry: "US",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: "47.736435",
+    longitude: "-116.879122",
+  },
+  areaServed: [
+    { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
+    { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
+    { "@type": "City", name: "Hayden", containedInPlace: { "@type": "State", name: "Idaho" } },
+    { "@type": "City", name: "Sandpoint", containedInPlace: { "@type": "State", name: "Idaho" } },
+    { "@type": "City", name: "Rathdrum", containedInPlace: { "@type": "State", name: "Idaho" } },
+  ],
+  openingHoursSpecification: [
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "17:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "09:00", closes: "14:00" },
+  ],
+  sameAs: [
+    "https://share.google/9kubt3XEi6TrNzGKe",
+    "https://www.bing.com/maps/search?toWww=1&redig=2BC026B2E32B45528048B81FC45876EE&style=r&q=Luxe+Window+Works+LLC%2C+2972+N+Pavo+Ln%2C+Post+Falls%2C+ID+83854%2C+United+States&ss=id.local_ypid%3A%22YN6F9E5AD2DAFE5C39%22&st=Luxe+Window+Works+LLC&sfa=2972+N+Pavo+Ln%2C+Post+Falls%2C+ID+83854%2C+United+States&cp=47.736435%7E-116.879120&lvl=16",
+    "https://maps.apple.com/place?place-id=I907802082955E66F&address=2972+N+Pavo+Ln%2C+Post+Falls%2C+ID++83854%2C+United+States&coordinate=47.736435%2C-116.879122&name=Luxe+Window+Works&_provider=9902",
+    "https://www.yelp.com/biz/luxe-window-works-post-falls",
+    "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
+    "https://www.yellowpages.com/post-falls-id/mip/luxe-window-works-llc-579719675",
+    "https://www.instagram.com/luxewindowworks",
+    "https://www.facebook.com/profile.php?id=61573190815920",
+  ],
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "5.0",
+    reviewCount: "14",
+    bestRating: "5",
+    worstRating: "1",
+  },
+};
+
 const videoSchema = {
   "@context": "https://schema.org",
   "@type": "VideoObject",
   name: "Premium Window Treatments for Northern Idaho Homes — Luxe Window Works",
-  description:
-    "Transform your view, elevate your lifestyle. At Luxe Window Works, we don't just cover windows—we craft custom solutions that enhance beauty, boost energy efficiency, and increase the value of your Northern Idaho home. From stunning shutters to smart shades, this showcase highlights what true window elegance looks like when design meets craftsmanship. Serving Post Falls, Coeur d'Alene, Hayden & beyond.",
+  description: "Transform your view, elevate your lifestyle. At Luxe Window Works, we don't just cover windows—we craft custom solutions that enhance beauty, boost energy efficiency, and increase the value of your Northern Idaho home. From stunning shutters to smart shades, this showcase highlights what true window elegance looks like when design meets craftsmanship. Serving Post Falls, Coeur d'Alene, Hayden & beyond.",
   thumbnailUrl: "https://img.youtube.com/vi/8FiVnMSHuc4/maxresdefault.jpg",
   uploadDate: "2025-11-07",
   duration: "PT1M6S",
   embedUrl: "https://www.youtube.com/embed/8FiVnMSHuc4",
   contentUrl: "https://www.youtube.com/watch?v=8FiVnMSHuc4",
-  publisher: {
-    "@type": "LocalBusiness",
-    "@id": "https://www.luxewindowworks.com/#business",
-    name: "Luxe Window Works",
-    url: "https://www.luxewindowworks.com",
-  },
+  publisher: { "@id": `${BASE}/#business` },
 };
 
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema) }}

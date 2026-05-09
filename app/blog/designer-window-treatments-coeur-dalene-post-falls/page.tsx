@@ -98,11 +98,38 @@ function ArticleSchema() {
     ],
   };
 
+  const reviewSchema = {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "@id": `${BASE}/#review-caroline-didiego`,
+    url: "https://maps.app.goo.gl/LK59b24y9xTy7Jcw8",
+    datePublished: "2025-11-09",
+    reviewBody: "Outstanding experience with Mark at Luxe Window Works! As designers we love to work with professionals to implement our designs. We always have very 'custom' requirements, and that was certainly the case with Mark and Luxe Window Works. Mark paid super close attention during the ordering process, and it really paid off! Our design criteria was realized meticulously, and Mark's installation was thorough (and fast!), with the end result exceeding our expectations. Window treatments can make or break an interior design, so it's mandatory to have a resource that offers a curated selection of the best made, proven quality products, as Luxe does. In the end it saves time and money, and results in very happy clients. And we all want happy clients!",
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: "5",
+      bestRating: "5",
+      worstRating: "1",
+    },
+    author: {
+      "@type": "Person",
+      name: "Caroline Di Diego",
+      jobTitle: "Interior Designer",
+    },
+    itemReviewed: {
+      "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
+      "@id": `${BASE}/#business`,
+      name: "Luxe Window Works",
+    },
+    subjectOf: { "@id": CANONICAL },
+  };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
     </>
   );
 }
