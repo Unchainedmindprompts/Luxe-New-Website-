@@ -354,13 +354,10 @@ export const productPages: Record<string, ProductPageData> = {
     secondVideo: {
       idSlug: "video-motorization-2025-08-22",
       youtubeId: "nY_XVjk9Bco",
-      // TODO: add final title from YouTube
-      title: "TODO: add final title from YouTube",
-      // TODO: add final description from YouTube
-      description: "TODO: add final description from YouTube",
+      title: "The Dog Days Of Summer!",
+      description: "Motorized window shades from Luxe Window Works. Push-button operation, no cords, safe for kids and pets, and perfect for hard-to-reach windows. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint in North Idaho. Free in-home consultations and 23 years of experience.",
       uploadDate: "2025-08-22",
-      // TODO: add duration in ISO 8601 format (e.g. PT1M30S for 1 min 30 sec)
-      duration: "TODO: add ISO 8601 duration",
+      duration: "PT9S",
     },
     headline: "One Tap. Every Shade. Perfect Position.",
     subheadline: "Smart motorized shades you can control from your phone, your voice, or the wall — because some things should just be easy.",
