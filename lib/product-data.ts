@@ -4,6 +4,10 @@ export interface FAQ {
 }
 
 export interface ProductVideo {
+  // Stable slug used to generate the @id (e.g. "video-motorization-overview"
+  // becomes https://www.luxewindowworks.com/#video-motorization-overview).
+  // Keep this stable once published — it's the entity identifier crawlers use.
+  idSlug: string;
   youtubeId: string;
   title: string;
   description: string;
@@ -16,6 +20,7 @@ export interface ProductPageData {
   name: string;
   image?: string;
   video?: ProductVideo;
+  secondVideo?: ProductVideo;
   headline: string;
   subheadline: string;
   problem: string;
@@ -339,11 +344,23 @@ export const productPages: Record<string, ProductPageData> = {
     slug: "motorization",
     name: "Motorization",
     video: {
+      idSlug: "video-motorization-overview",
       youtubeId: "BTVQo6bRGEw",
       title: "Motorized Window Treatments — Luxe Window Works",
       description: "See motorized window treatments in action — installed by Luxe Window Works in Northern Idaho. One tap controls every shade in the room. Battery-powered motors, no hardwiring required. Serving Post Falls, Coeur d'Alene, Hayden, and Sandpoint.",
       uploadDate: "2025-08-30",
       duration: "PT53S",
+    },
+    secondVideo: {
+      idSlug: "video-motorization-2025-08-22",
+      youtubeId: "nY_XVjk9Bco",
+      // TODO: add final title from YouTube
+      title: "TODO: add final title from YouTube",
+      // TODO: add final description from YouTube
+      description: "TODO: add final description from YouTube",
+      uploadDate: "2025-08-22",
+      // TODO: add duration in ISO 8601 format (e.g. PT1M30S for 1 min 30 sec)
+      duration: "TODO: add ISO 8601 duration",
     },
     headline: "One Tap. Every Shade. Perfect Position.",
     subheadline: "Smart motorized shades you can control from your phone, your voice, or the wall — because some things should just be easy.",

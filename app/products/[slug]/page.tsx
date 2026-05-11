@@ -4,7 +4,7 @@ import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { productPages } from "@/lib/product-data";
-import type { ProductPageData } from "@/lib/product-data";
+import type { ProductPageData, ProductVideo } from "@/lib/product-data";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
 
 interface Props {
@@ -67,18 +67,18 @@ function ServiceSchema({ product }: { product: ProductPageData }) {
   );
 }
 
-function VideoSchema({ product }: { product: ProductPageData }) {
-  if (!product.video) return null;
+function VideoSchema({ video }: { video: ProductVideo }) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "VideoObject",
-    name: product.video.title,
-    description: product.video.description,
-    thumbnailUrl: `https://img.youtube.com/vi/${product.video.youtubeId}/maxresdefault.jpg`,
-    uploadDate: product.video.uploadDate,
-    duration: product.video.duration,
-    embedUrl: `https://www.youtube.com/embed/${product.video.youtubeId}`,
-    contentUrl: `https://www.youtube.com/watch?v=${product.video.youtubeId}`,
+    "@id": `https://www.luxewindowworks.com/#${video.idSlug}`,
+    name: video.title,
+    description: video.description,
+    thumbnailUrl: `https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg`,
+    uploadDate: video.uploadDate,
+    duration: video.duration,
+    embedUrl: `https://www.youtube.com/embed/${video.youtubeId}`,
+    contentUrl: `https://www.youtube.com/watch?v=${video.youtubeId}`,
     publisher: { "@id": "https://www.luxewindowworks.com/#business" },
   };
   return (
@@ -120,7 +120,8 @@ export default async function ProductPage({ params }: Props) {
     <>
       <ServiceSchema product={product} />
       <FAQSchema product={product} />
-      <VideoSchema product={product} />
+      {product.video && <VideoSchema video={product.video} />}
+      {product.secondVideo && <VideoSchema video={product.secondVideo} />}
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
@@ -280,6 +281,23 @@ export default async function ProductPage({ params }: Props) {
           </p>
         </div>
       </section>
+
+      {/* Second video — only renders when a product has a secondVideo (currently motorization). */}
+      {product.secondVideo && (
+        <section className="py-16 md:py-20 bg-warm-white">
+          <div className="container-luxe max-w-4xl">
+            <h2 className="font-serif text-2xl sm:text-3xl text-charcoal text-center mb-8">
+              See It in Action
+            </h2>
+            <div className="rounded-2xl overflow-hidden">
+              <YoutubeEmbed
+                videoId={product.secondVideo.youtubeId}
+                title={product.secondVideo.title}
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* FAQ */}
       <section className="py-16 md:py-20 bg-cream/50">
