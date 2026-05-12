@@ -73,6 +73,7 @@ const localBusinessSchema = {
     "https://www.yellowpages.com/post-falls-id/mip/luxe-window-works-llc-579719675",
     "https://www.instagram.com/luxewindowworks",
     "https://www.facebook.com/profile.php?id=61573190815920",
+    "https://www.houzz.com/pro/webuser-472935533/luxe-window-works-llc",
   ],
   aggregateRating: {
     "@type": "AggregateRating",
