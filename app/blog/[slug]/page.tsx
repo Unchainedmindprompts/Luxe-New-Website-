@@ -281,6 +281,14 @@ function ArticleSchema({ post }: { post: BlogPost }) {
       name: "Window Treatment Insights",
       publisher: { "@id": "https://www.luxewindowworks.com/#business" },
     },
+    about: { "@id": "https://www.luxewindowworks.com/#business" },
+    mentions: [
+      { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
+      { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
+      { "@type": "City", name: "Hayden", containedInPlace: { "@type": "State", name: "Idaho" } },
+      { "@type": "City", name: "Rathdrum", containedInPlace: { "@type": "State", name: "Idaho" } },
+      { "@type": "City", name: "Sandpoint", containedInPlace: { "@type": "State", name: "Idaho" } },
+    ],
     speakable: {
       "@type": "SpeakableSpecification",
       cssSelector: ["h1", ".post-excerpt"],
