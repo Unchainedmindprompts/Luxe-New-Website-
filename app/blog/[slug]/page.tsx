@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
@@ -472,7 +473,7 @@ export default async function BlogPostPage({ params }: Props) {
                 prose-img:rounded-xl prose-img:mx-auto
                 prose-figure:my-8
                 prose-li:text-warm-gray-600">
-              <ReactMarkdown>{post.content}</ReactMarkdown>
+              <ReactMarkdown rehypePlugins={[rehypeRaw]}>{post.content}</ReactMarkdown>
             </div>
           </div>
         </section>
