@@ -467,6 +467,9 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="container-luxe max-w-3xl">
             <div className="prose prose-lg prose-warm-gray max-w-none
                 prose-headings:font-serif prose-headings:text-charcoal
+                prose-h1:font-bold
+                prose-h2:font-bold
+                prose-h3:font-bold
                 prose-p:text-warm-gray-600 prose-p:leading-relaxed
                 prose-a:text-gold prose-a:no-underline hover:prose-a:underline
                 prose-strong:text-charcoal
