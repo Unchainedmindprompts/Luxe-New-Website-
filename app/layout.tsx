@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
 import { ConditionalLayout } from "./ConditionalLayout";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = localFont({
   src: [
@@ -106,6 +107,7 @@ fbq('track','PageView');`}
           />
         </noscript>
         <ConditionalLayout>{children}</ConditionalLayout>
+        <Analytics />
       </body>
     </html>
   );
