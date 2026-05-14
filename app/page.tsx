@@ -74,6 +74,7 @@ const localBusinessSchema = {
     "https://www.instagram.com/luxewindowworks",
     "https://www.facebook.com/profile.php?id=61573190815920",
     "https://www.houzz.com/pro/webuser-472935533/luxe-window-works-llc",
+    "https://nextdoor.com/page/luxe-window-works-llc-post-falls-id/",
   ],
   aggregateRating: {
     "@type": "AggregateRating",
