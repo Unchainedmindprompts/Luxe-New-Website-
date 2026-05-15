@@ -262,6 +262,7 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
   citation?: object[];
   mentions?: object[];
   relatedLink?: string[];
+  faqs?: { question: string; answer: string }[];
 }> = {
   "are-costco-window-treatments-worth-it-a-local-dealer-tells-you-the-truth": {
     citation: [
@@ -284,6 +285,36 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
     ],
     relatedLink: [
       "https://www.luxewindowworks.com/blog/why-custom-window-treatments-in-coeur-d-alene-and-post-falls-don-t-have-to-cost-twice-what-they-should",
+    ],
+    faqs: [
+      {
+        question: "Does Costco install window treatments themselves?",
+        answer: "No. Costco contracts with local independent window treatment dealers to measure, supply, and install. You are not buying from Costco's installation team — you are buying from a local dealer through Costco's program, which adds a layer of cost and a layer of service complexity between you and the person doing the work.",
+      },
+      {
+        question: "Are Graber shades good quality?",
+        answer: "Graber makes a functional product that has been on the market for decades. The brand was acquired by a private equity–backed company, which has shifted priorities toward margin management over innovation and customer service. They are not a bad product, but they are not the only option — and in many cases, comparable or better products are available at lower cost through an independent dealer who carries multiple brands.",
+      },
+      {
+        question: "Why is Costco window treatment pricing so high?",
+        answer: "The Costco model requires two layers of retail margin: the dealer's margin and Costco's margin on the same transaction. Both parties need to profit from the sale, so the consumer effectively pays full retail twice. Additionally, Costco's promotional model — shop cards, limited-time offers, percentage-off promotions — is built on base prices that are set high enough to absorb the discounts and still deliver full margin.",
+      },
+      {
+        question: "Can I use the Costco dealer directly without going through the program?",
+        answer: "No. Once you come in through the Costco program, Costco owns that customer relationship permanently. Even a year later, if you want to follow up, add treatments, or request service, that contact has to go back through Costco — not directly to the dealer who was in your home. The dealer is contractually prohibited from working with you outside the program once you entered as a Costco customer. This is one of the most important things to understand before you make that first call: you are not building a relationship with a local dealer, you are becoming a Costco customer who happens to have a local dealer assigned to your job.",
+      },
+      {
+        question: "What window treatments work best for North Idaho homes?",
+        answer: "For the Post Falls and Coeur d'Alene area, cellular shades are the top recommendation for energy efficiency. Solar shades work well on south- and west-facing windows for UV control. Motorization is a practical upgrade for vaulted ceilings and tall windows. Top-down/bottom-up shades are a strong option for street-facing rooms where you want privacy without losing light. A local dealer who works in this climate regularly can walk you through the right product for each exposure in your specific home.",
+      },
+      {
+        question: "How much should window treatments cost?",
+        answer: "The honest answer is that it depends on the product, the number of windows, and the complexity of the installation. What we can tell you is that in our 23 years of doing this, a fair competitive price from a local independent dealer is typically significantly less than a national program quote — often by 40 to 50 percent — for comparable products and installation quality. Get multiple quotes and compare them on equal terms.",
+      },
+      {
+        question: "What makes Luxe Window Works different from other local dealers?",
+        answer: "We carry multiple brands including Norman, Lafayette, and Alta, which means we recommend the right product for your home rather than the product the program requires us to sell. We offer one price to every customer — no promotions, no shop cards, no fake sales. And when you need service, you call us directly. We have been building relationships in this community since we opened, and our goal is to be the local resource you can count on for the life of your window treatments — including products you did not buy from us.",
+      },
     ],
   },
 };
@@ -355,11 +386,12 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     ],
   };
 
-  const faqSchema = post.faqs.length > 0 ? {
+  const faqsToUse = post.faqs.length > 0 ? post.faqs : (extensions?.faqs ?? []);
+  const faqSchema = faqsToUse.length > 0 ? {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "@id": `https://www.luxewindowworks.com/blog/${post.slug}#faq`,
-    mainEntity: post.faqs.map((faq) => ({
+    mainEntity: faqsToUse.map((faq) => ({
       "@type": "Question",
       name: faq.question,
       acceptedAnswer: {
