@@ -257,7 +257,41 @@ const SLUG_SCHEMA: Record<string, object[]> = {
   ],
 };
 
+/** Per-slug additions merged into the BlogPosting node itself */
+const SLUG_ARTICLE_EXTENSIONS: Record<string, {
+  citation?: object[];
+  mentions?: object[];
+  relatedLink?: string[];
+}> = {
+  "are-costco-window-treatments-worth-it-a-local-dealer-tells-you-the-truth": {
+    citation: [
+      {
+        "@type": "DiscussionForumPosting",
+        "@id": "https://www.reddit.com/r/Costco/comments/1lk91hv/costco_window_treatments_whats_your_option/",
+        url: "https://www.reddit.com/r/Costco/comments/1lk91hv/costco_window_treatments_whats_your_option/",
+        headline: "Costco window treatments — what's your option?",
+        isPartOf: { "@type": "WebSite", name: "Reddit", url: "https://www.reddit.com" },
+      },
+    ],
+    mentions: [
+      { "@id": "https://www.luxewindowworks.com/blog/why-custom-window-treatments-in-coeur-d-alene-and-post-falls-don-t-have-to-cost-twice-what-they-should#article" },
+    ],
+    relatedLink: [
+      "https://www.luxewindowworks.com/blog/why-custom-window-treatments-in-coeur-d-alene-and-post-falls-don-t-have-to-cost-twice-what-they-should",
+    ],
+  },
+};
+
 function ArticleSchema({ post }: { post: BlogPost }) {
+  const extensions = SLUG_ARTICLE_EXTENSIONS[post.slug];
+  const baseMentions: object[] = [
+    { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
+    { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
+    { "@type": "City", name: "Hayden", containedInPlace: { "@type": "State", name: "Idaho" } },
+    { "@type": "City", name: "Rathdrum", containedInPlace: { "@type": "State", name: "Idaho" } },
+    { "@type": "City", name: "Sandpoint", containedInPlace: { "@type": "State", name: "Idaho" } },
+  ];
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -283,13 +317,9 @@ function ArticleSchema({ post }: { post: BlogPost }) {
       publisher: { "@id": "https://www.luxewindowworks.com/#business" },
     },
     about: { "@id": "https://www.luxewindowworks.com/#business" },
-    mentions: [
-      { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
-      { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
-      { "@type": "City", name: "Hayden", containedInPlace: { "@type": "State", name: "Idaho" } },
-      { "@type": "City", name: "Rathdrum", containedInPlace: { "@type": "State", name: "Idaho" } },
-      { "@type": "City", name: "Sandpoint", containedInPlace: { "@type": "State", name: "Idaho" } },
-    ],
+    mentions: [...baseMentions, ...(extensions?.mentions ?? [])],
+    ...(extensions?.citation && { citation: extensions.citation }),
+    ...(extensions?.relatedLink && { relatedLink: extensions.relatedLink }),
     speakable: {
       "@type": "SpeakableSpecification",
       cssSelector: ["h1", ".post-excerpt"],
