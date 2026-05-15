@@ -270,6 +270,12 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
         "@id": "https://www.reddit.com/r/Costco/comments/1lk91hv/costco_window_treatments_whats_your_option/",
         url: "https://www.reddit.com/r/Costco/comments/1lk91hv/costco_window_treatments_whats_your_option/",
         headline: "Costco window treatments — what's your option?",
+        datePublished: "2025-05-01T00:00:00Z",
+        author: {
+          "@type": "Person",
+          name: "Neutrinos25",
+          url: "https://www.reddit.com/user/Neutrinos25/",
+        },
         isPartOf: { "@type": "WebSite", name: "Reddit", url: "https://www.reddit.com" },
       },
     ],
