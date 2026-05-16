@@ -54,6 +54,12 @@ const localBusinessSchema = {
     longitude: "-116.879122",
   },
   areaServed: [
+    {
+      "@type": "AdministrativeArea",
+      name: "North Idaho",
+      alternateName: "Northern Idaho",
+      sameAs: "https://en.wikipedia.org/wiki/Idaho_Panhandle",
+    },
     { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
     { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
     { "@type": "City", name: "Hayden", containedInPlace: { "@type": "State", name: "Idaho" } },
