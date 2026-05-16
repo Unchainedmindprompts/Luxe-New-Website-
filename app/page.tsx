@@ -179,7 +179,7 @@ export default function HomePage() {
             <span className="hidden md:inline text-warm-gray-600">|</span>
             <span className="text-warm-gray-300">{BUSINESS.guarantee}</span>
             <span className="hidden md:inline text-warm-gray-600">|</span>
-            <span className="text-warm-gray-300">Serving Northern Idaho</span>
+            <span className="text-warm-gray-300">Serving North Idaho</span>
           </div>
         </div>
       </section>
@@ -279,7 +279,7 @@ export default function HomePage() {
         <div className="container-luxe">
           <div className="text-center mb-10">
             <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">
-              Proudly Serving Northern Idaho
+              Proudly Serving North Idaho
             </h2>
           </div>
           <div className="flex flex-wrap justify-center gap-4">

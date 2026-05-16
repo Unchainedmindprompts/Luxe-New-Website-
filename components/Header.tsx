@@ -17,7 +17,7 @@ export default function Header() {
             Luxe Window Works
           </span>
           <span className="text-[10px] md:text-xs text-warm-gray-500 tracking-widest uppercase -mt-1">
-            Northern Idaho
+            North Idaho
           </span>
         </Link>
 
