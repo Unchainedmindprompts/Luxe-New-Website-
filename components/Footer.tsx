@@ -13,12 +13,12 @@ export default function Footer() {
                 Luxe Window Works
               </span>
               <span className="block text-xs text-warm-gray-500 tracking-widest uppercase mt-0.5">
-                Northern Idaho
+                North Idaho
               </span>
             </Link>
             <p className="mt-4 text-sm text-warm-gray-400 leading-relaxed">
               23 years of hands-on expertise in custom window treatments.
-              Serving Northern Idaho with premium products and a lifetime installation guarantee.
+              Serving North Idaho with premium products and a lifetime installation guarantee.
             </p>
             <div className="mt-6 space-y-2 text-sm">
               <a href={BUSINESS.phoneHref} className="flex items-center gap-2 text-warm-gray-300 hover:text-gold transition-colors">
@@ -150,7 +150,7 @@ export default function Footer() {
       <div className="border-t border-warm-gray-800">
         <div className="container-luxe py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-warm-gray-500">
           <p>&copy; {new Date().getFullYear()} Luxe Window Works. All rights reserved.</p>
-          <p>Custom window treatments for Northern Idaho homes.</p>
+          <p>Custom window treatments for North Idaho homes.</p>
         </div>
       </div>
     </footer>
