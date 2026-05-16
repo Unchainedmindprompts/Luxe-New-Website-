@@ -84,6 +84,7 @@ const personSchema = {
     "Hayden, Idaho",
     "Sandpoint, Idaho",
     "Rathdrum, Idaho",
+    "North Idaho",
     "Northern Idaho",
   ],
   sameAs: [
@@ -119,13 +120,13 @@ export default function AboutPage() {
                 Why Luxe Window Works
               </p>
               <h2 className="text-4xl md:text-5xl font-semibold text-stone-900 leading-tight">
-                Built for Northern Idaho Homes
+                Built for North Idaho Homes
               </h2>
               <p>
                 For 23 years, owner Mark Abplanalp has specialized in window treatments that perform in our unique climate — from intense summer sun reflecting off the lake to freezing winters that demand real insulation.
               </p>
               <p>
-                Luxe Window Works was founded on that deep experience. We don&apos;t just sell products. We engineer complete solutions tailored to your home, your views, your lifestyle, and the specific challenges of Northern Idaho living. Every project includes precise measurements, expert recommendations, and professional installation backed by a lifetime guarantee.
+                Luxe Window Works was founded on that deep experience. We don&apos;t just sell products. We engineer complete solutions tailored to your home, your views, your lifestyle, and the specific challenges of North Idaho living. Every project includes precise measurements, expert recommendations, and professional installation backed by a lifetime guarantee.
               </p>
               <p>
                 Homes throughout Coeur d&apos;Alene, Post Falls, Hayden, Rathdrum, and Sandpoint trust us because we understand this region — the lake-view glare, the temperature swings, and the practical needs of both new construction and established homes.
