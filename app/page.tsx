@@ -97,9 +97,11 @@ const localBusinessSchema = {
         "@type": "OfferCatalog",
         name: "Blinds",
         itemListElement: [
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Faux Wood Blinds" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Horizontal Blinds" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Wood Blinds" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Faux Wood Blinds" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Composite Blinds" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Composite Wood Blinds" } },
         ],
       },
       {
@@ -111,13 +113,15 @@ const localBusinessSchema = {
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Roller Shades", url: `${BASE}/products/roller-shades` } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Banded Shades", url: `${BASE}/products/banded-shades` } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Roman Shades", url: `${BASE}/products/roman-shades` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Exterior Solar Shades" } },
         ],
       },
       {
         "@type": "OfferCatalog",
         name: "Shutters",
         itemListElement: [
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Plantation Shutters", url: `${BASE}/products/shutters` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Norman Plantation Shutters", url: `${BASE}/products/shutters` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Aluminum Shutters" } },
         ],
       },
       {
