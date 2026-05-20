@@ -33,7 +33,7 @@ export const BUSINESS = {
   ],
   experience: "23 Years of Experience",
   guarantee: "Lifetime Installation Guarantee",
-  brands: ["Alta", "Norman", "Lafayette"],
+  brands: ["Alta", "Norman", "Lafayette", "Corradi USA", "The Window Outfitters"],
   url: "https://www.luxewindowworks.com",
 } as const;
 
@@ -67,6 +67,13 @@ export const SERVICE_AREAS = [
 
 export const PRODUCTS = [
   {
+    name: "Blinds",
+    slug: "blinds",
+    tagline: "Wood, faux wood, and composite — matched to the room.",
+    shortDescription: "Real wood, faux wood, and composite blinds in 2-inch and 2.5-inch slats — matched to each window so they stay straight through North Idaho's brutal sun and moisture.",
+    icon: "blinds",
+  },
+  {
     name: "Cellular Shades",
     slug: "cellular-shades",
     tagline: "Stop losing heat in winter and cool air in summer.",
@@ -78,6 +85,13 @@ export const PRODUCTS = [
     slug: "solar-shades",
     tagline: "Enjoy the view without the glare or UV damage.",
     shortDescription: "Preserve your lake and mountain views while blocking intense glare and the UV rays that fade furniture and floors.",
+    icon: "solar",
+  },
+  {
+    name: "Exterior Solar Shades",
+    slug: "exterior-solar-shades",
+    tagline: "Stop the heat before it reaches your glass.",
+    shortDescription: "Corradi USA exterior screens block solar heat at the source — far more effective than interior shades. Motorized with Somfy for patios, decks, and sun-blasted windows.",
     icon: "solar",
   },
   {

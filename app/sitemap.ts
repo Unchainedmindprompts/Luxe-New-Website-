@@ -57,6 +57,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     // Product pages
     {
+      url: `${baseUrl}/products/blinds`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/products/cellular-shades`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
@@ -64,6 +70,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/products/solar-shades`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/products/exterior-solar-shades`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
