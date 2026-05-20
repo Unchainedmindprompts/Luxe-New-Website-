@@ -15,7 +15,7 @@ wordCount: 2600
 
 <p>Not every window treatment company has a specialty. At Luxe Window Works, ours is straightforward: when a North Idaho homeowner wants interior shutters, we install Norman shutters. Not sometimes. Not as one option among many. Every time.</p>
 
-<p>We've been a Norman partner since 2009. In that time, we've installed Norman shutters in lakefront homes on <a href="/areas/coeur-d-alene">Coeur d'Alene</a>, craftsman bungalows in <a href="/areas/post-falls">Post Falls</a>, new construction in Hayden, and historic homes in <a href="/areas/sandpoint">Sandpoint</a>. We've seen what holds up and what doesn't in North Idaho's four-season climate — the freeze-thaw cycles that shift window frames, the summer sun that beats through south-facing glass, the humidity that rolls off the lakes. Norman shutters handle all of it.</p>
+<p>We've been a Norman dealer since 2009, and we bring that experience to North Idaho homes — lakefront properties on <a href="/areas/coeur-d-alene">Coeur d'Alene</a>, craftsman bungalows in <a href="/areas/post-falls">Post Falls</a>, new construction in Hayden, and historic homes in <a href="/areas/sandpoint">Sandpoint</a>. We know what holds up and what doesn't in a four-season climate like North Idaho's — the freeze-thaw cycles that shift window frames, the summer sun that beats through south-facing glass, the humidity that rolls off the lakes. Norman shutters handle all of it.</p>
 
 <p>Here's why we choose Norman, what the Normandy, Woodlore, and Woodlore Plus lines offer, and what a professional Norman shutter installation looks like from consultation to completion.</p>
 
@@ -67,7 +67,7 @@ wordCount: 2600
 
 <p>Blinds and shades have a lifespan measured in years. The cords fray, the mechanisms fail, the fabric sags, the slats warp. Norman shutters, installed correctly, have a lifespan measured in decades. They become part of the home's architecture — they stay when you sell, they add to the home's perceived value, and they never need to be replaced because a spring broke or a slat bent.</p>
 
-<p>We've installed Norman shutters in North Idaho homes where they've been operating without issue for 12 to 15 years. That's a fundamentally different product category than what you find at a big-box store.</p>
+<p>We've installed Norman shutters that have been operating without issue for well over a decade. That's a fundamentally different product category than what you find at a big-box store.</p>
 
 <h2>Norman Shutter Lines, Materials, and Applications</h2>
 
@@ -145,7 +145,7 @@ wordCount: 2600
 
 <h3>How long do Norman shutters actually last?</h3>
 
-<p>Norman shutters are built to last the life of the home when installed correctly. Normandy hardwood shutters use Paulownia, which resists warping under normal conditions. Woodlore and Woodlore Plus composite shutters use an engineered core that stays dimensionally stable across North Idaho's temperature swings and humidity changes. Norman backs both lines with a limited lifetime warranty. We've installed Norman shutters in <a href="/areas/coeur-d-alene">Coeur d'Alene</a>-area homes that have been performing without issue for more than a decade. The key is proper installation — shutters measured and mounted precisely will operate smoothly for decades.</p>
+<p>Norman shutters are built to last the life of the home when installed correctly. Normandy hardwood shutters use Paulownia, which resists warping under normal conditions. Woodlore and Woodlore Plus composite shutters use an engineered core that stays dimensionally stable across North Idaho's temperature swings and humidity changes. Norman backs both lines with a limited lifetime warranty. We've installed Norman shutters that have been performing without issue for more than a decade. The key is proper installation — shutters measured and mounted precisely will operate smoothly for decades.</p>
 
 <h3>Are Norman shutters good for bathrooms and kitchens?</h3>
 
@@ -183,6 +183,6 @@ wordCount: 2600
 
 <p>Mark Abplanalp is the owner of Luxe Window Works, a custom window treatment company serving Northern Idaho communities including <a href="/areas/coeur-d-alene">Coeur d'Alene</a>, <a href="/areas/post-falls">Post Falls</a>, Hayden, <a href="/areas/sandpoint">Sandpoint</a>, and <a href="/areas/rathdrum">Rathdrum</a>. With 23 years of hands-on experience measuring, specifying, and installing window treatments — including hundreds of Norman shutter installations — Mark has developed the kind of product knowledge and installation precision that only comes from working in real homes, day after day.</p>
 
-<p>Mark has been a Norman partner since 2009, working directly with the manufacturer to specify and install Normandy, Woodlore, and Woodlore Plus shutters for North Idaho homeowners. His approach is straightforward: honest recommendations, precise measurements, and products that hold up to the demands of our four-season climate.</p>
+<p>Mark has been a Norman partner since 2009, working directly with the manufacturer to specify and install Normandy, Woodlore, and Woodlore Plus shutters — experience he now brings to North Idaho homeowners. His approach is straightforward: honest recommendations, precise measurements, and products that hold up to the demands of our four-season climate.</p>
 
 <p>Have a question? Reach Mark directly at <a href="tel:+12086608643">208-660-8643</a> or <a href="mailto:mark@luxewindowworks.com">mark@luxewindowworks.com</a></p>

@@ -24,7 +24,7 @@ const localBusinessSchema = {
   "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
   "@id": `${BASE}/#business`,
   name: "Luxe Window Works",
-  description: "Premium custom window treatments in Northern Idaho. 23 years of installation expertise serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Free in-home consultation.",
+  description: "Premium custom window treatments in Northern Idaho, backed by 23 years of installation expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Free in-home consultation.",
   url: BASE,
   telephone: "208-660-8643",
   email: "mark@luxewindowworks.com",

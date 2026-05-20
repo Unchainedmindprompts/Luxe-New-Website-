@@ -18,7 +18,7 @@ wordCount: 2091
 <p>That's the compromise nobody warns you about. Shutters are stunning when the louvers are open—they frame your view, add depth, create that high-end custom look that makes a house feel intentional. But the moment you need light control, privacy, or insulation, you're tilting those louvers shut and losing everything: your view, your natural light, your $8,000 investment in beauty.</p>
 <p>And here's the thing most homeowners don't realize until it's too late: even when shutters are fully closed, they're not actually airtight. You'll still get light bleed around the edges (that "halo effect"), temperature transfer through the louvers, and if you're trying to darken a nursery or bedroom for sleep, you're fighting a losing battle.</p>
 <p>So what do you do? Rip out the shutters? Live in the dark? Settle for "good enough"?</p>
-<p>There's a third option—and it's the one I've been installing in high-end homes across Northern Idaho for over a decade.</p>
+<p>There's a third option—and it's the one I've been installing in high-end homes for over a decade.</p>
 <hr /><h2>The Luxe Layered Solution: Shutters + Motorized Shades</h2>
 <p>Here's the pro move: you don't choose between shutters and shades. You layer them.</p>
 <p>Specifically, you install <strong>outside-mount shutters</strong> (with an L-frame for maximum visual impact) and pair them with an <strong>inside-mount motorized shade</strong> that sits behind the shutter in the window opening. This gives you two independent systems working together: the shutter handles the aesthetics and stays open, while the shade manages light, heat, and privacy with zero compromise.</p>
