@@ -33,7 +33,7 @@ export const BUSINESS = {
   ],
   experience: "23 Years of Experience",
   guarantee: "Lifetime Installation Guarantee",
-  brands: ["Alta", "Norman", "Lafayette"],
+  brands: ["Alta", "Norman", "Lafayette", "Corradi USA", "The Window Outfitters"],
   url: "https://www.luxewindowworks.com",
 } as const;
 
@@ -66,6 +66,13 @@ export const SERVICE_AREAS = [
 ] as const;
 
 export const PRODUCTS = [
+  {
+    name: "Blinds",
+    slug: "blinds",
+    tagline: "Wood, faux wood, and composite — matched to the room.",
+    shortDescription: "Real wood, faux wood, and composite blinds in 2-inch and 2.5-inch slats — matched to each window so they stay straight through North Idaho's brutal sun and moisture.",
+    icon: "blinds",
+  },
   {
     name: "Cellular Shades",
     slug: "cellular-shades",

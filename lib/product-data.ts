@@ -35,6 +35,63 @@ export interface ProductPageData {
 }
 
 export const productPages: Record<string, ProductPageData> = {
+  "blinds": {
+    slug: "blinds",
+    name: "Blinds",
+    image: "/images/wood-blinds.jpeg",
+    headline: "Tired of Blinds That Warp, Sag, or Yellow After a Few Idaho Summers?",
+    subheadline: "Real wood, faux wood, and composite blinds — matched to the right room so they look sharp and stay straight for years. Custom-fit and professionally installed across North Idaho.",
+    problem: "Most blinds don't fail because blinds are a bad product — they fail because the wrong material went into the wrong room. Big-box stores sell one-size-fits-all faux wood and let you sort out the rest. Then a few seasons later, the slats on that big south-facing window have bowed in the heat, the budget vinyl has yellowed, or real wood blinds in the bathroom have swelled and stopped tilting. North Idaho is especially hard on the wrong choice: freezing dry winters, intense summer sun on lake-facing glass, and 60-degree temperature swings between January and July.",
+    solution: "The fix is matching the material to the window. Faux wood blinds (PVC or vinyl) are lightweight and shrug off moisture — the right call for bathrooms, kitchens, and standard windows. Composite blinds (wood fiber blended with polymer) are heavier and more rigid, holding their shape under heat and UV on large, sunny windows where faux wood would eventually sag. Real wood blinds deliver the warmth and natural grain nothing else matches, ideal for dry living rooms and bedrooms. We carry premium lines from Norman, Alta, and Lafayette, in 2-inch and 2.5-inch slat sizes, with cordless and child-safe lift options. Every set is custom-measured to your exact opening and installed precisely.",
+    expertInsight: "After two decades installing blinds across North Idaho, here's what I tell every client: the slickest catalog photo doesn't matter if the material is wrong for your window. I've pulled faux wood blinds out of west-facing living rooms that developed a visible bow after just 3-5 summers — the PVC softens in the heat and gravity does the rest. On those big, bright windows I steer people to composite; I've taken composite slats out after 10-plus summers of direct sun and they were still dead straight. For bathrooms and kitchens it flips — faux wood's moisture resistance is unbeatable and you won't overload the lift mechanism with weight. And one upgrade most people overlook: 2.5-inch slats instead of the standard 2-inch. Fewer, wider slats mean a clearer view, a lower stack height when raised (2-3 more inches of exposed glass), and a clean, plantation-shutter look at a fraction of the cost.",
+    features: [
+      "Real wood, faux wood (PVC/vinyl), and composite blinds",
+      "Horizontal blinds in 2-inch and 2.5-inch slat sizes",
+      "Faux wood: excellent moisture resistance for baths and kitchens",
+      "Composite: superior heat and UV stability for large, sunny windows",
+      "2.5-inch slats — wider view, lower stack height, plantation-shutter look for less",
+      "Cordless and child-safe lift options",
+      "Premium brands: Norman, Alta, and Lafayette",
+      "Custom-measured and professionally installed",
+    ],
+    idealFor: [
+      "Bathrooms and kitchens where moisture would warp real wood (faux wood)",
+      "Large west- or south-facing windows with heavy sun (composite)",
+      "Living rooms and bedrooms wanting genuine wood warmth (real wood)",
+      "Modern homes wanting wide-slat, clean-line styling (2.5-inch)",
+      "Rentals and budget-conscious rooms that still want the wood look",
+      "Any window where precise, everyday light and privacy control matters",
+    ],
+    localContext: "North Idaho's climate punishes the wrong blind material — but rewards the right one. On the bright, lake-facing picture windows common around Coeur d'Alene and Sandpoint, composite blinds hold their shape through summers that bow lesser slats. In bathrooms and lakefront homes with constant humidity, faux wood keeps performing where real wood swells. We've matched materials to hundreds of North Idaho windows, carrying Norman, Alta, and Lafayette so the recommendation is driven by your room — not by whatever a catalog pushes hardest.",
+    faqs: [
+      {
+        question: "Faux wood vs. composite blinds — which holds up better in North Idaho?",
+        answer: "Both outperform real wood in our climate, but they're not identical. Faux wood (PVC/vinyl) is lightweight and excellent against moisture, ideal for bathrooms, kitchens, and standard windows up to about 6 feet wide. Composite (wood fiber + polymer) is heavier and more rigid, with superior heat and UV resistance — it holds its shape on large, sunny windows where faux wood can bow over a few summers. For big west- or south-facing glass, choose composite; for moisture-prone or budget-conscious rooms, faux wood gives you about 90% of the benefit for less.",
+      },
+      {
+        question: "Will faux wood blinds sag or bow in the sun?",
+        answer: "They can — on large windows with prolonged direct sun. PVC softens under sustained heat, and on wide spans gravity slowly bows the slats over 3-5 summers. It's not catastrophic, but it's noticeable. That's exactly why we recommend composite for big, bright, west- or south-facing windows: the wood-fiber core gives the slats structural memory so they stay straight. On standard or shaded windows, faux wood holds up fine.",
+      },
+      {
+        question: "What's the difference between 2-inch and 2.5-inch blind slats?",
+        answer: "2.5-inch slats are the upgrade most people don't know to ask for. Fewer, wider slats mean less visual interruption (about 8-9 slats across a window instead of 10-12), a clearer view outside, and a roughly 20% lower stack height when raised — 2-3 more inches of exposed glass. They also replicate the clean, structured look of plantation shutters at a fraction of the cost. The trade-off is minor: slightly more light seepage when tilted, and a bit more recess depth needed for a flush inside mount.",
+      },
+      {
+        question: "Are blinds a good choice for bathrooms and kitchens?",
+        answer: "Yes — as long as you use faux wood or composite, not real wood. Faux wood blinds resist steam and humidity beautifully; I've installed them in bathrooms that steam up daily for years without warping. Real wood, by contrast, will swell and eventually stop operating smoothly in those rooms. For kitchens and baths, faux wood is the practical, long-lasting choice.",
+      },
+      {
+        question: "Can blinds be made cordless for child and pet safety?",
+        answer: "Yes. We offer cordless lift options across our blind lines, which eliminate the exposed pull cords that pose a strangulation hazard to children and pets. Cordless operation is a straightforward, affordable safety upgrade — and in many rental situations it's now the expected standard. We'll walk you through cordless and motorized options during your consultation.",
+      },
+      {
+        question: "Should I choose real wood or faux wood blinds?",
+        answer: "Real wood blinds offer unmatched natural grain and warmth, and they're the premium choice for dry living rooms, bedrooms, and home offices. Faux wood mimics the wood look at a lower price while resisting moisture and handling abuse better — the smarter pick for bathrooms, kitchens, rentals, and high-traffic rooms. The deciding factors are usually the room's moisture level, the window's sun exposure, and your budget. We help you weigh all three for each window rather than defaulting to one material everywhere.",
+      },
+    ],
+    metaTitle: "Custom Blinds in Northern Idaho | Wood, Faux Wood & Composite",
+    metaDescription: "Custom wood, faux wood, and composite blinds for North Idaho homes — matched to each room and professionally installed. Norman, Alta, and Lafayette. Serving Coeur d'Alene, Post Falls, Hayden, Sandpoint. Free in-home consultation.",
+  },
   "cellular-shades": {
     slug: "cellular-shades",
     name: "Cellular Shades",
