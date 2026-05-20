@@ -89,6 +89,46 @@ const localBusinessSchema = {
     bestRating: "5",
     worstRating: "1",
   },
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Window Treatments",
+    itemListElement: [
+      {
+        "@type": "OfferCatalog",
+        name: "Blinds",
+        itemListElement: [
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Faux Wood Blinds" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Wood Blinds" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Composite Blinds" } },
+        ],
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Shades",
+        itemListElement: [
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Cellular Shades", url: `${BASE}/products/cellular-shades` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Solar Shades", url: `${BASE}/products/solar-shades` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Roller Shades", url: `${BASE}/products/roller-shades` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Banded Shades", url: `${BASE}/products/banded-shades` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Roman Shades", url: `${BASE}/products/roman-shades` } },
+        ],
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Shutters",
+        itemListElement: [
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Plantation Shutters", url: `${BASE}/products/shutters` } },
+        ],
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Motorization",
+        itemListElement: [
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Motorized Shades & Blinds", url: `${BASE}/products/motorization` } },
+        ],
+      },
+    ],
+  },
 };
 
 const videoSchema = {
