@@ -88,6 +88,13 @@ export const PRODUCTS = [
     icon: "solar",
   },
   {
+    name: "Exterior Solar Shades",
+    slug: "exterior-solar-shades",
+    tagline: "Stop the heat before it reaches your glass.",
+    shortDescription: "Corradi USA exterior screens block solar heat at the source — far more effective than interior shades. Motorized with Somfy for patios, decks, and sun-blasted windows.",
+    icon: "solar",
+  },
+  {
     name: "Roller Shades",
     slug: "roller-shades",
     tagline: "Clean lines, simple function, modern style.",

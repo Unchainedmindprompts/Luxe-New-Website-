@@ -406,6 +406,63 @@ export const productPages: Record<string, ProductPageData> = {
     metaTitle: "Norman Shutters in Northern Idaho | Plantation Shutter Installation",
     metaDescription: "Norman plantation shutters in North Idaho since 2009 — Normandy hardwood, Woodlore Plus composite, InvisibleTilt. Precise measurement and expert installation in Coeur d'Alene, Post Falls, Hayden. Free in-home consultation.",
   },
+  "exterior-solar-shades": {
+    slug: "exterior-solar-shades",
+    name: "Exterior Solar Shades",
+    image: "/images/IMG_2272.jpeg",
+    headline: "Stop the Heat Before It Ever Reaches Your Glass.",
+    subheadline: "Exterior solar shades mount outside the window and block solar energy at the source — far more effective at cutting heat than any interior shade. We install Corradi USA exterior screens on North Idaho patios, decks, and sun-blasted windows.",
+    problem: "Interior shades only act after sunlight has already passed through the glass and entered your home — by then the heat is in, and you're just managing it. On the big west- and south-facing lake-facing windows common across North Idaho, and on open patios and decks, that means rooms that bake all afternoon, an AC system working overtime, interiors fading from UV, and outdoor living spaces too hot to actually use during the summer.",
+    solution: "Exterior solar shades intercept the sun before it hits the glass, so the heat never enters the room in the first place. Corradi USA exterior solar screens are retractable vertical shades — available manual or motorized, in cassette or open-roll configurations — that manage sun, glare, UV, privacy, insects, and even light rain. High-performance screen fabrics block a large share of solar heat and up to 90-99% of UV while preserving your view, and Somfy motorization lets you raise, lower, schedule, or voice-control them. The result: dramatically lower solar heat gain on large windows, and patios and decks that stay usable through the hottest part of the day.",
+    expertInsight: "Here's the physics most people miss: stopping the sun outside the glass is fundamentally more effective than stopping it inside. Once solar energy passes through the window and is absorbed by your floors and furniture, it re-radiates as heat that's already trapped in the room. An exterior screen blocks that energy before it ever enters. After two decades working North Idaho's climate, I treat west-facing windows as the 'kill zone' — the harshest afternoon solar load — and that's exactly where exterior shades earn their keep. I also match fabric openness to each exposure rather than using one spec everywhere, and for exterior systems I almost always recommend motorization: Corradi's Somfy motors let you retract the screens in high wind or storms, which protects the fabric and hardware and is the single biggest factor in how long an outdoor system lasts here.",
+    features: [
+      "Mounts outside the window — blocks solar heat before it enters the glass",
+      "Corradi USA exterior solar screens — retractable vertical shades",
+      "Manual or motorized; cassette or open-roll configurations",
+      "Manages sun, glare, UV, privacy, insects, and light rain",
+      "High-performance fabrics block up to 90-99% of UV while preserving the view",
+      "Somfy motorization — remote, app, voice (Alexa), and scheduling",
+      "Ideal for patios, decks, pergolas, and large sun-facing windows",
+      "Built and rated for North Idaho's outdoor exposure",
+    ],
+    idealFor: [
+      "West- and south-facing windows that bake in afternoon sun",
+      "Lakefront picture windows with intense glare and heat gain",
+      "Patios, decks, and outdoor living spaces too hot to use midday",
+      "Homes fighting high summer cooling bills",
+      "Protecting hardwood floors, art, and furnishings from UV fading",
+      "Anyone who wants dynamic shade they can fully retract for the view",
+    ],
+    localContext: "North Idaho's long, bright summers send intense solar load through lake-facing and west-facing glass all afternoon. Exterior solar shades stop that energy outside the window — before it becomes trapped heat — which interior shades simply can't do. We install Corradi USA exterior screens with Somfy motorization across Coeur d'Alene, Post Falls, Hayden, Sandpoint, and Rathdrum, sizing fabric openness and configuration to each home's exposure and wind conditions.",
+    faqs: [
+      {
+        question: "How are exterior solar shades different from interior solar shades?",
+        answer: "The difference is where they stop the sun. Interior solar shades block glare and UV after sunlight has already passed through the glass — useful, but the heat energy is already inside and re-radiates into the room. Exterior solar shades mount outside the window and intercept that energy before it reaches the glass, so the heat never enters. For raw heat-gain reduction on hot, sun-facing windows, exterior shades are significantly more effective. Interior shades remain a great choice for view preservation, glare, and UV where exterior mounting isn't practical.",
+      },
+      {
+        question: "Can exterior solar shades handle North Idaho's weather and wind?",
+        answer: "Yes — when they're specified and installed correctly. Corradi USA exterior screens are built and rated for outdoor exposure, and cassette configurations roll the fabric into a protective housing when retracted. The most important factor is motorization: Somfy motors let you retract the screens in high wind or storms with the touch of a button or automatically via sensors. Retracting during severe weather is what protects the fabric and hardware and gives an outdoor system its longevity here.",
+      },
+      {
+        question: "Will I still be able to see my view through them?",
+        answer: "Yes. Exterior solar screens use an open-weave fabric that preserves view-through while cutting glare and heat — you see out, the sun's intensity is tamed. The 'openness factor' of the fabric controls the balance: a tighter weave (1-5% openness) maximizes heat and glare control for harsh west and south exposures, while a more open weave (7-10%) keeps more of the view on gentler exposures. We match the openness to each window. And because the screens fully retract, you can always clear the view entirely.",
+      },
+      {
+        question: "Can exterior solar shades be motorized and connected to my smart home?",
+        answer: "Absolutely — and for exterior systems we usually recommend it. Corradi USA exterior screens motorize with Somfy, which integrates with smart-home platforms and voice assistants like Amazon Alexa, and operates from a remote or the Somfy app. You can schedule screens to lower during peak afternoon sun and raise in the evening, or tie them to sensors that retract them automatically in high wind. Motorization also makes large or hard-to-reach patio screens effortless to operate.",
+      },
+      {
+        question: "Do exterior solar shades work for patios and outdoor living spaces, not just windows?",
+        answer: "Yes — that's one of their best uses. Corradi USA exterior screens enclose and shade patios, decks, and pergolas, blocking sun and glare while also managing insects and light rain. They turn an outdoor space that's unusable in the midday heat into comfortable, shaded living space, and they retract when you want full openness. It's a popular upgrade for North Idaho homes built around lake and mountain views.",
+      },
+      {
+        question: "How much UV do exterior solar shades block?",
+        answer: "High-performance solar screen fabrics block roughly 90-99% of harmful UV rays, depending on the fabric and openness factor. Because exterior screens stop that UV outside the glass, they protect your interior — hardwood floors, upholstery, leather, and art — from the fading and degradation that unfiltered sun causes. That UV protection, combined with the heat-gain reduction, is what makes exterior solar shades both a comfort and a preservation investment.",
+      },
+    ],
+    metaTitle: "Exterior Solar Shades in Northern Idaho | Corradi USA Outdoor Screens",
+    metaDescription: "Exterior solar shades that block heat before it hits your glass — Corradi USA retractable screens, motorized with Somfy. Cut heat gain on patios and sun-facing windows in Coeur d'Alene, Post Falls, Hayden. Free in-home consultation.",
+  },
   "motorization": {
     slug: "motorization",
     name: "Motorization",

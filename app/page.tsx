@@ -113,7 +113,7 @@ const localBusinessSchema = {
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Roller Shades", url: `${BASE}/products/roller-shades` } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Banded Shades", url: `${BASE}/products/banded-shades` } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Roman Shades", url: `${BASE}/products/roman-shades` } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Exterior Solar Shades" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Exterior Solar Shades", url: `${BASE}/products/exterior-solar-shades` } },
         ],
       },
       {
