@@ -147,7 +147,13 @@ function deriveKeywords(post: BlogPost): string {
 }
 
 /** Author reference — full entity defined in layout.tsx LocalBusiness founder */
-const markAuthorRef = { "@id": "https://www.luxewindowworks.com/#owner" };
+const markAuthorRef = {
+  "@type": "Person",
+  "@id": "https://www.luxewindowworks.com/#owner",
+  name: "Mark Abplanalp",
+  jobTitle: "Owner & Window Treatment Specialist",
+  url: "https://www.luxewindowworks.com",
+};
 
 /** HowTo schema — 5-step installation process */
 const installationHowToSchema = {
@@ -306,24 +312,32 @@ function ArticleSchema({ post }: { post: BlogPost }) {
 
   const schema = {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    "@type": "Article",
     "@id": `${BUSINESS.url}/blog/${post.slug}#article`,
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
-    dateModified: (() => { const d = post.dateModified || post.date; return d.includes("T") ? d : `${d}T00:00:00Z`; })(),
+    dateModified: (() => { const d = post.dateModified || post.date; return d.includes("T") ? d : `${d}T00:00:00-07:00`; })(),
     wordCount: post.wordCount,
     articleSection: post.category,
     keywords: deriveKeywords(post),
     inLanguage: "en-US",
     author: markAuthorRef,
-    publisher: { "@id": "https://www.luxewindowworks.com/#business" },
+    publisher: {
+      "@type": "Organization",
+      "@id": "https://www.luxewindowworks.com/#business",
+      name: "Luxe Window Works",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.luxewindowworks.com/icon.png",
+      },
+    },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `${BUSINESS.url}/blog/${post.slug}`,
     },
     isPartOf: {
-      "@type": "Blog",
+      "@type": "CollectionPage",
       "@id": `${BUSINESS.url}/blog`,
       name: "Window Treatment Insights",
       publisher: { "@id": "https://www.luxewindowworks.com/#business" },
@@ -354,6 +368,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `https://www.luxewindowworks.com/blog/${post.slug}#breadcrumb`,
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: "https://www.luxewindowworks.com" },
       { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.luxewindowworks.com/blog" },
