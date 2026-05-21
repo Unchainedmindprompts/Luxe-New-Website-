@@ -292,6 +292,101 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       "https://www.luxewindowworks.com/blog/why-custom-window-treatments-in-coeur-d-alene-and-post-falls-don-t-have-to-cost-twice-what-they-should",
     ],
   },
+  "woodlore-plus-shutters-north-idaho": {
+    citation: [
+      {
+        "@type": "WebPage",
+        "@id": "https://normanusa.com/product/woodlore-plus-shutters/",
+        url: "https://normanusa.com/product/woodlore-plus-shutters/",
+        name: "Woodlore® Plus Shutters — Official Product Page",
+        isPartOf: { "@type": "WebSite", name: "Norman Window Fashions", url: "https://normanusa.com" },
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://normanusa.com/blog/norman-50th-anniversary/",
+        url: "https://normanusa.com/blog/norman-50th-anniversary/",
+        name: "Norman Celebrates 50 Years of Innovation",
+        isPartOf: { "@type": "WebSite", name: "Norman Window Fashions", url: "https://normanusa.com" },
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.energy.gov/energysaver/energy-efficient-window-coverings",
+        url: "https://www.energy.gov/energysaver/energy-efficient-window-coverings",
+        name: "Energy Efficient Window Coverings",
+        isPartOf: { "@type": "WebSite", name: "U.S. Department of Energy — Energy Saver", url: "https://www.energy.gov/energysaver" },
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://ww2.arb.ca.gov/sites/default/files/classic/toxics/compwood/consumer_faq.pdf",
+        url: "https://ww2.arb.ca.gov/sites/default/files/classic/toxics/compwood/consumer_faq.pdf",
+        name: "Composite Wood Products — Consumer FAQ (CARB Phase 2)",
+        isPartOf: { "@type": "WebSite", name: "California Air Resources Board", url: "https://ww2.arb.ca.gov" },
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.wevolver.com/article/understanding-abs-heat-resistance-a-comprehensive-guide",
+        url: "https://www.wevolver.com/article/understanding-abs-heat-resistance-a-comprehensive-guide",
+        name: "Understanding ABS Heat Resistance — A Comprehensive Guide",
+        isPartOf: { "@type": "WebSite", name: "Wevolver", url: "https://www.wevolver.com" },
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://normanusa.com/blog/norman-wins-wcma-awards/",
+        url: "https://normanusa.com/blog/norman-wins-wcma-awards/",
+        name: "Norman Wins 5 Prestigious WCMA Product Awards",
+        isPartOf: { "@type": "WebSite", name: "Norman Window Fashions", url: "https://normanusa.com" },
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.wf-vision.com/industry-news/award-winning-window-covering-products-announced-2/",
+        url: "https://www.wf-vision.com/industry-news/award-winning-window-covering-products-announced-2/",
+        name: "Award-Winning Window Covering Products Announced — WCMA 35th Annual Product Awards",
+        isPartOf: { "@type": "WebSite", name: "Window Fashion VISION", url: "https://www.wf-vision.com" },
+      },
+    ],
+    mentions: [
+      { "@type": "Organization", name: "Norman Window Fashions", sameAs: "https://normanusa.com", foundingDate: "1974" },
+      { "@type": "Organization", name: "Window Covering Manufacturers Association", sameAs: "https://wcmanet.com" },
+      { "@type": "Organization", name: "California Air Resources Board", sameAs: "https://ww2.arb.ca.gov" },
+      { "@type": "Organization", name: "U.S. Department of Energy", sameAs: "https://www.energy.gov" },
+      {
+        "@type": "DefinedTerm",
+        name: "Woodlore Plus",
+        description: "Wood-composite hybrid plantation shutter by Norman Window Fashions, featuring ABS louvers with internal aircraft-inspired reinforcement and multi-layer engineered stiles.",
+        url: "https://normanusa.com/product/woodlore-plus-shutters/",
+      },
+      {
+        "@type": "DefinedTerm",
+        name: "PerfectTilt G4 Motorization",
+        description: "Norman's award-winning hidden-motor system for plantation shutters, compatible with Woodlore Plus and operable via remote, iPhone, iPad, and scheduled automation.",
+      },
+      {
+        "@type": "DefinedTerm",
+        name: "InvisibleTilt",
+        description: "Norman's hidden gear-and-pinion tilt mechanism that eliminates the visible center tilt rod on plantation shutters.",
+      },
+      {
+        "@type": "DefinedTerm",
+        name: "CARB Phase 2",
+        description: "California Air Resources Board emissions standard capping formaldehyde release from composite wood products. Woodlore Plus is CARB Phase 2 compliant per Norman product specifications.",
+        url: "https://ww2.arb.ca.gov/our-work/programs/composite-wood-products-program",
+      },
+      {
+        "@type": "DefinedTerm",
+        name: "ABS (Acrylonitrile Butadiene Styrene)",
+        description: "Impact-resistant thermoplastic polymer used for Woodlore Plus louvers. Low moisture absorption, low thermal conductivity (~0.14–0.21 W/m·K), service temperature range approximately -20°C to 80°C.",
+      },
+    ],
+    relatedLink: [
+      "https://www.luxewindowworks.com/products/shutters",
+      "https://www.luxewindowworks.com/products/motorization",
+      "https://www.luxewindowworks.com/areas/coeur-d-alene",
+      "https://www.luxewindowworks.com/areas/post-falls",
+      "https://www.luxewindowworks.com/areas/sandpoint",
+      "https://www.luxewindowworks.com/areas/hayden",
+      "https://www.luxewindowworks.com/areas/rathdrum",
+    ],
+  },
 };
 
 function ArticleSchema({ post }: { post: BlogPost }) {
