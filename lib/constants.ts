@@ -13,7 +13,7 @@ export const BUSINESS = {
   },
   google: {
     rating: 5.0,
-    reviewCount: 14,
+    reviewCount: 15,
     mapsUrl: "https://share.google/pRM5IoXZgRTksImvp",
   },
   yelp: {
