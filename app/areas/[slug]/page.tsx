@@ -47,6 +47,36 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
   const areaName = area.name;
   const areaUrl = `${BUSINESS.url}/areas/${slug}`;
 
+  // Lightweight NAP node — same @id as the canonical homepage #business entity, but
+  // NAP-only. aggregateRating, sameAs, founder, hours, and hasOfferCatalog stay
+  // single-source on the homepage to avoid duplicate/conflicting nodes.
+  const localBusinessNAP = {
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
+    "@id": `${BUSINESS.url}/#business`,
+    name: BUSINESS.name,
+    url: BUSINESS.url,
+    telephone: BUSINESS.phone,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: BUSINESS.address.street,
+      addressLocality: BUSINESS.address.city,
+      addressRegion: BUSINESS.address.state,
+      postalCode: BUSINESS.address.zip,
+      addressCountry: "US",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: BUSINESS.geo.lat,
+      longitude: BUSINESS.geo.lng,
+    },
+    areaServed: {
+      "@type": "City",
+      name: areaName,
+      containedInPlace: { "@type": "State", name: "Idaho" },
+    },
+  };
+
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -180,6 +210,11 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
 
   return (
     <>
+      <Script
+        id={`area-business-schema-${slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessNAP) }}
+      />
       <Script
         id={`area-service-schema-${slug}`}
         type="application/ld+json"

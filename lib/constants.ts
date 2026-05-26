@@ -11,6 +11,10 @@ export const BUSINESS = {
     zip: "83854",
     full: "2972 N Pavo Ln, Post Falls, ID 83854",
   },
+  geo: {
+    lat: "47.736435",
+    lng: "-116.879122",
+  },
   google: {
     rating: 5.0,
     reviewCount: 15,
