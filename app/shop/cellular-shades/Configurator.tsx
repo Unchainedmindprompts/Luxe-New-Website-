@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   CELLULAR_WIDTHS,
   CELLULAR_HEIGHTS,
@@ -34,9 +34,6 @@ const COLOR_SWATCHES: { name: CellularColor; hex: string }[] = [
   { name: "Whipped Mocha", hex: "#B89880" },
 ];
 
-// Cordless operation caps at CELLULAR_MAX_WIDTH, so for bracket lookup we
-// only consider widths within that limit. The data file also exposes wider
-// brackets carried over from Norman's sheet, but they aren't available here.
 const ALL_WIDTHS: number[] = [...CELLULAR_WIDTHS];
 const HEIGHTS: number[] = [...CELLULAR_HEIGHTS];
 const CORDLESS_WIDTHS: number[] = ALL_WIDTHS.filter(
@@ -50,6 +47,12 @@ const HEIGHT_MAX = HEIGHTS[HEIGHTS.length - 1];
 
 const TDBU_SURCHARGE = calculatePrice(CELLULAR_TDBU_MSRP_SURCHARGE);
 
+const PRODUCT_NAME = '9/16" Portrait Honeycomb Cell Shades';
+const LIFT_LABELS = {
+  cordless: "Cordless",
+  tdbu: "Top Down Bottom Up (TDBU)",
+} as const;
+
 const fmt = (n: number) =>
   n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
@@ -57,6 +60,12 @@ const parseIntOrZero = (s: string) => {
   const n = parseInt(s, 10);
   return isNaN(n) ? 0 : n;
 };
+
+function formatMeasurement(whole: number, fraction: number): string {
+  const f = FRACTIONS.find((x) => x.value === fraction);
+  if (!f || f.value === 0) return `${whole}`;
+  return `${whole} ${f.label}`;
+}
 
 type LiftSystem = "cordless" | "tdbu";
 
@@ -68,19 +77,8 @@ export default function Configurator() {
   const [fractionHeight, setFractionHeight] = useState<number>(0);
   const [lift, setLift] = useState<LiftSystem>("cordless");
   const [quantity, setQuantity] = useState<number>(1);
-  const [submitted, setSubmitted] = useState(false);
-
-  useEffect(() => {
-    setSubmitted(false);
-  }, [
-    color,
-    wholeWidth,
-    fractionWidth,
-    wholeHeight,
-    fractionHeight,
-    lift,
-    quantity,
-  ]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const widthDecimal = wholeWidth + fractionWidth;
   const widthExceeded = widthDecimal > CELLULAR_MAX_WIDTH;
@@ -121,6 +119,36 @@ export default function Configurator() {
       lift,
       quantity,
     ]);
+
+  async function handleCheckout() {
+    setError(null);
+    setLoading(true);
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product: PRODUCT_NAME,
+          color,
+          width: formatMeasurement(wholeWidth, fractionWidth),
+          height: formatMeasurement(wholeHeight, fractionHeight),
+          liftSystem: LIFT_LABELS[lift],
+          quantity,
+          unitPrice: Math.round(pricePerShade * 100),
+          shippingCost: Math.round(shipping * 100),
+          orderTotal: Math.round(total * 100),
+        }),
+      });
+      if (!response.ok) throw new Error("Checkout request failed");
+      const { url } = (await response.json()) as { url?: string };
+      if (!url) throw new Error("No checkout URL returned");
+      window.location.href = url;
+    } catch (err) {
+      console.error(err);
+      setError("Could not start checkout. Please try again or call us.");
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="bg-white rounded-2xl border border-warm-gray-200/60 p-6 md:p-8 shadow-sm">
@@ -164,7 +192,6 @@ export default function Configurator() {
           Select Size
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Width */}
           <div>
             <label className="block text-sm text-warm-gray-500 mb-1.5">
               Width (inches)
@@ -196,7 +223,6 @@ export default function Configurator() {
               </select>
             </div>
           </div>
-          {/* Height */}
           <div>
             <label className="block text-sm text-warm-gray-500 mb-1.5">
               Height (inches)
@@ -250,7 +276,6 @@ export default function Configurator() {
           Lift System
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {/* Cordless */}
           <button
             type="button"
             onClick={() => setLift("cordless")}
@@ -266,7 +291,6 @@ export default function Configurator() {
               Clean look, no cords. Max width 96 inches.
             </div>
           </button>
-          {/* TDBU */}
           <button
             type="button"
             onClick={() => setLift("tdbu")}
@@ -374,28 +398,20 @@ export default function Configurator() {
         .
       </p>
 
-      {/* Add to Cart */}
+      {/* Checkout */}
       <button
         type="button"
-        onClick={() => setSubmitted(true)}
-        disabled={widthExceeded}
+        onClick={handleCheckout}
+        disabled={widthExceeded || loading}
         className="w-full text-white font-semibold px-6 py-3.5 rounded-full bg-[#9CAF88] hover:bg-[#7B9A6E] transition-all hover:shadow-lg disabled:bg-warm-gray-300 disabled:hover:bg-warm-gray-300 disabled:cursor-not-allowed disabled:hover:shadow-none"
       >
-        Add to Cart
+        {loading ? "Processing…" : "Proceed to Checkout"}
       </button>
 
-      {/* Confirmation */}
-      {submitted && !widthExceeded && (
-        <div
-          role="status"
-          aria-live="polite"
-          className="mt-6 rounded-xl p-4 bg-[#9CAF88]/10 border border-[#9CAF88]/40"
-        >
-          <p className="text-charcoal text-sm">
-            Your order details have been noted. We will contact you to confirm
-            and process payment.
-          </p>
-        </div>
+      {error && (
+        <p role="alert" className="mt-4 text-sm text-red-600">
+          {error}
+        </p>
       )}
     </div>
   );

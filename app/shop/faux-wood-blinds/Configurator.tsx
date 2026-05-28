@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   FAUX_WOOD_WIDTHS,
   FAUX_WOOD_HEIGHTS,
@@ -36,6 +36,9 @@ const WIDTH_MAX = WIDTHS[WIDTHS.length - 1];
 const HEIGHT_MIN = HEIGHTS[0];
 const HEIGHT_MAX = HEIGHTS[HEIGHTS.length - 1];
 
+const PRODUCT_NAME = "SmartPrivacy Cordless Faux Wood Blinds";
+const LIFT_SYSTEM = "Cordless";
+
 const fmt = (n: number) =>
   n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
@@ -44,6 +47,12 @@ const parseIntOrZero = (s: string) => {
   return isNaN(n) ? 0 : n;
 };
 
+function formatMeasurement(whole: number, fraction: number): string {
+  const f = FRACTIONS.find((x) => x.value === fraction);
+  if (!f || f.value === 0) return `${whole}`;
+  return `${whole} ${f.label}`;
+}
+
 export default function Configurator() {
   const [color, setColor] = useState<FauxWoodColor>(COLOR_SWATCHES[0].name);
   const [wholeWidth, setWholeWidth] = useState<number>(WIDTH_MIN);
@@ -51,18 +60,8 @@ export default function Configurator() {
   const [wholeHeight, setWholeHeight] = useState<number>(HEIGHT_MIN);
   const [fractionHeight, setFractionHeight] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(1);
-  const [submitted, setSubmitted] = useState(false);
-
-  useEffect(() => {
-    setSubmitted(false);
-  }, [
-    color,
-    wholeWidth,
-    fractionWidth,
-    wholeHeight,
-    fractionHeight,
-    quantity,
-  ]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const { pricePerBlind, shipping, total } = useMemo(() => {
     const widthDecimal = wholeWidth + fractionWidth;
@@ -76,6 +75,36 @@ export default function Configurator() {
     const s = calculateShipping(quantity);
     return { pricePerBlind: p, shipping: s, total: p * quantity + s };
   }, [wholeWidth, fractionWidth, wholeHeight, fractionHeight, quantity]);
+
+  async function handleCheckout() {
+    setError(null);
+    setLoading(true);
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product: PRODUCT_NAME,
+          color,
+          width: formatMeasurement(wholeWidth, fractionWidth),
+          height: formatMeasurement(wholeHeight, fractionHeight),
+          liftSystem: LIFT_SYSTEM,
+          quantity,
+          unitPrice: Math.round(pricePerBlind * 100),
+          shippingCost: Math.round(shipping * 100),
+          orderTotal: Math.round(total * 100),
+        }),
+      });
+      if (!response.ok) throw new Error("Checkout request failed");
+      const { url } = (await response.json()) as { url?: string };
+      if (!url) throw new Error("No checkout URL returned");
+      window.location.href = url;
+    } catch (err) {
+      console.error(err);
+      setError("Could not start checkout. Please try again or call us.");
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="bg-white rounded-2xl border border-warm-gray-200/60 p-6 md:p-8 shadow-sm">
@@ -119,7 +148,6 @@ export default function Configurator() {
           Select Size
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Width */}
           <div>
             <label className="block text-sm text-warm-gray-500 mb-1.5">
               Width (inches)
@@ -151,7 +179,6 @@ export default function Configurator() {
               </select>
             </div>
           </div>
-          {/* Height */}
           <div>
             <label className="block text-sm text-warm-gray-500 mb-1.5">
               Height (inches)
@@ -245,27 +272,20 @@ export default function Configurator() {
         .
       </p>
 
-      {/* Add to Cart */}
+      {/* Checkout */}
       <button
         type="button"
-        onClick={() => setSubmitted(true)}
-        className="w-full text-white font-semibold px-6 py-3.5 rounded-full bg-[#9CAF88] hover:bg-[#7B9A6E] transition-all hover:shadow-lg"
+        onClick={handleCheckout}
+        disabled={loading}
+        className="w-full text-white font-semibold px-6 py-3.5 rounded-full bg-[#9CAF88] hover:bg-[#7B9A6E] transition-all hover:shadow-lg disabled:bg-warm-gray-300 disabled:hover:bg-warm-gray-300 disabled:cursor-not-allowed disabled:hover:shadow-none"
       >
-        Add to Cart
+        {loading ? "Processing…" : "Proceed to Checkout"}
       </button>
 
-      {/* Confirmation */}
-      {submitted && (
-        <div
-          role="status"
-          aria-live="polite"
-          className="mt-6 rounded-xl p-4 bg-[#9CAF88]/10 border border-[#9CAF88]/40"
-        >
-          <p className="text-charcoal text-sm">
-            Your order details have been noted. We will contact you to confirm
-            and process payment.
-          </p>
-        </div>
+      {error && (
+        <p role="alert" className="mt-4 text-sm text-red-600">
+          {error}
+        </p>
       )}
     </div>
   );
