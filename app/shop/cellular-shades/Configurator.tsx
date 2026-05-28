@@ -177,6 +177,7 @@ export default function Configurator() {
                 max={WIDTH_MAX}
                 value={wholeWidth}
                 aria-label="Width whole inches"
+                onFocus={(e) => e.currentTarget.select()}
                 onChange={(e) => setWholeWidth(parseIntOrZero(e.target.value))}
                 className="w-full bg-white border border-warm-gray-300 rounded-lg px-3 py-2.5 text-charcoal focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
               />
@@ -208,6 +209,7 @@ export default function Configurator() {
                 max={HEIGHT_MAX}
                 value={wholeHeight}
                 aria-label="Height whole inches"
+                onFocus={(e) => e.currentTarget.select()}
                 onChange={(e) => setWholeHeight(parseIntOrZero(e.target.value))}
                 className="w-full bg-white border border-warm-gray-300 rounded-lg px-3 py-2.5 text-charcoal focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
               />
@@ -302,6 +304,7 @@ export default function Configurator() {
           type="number"
           min={1}
           value={quantity}
+          onFocus={(e) => e.currentTarget.select()}
           onChange={(e) => {
             const v = parseInt(e.target.value || "1", 10);
             setQuantity(isNaN(v) || v < 1 ? 1 : v);
