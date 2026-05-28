@@ -128,13 +128,19 @@ export default function Configurator() {
           quantity,
         }),
       });
-      if (!response.ok) throw new Error("Checkout request failed");
+      if (!response.ok) {
+        const data = (await response.json().catch(() => ({}))) as {
+          error?: string;
+        };
+        throw new Error(data.error || `Checkout request failed (${response.status})`);
+      }
       const { url } = (await response.json()) as { url?: string };
       if (!url) throw new Error("No checkout URL returned");
       window.location.href = url;
     } catch (err) {
       console.error(err);
-      setError("Could not start checkout. Please try again or call us.");
+      const msg = err instanceof Error ? err.message : "Could not start checkout.";
+      setError(`${msg}. Please try again or call us.`);
       setLoading(false);
     }
   }
