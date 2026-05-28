@@ -17,17 +17,19 @@ import {
 } from "@/data/faux-wood-blinds";
 import {
   CELLULAR_COLORS,
+  CELLULAR_COLOR_DATA,
   CELLULAR_WIDTHS,
   CELLULAR_HEIGHTS,
   CELLULAR_MSRP,
   CELLULAR_TDBU_MSRP_SURCHARGE,
+  CELLULAR_CORD_LOOP_MSRP_SURCHARGE,
   CELLULAR_MAX_WIDTH,
 } from "@/data/cellular-shades";
 
 export const runtime = "nodejs";
 
 type ProductKey = "faux-wood-blinds" | "cellular-shades";
-type Lift = "cordless" | "tdbu";
+type Lift = "cordless" | "tdbu" | "cordloop";
 
 type IncomingItem = {
   productKey: ProductKey;
@@ -45,6 +47,9 @@ type IncomingItem = {
   wandDrop?: string;
   sideMountBrackets?: boolean;
   holdDowns?: boolean;
+  // Cellular-specific options
+  colorCode?: string;
+  cordSide?: string;
 };
 
 type CheckoutBody = { items: IncomingItem[] };
@@ -112,11 +117,20 @@ function validateItemShape(it: Partial<IncomingItem>): string | null {
   ) {
     return "Quantity must be a positive integer";
   }
-  if (it.lift !== undefined && it.lift !== "cordless" && it.lift !== "tdbu") {
+  if (
+    it.lift !== undefined &&
+    it.lift !== "cordless" &&
+    it.lift !== "tdbu" &&
+    it.lift !== "cordloop"
+  ) {
     return "Invalid lift system";
   }
   return null;
 }
+
+const CELLULAR_COLOR_CODE_MAP = new Map<string, string>(
+  CELLULAR_COLOR_DATA.map((c) => [c.code, c.name])
+);
 
 function priceFauxWood(it: IncomingItem): PricedLine | { error: string } {
   if (!FAUX_COLOR_SET.has(it.color)) return { error: "Invalid color" };
@@ -172,10 +186,30 @@ function priceFauxWood(it: IncomingItem): PricedLine | { error: string } {
 }
 
 function priceCellular(it: IncomingItem): PricedLine | { error: string } {
-  if (!CEL_COLOR_SET.has(it.color)) return { error: "Invalid color" };
-  if (it.lift !== "cordless" && it.lift !== "tdbu") {
+  // Color validation — prefer code if present, else fall back to name.
+  let colorName: string;
+  if (it.colorCode) {
+    const fromCode = CELLULAR_COLOR_CODE_MAP.get(it.colorCode);
+    if (!fromCode) return { error: "Invalid color code" };
+    colorName = fromCode;
+  } else {
+    if (!CEL_COLOR_SET.has(it.color)) return { error: "Invalid color" };
+    colorName = it.color;
+  }
+
+  if (
+    it.lift !== "cordless" &&
+    it.lift !== "tdbu" &&
+    it.lift !== "cordloop"
+  ) {
     return { error: "Invalid lift system" };
   }
+  if (it.lift === "cordloop" && it.cordSide) {
+    if (it.cordSide !== "Left" && it.cordSide !== "Right") {
+      return { error: "Invalid cord side" };
+    }
+  }
+
   const widthDecimal = it.wholeWidth + it.fractionWidth;
   const heightDecimal = it.wholeHeight + it.fractionHeight;
   const heightMax = CEL_HEIGHTS_ARR[CEL_HEIGHTS_ARR.length - 1];
@@ -184,7 +218,7 @@ function priceCellular(it: IncomingItem): PricedLine | { error: string } {
   }
   if (widthDecimal > CELLULAR_MAX_WIDTH) {
     return {
-      error: `Cordless shades have a maximum width of ${CELLULAR_MAX_WIDTH} inches`,
+      error: `Maximum width is ${CELLULAR_MAX_WIDTH} inches. Please call to discuss options for wider windows.`,
     };
   }
   if (heightDecimal < CEL_HEIGHTS_ARR[0] || heightDecimal > heightMax) {
@@ -196,24 +230,41 @@ function priceCellular(it: IncomingItem): PricedLine | { error: string } {
   const h = CEL_HEIGHTS_ARR.indexOf(heightBracket);
   const msrp = CELLULAR_MSRP[h][w];
   const base = calculatePrice(msrp);
-  const surcharge =
-    it.lift === "tdbu" ? calculatePrice(CELLULAR_TDBU_MSRP_SURCHARGE) : 0;
+  let surcharge = 0;
+  let liftSystem = "SmartRise Cordless";
+  if (it.lift === "tdbu") {
+    surcharge = calculatePrice(CELLULAR_TDBU_MSRP_SURCHARGE);
+    liftSystem = "Cordless TDBU";
+  } else if (it.lift === "cordloop") {
+    surcharge = calculatePrice(CELLULAR_CORD_LOOP_MSRP_SURCHARGE);
+    liftSystem = "Cord Loop";
+  }
   const perUnit = base + surcharge;
 
   const widthStr = formatMeasurement(it.wholeWidth, it.fractionWidth);
   const heightStr = formatMeasurement(it.wholeHeight, it.fractionHeight);
-  const productName = '9/16" Portrait Honeycomb Cell Shades';
-  const liftSystem =
-    it.lift === "tdbu" ? "Top Down Bottom Up (TDBU)" : "Cordless";
+  const productName =
+    '9/16" Portrait Honeycomb Cell Shade — Light Filtering';
+
+  const descParts: string[] = [];
+  descParts.push(
+    it.colorCode ? `Color: ${colorName} (${it.colorCode})` : `Color: ${colorName}`
+  );
+  descParts.push(`Size: ${widthStr} x ${heightStr}`);
+  if (it.mountType) descParts.push(`Mount: ${it.mountType}`);
+  descParts.push(`Lift: ${liftSystem}`);
+  if (it.lift === "cordloop" && it.cordSide) {
+    descParts.push(`Cord: ${it.cordSide}`);
+  }
 
   return {
     productName,
-    description: `Color: ${it.color} · Size: ${widthStr} x ${heightStr} · Lift: ${liftSystem}`,
+    description: descParts.join(" · "),
     quantity: it.quantity,
     unitPriceCents: Math.round(perUnit * 100),
     meta: {
       productKey: "cellular-shades",
-      color: it.color,
+      color: colorName,
       width: widthStr,
       height: heightStr,
       liftSystem,

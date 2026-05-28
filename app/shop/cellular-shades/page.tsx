@@ -19,12 +19,13 @@ export const metadata: Metadata = {
 
 const PRODUCT_DETAILS = [
   '9/16" single cell construction',
-  "Cordless lift system standard",
-  "Optional Top Down Bottom Up available",
   "Light filtering fabric",
-  "Made in the USA",
-  "Norman certified quality",
+  "Cordless, TDBU, or Cord Loop options",
+  "Inside or outside mount",
+  "Rail color: default",
   "Max cordless width 96 inches",
+  "Norman certified quality",
+  "Made in the USA",
 ];
 
 export default function CellularShadesPage() {

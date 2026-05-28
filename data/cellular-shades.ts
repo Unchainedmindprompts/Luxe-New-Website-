@@ -27,27 +27,39 @@ export const CELLULAR_MSRP: number[][] = [
   [519, 622, 674, 748, 838, 1007, 1080, 1173, 1264, 1389, 1500, 1694, 1790],
 ];
 
-export const CELLULAR_COLORS = [
-  "Brilliant White",
-  "Gardenia",
-  "Natural Tan",
-  "Pale Oak",
-  "Wheat",
-  "New Camel",
-  "Silver Dusk",
-  "Dew",
-  "French Silver",
-  "Iron Mountain",
-  "Space Gray",
-  "Florida Keys",
-  "Bella Blue",
-  "Whipped Mocha",
+export const CELLULAR_COLOR_DATA = [
+  { code: "C7015K", name: "Brilliant White", hex: "#FAFAFA" },
+  { code: "C7016K", name: "Cotton Cloud", hex: "#F5F5F0" },
+  { code: "C7017K", name: "Gardenia", hex: "#F5F0E0" },
+  { code: "C7135K", name: "French Silver", hex: "#C8C8C0" },
+  { code: "C7138K", name: "Iron Mountain", hex: "#6B6B6B" },
+  { code: "C7142K", name: "Dew", hex: "#D8DDD0" },
+  { code: "C7143K", name: "Silver Dusk", hex: "#C0BDB5" },
+  { code: "C7208K", name: "Space Gray", hex: "#808080" },
+  { code: "C7423K", name: "Natural Tan", hex: "#E8DCC8" },
+  { code: "C7424K", name: "Pale Oak", hex: "#DDD0B8" },
+  { code: "C7425K", name: "Whipped Mocha", hex: "#B89880" },
+  { code: "C7427K", name: "Wheat", hex: "#D4BC8C" },
+  { code: "C7516K", name: "New Camel", hex: "#C8A870" },
+  { code: "C7617K", name: "Florida Keys", hex: "#A8C0A0" },
+  { code: "C7715K", name: "Bella Blue", hex: "#A0B0C8" },
 ] as const;
 
-export type CellularColor = (typeof CELLULAR_COLORS)[number];
+export type CellularColorCode = (typeof CELLULAR_COLOR_DATA)[number]["code"];
+export type CellularColorName = (typeof CELLULAR_COLOR_DATA)[number]["name"];
+
+/** Color name list — kept for server validation against legacy cart items. */
+export const CELLULAR_COLORS: readonly string[] = CELLULAR_COLOR_DATA.map(
+  (c) => c.name
+);
+
+export type CellularColor = CellularColorName;
 
 /** TDBU (top-down/bottom-up) option surcharge in MSRP dollars; apply calculatePrice() to convert. */
 export const CELLULAR_TDBU_MSRP_SURCHARGE = 89.0;
+
+/** Cord Loop operating-system surcharge in MSRP dollars; apply calculatePrice() to convert. */
+export const CELLULAR_CORD_LOOP_MSRP_SURCHARGE = 73.0;
 
 /**
  * Operational constraints. The MSRP table includes widths up to 120" (carried over

@@ -28,7 +28,7 @@ export type CartItem = {
   fractionWidth: number;
   wholeHeight: number;
   fractionHeight: number;
-  lift?: "cordless" | "tdbu";
+  lift?: "cordless" | "tdbu" | "cordloop";
   // Faux-wood-specific options (optional, ignored by other products)
   slatSize?: string;
   finish?: string;
@@ -36,6 +36,9 @@ export type CartItem = {
   wandDrop?: string;
   sideMountBrackets?: boolean;
   holdDowns?: boolean;
+  // Cellular-specific options
+  colorCode?: string;
+  cordSide?: string;
 };
 
 const STORAGE_KEY = "luxe-cart";
