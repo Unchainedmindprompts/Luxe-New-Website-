@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { BUSINESS } from "@/lib/constants";
 import {
   calculatePrice,
@@ -211,6 +211,7 @@ export async function POST(request: Request) {
   const origin = request.headers.get("origin") || BUSINESS.url;
 
   try {
+    const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: [

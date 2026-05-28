@@ -1,8 +1,21 @@
 import Stripe from "stripe";
 
-// The Stripe SDK bundles a pinned API version, and Stripe SDK 22 narrows
-// the apiVersion field to that exact literal. We omit it so the SDK uses
-// its bundled version automatically — this matches Stripe's recommendation
-// and avoids churn when the SDK is upgraded. To override, pass
-// { apiVersion: '<currently-supported-version>' } here.
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+// Stripe SDK 22 throws at construction if no API key is provided, which
+// breaks Next.js's "collect page data" build step on environments where
+// STRIPE_SECRET_KEY isn't set yet (e.g. a fresh Vercel project). Lazy-init
+// defers the constructor to first request, so the build always succeeds
+// and the missing-key error only surfaces at runtime with a clear message.
+let _stripe: Stripe | undefined;
+
+export function getStripe(): Stripe {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) {
+      throw new Error(
+        "STRIPE_SECRET_KEY is not configured. Set it in .env.local for local dev, or in Vercel → Project Settings → Environment Variables for deployments."
+      );
+    }
+    _stripe = new Stripe(key);
+  }
+  return _stripe;
+}

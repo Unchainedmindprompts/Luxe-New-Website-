@@ -1,11 +1,24 @@
 import { NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { Resend } from "resend";
 import type Stripe from "stripe";
 
 export const runtime = "nodejs";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Resend, like Stripe, throws at construction when the key is missing —
+// which breaks the build on environments where the key isn't set yet.
+// Lazy-init defers it to first request.
+let _resend: Resend | undefined;
+function getResend(): Resend {
+  if (!_resend) {
+    const key = process.env.RESEND_API_KEY;
+    if (!key) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
+    _resend = new Resend(key);
+  }
+  return _resend;
+}
 
 const FROM_ADDRESS = "Luxe Window Works <orders@luxewindowworks.com>";
 const MARK_EMAIL = "mark@luxewindowworks.com";
@@ -28,6 +41,7 @@ export async function POST(request: Request) {
 
   let event: Stripe.Event;
   try {
+    const stripe = getStripe();
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
     console.error("Webhook signature verification failed:", err);
@@ -70,7 +84,7 @@ export async function POST(request: Request) {
     ].join("\n");
 
     try {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: FROM_ADDRESS,
         to: MARK_EMAIL,
         subject: `New Luxe Order — ${m.product || "window treatment"}`,
@@ -78,7 +92,7 @@ export async function POST(request: Request) {
       });
 
       if (customerEmail) {
-        await resend.emails.send({
+        await getResend().emails.send({
           from: FROM_ADDRESS,
           to: customerEmail,
           subject: "Your Luxe Window Works Order",
