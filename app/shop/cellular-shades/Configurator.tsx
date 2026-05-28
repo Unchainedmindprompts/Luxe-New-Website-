@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
   CELLULAR_WIDTHS,
@@ -13,11 +14,18 @@ import {
   calculatePrice,
   calculateShipping,
   FRACTIONS,
+  formatMeasurement,
   roundUpToBracket,
 } from "@/lib/pricing";
 import { BUSINESS } from "@/lib/constants";
+import { addToCart, useCart } from "@/lib/cart";
 
-const PRODUCT_KEY = "cellular-shades";
+const PRODUCT_KEY = "cellular-shades" as const;
+const PRODUCT_NAME = '9/16" Portrait Honeycomb Cell Shades';
+const LIFT_LABELS = {
+  cordless: "Cordless",
+  tdbu: "Top Down Bottom Up (TDBU)",
+} as const;
 
 const COLOR_SWATCHES: { name: CellularColor; hex: string }[] = [
   { name: "Brilliant White", hex: "#FAFAFA" },
@@ -67,8 +75,9 @@ export default function Configurator() {
   const [fractionHeight, setFractionHeight] = useState<number>(0);
   const [lift, setLift] = useState<LiftSystem>("cordless");
   const [quantity, setQuantity] = useState<number>(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [added, setAdded] = useState(false);
+  const cart = useCart();
+  const cartHasItems = cart.length > 0;
 
   const widthDecimal = wholeWidth + fractionWidth;
   const widthExceeded = widthDecimal > CELLULAR_MAX_WIDTH;
@@ -110,39 +119,27 @@ export default function Configurator() {
       quantity,
     ]);
 
-  async function handleCheckout() {
-    setError(null);
-    setLoading(true);
-    try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productKey: PRODUCT_KEY,
-          color,
-          wholeWidth,
-          fractionWidth,
-          wholeHeight,
-          fractionHeight,
-          lift,
-          quantity,
-        }),
-      });
-      if (!response.ok) {
-        const data = (await response.json().catch(() => ({}))) as {
-          error?: string;
-        };
-        throw new Error(data.error || `Checkout request failed (${response.status})`);
-      }
-      const { url } = (await response.json()) as { url?: string };
-      if (!url) throw new Error("No checkout URL returned");
-      window.location.href = url;
-    } catch (err) {
-      console.error(err);
-      const msg = err instanceof Error ? err.message : "Could not start checkout.";
-      setError(`${msg}. Please try again or call us.`);
-      setLoading(false);
-    }
+  function handleAddToCart() {
+    if (widthExceeded) return;
+    addToCart({
+      id: crypto.randomUUID(),
+      product: PRODUCT_NAME,
+      color,
+      width: formatMeasurement(wholeWidth, fractionWidth),
+      height: formatMeasurement(wholeHeight, fractionHeight),
+      liftSystem: LIFT_LABELS[lift],
+      quantity,
+      unitPrice: pricePerShade,
+      shippingCost: shipping,
+      productKey: PRODUCT_KEY,
+      wholeWidth,
+      fractionWidth,
+      wholeHeight,
+      fractionHeight,
+      lift,
+    });
+    setAdded(true);
+    window.setTimeout(() => setAdded(false), 2000);
   }
 
   return (
@@ -367,13 +364,13 @@ export default function Configurator() {
           </div>
         )}
         <div className="flex items-baseline justify-between mb-3">
-          <span className="text-sm text-warm-gray-500">Shipping</span>
+          <span className="text-sm text-warm-gray-500">Shipping (single)</span>
           <span className="text-charcoal">
             {widthExceeded ? "—" : fmt(shipping)}
           </span>
         </div>
         <div className="flex items-baseline justify-between pt-3 border-t border-warm-gray-200">
-          <span className="font-semibold text-charcoal">Order Total</span>
+          <span className="font-semibold text-charcoal">If ordered alone</span>
           <span className="font-serif text-2xl font-semibold text-charcoal">
             {widthExceeded ? "—" : fmt(total)}
           </span>
@@ -393,20 +390,34 @@ export default function Configurator() {
         .
       </p>
 
-      {/* Checkout */}
+      {/* Add to Cart */}
       <button
         type="button"
-        onClick={handleCheckout}
-        disabled={widthExceeded || loading}
+        onClick={handleAddToCart}
+        disabled={widthExceeded}
         className="w-full text-white font-semibold px-6 py-3.5 rounded-full bg-[#9CAF88] hover:bg-[#7B9A6E] transition-all hover:shadow-lg disabled:bg-warm-gray-300 disabled:hover:bg-warm-gray-300 disabled:cursor-not-allowed disabled:hover:shadow-none"
       >
-        {loading ? "Processing…" : "Proceed to Checkout"}
+        Add to Cart
       </button>
 
-      {error && (
-        <p role="alert" className="mt-4 text-sm text-red-600">
-          {error}
+      {added && (
+        <p
+          role="status"
+          aria-live="polite"
+          className="mt-3 text-sm text-center text-[#7B9A6E] font-medium"
+        >
+          Added to cart ✓
         </p>
+      )}
+
+      {/* Proceed to Checkout — only when cart has items */}
+      {cartHasItems && (
+        <Link
+          href="/shop/cart"
+          className="block w-full text-center mt-3 px-6 py-3.5 rounded-full border-2 border-[#9CAF88] text-[#7B9A6E] font-semibold hover:bg-[#9CAF88]/10 transition-all"
+        >
+          Proceed to Checkout
+        </Link>
       )}
     </div>
   );

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { BUSINESS, NAV_LINKS } from "@/lib/constants";
+import CartIcon from "@/components/CartIcon";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -58,6 +59,7 @@ export default function Header() {
               )}
             </div>
           ))}
+          <CartIcon />
           <Link
             href="/book"
             className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors"
@@ -75,12 +77,14 @@ export default function Header() {
           </a>
         </nav>
 
-        {/* Mobile menu button */}
-        <button
-          className="lg:hidden p-2 text-charcoal"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-        >
+        {/* Mobile cart + menu */}
+        <div className="lg:hidden flex items-center gap-3">
+          <CartIcon />
+          <button
+            className="p-2 text-charcoal"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          >
           {mobileOpen ? (
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -90,7 +94,8 @@ export default function Header() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           )}
-        </button>
+          </button>
+        </div>
       </div>
 
       {/* Mobile Nav */}

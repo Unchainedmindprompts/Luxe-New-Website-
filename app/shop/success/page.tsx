@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
+import ClearCartOnMount from "./ClearCartOnMount";
 
 export const metadata: Metadata = {
   title: "Order Received",
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 export default function SuccessPage() {
   return (
     <>
+      <ClearCartOnMount />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
