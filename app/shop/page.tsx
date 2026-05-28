@@ -39,11 +39,37 @@ export default function ShopPage() {
       <section className="pt-12 md:pt-16 pb-8 md:pb-12 bg-warm-white">
         <div className="container-luxe max-w-4xl text-center">
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl text-charcoal leading-tight tracking-tight">
-            Custom Blinds &amp; Shades
+            Premium blinds and shades, delivered to your door.
           </h1>
           <p className="mt-5 text-lg md:text-xl text-warm-gray-500 leading-relaxed">
-            Custom made to your exact size. Free shipping on every order.
+            Skip the big box. Order direct.
           </p>
+        </div>
+      </section>
+
+      <section className="pb-12 md:pb-16 bg-warm-white">
+        <div className="container-luxe max-w-3xl">
+          <div className="space-y-5 text-base md:text-lg text-warm-gray-700 leading-relaxed">
+            <p>
+              We get it — everything has gotten more expensive, and window
+              treatments are no exception. That&apos;s why we&apos;ve taken two of
+              our best sellers and made them available online at honest prices,
+              shipped directly to you.
+            </p>
+            <p>
+              Norman USA faux wood blinds and cellular shades aren&apos;t the
+              cheapest option out there. They&apos;re not meant to be. What they
+              are is premium quality — custom made to your exact measurements —
+              backed by one of the best warranties in the industry. If anything
+              malfunctions under normal use, Norman sends you a replacement. No
+              hassle, no runaround. Try getting that kind of service from a big
+              box store or a membership warehouse.
+            </p>
+            <p>
+              Order online, configure to your exact size, and have them
+              delivered to your door.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -81,6 +107,59 @@ export default function ShopPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="pb-12 md:pb-16 bg-warm-white">
+        <div className="container-luxe max-w-3xl">
+          <div className="bg-cream border-2 border-[#9CAF88] rounded-2xl p-6 md:p-8 text-center">
+            <p className="text-base md:text-lg text-charcoal leading-relaxed">
+              <span className="font-semibold">Live in North Idaho?</span> We can
+              help with professional installation. Minimum trip and installation
+              fees apply.{" "}
+              <Link
+                href="/contact"
+                className="text-[#7B9A6E] font-semibold hover:underline"
+              >
+                Contact us
+              </Link>{" "}
+              for a quote.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="pb-20 md:pb-28 bg-warm-white">
+        <div className="container-luxe max-w-5xl">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {[
+              "Norman USA — Industry Leading Warranty",
+              "Custom Made to Your Exact Size",
+              "Free Shipping on Every Order",
+              "23 Years of Window Treatment Experience",
+            ].map((item) => (
+              <li
+                key={item}
+                className="flex items-start gap-3 text-sm md:text-base text-charcoal leading-snug"
+              >
+                <svg
+                  className="w-5 h-5 mt-0.5 text-[#9CAF88] flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
     </>
