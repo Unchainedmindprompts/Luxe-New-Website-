@@ -29,6 +29,13 @@ export type CartItem = {
   wholeHeight: number;
   fractionHeight: number;
   lift?: "cordless" | "tdbu";
+  // Faux-wood-specific options (optional, ignored by other products)
+  slatSize?: string;
+  finish?: string;
+  mountType?: string;
+  wandDrop?: string;
+  sideMountBrackets?: boolean;
+  holdDowns?: boolean;
 };
 
 const STORAGE_KEY = "luxe-cart";

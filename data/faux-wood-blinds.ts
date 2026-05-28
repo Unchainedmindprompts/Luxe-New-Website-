@@ -25,16 +25,15 @@ export const FAUX_WOOD_MSRP: number[][] = [
 ];
 
 export const FAUX_WOOD_COLORS = [
-  "Designer White Smooth",
-  "Designer White Embossed",
   "Pure White Smooth",
   "Pure White Embossed",
   "Silk White Smooth",
   "Silk White Embossed",
   "Pearl Smooth",
   "Pearl Embossed",
-  "Bright White Smooth",
-  "Bright White Embossed",
+  "Designer White Smooth",
+  "Designer White Embossed",
+  "Mist Smooth",
 ] as const;
 
 export type FauxWoodColor = (typeof FAUX_WOOD_COLORS)[number];
@@ -44,3 +43,6 @@ export const FAUX_WOOD_MAX_WIDTH = 72;
 
 /** No top-down/bottom-up option on this product. */
 export const FAUX_WOOD_TDBU_AVAILABLE = false;
+
+/** Side-mount bracket option surcharge in MSRP dollars (per blind). Apply calculatePrice() to convert. */
+export const FAUX_WOOD_SIDE_MOUNT_MSRP_SURCHARGE = 23.0;

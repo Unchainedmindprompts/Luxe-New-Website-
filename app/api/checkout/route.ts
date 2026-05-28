@@ -13,6 +13,7 @@ import {
   FAUX_WOOD_WIDTHS,
   FAUX_WOOD_HEIGHTS,
   FAUX_WOOD_MSRP,
+  FAUX_WOOD_SIDE_MOUNT_MSRP_SURCHARGE,
 } from "@/data/faux-wood-blinds";
 import {
   CELLULAR_COLORS,
@@ -37,6 +38,13 @@ type IncomingItem = {
   fractionHeight: number;
   lift?: Lift;
   quantity: number;
+  // Faux-wood-specific options
+  slatSize?: string;
+  finish?: string;
+  mountType?: string;
+  wandDrop?: string;
+  sideMountBrackets?: boolean;
+  holdDowns?: boolean;
 };
 
 type CheckoutBody = { items: IncomingItem[] };
@@ -127,16 +135,29 @@ function priceFauxWood(it: IncomingItem): PricedLine | { error: string } {
   const w = FAUX_WIDTHS_ARR.indexOf(widthBracket);
   const h = FAUX_HEIGHTS_ARR.indexOf(heightBracket);
   const msrp = FAUX_WOOD_MSRP[h][w];
-  const perUnit = calculatePrice(msrp);
+  const base = calculatePrice(msrp);
+  const sideMountSurcharge = it.sideMountBrackets
+    ? calculatePrice(FAUX_WOOD_SIDE_MOUNT_MSRP_SURCHARGE)
+    : 0;
+  const perUnit = base + sideMountSurcharge;
 
   const widthStr = formatMeasurement(it.wholeWidth, it.fractionWidth);
   const heightStr = formatMeasurement(it.wholeHeight, it.fractionHeight);
   const productName = "SmartPrivacy Cordless Faux Wood Blinds";
   const liftSystem = "Cordless";
 
+  const descParts: string[] = [];
+  if (it.slatSize) descParts.push(`Slat: ${it.slatSize}`);
+  descParts.push(`Color: ${it.color}`);
+  descParts.push(`Size: ${widthStr} x ${heightStr}`);
+  if (it.mountType) descParts.push(`Mount: ${it.mountType}`);
+  if (it.sideMountBrackets) descParts.push("Side-mount brackets");
+  if (it.holdDowns) descParts.push("Hold downs");
+  descParts.push(`Lift: ${liftSystem}`);
+
   return {
     productName,
-    description: `Color: ${it.color} · Size: ${widthStr} x ${heightStr} · Lift: ${liftSystem}`,
+    description: descParts.join(" · "),
     quantity: it.quantity,
     unitPriceCents: Math.round(perUnit * 100),
     meta: {

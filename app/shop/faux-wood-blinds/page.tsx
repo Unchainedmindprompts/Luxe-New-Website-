@@ -18,13 +18,14 @@ export const metadata: Metadata = {
 };
 
 const PRODUCT_DETAILS = [
+  '2" or 2½" slat options',
   "Cordless lift system",
-  "SmartPrivacy for light and privacy control",
+  "SmartPrivacy light and privacy control",
   "Impact resistant PolyDeco headrail included",
   "Engineered trapezoid bottom rail",
-  "Wand tilt standard left",
+  "Wand tilt — left standard",
   "Max width 72 inches",
-  "Made in the USA",
+  "Made in the USA by Norman",
 ];
 
 export default function FauxWoodBlindsPage() {
