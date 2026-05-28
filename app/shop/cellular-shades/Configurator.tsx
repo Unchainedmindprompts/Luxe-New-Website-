@@ -17,6 +17,8 @@ import {
 } from "@/lib/pricing";
 import { BUSINESS } from "@/lib/constants";
 
+const PRODUCT_KEY = "cellular-shades";
+
 const COLOR_SWATCHES: { name: CellularColor; hex: string }[] = [
   { name: "Brilliant White", hex: "#FAFAFA" },
   { name: "Gardenia", hex: "#F5F0E0" },
@@ -47,12 +49,6 @@ const HEIGHT_MAX = HEIGHTS[HEIGHTS.length - 1];
 
 const TDBU_SURCHARGE = calculatePrice(CELLULAR_TDBU_MSRP_SURCHARGE);
 
-const PRODUCT_NAME = '9/16" Portrait Honeycomb Cell Shades';
-const LIFT_LABELS = {
-  cordless: "Cordless",
-  tdbu: "Top Down Bottom Up (TDBU)",
-} as const;
-
 const fmt = (n: number) =>
   n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
@@ -60,12 +56,6 @@ const parseIntOrZero = (s: string) => {
   const n = parseInt(s, 10);
   return isNaN(n) ? 0 : n;
 };
-
-function formatMeasurement(whole: number, fraction: number): string {
-  const f = FRACTIONS.find((x) => x.value === fraction);
-  if (!f || f.value === 0) return `${whole}`;
-  return `${whole} ${f.label}`;
-}
 
 type LiftSystem = "cordless" | "tdbu";
 
@@ -128,15 +118,14 @@ export default function Configurator() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          product: PRODUCT_NAME,
+          productKey: PRODUCT_KEY,
           color,
-          width: formatMeasurement(wholeWidth, fractionWidth),
-          height: formatMeasurement(wholeHeight, fractionHeight),
-          liftSystem: LIFT_LABELS[lift],
+          wholeWidth,
+          fractionWidth,
+          wholeHeight,
+          fractionHeight,
+          lift,
           quantity,
-          unitPrice: Math.round(pricePerShade * 100),
-          shippingCost: Math.round(shipping * 100),
-          orderTotal: Math.round(total * 100),
         }),
       });
       if (!response.ok) throw new Error("Checkout request failed");

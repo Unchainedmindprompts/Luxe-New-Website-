@@ -15,6 +15,8 @@ import {
 } from "@/lib/pricing";
 import { BUSINESS } from "@/lib/constants";
 
+const PRODUCT_KEY = "faux-wood-blinds";
+
 const COLOR_SWATCHES: { name: FauxWoodColor; hex: string }[] = [
   { name: "Designer White Smooth", hex: "#FFFFFF" },
   { name: "Designer White Embossed", hex: "#F8F8F8" },
@@ -36,9 +38,6 @@ const WIDTH_MAX = WIDTHS[WIDTHS.length - 1];
 const HEIGHT_MIN = HEIGHTS[0];
 const HEIGHT_MAX = HEIGHTS[HEIGHTS.length - 1];
 
-const PRODUCT_NAME = "SmartPrivacy Cordless Faux Wood Blinds";
-const LIFT_SYSTEM = "Cordless";
-
 const fmt = (n: number) =>
   n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
@@ -46,12 +45,6 @@ const parseIntOrZero = (s: string) => {
   const n = parseInt(s, 10);
   return isNaN(n) ? 0 : n;
 };
-
-function formatMeasurement(whole: number, fraction: number): string {
-  const f = FRACTIONS.find((x) => x.value === fraction);
-  if (!f || f.value === 0) return `${whole}`;
-  return `${whole} ${f.label}`;
-}
 
 export default function Configurator() {
   const [color, setColor] = useState<FauxWoodColor>(COLOR_SWATCHES[0].name);
@@ -84,15 +77,13 @@ export default function Configurator() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          product: PRODUCT_NAME,
+          productKey: PRODUCT_KEY,
           color,
-          width: formatMeasurement(wholeWidth, fractionWidth),
-          height: formatMeasurement(wholeHeight, fractionHeight),
-          liftSystem: LIFT_SYSTEM,
+          wholeWidth,
+          fractionWidth,
+          wholeHeight,
+          fractionHeight,
           quantity,
-          unitPrice: Math.round(pricePerBlind * 100),
-          shippingCost: Math.round(shipping * 100),
-          orderTotal: Math.round(total * 100),
         }),
       });
       if (!response.ok) throw new Error("Checkout request failed");

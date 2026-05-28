@@ -51,3 +51,10 @@ export function roundUpToBracket(
   }
   return brackets[brackets.length - 1];
 }
+
+/** Format a (whole, fraction) pair like (36, 0.375) into "36 3/8". */
+export function formatMeasurement(whole: number, fraction: number): string {
+  const f = FRACTIONS.find((x) => x.value === fraction);
+  if (!f || f.value === 0) return `${whole}`;
+  return `${whole} ${f.label}`;
+}
