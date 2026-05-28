@@ -23,3 +23,31 @@ export function calculateShipping(quantity: number): number {
   if (quantity <= 0) return 0;
   return SHIPPING_FIRST + SHIPPING_ADDITIONAL * (quantity - 1);
 }
+
+/** Standard 1/8" fraction increments used in the measurement inputs. */
+export const FRACTIONS = [
+  { label: "0", value: 0 },
+  { label: "1/8", value: 0.125 },
+  { label: "1/4", value: 0.25 },
+  { label: "3/8", value: 0.375 },
+  { label: "1/2", value: 0.5 },
+  { label: "5/8", value: 0.625 },
+  { label: "3/4", value: 0.75 },
+  { label: "7/8", value: 0.875 },
+] as const;
+
+/**
+ * Round a decimal measurement UP to the next available bracket value.
+ * Industry-standard window-treatment pricing: always size up, never down.
+ * Brackets must be sorted ascending. Returns the largest bracket if the
+ * measurement exceeds it (caller is responsible for max-size validation).
+ */
+export function roundUpToBracket(
+  measurement: number,
+  brackets: readonly number[]
+): number {
+  for (const b of brackets) {
+    if (b >= measurement) return b;
+  }
+  return brackets[brackets.length - 1];
+}
