@@ -6,14 +6,14 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 export const metadata: Metadata = {
   title: "Shop Custom Blinds & Shades",
   description:
-    "Custom blinds and shades made to your exact size. Free shipping on every order. Configure and price online from Luxe Window Works.",
+    "Custom blinds and shades made to your exact size. Shipping at cost — no markup. Configure and price online from Luxe Window Works.",
   alternates: {
     canonical: "https://www.luxewindowworks.com/shop",
   },
   openGraph: {
     title: "Shop Custom Blinds & Shades | Luxe Window Works",
     description:
-      "Custom blinds and shades made to your exact size. Free shipping on every order.",
+      "Custom blinds and shades made to your exact size. Shipping at cost — no markup.",
     type: "website",
   },
 };
@@ -135,7 +135,7 @@ export default function ShopPage() {
             {[
               "Norman USA — Industry Leading Warranty",
               "Custom Made to Your Exact Size",
-              "Free Shipping on Every Order",
+              "Shipping at Cost — No Markup",
               "23 Years of Window Treatment Experience",
             ].map((item) => (
               <li

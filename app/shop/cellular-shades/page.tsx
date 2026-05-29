@@ -5,14 +5,14 @@ import Configurator from "./Configurator";
 export const metadata: Metadata = {
   title: '9/16" Portrait Honeycomb Cell Shades | Shop',
   description:
-    'Configure and price 9/16" Portrait honeycomb cell shades — cordless, light filtering, 14 colors, optional Top Down Bottom Up. Custom made to your exact size with free shipping.',
+    'Configure and price 9/16" Portrait honeycomb cell shades — cordless, light filtering, 15 colors, three lift systems including TDBU and Cord Loop. Custom made to your exact size; shipping at cost with no markup.',
   alternates: {
     canonical: "https://www.luxewindowworks.com/shop/cellular-shades",
   },
   openGraph: {
     title: '9/16" Portrait Honeycomb Cell Shades | Luxe Window Works',
     description:
-      "Cordless honeycomb shades, light filtering, custom made to your exact size. Free shipping on every order.",
+      "Cordless honeycomb shades, light filtering, custom made to your exact size. Shipping at cost with no markup.",
     type: "website",
   },
 };

@@ -5,14 +5,14 @@ import Configurator from "./Configurator";
 export const metadata: Metadata = {
   title: "SmartPrivacy Cordless Faux Wood Blinds | Shop",
   description:
-    'Configure and price SmartPrivacy cordless faux wood blinds — 2" and 2.5" slats, custom made to your exact size, free shipping on every order.',
+    'Configure and price SmartPrivacy cordless faux wood blinds — 2" and 2.5" slats, custom made to your exact size, shipping at cost with no markup.',
   alternates: {
     canonical: "https://www.luxewindowworks.com/shop/faux-wood-blinds",
   },
   openGraph: {
     title: "SmartPrivacy Cordless Faux Wood Blinds | Luxe Window Works",
     description:
-      "Custom faux wood blinds, cordless, made to your exact size. Free shipping on every order.",
+      "Custom faux wood blinds, cordless, made to your exact size. Shipping at cost with no markup.",
     type: "website",
   },
 };
