@@ -258,25 +258,26 @@ export default function Configurator() {
       {/* STEP 2 — Color & Finish */}
       <section className="mb-10">
         <StepHeader number={2} label="Color" />
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        <p className="text-xs text-warm-gray-500 leading-relaxed mb-4">
+          Browse the available colors below. Pick your color and finish in
+          the selectors that follow to commit them to your order.
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
           {COLORS.map((c) => {
             const selected = colorName === c.name;
             return (
-              <button
+              <div
                 key={c.name}
-                type="button"
-                onClick={() => handleColorChange(c.name)}
-                aria-pressed={selected}
-                aria-label={c.name}
-                className="group flex flex-col items-center text-center focus:outline-none"
+                className="flex flex-col items-center text-center"
               >
                 <div
                   className={`w-full aspect-square rounded-lg border-2 transition-all ${
                     selected
                       ? "border-[#9CAF88] ring-2 ring-[#9CAF88]/30"
-                      : "border-warm-gray-200 group-hover:border-warm-gray-400"
+                      : "border-warm-gray-200"
                   }`}
                   style={{ backgroundColor: c.hex }}
+                  aria-hidden="true"
                 />
                 <span className="mt-2 text-xs leading-tight text-charcoal font-medium">
                   {c.name}
@@ -284,14 +285,36 @@ export default function Configurator() {
                 <span className="mt-0.5 text-[10px] text-warm-gray-400">
                   {c.finishes.join(" · ")}
                 </span>
-              </button>
+              </div>
             );
           })}
         </div>
 
+        {/* Color selector */}
+        <div className="mb-5">
+          <label
+            htmlFor="fw-color-select"
+            className="block text-sm font-semibold text-charcoal mb-2"
+          >
+            Select your color
+          </label>
+          <select
+            id="fw-color-select"
+            value={colorName}
+            onChange={(e) => handleColorChange(e.target.value as ColorName)}
+            className="w-full bg-white border border-warm-gray-300 rounded-lg px-3 py-2.5 text-charcoal focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
+          >
+            {COLORS.map((c) => (
+              <option key={c.name} value={c.name}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         {/* Finish */}
-        <div className="mt-6">
-          <div className="text-sm text-warm-gray-500 mb-2">Finish</div>
+        <div>
+          <div className="text-sm font-semibold text-charcoal mb-2">Finish</div>
           <div className="flex flex-wrap gap-2">
             <RadioOption
               selected={finish === "Smooth"}
