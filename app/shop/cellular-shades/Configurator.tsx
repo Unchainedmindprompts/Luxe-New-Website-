@@ -279,20 +279,23 @@ export default function Configurator() {
       {/* STEP 1 — Color */}
       <section className="mb-10">
         <StepHeader number={1} label="Select Color" />
-        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+        <p className="text-xs text-warm-gray-500 leading-relaxed mb-4">
+          Click any swatch for a full-size view. Pick your color in the
+          selector below to commit it to your order.
+        </p>
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-6">
           {CELLULAR_COLOR_DATA.map((c) => {
             const selected = colorCode === c.code;
             return (
               <div
                 key={c.code}
-                className="relative flex flex-col items-center text-center"
+                className="flex flex-col items-center text-center"
               >
                 <button
                   type="button"
-                  onClick={() => setColorCode(c.code)}
-                  aria-pressed={selected}
-                  aria-label={`Select ${c.name}`}
-                  className="group w-full focus:outline-none"
+                  onClick={() => setLightbox({ src: c.image, name: c.name })}
+                  aria-label={`View ${c.name} fabric larger`}
+                  className="group relative w-full focus:outline-none"
                 >
                   <div
                     className={`relative w-full aspect-square rounded-lg overflow-hidden border-2 transition-all bg-warm-gray-100 ${
@@ -309,27 +312,24 @@ export default function Configurator() {
                       className="object-cover object-top"
                     />
                   </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLightbox({ src: c.image, name: c.name })}
-                  aria-label={`View ${c.name} fabric larger`}
-                  className="absolute top-1.5 right-1.5 w-7 h-7 bg-white/90 hover:bg-white rounded-full shadow-sm flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#9CAF88] transition-colors"
-                >
-                  <svg
-                    className="w-3.5 h-3.5 text-charcoal"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                  <span
                     aria-hidden="true"
+                    className="absolute top-1.5 right-1.5 w-7 h-7 bg-white/90 rounded-full shadow-sm flex items-center justify-center pointer-events-none"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                    />
-                  </svg>
+                    <svg
+                      className="w-3.5 h-3.5 text-charcoal"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                      />
+                    </svg>
+                  </span>
                 </button>
                 <span className="mt-2 text-xs leading-tight text-charcoal font-medium">
                   {c.name}
@@ -337,6 +337,26 @@ export default function Configurator() {
               </div>
             );
           })}
+        </div>
+        <div>
+          <label
+            htmlFor="cs-color-select"
+            className="block text-sm font-semibold text-charcoal mb-2"
+          >
+            Select your color
+          </label>
+          <select
+            id="cs-color-select"
+            value={colorCode}
+            onChange={(e) => setColorCode(e.target.value as ColorCode)}
+            className="w-full bg-white border border-warm-gray-300 rounded-lg px-3 py-2.5 text-charcoal focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
+          >
+            {CELLULAR_COLOR_DATA.map((c) => (
+              <option key={c.code} value={c.code}>
+                {c.name} ({c.code})
+              </option>
+            ))}
+          </select>
         </div>
       </section>
 
