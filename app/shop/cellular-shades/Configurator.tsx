@@ -163,9 +163,9 @@ export default function Configurator() {
   // Step 2
   const [mountType, setMountType] = useState<MountType>("Inside Mount");
   // Step 3
-  const [wholeWidth, setWholeWidth] = useState<number>(WIDTH_MIN);
+  const [wholeWidth, setWholeWidth] = useState<number>(0);
   const [fractionWidth, setFractionWidth] = useState<number>(0);
-  const [wholeHeight, setWholeHeight] = useState<number>(HEIGHT_MIN);
+  const [wholeHeight, setWholeHeight] = useState<number>(0);
   const [fractionHeight, setFractionHeight] = useState<number>(0);
   // Step 4
   const [lift, setLift] = useState<LiftValue>("cordless");
@@ -195,13 +195,14 @@ export default function Configurator() {
 
   const widthDecimal = wholeWidth + fractionWidth;
   const widthExceeded = widthDecimal > CELLULAR_MAX_WIDTH;
+  const dimensionsEntered = wholeWidth > 0 && wholeHeight > 0;
 
   const currentColor = CELLULAR_COLOR_DATA.find((c) => c.code === colorCode)!;
   const currentLift = LIFT_OPTIONS.find((o) => o.value === lift)!;
 
   const { basePrice, liftSurcharge, pricePerShade, subtotal, shipping, total } =
     useMemo(() => {
-      if (widthExceeded) {
+      if (!dimensionsEntered || widthExceeded) {
         return {
           basePrice: 0,
           liftSurcharge: 0,
@@ -231,6 +232,7 @@ export default function Configurator() {
         total: sub + ship,
       };
     }, [
+      dimensionsEntered,
       widthExceeded,
       widthDecimal,
       wholeHeight,
@@ -243,7 +245,7 @@ export default function Configurator() {
   const heightStr = formatMeasurement(wholeHeight, fractionHeight);
 
   function handleAddToCart() {
-    if (widthExceeded) return;
+    if (!dimensionsEntered || widthExceeded) return;
     addToCart({
       id: crypto.randomUUID(),
       product: PRODUCT_NAME,
@@ -410,11 +412,12 @@ export default function Configurator() {
                 type="number"
                 min={WIDTH_MIN}
                 max={WIDTH_MAX}
-                value={wholeWidth}
+                value={wholeWidth || ""}
+                placeholder="Width"
                 aria-label="Width whole inches"
                 onFocus={(e) => e.currentTarget.select()}
                 onChange={(e) => setWholeWidth(parseIntOrZero(e.target.value))}
-                className="w-full bg-white border border-warm-gray-300 rounded-lg px-3 py-2.5 text-charcoal focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
+                className="w-full bg-white border border-warm-gray-300 rounded-lg px-3 py-2.5 text-charcoal placeholder:text-warm-gray-400 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
               />
               <select
                 id="cs-width-frac"
@@ -441,11 +444,12 @@ export default function Configurator() {
                 type="number"
                 min={HEIGHT_MIN}
                 max={HEIGHT_MAX}
-                value={wholeHeight}
+                value={wholeHeight || ""}
+                placeholder="Height"
                 aria-label="Height whole inches"
                 onFocus={(e) => e.currentTarget.select()}
                 onChange={(e) => setWholeHeight(parseIntOrZero(e.target.value))}
-                className="w-full bg-white border border-warm-gray-300 rounded-lg px-3 py-2.5 text-charcoal focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
+                className="w-full bg-white border border-warm-gray-300 rounded-lg px-3 py-2.5 text-charcoal placeholder:text-warm-gray-400 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
               />
               <select
                 id="cs-height-frac"
@@ -542,7 +546,13 @@ export default function Configurator() {
 
       {/* PRICE DISPLAY */}
       <div className="bg-cream rounded-xl p-5 mb-6">
-        {widthExceeded ? (
+        {!dimensionsEntered ? (
+          <div className="text-center py-4">
+            <p className="text-sm text-warm-gray-500 leading-relaxed">
+              Enter your window width and height above to see pricing.
+            </p>
+          </div>
+        ) : widthExceeded ? (
           <div className="flex items-baseline justify-between mb-2">
             <span className="text-sm text-warm-gray-500">Price per shade</span>
             <span className="font-serif text-2xl text-warm-gray-400">—</span>
@@ -586,12 +596,14 @@ export default function Configurator() {
             </p>
           </>
         )}
-        <div className="flex items-baseline justify-between pt-3 mt-3 border-t border-warm-gray-200">
-          <span className="font-semibold text-charcoal">Order Total</span>
-          <span className="font-serif text-2xl font-semibold text-charcoal">
-            {widthExceeded ? "—" : fmt(total)}
-          </span>
-        </div>
+        {dimensionsEntered && (
+          <div className="flex items-baseline justify-between pt-3 mt-3 border-t border-warm-gray-200">
+            <span className="font-semibold text-charcoal">Order Total</span>
+            <span className="font-serif text-2xl font-semibold text-charcoal">
+              {widthExceeded ? "—" : fmt(total)}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* ORDER SUMMARY */}
@@ -617,7 +629,7 @@ export default function Configurator() {
           <div className="flex justify-between sm:block">
             <dt className="text-warm-gray-400">Size</dt>
             <dd className="text-charcoal sm:mt-0.5">
-              {widthStr}&quot; × {heightStr}&quot;
+              {dimensionsEntered ? `${widthStr}" × ${heightStr}"` : "—"}
             </dd>
           </div>
           <div className="flex justify-between sm:block">
@@ -654,7 +666,7 @@ export default function Configurator() {
       <button
         type="button"
         onClick={handleAddToCart}
-        disabled={widthExceeded}
+        disabled={!dimensionsEntered || widthExceeded}
         className="w-full text-white font-semibold px-6 py-3.5 rounded-full bg-[#9CAF88] hover:bg-[#7B9A6E] transition-all hover:shadow-lg disabled:bg-warm-gray-300 disabled:hover:bg-warm-gray-300 disabled:cursor-not-allowed disabled:hover:shadow-none"
       >
         Add to Cart
