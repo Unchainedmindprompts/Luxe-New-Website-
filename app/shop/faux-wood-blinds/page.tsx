@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Configurator from "./Configurator";
 
@@ -80,6 +81,34 @@ export default function FauxWoodBlindsPage() {
               Norman&apos;s industry-leading replacement warranty.
             </p>
           </div>
+
+          <div className="mt-10 md:mt-14 grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+            <Image
+              src="/images/smartprivacy-tightest-closure.png"
+              alt="Tightest closure: Norman's exclusive bottom rail pivots 90 degrees when closed for the tightest top-to-bottom seal in the market."
+              width={941}
+              height={1672}
+              className="w-full h-auto rounded-2xl bg-white shadow-sm"
+              sizes="(max-width: 640px) 100vw, 33vw"
+            />
+            <Image
+              src="/images/smartprivacy-valance-free-headrail.png"
+              alt="Valance-free headrail: impact-resistant polydeco headrail with a slim, modern profile that blends into most window trims."
+              width={941}
+              height={1672}
+              className="w-full h-auto rounded-2xl bg-white shadow-sm"
+              sizes="(max-width: 640px) 100vw, 33vw"
+            />
+            <Image
+              src="/images/smartprivacy-lead-free.png"
+              alt="Lead-free: proprietary formulation that's lightweight, durable, and contains no lead."
+              width={941}
+              height={1672}
+              className="w-full h-auto rounded-2xl bg-white shadow-sm"
+              sizes="(max-width: 640px) 100vw, 33vw"
+            />
+          </div>
+
           <div
             className="mt-12 md:mt-16 h-px bg-[#9CAF88]/40 max-w-xs mx-auto"
             aria-hidden="true"
