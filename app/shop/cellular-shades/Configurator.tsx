@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
@@ -274,13 +275,20 @@ export default function Configurator() {
                 className="group flex flex-col items-center text-center focus:outline-none"
               >
                 <div
-                  className={`w-full aspect-square rounded-lg border-2 transition-all ${
+                  className={`relative w-full aspect-square rounded-lg overflow-hidden border-2 transition-all bg-warm-gray-100 ${
                     selected
                       ? "border-[#9CAF88] ring-2 ring-[#9CAF88]/30"
                       : "border-warm-gray-200 group-hover:border-warm-gray-400"
                   }`}
-                  style={{ backgroundColor: c.hex }}
-                />
+                >
+                  <Image
+                    src={c.image}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 33vw, 20vw"
+                    className="object-cover object-top"
+                  />
+                </div>
                 <span className="mt-2 text-xs leading-tight text-charcoal font-medium">
                   {c.name}
                 </span>

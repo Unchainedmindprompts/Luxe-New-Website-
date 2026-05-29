@@ -28,21 +28,16 @@ export const CELLULAR_MSRP: number[][] = [
 ];
 
 export const CELLULAR_COLOR_DATA = [
-  { code: "C7015K", name: "Brilliant White", hex: "#FAFAFA" },
-  { code: "C7016K", name: "Cotton Cloud", hex: "#F5F5F0" },
-  { code: "C7017K", name: "Gardenia", hex: "#F5F0E0" },
-  { code: "C7135K", name: "French Silver", hex: "#C8C8C0" },
-  { code: "C7138K", name: "Iron Mountain", hex: "#6B6B6B" },
-  { code: "C7142K", name: "Dew", hex: "#D8DDD0" },
-  { code: "C7143K", name: "Silver Dusk", hex: "#C0BDB5" },
-  { code: "C7208K", name: "Space Gray", hex: "#808080" },
-  { code: "C7423K", name: "Natural Tan", hex: "#E8DCC8" },
-  { code: "C7424K", name: "Pale Oak", hex: "#DDD0B8" },
-  { code: "C7425K", name: "Whipped Mocha", hex: "#B89880" },
-  { code: "C7427K", name: "Wheat", hex: "#D4BC8C" },
-  { code: "C7516K", name: "New Camel", hex: "#C8A870" },
-  { code: "C7617K", name: "Florida Keys", hex: "#A8C0A0" },
-  { code: "C7715K", name: "Bella Blue", hex: "#A0B0C8" },
+  { code: "C7016K", name: "Cotton Cloud", image: "/images/cellular-cotton-cloud.png" },
+  { code: "C7017K", name: "Gardenia", image: "/images/cellular-gardenia.png" },
+  { code: "C7135K", name: "French Silver", image: "/images/cellular-french-silver.png" },
+  { code: "C7138K", name: "Iron Mountain", image: "/images/cellular-iron-mountain.png" },
+  { code: "C7142K", name: "Dew", image: "/images/cellular-dew.png" },
+  { code: "C7143K", name: "Silver Dusk", image: "/images/cellular-silver-dusk.png" },
+  { code: "C7208K", name: "Space Gray", image: "/images/cellular-space-gray.png" },
+  { code: "C7423K", name: "Natural Tan", image: "/images/cellular-natural-tan.png" },
+  { code: "C7424K", name: "Pale Oak", image: "/images/cellular-pale-oak.png" },
+  { code: "C7425K", name: "Whipped Mocha", image: "/images/cellular-whipped-mocha.png" },
 ] as const;
 
 export type CellularColorCode = (typeof CELLULAR_COLOR_DATA)[number]["code"];
