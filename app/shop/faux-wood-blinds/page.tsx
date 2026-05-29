@@ -50,6 +50,43 @@ export default function FauxWoodBlindsPage() {
         </div>
       </section>
 
+      <section className="pt-8 md:pt-12 pb-12 md:pb-16 bg-cream">
+        <div className="container-luxe max-w-3xl">
+          <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-6 leading-tight">
+            Why SmartPrivacy Faux Wood Blinds?
+          </h2>
+          <div className="space-y-5 text-base md:text-lg text-warm-gray-600 leading-relaxed">
+            <p>
+              Traditional blinds have a design flaw — route holes in the middle
+              of every slat let light bleed through and compromise your privacy.
+              Norman&apos;s patented SmartPrivacy technology fixes that by moving
+              the route holes to the back of the slat. The result is a blind
+              that closes more tightly, rotates more consistently, and keeps
+              slats locked in place so they never fall out or become misaligned.
+              The bottom rail stays level when raising and lowering. They&apos;re
+              almost like blinds reinvented. Actually, they pretty much are.
+            </p>
+            <p>
+              Cordless operation means no dangerous tangles, no cords within
+              reach of kids or pets. Norman&apos;s cordless lift system is
+              certified Best for Kids — just tap or pull to raise and lower.
+              Clean, quiet, and safe for any room in the house.
+            </p>
+            <p>
+              Faux wood construction makes these ideal for kitchens, bathrooms,
+              and any high-humidity space where real wood would warp or
+              deteriorate. Durable enough for daily wear, stylish enough for
+              living rooms and bedrooms. Built to last and backed by
+              Norman&apos;s industry-leading replacement warranty.
+            </p>
+          </div>
+          <div
+            className="mt-12 md:mt-16 h-px bg-[#9CAF88]/40 max-w-xs mx-auto"
+            aria-hidden="true"
+          />
+        </div>
+      </section>
+
       <section className="pb-12 md:pb-16 bg-warm-white">
         <div className="container-luxe max-w-3xl">
           <Configurator />
