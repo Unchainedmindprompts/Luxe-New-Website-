@@ -18,6 +18,7 @@
     "@payloadcms/next": "^3.84.1",
     "@payloadcms/richtext-lexical": "^3.84.1",
     "@payloadcms/storage-vercel-blob": "^3.84.1",
+    "@stripe/stripe-js": "^9.7.0",
     "@vercel/analytics": "^1.5.0",
     "graphql": "^16.13.2",
     "next": "^16.2.4",
@@ -26,7 +27,9 @@
     "react-dom": "^19.2.5",
     "react-markdown": "^10.1.0",
     "rehype-raw": "^7.0.0",
-    "sharp": "^0.34.5"
+    "resend": "^6.12.4",
+    "sharp": "^0.34.5",
+    "stripe": "^22.2.0"
   },
   "browserslist": [
     "last 2 Chrome versions",
