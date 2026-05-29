@@ -1,7 +1,94 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { JsonLd } from "@/components/JsonLd";
+import {
+  FAUX_WOOD_MSRP,
+  FAUX_WOOD_WIDTHS,
+  FAUX_WOOD_HEIGHTS,
+  FAUX_WOOD_COLORS,
+} from "@/data/faux-wood-blinds";
+import { calculatePrice } from "@/lib/pricing";
 import Configurator from "./Configurator";
+
+const BASE = "https://www.luxewindowworks.com";
+const PRODUCT_URL = `${BASE}/shop/faux-wood-blinds`;
+
+const fauxWoodPrices = FAUX_WOOD_MSRP.flat().map(calculatePrice);
+const fauxWoodLowPrice = Math.min(...fauxWoodPrices).toFixed(2);
+const fauxWoodHighPrice = Math.max(...fauxWoodPrices).toFixed(2);
+const fauxWoodSizeBracketCount = FAUX_WOOD_WIDTHS.length * FAUX_WOOD_HEIGHTS.length;
+
+const normanBrand = {
+  "@type": "Brand",
+  "@id": "https://www.normanwindowfashions.com/#brand",
+  name: "Norman",
+  alternateName: "Norman Window Fashions",
+  url: "https://www.normanwindowfashions.com",
+  sameAs: [
+    "https://www.normanwindowfashions.com",
+    "https://en.wikipedia.org/wiki/Norman_(window_treatment_brand)",
+  ],
+};
+
+const productSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": `${PRODUCT_URL}#product`,
+  name: "SmartPrivacy Cordless Faux Wood Blinds",
+  alternateName: 'Norman SmartPrivacy 2" and 2.5" Cordless Faux Wood Blinds',
+  description:
+    "Custom-made Norman SmartPrivacy cordless faux wood blinds with patented rear-route holes for tighter closure, lead-free composite slats, valance-free PolyDeco headrail, and a certified Best for Kids cordless lift system. Built to the customer's exact width and height.",
+  url: PRODUCT_URL,
+  image: [
+    `${BASE}/images/smartprivacy-tightest-closure.png`,
+    `${BASE}/images/smartprivacy-valance-free-headrail.png`,
+    `${BASE}/images/smartprivacy-lead-free.png`,
+  ],
+  category: "Faux Wood Blinds",
+  brand: normanBrand,
+  manufacturer: {
+    "@id": "https://www.normanwindowfashions.com/#brand",
+  },
+  hasVariant: FAUX_WOOD_COLORS.map((color) => ({
+    "@type": "ProductModel",
+    name: color,
+  })),
+  audience: {
+    "@type": "PeopleAudience",
+    geographicArea: {
+      "@type": "AdministrativeArea",
+      name: "Northern Idaho",
+    },
+  },
+  offers: {
+    "@type": "AggregateOffer",
+    priceCurrency: "USD",
+    lowPrice: fauxWoodLowPrice,
+    highPrice: fauxWoodHighPrice,
+    offerCount: fauxWoodSizeBracketCount,
+    availability: "https://schema.org/InStock",
+    itemCondition: "https://schema.org/NewCondition",
+    seller: { "@id": `${BASE}/#business` },
+    areaServed: {
+      "@type": "Country",
+      name: "United States",
+    },
+    shippingDetails: {
+      "@type": "OfferShippingDetails",
+      shippingDestination: {
+        "@type": "DefinedRegion",
+        addressCountry: "US",
+      },
+      description:
+        "Shipping passed through at cost — no markup. $25 first unit, $11 each additional unit.",
+    },
+  },
+  speakable: {
+    "@type": "SpeakableSpecification",
+    cssSelector: ["h1", "h2"],
+  },
+};
 
 export const metadata: Metadata = {
   title: "SmartPrivacy Cordless Faux Wood Blinds | Shop",
@@ -32,6 +119,7 @@ const PRODUCT_DETAILS = [
 export default function FauxWoodBlindsPage() {
   return (
     <>
+      <JsonLd data={productSchema} />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
