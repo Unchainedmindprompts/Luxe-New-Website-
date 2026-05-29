@@ -25,7 +25,7 @@ const PRODUCT_DETAILS = [
   "Rail color: default",
   "Max cordless width 96 inches",
   "Norman certified quality",
-  "Made in the USA",
+  "By Norman USA",
 ];
 
 export default function CellularShadesPage() {

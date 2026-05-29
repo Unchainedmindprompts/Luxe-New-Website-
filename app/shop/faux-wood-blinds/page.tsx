@@ -26,7 +26,7 @@ const PRODUCT_DETAILS = [
   "Engineered trapezoid bottom rail",
   "Wand tilt — left standard",
   "Max width 72 inches",
-  "Made in the USA by Norman",
+  "By Norman USA",
 ];
 
 export default function FauxWoodBlindsPage() {
