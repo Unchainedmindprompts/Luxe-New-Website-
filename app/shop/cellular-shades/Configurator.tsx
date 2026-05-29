@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CELLULAR_WIDTHS,
   CELLULAR_HEIGHTS,
@@ -174,8 +174,24 @@ export default function Configurator() {
   const [quantity, setQuantity] = useState<number>(1);
 
   const [added, setAdded] = useState(false);
+  const [lightbox, setLightbox] = useState<{ src: string; name: string } | null>(null);
   const cart = useCart();
   const cartHasItems = cart.length > 0;
+
+  // Close lightbox on ESC and lock background scroll while it's open.
+  useEffect(() => {
+    if (!lightbox) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setLightbox(null);
+    }
+    window.addEventListener("keydown", onKey);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [lightbox]);
 
   const widthDecimal = wholeWidth + fractionWidth;
   const widthExceeded = widthDecimal > CELLULAR_MAX_WIDTH;
@@ -258,6 +274,7 @@ export default function Configurator() {
       : 'Measure the area you want covered. We recommend adding 1.5" to 3" on each side for best light coverage. No deductions are taken from your measurements.';
 
   return (
+    <>
     <div className="bg-white rounded-2xl border border-warm-gray-200/60 p-6 md:p-8 shadow-sm">
       {/* STEP 1 — Color */}
       <section className="mb-10">
@@ -266,33 +283,58 @@ export default function Configurator() {
           {CELLULAR_COLOR_DATA.map((c) => {
             const selected = colorCode === c.code;
             return (
-              <button
+              <div
                 key={c.code}
-                type="button"
-                onClick={() => setColorCode(c.code)}
-                aria-pressed={selected}
-                aria-label={c.name}
-                className="group flex flex-col items-center text-center focus:outline-none"
+                className="relative flex flex-col items-center text-center"
               >
-                <div
-                  className={`relative w-full aspect-square rounded-lg overflow-hidden border-2 transition-all bg-warm-gray-100 ${
-                    selected
-                      ? "border-[#9CAF88] ring-2 ring-[#9CAF88]/30"
-                      : "border-warm-gray-200 group-hover:border-warm-gray-400"
-                  }`}
+                <button
+                  type="button"
+                  onClick={() => setColorCode(c.code)}
+                  aria-pressed={selected}
+                  aria-label={`Select ${c.name}`}
+                  className="group w-full focus:outline-none"
                 >
-                  <Image
-                    src={c.image}
-                    alt=""
-                    fill
-                    sizes="(max-width: 640px) 33vw, 20vw"
-                    className="object-cover object-top"
-                  />
-                </div>
+                  <div
+                    className={`relative w-full aspect-square rounded-lg overflow-hidden border-2 transition-all bg-warm-gray-100 ${
+                      selected
+                        ? "border-[#9CAF88] ring-2 ring-[#9CAF88]/30"
+                        : "border-warm-gray-200 group-hover:border-warm-gray-400"
+                    }`}
+                  >
+                    <Image
+                      src={c.image}
+                      alt=""
+                      fill
+                      sizes="(max-width: 640px) 33vw, 20vw"
+                      className="object-cover object-top"
+                    />
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLightbox({ src: c.image, name: c.name })}
+                  aria-label={`View ${c.name} fabric larger`}
+                  className="absolute top-1.5 right-1.5 w-7 h-7 bg-white/90 hover:bg-white rounded-full shadow-sm flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#9CAF88] transition-colors"
+                >
+                  <svg
+                    className="w-3.5 h-3.5 text-charcoal"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                    />
+                  </svg>
+                </button>
                 <span className="mt-2 text-xs leading-tight text-charcoal font-medium">
                   {c.name}
                 </span>
-              </button>
+              </div>
             );
           })}
         </div>
@@ -617,5 +659,49 @@ export default function Configurator() {
         </Link>
       )}
     </div>
+
+    {lightbox && (
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${lightbox.name} fabric color`}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-charcoal/80 p-4"
+        onClick={() => setLightbox(null)}
+      >
+        <div
+          className="relative max-h-[90vh]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={lightbox.src}
+            alt={`${lightbox.name} — Norman cellular shade fabric color`}
+            className="max-h-[90vh] max-w-[90vw] w-auto h-auto rounded-xl shadow-2xl block"
+          />
+          <button
+            type="button"
+            onClick={() => setLightbox(null)}
+            aria-label="Close"
+            className="absolute -top-3 -right-3 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-warm-gray-100 focus:outline-none focus:ring-2 focus:ring-white transition-colors"
+          >
+            <svg
+              className="w-5 h-5 text-charcoal"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
