@@ -173,22 +173,13 @@ export default function HomePage() {
         />
         <div className="absolute inset-0 bg-charcoal/55" />
 
-        {/* Shop quick links — upper right of hero */}
-        <div className="hidden md:flex absolute top-28 right-6 lg:right-10 z-10 flex-col items-end gap-2">
+        {/* Shop quick link — upper right of hero */}
+        <div className="hidden md:block absolute top-28 right-6 lg:right-10 z-10">
           <Link
-            href="/shop/faux-wood-blinds"
-            className="inline-flex items-center justify-between gap-2 bg-white/95 hover:bg-white text-charcoal font-semibold pl-5 pr-4 py-2.5 rounded-full text-sm shadow-md hover:shadow-lg transition-all"
+            href="/shop"
+            className="inline-flex items-center gap-2 bg-white/95 hover:bg-white text-charcoal font-semibold pl-6 pr-5 py-3 rounded-full text-base shadow-md hover:shadow-lg transition-all"
           >
-            Shop Faux Wood Blinds
-            <svg className="w-4 h-4 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-          <Link
-            href="/shop/cellular-shades"
-            className="inline-flex items-center justify-between gap-2 bg-white/95 hover:bg-white text-charcoal font-semibold pl-5 pr-4 py-2.5 rounded-full text-sm shadow-md hover:shadow-lg transition-all"
-          >
-            Shop Honeycomb Shades
+            Shop Online
             <svg className="w-4 h-4 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
             </svg>
@@ -204,22 +195,13 @@ export default function HomePage() {
               We&apos;ll walk you through what works — and what doesn&apos;t.
             </p>
 
-            {/* Mobile shop pills — desktop has them floating upper-right */}
-            <div className="md:hidden mt-6 flex flex-wrap gap-2">
+            {/* Mobile shop pill — desktop has it floating upper-right */}
+            <div className="md:hidden mt-6">
               <Link
-                href="/shop/faux-wood-blinds"
-                className="inline-flex items-center gap-1.5 bg-white/95 text-charcoal font-semibold px-4 py-2 rounded-full text-sm shadow-md"
+                href="/shop"
+                className="inline-flex items-center gap-2 bg-white/95 text-charcoal font-semibold px-5 py-2.5 rounded-full text-sm shadow-md"
               >
-                Shop Faux Wood
-                <svg className="w-3.5 h-3.5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-              <Link
-                href="/shop/cellular-shades"
-                className="inline-flex items-center gap-1.5 bg-white/95 text-charcoal font-semibold px-4 py-2 rounded-full text-sm shadow-md"
-              >
-                Shop Honeycomb
+                Shop Online
                 <svg className="w-3.5 h-3.5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
