@@ -172,6 +172,29 @@ export default function HomePage() {
           quality={85}
         />
         <div className="absolute inset-0 bg-charcoal/55" />
+
+        {/* Shop quick links — upper right of hero */}
+        <div className="hidden md:flex absolute top-28 right-6 lg:right-10 z-10 flex-col items-end gap-2">
+          <Link
+            href="/shop/faux-wood-blinds"
+            className="inline-flex items-center justify-between gap-2 bg-white/95 hover:bg-white text-charcoal font-semibold pl-5 pr-4 py-2.5 rounded-full text-sm shadow-md hover:shadow-lg transition-all"
+          >
+            Shop Faux Wood Blinds
+            <svg className="w-4 h-4 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+          <Link
+            href="/shop/cellular-shades"
+            className="inline-flex items-center justify-between gap-2 bg-white/95 hover:bg-white text-charcoal font-semibold pl-5 pr-4 py-2.5 rounded-full text-sm shadow-md hover:shadow-lg transition-all"
+          >
+            Shop Honeycomb Shades
+            <svg className="w-4 h-4 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
+
         <div className="container-luxe relative">
           <div className="max-w-3xl">
             <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight text-balance">
@@ -180,6 +203,29 @@ export default function HomePage() {
             <p className="mt-6 md:mt-8 text-lg md:text-xl italic text-warm-gray-200 leading-relaxed max-w-2xl">
               We&apos;ll walk you through what works — and what doesn&apos;t.
             </p>
+
+            {/* Mobile shop pills — desktop has them floating upper-right */}
+            <div className="md:hidden mt-6 flex flex-wrap gap-2">
+              <Link
+                href="/shop/faux-wood-blinds"
+                className="inline-flex items-center gap-1.5 bg-white/95 text-charcoal font-semibold px-4 py-2 rounded-full text-sm shadow-md"
+              >
+                Shop Faux Wood
+                <svg className="w-3.5 h-3.5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+              <Link
+                href="/shop/cellular-shades"
+                className="inline-flex items-center gap-1.5 bg-white/95 text-charcoal font-semibold px-4 py-2 rounded-full text-sm shadow-md"
+              >
+                Shop Honeycomb
+                <svg className="w-3.5 h-3.5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+
             <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4">
               <a
                 href={BUSINESS.phoneHref}
