@@ -142,9 +142,9 @@ export default function Configurator() {
   // Step 3
   const [mountType, setMountType] = useState<MountType>("Inside Mount");
   // Step 4
-  const [wholeWidth, setWholeWidth] = useState<number>(WIDTH_MIN);
+  const [wholeWidth, setWholeWidth] = useState<number>(0);
   const [fractionWidth, setFractionWidth] = useState<number>(0);
-  const [wholeHeight, setWholeHeight] = useState<number>(HEIGHT_MIN);
+  const [wholeHeight, setWholeHeight] = useState<number>(0);
   const [fractionHeight, setFractionHeight] = useState<number>(0);
   // Step 5
   const [wandDrop, setWandDrop] = useState<WandDrop>("Standard");
@@ -156,6 +156,7 @@ export default function Configurator() {
   const [added, setAdded] = useState(false);
   const cart = useCart();
   const cartHasItems = cart.length > 0;
+  const dimensionsEntered = wholeWidth > 0 && wholeHeight > 0;
 
   // Force Smooth when Mist is selected (Mist has no Embossed option)
   function handleColorChange(c: ColorName) {
@@ -167,6 +168,16 @@ export default function Configurator() {
 
   const { basePrice, sideMountFee, pricePerBlind, subtotal, shipping, total } =
     useMemo(() => {
+      if (!dimensionsEntered) {
+        return {
+          basePrice: 0,
+          sideMountFee: 0,
+          pricePerBlind: 0,
+          subtotal: 0,
+          shipping: 0,
+          total: 0,
+        };
+      }
       const widthDecimal = wholeWidth + fractionWidth;
       const heightDecimal = wholeHeight + fractionHeight;
       const widthBracket = roundUpToBracket(widthDecimal, WIDTHS);
@@ -188,6 +199,7 @@ export default function Configurator() {
         total: sub + ship,
       };
     }, [
+      dimensionsEntered,
       wholeWidth,
       fractionWidth,
       wholeHeight,
@@ -200,6 +212,7 @@ export default function Configurator() {
   const heightStr = formatMeasurement(wholeHeight, fractionHeight);
 
   function handleAddToCart() {
+    if (!dimensionsEntered) return;
     addToCart({
       id: crypto.randomUUID(),
       product: PRODUCT_NAME,
@@ -382,11 +395,12 @@ export default function Configurator() {
                 type="number"
                 min={WIDTH_MIN}
                 max={WIDTH_MAX}
-                value={wholeWidth}
+                value={wholeWidth || ""}
+                placeholder="Width"
                 aria-label="Width whole inches"
                 onFocus={(e) => e.currentTarget.select()}
                 onChange={(e) => setWholeWidth(parseIntOrZero(e.target.value))}
-                className="w-full bg-white border border-warm-gray-300 rounded-lg px-3 py-2.5 text-charcoal focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
+                className="w-full bg-white border border-warm-gray-300 rounded-lg px-3 py-2.5 text-charcoal placeholder:text-warm-gray-400 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
               />
               <select
                 id="fw-width-frac"
@@ -413,11 +427,12 @@ export default function Configurator() {
                 type="number"
                 min={HEIGHT_MIN}
                 max={HEIGHT_MAX}
-                value={wholeHeight}
+                value={wholeHeight || ""}
+                placeholder="Height"
                 aria-label="Height whole inches"
                 onFocus={(e) => e.currentTarget.select()}
                 onChange={(e) => setWholeHeight(parseIntOrZero(e.target.value))}
-                className="w-full bg-white border border-warm-gray-300 rounded-lg px-3 py-2.5 text-charcoal focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
+                className="w-full bg-white border border-warm-gray-300 rounded-lg px-3 py-2.5 text-charcoal placeholder:text-warm-gray-400 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
               />
               <select
                 id="fw-height-frac"
@@ -529,43 +544,53 @@ export default function Configurator() {
 
       {/* PRICE DISPLAY */}
       <div className="bg-cream rounded-xl p-5 mb-6">
-        <div className="flex items-baseline justify-between mb-1">
-          <span className="text-sm text-warm-gray-500">Base price per blind</span>
-          <span className="text-charcoal">{fmt(basePrice)}</span>
-        </div>
-        {sideMountBrackets && (
-          <div className="flex items-baseline justify-between mb-1">
-            <span className="text-sm text-warm-gray-500">Side mount brackets</span>
-            <span className="text-charcoal">+{fmt(sideMountFee)}</span>
+        {!dimensionsEntered ? (
+          <div className="text-center py-4">
+            <p className="text-sm text-warm-gray-500 leading-relaxed">
+              Enter your window width and height above to see pricing.
+            </p>
           </div>
+        ) : (
+          <>
+            <div className="flex items-baseline justify-between mb-1">
+              <span className="text-sm text-warm-gray-500">Base price per blind</span>
+              <span className="text-charcoal">{fmt(basePrice)}</span>
+            </div>
+            {sideMountBrackets && (
+              <div className="flex items-baseline justify-between mb-1">
+                <span className="text-sm text-warm-gray-500">Side mount brackets</span>
+                <span className="text-charcoal">+{fmt(sideMountFee)}</span>
+              </div>
+            )}
+            <div className="flex items-baseline justify-between mb-2 pt-2 border-t border-warm-gray-200/60">
+              <span className="text-sm text-warm-gray-500">Price per blind</span>
+              <span className="font-serif text-xl text-charcoal">
+                {fmt(pricePerBlind)}
+              </span>
+            </div>
+            <div className="flex items-baseline justify-between mb-1">
+              <span className="text-sm text-warm-gray-500">Quantity</span>
+              <span className="text-charcoal">× {quantity}</span>
+            </div>
+            <div className="flex items-baseline justify-between mb-1">
+              <span className="text-sm text-warm-gray-500">Subtotal</span>
+              <span className="text-charcoal">{fmt(subtotal)}</span>
+            </div>
+            <div className="flex items-baseline justify-between">
+              <span className="text-sm text-warm-gray-500">Shipping</span>
+              <span className="text-charcoal">{fmt(shipping)}</span>
+            </div>
+            <p className="mt-1 text-xs text-warm-gray-400 leading-relaxed">
+              Actual freight — not marked up.
+            </p>
+            <div className="flex items-baseline justify-between pt-3 mt-3 border-t border-warm-gray-200">
+              <span className="font-semibold text-charcoal">Order Total</span>
+              <span className="font-serif text-2xl font-semibold text-charcoal">
+                {fmt(total)}
+              </span>
+            </div>
+          </>
         )}
-        <div className="flex items-baseline justify-between mb-2 pt-2 border-t border-warm-gray-200/60">
-          <span className="text-sm text-warm-gray-500">Price per blind</span>
-          <span className="font-serif text-xl text-charcoal">
-            {fmt(pricePerBlind)}
-          </span>
-        </div>
-        <div className="flex items-baseline justify-between mb-1">
-          <span className="text-sm text-warm-gray-500">Quantity</span>
-          <span className="text-charcoal">× {quantity}</span>
-        </div>
-        <div className="flex items-baseline justify-between mb-1">
-          <span className="text-sm text-warm-gray-500">Subtotal</span>
-          <span className="text-charcoal">{fmt(subtotal)}</span>
-        </div>
-        <div className="flex items-baseline justify-between">
-          <span className="text-sm text-warm-gray-500">Shipping</span>
-          <span className="text-charcoal">{fmt(shipping)}</span>
-        </div>
-        <p className="mt-1 text-xs text-warm-gray-400 leading-relaxed">
-          Actual freight — not marked up.
-        </p>
-        <div className="flex items-baseline justify-between pt-3 mt-3 border-t border-warm-gray-200">
-          <span className="font-semibold text-charcoal">Order Total</span>
-          <span className="font-serif text-2xl font-semibold text-charcoal">
-            {fmt(total)}
-          </span>
-        </div>
       </div>
 
       {/* ORDER SUMMARY */}
@@ -591,7 +616,7 @@ export default function Configurator() {
           <div className="flex justify-between sm:block">
             <dt className="text-warm-gray-400">Size</dt>
             <dd className="text-charcoal sm:mt-0.5">
-              {widthStr}&quot; × {heightStr}&quot;
+              {dimensionsEntered ? `${widthStr}" × ${heightStr}"` : "—"}
             </dd>
           </div>
           <div className="flex justify-between sm:block">
@@ -632,7 +657,8 @@ export default function Configurator() {
       <button
         type="button"
         onClick={handleAddToCart}
-        className="w-full text-white font-semibold px-6 py-3.5 rounded-full bg-[#9CAF88] hover:bg-[#7B9A6E] transition-all hover:shadow-lg"
+        disabled={!dimensionsEntered}
+        className="w-full text-white font-semibold px-6 py-3.5 rounded-full bg-[#9CAF88] hover:bg-[#7B9A6E] transition-all hover:shadow-lg disabled:bg-warm-gray-300 disabled:hover:bg-warm-gray-300 disabled:cursor-not-allowed disabled:hover:shadow-none"
       >
         Add to Cart
       </button>
