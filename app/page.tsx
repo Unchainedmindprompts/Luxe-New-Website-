@@ -133,7 +133,7 @@ const businessNode = {
     },
   ],
   sameAs: [
-    "https://share.google/9kubt3XEi6TrNzGKe",
+    "https://www.google.com/maps/place/Luxe+Window+Works+LLC/@47.7363916,-116.8816972,17z/data=!3m1!4b1!4m6!3m5!1s0x617bcf2eafa50481:0xb488fb56afcb0982!8m2!3d47.7363916!4d-116.8791223!16s%2Fg%2F11m71mk1yq",
     "https://www.bing.com/maps/search?name=Luxe+Window+Works+LLC&trfc=&mepi=139%7E%7EEmbedded%7ELargeMapLink&FORM=MPSRPL&style=r&q=Luxe+Window+Works+LLC&ss=id.ypid%3AYN6F9E5AD2DAFE5C39&ppois=47.73643493652344_-116.87911987304688_Luxe+Window+Works+LLC&cp=47.736435%7E-116.879120&lvl=15",
     "https://maps.apple.com/place?place-id=I907802082955E66F&address=2972+N+Pavo+Ln%2C+Post+Falls%2C+ID++83854%2C+United+States&coordinate=47.736435%2C-116.879122&name=Luxe+Window+Works&_provider=9902",
     "https://www.yelp.com/biz/luxe-window-works-post-falls",
