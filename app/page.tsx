@@ -27,7 +27,7 @@ const businessNode = {
   description:
     "Premium custom window treatments in Northern Idaho, backed by 23 years of installation expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Free in-home consultation.",
   url: BASE,
-  telephone: "+12086608643",
+  telephone: BUSINESS.phoneE164,
   email: "mark@luxewindowworks.com",
   priceRange: "$$",
   foundingDate: "2025",
@@ -37,6 +37,13 @@ const businessNode = {
     contentUrl: `${BASE}/images/hero-modern-living.webp`,
     width: 900,
     height: 780,
+  },
+  logo: {
+    "@type": "ImageObject",
+    "@id": `${BASE}/#logo`,
+    url: `${BASE}/icon.png`,
+    contentUrl: `${BASE}/icon.png`,
+    caption: "Luxe Window Works",
   },
   founder: { "@id": `${BASE}/#owner` },
   address: {
@@ -127,7 +134,7 @@ const businessNode = {
   ],
   sameAs: [
     "https://share.google/9kubt3XEi6TrNzGKe",
-    "https://www.bing.com/maps/search?toWww=1&redig=2BC026B2E32B45528048B81FC45876EE&style=r&q=Luxe+Window+Works+LLC%2C+2972+N+Pavo+Ln%2C+Post+Falls%2C+ID+83854%2C+United+States&ss=id.local_ypid%3A%22YN6F9E5AD2DAFE5C39%22&st=Luxe+Window+Works+LLC&sfa=2972+N+Pavo+Ln%2C+Post+Falls%2C+ID+83854%2C+United+States&cp=47.736435%7E-116.879120&lvl=16",
+    "https://www.bing.com/maps/search?name=Luxe+Window+Works+LLC&trfc=&mepi=139%7E%7EEmbedded%7ELargeMapLink&FORM=MPSRPL&style=r&q=Luxe+Window+Works+LLC&ss=id.ypid%3AYN6F9E5AD2DAFE5C39&ppois=47.73643493652344_-116.87911987304688_Luxe+Window+Works+LLC&cp=47.736435%7E-116.879120&lvl=15",
     "https://maps.apple.com/place?place-id=I907802082955E66F&address=2972+N+Pavo+Ln%2C+Post+Falls%2C+ID++83854%2C+United+States&coordinate=47.736435%2C-116.879122&name=Luxe+Window+Works&_provider=9902",
     "https://www.yelp.com/biz/luxe-window-works-post-falls",
     "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
@@ -199,7 +206,7 @@ const personNode = {
     "Mark Abplanalp has worked in the window treatment industry since 2002 — 23 years of hands-on sales, design, and installation experience across Washington, Oregon, and Idaho. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025.",
   url: `${BASE}/about`,
   image: `${BASE}/images/mark-photo.webp`,
-  telephone: "+12086608643",
+  telephone: BUSINESS.phoneE164,
   email: "mark@luxewindowworks.com",
   address: {
     "@type": "PostalAddress",
@@ -283,6 +290,48 @@ const webpageNode = {
   inLanguage: "en-US",
 };
 
+const HOMEPAGE_FAQS = [
+  {
+    question: "What areas does Luxe Window Works serve?",
+    answer:
+      "We serve Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint, and the surrounding Kootenai County area. Free in-home consultations are available throughout Northern Idaho.",
+  },
+  {
+    question: "Can I buy custom window treatments online from Luxe Window Works?",
+    answer:
+      "Yes — we offer direct online ordering of custom Norman shades through our shop. Norman SmartPrivacy faux wood blinds and 9/16\" Portrait cellular shades can be configured to your exact width and height and shipped at cost. All other products — Lafayette, Corradi USA exterior shades, plantation shutters, and motorized systems — are quoted and professionally installed through an in-home consultation.",
+  },
+  {
+    question: "What's included in the lifetime installation guarantee?",
+    answer:
+      "Every window treatment we professionally install is backed by a lifetime installation guarantee. If a treatment we installed develops any installation-related issue — a loose bracket, a misaligned headrail, anything tied to how it was put up — we come back and make it right for as long as you own the home.",
+  },
+  {
+    question: "How does shipping work on online orders?",
+    answer:
+      "Shipping is passed through at actual freight cost — no markup. The flat rate is $25 for the first unit and $11 for each additional unit on the same order.",
+  },
+  {
+    question: "Why do you recommend cellular shades for Northern Idaho homes?",
+    answer:
+      "Cellular (honeycomb) shades trap air inside their hexagonal cells, making them the most energy-efficient window covering available — R-values up to 7.86 on double-cell blackout configurations. In Northern Idaho's heating-dominated climate, that translates to meaningfully lower winter heat loss and reduced summer heat gain.",
+  },
+] as const;
+
+const faqPageNode = {
+  "@type": "FAQPage",
+  "@id": `${BASE}/#faq`,
+  isPartOf: { "@id": `${BASE}/#webpage` },
+  mainEntity: HOMEPAGE_FAQS.map((f) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.answer,
+    },
+  })),
+};
+
 const videoNode = {
   "@type": "VideoObject",
   "@id": `${BASE}/#video-overview`,
@@ -299,7 +348,14 @@ const videoNode = {
 
 const homepageGraph = {
   "@context": "https://schema.org",
-  "@graph": [businessNode, personNode, websiteNode, webpageNode, videoNode],
+  "@graph": [
+    businessNode,
+    personNode,
+    websiteNode,
+    webpageNode,
+    faqPageNode,
+    videoNode,
+  ],
 };
 
 export default function HomePage() {
@@ -514,6 +570,29 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-16 md:py-20 bg-warm-white">
+        <div className="container-luxe max-w-3xl">
+          <div className="text-center mb-10">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-charcoal">
+              Frequently Asked Questions
+            </h2>
+          </div>
+          <dl className="space-y-8">
+            {HOMEPAGE_FAQS.map((f) => (
+              <div key={f.question}>
+                <dt className="font-serif text-lg md:text-xl text-charcoal leading-snug">
+                  {f.question}
+                </dt>
+                <dd className="mt-2 text-base md:text-lg text-warm-gray-600 leading-relaxed">
+                  {f.answer}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 

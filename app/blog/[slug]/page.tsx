@@ -146,14 +146,8 @@ function deriveKeywords(post: BlogPost): string {
   return Array.from(kw).join(", ");
 }
 
-/** Author reference — full entity defined in layout.tsx LocalBusiness founder */
-const markAuthorRef = {
-  "@type": "Person",
-  "@id": "https://www.luxewindowworks.com/#owner",
-  name: "Mark Abplanalp",
-  jobTitle: "Owner & Window Treatment Specialist",
-  url: "https://www.luxewindowworks.com",
-};
+/** Author reference — the full Person entity lives in the homepage @graph (#owner). */
+const markAuthorRef = { "@id": "https://www.luxewindowworks.com/#owner" };
 
 /** HowTo schema — 5-step installation process */
 const installationHowToSchema = {
@@ -418,15 +412,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     keywords: deriveKeywords(post),
     inLanguage: "en-US",
     author: markAuthorRef,
-    publisher: {
-      "@type": "Organization",
-      "@id": "https://www.luxewindowworks.com/#business",
-      name: "Luxe Window Works",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://www.luxewindowworks.com/icon.png",
-      },
-    },
+    publisher: { "@id": "https://www.luxewindowworks.com/#business" },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `${BUSINESS.url}/blog/${post.slug}`,
@@ -506,11 +492,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
           name: post.review.reviewerName,
           ...(post.review.reviewerJobTitle && { jobTitle: post.review.reviewerJobTitle }),
         },
-        itemReviewed: {
-          "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
-          "@id": "https://www.luxewindowworks.com/#business",
-          name: "Luxe Window Works",
-        },
+        itemReviewed: { "@id": "https://www.luxewindowworks.com/#business" },
         subjectOf: { "@id": `https://www.luxewindowworks.com/blog/${post.slug}` },
       }
     : null;

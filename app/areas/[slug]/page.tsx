@@ -56,7 +56,7 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
     "@id": `${BUSINESS.url}/#business`,
     name: BUSINESS.name,
     url: BUSINESS.url,
-    telephone: BUSINESS.phone,
+    telephone: BUSINESS.phoneE164,
     address: {
       "@type": "PostalAddress",
       streetAddress: BUSINESS.address.street,

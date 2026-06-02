@@ -117,11 +117,7 @@ function ArticleSchema() {
       name: "Caroline Di Diego",
       jobTitle: "Interior Designer",
     },
-    itemReviewed: {
-      "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
-      "@id": `${BASE}/#business`,
-      name: "Luxe Window Works",
-    },
+    itemReviewed: { "@id": `${BASE}/#business` },
     subjectOf: { "@id": CANONICAL },
   };
 

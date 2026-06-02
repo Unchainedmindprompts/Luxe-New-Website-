@@ -2,6 +2,7 @@ export const BUSINESS = {
   name: "Luxe Window Works",
   owner: "Mark",
   phone: "208-660-8643",
+  phoneE164: "+12086608643",
   phoneHref: "tel:+12086608643",
   email: "mark@luxewindowworks.com",
   address: {
