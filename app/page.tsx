@@ -75,6 +75,7 @@ const businessNode = {
     {
       "@type": "City",
       name: "Coeur d'Alene",
+      sameAs: "https://en.wikipedia.org/wiki/Coeur_d%27Alene,_Idaho",
       containedInPlace: {
         "@type": "AdministrativeArea",
         name: "Kootenai County",
@@ -84,6 +85,7 @@ const businessNode = {
     {
       "@type": "City",
       name: "Post Falls",
+      sameAs: "https://en.wikipedia.org/wiki/Post_Falls,_Idaho",
       containedInPlace: {
         "@type": "AdministrativeArea",
         name: "Kootenai County",
@@ -93,6 +95,7 @@ const businessNode = {
     {
       "@type": "City",
       name: "Hayden",
+      sameAs: "https://en.wikipedia.org/wiki/Hayden,_Idaho",
       containedInPlace: {
         "@type": "AdministrativeArea",
         name: "Kootenai County",
@@ -102,6 +105,7 @@ const businessNode = {
     {
       "@type": "City",
       name: "Rathdrum",
+      sameAs: "https://en.wikipedia.org/wiki/Rathdrum,_Idaho",
       containedInPlace: {
         "@type": "AdministrativeArea",
         name: "Kootenai County",
@@ -111,6 +115,7 @@ const businessNode = {
     {
       "@type": "City",
       name: "Sandpoint",
+      sameAs: "https://en.wikipedia.org/wiki/Sandpoint,_Idaho",
       containedInPlace: {
         "@type": "AdministrativeArea",
         name: "Bonner County",
@@ -257,10 +262,6 @@ const personNode = {
     "Kootenai County, Idaho",
     "North Idaho",
     "Northern Idaho",
-  ],
-  sameAs: [
-    "https://www.yelp.com/biz/luxe-window-works-post-falls",
-    "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
   ],
 };
 
