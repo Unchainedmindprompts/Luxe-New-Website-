@@ -19,27 +19,26 @@ function StarIcon() {
 
 const BASE = "https://www.luxewindowworks.com";
 
-const localBusinessSchema = {
-  "@context": "https://schema.org",
-  "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
+const businessNode = {
+  "@type": ["HomeAndConstructionBusiness", "LocalBusiness"],
   "@id": `${BASE}/#business`,
   name: "Luxe Window Works",
-  description: "Premium custom window treatments in Northern Idaho, backed by 23 years of installation expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Free in-home consultation.",
+  legalName: "Luxe Window Works LLC",
+  description:
+    "Premium custom window treatments in Northern Idaho, backed by 23 years of installation expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Free in-home consultation.",
   url: BASE,
-  telephone: "208-660-8643",
+  telephone: "+12086608643",
   email: "mark@luxewindowworks.com",
   priceRange: "$$",
   foundingDate: "2025",
-  image: { "@type": "ImageObject", url: `${BASE}/images/hero-modern-living.webp`, contentUrl: `${BASE}/images/hero-modern-living.webp`, width: 900, height: 780 },
-  founder: {
-    "@type": "Person",
-    "@id": `${BASE}/#owner`,
-    name: "Mark Abplanalp",
-    jobTitle: "Owner & Window Treatment Specialist",
-    url: `${BASE}/about`,
-    image: `${BASE}/images/mark-photo.webp`,
-    worksFor: { "@id": `${BASE}/#business` },
+  image: {
+    "@type": "ImageObject",
+    url: `${BASE}/images/hero-modern-living.webp`,
+    contentUrl: `${BASE}/images/hero-modern-living.webp`,
+    width: 900,
+    height: 780,
   },
+  founder: { "@id": `${BASE}/#owner` },
   address: {
     "@type": "PostalAddress",
     streetAddress: "2972 N Pavo Ln",
@@ -60,15 +59,71 @@ const localBusinessSchema = {
       alternateName: "Northern Idaho",
       sameAs: "https://en.wikipedia.org/wiki/Idaho_Panhandle",
     },
-    { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
-    { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
-    { "@type": "City", name: "Hayden", containedInPlace: { "@type": "State", name: "Idaho" } },
-    { "@type": "City", name: "Sandpoint", containedInPlace: { "@type": "State", name: "Idaho" } },
-    { "@type": "City", name: "Rathdrum", containedInPlace: { "@type": "State", name: "Idaho" } },
+    {
+      "@type": "AdministrativeArea",
+      name: "Kootenai County",
+      sameAs: "https://en.wikipedia.org/wiki/Kootenai_County,_Idaho",
+      containedInPlace: { "@type": "State", name: "Idaho" },
+    },
+    {
+      "@type": "City",
+      name: "Coeur d'Alene",
+      containedInPlace: {
+        "@type": "AdministrativeArea",
+        name: "Kootenai County",
+        containedInPlace: { "@type": "State", name: "Idaho" },
+      },
+    },
+    {
+      "@type": "City",
+      name: "Post Falls",
+      containedInPlace: {
+        "@type": "AdministrativeArea",
+        name: "Kootenai County",
+        containedInPlace: { "@type": "State", name: "Idaho" },
+      },
+    },
+    {
+      "@type": "City",
+      name: "Hayden",
+      containedInPlace: {
+        "@type": "AdministrativeArea",
+        name: "Kootenai County",
+        containedInPlace: { "@type": "State", name: "Idaho" },
+      },
+    },
+    {
+      "@type": "City",
+      name: "Rathdrum",
+      containedInPlace: {
+        "@type": "AdministrativeArea",
+        name: "Kootenai County",
+        containedInPlace: { "@type": "State", name: "Idaho" },
+      },
+    },
+    {
+      "@type": "City",
+      name: "Sandpoint",
+      containedInPlace: {
+        "@type": "AdministrativeArea",
+        name: "Bonner County",
+        containedInPlace: { "@type": "State", name: "Idaho" },
+      },
+    },
   ],
   openingHoursSpecification: [
-    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "17:00" },
-    { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "09:00", closes: "14:00" },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "17:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Saturday",
+      opens: "09:00",
+      closes: "14:00",
+    },
   ],
   sameAs: [
     "https://share.google/9kubt3XEi6TrNzGKe",
@@ -99,7 +154,7 @@ const localBusinessSchema = {
         itemListElement: [
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Horizontal Blinds" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Wood Blinds" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Faux Wood Blinds" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Faux Wood Blinds", url: `${BASE}/shop/faux-wood-blinds` } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Composite Blinds" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Composite Wood Blinds" } },
         ],
@@ -135,12 +190,105 @@ const localBusinessSchema = {
   },
 };
 
-const videoSchema = {
-  "@context": "https://schema.org",
+const personNode = {
+  "@type": "Person",
+  "@id": `${BASE}/#owner`,
+  name: "Mark Abplanalp",
+  jobTitle: "Owner & Window Treatment Specialist",
+  description:
+    "Mark Abplanalp has worked in the window treatment industry since 2002 — 23 years of hands-on sales, design, and installation experience across Washington, Oregon, and Idaho. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025.",
+  url: `${BASE}/about`,
+  image: `${BASE}/images/mark-photo.webp`,
+  telephone: "+12086608643",
+  email: "mark@luxewindowworks.com",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Post Falls",
+    addressRegion: "ID",
+    postalCode: "83854",
+    addressCountry: "US",
+  },
+  worksFor: { "@id": `${BASE}/#business` },
+  foundingDate: "2002",
+  hasOccupation: {
+    "@type": "Occupation",
+    name: "Window Treatment Specialist",
+    occupationLocation: {
+      "@type": "City",
+      name: "Post Falls",
+      containedInPlace: { "@type": "State", name: "Idaho" },
+    },
+    skills:
+      "Custom window treatment design, plantation shutter installation, motorized shade systems, cellular shades, solar shades, roller shades, fenestration consulting, UV mitigation, commercial window treatments, exterior solar shades",
+  },
+  knowsAbout: [
+    "Custom window treatments",
+    "Plantation shutters",
+    "Cellular shades",
+    "Motorized window treatments",
+    "Solar shades",
+    "Roller shades",
+    "Window treatment installation",
+    "Energy efficient window coverings",
+    "Fenestration design",
+    "Commercial window treatments",
+    "UV mitigation",
+    "Heat reduction window coverings",
+    "Exterior solar shades",
+    "Alta Window Fashions",
+    "Norman Window Fashions",
+    "Lafayette Interior Fashions",
+    "Corradi USA exterior shading systems",
+  ],
+  areaServed: [
+    "Coeur d'Alene, Idaho",
+    "Post Falls, Idaho",
+    "Hayden, Idaho",
+    "Sandpoint, Idaho",
+    "Rathdrum, Idaho",
+    "Kootenai County, Idaho",
+    "North Idaho",
+    "Northern Idaho",
+  ],
+  sameAs: [
+    "https://www.yelp.com/biz/luxe-window-works-post-falls",
+    "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
+  ],
+};
+
+const websiteNode = {
+  "@type": "WebSite",
+  "@id": `${BASE}/#website`,
+  url: BASE,
+  name: "Luxe Window Works",
+  description:
+    "Custom window treatments in Northern Idaho — blinds, shades, shutters, and motorized systems. Direct online ordering of custom Norman shades.",
+  publisher: { "@id": `${BASE}/#business` },
+  inLanguage: "en-US",
+};
+
+const webpageNode = {
+  "@type": "WebPage",
+  "@id": `${BASE}/#webpage`,
+  url: BASE,
+  name: "Premium Custom Window Treatments in Northern Idaho | Luxe Window Works",
+  description:
+    "Custom blinds, shades, shutters, and motorized window treatments in Coeur d'Alene, Post Falls, and Northern Idaho. 23 years of expertise. Lifetime installation guarantee.",
+  isPartOf: { "@id": `${BASE}/#website` },
+  about: { "@id": `${BASE}/#business` },
+  primaryImageOfPage: {
+    "@type": "ImageObject",
+    url: `${BASE}/images/hero-modern-living.webp`,
+  },
+  inLanguage: "en-US",
+};
+
+const videoNode = {
   "@type": "VideoObject",
   "@id": `${BASE}/#video-overview`,
   name: "Premium Window Treatments for Northern Idaho Homes — Luxe Window Works",
-  description: "Transform your view, elevate your lifestyle. At Luxe Window Works, we don't just cover windows—we craft custom solutions that enhance beauty, boost energy efficiency, and increase the value of your Northern Idaho home. From stunning shutters to smart shades, this showcase highlights what true window elegance looks like when design meets craftsmanship. Serving Post Falls, Coeur d'Alene, Hayden & beyond.",
+  description:
+    "Transform your view, elevate your lifestyle. At Luxe Window Works, we don't just cover windows—we craft custom solutions that enhance beauty, boost energy efficiency, and increase the value of your Northern Idaho home. From stunning shutters to smart shades, this showcase highlights what true window elegance looks like when design meets craftsmanship. Serving Post Falls, Coeur d'Alene, Hayden & beyond.",
   thumbnailUrl: "https://img.youtube.com/vi/8FiVnMSHuc4/maxresdefault.jpg",
   uploadDate: "2025-11-07",
   duration: "PT1M6S",
@@ -149,16 +297,17 @@ const videoSchema = {
   publisher: { "@id": `${BASE}/#business` },
 };
 
+const homepageGraph = {
+  "@context": "https://schema.org",
+  "@graph": [businessNode, personNode, websiteNode, webpageNode, videoNode],
+};
+
 export default function HomePage() {
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageGraph) }}
       />
       {/* Hero Section */}
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">

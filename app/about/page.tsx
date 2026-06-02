@@ -36,7 +36,7 @@ const personSchema = {
     "Mark Abplanalp has worked in the window treatment industry since 2002 — 23 years of hands-on sales, design, and installation experience across Washington, Oregon, and Idaho. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025.",
   url: "https://www.luxewindowworks.com/about",
   image: "https://www.luxewindowworks.com/_next/image?url=%2Fimages%2Fmark-photo.webp&w=3840&q=80",
-  telephone: "208-660-8643",
+  telephone: "+12086608643",
   email: "mark@luxewindowworks.com",
   address: {
     "@type": "PostalAddress",
@@ -84,6 +84,7 @@ const personSchema = {
     "Hayden, Idaho",
     "Sandpoint, Idaho",
     "Rathdrum, Idaho",
+    "Kootenai County, Idaho",
     "North Idaho",
     "Northern Idaho",
   ],
