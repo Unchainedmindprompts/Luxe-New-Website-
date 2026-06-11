@@ -3,14 +3,14 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Book a Free Consultation | Luxe Window Works",
   description:
-    "Schedule your free in-home window treatment consultation with Mark Abplanalp. 23 years of expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint — no pressure, no obligation.",
+    "Schedule your free in-home window treatment consultation with Mark Abplanalp. 24 years of installer expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint — no pressure.",
   alternates: {
     canonical: "https://www.luxewindowworks.com/book",
   },
   openGraph: {
     title: "Book a Free Consultation | Luxe Window Works",
     description:
-      "Schedule your free in-home window treatment consultation with Mark Abplanalp. Serving Northern Idaho with 23 years of hands-on expertise.",
+      "Schedule your free in-home window treatment consultation with Mark Abplanalp. Serving Northern Idaho with 24 years of hands-on expertise.",
     url: "https://www.luxewindowworks.com/book",
     type: "website",
     images: [

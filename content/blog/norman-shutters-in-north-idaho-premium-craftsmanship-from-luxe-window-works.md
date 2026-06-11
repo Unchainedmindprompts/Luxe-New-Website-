@@ -181,7 +181,7 @@ wordCount: 2600
 
 <h3>Mark Abplanalp</h3>
 
-<p>Mark Abplanalp is the owner of Luxe Window Works, a custom window treatment company serving Northern Idaho communities including <a href="/areas/coeur-d-alene">Coeur d'Alene</a>, <a href="/areas/post-falls">Post Falls</a>, Hayden, <a href="/areas/sandpoint">Sandpoint</a>, and <a href="/areas/rathdrum">Rathdrum</a>. With 23 years of hands-on experience measuring, specifying, and installing window treatments — including hundreds of Norman shutter installations — Mark has developed the kind of product knowledge and installation precision that only comes from working in real homes, day after day.</p>
+<p>Mark Abplanalp is the owner of Luxe Window Works, a custom window treatment company serving Northern Idaho communities including <a href="/areas/coeur-d-alene">Coeur d'Alene</a>, <a href="/areas/post-falls">Post Falls</a>, Hayden, <a href="/areas/sandpoint">Sandpoint</a>, and <a href="/areas/rathdrum">Rathdrum</a>. With 24 years of hands-on experience measuring, specifying, and installing window treatments — including hundreds of Norman shutter installations — Mark has developed the kind of product knowledge and installation precision that only comes from working in real homes, day after day.</p>
 
 <p>Mark has been a Norman partner since 2009, working directly with the manufacturer to specify and install Normandy, Woodlore, and Woodlore Plus shutters — experience he now brings to North Idaho homeowners. His approach is straightforward: honest recommendations, precise measurements, and products that hold up to the demands of our four-season climate.</p>
 

@@ -28,11 +28,11 @@ const playfairDisplay = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.luxewindowworks.com"),
   title: {
-    default: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
-    template: "%s | Luxe Window Works",
+    default: "Luxe Window Works | Custom Window Treatments, North Idaho",
+    template: "%s",
   },
   description:
-    "Premium custom window treatments in Northern Idaho, backed by 23 years of installer expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Free in-home consultation.",
+    "Premium custom window treatments in North Idaho — 24 years of installer expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
   keywords: [
     "window treatments",
     "custom blinds",
@@ -49,9 +49,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://www.luxewindowworks.com",
     siteName: "Luxe Window Works",
-    title: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
+    title: "Luxe Window Works | Custom Window Treatments, North Idaho",
     description:
-      "Premium custom window treatments with two decades of hands-on expertise. Free in-home consultation. Serving Northern Idaho.",
+      "Premium custom window treatments — 24 years of installer expertise. Free in-home consultation. Serving North Idaho.",
     images: [
       {
         url: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
@@ -63,9 +63,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Luxe Window Works | Custom Window Treatments in Northern Idaho",
+    title: "Luxe Window Works | Custom Window Treatments, North Idaho",
     description:
-      "Premium custom window treatments with two decades of hands-on expertise. Free in-home consultation.",
+      "Premium custom window treatments — 24 years of installer expertise. Free in-home consultation.",
     images: ["https://www.luxewindowworks.com/images/hero-modern-living.webp"],
   },
   robots: {

@@ -16,6 +16,7 @@ type PostDoc = {
   id: string;
   title: string;
   slug: string;
+  seoTitle?: string;
   excerpt?: string;
   metaDescription?: string;
   category?: string;
@@ -308,6 +309,16 @@ const Posts: CollectionConfig = {
       type: "array",
       admin: { position: "sidebar", initCollapsed: true },
       fields: [{ name: "tag", type: "text", required: true }],
+    },
+    {
+      name: "seoTitle",
+      type: "text",
+      label: "SEO Title (for <title> tag)",
+      admin: {
+        position: "sidebar",
+        description:
+          "Optional short title for Google SERP. Keep under 60 chars. If blank, the long display title is used (and will likely be truncated in search results).",
+      },
     },
     {
       name: "metaDescription",

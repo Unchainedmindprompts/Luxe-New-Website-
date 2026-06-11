@@ -6,18 +6,19 @@ import { BUSINESS } from "@/lib/constants";
 
 const SLUG = "custom-window-coverings-near-post-falls-coeur-dalene-local-expertise";
 const TITLE = "Custom Window Coverings Near Post Falls and Coeur d'Alene: Why Local Expertise Makes All the Difference";
-const DESCRIPTION = "Looking for custom window coverings near Post Falls or Coeur d'Alene? A local window treatment specialist explains why independent expertise beats a franchise catalog — and what to ask before you hire anyone.";
+const SEO_TITLE = "Custom Window Coverings Near Post Falls & Coeur d'Alene";
+const DESCRIPTION = "Looking for custom window coverings near Post Falls or Coeur d'Alene? Why independent local expertise beats a franchise catalog — and what to ask first.";
 const HERO = "/images/IMG_6457.jpeg";
 const BASE = "https://www.luxewindowworks.com";
 const CANONICAL = `${BASE}/blog/${SLUG}`;
 
 export const metadata: Metadata = {
-  title: TITLE,
+  title: SEO_TITLE,
   description: DESCRIPTION,
   keywords: "custom window coverings near me, window coverings near me, custom blinds near me, blind near me, window blinds near me, window treatments near me, Post Falls Idaho, Coeur d'Alene, Northern Idaho, buying guide, local expertise, Luxe Window Works, Mark Abplanalp",
   alternates: { canonical: CANONICAL },
   openGraph: {
-    title: TITLE,
+    title: SEO_TITLE,
     description: DESCRIPTION,
     type: "article",
     publishedTime: "2026-04-16T00:00:00.000Z",
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: TITLE,
+    title: SEO_TITLE,
     description: DESCRIPTION,
     images: [HERO],
   },
@@ -179,7 +180,7 @@ export default function Page() {
 
               <p>A franchise consultant working from a standardized catalog can show you what is available within that system. What they may not be positioned to tell you is that a different product — one outside their lineup — would serve your specific situation better.</p>
 
-              <p>That kind of honest guidance requires both broad product knowledge and the freedom to use it. After 23 years of selling and installing window treatments across the Pacific Northwest, the most valuable thing I can offer a client is a recommendation that has no agenda behind it — just experience and the right product for the job.</p>
+              <p>That kind of honest guidance requires both broad product knowledge and the freedom to use it. After 24 years of selling and installing window treatments across the Pacific Northwest, the most valuable thing I can offer a client is a recommendation that has no agenda behind it — just experience and the right product for the job.</p>
 
               <h2>What a Local Window Treatment Expert Actually Does Differently</h2>
 
@@ -195,7 +196,7 @@ export default function Page() {
 
               <p>Custom window coverings are only as good as the measurements behind them. A quarter inch matters. An experienced installer measures differently than someone who learned from a manufacturer&apos;s guide — accounting for the way frames sit, how walls are finished, and what clearances are needed for the specific operating system being installed.</p>
 
-              <p>In 23 years of selling and installing window treatments, the most common problems I see on callbacks — treatments that bind, gaps at the edges, shades that won&apos;t retract cleanly — trace back to measurement errors made before the order was placed.</p>
+              <p>In 24 years of selling and installing window treatments, the most common problems I see on callbacks — treatments that bind, gaps at the edges, shades that won&apos;t retract cleanly — trace back to measurement errors made before the order was placed.</p>
 
               <h3>Products Matched to Northern Idaho&apos;s Climate</h3>
 
@@ -291,7 +292,7 @@ export default function Page() {
 
               <p>Yes. Luxe Window Works serves homeowners across Northern Idaho including Post Falls, Coeur d&apos;Alene, Hayden, Rathdrum, and Sandpoint. The in-home consultation is available throughout the service area at no charge.</p>
 
-              <p><strong>Mark Abplanalp</strong> is the owner of Luxe Window Works and has spent 23 years selling and installing window treatments across the Pacific Northwest. Luxe Window Works offers free in-home consultations throughout Northern Idaho. <Link href="/book">Book your consultation</Link> and get personalized recommendations for your specific home — no pressure, no obligation.</p>
+              <p><strong>Mark Abplanalp</strong> is the owner of Luxe Window Works and has spent 24 years selling and installing window treatments across the Pacific Northwest. Luxe Window Works offers free in-home consultations throughout Northern Idaho. <Link href="/book">Book your consultation</Link> and get personalized recommendations for your specific home — no pressure, no obligation.</p>
 
             </div>
           </div>

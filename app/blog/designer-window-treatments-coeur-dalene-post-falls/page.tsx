@@ -6,18 +6,19 @@ import { BUSINESS } from "@/lib/constants";
 
 const SLUG = "designer-window-treatments-coeur-dalene-post-falls";
 const TITLE = "Designer Window Treatments in Coeur d'Alene & Post Falls: What \"Custom\" Actually Means";
-const DESCRIPTION = "Why interior designers in Coeur d'Alene and Post Falls trust Luxe Window Works for custom window treatment installation. A designer's perspective on what 'custom' really means.";
+const SEO_TITLE = "Designer Window Treatments, Coeur d'Alene & Post Falls";
+const DESCRIPTION = "Why designers in Coeur d'Alene and Post Falls trust Luxe Window Works for custom window treatment installation — and what \"custom\" really means.";
 const HERO = "/images/designer-window-treatments-hero.png";
 const BASE = "https://www.luxewindowworks.com";
 const CANONICAL = `${BASE}/blog/${SLUG}`;
 
 export const metadata: Metadata = {
-  title: TITLE,
+  title: SEO_TITLE,
   description: DESCRIPTION,
   keywords: "designer window treatments, interior designer window treatments, Coeur d'Alene window treatments, Post Falls window treatments, custom window treatments, North Idaho, Luxe Window Works, Mark Abplanalp",
   alternates: { canonical: CANONICAL },
   openGraph: {
-    title: TITLE,
+    title: SEO_TITLE,
     description: DESCRIPTION,
     type: "article",
     publishedTime: "2026-05-09T00:00:00.000Z",
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: TITLE,
+    title: SEO_TITLE,
     description: DESCRIPTION,
     images: [HERO],
   },
@@ -183,7 +184,7 @@ export default function Page() {
 
               <h2>Who Is Luxe Window Works?</h2>
 
-              <p>Luxe Window Works is a custom window treatment company based in Post Falls, Idaho, serving Coeur d&apos;Alene, Hayden, Rathdrum, and the surrounding North Idaho region. Founded by Mark Abplanalp, who has twenty-three years of hands-on installation experience starting with his first window treatment business in Issaquah, Washington in 2002. Luxe carries Alta, Norman, and Lafayette brands and specializes in motorized shading systems including Somfy and BLISS/Dooya.</p>
+              <p>Luxe Window Works is a custom window treatment company based in Post Falls, Idaho, serving Coeur d&apos;Alene, Hayden, Rathdrum, and the surrounding North Idaho region. Founded by Mark Abplanalp, who has twenty-four years of hands-on installation experience starting with his first window treatment business in Issaquah, Washington in 2002. Luxe carries Alta, Norman, and Lafayette brands and specializes in motorized shading systems including Somfy and BLISS/Dooya.</p>
 
               <h2>What Did the Designer Say About Luxe Window Works?</h2>
 
@@ -260,7 +261,7 @@ export default function Page() {
                 </a>.
               </p>
 
-              <p><strong>Mark Abplanalp</strong> is the owner of Luxe Window Works and has spent 23 years selling and installing window treatments across the Pacific Northwest. Luxe Window Works offers free in-home consultations throughout Northern Idaho. <Link href="/book">Book your consultation</Link> and get personalized recommendations for your specific home — no pressure, no obligation.</p>
+              <p><strong>Mark Abplanalp</strong> is the owner of Luxe Window Works and has spent 24 years selling and installing window treatments across the Pacific Northwest. Luxe Window Works offers free in-home consultations throughout Northern Idaho. <Link href="/book">Book your consultation</Link> and get personalized recommendations for your specific home — no pressure, no obligation.</p>
 
             </div>
           </div>

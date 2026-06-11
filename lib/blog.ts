@@ -23,6 +23,7 @@ export interface ReviewData {
 export interface BlogPost {
   slug: string;
   title: string;
+  seoTitle?: string;
   date: string;
   dateModified: string;
   author: string;
@@ -106,6 +107,7 @@ function getMarkdownPost(slug: string): BlogPost | null {
     return {
       slug: data.slug || slug,
       title: data.title || "",
+      ...(data.seoTitle ? { seoTitle: data.seoTitle } : {}),
       date: data.date || "",
       dateModified: data.dateModified || data.date || "",
       author: data.author || "",

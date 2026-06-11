@@ -10,7 +10,7 @@ const PAGE_URL = `${BASE}/glossary`;
 export const metadata: Metadata = {
   title: "Window Treatment Glossary | Luxe Window Works",
   description:
-    "Plain-English definitions of window treatment industry terms — cellular shades, TDBU, R-value, SmartPrivacy, plantation shutters, and more — from a 23-year industry expert.",
+    "Plain-English definitions of window treatment industry terms — cellular shades, TDBU, R-value, SmartPrivacy, plantation shutters, and more — from a 24-year industry expert.",
   alternates: {
     canonical: PAGE_URL,
   },
@@ -68,7 +68,7 @@ export default function GlossaryPage() {
           </h1>
           <p className="mt-4 text-base md:text-lg text-warm-gray-500 leading-relaxed">
             Plain-English definitions of the terms that matter when you&apos;re buying
-            custom blinds, shades, and shutters — written by a 23-year industry installer.
+            custom blinds, shades, and shutters — written by a 24-year industry installer.
           </p>
         </div>
       </section>
@@ -129,7 +129,7 @@ export default function GlossaryPage() {
             Have a question we didn&apos;t cover?
           </h2>
           <p className="text-base md:text-lg text-warm-gray-600 leading-relaxed mb-6">
-            Mark has been installing custom window treatments for 23 years. If there&apos;s
+            Mark has been installing custom window treatments for 24 years. If there&apos;s
             a term, product, or installation question you want a plain-English answer to,
             ask him directly.
           </p>

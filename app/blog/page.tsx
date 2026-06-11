@@ -36,7 +36,7 @@ function BlogListSchema() {
     "@id": `${BUSINESS.url}/blog`,
     name: "Luxe Window Works Blog",
     description:
-      "Expert window treatment advice, buying guides, and design inspiration from 23 years of hands-on experience in Northern Idaho homes — by Mark Abplanalp, owner of Luxe Window Works.",
+      "Expert window treatment advice, buying guides, and design inspiration from 24 years of hands-on experience in Northern Idaho homes — by Mark Abplanalp, owner of Luxe Window Works.",
     url: `${BUSINESS.url}/blog`,
     inLanguage: "en-US",
     author: { "@id": "https://www.luxewindowworks.com/#owner" },

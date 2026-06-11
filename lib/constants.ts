@@ -36,7 +36,7 @@ export const BUSINESS = {
     { day: "Saturday",  open: "9:00 AM", close: "2:00 PM" },
     { day: "Sunday",    open: null,      close: null },
   ],
-  experience: "23 Years of Experience",
+  experience: "24 Years of Installer Experience",
   guarantee: "Lifetime Installation Guarantee",
   brands: ["Alta", "Norman", "Lafayette", "Corradi USA", "The Window Outfitters"],
   url: "https://www.luxewindowworks.com",

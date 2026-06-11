@@ -25,7 +25,7 @@ const businessNode = {
   name: "Luxe Window Works",
   legalName: "Luxe Window Works LLC",
   description:
-    "Premium custom window treatments in Northern Idaho, backed by 23 years of installation expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Free in-home consultation.",
+    "Premium custom window treatments in North Idaho — 24 years of installer expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
   url: BASE,
   telephone: BUSINESS.phoneE164,
   email: "mark@luxewindowworks.com",
@@ -209,7 +209,7 @@ const personNode = {
   name: "Mark Abplanalp",
   jobTitle: "Owner & Window Treatment Specialist",
   description:
-    "Mark Abplanalp has worked in the window treatment industry since 2002 — 23 years of hands-on sales, design, and installation experience across Washington, Oregon, and Idaho. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025.",
+    "Mark Abplanalp has worked in the window treatment industry since 2002 — 24 years of hands-on sales, design, and installation experience across Washington, Oregon, and Idaho. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025.",
   url: `${BASE}/about`,
   image: `${BASE}/images/mark-photo.webp`,
   telephone: BUSINESS.phoneE164,
@@ -282,7 +282,7 @@ const webpageNode = {
   url: BASE,
   name: "Premium Custom Window Treatments in Northern Idaho | Luxe Window Works",
   description:
-    "Custom blinds, shades, shutters, and motorized window treatments in Coeur d'Alene, Post Falls, and Northern Idaho. 23 years of expertise. Lifetime installation guarantee.",
+    "Custom blinds, shades, shutters, and motorized window treatments in Coeur d'Alene, Post Falls, and Northern Idaho. 24 years of installer expertise. Lifetime installation guarantee.",
   isPartOf: { "@id": `${BASE}/#website` },
   about: { "@id": `${BASE}/#business` },
   primaryImageOfPage: {
@@ -605,7 +605,7 @@ export default function HomePage() {
             Let&apos;s Find What Works for Your Home
           </h2>
           <p className="mt-6 text-lg text-warm-gray-400 leading-relaxed">
-            23 years of expertise, zero pressure. We come to you, measure everything, and recommend
+            24 years of expertise, zero pressure. We come to you, measure everything, and recommend
             exactly what fits your space, your style, and your budget.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">

@@ -94,7 +94,7 @@ export const metadata: Metadata = {
     canonical: "https://www.luxewindowworks.com/shop/cellular-shades",
   },
   openGraph: {
-    title: '9/16" Portrait Honeycomb Cell Shades | Luxe Window Works',
+    title: '9/16" Portrait Honeycomb Cell Shades | Shop',
     description:
       "Cordless honeycomb shades, light filtering, custom made to your exact size. Shipping at cost with no markup.",
     type: "website",

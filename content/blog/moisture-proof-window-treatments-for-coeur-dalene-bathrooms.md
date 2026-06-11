@@ -130,7 +130,7 @@ wordCount: 2774
 <h3>Tailored Recommendations for Every Room</h3>
 <p>At Luxe Window Works, we don't just sell window coverings—we engineer long-term solutions. Every bathroom consultation includes a moisture analysis, ventilation check, and recommendation for materials suited to your exact environment.</p>
 <h3>Precision Installation and Local Expertise</h3>
-<p>With over 23 years of experience serving Coeur d'Alene, Post Falls, Sandpoint, Hayden, and Rathdrum, we understand Northern Idaho's unique climate challenges—cold winters, sealed homes, and year-round humidity fluctuations.</p>
+<p>With over 24 years of experience serving Coeur d'Alene, Post Falls, Sandpoint, Hayden, and Rathdrum, we understand Northern Idaho's unique climate challenges—cold winters, sealed homes, and year-round humidity fluctuations.</p>
 <h3>Commitment to Lifetime Support</h3>
 <p>Our service doesn't end at installation. We provide ongoing maintenance tips and lifetime support for every product we install. If moisture or mechanical issues ever arise, we're here to make it right.</p>
 <hr /><h2>Final Takeaway: Build Bathrooms That Last Decades</h2>

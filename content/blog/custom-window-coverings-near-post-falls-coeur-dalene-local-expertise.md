@@ -34,7 +34,7 @@ wordCount: 2500
 
 <p>A franchise consultant working from a standardized catalog can show you what is available within that system. What they may not be positioned to tell you is that a different product — one outside their lineup — would serve your specific situation better.</p>
 
-<p>That kind of honest guidance requires both broad product knowledge and the freedom to use it. After 23 years of selling and installing window treatments across the Pacific Northwest, the most valuable thing I can offer a client is a recommendation that has no agenda behind it — just experience and the right product for the job.</p>
+<p>That kind of honest guidance requires both broad product knowledge and the freedom to use it. After 24 years of selling and installing window treatments across the Pacific Northwest, the most valuable thing I can offer a client is a recommendation that has no agenda behind it — just experience and the right product for the job.</p>
 
 <h2>What a Local Window Treatment Expert Actually Does Differently</h2>
 
@@ -50,7 +50,7 @@ wordCount: 2500
 
 <p>Custom window coverings are only as good as the measurements behind them. A quarter inch matters. An experienced installer measures differently than someone who learned from a manufacturer&apos;s guide — accounting for the way frames sit, how walls are finished, and what clearances are needed for the specific operating system being installed.</p>
 
-<p>In 23 years of selling and installing window treatments, the most common problems I see on callbacks — treatments that bind, gaps at the edges, shades that won&apos;t retract cleanly — trace back to measurement errors made before the order was placed.</p>
+<p>In 24 years of selling and installing window treatments, the most common problems I see on callbacks — treatments that bind, gaps at the edges, shades that won&apos;t retract cleanly — trace back to measurement errors made before the order was placed.</p>
 
 <h3>Products Matched to Northern Idaho&apos;s Climate</h3>
 
@@ -146,4 +146,4 @@ wordCount: 2500
 
 <p>Yes. Luxe Window Works serves homeowners across Northern Idaho including Post Falls, Coeur d&apos;Alene, Hayden, Rathdrum, and Sandpoint. The in-home consultation is available throughout the service area at no charge.</p>
 
-<p><strong>Mark Abplanalp</strong> is the owner of Luxe Window Works and has spent 23 years selling and installing window treatments across the Pacific Northwest. Luxe Window Works offers free in-home consultations throughout Northern Idaho. <a href="/book">Book your consultation</a> and get personalized recommendations for your specific home — no pressure, no obligation.</p>
+<p><strong>Mark Abplanalp</strong> is the owner of Luxe Window Works and has spent 24 years selling and installing window treatments across the Pacific Northwest. Luxe Window Works offers free in-home consultations throughout Northern Idaho. <a href="/book">Book your consultation</a> and get personalized recommendations for your specific home — no pressure, no obligation.</p>
