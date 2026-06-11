@@ -5,16 +5,16 @@ import Link from "next/link";
 import { BUSINESS } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "About Mark Abplanalp | 23 Years of Window Treatment Expertise | Luxe Window Works",
+  title: "About Mark Abplanalp | 24 Years in Window Treatments",
   description:
-    "Mark Abplanalp has been designing and installing window treatments since 2002 — from Seattle to Bend to Apple retail locations nationwide. Now serving Northern Idaho from Post Falls with Luxe Window Works.",
+    "Mark Abplanalp has installed window treatments since 2002 — from Seattle to Bend to Apple retail. Now serving North Idaho from Post Falls with Luxe Window Works.",
   alternates: {
     canonical: "https://www.luxewindowworks.com/about",
   },
   openGraph: {
-    title: "About Mark Abplanalp | Luxe Window Works",
+    title: "About Mark Abplanalp | 24 Years in Window Treatments",
     description:
-      "23 years of window treatment expertise. Apple Visitor Center. Union Square. Now Post Falls, Idaho.",
+      "24 years of window treatment expertise. Apple Visitor Center. Union Square. Now Post Falls, Idaho.",
     url: "https://www.luxewindowworks.com/about",
     images: [
       {
@@ -34,7 +34,7 @@ const personSchema = {
   name: "Mark Abplanalp",
   jobTitle: "Owner & Window Treatment Specialist",
   description:
-    "Mark Abplanalp has worked in the window treatment industry since 2002 — 23 years of hands-on sales, design, and installation experience across Washington, Oregon, and Idaho. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025.",
+    "Mark Abplanalp has worked in the window treatment industry since 2002 — 24 years of hands-on sales, design, and installation experience across Washington, Oregon, and Idaho. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025.",
   url: "https://www.luxewindowworks.com/about",
   image: "https://www.luxewindowworks.com/_next/image?url=%2Fimages%2Fmark-photo.webp&w=3840&q=80",
   telephone: BUSINESS.phoneE164,
@@ -125,7 +125,7 @@ export default function AboutPage() {
                 Built for North Idaho Homes
               </h2>
               <p>
-                For 23 years, owner Mark Abplanalp has specialized in window treatments that perform in our unique climate — from intense summer sun reflecting off the lake to freezing winters that demand real insulation.
+                For 24 years, owner Mark Abplanalp has specialized in window treatments that perform in our unique climate — from intense summer sun reflecting off the lake to freezing winters that demand real insulation.
               </p>
               <p>
                 Luxe Window Works was founded on that deep experience. We don&apos;t just sell products. We engineer complete solutions tailored to your home, your views, your lifestyle, and the specific challenges of North Idaho living. Every project includes precise measurements, expert recommendations, and professional installation backed by a lifetime guarantee.
@@ -150,7 +150,7 @@ export default function AboutPage() {
         <section className="py-16 px-6">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-semibold text-stone-900 mb-10">
-              23 Years. Every Product Category. Every Project Type.
+              24 Years. Every Product Category. Every Project Type.
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               {[
@@ -183,7 +183,7 @@ export default function AboutPage() {
               Brands Mark Has Worked With
             </h2>
             <p className="text-stone-600 mb-8">
-              Over 23 years, Mark has sold and installed products from every major manufacturer in the industry. At Luxe, he carries the ones he trusts.
+              Over 24 years, Mark has sold and installed products from every major manufacturer in the industry. At Luxe, he carries the ones he trusts.
             </p>
             <div className="flex flex-wrap gap-3">
               {[
@@ -210,7 +210,7 @@ export default function AboutPage() {
               Ready to Work With Someone Who Actually Knows Windows?
             </h2>
             <p className="text-stone-600 mb-8">
-              Schedule a free in-home consultation with Mark. No pressure, no catalog overwhelm — just honest advice from someone who has been doing this for 23 years.
+              Schedule a free in-home consultation with Mark. No pressure, no catalog overwhelm — just honest advice from someone who has been doing this for 24 years.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

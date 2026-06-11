@@ -210,5 +210,5 @@ wordCount: 3700
 <p>luxewindowworks.com &nbsp;|&nbsp; 208-660-8643 &nbsp;|&nbsp; mark@luxewindowworks.com</p>
 
 <h2>About the Author</h2>
-<p>Mark Abplanalp is the owner of Luxe Window Works, a trusted custom window covering dealer serving Northern Idaho. With over 23 years of hands-on industry experience — including measuring, installing, and consulting — Mark brings clarity to complex decisions. He's worked with top brands including Hunter Douglas, Alta, Norman, and Graber, and specializes in helping homeowners choose the right solutions for their space, style, and climate.</p>
+<p>Mark Abplanalp is the owner of Luxe Window Works, a trusted custom window covering dealer serving Northern Idaho. With over 24 years of hands-on industry experience — including measuring, installing, and consulting — Mark brings clarity to complex decisions. He's worked with top brands including Hunter Douglas, Alta, Norman, and Graber, and specializes in helping homeowners choose the right solutions for their space, style, and climate.</p>
 <p>Proudly serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint, Idaho.</p>

@@ -6,18 +6,19 @@ import { BUSINESS } from "@/lib/constants";
 
 const SLUG = "what-is-an-entity-graph";
 const TITLE = "What Is an Entity Graph — And Why the Technology Behind It Has Been Hiding in Plain Sight for Over a Decade";
-const DESCRIPTION = "Schema.org launched in 2011. Most of the web still gets structured data wrong. What an entity graph actually is, why it matters more now than ever, and how a properly built implementation compounds over time.";
+const SEO_TITLE = "What Is an Entity Graph? | Luxe Window Works";
+const DESCRIPTION = "Schema.org launched in 2011. What an entity graph actually is, why it matters now more than ever, and how proper implementation compounds over time.";
 const HERO = "/images/hero-modern-living.webp";
 const BASE = "https://www.luxewindowworks.com";
 const CANONICAL = `${BASE}/blog/${SLUG}`;
 
 export const metadata: Metadata = {
-  title: TITLE,
+  title: SEO_TITLE,
   description: DESCRIPTION,
   keywords: "entity graph, schema markup, local SEO, structured data, knowledge graph, local business SEO, JSON-LD, schema.org",
   alternates: { canonical: CANONICAL },
   openGraph: {
-    title: TITLE,
+    title: SEO_TITLE,
     description: DESCRIPTION,
     type: "article",
     publishedTime: "2026-04-17T00:00:00.000Z",
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: TITLE,
+    title: SEO_TITLE,
     description: DESCRIPTION,
     images: [`${BASE}${HERO}`],
   },

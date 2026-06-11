@@ -34,7 +34,7 @@ wordCount: 1923
 <p>Our process begins with understanding your specific needs, lifestyle, and aesthetic preferences. During our free in-home consultation, we assess your windows, discuss your functional requirements, and explore design possibilities that align with your home's architecture and your personal style.</p>
 <p>This isn't a high-pressure sales visit—it's a collaborative planning session where we listen more than we talk.</p>
 <h3>Step 2: Expert Product Selection</h3>
-<p>With over 23 years of hands-on experience in the window treatment industry, our team guides you through product selection based on your specific needs. Whether you're interested in energy-efficient cellular shades, blackout solutions for bedrooms, or motorized blinds for hard-to-reach windows, we match products to purposes.</p>
+<p>With over 24 years of hands-on experience in the window treatment industry, our team guides you through product selection based on your specific needs. Whether you're interested in energy-efficient cellular shades, blackout solutions for bedrooms, or motorized blinds for hard-to-reach windows, we match products to purposes.</p>
 <h3>Step 3: Precision Measuring</h3>
 <p><strong>Accurate measuring is critical for custom blinds success.</strong>&nbsp;Our technicians use professional-grade tools and follow manufacturer specifications to ensure every measurement is precise. We account for window depth, mounting preferences, and any architectural irregularities that could affect installation.</p>
 <p>Studies show that 73% of DIY window treatment failures stem from measurement errors.² Professional measuring eliminates this risk entirely.</p>

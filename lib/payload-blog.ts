@@ -20,6 +20,7 @@ async function toPost(doc: any): Promise<BlogPost> {
   return {
     slug: doc.slug ?? "",
     title: doc.title ?? "",
+    ...(doc.seoTitle ? { seoTitle: doc.seoTitle as string } : {}),
     date,
     dateModified: doc.dateModified ?? doc.updatedAt ?? date,
     author: AUTHOR,

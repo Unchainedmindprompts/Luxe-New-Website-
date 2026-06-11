@@ -485,7 +485,7 @@ export default async function AreaPage({ params }: Props) {
               </svg>
               5.0 Stars
             </span>
-            <span>{BUSINESS.experience} Experience</span>
+            <span>{BUSINESS.experience}</span>
             <span>{BUSINESS.guarantee}</span>
           </div>
         </div>

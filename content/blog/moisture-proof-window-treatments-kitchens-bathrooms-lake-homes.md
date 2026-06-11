@@ -177,7 +177,7 @@ wordCount: 2250
 
 <p>Every home in Northern Idaho has different moisture challenges. Your bathroom might have excellent ventilation. Your kitchen might get direct steam from a cooktop near the window. Your lake home might deal with humidity year-round.</p>
 
-<p>At Luxe Window Works, we've spent 23 years helping North Idaho homeowners solve these exact problems. We come to your home — or offer a virtual consultation if that works better for your schedule — look at your specific spaces, and recommend products that will actually last. You'll get treatments that fit precisely, operate smoothly, and look great for years without warping, peeling, or developing mildew.</p>
+<p>At Luxe Window Works, we've spent 24 years helping North Idaho homeowners solve these exact problems. We come to your home — or offer a virtual consultation if that works better for your schedule — look at your specific spaces, and recommend products that will actually last. You'll get treatments that fit precisely, operate smoothly, and look great for years without warping, peeling, or developing mildew.</p>
 
 <p>Proudly serving <a href="/areas/coeur-d-alene">Coeur d'Alene</a>, <a href="/areas/post-falls">Post Falls</a>, Hayden, <a href="/areas/sandpoint">Sandpoint</a>, and Rathdrum.</p>
 
@@ -191,7 +191,7 @@ wordCount: 2250
 
 <h3>Mark Abplanalp</h3>
 
-<p>Mark Abplanalp is the owner of Luxe Window Works, a custom window treatment company serving Northern Idaho communities including <a href="/areas/coeur-d-alene">Coeur d'Alene</a>, <a href="/areas/post-falls">Post Falls</a>, Hayden, <a href="/areas/sandpoint">Sandpoint</a>, and Rathdrum. With 23 years of hands-on experience measuring, specifying, and installing window treatments in real homes, Mark has seen firsthand how the wrong materials fail in high-moisture environments — and how the right ones perform for decades.</p>
+<p>Mark Abplanalp is the owner of Luxe Window Works, a custom window treatment company serving Northern Idaho communities including <a href="/areas/coeur-d-alene">Coeur d'Alene</a>, <a href="/areas/post-falls">Post Falls</a>, Hayden, <a href="/areas/sandpoint">Sandpoint</a>, and Rathdrum. With 24 years of hands-on experience measuring, specifying, and installing window treatments in real homes, Mark has seen firsthand how the wrong materials fail in high-moisture environments — and how the right ones perform for decades.</p>
 
 <p>Mark works exclusively with premium brands including Alta, Norman, and Lafayette, and backs every installation with a lifetime guarantee. His approach is straightforward: honest advice, precise measurements, and products that actually hold up to North Idaho's four-season climate.</p>
 

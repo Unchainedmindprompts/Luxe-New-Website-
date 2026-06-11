@@ -37,15 +37,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const description = post.metaDescription || post.excerpt;
   const keywords = SLUG_KEYWORDS[slug];
+  // Use seoTitle for the <title> tag when present; the long display title remains
+  // the H1 on-page. Decouples SERP truncation from reader-facing copy.
+  const titleForTag = post.seoTitle || post.title;
   return {
-    title: post.title,
+    title: titleForTag,
     description,
     ...(keywords && { keywords }),
     alternates: {
       canonical: `https://www.luxewindowworks.com/blog/${slug}`,
     },
     openGraph: {
-      title: post.title,
+      title: titleForTag,
       description,
       type: "article",
       publishedTime: post.date,
@@ -55,7 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
+      title: titleForTag,
       description,
       images: post.featuredImage ? [post.featuredImage] : undefined,
     },
@@ -183,7 +186,7 @@ const installationHowToSchema = {
       "@type": "HowToStep",
       position: 2,
       name: "Expert Product Selection",
-      text: "With 23 years of hands-on experience, our team guides you through product selection based on your specific needs — whether energy-efficient cellular shades, blackout solutions, or motorized blinds for hard-to-reach windows.",
+      text: "With 24 years of hands-on experience, our team guides you through product selection based on your specific needs — whether energy-efficient cellular shades, blackout solutions, or motorized blinds for hard-to-reach windows.",
     },
     {
       "@type": "HowToStep",

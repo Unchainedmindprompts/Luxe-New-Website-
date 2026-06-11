@@ -98,7 +98,7 @@ export const metadata: Metadata = {
     canonical: "https://www.luxewindowworks.com/shop/faux-wood-blinds",
   },
   openGraph: {
-    title: "SmartPrivacy Cordless Faux Wood Blinds | Luxe Window Works",
+    title: "SmartPrivacy Cordless Faux Wood Blinds | Shop",
     description:
       "Custom faux wood blinds, cordless, made to your exact size. Shipping at cost with no markup.",
     type: "website",
