@@ -450,7 +450,7 @@ export default function HomePage() {
                 ))}
               </div>
               <span className="text-warm-gray-300">
-                {BUSINESS.google.rating} Stars · {BUSINESS.google.reviewCount} Google Reviews
+                {BUSINESS.google.rating} Star Reviews
               </span>
             </div>
             <span className="hidden md:inline text-warm-gray-600">|</span>
