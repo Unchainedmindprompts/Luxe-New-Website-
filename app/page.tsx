@@ -7,6 +7,20 @@ export const metadata: Metadata = {
   },
 };
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
+import { productPages } from "@/lib/product-data";
+
+/**
+ * Image for each product card. Pulled from productPages so the homepage card and
+ * the product-page hero stay in sync — clicking a card lands on the same photo.
+ * Motorization has no still image (uses a YouTube video on its product page),
+ * so we fall back to the YouTube thumbnail.
+ */
+function getProductCardImage(slug: string): string {
+  const p = productPages[slug];
+  if (p?.image) return p.image;
+  if (p?.video) return `https://img.youtube.com/vi/${p.video.youtubeId}/maxresdefault.jpg`;
+  return "/images/hero-modern-living.webp";
+}
 
 function StarIcon() {
   return (
@@ -529,25 +543,31 @@ export default function HomePage() {
               <Link
                 key={product.slug}
                 href={`/products/${product.slug}`}
-                className="group bg-white rounded-2xl border border-warm-gray-200/60 p-6 hover:shadow-lg hover:border-gold/30 transition-all"
+                className="group bg-white rounded-2xl border border-warm-gray-200/60 overflow-hidden hover:shadow-lg hover:border-gold/30 transition-all flex flex-col"
               >
-                <div className="w-12 h-12 bg-cream rounded-xl flex items-center justify-center mb-4 group-hover:bg-gold/10 transition-colors">
-                  <svg className="w-6 h-6 text-warm-gray-500 group-hover:text-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-                  </svg>
+                <div className="relative aspect-[4/3] overflow-hidden bg-warm-gray-100">
+                  <Image
+                    src={getProductCardImage(product.slug)}
+                    alt={`${product.name} — installed by Luxe Window Works`}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
+                  />
                 </div>
-                <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold transition-colors">
-                  {product.name}
-                </h3>
-                <p className="mt-2 text-sm text-warm-gray-500 leading-relaxed">
-                  {HOMEPAGE_PRODUCT_COPY[product.slug] ?? product.shortDescription}
-                </p>
-                <span className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
-                  Learn more
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </span>
+                <div className="p-6 flex flex-col flex-1">
+                  <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold transition-colors">
+                    {product.name}
+                  </h3>
+                  <p className="mt-2 text-sm text-warm-gray-500 leading-relaxed">
+                    {HOMEPAGE_PRODUCT_COPY[product.slug] ?? product.shortDescription}
+                  </p>
+                  <span className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
+                    Learn more
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </div>
               </Link>
             ))}
           </div>
