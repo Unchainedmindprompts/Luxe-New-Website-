@@ -404,12 +404,12 @@ export default function HomePage() {
       />
 
       {/* 1. Hero */}
-      <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
+      <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] lg:min-h-[75vh] xl:min-h-[82vh] 2xl:min-h-[88vh] flex items-center">
         <Image
           src="/images/hero-modern-living.webp"
           alt="Modern living room with custom cellular shades and a mountain view"
           fill
-          className="object-cover"
+          className="object-cover object-center"
           priority
           sizes="100vw"
           quality={85}
