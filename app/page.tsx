@@ -432,10 +432,10 @@ export default function HomePage() {
         <div className="container-luxe relative">
           <div className="max-w-3xl">
             <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight text-balance">
-              Custom Window Treatments, Measured and Installed by a 24-Year Pro
+              Custom Window Treatments. 24 Years of Selling, Designing, and Installing Them.
             </h1>
             <p className="mt-6 md:mt-8 text-lg md:text-xl text-warm-gray-200 leading-relaxed max-w-2xl">
-              Blinds, shades, shutters, draperies, and motorized window treatments for North Idaho homes. We bring samples to you, help you choose the right solution for each room, measure everything professionally, and install it with a lifetime installation guarantee.
+              Three sides of the same business — sales, design, and installation — means I know what each product can do, what it can&apos;t, and what&apos;s right for each room in your home. We bring samples to you, measure professionally, and back every installation with a lifetime guarantee. No overpromising.
             </p>
 
             {/* Mobile shop pill — desktop has it floating upper-right */}
