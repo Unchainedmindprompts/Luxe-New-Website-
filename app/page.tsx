@@ -7,6 +7,20 @@ export const metadata: Metadata = {
   },
 };
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
+import { productPages } from "@/lib/product-data";
+
+/**
+ * Image for each product card. Pulled from productPages so the homepage card and
+ * the product-page hero stay in sync — clicking a card lands on the same photo.
+ * Motorization has no still image (uses a YouTube video on its product page),
+ * so we fall back to the YouTube thumbnail.
+ */
+function getProductCardImage(slug: string): string {
+  const p = productPages[slug];
+  if (p?.image) return p.image;
+  if (p?.video) return `https://img.youtube.com/vi/${p.video.youtubeId}/maxresdefault.jpg`;
+  return "/images/hero-modern-living.webp";
+}
 
 function StarIcon() {
   return (
@@ -390,12 +404,12 @@ export default function HomePage() {
       />
 
       {/* 1. Hero */}
-      <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
+      <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] lg:min-h-[75vh] xl:min-h-[82vh] 2xl:min-h-[88vh] flex items-center">
         <Image
           src="/images/hero-modern-living.webp"
           alt="Modern living room with custom cellular shades and a mountain view"
           fill
-          className="object-cover"
+          className="object-cover object-center"
           priority
           sizes="100vw"
           quality={85}
@@ -418,10 +432,10 @@ export default function HomePage() {
         <div className="container-luxe relative">
           <div className="max-w-3xl">
             <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight text-balance">
-              Custom Window Treatments, Measured and Installed by a 24-Year Pro
+              Custom Window Treatments. 24 Years of Selling, Designing, and Installing Them.
             </h1>
             <p className="mt-6 md:mt-8 text-lg md:text-xl text-warm-gray-200 leading-relaxed max-w-2xl">
-              Blinds, shades, shutters, draperies, and motorized window treatments for North Idaho homes. We bring samples to you, help you choose the right solution for each room, measure everything professionally, and install it with a lifetime installation guarantee.
+              24 years across sales, design, and installation means I know what each product can do, what it can&apos;t, and what&apos;s right for each room in your home. I&apos;ll bring samples to you, measure professionally, and stand behind every installation with a lifetime guarantee. No overpromising.
             </p>
 
             {/* Mobile shop pill — desktop has it floating upper-right */}
@@ -447,15 +461,6 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
-              <a
-                href="sms:+12086608643"
-                className="inline-flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white hover:text-charcoal font-semibold px-8 py-4 rounded-full text-lg transition-all"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                Text Us a Photo of Your Windows
-              </a>
             </div>
           </div>
         </div>
@@ -529,25 +534,31 @@ export default function HomePage() {
               <Link
                 key={product.slug}
                 href={`/products/${product.slug}`}
-                className="group bg-white rounded-2xl border border-warm-gray-200/60 p-6 hover:shadow-lg hover:border-gold/30 transition-all"
+                className="group bg-white rounded-2xl border border-warm-gray-200/60 overflow-hidden hover:shadow-lg hover:border-gold/30 transition-all flex flex-col"
               >
-                <div className="w-12 h-12 bg-cream rounded-xl flex items-center justify-center mb-4 group-hover:bg-gold/10 transition-colors">
-                  <svg className="w-6 h-6 text-warm-gray-500 group-hover:text-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-                  </svg>
+                <div className="relative aspect-[4/3] overflow-hidden bg-warm-gray-100">
+                  <Image
+                    src={getProductCardImage(product.slug)}
+                    alt={`${product.name} — installed by Luxe Window Works`}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
+                  />
                 </div>
-                <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold transition-colors">
-                  {product.name}
-                </h3>
-                <p className="mt-2 text-sm text-warm-gray-500 leading-relaxed">
-                  {HOMEPAGE_PRODUCT_COPY[product.slug] ?? product.shortDescription}
-                </p>
-                <span className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
-                  Learn more
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </span>
+                <div className="p-6 flex flex-col flex-1">
+                  <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold transition-colors">
+                    {product.name}
+                  </h3>
+                  <p className="mt-2 text-sm text-warm-gray-500 leading-relaxed">
+                    {HOMEPAGE_PRODUCT_COPY[product.slug] ?? product.shortDescription}
+                  </p>
+                  <span className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
+                    Learn more
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </div>
               </Link>
             ))}
           </div>
@@ -673,15 +684,6 @@ export default function HomePage() {
             >
               Schedule Your Free Consultation
             </Link>
-            <a
-              href="sms:+12086608643"
-              className="inline-flex items-center justify-center gap-2 border-2 border-warm-gray-600 text-white hover:border-white font-semibold px-8 py-4 rounded-full text-lg transition-all"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              Text Us a Photo of Your Windows
-            </a>
           </div>
         </div>
       </section>
