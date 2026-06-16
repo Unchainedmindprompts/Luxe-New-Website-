@@ -435,7 +435,7 @@ export default function HomePage() {
               Custom Window Treatments. 24 Years of Selling, Designing, and Installing Them.
             </h1>
             <p className="mt-6 md:mt-8 text-lg md:text-xl text-warm-gray-200 leading-relaxed max-w-2xl">
-              Three sides of the same business — sales, design, and installation — means I know what each product can do, what it can&apos;t, and what&apos;s right for each room in your home. We bring samples to you, measure professionally, and back every installation with a lifetime guarantee. No overpromising.
+              24 years across sales, design, and installation means I know what each product can do, what it can&apos;t, and what&apos;s right for each room in your home. I&apos;ll bring samples to you, measure professionally, and stand behind every installation with a lifetime guarantee. No overpromising.
             </p>
 
             {/* Mobile shop pill — desktop has it floating upper-right */}
