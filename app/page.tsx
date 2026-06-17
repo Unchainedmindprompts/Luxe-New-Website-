@@ -162,6 +162,7 @@ const businessNode = {
     "https://www.facebook.com/profile.php?id=61573190815920",
     "https://www.houzz.com/pro/webuser-472935533/luxe-window-works-llc",
     "https://nextdoor.com/page/luxe-window-works-llc-post-falls-id/",
+    BUSINESS.google.mapsUrl,
   ],
   aggregateRating: {
     "@type": "AggregateRating",
@@ -597,6 +598,24 @@ export default function HomePage() {
                 </p>
               </div>
             ))}
+          </div>
+          <div className="mt-12 text-center">
+            <a
+              href={BUSINESS.google.mapsUrl}
+              target="_blank"
+              rel="noopener nofollow"
+              className="inline-flex items-center gap-2 text-charcoal hover:text-gold font-medium transition-colors group"
+            >
+              <span className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon key={i} />
+                ))}
+              </span>
+              Read all {BUSINESS.google.reviewCount} reviews on Google
+              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
           </div>
         </div>
       </section>
