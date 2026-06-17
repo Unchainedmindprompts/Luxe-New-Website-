@@ -165,8 +165,8 @@ const businessNode = {
   ],
   aggregateRating: {
     "@type": "AggregateRating",
-    ratingValue: "5.0",
-    reviewCount: "15",
+    ratingValue: BUSINESS.google.rating.toFixed(1),
+    reviewCount: String(BUSINESS.google.reviewCount),
     bestRating: "5",
     worstRating: "1",
   },
