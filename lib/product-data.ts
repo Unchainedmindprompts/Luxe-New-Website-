@@ -21,6 +21,8 @@ export interface ProductPageData {
   image?: string;
   video?: ProductVideo;
   secondVideo?: ProductVideo;
+  /** Optional install-photo gallery rendered after Local Context. */
+  gallery?: { src: string; alt: string }[];
   headline: string;
   subheadline: string;
   problem: string;
@@ -410,6 +412,10 @@ export const productPages: Record<string, ProductPageData> = {
     slug: "exterior-solar-shades",
     name: "Exterior Solar Shades",
     image: "/images/IMG_1441.jpeg",
+    gallery: [
+      { src: "/images/IMG_0983.jpeg", alt: "Motorized exterior solar shade install on a covered deck by Luxe Window Works in North Idaho" },
+      { src: "/images/IMG_1422.jpeg", alt: "Exterior solar shade install on a North Idaho home by Luxe Window Works" },
+    ],
     headline: "Stop the Heat Before It Ever Reaches Your Glass.",
     subheadline: "Exterior solar shades mount outside the window and block solar energy at the source — far more effective at cutting heat than any interior shade. We install Corradi USA exterior screens on North Idaho patios, decks, and sun-blasted windows.",
     problem: "Interior shades only act after sunlight has already passed through the glass and entered your home — by then the heat is in, and you're just managing it. On the big west- and south-facing lake-facing windows common across North Idaho, and on open patios and decks, that means rooms that bake all afternoon, an AC system working overtime, interiors fading from UV, and outdoor living spaces too hot to actually use during the summer.",
