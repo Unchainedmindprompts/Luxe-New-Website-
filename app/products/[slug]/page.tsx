@@ -282,6 +282,38 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </section>
 
+      {/* Install gallery — only renders when product has gallery photos. */}
+      {product.gallery && product.gallery.length > 0 && (
+        <section className="py-16 md:py-20 bg-cream/50">
+          <div className="container-luxe max-w-5xl">
+            <div className="text-center mb-10">
+              <p className="text-gold font-medium text-sm uppercase tracking-widest mb-3">
+                Real Work
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">
+                Recent {product.name} Installs
+              </h2>
+            </div>
+            <div className={`grid gap-5 ${product.gallery.length === 1 ? "grid-cols-1 max-w-2xl mx-auto" : product.gallery.length === 2 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 md:grid-cols-3"}`}>
+              {product.gallery.map((photo) => (
+                <div
+                  key={photo.src}
+                  className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-warm-gray-100"
+                >
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    className="object-cover hover:scale-105 transition-transform duration-500"
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Second video — only renders when a product has a secondVideo (currently motorization). */}
       {product.secondVideo && (
         <section className="py-16 md:py-20 bg-warm-white">
