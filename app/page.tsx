@@ -385,14 +385,20 @@ const PROCESS_STEPS = [
   {
     title: "We Bring the Samples to You",
     body: "See colors, fabrics, opacity levels, slat sizes, and product options in your actual home — not under showroom lighting.",
+    image: "/images/process-samples.png",
+    alt: "Fabric, color, and material samples laid out on a kitchen island during an in-home consultation",
   },
   {
     title: "We Help You Choose Room by Room",
     body: "Every window has a different job. We help you think through privacy, glare, insulation, blackout, child safety, motorization, and style.",
+    image: "/images/process-room-by-room.png",
+    alt: "Open-plan North Idaho home with different window treatments matched to each room",
   },
   {
     title: "We Measure and Install Everything",
     body: "No guesswork. No uneven brackets. No products that almost fit. Your treatments are professionally measured, installed, and backed by our lifetime installation guarantee.",
+    image: "/images/process-measure-install.png",
+    alt: "Measuring tape extended next to fabric samples and window treatments",
   },
 ];
 
@@ -503,19 +509,30 @@ export default function HomePage() {
             {PROCESS_STEPS.map((step, i) => (
               <div
                 key={step.title}
-                className="bg-white rounded-2xl p-8 border border-warm-gray-200/60 shadow-sm"
+                className="group bg-white rounded-2xl border border-warm-gray-200/60 shadow-sm overflow-hidden flex flex-col"
               >
-                <div className="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center mb-5">
-                  <span className="font-serif text-lg text-gold font-semibold">
-                    {i + 1}
-                  </span>
+                <div className="relative aspect-[4/3] overflow-hidden bg-warm-gray-100">
+                  <Image
+                    src={step.image}
+                    alt={step.alt}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                  />
                 </div>
-                <h3 className="font-serif text-xl text-charcoal leading-snug">
-                  {step.title}
-                </h3>
-                <p className="mt-3 text-warm-gray-600 leading-relaxed">
-                  {step.body}
-                </p>
+                <div className="p-8 flex flex-col flex-1">
+                  <div className="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center mb-5">
+                    <span className="font-serif text-lg text-gold font-semibold">
+                      {i + 1}
+                    </span>
+                  </div>
+                  <h3 className="font-serif text-xl text-charcoal leading-snug">
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 text-warm-gray-600 leading-relaxed">
+                    {step.body}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
