@@ -151,6 +151,9 @@ export default function Footer() {
         <div className="container-luxe py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-warm-gray-500">
           <p>&copy; {new Date().getFullYear()} Luxe Window Works. All rights reserved.</p>
           <div className="flex items-center gap-4">
+            <Link href="/about" className="hover:text-gold transition-colors">
+              About
+            </Link>
             <Link href="/glossary" className="hover:text-gold transition-colors">
               Glossary
             </Link>
