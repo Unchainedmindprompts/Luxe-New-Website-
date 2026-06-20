@@ -41,9 +41,9 @@ const personSchema = {
   email: BUSINESS.email,
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Post Falls",
-    addressRegion: "ID",
-    postalCode: "83854",
+    addressLocality: BUSINESS.address.city,
+    addressRegion: BUSINESS.address.state,
+    postalCode: BUSINESS.address.zip,
     addressCountry: "US",
   },
   worksFor: { "@id": "https://www.luxewindowworks.com/#business" },

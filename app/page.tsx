@@ -61,10 +61,10 @@ const businessNode = {
   founder: { "@id": `${BASE}/#owner` },
   address: {
     "@type": "PostalAddress",
-    streetAddress: "2972 N Pavo Ln",
-    addressLocality: "Post Falls",
-    addressRegion: "ID",
-    postalCode: "83854",
+    streetAddress: BUSINESS.address.street,
+    addressLocality: BUSINESS.address.city,
+    addressRegion: BUSINESS.address.state,
+    postalCode: BUSINESS.address.zip,
     addressCountry: "US",
   },
   geo: {
@@ -230,9 +230,9 @@ const personNode = {
   email: "mark@luxewindowworks.com",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Post Falls",
-    addressRegion: "ID",
-    postalCode: "83854",
+    addressLocality: BUSINESS.address.city,
+    addressRegion: BUSINESS.address.state,
+    postalCode: BUSINESS.address.zip,
     addressCountry: "US",
   },
   worksFor: { "@id": `${BASE}/#business` },
