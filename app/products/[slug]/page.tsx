@@ -144,7 +144,7 @@ export default async function ProductPage({ params }: Props) {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <a
-              href="/#concierge"
+              href="/book"
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
               Get Expert Recommendations
@@ -332,7 +332,7 @@ export default async function ProductPage({ params }: Props) {
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="/#concierge"
+              href="/book"
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
               Start the Consultation

@@ -197,7 +197,7 @@ export default function BlogPage() {
             Get personalized advice for your specific situation.
           </p>
           <Link
-            href="/#concierge"
+            href="/book"
             className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
           >
             Get Personalized Advice Now

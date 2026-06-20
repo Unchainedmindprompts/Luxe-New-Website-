@@ -336,7 +336,7 @@ export default function Page() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
-                href="/#concierge"
+                href="/book"
                 className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-6 py-3 rounded-full transition-all"
               >
                 Start a Consultation
