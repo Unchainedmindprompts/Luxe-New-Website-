@@ -61,10 +61,10 @@ const businessNode = {
   founder: { "@id": `${BASE}/#owner` },
   address: {
     "@type": "PostalAddress",
-    streetAddress: "2972 N Pavo Ln",
-    addressLocality: "Post Falls",
-    addressRegion: "ID",
-    postalCode: "83854",
+    streetAddress: BUSINESS.address.street,
+    addressLocality: BUSINESS.address.city,
+    addressRegion: BUSINESS.address.state,
+    postalCode: BUSINESS.address.zip,
     addressCountry: "US",
   },
   geo: {
@@ -162,11 +162,12 @@ const businessNode = {
     "https://www.facebook.com/profile.php?id=61573190815920",
     "https://www.houzz.com/pro/webuser-472935533/luxe-window-works-llc",
     "https://nextdoor.com/page/luxe-window-works-llc-post-falls-id/",
+    BUSINESS.google.mapsUrl,
   ],
   aggregateRating: {
     "@type": "AggregateRating",
-    ratingValue: "5.0",
-    reviewCount: "15",
+    ratingValue: BUSINESS.google.rating.toFixed(1),
+    reviewCount: String(BUSINESS.google.reviewCount),
     bestRating: "5",
     worstRating: "1",
   },
@@ -229,9 +230,9 @@ const personNode = {
   email: "mark@luxewindowworks.com",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Post Falls",
-    addressRegion: "ID",
-    postalCode: "83854",
+    addressLocality: BUSINESS.address.city,
+    addressRegion: BUSINESS.address.state,
+    postalCode: BUSINESS.address.zip,
     addressCountry: "US",
   },
   worksFor: { "@id": `${BASE}/#business` },
@@ -565,7 +566,41 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. Reviews */}
+      {/* 5. Recent Installs gallery */}
+      <section className="py-20 md:py-28 bg-warm-white">
+        <div className="container-luxe">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
+              Real Work
+            </p>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
+              Recent Installs in North Idaho Homes
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              { src: "/images/IMG_0983.jpeg", alt: "Custom window treatment installation by Luxe Window Works in a North Idaho home" },
+              { src: "/images/IMG_1422.jpeg", alt: "Custom window treatment installation by Luxe Window Works in a North Idaho home" },
+              { src: "/images/IMG_1441.jpeg", alt: "Motorized exterior solar shade install by Luxe Window Works in a North Idaho home" },
+            ].map((photo) => (
+              <div
+                key={photo.src}
+                className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-warm-gray-100"
+              >
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-500"
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Reviews */}
       <section className="py-20 md:py-28 bg-warm-white">
         <div className="container-luxe">
           <div className="text-center max-w-2xl mx-auto mb-14">
@@ -598,10 +633,28 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+          <div className="mt-12 text-center">
+            <a
+              href={BUSINESS.google.mapsUrl}
+              target="_blank"
+              rel="noopener nofollow"
+              className="inline-flex items-center gap-2 text-charcoal hover:text-gold font-medium transition-colors group"
+            >
+              <span className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon key={i} />
+                ))}
+              </span>
+              Read all {BUSINESS.google.reviewCount} reviews on Google
+              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* 6. Why Luxe */}
+      {/* 7. Why Luxe */}
       <section className="py-20 md:py-28 bg-cream">
         <div className="container-luxe max-w-3xl">
           <div className="text-center mb-10">
@@ -620,7 +673,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 7. Service Areas */}
+      {/* 8. Service Areas */}
       <section className="py-16 md:py-20 bg-warm-white">
         <div className="container-luxe">
           <div className="text-center max-w-2xl mx-auto mb-10">
@@ -645,7 +698,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 8. FAQ */}
+      {/* 9. FAQ */}
       <section className="py-16 md:py-20 bg-cream">
         <div className="container-luxe max-w-3xl">
           <div className="text-center mb-10">
@@ -668,7 +721,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 9. Final CTA */}
+      {/* 10. Final CTA */}
       <section className="py-20 md:py-28 bg-charcoal text-white">
         <div className="container-luxe text-center max-w-3xl mx-auto">
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl leading-tight">
