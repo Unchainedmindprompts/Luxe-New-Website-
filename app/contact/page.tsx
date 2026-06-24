@@ -7,6 +7,9 @@ import ContactForm from "./ContactForm";
 export const metadata: Metadata = {
   title: "Contact | Free In-Home Consultation",
   description: `Contact ${BUSINESS.name} for a free in-home consultation. Call ${BUSINESS.phone} or fill out our form. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.`,
+  alternates: {
+    canonical: "https://www.luxewindowworks.com/contact",
+  },
   openGraph: {
     title: "Contact Luxe Window Works",
     description: "Schedule your free in-home window treatment consultation in Northern Idaho.",

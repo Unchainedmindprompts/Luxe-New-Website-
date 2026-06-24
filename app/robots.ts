@@ -1,12 +1,29 @@
-import { MetadataRoute } from "next";
+import { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/api/"],
-    },
-    sitemap: "https://luxewindowworks.com/sitemap.xml",
-  };
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+      },
+      {
+        userAgent: 'GPTBot',
+        allow: '/',
+      },
+      {
+        userAgent: 'PerplexityBot',
+        allow: '/',
+      },
+      {
+        userAgent: 'anthropic-ai',
+        allow: '/',
+      },
+      {
+        userAgent: 'ClaudeBot',
+        allow: '/',
+      },
+    ],
+    sitemap: 'https://www.luxewindowworks.com/sitemap.xml',
+  }
 }

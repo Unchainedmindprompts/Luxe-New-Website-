@@ -16,7 +16,6 @@ wordCount: 1705
 <h2>What Makes Cellular Shades Different</h2>
 <p>Think of cellular shades as the Swiss Army knife of window treatments. Their secret lies in their unique honeycomb construction—layers of fabric that form insulating air pockets, or "cells," when the shade is extended. Unlike flat Roman shades or basic roller shades, these air-filled chambers create a thermal barrier between your windows and your living space.</p>
 <p>The engineering is simple but brilliant: trapped air is one of nature's best insulators. Single-cell shades provide solid insulation, while double-cell options create even more thermal protection—perfect for those windows that face our harsh north winds or catch the intense afternoon sun bouncing off snow-covered peaks.</p>
-<figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/07/img_3826.jpeg" alt=""/></figure>
 <h2>Energy Efficiency That Actually Makes a Difference</h2>
 <h3>Proven Insulation Performance</h3>
 <p>Here's something that surprises many homeowners: quality cellular shades can improve your window's insulating value by up to 40%.¹ In practical terms, that means your furnace doesn't work as hard during those December cold snaps, and your air conditioner gets a break during August heat waves.</p>

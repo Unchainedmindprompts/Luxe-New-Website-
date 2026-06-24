@@ -63,8 +63,6 @@ wordCount: 1357
   "offers": {
     "@type": "Offer",
     "availability": "https://schema.org/InStock",
-    "price": "Request Quote",
-    "priceCurrency": "USD",
     "url": "https://luxewindowworks.com/contact/"
   },
   "review": {
