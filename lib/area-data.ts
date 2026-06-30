@@ -114,8 +114,8 @@ export const areaPages: Record<string, AreaPageData> = {
         slug: "cellular-shades-for-energy-savings-in-coeur-dalene-post-falls",
       },
       {
-        title: "Your Window Shades Are the Real HVAC Regulator in CDA & Post Falls",
-        slug: "your-window-shades-are-the-real-hvac-regulator-in-cda-post-falls",
+        title: "The Science of Savings: Energy-Efficient Window Treatments for Northern Idaho",
+        slug: "energy-efficient-window-treatments-for-northern-idaho-homes",
       },
       {
         title: "How Much Does Battery-Operated Motorized Shade Installation Cost in Post Falls?",
@@ -168,8 +168,8 @@ export const areaPages: Record<string, AreaPageData> = {
         slug: "the-hidden-value-of-plantation-shutters-in-northern-idaho-homes",
       },
       {
-        title: "Norman Motorized Shades with Easy Charging in Coeur d'Alene",
-        slug: "norman-motorized-shades-with-easy-charging-in-coeur-dalene",
+        title: "The Smart Shade Showdown: Hardwired vs RF vs IR vs Z-Wave",
+        slug: "smart-shade-motorization-guide-for-northern-idaho-homes",
       },
     ],
     localCTA: "Whether you're on Hayden Lake or in one of the family neighborhoods, Mark provides free in-home consultations throughout the Hayden area. Let's find the right solution for your space.",
@@ -206,16 +206,16 @@ export const areaPages: Record<string, AreaPageData> = {
     ],
     relatedPosts: [
       {
-        title: "Cellular Shades for Rathdrum Homes Built for Idaho's Climate",
-        slug: "cellular-shades-for-rathdrum-homes-built-for-idahos-climate",
+        title: "STOP LEAKING MONEY: The Expert's Guide to Choosing Cellular Shades for Maximum ROI",
+        slug: "cellular-shades-for-energy-savings-in-coeur-dalene-post-falls",
       },
       {
         title: "Window Coverings for New Construction in Coeur d'Alene & Rathdrum",
         slug: "window-coverings-for-new-construction-in-coeur-dalene-rathdrum",
       },
       {
-        title: "Why Cellular Shades Are the Smart Choice for Northern Idaho Homes",
-        slug: "why-cellular-shades-are-the-smart-choice-for-northern-idaho-homes",
+        title: "Why Performance Solar Shade Fabrics Are Worth Every Penny",
+        slug: "why-performance-solar-shade-fabrics-are-worth-every-penny-a-window-pros-honest-take",
       },
       {
         title: "Energy-Efficient Window Treatments for Northern Idaho Homes",
@@ -264,8 +264,8 @@ export const areaPages: Record<string, AreaPageData> = {
         slug: "smart-shade-motorization-guide-for-northern-idaho-homes",
       },
       {
-        title: "Custom Window Treatments for Luxury & Efficiency in North Idaho",
-        slug: "custom-window-treatments-for-luxury-efficiency-in-north-idaho",
+        title: "The Science of Savings: Energy-Efficient Window Treatments for Northern Idaho",
+        slug: "energy-efficient-window-treatments-for-northern-idaho-homes",
       },
       {
         title: "Why Performance Solar Shade Fabrics Are Worth Every Penny",
