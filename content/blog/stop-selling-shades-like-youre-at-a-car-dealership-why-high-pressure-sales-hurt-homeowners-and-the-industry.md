@@ -32,6 +32,18 @@ wordCount: 2400
 <h3>The Real Cost: Bad Decisions and Buyer's Remorse</h3>
 <p>When homeowners feel rushed, they make compromises they regret. They choose a product that's "good enough" instead of the right fit. They overpay for features they don't need, or underpay for quality they'll wish they had. They skip important questions about installation, motorization compatibility, or warranty terms — and feel regret within days of signing.</p>
 <p>There's also a broader cost that rarely gets discussed: <strong>pressure-based sales erode trust in the entire industry.</strong> When one company operates this way, it makes homeowners more skeptical of everyone — including the professionals who operate with integrity.</p>
+<h2>The Phantom Pricing Trick: How the "70% Off" Math Actually Works</h2>
+
+<p>One specific tactic deserves its own breakdown because it is everywhere in this industry: phantom pricing. You have seen the mailers. "Buy One, Get One Free!" "70% Off All Cellular Shades!" "Up to 60% Off, Limited Time!" Sounds incredible until you understand the math.</p>
+
+<p>Here is how it actually works. Imagine a cellular shade that costs the company $150 to make, ship, and install. A fair retail price with a normal margin might be $250. But the company does not show you $250. They show you $600. Then they "discount" it by 60%, and you pay $240. You walk away feeling like you saved $360. But the $600 price never existed. No customer has ever paid $600 for that shade. It is a psychological anchor &mdash; a fake number designed to make $240 feel like a steal, even though it is just the fair market price.</p>
+
+<p>The Federal Trade Commission has rules against this (it is called false reference pricing), but enforcement is weak and the practice continues because it works. People love feeling like they got a deal, even when the math says they did not.</p>
+
+<p>The same trick shows up in shop-card promotions &mdash; "spend $X on shades, get a $200 Costco card." Sounds like free money. It is not. The shade price was raised by at least the value of the card to fund it. You are not getting a bonus; you are getting your own money back in a form that forces you to spend it at one specific retailer. Net cost is identical or worse than buying at fair price from a dealer who just quotes you fair.</p>
+
+<p>The way to see through both tactics is to focus on the <strong>final out-of-pocket price</strong>, not the headline discount percentage. If the company will not tell you what they would charge tomorrow when the sale is not running, you are looking at phantom pricing. Walk away.</p>
+
 <h2>What a Real Window Treatment Consultation Looks Like</h2>
 <h3>Listening First, Recommending Second</h3>
 <p>A true consultation begins with questions, not product sheets. At Luxe Window Works, we start every project by understanding how you actually live in your space. That means asking things like:</p>

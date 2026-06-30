@@ -156,6 +156,26 @@ wordCount: 6320
 <p>Yes, but only with proper cell-in-cell room-darkening construction and flush inside mount installation. Standard room-darkening cellular shades use a grey mylar liner that blocks light but creates the grey hue problem (dull, washed-out face fabric color). Cell-in-cell construction isolates the light-blocking layer in the interior nested cell, allowing the face fabric to maintain accurate color while still delivering 95%+ light blocking. The critical factor most people miss is installation: even the best room-darkening fabric is defeated by light gaps around the perimeter. Flush inside mount with proper frame seal eliminates side gaps. Quality headrails from Lafayette or Norman eliminate top gaps through precision-engineered mounting systems. And proper bottom rail weighting eliminates bottom gaps. I installed Norman Smartprivacy cell-in-cell shades in a Coeur d'Alene nursery last year where the parents were desperate for nap-time darkness—windows facing east catching intense morning sun. The shades delivered near-total darkness (only slight light bleed at the absolute edges) while maintaining the warm cream color they'd selected for the room's design. The mom reported their toddler went from 45-minute nap struggles to 2-hour peaceful naps within the first week—the darkness made that much difference to sleep quality.</p>
 <h3><strong>Should I choose cordless, continuous cord loop, or motorized operation?</strong></h3>
 <p>The right choice depends on window size, accessibility, and your long-term plans. <strong>Cordless</strong> (push-up/pull-down operation) works well for smaller windows (under 48" wide) and standard heights where you can comfortably reach the bottom rail. It's the safest option for homes with young children and creates the cleanest aesthetic with no cords visible. <strong>Continuous cord loop</strong> is better for larger or taller windows where cordless operation would be difficult, and it provides more precise positioning control. The cord stays at a consistent length regardless of shade position, making it easier to operate than traditional lift cords. <strong>Motorization</strong> is the premium choice for hard-to-reach windows (high ceilings, windows behind furniture), large cellular shades that are heavy to operate manually, or homeowners who want energy management automation (program shades to close during peak summer heat, open for passive winter solar heating). I typically recommend planning for motorization even if you're installing manual operation initially—it's easier and cheaper to build power routing and control integration into the original installation than to retrofit later. For most Northern Idaho homes, I see homeowners choosing a mix: cordless for bedrooms and standard-height windows, motorized for great rooms with high ceilings or large window walls, and continuous cord loop for any oversized shades where cordless would be impractical but motorization isn't in the current budget.</p>
+<h2><strong>What Cellular Shades Cost in Northern Idaho — And One Thing Older-Home Owners Should Know First</strong></h2>
+
+<h3>Realistic Pricing — Per Window, Supply Plus Installation</h3>
+
+<p>Pricing varies by cell type, size, opacity, and motorization. Here is a realistic range for supply and professional installation in this region:</p>
+
+<ul>
+<li><strong>Single cell, manual, standard size:</strong> $180&ndash;$280 per window</li>
+<li><strong>Double cell, manual, standard size:</strong> $220&ndash;$350 per window</li>
+<li><strong>Triple cell, manual, standard size:</strong> $280&ndash;$420 per window</li>
+<li><strong>Double cell, motorized, standard size:</strong> $400&ndash;$650 per window</li>
+<li><strong>Triple cell, motorized, large window:</strong> $550&ndash;$900+ per window</li>
+</ul>
+
+<p>For a typical Northern Idaho home with 14 to 18 windows, a complete double-cell installation runs approximately $3,500 to $7,000 including professional installation. Large windows, specialty shapes, and outside-mount configurations may shift these numbers.</p>
+
+<h3>Condensation on Older Windows &mdash; The One Detail Most Cellular Shade Articles Miss</h3>
+
+<p>This is the one thing most cellular shade articles do not mention. On older single-pane windows or windows with failing seals, a deep cell shade can trap cold air against the glass overnight, which increases condensation. In Northern Idaho's winters that moisture can cause mold or damage to the window frame over time. The fix is either upgrading the window seal or choosing a shade with a small bottom gap to allow minimal air circulation. I flag this on every older home consultation &mdash; it is a non-obvious detail that prevents an avoidable problem and is the kind of thing a professional measurement catches before it becomes a maintenance issue.</p>
+
 <div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:2rem 0;border-radius:0 .25rem .25rem 0;">
 <p style="margin:0 0 .5rem;font-weight:600;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:#a8862d;">Continue Exploring Cellular Shades</p>
 <ul style="margin:0 0 .5rem;padding-left:1.25rem;">
