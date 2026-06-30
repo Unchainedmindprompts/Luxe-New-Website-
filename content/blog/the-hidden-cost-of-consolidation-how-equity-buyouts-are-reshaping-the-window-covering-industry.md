@@ -1,6 +1,6 @@
 ---
 title: "Private Equity Consolidation in Window Coverings: What Dealers and Homeowners Need to Know"
-slug: the-hidden-cost-of-consolidation-how-equity-buyouts-are-reshaping-the-window-covering-industry-the-hidden-cost-of-consolidation-how-equity-buyouts-are-reshaping-the-window-covering-industry
+slug: the-hidden-cost-of-consolidation-how-equity-buyouts-are-reshaping-the-window-covering-industry
 date: "2025-07-17T14:18:24.000Z"
 author: Mark Abplanalp
 excerpt: "From an installer's perspective with two decades in the window treatment industry, I've watched the business model shift underneath familiar brand..."
