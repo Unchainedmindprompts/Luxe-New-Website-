@@ -13,6 +13,9 @@ wordCount: 2400
 <p>You've probably experienced it. A sales rep arrives at your home for what was billed as a helpful consultation. Instead, you're hit with time-limited offers, aggressive closing tactics, and that uncomfortable feeling that you're being pushed into a decision you're not ready to make.</p>
 <p>If you've heard lines like "This 50% discount ends the moment I walk out the door" or "Why aren't you ready to move forward today?" — you know exactly what we're talking about. That's not a consultation. It's a high-pressure pitch, and it has no place in someone's living room.</p>
 <p>After 24 years in the window treatment industry, we've seen this approach damage trust, lead to poor decisions, and ultimately hurt homeowners who deserve better. Buying window treatments shouldn't feel like negotiating for a used car. It should feel like working with a trusted advisor who genuinely cares about solving your problem — not just closing a sale before lunch.</p>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>📘 The Industry Context</strong> — High-pressure tactics are one piece of a bigger pattern. For what's actually behind the labels and pricing — manufacturing locations, brand consolidation, what "Made in USA" really means — read <a href="/blog/made-in-usa-window-coverings-what-that-label-really-means-and-doesnt">What "Made in USA" Actually Means for Window Coverings →</a></p>
+</div>
 <h2>The Problem: Pressure Tactics Don't Belong in Your Home</h2>
 <p>When a window treatment rep walks into your house with a scripted pitch and artificial urgency, the focus has already shifted from understanding your needs to manufacturing a sense of panic. Here are the most common tactics homeowners face:</p>
 <ul>
@@ -29,6 +32,18 @@ wordCount: 2400
 <h3>The Real Cost: Bad Decisions and Buyer's Remorse</h3>
 <p>When homeowners feel rushed, they make compromises they regret. They choose a product that's "good enough" instead of the right fit. They overpay for features they don't need, or underpay for quality they'll wish they had. They skip important questions about installation, motorization compatibility, or warranty terms — and feel regret within days of signing.</p>
 <p>There's also a broader cost that rarely gets discussed: <strong>pressure-based sales erode trust in the entire industry.</strong> When one company operates this way, it makes homeowners more skeptical of everyone — including the professionals who operate with integrity.</p>
+<h2>The Phantom Pricing Trick: How the "70% Off" Math Actually Works</h2>
+
+<p>One specific tactic deserves its own breakdown because it is everywhere in this industry: phantom pricing. You have seen the mailers. "Buy One, Get One Free!" "70% Off All Cellular Shades!" "Up to 60% Off, Limited Time!" Sounds incredible until you understand the math.</p>
+
+<p>Here is how it actually works. Imagine a cellular shade that costs the company $150 to make, ship, and install. A fair retail price with a normal margin might be $250. But the company does not show you $250. They show you $600. Then they "discount" it by 60%, and you pay $240. You walk away feeling like you saved $360. But the $600 price never existed. No customer has ever paid $600 for that shade. It is a psychological anchor &mdash; a fake number designed to make $240 feel like a steal, even though it is just the fair market price.</p>
+
+<p>The Federal Trade Commission has rules against this (it is called false reference pricing), but enforcement is weak and the practice continues because it works. People love feeling like they got a deal, even when the math says they did not.</p>
+
+<p>The same trick shows up in shop-card promotions &mdash; "spend $X on shades, get a $200 Costco card." Sounds like free money. It is not. The shade price was raised by at least the value of the card to fund it. You are not getting a bonus; you are getting your own money back in a form that forces you to spend it at one specific retailer. Net cost is identical or worse than buying at fair price from a dealer who just quotes you fair.</p>
+
+<p>The way to see through both tactics is to focus on the <strong>final out-of-pocket price</strong>, not the headline discount percentage. If the company will not tell you what they would charge tomorrow when the sale is not running, you are looking at phantom pricing. Walk away.</p>
+
 <h2>What a Real Window Treatment Consultation Looks Like</h2>
 <h3>Listening First, Recommending Second</h3>
 <p>A true consultation begins with questions, not product sheets. At Luxe Window Works, we start every project by understanding how you actually live in your space. That means asking things like:</p>

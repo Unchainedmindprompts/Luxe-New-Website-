@@ -102,6 +102,15 @@ wordCount: 1757
 <li><strong>Use Automation as Your Energy Guard:</strong> If budget allows, invest in <strong>motorized treatments</strong>. Program them to automatically close west-facing windows every afternoon at 3:00 PM in the summer to prevent massive solar heat gain, and program your bedroom shades to close every night in the winter to lock in warmth. This effortless management maximizes your energy savings without you lifting a finger.</li>
 <li><strong>Seal the Envelope First:</strong> Before installing any treatment, take a moment to <strong>draft-proof</strong> the window casing. Use basic caulking or weatherstripping to seal any visible gaps around the window frame. Addressing air leaks first ensures your new window treatments have a perfect foundation on which to build their insulation barrier.</li>
 </ol>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:2rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0 0 .5rem;font-weight:600;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:#a8862d;">Energy Efficiency Connects These Solutions</p>
+<p style="margin:0 0 .5rem;font-size:.95rem;">No single window treatment solves every problem in Northern Idaho's climate. Each of these guides dives deep on a single solution that the energy strategy depends on:</p>
+<ul style="margin:0;padding-left:1.25rem;">
+<li><a href="/blog/cellular-shades-for-energy-savings-in-coeur-dalene-post-falls">STOP LEAKING MONEY: cellular shades for maximum ROI in Coeur d'Alene &amp; Post Falls</a> — the thermal-barrier play</li>
+<li><a href="/blog/why-performance-solar-shade-fabrics-are-worth-every-penny-a-window-pros-honest-take">Why performance solar shade fabrics are worth every penny</a> — the heat-gain play</li>
+<li><a href="/blog/how-drapes-make-ceilings-taller-in-coeur-dalene-homes">How Coeur d'Alene homeowners use drapes to get taller ceilings</a> — the soft-treatment angle</li>
+</ul>
+</div>
 <hr /><p>Don't spend another season living with inconsistent temperatures, expensive drafts, or an overworked HVAC system. The path to a comfortable, energy-efficient home isn't found in a costly system overhaul, but in the intelligent, cost-effective upgrade of your window coverings.</p>
 <p><strong>Ready to start saving money and maximizing your home’s comfort? Contact Luxe Window Works today for a FREE, on-site energy audit and consultation. We will identify your home's biggest energy leaks and show you the perfect, affordable solution for every window.</strong></p>
 <p><strong>Proudly Serving Northern Idaho! </strong></p>

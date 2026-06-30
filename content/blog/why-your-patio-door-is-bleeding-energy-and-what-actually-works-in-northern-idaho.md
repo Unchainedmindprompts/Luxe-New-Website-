@@ -3,14 +3,14 @@ title: Why Your Patio Door is Bleeding Energy (And What Actually Works in Northe
 slug: why-your-patio-door-is-bleeding-energy-and-what-actually-works-in-northern-idaho
 date: "2025-12-05T17:51:22.000Z"
 author: Mark Abplanalp
-excerpt: "From an installer's perspective with two decades installing window treatments, I've walked through hundreds of homes where the patio slider was the single..."
+excerpt: "From an installer's perspective with 24 years installing window treatments, I've walked through hundreds of homes where the patio slider was the single..."
 featuredImage: /images/patio-door-energy-north-idaho.jpeg
 featuredImageAlt: "Patio door with custom window treatment installed by Luxe Window Works in Northern Idaho"
 category: Custom Window Coverings
 tags: ["Coeur d'Alene window treatments", Energy saving window shades, Insulated window treatments, Northern Idaho window coverings, Patio door heat loss, Patio door insulation, Post Falls window coverings, Vertical cellular shades]
 wordCount: 3149
 ---
-From an installer's perspective with two decades installing window treatments, I've walked through hundreds of homes where the patio slider was the single biggest comfort problem—and the homeowner had no idea.
+From an installer's perspective with 24 years installing window treatments, I've walked through hundreds of homes where the patio slider was the single biggest comfort problem—and the homeowner had no idea.
 
 They'd complain about cold drafts near the door in January. About the living room being 8 degrees colder than the rest of the house. About curtains that never close all the way or plastic vertical blinds that rattle every time the furnace kicks on.
 
@@ -372,6 +372,15 @@ The difference is immediate and measurable. Your furnace runs less. Your living 
 And you stop wasting money on a treatment that never worked in the first place.
 
 <hr />
+
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:2rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0 0 .5rem;font-weight:600;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:#a8862d;">Patio Door Solutions Across the Site</p>
+<p style="margin:0 0 .5rem;font-size:.95rem;">Patio doors aren't a single-product topic — different solutions fit different homes. Two product deep-dives that complete this guide:</p>
+<ul style="margin:0;padding-left:1.25rem;">
+<li><a href="/blog/smartdrape-patio-door-shades-in-coeur-dalene-post-falls">Norman SmartDrape vertical sheer shades — the walk-through solution for daily-use patio doors</a></li>
+<li><a href="/blog/lockable-aluminum-shutters-for-4-season-patios-in-north-idaho">Lockable aluminum exterior shutters — turning your patio into a 4-season room</a></li>
+</ul>
+</div>
 
 <strong>Ready to solve your patio door problem?</strong>
 

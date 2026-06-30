@@ -19,6 +19,10 @@ wordCount: 1832
 
 <p>Below I'll break down exactly what makes the construction different, why that matters for our specific climate, and how to evaluate Woodlore® Plus against the other shutters you'll see in showrooms.</p>
 
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>📘 The Complete Shutter Guide</strong> — Woodlore Plus is one product line in a larger picture. For frame types (Z, L, hang-strip), louver depth math, material trade-offs, and panel configuration, read <a href="/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration">the Ultimate Shutter Guide for Northern Idaho Homes →</a></p>
+</div>
+
 <h2>What Is Woodlore Plus and How Is It Built?</h2>
 
 <p>Woodlore® Plus is a wood-composite hybrid shutter manufactured by <a href="https://normanusa.com/product/woodlore-plus-shutters/" rel="noopener" target="_blank">Norman® Window Fashions</a>, a 50-year-old company founded in 1974. It is not solid wood, and it is not basic vinyl or foamed PVC. The construction combines three engineered elements that work together.</p>
@@ -103,6 +107,28 @@ wordCount: 1832
   <li><strong>Insist on professional measurement.</strong> Most "shutter problems" are actually installation problems. The product can be perfect and still fail if the panels are out of square.</li>
   <li><strong>Plan motorization at design time.</strong> Retrofitting motors later costs more than building them in. If you have any hard-to-reach windows, decide now.</li>
 </ol>
+
+<h2>Common Questions About Woodlore® Plus Shutters</h2>
+
+<h3>Will these shutters sag or warp over time?</h3>
+
+<p>No. The multi-layer engineered stiles and internally reinforced ABS louvers are designed to resist twisting, warping, and gap formation through North Idaho's humidity and temperature swings. Unlike solid wood or basic composite shutters, Woodlore® Plus holds its dimensional stability — that's the failure mode I see most often in cheaper shutters, and exactly what this construction is engineered to prevent.</p>
+
+<h3>How easy are these to keep clean?</h3>
+
+<p>Very. The multi-layer paint process produces a durable surface that holds up in bathrooms and kitchens, and the ABS material doesn't absorb moisture or oils like natural wood does. Routine cleaning is a damp cloth across the louvers and frames — no special treatments, no professional cleaning.</p>
+
+<h3>Will I lose my view when the louvers are open?</h3>
+
+<p>Not meaningfully. Louvers run up to 36 inches wide and stack tightly when fully open, preserving most of the glass area. With InvisibleTilt® you get an extra visual benefit — no center bar interrupting the view.</p>
+
+<h3>Can these be customized for odd window shapes or sizes?</h3>
+
+<p>Yes. Woodlore® Plus supports any shape, any color, and any size — arches, angles, octagons, oversized picture windows, custom color matching. This matters in North Idaho's custom home market where bay windows, picture windows, and architectural specialty shapes are common, and the engineering scales without compromising structural integrity.</p>
+
+<h3>Are motorized options available?</h3>
+
+<p>Yes — Norman's <strong>PerfectTilt™ G4</strong> motorization is available across the Woodlore® Plus line. Battery-powered, smart-home integration via iPhone/iPad/standard remotes, and especially valuable on hard-to-reach windows (high clerestories, tall picture windows above stairwells) or large window arrays where manual operation becomes a chore.</p>
 
 <h2>Book a Consultation</h2>
 

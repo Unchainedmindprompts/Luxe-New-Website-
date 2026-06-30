@@ -13,6 +13,10 @@ wordCount: 992
 <p>In Coeur d'Alene and Post Falls, the outdoor living trend is less a trend and more a lifestyle necessity. When you purchase a luxury home here, you're investing in the panoramic views, the clean air, and the ability to seamlessly transition from indoor comfort to <strong>outdoor living</strong>. You invest heavily in beautiful decks, custom-built outdoor kitchens, and high-end patio furniture—all to maximize those precious months of sun.</p>
 <p>But for the astute <strong>affluent homeowner</strong> in North Idaho, a harsh reality sets in: the usable season is short, and the maintenance is relentless.</p>
 <p>At Luxe Window Works, we specialize in high-performance solutions that protect and elevate your home's most valuable features. That's why we bring the story of the <strong>Weatherwell Elite Exterior Shutters </strong>homeowners need: a system that not only withstands our extreme climate but transforms your patio from a three-season space into a valuable, secure, <strong>all-season outdoor living</strong> room.</p>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0 0 .5rem;font-size:.95rem;"><strong>📘 The Complete Guides</strong> — Lockable aluminum shutters sit at the intersection of two topics. For the broader shutter picture, see <a href="/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration">the framework for picking shutter material, configuration, and operation →</a></p>
+<p style="margin:0;font-size:.95rem;">For why patio doors leak energy and what actually solves it, see <a href="/blog/why-your-patio-door-is-bleeding-energy-and-what-actually-works-in-northern-idaho">our deep-dive on patio doors and energy loss in Northern Idaho →</a></p>
+</div>
 <h3>The Three Season Trap: Why Your Northern Idaho Patio Space Sits Empty 6 Months a Year</h3>
 <p>Think about your current outdoor space. For six months of the year, from late October to early May, it’s a liability.</p>
 <p>The challenges we face in this area are unique:</p>

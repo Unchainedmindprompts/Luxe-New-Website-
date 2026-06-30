@@ -14,6 +14,9 @@ wordCount: 1689
 <p>And nothing impacts that experience more than the light and privacy in your home.</p>
 <p>That's where <strong>Norman PerfectSheer™ Shades</strong> come in. They aren't just another window covering. They're a luxury window treatment that artfully blends the best features of a sheer shade, a horizontal blind, and a fabric drapery into one elegant solution.</p>
 <p>For discerning homeowners who value both impeccable design and functional innovation, <strong>Norman PerfectSheer™ Shades</strong> offer a unique way to control light, preserve your views, and create a truly custom atmosphere. As your local experts at Luxe Window Works, we've seen firsthand how these shades transform a house into a home.</p>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>📘 The Complete Soft-Treatment Guide</strong> — PerfectSheer is one premium sheer-shade option. For the full lineup — Roman shades, drapes, woven wood, transitional sheers — and which fits each room, read <a href="/blog/roman-shades-buyers-guide-northern-idaho">the complete soft-treatment guide for Northern Idaho →</a></p>
+</div>
 <h2><strong>Discover the Unique Benefits of Norman PerfectSheer Shades</strong></h2>
 <h2><strong>How PerfectSheer Shades Work: Layered Design, Effortless Control</strong></h2>
 <p>Imagine a window covering that gives you the soft, filtered light of a sheer shade, the precise control of a blind, and the flowing elegance of fabric. That's the beauty of <strong>Norman PerfectSheer™ Shades</strong>.</p>

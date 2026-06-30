@@ -12,6 +12,10 @@ wordCount: 2091
 <figure><img src="/images/IMG_0873.jpeg" alt="Motorized transitional sheer shades layered across large windows in a warm living room, showing combined light control effect in a Northern Idaho home" /></figure>
 <p><em>For homeowners in Coeur d'Alene and Post Falls who refuse to choose between architectural beauty and flawless performance</em></p>
 <p>You can have shutters that stay open <em>and</em> complete light control—here's exactly how the pros layer them for maximum comfort, energy savings, and design impact in Northern Idaho homes.</p>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0 0 .5rem;font-size:.95rem;"><strong>📘 The Complete Guides</strong> — Layered shutters + motorized shades sits at the intersection of two topics. For the broader motorization picture, see <a href="/blog/smart-shade-motorization-guide-for-northern-idaho-homes">the master smart-shade comparison for Northern Idaho homes →</a></p>
+<p style="margin:0;font-size:.95rem;">For shutter selection — frames, materials, configuration — see <a href="/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration">the Ultimate Shutter Guide for Northern Idaho Homes →</a></p>
+</div>
 <hr /><h2>The Design Compromise: When Shutters Sacrifice Light and Efficiency</h2>
 <p>I'll never forget the call I got from a homeowner in Hayden three summers ago. She'd just installed gorgeous plantation shutters throughout her new build—custom-stained to match her trim, L-frame mounted for that clean, architectural look. About six weeks later, she reached me through her builder.</p>
 <p>"Mark, I love how they look," she said. "But I'm closing the louvers every afternoon because the glare is killing us. And now my living room feels like a cave. I spent all this money on shutters just to keep them closed?"</p>

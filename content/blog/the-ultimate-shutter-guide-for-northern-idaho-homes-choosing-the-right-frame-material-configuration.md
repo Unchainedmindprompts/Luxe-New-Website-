@@ -202,6 +202,18 @@ wordCount: 3700
 <h3>Tip 5: Think about swing direction and furniture before finalizing your order</h3>
 <p>Stand in front of each window and physically act out opening the shutters. Where do they swing? Is there a nightstand, dresser, or bookshelf in the way? Can you still reach the window crank or lock? If the answer to any of these is "no," adjust your panel configuration now — not after installation. Bi-fold panels, split configurations, or simply moving furniture a few inches can solve most issues. But you have to think through the swing before the shutters are built.</p>
 
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:2rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0 0 .5rem;font-weight:600;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:#a8862d;">Continue Exploring Shutters</p>
+<ul style="margin:0;padding-left:1.25rem;">
+<li><a href="/blog/woodlore-plus-shutters-north-idaho">Woodlore Plus shutters in North Idaho — why composite beats wood for Coeur d'Alene homes</a></li>
+<li><a href="/blog/norman-shutters-in-north-idaho-premium-craftsmanship-from-luxe-window-works">Norman shutters in North Idaho — Normandy, Woodlore Plus, and InvisibleTilt design</a></li>
+<li><a href="/blog/the-hidden-value-of-plantation-shutters-in-northern-idaho-homes">The hidden value of plantation shutters for Northern Idaho luxury homes</a></li>
+<li><a href="/blog/aluminum-interior-shutters-for-modern-north-idaho-homes">The future is aluminum — Highprofile Avenir interior shutters for modern homes</a></li>
+<li><a href="/blog/lockable-aluminum-shutters-for-4-season-patios-in-north-idaho">Lockable aluminum exterior shutters for 4-season patios in North Idaho</a></li>
+<li><a href="/blog/norman-bifold-180-shutters-for-bi-folding-doors-in-north-idaho">The Norman BiFold 180 for bi-folding doors in Northern Idaho</a></li>
+<li><a href="/blog/how-to-measure-and-install-plantation-shutters-like-a-pro">How to measure and install plantation shutters like a pro (DIY guide)</a></li>
+</ul>
+</div>
 <h2>Need Help Choosing the Right Shutter Setup?</h2>
 <p>Plantation shutters are an investment — both financially and in terms of how they affect your daily life at home. The frame type, material, louver size, and panel configuration you choose will determine how your shutters look, how they function, and how long they last.</p>
 <p>If you're considering shutters for your Northern Idaho home, let's talk through your windows, your layout, and your priorities. A local consultation gives you the chance to ask the questions that don't come up in a blog post — and it helps you avoid the common mistakes most homeowners never even know to look for.</p>
