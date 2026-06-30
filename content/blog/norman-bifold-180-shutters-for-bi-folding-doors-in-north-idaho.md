@@ -14,6 +14,9 @@ wordCount: 1357
 <p>Imagine you've just finished building your dream home in Coeur d'Alene. You have these beautiful, expansive bi-folding glass doors that open up to a stunning patio and an incredible view of the lake. They're the centerpiece of your living room, but you have a problem: how do you cover them?</p>
 <p>Curtains feel too bulky, and they get in the way every time you open the doors. Vertical blinds feel dated and just don't match the modern luxury of your home. Standard shutters seem like a good idea until you realize the panels stack out into the room, blocking your path and your view.</p>
 <p>This is a common frustration for homeowners with large glass openings. They want to control light and privacy without sacrificing their view or the effortless function of their doors. This is where the <strong>Norman® BiFold 180 shutter</strong> comes in—a solution designed specifically for these wide doorways.</p>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>📘 The Complete Shutter Guide</strong> — The BiFold 180 is one of several shutter answers for wide and door-style openings. For the full lineup — frame types, materials, and panel configuration for every kind of window or door in your home — read <a href="/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration">the complete North Idaho shutter playbook →</a></p>
+</div>
 <hr /><h2>The Challenge with Covering Bi-Folding Doors</h2>
 <h2>A Window Treatment Built for Wide, Folding Openings</h2>
 <p>Bi-folding doors, also known as accordion doors, are tricky to cover. They're meant to be opened and closed with ease, creating a seamless connection between your indoor and outdoor spaces. Any window treatment you choose has to accommodate this frequent, wide-sweeping movement.</p>

@@ -19,6 +19,10 @@ wordCount: 1832
 
 <p>Below I'll break down exactly what makes the construction different, why that matters for our specific climate, and how to evaluate Woodlore® Plus against the other shutters you'll see in showrooms.</p>
 
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>📘 The Complete Shutter Guide</strong> — Woodlore Plus is one product line in a larger picture. For frame types (Z, L, hang-strip), louver depth math, material trade-offs, and panel configuration, read <a href="/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration">the Ultimate Shutter Guide for Northern Idaho Homes →</a></p>
+</div>
+
 <h2>What Is Woodlore Plus and How Is It Built?</h2>
 
 <p>Woodlore® Plus is a wood-composite hybrid shutter manufactured by <a href="https://normanusa.com/product/woodlore-plus-shutters/" rel="noopener" target="_blank">Norman® Window Fashions</a>, a 50-year-old company founded in 1974. It is not solid wood, and it is not basic vinyl or foamed PVC. The construction combines three engineered elements that work together.</p>

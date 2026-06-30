@@ -11,6 +11,9 @@ wordCount: 967
 ---
 <p><strong>The Hidden Value of Plantation Shutters: Why They’re the Smartest Upgrade for Luxury Homes in Northern Idaho</strong></p>
 <p>When homeowners in places like Coeur d'Alene, Post Falls, and Hayden look to upgrade their homes, they're not just thinking about aesthetics. They're looking for solutions that add long-term value, comfort, and a touch of timeless class. That's why many of them are turning to <strong>plantation shutters</strong>. These aren’t just another window covering; they’re a permanent fixture that combines classic design with practical benefits, making them one of the smartest upgrades you can make to a luxury home.</p>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>📘 The Complete Shutter Guide</strong> — Plantation shutters earn their value through specific construction and configuration choices. For the framework that makes the value real — frame types, material trade-offs, panel configuration — read <a href="/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration">our complete plantation shutter guide for Northern Idaho homes →</a></p>
+</div>
 <h3><strong>Timeless Elegance That Complements Any Home Style</strong></h3>
 <p>Plantation shutters are one of the few window treatments that work equally well with a rustic mountain cabin, a sleek modern build on Lake Coeur d’Alene, or a traditional family estate. Their clean lines and custom fit provide a sophisticated, built-in look that elevates the entire room. Unlike curtains that can feel dated or blinds that can look cluttered, shutters offer a minimalist elegance that never goes out of style.</p>
 <p>As a matter of fact, <strong>plantation shutters aren’t just window coverings—they’re architectural features that elevate every room they’re in.</strong></p>
