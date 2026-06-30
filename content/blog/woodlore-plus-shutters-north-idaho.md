@@ -108,6 +108,28 @@ wordCount: 1832
   <li><strong>Plan motorization at design time.</strong> Retrofitting motors later costs more than building them in. If you have any hard-to-reach windows, decide now.</li>
 </ol>
 
+<h2>Common Questions About Woodlore® Plus Shutters</h2>
+
+<h3>Will these shutters sag or warp over time?</h3>
+
+<p>No. The multi-layer engineered stiles and internally reinforced ABS louvers are designed to resist twisting, warping, and gap formation through North Idaho's humidity and temperature swings. Unlike solid wood or basic composite shutters, Woodlore® Plus holds its dimensional stability — that's the failure mode I see most often in cheaper shutters, and exactly what this construction is engineered to prevent.</p>
+
+<h3>How easy are these to keep clean?</h3>
+
+<p>Very. The multi-layer paint process produces a durable surface that holds up in bathrooms and kitchens, and the ABS material doesn't absorb moisture or oils like natural wood does. Routine cleaning is a damp cloth across the louvers and frames — no special treatments, no professional cleaning.</p>
+
+<h3>Will I lose my view when the louvers are open?</h3>
+
+<p>Not meaningfully. Louvers run up to 36 inches wide and stack tightly when fully open, preserving most of the glass area. With InvisibleTilt® you get an extra visual benefit — no center bar interrupting the view.</p>
+
+<h3>Can these be customized for odd window shapes or sizes?</h3>
+
+<p>Yes. Woodlore® Plus supports any shape, any color, and any size — arches, angles, octagons, oversized picture windows, custom color matching. This matters in North Idaho's custom home market where bay windows, picture windows, and architectural specialty shapes are common, and the engineering scales without compromising structural integrity.</p>
+
+<h3>Are motorized options available?</h3>
+
+<p>Yes — Norman's <strong>PerfectTilt™ G4</strong> motorization is available across the Woodlore® Plus line. Battery-powered, smart-home integration via iPhone/iPad/standard remotes, and especially valuable on hard-to-reach windows (high clerestories, tall picture windows above stairwells) or large window arrays where manual operation becomes a chore.</p>
+
 <h2>Book a Consultation</h2>
 
 <p>If you're shopping shutters in Coeur d'Alene, Post Falls, Hayden, Rathdrum, or Sandpoint and you want an honest construction breakdown — not a sales pitch — text or call me at <strong>208-660-8643</strong> or <a href="/book">book a free in-home consultation here</a>. I'll bring physical samples of Woodlore® Plus, Normandy hardwood, and a basic composite so you can feel the difference, and we'll walk every window in the home together. No pressure, no upsell — just the right product for your specific windows and climate.</p>
