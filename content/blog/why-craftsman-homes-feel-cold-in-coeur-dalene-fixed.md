@@ -15,6 +15,9 @@ wordCount: 1214
 <p>But let’s be honest: that charm comes with a price, and that price is often paid in drafty rooms and surprisingly high winter energy bills.</p>
 <p>You know the feeling: you’re curled up on the sofa on a snowy Sunday, the fireplace is roaring, but there's still a persistent chill near the window. You blame the old window frame or a crack in the seal, but what you’re experiencing is often a silent, invisible process called <strong>convective loop drafting</strong>.</p>
 <p>As a lifelong resident of the Inland Northwest and the founder of Luxe Window Works, I want to pull back the curtain on this little-known physics problem and show you why your window treatments are your single most important defense against the winter chill. The solution isn't always a multi-thousand-dollar window replacement; sometimes, it’s a beautifully designed, high-performance cellular shade.</p>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>📘 The Complete Cellular Shade Guide</strong> — The Craftsman draft is one of many problems cellular shades solve. For the full framework — choosing cell construction, sizing for ROI, room-by-room strategy — read <a href="/blog/cellular-shades-for-energy-savings-in-coeur-dalene-post-falls">our complete cellular shades buyer's guide for Coeur d'Alene &amp; Post Falls →</a></p>
+</div>
 <hr /><h2>The Physics of Cold Glass: Why Your Warm Air is Attacking You</h2>
 <p>When you feel a draft near a window in your classic home, your instinct is to feel around the frame for a leak. Sometimes there is one, but more often, that cold sensation is an illusion—a feeling of moving air caused entirely by a phenomenon called the <strong>"cold glass effect."</strong></p>
 <h3>Understanding the Convective Loop</h3>
