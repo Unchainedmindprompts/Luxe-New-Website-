@@ -94,17 +94,16 @@ s.parentNode.insertBefore(t,s)}(window,document,'script',
 fbq('init','1655897412521361');
 fbq('track','PageView');`}
         </Script>
-        {/* Microsoft Clarity — production only, env-var driven, non-blocking */}
-        {process.env.NODE_ENV === "production" &&
-          process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID && (
-            <Script id="ms-clarity" strategy="afterInteractive">
-              {`(function(c,l,a,r,i,t,y){
+        {/* Microsoft Clarity — production only, non-blocking */}
+        {process.env.NODE_ENV === "production" && (
+          <Script id="ms-clarity" strategy="afterInteractive">
+            {`(function(c,l,a,r,i,t,y){
 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-})(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID}");`}
-            </Script>
-          )}
+})(window, document, "clarity", "script", "xf9si2ousa");`}
+          </Script>
+        )}
       </head>
       <body className="font-sans antialiased bg-warm-white text-charcoal">
         <noscript>
