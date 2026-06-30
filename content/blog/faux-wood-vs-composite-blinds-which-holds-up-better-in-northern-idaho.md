@@ -11,7 +11,7 @@ wordCount: 1207
 ---
 <figure><img src="/images/IMG_0678.png" alt="Faux wood composite blinds in a bright coastal farmhouse living room, showing moisture-resistant and durable construction for Northern Idaho homes" /></figure>
 <p><strong>The short answer:</strong> Both faux wood and composite blinds outperform real wood in Northern Idaho's extreme climate, but they're not identical. Faux wood (PVC or vinyl) offers lighter weight and excellent moisture resistance, while composite (wood fiber + polymer blend) provides superior rigidity and heat tolerance. For most homeowners in Coeur d'Alene and Sandpoint, the choice comes down to window size, sun exposure, and specific room conditions.</p>
-<p>After installing window treatments across the Pacific North West for over two decades, I've seen both materials succeed—and fail—in ways that matter to your home's comfort and your wallet.</p>
+<p>After installing window treatments across the Pacific North West for 24 years, I've seen both materials succeed—and fail—in ways that matter to your home's comfort and your wallet.</p>
 <h2><strong>What Are Faux Wood and Composite Blinds Made Of?</strong></h2>
 <p>Let's clear up the confusion right away, because even big-box stores mix up these terms.</p>
 <p><strong>Faux wood blinds</strong> are typically made from PVC (polyvinyl chloride) or vinyl—basically durable plastic molded to mimic wood grain. They're hollow or foam-filled, which keeps them lightweight. Think of them as the practical cousin of real wood: same look, better behavior around moisture.</p>

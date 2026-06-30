@@ -3,7 +3,7 @@ title: "What \"Made in USA\" Actually Means for Window Coverings (And What It Do
 slug: made-in-usa-window-coverings-what-that-label-really-means-and-doesnt
 date: "2025-07-17T15:20:09.000Z"
 author: Mark Abplanalp
-excerpt: "When homeowners see \"Made in USA\" on window treatments, they think American craftsmanship, American jobs, and American quality standards. After nearly two..."
+excerpt: "When homeowners see \"Made in USA\" on window treatments, they think American craftsmanship, American jobs, and American quality standards. After 24 years..."
 featuredImage: "/images/IMG_0807.jpeg"
 category: Custom Window Coverings
 tags: [china, economy, Home Imrovement, interior-design, politics, tariffs, trump]
@@ -11,7 +11,7 @@ wordCount: 2968
 ---
 <figure><img src="/images/IMG_0807.jpeg" alt="American-made custom window coverings installed with quality craftsmanship in a northern Idaho home" /></figure>
 
-<p>When homeowners see "Made in USA" on window treatments, they think American craftsmanship, American jobs, and American quality standards. After nearly two decades in this industry, I've watched how that label works in practice versus how consumers think it works—and the gap is bigger than most people realize.</p>
+<p>When homeowners see "Made in USA" on window treatments, they think American craftsmanship, American jobs, and American quality standards. After 24 years in this industry, I've watched how that label works in practice versus how consumers think it works—and the gap is bigger than most people realize.</p>
 <p>The window covering industry has become particularly skilled at appearing domestic while operating very differently behind the scenes. Federal labeling regulations create significant room for interpretation, trade agreements blur geographic boundaries, and strategic marketing language suggests American origin without technically claiming it.</p>
 <p>For consumers paying premium prices based on assumptions about where and how products are manufactured, understanding what "Made in USA" actually means—and doesn't mean—matters more than marketing departments want you to know.</p>
 <h2><strong>The Trust Gap: Consumer Expectations vs. Industry Reality</strong></h2>
@@ -91,8 +91,8 @@ wordCount: 2968
 <p>The most successful dealers and manufacturers long-term will be those who match their marketing messages to their operational realities, rather than maximizing the gap between consumer perception and manufacturing truth. Honesty about where products come from, why manufacturing location matters for quality and service, and what consumers should actually expect creates the kind of trust that survives beyond the initial sale.</p>
 <p>Consumers care about authenticity. They're paying attention to these details. And they deserve to know the difference between genuine American manufacturing and strategic labeling that suggests one thing while delivering another.</p>
 <hr/>
-<p><strong>Mark Abplanalp, Owner of Luxe Window Works</strong><strong><br></strong>With two decades installing window treatments across the Pacific North West, I specialize in matching products to regional climate challenges and real-world performance requirements. I prioritize long-term durability, honest sourcing information, and transparent guidance over marketing-driven recommendations. Luxe Window Works serves Coeur d'Alene, Post Falls, Hayden, Sandpoint, and surrounding communities with a focus on engineering-appropriate solutions and genuine product knowledge rather than catalog promises.</p>
-<p>Questions about specific brands, manufacturing locations, or what "Made in USA" actually means for the products you're considering? I'm happy to share what I've learned from nearly two decades working with these products and these companies—including which ones actually manufacture where they claim to, and which ones use strategic language to suggest something different than reality.</p>
+<p><strong>Mark Abplanalp, Owner of Luxe Window Works</strong><strong><br></strong>With 24 years installing window treatments across the Pacific North West, I specialize in matching products to regional climate challenges and real-world performance requirements. I prioritize long-term durability, honest sourcing information, and transparent guidance over marketing-driven recommendations. Luxe Window Works serves Coeur d'Alene, Post Falls, Hayden, Sandpoint, and surrounding communities with a focus on engineering-appropriate solutions and genuine product knowledge rather than catalog promises.</p>
+<p>Questions about specific brands, manufacturing locations, or what "Made in USA" actually means for the products you're considering? I'm happy to share what I've learned from 24 years working with these products and these companies—including which ones actually manufacture where they claim to, and which ones use strategic language to suggest something different than reality.</p>
 <p><a href="https://luxewindowworks.com/window-coverings-sandpoint-id/" data-type="link" data-id="https://luxewindowworks.com/window-coverings-sandpoint-id/">https://luxewindowworks.com/window-coverings-sandpoint-id/</a></p>
 <p><a href="https://luxewindowworks.com/window-coverings-coeur-d-alene/" data-type="link" data-id="https://luxewindowworks.com/window-coverings-coeur-d-alene/">https://luxewindowworks.com/window-coverings-coeur-d-alene/</a></p>
 <p><a href="https://luxewindowworks.com/window-coverings-post-falls-id/" data-type="link" data-id="https://luxewindowworks.com/window-coverings-post-falls-id/">https://luxewindowworks.com/window-coverings-post-falls-id/</a></p>
