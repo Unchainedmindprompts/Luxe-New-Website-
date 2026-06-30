@@ -86,6 +86,13 @@ wordCount: 2968
 <li><strong>Understand that ownership changes affect manufacturing decisions.</strong> When private equity firms acquire window covering brands, cost reduction becomes a priority even if it conflicts with historical reputation. If a brand you trusted five years ago has changed ownership, verify that manufacturing standards haven't changed along with it.</li>
 <li><strong>Support companies that actually commit to domestic manufacturing.</strong> If genuine American manufacturing matters to you, seek out companies like Lafayette Interior Fashions that have maintained domestic operations across decades and ownership transitions. Your purchasing decisions signal what you value—companies respond to that feedback.</li>
 </ol>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:2rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0 0 .5rem;font-weight:600;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:#a8862d;">Continue Exploring the Industry Behind the Labels</p>
+<ul style="margin:0;padding-left:1.25rem;">
+<li><a href="/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry">Why high-pressure window treatment sales hurt homeowners — and how to spot them</a></li>
+<li><a href="/blog/the-hidden-cost-of-consolidation-how-equity-buyouts-are-reshaping-the-window-covering-industry">Private equity consolidation in window coverings: what dealers and homeowners need to know</a></li>
+</ul>
+</div>
 <h2><strong>Building Trust Through Transparency</strong></h2>
 <p>In an industry where labeling can be misleading and marketing messages often obscure operational realities, transparency becomes a genuine competitive advantage. Consumers are increasingly sophisticated about researching products and companies before making significant home improvement investments. When they discover that "Made in USA" doesn't mean what they thought it meant, it damages trust across the entire industry.</p>
 <p>The most successful dealers and manufacturers long-term will be those who match their marketing messages to their operational realities, rather than maximizing the gap between consumer perception and manufacturing truth. Honesty about where products come from, why manufacturing location matters for quality and service, and what consumers should actually expect creates the kind of trust that survives beyond the initial sale.</p>

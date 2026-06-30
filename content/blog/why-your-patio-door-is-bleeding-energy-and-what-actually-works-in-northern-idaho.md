@@ -373,6 +373,15 @@ And you stop wasting money on a treatment that never worked in the first place.
 
 <hr />
 
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:2rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0 0 .5rem;font-weight:600;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:#a8862d;">Patio Door Solutions Across the Site</p>
+<p style="margin:0 0 .5rem;font-size:.95rem;">Patio doors aren't a single-product topic — different solutions fit different homes. Two product deep-dives that complete this guide:</p>
+<ul style="margin:0;padding-left:1.25rem;">
+<li><a href="/blog/smartdrape-patio-door-shades-in-coeur-dalene-post-falls">Norman SmartDrape vertical sheer shades — the walk-through solution for daily-use patio doors</a></li>
+<li><a href="/blog/lockable-aluminum-shutters-for-4-season-patios-in-north-idaho">Lockable aluminum exterior shutters — turning your patio into a 4-season room</a></li>
+</ul>
+</div>
+
 <strong>Ready to solve your patio door problem?</strong>
 
 Schedule a free in-home consultation with Luxe Window Works. I'll measure your slider, assess your frame depth, explain fabric options, and show you exactly what vertical cellular shades will deliver in your specific situation—no pressure, no hard sell, just honest advice from someone who's installed these in hundreds of Northern Idaho homes.

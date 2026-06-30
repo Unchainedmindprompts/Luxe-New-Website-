@@ -223,3 +223,14 @@ wordCount: 2850
 <h3>Can I put roman shades in a room that already has drapes?</h3>
 
 <p>Absolutely — this is one of the best design combinations available. Roman shades under drapes is a classic layered window treatment: the roman shade handles daily light control and privacy, while the drapes frame the window and provide full blackout when pulled closed. It&apos;s a particularly popular combination in primary bedrooms and formal living rooms.</p>
+
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:2rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0 0 .5rem;font-weight:600;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:#a8862d;">Continue Exploring Soft Treatments</p>
+<ul style="margin:0;padding-left:1.25rem;">
+<li><a href="/blog/smartdrape-patio-door-shades-in-coeur-dalene-post-falls">The patio door problem: why Northern Idaho homeowners are switching to Norman SmartDrape vertical sheer shades</a></li>
+<li><a href="/blog/why-you-should-never-inside-mount-corded-woven-wood-shades">Design tip: why you should never inside-mount a waterfall woven wood shade with cords</a></li>
+<li><a href="/blog/how-drapes-make-ceilings-taller-in-coeur-dalene-homes">How CDA homeowners use drapes to get taller ceilings, wider rooms, and lower energy bills</a></li>
+<li><a href="/blog/norman-perfectsheer-shades-for-luxury-homes-in-north-idaho">Why Norman PerfectSheer shades are the ultimate window treatment for luxury living</a></li>
+<li><a href="/blog/lafayette-allure-transitional-shades-for-coeur-dalene-homes">Elevate your Northern Idaho home with Lafayette Allure transitional shades</a></li>
+</ul>
+</div>

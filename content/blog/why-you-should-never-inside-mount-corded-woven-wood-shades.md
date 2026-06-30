@@ -14,6 +14,9 @@ wordCount: 1246
 <p>Sarah and David had a vision for their new sunroom in Post Falls. They wanted something that felt organic and luxurious, a perfect blend of the indoors with the stunning Idaho outdoors. After some research, they fell in love with <strong>woven wood shades</strong>. The natural textures and rich colors seemed like the perfect fit.</p>
 <p>They chose a clean, modern "waterfall" design, where the shade material cascades over the front, and opted for an inside mount to keep the look sleek and minimalist. Everything seemed perfect, but within a few months, their dream shades started to show signs of wear.</p>
 <p>This common, frustrating mistake is easy to avoid with the right design choice—a choice that often comes down to one simple question: <strong>corded or cordless?</strong></p>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>📘 The Complete Soft-Treatment Guide</strong> — Woven wood is one fabric option in a broader category. For Roman shades, drapes, sheers, and how to choose between them for each room, read <a href="/blog/roman-shades-buyers-guide-northern-idaho">the soft-treatment buyer's guide for Northern Idaho →</a></p>
+</div>
 <hr /><h2><strong>What Makes Woven Wood Shades Special?</strong></h2>
 <p><strong>Woven wood shades</strong> homeowners in Northern Idaho love them because they bring a unique, organic elegance indoors. They're crafted from renewable materials like bamboo, reeds, grasses, and jute, which gives each shade a one-of-a-kind texture. These shades can filter light beautifully, add warmth to a room, and create that perfect, understated luxury feel.</p>
 <p><strong>Woven wood shades bring organic elegance indoors, but like all natural materials, they require thoughtful design to last.</strong></p>

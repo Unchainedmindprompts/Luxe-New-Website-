@@ -13,6 +13,9 @@ wordCount: 1657
 <h1>Upgrade Your Windows: Why 2½-Inch Wood or Faux Wood Blinds Are Better Than Standard 2-Inch</h1>
 <p>Most homeowners automatically select standard 2-inch wood blinds without considering the alternative. But if you prioritize visibility, light quality, and proportional design—especially in contemporary homes—2½-inch slats deliver measurably better performance and aesthetics.</p>
 <p>The difference isn't just about size. It's about how your window treatments complement modern living spaces and architectural trends that favor clean lines, unobstructed views, and optimized natural light.</p>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>📘 The Complete Blinds Guide</strong> — Slat size is one of many blind decisions. For the broader category comparison — cellular, roller, vertical, Roman, faux wood, plantation shutter — read <a href="/blog/window-blinds-the-complete-installers-guide-to-every-popular-shade-type-what-really-works-in-northern-idaho">the master guide to every popular blind type for Northern Idaho homes →</a></p>
+</div>
 <h2>Evolving Homes, Evolving Window Treatments</h2>
 <p>Today's homes feature open floor plans, expansive windows, and streamlined architectural details. While 2-inch blinds served traditional home styles effectively, 2½-inch slats align with the broader proportions and refined aesthetics of contemporary design.</p>
 <p>This sizing evolution reflects how we use our living spaces differently—prioritizing natural light, outdoor connections, and uncluttered sight lines that 2½-inch blinds support more effectively.</p>

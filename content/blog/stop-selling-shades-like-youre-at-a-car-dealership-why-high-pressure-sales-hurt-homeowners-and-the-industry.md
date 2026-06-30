@@ -13,6 +13,9 @@ wordCount: 2400
 <p>You've probably experienced it. A sales rep arrives at your home for what was billed as a helpful consultation. Instead, you're hit with time-limited offers, aggressive closing tactics, and that uncomfortable feeling that you're being pushed into a decision you're not ready to make.</p>
 <p>If you've heard lines like "This 50% discount ends the moment I walk out the door" or "Why aren't you ready to move forward today?" — you know exactly what we're talking about. That's not a consultation. It's a high-pressure pitch, and it has no place in someone's living room.</p>
 <p>After 24 years in the window treatment industry, we've seen this approach damage trust, lead to poor decisions, and ultimately hurt homeowners who deserve better. Buying window treatments shouldn't feel like negotiating for a used car. It should feel like working with a trusted advisor who genuinely cares about solving your problem — not just closing a sale before lunch.</p>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>📘 The Industry Context</strong> — High-pressure tactics are one piece of a bigger pattern. For what's actually behind the labels and pricing — manufacturing locations, brand consolidation, what "Made in USA" really means — read <a href="/blog/made-in-usa-window-coverings-what-that-label-really-means-and-doesnt">What "Made in USA" Actually Means for Window Coverings →</a></p>
+</div>
 <h2>The Problem: Pressure Tactics Don't Belong in Your Home</h2>
 <p>When a window treatment rep walks into your house with a scripted pitch and artificial urgency, the focus has already shifted from understanding your needs to manufacturing a sense of panic. Here are the most common tactics homeowners face:</p>
 <ul>

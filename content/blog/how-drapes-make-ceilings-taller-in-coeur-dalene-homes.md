@@ -14,6 +14,9 @@ wordCount: 1488
 <p>Drapes, particularly custom, floor-to-ceiling soft treatments from a distinguished collection like the <strong>Lafayette Interior Fashions Masterpieces Collection</strong>, are more than just fabric; they are a sophisticated design tool. When professionally specified and installed, they can visually stretch your ceiling height, expand the width of a room, and, critically for Northern Idaho, provide a powerful, year-round, <strong>Energy Efficient Window Treatment</strong>.</p>
 <p><a href="https://www.lafvb.com/interior-masterpieces" data-type="link" data-id="https://www.lafvb.com/interior-masterpieces">https://www.lafvb.com/interior-masterpieces</a></p>
 <p>If you're looking for an upgrade that offers both immediate, impactful aesthetic returns and long-term financial benefits, this is a mastery-level technique.</p>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>📘 The Complete Soft-Treatment Guide</strong> — Drapes are one piece of the soft-treatment picture. For Roman shades, sheers, blackout linings, and how to layer fabric treatments for each room, read <a href="/blog/roman-shades-buyers-guide-northern-idaho">the Roman Shades buyer's framework for Northern Idaho homes →</a></p>
+</div>
 <hr /><h3>The Design Mistake That Shrinks Your Home's Potential</h3>
 <p>Let’s talk about Sarah and Mike, who live in a beautiful, newer home in Post Falls. Their living room had standard 9-foot ceilings and gorgeous windows, but something felt "off." They had purchased beautiful, ready-made drapes and hung them directly above the window frame, using standard rods.</p>
 <p>The result? The room felt heavy, and the ceilings seemed lower than they actually were. This is the <strong>Design Mistake That Shrinks Your Home's Potential</strong>.</p>
