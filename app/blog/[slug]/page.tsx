@@ -420,12 +420,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
       "@type": "WebPage",
       "@id": `${BUSINESS.url}/blog/${post.slug}`,
     },
-    isPartOf: {
-      "@type": "CollectionPage",
-      "@id": `${BUSINESS.url}/blog`,
-      name: "Window Treatment Insights",
-      publisher: { "@id": "https://www.luxewindowworks.com/#business" },
-    },
+    isPartOf: { "@id": `${BUSINESS.url}/blog` },
     about: { "@id": "https://www.luxewindowworks.com/#business" },
     mentions: [...baseMentions, ...(extensions?.mentions ?? [])],
     ...(extensions?.citation && { citation: extensions.citation }),

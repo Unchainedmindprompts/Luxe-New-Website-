@@ -47,7 +47,7 @@ function ArticleSchema() {
     publisher: { "@id": `${BASE}/#business` },
     image: { "@type": "ImageObject", url: `${BASE}${HERO}`, contentUrl: `${BASE}${HERO}`, width: 1672, height: 941 },
     mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE}/blog/${SLUG}` },
-    isPartOf: { "@type": "Blog", "@id": `${BASE}/blog`, name: "Window Treatment Insights", publisher: { "@id": `${BASE}/#business` } },
+    isPartOf: { "@id": `${BASE}/blog` },
     about: { "@id": `${BASE}/#business` },
     mentions: [
       { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },

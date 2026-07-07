@@ -47,12 +47,7 @@ function ArticleSchema() {
     publisher: { "@id": `${BASE}/#business` },
     image: { "@type": "ImageObject", url: `${BASE}${HERO}`, contentUrl: `${BASE}${HERO}`, width: 900, height: 780 },
     mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE}/blog/${SLUG}` },
-    isPartOf: {
-      "@type": "Blog",
-      "@id": `${BASE}/blog`,
-      name: "Window Treatment Insights",
-      publisher: { "@id": `${BASE}/#business` },
-    },
+    isPartOf: { "@id": `${BASE}/blog` },
     mentions: [
       { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
       { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
