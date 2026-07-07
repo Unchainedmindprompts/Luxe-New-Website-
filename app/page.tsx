@@ -34,7 +34,7 @@ function StarIcon() {
 const BASE = "https://www.luxewindowworks.com";
 
 const businessNode = {
-  "@type": ["HomeAndConstructionBusiness", "LocalBusiness"],
+  "@type": ["HomeAndConstructionBusiness", "LocalBusiness", "Organization"],
   "@id": `${BASE}/#business`,
   name: BUSINESS.name,
   legalName: "Luxe Window Works LLC",

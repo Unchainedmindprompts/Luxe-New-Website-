@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
+import { cityNode } from "@/lib/cities";
 
 const SLUG = "designer-window-treatments-coeur-dalene-post-falls";
 const TITLE = "Designer Window Treatments in Coeur d'Alene & Post Falls: What \"Custom\" Actually Means";
@@ -48,10 +49,10 @@ function ArticleSchema() {
     image: { "@type": "ImageObject", url: `${BASE}${HERO}`, contentUrl: `${BASE}${HERO}`, width: 1672, height: 941 },
     mainEntityOfPage: `${BASE}/blog/${SLUG}`,
     isPartOf: { "@id": `${BASE}/blog` },
-    about: { "@id": `${BASE}/#business` },
+    about: { "@id": `${BASE}/areas/coeur-d-alene#service` },
     mentions: [
-      { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
-      { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
+      cityNode("Coeur d'Alene"),
+      cityNode("Post Falls"),
       { "@type": "City", name: "Hayden", containedInPlace: { "@type": "State", name: "Idaho" } },
       { "@type": "City", name: "Rathdrum", containedInPlace: { "@type": "State", name: "Idaho" } },
       { "@type": "City", name: "Sandpoint", containedInPlace: { "@type": "State", name: "Idaho" } },

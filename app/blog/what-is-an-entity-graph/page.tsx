@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
+import { cityNode } from "@/lib/cities";
 
 const SLUG = "what-is-an-entity-graph";
 const TITLE = "What Is an Entity Graph — And Why the Technology Behind It Has Been Hiding in Plain Sight for Over a Decade";
@@ -49,8 +50,8 @@ function ArticleSchema() {
     mainEntityOfPage: `${BASE}/blog/${SLUG}`,
     isPartOf: { "@id": `${BASE}/blog` },
     mentions: [
-      { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
-      { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
+      cityNode("Post Falls"),
+      cityNode("Coeur d'Alene"),
     ],
     about: [
       { "@type": "Thing", name: "Entity Graph", sameAs: "https://en.wikipedia.org/wiki/Knowledge_graph" },

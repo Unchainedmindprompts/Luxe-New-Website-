@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
+import { cityNode } from "@/lib/cities";
 import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
 import type { BlogPost } from "@/lib/blog";
 
@@ -386,6 +387,30 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
   },
 };
 
+/** Match the article to a product Service @id when the slug names a product,
+ * otherwise emit a topical Thing. Keeps Article.about pointing at the actual
+ * subject, not reflexively at #business. */
+function deriveArticleAbout(post: BlogPost): object {
+  const slug = post.slug.toLowerCase();
+  const productMap: Array<[RegExp, string]> = [
+    [/exterior-solar|corradi/, "exterior-solar-shades"],
+    [/cellular|honeycomb|smartprivacy-cell/, "cellular-shades"],
+    [/solar-shade|solar-screen|mermet|koolblack/, "solar-shades"],
+    [/roller-shade|roller-fit|roller-fabric|pucker/, "roller-shades"],
+    [/banded-shade|zebra/, "banded-shades"],
+    [/roman-shade/, "roman-shades"],
+    [/motoriz|smart-shade|automation|battery-operated|somfy|bond-bridge/, "motorization"],
+    [/shutter|woodlore|bifold-180|plantation|aluminum-interior/, "shutters"],
+    [/blind/, "blinds"],
+  ];
+  for (const [pattern, productSlug] of productMap) {
+    if (pattern.test(slug)) {
+      return { "@id": `${BUSINESS.url}/products/${productSlug}#service` };
+    }
+  }
+  return { "@type": "Thing", name: post.category || "Custom Window Coverings" };
+}
+
 function ArticleSchema({ post }: { post: BlogPost }) {
   const extensions = SLUG_ARTICLE_EXTENSIONS[post.slug];
   const baseMentions: object[] = [
@@ -395,11 +420,11 @@ function ArticleSchema({ post }: { post: BlogPost }) {
       alternateName: "Northern Idaho",
       sameAs: "https://en.wikipedia.org/wiki/Idaho_Panhandle",
     },
-    { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
-    { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
-    { "@type": "City", name: "Hayden", containedInPlace: { "@type": "State", name: "Idaho" } },
-    { "@type": "City", name: "Rathdrum", containedInPlace: { "@type": "State", name: "Idaho" } },
-    { "@type": "City", name: "Sandpoint", containedInPlace: { "@type": "State", name: "Idaho" } },
+    cityNode("Coeur d'Alene"),
+    cityNode("Post Falls"),
+    cityNode("Hayden"),
+    cityNode("Rathdrum"),
+    cityNode("Sandpoint"),
   ];
 
   const schema = {
@@ -418,7 +443,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     publisher: { "@id": `${BUSINESS.url}/#business` },
     mainEntityOfPage: `${BUSINESS.url}/blog/${post.slug}`,
     isPartOf: { "@id": `${BUSINESS.url}/blog` },
-    about: { "@id": `${BUSINESS.url}/#business` },
+    about: deriveArticleAbout(post),
     mentions: [...baseMentions, ...(extensions?.mentions ?? [])],
     ...(extensions?.citation && { citation: extensions.citation }),
     ...(extensions?.relatedLink && { relatedLink: extensions.relatedLink }),
