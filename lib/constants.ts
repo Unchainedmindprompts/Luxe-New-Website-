@@ -180,7 +180,7 @@ export const NAV_LINKS: NavLink[] = [
   },
   {
     label: "Service Areas",
-    href: "/areas/coeur-d-alene",
+    href: "/areas",
     children: SERVICE_AREAS.map((a) => ({ label: a.name, href: `/areas/${a.slug}` })),
   },
   { label: "Blog", href: "/blog" },

@@ -69,8 +69,8 @@ const businessNode = {
   },
   geo: {
     "@type": "GeoCoordinates",
-    latitude: "47.736435",
-    longitude: "-116.879122",
+    latitude: BUSINESS.geo.lat,
+    longitude: BUSINESS.geo.lng,
   },
   areaServed: [
     {
