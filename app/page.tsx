@@ -217,68 +217,6 @@ const businessNode = {
   },
 };
 
-const personNode = {
-  "@type": "Person",
-  "@id": `${BASE}/#owner`,
-  name: "Mark Abplanalp",
-  jobTitle: "Owner & Window Treatment Specialist",
-  description:
-    "Mark Abplanalp has worked in the window treatment industry since 2002 — 24 years of hands-on sales, design, and installation experience across Washington, Oregon, and Idaho. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025.",
-  url: `${BASE}/about`,
-  image: `${BASE}/images/mark-photo.webp`,
-  telephone: BUSINESS.phoneE164,
-  email: "mark@luxewindowworks.com",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: BUSINESS.address.city,
-    addressRegion: BUSINESS.address.state,
-    postalCode: BUSINESS.address.zip,
-    addressCountry: "US",
-  },
-  worksFor: { "@id": `${BASE}/#business` },
-  foundingDate: "2002",
-  hasOccupation: {
-    "@type": "Occupation",
-    name: "Window Treatment Specialist",
-    occupationLocation: {
-      "@type": "City",
-      name: "Post Falls",
-      containedInPlace: { "@type": "State", name: "Idaho" },
-    },
-    skills:
-      "Custom window treatment design, plantation shutter installation, motorized shade systems, cellular shades, solar shades, roller shades, fenestration consulting, UV mitigation, commercial window treatments, exterior solar shades",
-  },
-  knowsAbout: [
-    "Custom window treatments",
-    "Plantation shutters",
-    "Cellular shades",
-    "Motorized window treatments",
-    "Solar shades",
-    "Roller shades",
-    "Window treatment installation",
-    "Energy efficient window coverings",
-    "Fenestration design",
-    "Commercial window treatments",
-    "UV mitigation",
-    "Heat reduction window coverings",
-    "Exterior solar shades",
-    "Alta Window Fashions",
-    "Norman Window Fashions",
-    "Lafayette Interior Fashions",
-    "Corradi USA exterior shading systems",
-  ],
-  areaServed: [
-    "Coeur d'Alene, Idaho",
-    "Post Falls, Idaho",
-    "Hayden, Idaho",
-    "Sandpoint, Idaho",
-    "Rathdrum, Idaho",
-    "Kootenai County, Idaho",
-    "North Idaho",
-    "Northern Idaho",
-  ],
-};
-
 const websiteNode = {
   "@type": "WebSite",
   "@id": `${BASE}/#website`,
@@ -352,7 +290,6 @@ const homepageGraph = {
   "@context": "https://schema.org",
   "@graph": [
     businessNode,
-    personNode,
     websiteNode,
     webpageNode,
     faqPageNode,

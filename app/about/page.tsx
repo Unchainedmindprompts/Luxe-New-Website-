@@ -30,13 +30,13 @@ export const metadata: Metadata = {
 const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
-  "@id": "https://www.luxewindowworks.com/#owner",
+  "@id": `${BUSINESS.url}/#owner`,
   name: "Mark Abplanalp",
   jobTitle: "Owner & Window Treatment Specialist",
   description:
     "Mark Abplanalp has worked in the window treatment industry since 2002 — 24 years of hands-on sales, design, and installation experience across Washington, Oregon, and Idaho. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025.",
-  url: "https://www.luxewindowworks.com/about",
-  image: "https://www.luxewindowworks.com/_next/image?url=%2Fimages%2Fmark-photo.webp&w=3840&q=80",
+  url: `${BUSINESS.url}/about`,
+  image: `${BUSINESS.url}/images/mark-photo.webp`,
   telephone: BUSINESS.phoneE164,
   email: BUSINESS.email,
   address: {
@@ -46,7 +46,7 @@ const personSchema = {
     postalCode: BUSINESS.address.zip,
     addressCountry: "US",
   },
-  worksFor: { "@id": "https://www.luxewindowworks.com/#business" },
+  worksFor: { "@id": `${BUSINESS.url}/#business` },
   foundingDate: "2002",
   hasOccupation: {
     "@type": "Occupation",
@@ -60,25 +60,24 @@ const personSchema = {
       "Custom window treatment design, plantation shutter installation, motorized shade systems, cellular shades, solar shades, roller shades, fenestration consulting, UV mitigation, commercial window treatments, exterior solar shades",
   },
   knowsAbout: [
-    "custom window treatments",
-    "plantation shutters",
-    "cellular shades",
-    "motorized window treatments",
-    "solar shades",
-    "roller shades",
-    "window treatment installation",
-    "energy efficient window coverings",
-    "fenestration design",
-    "commercial window treatments",
+    "Custom window treatments",
+    "Plantation shutters",
+    "Cellular shades",
+    "Motorized window treatments",
+    "Solar shades",
+    "Roller shades",
+    "Window treatment installation",
+    "Energy efficient window coverings",
+    "Fenestration design",
+    "Commercial window treatments",
     "UV mitigation",
-    "heat reduction window coverings",
-    "exterior solar shades",
+    "Heat reduction window coverings",
+    "Exterior solar shades",
     "Alta Window Fashions",
     "Norman Window Fashions",
     "Lafayette Interior Fashions",
     "Corradi USA exterior shading systems",
   ],
-  alumniOf: [],
   areaServed: [
     "Coeur d'Alene, Idaho",
     "Post Falls, Idaho",
@@ -95,6 +94,20 @@ const personSchema = {
   ],
 };
 
+const webpageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${BUSINESS.url}/about#webpage`,
+  url: `${BUSINESS.url}/about`,
+  name: "About Mark Abplanalp | 24 Years in Window Treatments",
+  description:
+    "Mark Abplanalp has installed window treatments since 2002 — from Seattle to Bend to Apple retail. Now serving North Idaho from Post Falls with Luxe Window Works.",
+  isPartOf: { "@id": `${BUSINESS.url}/#website` },
+  about: { "@id": `${BUSINESS.url}/#business` },
+  mainEntity: { "@id": `${BUSINESS.url}/#owner` },
+  inLanguage: "en-US",
+};
+
 export default function AboutPage() {
   return (
     <>
@@ -102,6 +115,11 @@ export default function AboutPage() {
         id="person-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+      />
+      <Script
+        id="webpage-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
       />
       <main className="bg-white">
         {/* Main bio */}
