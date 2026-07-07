@@ -88,10 +88,6 @@ const personSchema = {
     "North Idaho",
     "Northern Idaho",
   ],
-  sameAs: [
-    "https://www.yelp.com/biz/luxe-window-works-post-falls",
-    "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
-  ],
 };
 
 const webpageSchema = {
