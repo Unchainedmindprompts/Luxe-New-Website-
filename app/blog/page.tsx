@@ -40,14 +40,14 @@ function BlogListSchema() {
     description: `Expert window treatment advice from ${BUSINESS.name}. Tips on choosing the right blinds, shades, and shutters for Northern Idaho homes.`,
     isPartOf: { "@id": `${BUSINESS.url}/#website` },
     about: { "@id": `${BUSINESS.url}/#business` },
-    mainEntity: { "@id": pageUrl },
+    mainEntity: { "@id": `${pageUrl}` },
     breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
     inLanguage: "en-US",
   };
   const blogSchema = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    "@id": pageUrl,
+    "@id": `${pageUrl}`,
     name: "Luxe Window Works Blog",
     description:
       "Expert window treatment advice, buying guides, and design inspiration from 24 years of hands-on experience in Northern Idaho homes — by Mark Abplanalp, owner of Luxe Window Works.",
