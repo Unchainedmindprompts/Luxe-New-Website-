@@ -46,7 +46,7 @@ function ArticleSchema() {
     author: { "@id": "https://www.luxewindowworks.com/#owner" },
     publisher: { "@id": "https://www.luxewindowworks.com/#business" },
     image: { "@type": "ImageObject", url: "https://www.luxewindowworks.com/images/IMG_6457.jpeg", contentUrl: "https://www.luxewindowworks.com/images/IMG_6457.jpeg", width: 1000, height: 784 },
-    mainEntityOfPage: { "@type": "WebPage", "@id": `https://www.luxewindowworks.com/blog/${SLUG}` },
+    mainEntityOfPage: `https://www.luxewindowworks.com/blog/${SLUG}`,
     isPartOf: { "@id": "https://www.luxewindowworks.com/blog" },
     mentions: [
       { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },

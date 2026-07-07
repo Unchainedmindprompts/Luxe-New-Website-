@@ -46,7 +46,7 @@ function ArticleSchema() {
     author: { "@id": `${BASE}/#owner` },
     publisher: { "@id": `${BASE}/#business` },
     image: { "@type": "ImageObject", url: `${BASE}${HERO}`, contentUrl: `${BASE}${HERO}`, width: 1672, height: 941 },
-    mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE}/blog/${SLUG}` },
+    mainEntityOfPage: `${BASE}/blog/${SLUG}`,
     isPartOf: { "@id": `${BASE}/blog` },
     about: { "@id": `${BASE}/#business` },
     mentions: [
@@ -119,7 +119,6 @@ function ArticleSchema() {
       jobTitle: "Interior Designer",
     },
     itemReviewed: { "@id": `${BASE}/#business` },
-    subjectOf: { "@id": CANONICAL },
   };
 
   return (

@@ -416,10 +416,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     inLanguage: "en-US",
     author: markAuthorRef,
     publisher: { "@id": `${BUSINESS.url}/#business` },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${BUSINESS.url}/blog/${post.slug}`,
-    },
+    mainEntityOfPage: `${BUSINESS.url}/blog/${post.slug}`,
     isPartOf: { "@id": `${BUSINESS.url}/blog` },
     about: { "@id": `${BUSINESS.url}/#business` },
     mentions: [...baseMentions, ...(extensions?.mentions ?? [])],

@@ -46,7 +46,7 @@ function ArticleSchema() {
     author: { "@id": `${BASE}/#owner` },
     publisher: { "@id": `${BASE}/#business` },
     image: { "@type": "ImageObject", url: `${BASE}${HERO}`, contentUrl: `${BASE}${HERO}`, width: 900, height: 780 },
-    mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE}/blog/${SLUG}` },
+    mainEntityOfPage: `${BASE}/blog/${SLUG}`,
     isPartOf: { "@id": `${BASE}/blog` },
     mentions: [
       { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
