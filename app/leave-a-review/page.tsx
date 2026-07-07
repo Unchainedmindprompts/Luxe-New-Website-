@@ -2,6 +2,32 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BUSINESS } from "@/lib/constants";
 
+const PAGE_URL = `${BUSINESS.url}/leave-a-review`;
+
+const webpageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${PAGE_URL}#webpage`,
+  url: PAGE_URL,
+  name: "Leave a Review — Luxe Window Works",
+  description:
+    "Did Luxe Window Works do a great job for you? A quick Google review helps the next North Idaho homeowner make a confident decision.",
+  isPartOf: { "@id": `${BUSINESS.url}/#website` },
+  about: { "@id": `${BUSINESS.url}/#business` },
+  breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
+  inLanguage: "en-US",
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "@id": `${PAGE_URL}#breadcrumb`,
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
+    { "@type": "ListItem", position: 2, name: "Leave a Review", item: PAGE_URL },
+  ],
+};
+
 export const metadata: Metadata = {
   title: "Leave a Review — Luxe Window Works",
   description:
@@ -18,6 +44,8 @@ export const metadata: Metadata = {
 export default function LeaveAReviewPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {/* Hero */}
       <section className="bg-warm-white pt-20 md:pt-28 pb-12 md:pb-16">
         <div className="container-luxe max-w-3xl text-center">

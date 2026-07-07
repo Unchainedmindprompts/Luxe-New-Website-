@@ -237,6 +237,7 @@ const webpageNode = {
     "Custom blinds, shades, shutters, and motorized window treatments in Coeur d'Alene, Post Falls, and Northern Idaho. 24 years of installer expertise. Lifetime installation guarantee.",
   isPartOf: { "@id": `${BASE}/#website` },
   about: { "@id": `${BASE}/#business` },
+  mainEntity: { "@id": `${BASE}/#business` },
   primaryImageOfPage: {
     "@type": "ImageObject",
     url: `${BASE}/images/hero-modern-living.webp`,

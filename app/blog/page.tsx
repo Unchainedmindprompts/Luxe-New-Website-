@@ -30,24 +30,48 @@ export const metadata: Metadata = {
 };
 
 function BlogListSchema() {
-  const schema = {
+  const pageUrl = `${BUSINESS.url}/blog`;
+  const webpageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: "Blog | Window Treatment Tips & Guides",
+    description: `Expert window treatment advice from ${BUSINESS.name}. Tips on choosing the right blinds, shades, and shutters for Northern Idaho homes.`,
+    isPartOf: { "@id": `${BUSINESS.url}/#website` },
+    about: { "@id": `${BUSINESS.url}/#business` },
+    mainEntity: { "@id": pageUrl },
+    breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
+    inLanguage: "en-US",
+  };
+  const blogSchema = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    "@id": `${BUSINESS.url}/blog`,
+    "@id": pageUrl,
     name: "Luxe Window Works Blog",
     description:
       "Expert window treatment advice, buying guides, and design inspiration from 24 years of hands-on experience in Northern Idaho homes — by Mark Abplanalp, owner of Luxe Window Works.",
-    url: `${BUSINESS.url}/blog`,
+    url: pageUrl,
     inLanguage: "en-US",
-    author: { "@id": "https://www.luxewindowworks.com/#owner" },
-    publisher: { "@id": "https://www.luxewindowworks.com/#business" },
+    author: { "@id": `${BUSINESS.url}/#owner` },
+    publisher: { "@id": `${BUSINESS.url}/#business` },
+  };
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${pageUrl}#breadcrumb`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: pageUrl },
+    ],
   };
 
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+    </>
   );
 }
 
