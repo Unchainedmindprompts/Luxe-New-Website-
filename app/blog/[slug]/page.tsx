@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     ...(keywords && { keywords }),
     alternates: {
-      canonical: `https://www.luxewindowworks.com/blog/${slug}`,
+      canonical: `${BUSINESS.url}/blog/${slug}`,
     },
     openGraph: {
       title: titleForTag,
@@ -150,14 +150,14 @@ function deriveKeywords(post: BlogPost): string {
 }
 
 /** Author reference — the full Person entity lives in the homepage @graph (#owner). */
-const markAuthorRef = { "@id": "https://www.luxewindowworks.com/#owner" };
+const markAuthorRef = { "@id": `${BUSINESS.url}/#owner` };
 
 /** HowTo schema — 5-step installation process */
 const installationHowToSchema = {
   "@context": "https://schema.org",
   "@type": "HowTo",
   "@id":
-    "https://www.luxewindowworks.com/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works#howto",
+    `${BUSINESS.url}/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works#howto`,
   name: "How to Get Custom Window Treatments Installed in Northern Idaho",
   description:
     "The Luxe Window Works 5-step process for getting custom window treatments measured, ordered, and professionally installed in Northern Idaho.",
@@ -180,7 +180,7 @@ const installationHowToSchema = {
       position: 1,
       name: "Free In-Home Consultation",
       text: "Mark visits your home to assess your windows, discuss your functional requirements, and explore design possibilities. This is a collaborative planning session — no pressure, no sales pitch.",
-      url: "https://www.luxewindowworks.com/book",
+      url: `${BUSINESS.url}/book`,
     },
     {
       "@type": "HowToStep",
@@ -212,7 +212,7 @@ const installationHowToSchema = {
 const highPressureHowToSchema = {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "@id": "https://www.luxewindowworks.com/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry#howto",
+  "@id": `${BUSINESS.url}/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry#howto`,
   name: "5 Tips for Navigating Window Treatment Sales Without Getting Pressured",
   description: "How to protect yourself from high-pressure window treatment sales tactics and make a confident, informed decision.",
   totalTime: "PT5M",
@@ -283,10 +283,10 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       },
     ],
     mentions: [
-      { "@id": "https://www.luxewindowworks.com/blog/why-custom-window-treatments-in-coeur-d-alene-and-post-falls-don-t-have-to-cost-twice-what-they-should#article" },
+      { "@id": `${BUSINESS.url}/blog/why-custom-window-treatments-in-coeur-d-alene-and-post-falls-don-t-have-to-cost-twice-what-they-should#article` },
     ],
     relatedLink: [
-      "https://www.luxewindowworks.com/blog/why-custom-window-treatments-in-coeur-d-alene-and-post-falls-don-t-have-to-cost-twice-what-they-should",
+      `${BUSINESS.url}/blog/why-custom-window-treatments-in-coeur-d-alene-and-post-falls-don-t-have-to-cost-twice-what-they-should`,
     ],
   },
   "woodlore-plus-shutters-north-idaho": {
@@ -375,13 +375,13 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       },
     ],
     relatedLink: [
-      "https://www.luxewindowworks.com/products/shutters",
-      "https://www.luxewindowworks.com/products/motorization",
-      "https://www.luxewindowworks.com/areas/coeur-d-alene",
-      "https://www.luxewindowworks.com/areas/post-falls",
-      "https://www.luxewindowworks.com/areas/sandpoint",
-      "https://www.luxewindowworks.com/areas/hayden",
-      "https://www.luxewindowworks.com/areas/rathdrum",
+      `${BUSINESS.url}/products/shutters`,
+      `${BUSINESS.url}/products/motorization`,
+      `${BUSINESS.url}/areas/coeur-d-alene`,
+      `${BUSINESS.url}/areas/post-falls`,
+      `${BUSINESS.url}/areas/sandpoint`,
+      `${BUSINESS.url}/areas/hayden`,
+      `${BUSINESS.url}/areas/rathdrum`,
     ],
   },
 };
@@ -415,18 +415,13 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     keywords: deriveKeywords(post),
     inLanguage: "en-US",
     author: markAuthorRef,
-    publisher: { "@id": "https://www.luxewindowworks.com/#business" },
+    publisher: { "@id": `${BUSINESS.url}/#business` },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `${BUSINESS.url}/blog/${post.slug}`,
     },
-    isPartOf: {
-      "@type": "CollectionPage",
-      "@id": `${BUSINESS.url}/blog`,
-      name: "Window Treatment Insights",
-      publisher: { "@id": "https://www.luxewindowworks.com/#business" },
-    },
-    about: { "@id": "https://www.luxewindowworks.com/#business" },
+    isPartOf: { "@id": `${BUSINESS.url}/blog` },
+    about: { "@id": `${BUSINESS.url}/#business` },
     mentions: [...baseMentions, ...(extensions?.mentions ?? [])],
     ...(extensions?.citation && { citation: extensions.citation }),
     ...(extensions?.relatedLink && { relatedLink: extensions.relatedLink }),
@@ -439,10 +434,10 @@ function ArticleSchema({ post }: { post: BlogPost }) {
         "@type": "ImageObject",
         url: post.featuredImage.startsWith("http")
           ? post.featuredImage
-          : `https://www.luxewindowworks.com${post.featuredImage}`,
+          : `${BUSINESS.url}${post.featuredImage}`,
         contentUrl: post.featuredImage.startsWith("http")
           ? post.featuredImage
-          : `https://www.luxewindowworks.com${post.featuredImage}`,
+          : `${BUSINESS.url}${post.featuredImage}`,
         width: 1200,
         height: 630,
       },
@@ -452,18 +447,18 @@ function ArticleSchema({ post }: { post: BlogPost }) {
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "@id": `https://www.luxewindowworks.com/blog/${post.slug}#breadcrumb`,
+    "@id": `${BUSINESS.url}/blog/${post.slug}#breadcrumb`,
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.luxewindowworks.com" },
-      { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.luxewindowworks.com/blog" },
-      { "@type": "ListItem", position: 3, name: post.title, item: `https://www.luxewindowworks.com/blog/${post.slug}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${BUSINESS.url}/blog` },
+      { "@type": "ListItem", position: 3, name: post.title, item: `${BUSINESS.url}/blog/${post.slug}` },
     ],
   };
 
   const faqSchema = post.faqs.length > 0 ? {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "@id": `https://www.luxewindowworks.com/blog/${post.slug}#faq`,
+    "@id": `${BUSINESS.url}/blog/${post.slug}#faq`,
     mainEntity: post.faqs.map((faq) => ({
       "@type": "Question",
       name: faq.question,
@@ -480,7 +475,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     ? {
         "@context": "https://schema.org",
         "@type": "Review",
-        "@id": `https://www.luxewindowworks.com/#review-${post.slug}`,
+        "@id": `${BUSINESS.url}/#review-${post.slug}`,
         ...(post.review.reviewUrl && { url: post.review.reviewUrl }),
         ...(post.review.reviewDate && { datePublished: post.review.reviewDate }),
         reviewBody: post.review.reviewBody,
@@ -495,8 +490,8 @@ function ArticleSchema({ post }: { post: BlogPost }) {
           name: post.review.reviewerName,
           ...(post.review.reviewerJobTitle && { jobTitle: post.review.reviewerJobTitle }),
         },
-        itemReviewed: { "@id": "https://www.luxewindowworks.com/#business" },
-        subjectOf: { "@id": `https://www.luxewindowworks.com/blog/${post.slug}` },
+        itemReviewed: { "@id": `${BUSINESS.url}/#business` },
+        subjectOf: { "@id": `${BUSINESS.url}/blog/${post.slug}` },
       }
     : null;
 

@@ -9,6 +9,7 @@ import {
   FAUX_WOOD_COLORS,
 } from "@/data/faux-wood-blinds";
 import { calculatePrice } from "@/lib/pricing";
+import { NORMAN_BRAND } from "@/lib/brands";
 import Configurator from "./Configurator";
 
 const BASE = "https://www.luxewindowworks.com";
@@ -18,18 +19,6 @@ const fauxWoodPrices = FAUX_WOOD_MSRP.flat().map(calculatePrice);
 const fauxWoodLowPrice = Math.min(...fauxWoodPrices).toFixed(2);
 const fauxWoodHighPrice = Math.max(...fauxWoodPrices).toFixed(2);
 const fauxWoodSizeBracketCount = FAUX_WOOD_WIDTHS.length * FAUX_WOOD_HEIGHTS.length;
-
-const normanBrand = {
-  "@type": "Brand",
-  "@id": "https://www.normanwindowfashions.com/#brand",
-  name: "Norman",
-  alternateName: "Norman Window Fashions",
-  url: "https://www.normanwindowfashions.com",
-  sameAs: [
-    "https://www.normanwindowfashions.com",
-    "https://en.wikipedia.org/wiki/Norman_(window_treatment_brand)",
-  ],
-};
 
 const productSchema = {
   "@context": "https://schema.org",
@@ -46,7 +35,7 @@ const productSchema = {
     `${BASE}/images/smartprivacy-lead-free.png`,
   ],
   category: "Faux Wood Blinds",
-  brand: normanBrand,
+  brand: NORMAN_BRAND,
   manufacturer: {
     "@id": "https://www.normanwindowfashions.com/#brand",
   },

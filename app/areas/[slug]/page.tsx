@@ -47,34 +47,23 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
   const areaName = area.name;
   const areaUrl = `${BUSINESS.url}/areas/${slug}`;
 
-  // Lightweight NAP node — same @id as the canonical homepage #business entity, but
-  // NAP-only. aggregateRating, sameAs, founder, hours, and hasOfferCatalog stay
-  // single-source on the homepage to avoid duplicate/conflicting nodes.
-  const localBusinessNAP = {
+  // Note on entity resolution: the area page does NOT re-declare a LocalBusiness
+  // node. The canonical #business entity is emitted once on the homepage. Both
+  // the WebPage and Service nodes below reference it by @id only — this is the
+  // strict single-source pattern that eliminates NAP drift risk entirely.
+
+  const webpageSchema = {
     "@context": "https://schema.org",
-    "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
-    "@id": `${BUSINESS.url}/#business`,
-    name: BUSINESS.name,
-    url: BUSINESS.url,
-    telephone: BUSINESS.phoneE164,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: BUSINESS.address.street,
-      addressLocality: BUSINESS.address.city,
-      addressRegion: BUSINESS.address.state,
-      postalCode: BUSINESS.address.zip,
-      addressCountry: "US",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: BUSINESS.geo.lat,
-      longitude: BUSINESS.geo.lng,
-    },
-    areaServed: {
-      "@type": "City",
-      name: areaName,
-      containedInPlace: { "@type": "State", name: "Idaho" },
-    },
+    "@type": "WebPage",
+    "@id": `${areaUrl}#webpage`,
+    url: areaUrl,
+    name: area.metaTitle,
+    description: area.metaDescription,
+    isPartOf: { "@id": `${BUSINESS.url}/#website` },
+    about: { "@id": `${BUSINESS.url}/#business` },
+    mainEntity: { "@id": `${areaUrl}#service` },
+    breadcrumb: { "@id": `${areaUrl}#breadcrumb` },
+    inLanguage: "en-US",
   };
 
   const serviceSchema = {
@@ -88,6 +77,7 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
     areaServed: {
       "@type": "City",
       name: areaName,
+      sameAs: area.wikipediaSameAs,
       containedInPlace: { "@type": "State", name: "Idaho" },
     },
     hasOfferCatalog: {
@@ -149,9 +139,10 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `${areaUrl}#breadcrumb`,
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
-      { "@type": "ListItem", position: 2, name: "Service Areas", item: `${BUSINESS.url}/areas/coeur-d-alene` },
+      { "@type": "ListItem", position: 2, name: "Service Areas", item: `${BUSINESS.url}/areas` },
       { "@type": "ListItem", position: 3, name: areaName, item: areaUrl },
     ],
   };
@@ -211,9 +202,9 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
   return (
     <>
       <Script
-        id={`area-business-schema-${slug}`}
+        id={`area-webpage-schema-${slug}`}
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessNAP) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
       />
       <Script
         id={`area-service-schema-${slug}`}
@@ -245,7 +236,7 @@ export default async function AreaPage({ params }: Props) {
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
-          { label: "Service Areas", href: "/areas/coeur-d-alene" },
+          { label: "Service Areas", href: "/areas" },
           { label: area.name },
         ]}
       />

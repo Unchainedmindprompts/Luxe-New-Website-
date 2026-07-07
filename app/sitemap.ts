@@ -143,6 +143,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     // Service area pages
     {
+      url: `${baseUrl}/areas`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/areas/coeur-d-alene`,
       lastModified: currentDate,
       changeFrequency: 'monthly',

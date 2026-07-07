@@ -8,6 +8,7 @@ import {
   CELLULAR_COLOR_DATA,
 } from "@/data/cellular-shades";
 import { calculatePrice } from "@/lib/pricing";
+import { NORMAN_BRAND } from "@/lib/brands";
 import Configurator from "./Configurator";
 
 const BASE = "https://www.luxewindowworks.com";
@@ -17,18 +18,6 @@ const cellularPrices = CELLULAR_MSRP.flat().map(calculatePrice);
 const cellularLowPrice = Math.min(...cellularPrices).toFixed(2);
 const cellularHighPrice = Math.max(...cellularPrices).toFixed(2);
 const cellularSizeBracketCount = CELLULAR_WIDTHS.length * CELLULAR_HEIGHTS.length;
-
-const normanBrand = {
-  "@type": "Brand",
-  "@id": "https://www.normanwindowfashions.com/#brand",
-  name: "Norman",
-  alternateName: "Norman Window Fashions",
-  url: "https://www.normanwindowfashions.com",
-  sameAs: [
-    "https://www.normanwindowfashions.com",
-    "https://en.wikipedia.org/wiki/Norman_(window_treatment_brand)",
-  ],
-};
 
 const productSchema = {
   "@context": "https://schema.org",
@@ -40,7 +29,7 @@ const productSchema = {
     'Custom-made Norman 9/16" Portrait honeycomb cellular shades in single-cell construction. Light filtering fabric in 10 designer colors, three lift systems (cordless, top-down/bottom-up, cord loop), inside or outside mount. Built to the customer\'s exact width and height.',
   url: PRODUCT_URL,
   category: "Cellular Shades",
-  brand: normanBrand,
+  brand: NORMAN_BRAND,
   manufacturer: {
     "@id": "https://www.normanwindowfashions.com/#brand",
   },

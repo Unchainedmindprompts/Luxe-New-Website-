@@ -41,7 +41,7 @@ const businessNode = {
     "Premium custom window treatments in North Idaho — 24 years of installer expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
   url: BASE,
   telephone: BUSINESS.phoneE164,
-  email: "mark@luxewindowworks.com",
+  email: BUSINESS.email,
   priceRange: "$$",
   foundingDate: "2025",
   image: {
@@ -69,8 +69,8 @@ const businessNode = {
   },
   geo: {
     "@type": "GeoCoordinates",
-    latitude: "47.736435",
-    longitude: "-116.879122",
+    latitude: BUSINESS.geo.lat,
+    longitude: BUSINESS.geo.lng,
   },
   areaServed: [
     {
@@ -151,7 +151,6 @@ const businessNode = {
     },
   ],
   sameAs: [
-    "https://www.google.com/maps/place/Luxe+Window+Works+LLC/@47.7363916,-116.8816972,17z/data=!3m1!4b1!4m6!3m5!1s0x617bcf2eafa50481:0xb488fb56afcb0982!8m2!3d47.7363916!4d-116.8791223!16s%2Fg%2F11m71mk1yq",
     "https://www.bing.com/maps/search?name=Luxe+Window+Works+LLC&trfc=&mepi=139%7E%7EEmbedded%7ELargeMapLink&FORM=MPSRPL&style=r&q=Luxe+Window+Works+LLC&ss=id.ypid%3AYN6F9E5AD2DAFE5C39&ppois=47.73643493652344_-116.87911987304688_Luxe+Window+Works+LLC&cp=47.736435%7E-116.879120&lvl=15",
     "https://maps.apple.com/place?place-id=I907802082955E66F&address=2972+N+Pavo+Ln%2C+Post+Falls%2C+ID++83854%2C+United+States&coordinate=47.736435%2C-116.879122&name=Luxe+Window+Works&_provider=9902",
     "https://www.yelp.com/biz/luxe-window-works-post-falls",
@@ -215,68 +214,6 @@ const businessNode = {
       },
     ],
   },
-};
-
-const personNode = {
-  "@type": "Person",
-  "@id": `${BASE}/#owner`,
-  name: "Mark Abplanalp",
-  jobTitle: "Owner & Window Treatment Specialist",
-  description:
-    "Mark Abplanalp has worked in the window treatment industry since 2002 — 24 years of hands-on sales, design, and installation experience across Washington, Oregon, and Idaho. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025.",
-  url: `${BASE}/about`,
-  image: `${BASE}/images/mark-photo.webp`,
-  telephone: BUSINESS.phoneE164,
-  email: "mark@luxewindowworks.com",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: BUSINESS.address.city,
-    addressRegion: BUSINESS.address.state,
-    postalCode: BUSINESS.address.zip,
-    addressCountry: "US",
-  },
-  worksFor: { "@id": `${BASE}/#business` },
-  foundingDate: "2002",
-  hasOccupation: {
-    "@type": "Occupation",
-    name: "Window Treatment Specialist",
-    occupationLocation: {
-      "@type": "City",
-      name: "Post Falls",
-      containedInPlace: { "@type": "State", name: "Idaho" },
-    },
-    skills:
-      "Custom window treatment design, plantation shutter installation, motorized shade systems, cellular shades, solar shades, roller shades, fenestration consulting, UV mitigation, commercial window treatments, exterior solar shades",
-  },
-  knowsAbout: [
-    "Custom window treatments",
-    "Plantation shutters",
-    "Cellular shades",
-    "Motorized window treatments",
-    "Solar shades",
-    "Roller shades",
-    "Window treatment installation",
-    "Energy efficient window coverings",
-    "Fenestration design",
-    "Commercial window treatments",
-    "UV mitigation",
-    "Heat reduction window coverings",
-    "Exterior solar shades",
-    "Alta Window Fashions",
-    "Norman Window Fashions",
-    "Lafayette Interior Fashions",
-    "Corradi USA exterior shading systems",
-  ],
-  areaServed: [
-    "Coeur d'Alene, Idaho",
-    "Post Falls, Idaho",
-    "Hayden, Idaho",
-    "Sandpoint, Idaho",
-    "Rathdrum, Idaho",
-    "Kootenai County, Idaho",
-    "North Idaho",
-    "Northern Idaho",
-  ],
 };
 
 const websiteNode = {
@@ -352,7 +289,6 @@ const homepageGraph = {
   "@context": "https://schema.org",
   "@graph": [
     businessNode,
-    personNode,
     websiteNode,
     webpageNode,
     faqPageNode,
