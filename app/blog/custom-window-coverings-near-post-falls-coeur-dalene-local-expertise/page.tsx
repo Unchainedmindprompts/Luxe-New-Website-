@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
+import { cityNode } from "@/lib/cities";
 
 const SLUG = "custom-window-coverings-near-post-falls-coeur-dalene-local-expertise";
 const TITLE = "Custom Window Coverings Near Post Falls and Coeur d'Alene: Why Local Expertise Makes All the Difference";
@@ -46,12 +47,12 @@ function ArticleSchema() {
     author: { "@id": "https://www.luxewindowworks.com/#owner" },
     publisher: { "@id": "https://www.luxewindowworks.com/#business" },
     image: { "@type": "ImageObject", url: "https://www.luxewindowworks.com/images/IMG_6457.jpeg", contentUrl: "https://www.luxewindowworks.com/images/IMG_6457.jpeg", width: 1000, height: 784 },
-    mainEntityOfPage: { "@type": "WebPage", "@id": `https://www.luxewindowworks.com/blog/${SLUG}` },
+    mainEntityOfPage: `https://www.luxewindowworks.com/blog/${SLUG}`,
     isPartOf: { "@id": "https://www.luxewindowworks.com/blog" },
     mentions: [
-      { "@type": "City", name: "Post Falls", containedInPlace: { "@type": "State", name: "Idaho" } },
-      { "@type": "City", name: "Coeur d'Alene", containedInPlace: { "@type": "State", name: "Idaho" } },
-      { "@type": "City", name: "Hayden", containedInPlace: { "@type": "State", name: "Idaho" } },
+      cityNode("Post Falls"),
+      cityNode("Coeur d'Alene"),
+      cityNode("Hayden"),
       { "@type": "City", name: "Rathdrum", containedInPlace: { "@type": "State", name: "Idaho" } },
       { "@type": "City", name: "Sandpoint", containedInPlace: { "@type": "State", name: "Idaho" } },
     ],

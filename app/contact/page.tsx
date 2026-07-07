@@ -4,6 +4,31 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import ContactForm from "./ContactForm";
 
+const PAGE_URL = `${BUSINESS.url}/contact`;
+
+const webpageSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": `${PAGE_URL}#webpage`,
+  url: PAGE_URL,
+  name: "Contact | Free In-Home Consultation",
+  description: `Contact ${BUSINESS.name} for a free in-home consultation. Call ${BUSINESS.phone} or fill out our form. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.`,
+  isPartOf: { "@id": `${BUSINESS.url}/#website` },
+  about: { "@id": `${BUSINESS.url}/#business` },
+  breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
+  inLanguage: "en-US",
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "@id": `${PAGE_URL}#breadcrumb`,
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
+    { "@type": "ListItem", position: 2, name: "Contact", item: PAGE_URL },
+  ],
+};
+
 export const metadata: Metadata = {
   title: "Contact | Free In-Home Consultation",
   description: `Contact ${BUSINESS.name} for a free in-home consultation. Call ${BUSINESS.phone} or fill out our form. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.`,
@@ -20,6 +45,8 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },

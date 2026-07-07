@@ -42,12 +42,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function ServiceSchema({ product }: { product: ProductPageData }) {
+function ServiceSchema({ product, slug }: { product: ProductPageData; slug: string }) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": `${BUSINESS.url}/products/${slug}#service`,
     name: `${product.name} Installation`,
-    provider: { "@id": "https://www.luxewindowworks.com/#business" },
+    provider: { "@id": `${BUSINESS.url}/#business` },
     areaServed: {
       "@type": "State",
       name: "Idaho",
@@ -59,6 +60,49 @@ function ServiceSchema({ product }: { product: ProductPageData }) {
     },
   };
 
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+function WebPageSchema({ product, slug }: { product: ProductPageData; slug: string }) {
+  const pageUrl = `${BUSINESS.url}/products/${slug}`;
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: product.metaTitle,
+    description: product.metaDescription,
+    isPartOf: { "@id": `${BUSINESS.url}/#website` },
+    about: { "@id": `${BUSINESS.url}/#business` },
+    mainEntity: { "@id": `${pageUrl}#service` },
+    breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
+    inLanguage: "en-US",
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+function BreadcrumbSchema({ product, slug }: { product: ProductPageData; slug: string }) {
+  const pageUrl = `${BUSINESS.url}/products/${slug}`;
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${pageUrl}#breadcrumb`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
+      { "@type": "ListItem", position: 2, name: "Products", item: `${BUSINESS.url}/products/cellular-shades` },
+      { "@type": "ListItem", position: 3, name: product.name, item: pageUrl },
+    ],
+  };
   return (
     <script
       type="application/ld+json"
@@ -118,7 +162,9 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <ServiceSchema product={product} />
+      <WebPageSchema product={product} slug={slug} />
+      <BreadcrumbSchema product={product} slug={slug} />
+      <ServiceSchema product={product} slug={slug} />
       <FAQSchema product={product} />
       {product.video && <VideoSchema video={product.video} />}
       {product.secondVideo && <VideoSchema video={product.secondVideo} />}

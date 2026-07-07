@@ -2,6 +2,33 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { BUSINESS } from "@/lib/constants";
+
+const PAGE_URL = `${BUSINESS.url}/shop`;
+
+const webpageSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": `${PAGE_URL}#webpage`,
+  url: PAGE_URL,
+  name: "Shop Custom Blinds & Shades",
+  description:
+    "Custom blinds and shades made to your exact size. Shipping at cost — no markup. Configure and price online from Luxe Window Works.",
+  isPartOf: { "@id": `${BUSINESS.url}/#website` },
+  about: { "@id": `${BUSINESS.url}/#business` },
+  breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
+  inLanguage: "en-US",
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "@id": `${PAGE_URL}#breadcrumb`,
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
+    { "@type": "ListItem", position: 2, name: "Shop", item: PAGE_URL },
+  ],
+};
 
 export const metadata: Metadata = {
   title: "Shop Custom Blinds & Shades",
@@ -34,6 +61,8 @@ const SHOP_PRODUCTS = [
 export default function ShopPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Shop" }]} />
 
       <section className="pt-12 md:pt-16 pb-8 md:pb-12 bg-warm-white">

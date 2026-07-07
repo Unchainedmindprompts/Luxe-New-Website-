@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { ConditionalLayout } from "./ConditionalLayout";
 import { Analytics } from "@vercel/analytics/next";
+import { BUSINESS } from "@/lib/constants";
 
 const inter = localFont({
   src: [
@@ -47,8 +48,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://www.luxewindowworks.com",
-    siteName: "Luxe Window Works",
+    url: BUSINESS.url,
+    siteName: BUSINESS.name,
     title: "Luxe Window Works | Custom Window Treatments, North Idaho",
     description:
       "Premium custom window treatments — 24 years of installer expertise. Free in-home consultation. Serving North Idaho.",

@@ -46,10 +46,10 @@ const personSchema = {
     addressCountry: "US",
   },
   worksFor: { "@id": `${BUSINESS.url}/#business` },
-  foundingDate: "2002",
   hasOccupation: {
     "@type": "Occupation",
     name: "Window Treatment Specialist",
+    startDate: "2002",
     occupationLocation: {
       "@type": "City",
       name: "Post Falls",
@@ -76,16 +76,6 @@ const personSchema = {
     "Norman Window Fashions",
     "Lafayette Interior Fashions",
     "Corradi USA exterior shading systems",
-  ],
-  areaServed: [
-    "Coeur d'Alene, Idaho",
-    "Post Falls, Idaho",
-    "Hayden, Idaho",
-    "Sandpoint, Idaho",
-    "Rathdrum, Idaho",
-    "Kootenai County, Idaho",
-    "North Idaho",
-    "Northern Idaho",
   ],
 };
 

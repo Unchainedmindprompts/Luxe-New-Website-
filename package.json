@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/audit-schema-ids.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "audit:schema": "node scripts/audit-schema-ids.mjs",
+    "prepare": "husky"
   },
   "engines": {
     "node": ">=18.17.0"
@@ -45,6 +48,7 @@
     "critters": "^0.0.23",
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
+    "husky": "^9.1.7",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

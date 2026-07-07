@@ -50,9 +50,36 @@ const definedTermSetSchema = {
   })),
 };
 
+const webpageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${PAGE_URL}#webpage`,
+  url: PAGE_URL,
+  name: "Window Treatment Glossary | Luxe Window Works",
+  description:
+    "Plain-English definitions of window treatment industry terms — cellular shades, TDBU, R-value, SmartPrivacy, plantation shutters, and more — from a 24-year industry expert.",
+  isPartOf: { "@id": `${BASE}/#website` },
+  about: { "@id": `${BASE}/#business` },
+  mainEntity: { "@id": `${PAGE_URL}#termset` },
+  breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
+  inLanguage: "en-US",
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "@id": `${PAGE_URL}#breadcrumb`,
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${BASE}/` },
+    { "@type": "ListItem", position: 2, name: "Glossary", item: PAGE_URL },
+  ],
+};
+
 export default function GlossaryPage() {
   return (
     <>
+      <JsonLd data={webpageSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <JsonLd data={definedTermSetSchema} />
       <Breadcrumbs
         items={[

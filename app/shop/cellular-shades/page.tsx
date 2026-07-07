@@ -101,9 +101,37 @@ const PRODUCT_DETAILS = [
   "By Norman USA",
 ];
 
+const webpageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${PRODUCT_URL}#webpage`,
+  url: PRODUCT_URL,
+  name: '9/16" Portrait Honeycomb Cell Shades | Shop',
+  description:
+    'Configure and price 9/16" Portrait honeycomb cell shades — cordless, light filtering, 15 colors, three lift systems including TDBU and Cord Loop. Custom made to your exact size; shipping at cost with no markup.',
+  isPartOf: { "@id": `${BASE}/#website` },
+  about: { "@id": `${BASE}/#business` },
+  mainEntity: { "@id": `${PRODUCT_URL}#product` },
+  breadcrumb: { "@id": `${PRODUCT_URL}#breadcrumb` },
+  inLanguage: "en-US",
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "@id": `${PRODUCT_URL}#breadcrumb`,
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${BASE}/` },
+    { "@type": "ListItem", position: 2, name: "Shop", item: `${BASE}/shop` },
+    { "@type": "ListItem", position: 3, name: "Cellular Shades", item: PRODUCT_URL },
+  ],
+};
+
 export default function CellularShadesPage() {
   return (
     <>
+      <JsonLd data={webpageSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <JsonLd data={productSchema} />
       <Breadcrumbs
         items={[

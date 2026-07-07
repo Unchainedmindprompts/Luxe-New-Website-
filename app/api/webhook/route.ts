@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { Resend } from "resend";
 import type Stripe from "stripe";
+import { BUSINESS } from "@/lib/constants";
 
 export const runtime = "nodejs";
 
@@ -20,8 +21,7 @@ function getResend(): Resend {
   return _resend;
 }
 
-const FROM_ADDRESS = "Luxe Window Works <orders@luxewindowworks.com>";
-const MARK_EMAIL = "mark@luxewindowworks.com";
+const FROM_ADDRESS = `${BUSINESS.name} <orders@luxewindowworks.com>`;
 
 const fmtCurrency = (cents: number) =>
   (cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" });
@@ -80,13 +80,13 @@ export async function POST(request: Request) {
       "Your custom window treatments will be made to your exact specifications. We will be in touch to confirm production and delivery timeline.",
       "",
       "Questions? Call us or reply to this email.",
-      "mark@luxewindowworks.com",
+      BUSINESS.email,
     ].join("\n");
 
     try {
       await getResend().emails.send({
         from: FROM_ADDRESS,
-        to: MARK_EMAIL,
+        to: BUSINESS.email,
         subject: `New Luxe Order — ${m.product || "window treatment"}`,
         text: `New order received on Luxe Window Works.\n\n${summary}`,
       });

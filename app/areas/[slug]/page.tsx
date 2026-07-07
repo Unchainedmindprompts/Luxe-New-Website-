@@ -159,7 +159,7 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
           name: `Who does custom window treatments in ${areaName}, Idaho?`,
           acceptedAnswer: {
             "@type": "Answer",
-            text: `Luxe Window Works provides custom window treatment installation in ${areaName}, Idaho. Founded by Mark Abplanalp — who has worked in the window treatment industry since 2002 — Luxe offers free in-home consultations, professional installation, and a lifetime workmanship guarantee. Call 208-660-8643 to schedule.`,
+            text: `Luxe Window Works provides custom window treatment installation in ${areaName}, Idaho. Founded by Mark Abplanalp — who has worked in the window treatment industry since 2002 — Luxe offers free in-home consultations, professional installation, and a lifetime workmanship guarantee. Call ${BUSINESS.phone} to schedule.`,
           },
         },
         {
@@ -175,7 +175,7 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
           name: `Does Luxe Window Works offer free consultations in ${areaName}?`,
           acceptedAnswer: {
             "@type": "Answer",
-            text: `Yes. Luxe Window Works offers free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities. During the consultation we assess your windows, show product samples, and provide honest recommendations with no pressure and no hidden costs. Call 208-660-8643 or book online to schedule.`,
+            text: `Yes. Luxe Window Works offers free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities. During the consultation we assess your windows, show product samples, and provide honest recommendations with no pressure and no hidden costs. Call ${BUSINESS.phone} or book online to schedule.`,
           },
         },
         {
@@ -183,7 +183,7 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
           name: `How long does window treatment installation take in ${areaName}?`,
           acceptedAnswer: {
             "@type": "Answer",
-            text: `Most custom window treatment orders take 3 to 4 weeks from ordering to installation in ${areaName}. Custom drapes and plantation shutters typically run 6 to 8 weeks depending on the manufacturer. Contact Luxe Window Works at 208-660-8643 for current lead times on your specific product.`,
+            text: `Most custom window treatment orders take 3 to 4 weeks from ordering to installation in ${areaName}. Custom drapes and plantation shutters typically run 6 to 8 weeks depending on the manufacturer. Contact Luxe Window Works at ${BUSINESS.phone} for current lead times on your specific product.`,
           },
         },
       ];
