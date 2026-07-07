@@ -3,6 +3,7 @@ import Script from "next/script";
 import Image from "next/image";
 import Link from "next/link";
 import { BUSINESS } from "@/lib/constants";
+import { OWNER_STUB } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "About Mark Abplanalp | 24 Years in Window Treatments",
@@ -29,9 +30,7 @@ export const metadata: Metadata = {
 
 const personSchema = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "@id": `${BUSINESS.url}/#owner`,
-  name: "Mark Abplanalp",
+  ...OWNER_STUB,
   jobTitle: "Owner & Window Treatment Specialist",
   description:
     "Mark Abplanalp has worked in the window treatment industry since 2002 — 24 years of hands-on sales, design, and installation experience across Washington, Oregon, and Idaho. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025.",

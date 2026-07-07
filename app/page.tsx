@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   },
 };
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
+import { OWNER_STUB } from "@/lib/schema";
 import { productPages } from "@/lib/product-data";
 
 /**
@@ -289,6 +290,7 @@ const homepageGraph = {
   "@context": "https://schema.org",
   "@graph": [
     businessNode,
+    OWNER_STUB,
     websiteNode,
     webpageNode,
     faqPageNode,
