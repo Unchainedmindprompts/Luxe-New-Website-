@@ -82,8 +82,13 @@ export async function POST(req: Request) {
 
   try {
     const resend = getResend();
+    // FROM address: use Resend's pre-verified `onboarding@resend.dev` until
+    // luxewindowworks.com is verified in the Resend Domains dashboard. Display
+    // name stays "Luxe Window Works" so the inbox rendering still reads clean.
+    // Once the domain is verified in Resend, swap this back to
+    // `orders@luxewindowworks.com`.
     const result = await resend.emails.send({
-      from: `${BUSINESS.name} <orders@luxewindowworks.com>`,
+      from: `${BUSINESS.name} <onboarding@resend.dev>`,
       to: BUSINESS.email,
       subject,
       text,
