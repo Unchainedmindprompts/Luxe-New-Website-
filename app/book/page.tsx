@@ -33,17 +33,17 @@ export default function BookPage() {
     setSubmitting(true);
 
     try {
-      const res = await fetch("https://formsubmit.co/ajax/mark@luxewindowworks.com", {
+      const res = await fetch("/api/consultation", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          _subject: `Consultation Request — ${form.firstName} ${form.lastName}`,
-          name: `${form.firstName} ${form.lastName}`,
+          firstName: form.firstName,
+          lastName: form.lastName,
           email: form.email,
           phone: form.phone,
-          address: form.address || "—",
-          message: form.message || "—",
-          _captcha: "false",
+          address: form.address,
+          message: form.message,
+          source: "book",
         }),
       });
 
