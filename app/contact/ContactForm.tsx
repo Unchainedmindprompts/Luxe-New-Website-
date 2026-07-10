@@ -3,16 +3,49 @@
 import { useState, FormEvent } from "react";
 
 export default function ContactForm() {
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string>("");
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Fire Facebook Pixel Lead event on consultation form submission
-    if (typeof window !== "undefined" && typeof (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq === "function") {
-      (window as unknown as { fbq: (...args: unknown[]) => void }).fbq("track", "Lead");
+    if (submitting) return;
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const payload = {
+      name: (formData.get("name") as string) || "",
+      phone: (formData.get("phone") as string) || "",
+      email: (formData.get("email") as string) || "",
+      needs: (formData.get("needs") as string) || "",
+      contactMethod: (formData.get("contactMethod") as string) || "",
+      source: "contact",
+    };
+
+    setError("");
+    setSubmitting(true);
+
+    try {
+      const res = await fetch("/api/consultation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error("Submit failed");
+
+      // Only fire Facebook Pixel Lead event on ACTUAL successful send —
+      // not on button click, which would inflate the metric.
+      if (typeof window !== "undefined" && typeof (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq === "function") {
+        (window as unknown as { fbq: (...args: unknown[]) => void }).fbq("track", "Lead");
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please call Mark at 208-660-8643 or email mark@luxewindowworks.com.");
+    } finally {
+      setSubmitting(false);
     }
-    // In production, this would submit to an API endpoint or email service
-    setSubmitted(true);
   };
 
   if (submitted) {
@@ -115,11 +148,26 @@ export default function ContactForm() {
         </div>
       </div>
 
+      {/* Honeypot — hidden from humans, catches bots. */}
+      <input
+        type="text"
+        name="_hp"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+      />
+
+      {error && (
+        <p className="text-red-500 text-sm text-center">{error}</p>
+      )}
+
       <button
         type="submit"
-        className="w-full bg-gold hover:bg-gold-dark text-white font-semibold py-3.5 rounded-full transition-colors text-sm"
+        disabled={submitting}
+        className="w-full bg-gold hover:bg-gold-dark disabled:bg-warm-gray-200 disabled:text-warm-gray-400 text-white font-semibold py-3.5 rounded-full transition-colors text-sm"
       >
-        Request Free Consultation
+        {submitting ? "Sending…" : "Request Free Consultation"}
       </button>
 
       <p className="text-xs text-warm-gray-400 text-center">
