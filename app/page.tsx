@@ -181,7 +181,7 @@ const businessNode = {
         itemListElement: [
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Horizontal Blinds" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Wood Blinds" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Faux Wood Blinds", url: `${BASE}/shop/faux-wood-blinds` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Faux Wood Blinds", url: `${BASE}/products/blinds` } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Composite Blinds" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Composite Wood Blinds" } },
         ],
@@ -252,19 +252,9 @@ const HOMEPAGE_FAQS = [
       "We serve Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint, and the surrounding Kootenai County area. Free in-home consultations are available throughout Northern Idaho.",
   },
   {
-    question: "Can I buy custom window treatments online from Luxe Window Works?",
-    answer:
-      "Yes — we offer direct online ordering of custom Norman shades through our shop. Norman SmartPrivacy faux wood blinds and 9/16\" Portrait cellular shades can be configured to your exact width and height and shipped at cost. All other products — Lafayette, Corradi USA exterior shades, plantation shutters, and motorized systems — are quoted and professionally installed through an in-home consultation.",
-  },
-  {
     question: "What's included in the lifetime installation guarantee?",
     answer:
       "Every window treatment we professionally install is backed by a lifetime installation guarantee. If a treatment we installed develops any installation-related issue — a loose bracket, a misaligned headrail, anything tied to how it was put up — we come back and make it right for as long as you own the home.",
-  },
-  {
-    question: "How does shipping work on online orders?",
-    answer:
-      "Shipping is passed through at actual freight cost — no markup. The flat rate is $25 for the first unit and $11 for each additional unit on the same order.",
   },
   {
     question: "Why do you recommend cellular shades for Northern Idaho homes?",
@@ -425,19 +415,6 @@ export default function HomePage() {
         />
         <div className="absolute inset-0 bg-charcoal/55" />
 
-        {/* Shop quick link — upper right of hero */}
-        <div className="hidden md:block absolute top-28 right-6 lg:right-10 z-10">
-          <Link
-            href="/shop"
-            className="inline-flex items-center gap-2 bg-white/95 hover:bg-white text-charcoal font-semibold pl-6 pr-5 py-3 rounded-full text-base shadow-md hover:shadow-lg transition-all"
-          >
-            Shop Online
-            <svg className="w-4 h-4 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-
         <div className="container-luxe relative">
           <div className="max-w-3xl">
             <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight text-balance">
@@ -446,19 +423,6 @@ export default function HomePage() {
             <p className="mt-6 md:mt-8 text-lg md:text-xl text-warm-gray-200 leading-relaxed max-w-2xl">
               You don&apos;t need to know which window treatment to buy. I bring the options to your home, help you choose what works room by room, measure everything, and install it with a lifetime guarantee.
             </p>
-
-            {/* Mobile shop pill — desktop has it floating upper-right */}
-            <div className="md:hidden mt-6">
-              <Link
-                href="/shop"
-                className="inline-flex items-center gap-2 bg-white/95 text-charcoal font-semibold px-5 py-2.5 rounded-full text-sm shadow-md"
-              >
-                Shop Online
-                <svg className="w-3.5 h-3.5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
 
             <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4">
               <Link

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { BUSINESS, NAV_LINKS } from "@/lib/constants";
-import CartIcon from "@/components/CartIcon";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -59,7 +58,6 @@ export default function Header() {
               )}
             </div>
           ))}
-          <CartIcon />
           <Link
             href="/book"
             className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors"
@@ -77,9 +75,8 @@ export default function Header() {
           </a>
         </nav>
 
-        {/* Mobile cart + menu */}
+        {/* Mobile menu */}
         <div className="lg:hidden flex items-center gap-3">
-          <CartIcon />
           <button
             className="p-2 text-charcoal"
             onClick={() => setMobileOpen(!mobileOpen)}

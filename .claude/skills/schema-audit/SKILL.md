@@ -79,7 +79,7 @@ Each rule below closes a class of bug that a critical outside reviewer could hav
 
 **F-4. `Article.about` references the article's real subject, not reflexively `#business`.** For articles about specific products, use the product Service `@id`. For articles about locations, use the area Service `@id`. For meta/topical articles, emit a `Thing` with the topic name (`sameAs` to Wikipedia/schema.org when a canonical URL exists).
 
-**F-5. Hub / collection pages emit `CollectionPage` + `BreadcrumbList`.** `/blog`, `/areas`, `/products`, `/shop`, `/glossary`. Add an `ItemList` of children when the hub is dense (>5 items).
+**F-5. Hub / collection pages emit `CollectionPage` + `BreadcrumbList`.** `/blog`, `/areas`, `/products`, `/glossary`. Add an `ItemList` of children when the hub is dense (>5 items).
 
 **F-6. Person nodes may not use Organization-only properties.** `foundingDate` belongs on Organization; a person's career-start goes on `hasOccupation.startDate`. `areaServed` in the business sense goes on Service or Business, not Person. `numberOfEmployees`, `legalName`, `taxID` etc. — never on Person.
 

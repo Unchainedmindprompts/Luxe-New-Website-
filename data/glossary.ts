@@ -90,7 +90,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: "Faux Wood Blind",
     definition:
       "A horizontal blind with slats made from PVC or composite material engineered to look like painted wood. Faux wood is dimensionally stable in humid environments where real wood warps (kitchens, bathrooms, laundry rooms), holds paint colors longer than real wood, and costs significantly less. The trade-off is weight — faux wood is heavier than real wood, which limits maximum width and adds load to the lift system.",
-    relatedUrl: "/shop/faux-wood-blinds",
+    relatedUrl: "/products/blinds",
   },
   {
     id: "inside-mount",
@@ -110,7 +110,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     alternateTerms: ["Norman Window Fashions"],
     definition:
       "A custom window treatment manufacturer founded in 1976, recognized as one of the world's largest producers of custom shutters, blinds, and shades. Norman USA's SmartPrivacy faux wood blinds, 9/16\" Portrait honeycomb cellular shades, and Woodlore Plus plantation shutters are among the industry's most widely installed products. Notable proprietary features include SmartPrivacy rear-route holes, the certified-cordless SmartFit system, and the Norman lifetime limited warranty.",
-    relatedUrl: "/shop",
+    relatedUrl: "/products/blinds",
   },
   {
     id: "outside-mount",
@@ -150,7 +150,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: "SmartPrivacy",
     definition:
       "A patented Norman design feature for horizontal blinds that relocates the lift-cord route holes from the center of each slat to the back edge. With the holes hidden behind the slats when closed, SmartPrivacy blinds achieve a tighter top-to-bottom seal, rotate more consistently, eliminate the light-leak halos that traditional route holes create, and lock each slat in place so they cannot misalign or fall out. Available on Norman faux wood, real wood, and composite blinds.",
-    relatedUrl: "/shop/faux-wood-blinds",
+    relatedUrl: "/products/blinds",
   },
   {
     id: "solar-shade",

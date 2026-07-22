@@ -1,9 +1,9 @@
 /**
  * Canonical Brand schema nodes for JSON-LD.
  *
- * One definition per brand, referenced by @id from every product/shop page
- * that mentions the brand. Prevents field drift (name, alternateName, url,
- * sameAs) across pages that all point to the same real-world brand entity.
+ * One definition per brand, referenced by @id from every product page that
+ * mentions the brand. Prevents field drift (name, alternateName, url, sameAs)
+ * across pages that all point to the same real-world brand entity.
  */
 
 export const NORMAN_BRAND = {
