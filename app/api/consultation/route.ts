@@ -22,9 +22,13 @@ interface ConsultationPayload {
   phone?: string;
   email?: string;
   address?: string;
+  city?: string;
   message?: string;
   needs?: string;
   contactMethod?: string;
+  // Populated when the visitor came through the "Show Me My Options" flow.
+  // Value is one of the eight problem labels shown in step 1.
+  problem?: string;
   source?: string;
   // Honeypot — hidden field bots love to fill, humans never see.
   _hp?: string;
@@ -49,8 +53,10 @@ export async function POST(req: Request) {
   const phone = (body.phone || "").trim();
   const email = (body.email || "").trim();
   const address = (body.address || "").trim();
+  const city = (body.city || "").trim();
   const message = (body.message || body.needs || "").trim();
   const contactMethod = (body.contactMethod || "").trim();
+  const problem = (body.problem || "").trim();
   const source = body.source || "unknown";
 
   if (!name || !phone) {
@@ -60,15 +66,27 @@ export async function POST(req: Request) {
     );
   }
 
-  const sourcePath = source === "book" ? "/book" : source === "contact" ? "/contact" : `/${source}`;
-  const subject = `New Consultation Request — ${name}`;
+  const sourcePath =
+    source === "book"
+      ? "/book"
+      : source === "contact"
+      ? "/contact"
+      : source === "show-me-my-options"
+      ? "/show-me-my-options"
+      : `/${source}`;
+  const subject = problem
+    ? `New Consultation Request — ${name} — ${problem}`
+    : `New Consultation Request — ${name}`;
   const text = [
     `New consultation request from ${BUSINESS.url}${sourcePath}`,
     ``,
+    problem ? `PROBLEM:  ${problem}` : null,
+    problem ? `` : null,
     `Name:     ${name}`,
     `Phone:    ${phone}`,
     `Email:    ${email || "(not provided)"}`,
-    `Address:  ${address || "(not provided)"}`,
+    address ? `Address:  ${address}` : null,
+    city ? `City:     ${city}` : null,
     contactMethod ? `Prefers:  ${contactMethod}` : null,
     ``,
     `Message:`,
@@ -102,7 +120,7 @@ export async function POST(req: Request) {
         "[CONSULTATION_LEAD_SEND_FAILED]",
         JSON.stringify({
           resendError: result.error,
-          payload: { name, phone, email, address, message, contactMethod, source },
+          payload: { name, phone, email, address, city, problem, message, contactMethod, source },
           at: new Date().toISOString(),
         })
       );
@@ -116,7 +134,7 @@ export async function POST(req: Request) {
       "[CONSULTATION_LEAD_SEND_FAILED]",
       JSON.stringify({
         exception: String(err),
-        payload: { name, phone, email, address, message, contactMethod, source },
+        payload: { name, phone, email, address, city, problem, message, contactMethod, source },
         at: new Date().toISOString(),
       })
     );
