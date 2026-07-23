@@ -69,7 +69,7 @@ export default function ContactPage() {
           </h1>
           <p className="mt-4 text-lg text-warm-gray-200 leading-relaxed">
             Whether you know exactly what you need or just know something needs to change —
-            Mark is here to help. Every project starts with a free, no-pressure in-home consultation.
+            we&apos;re here to help. Every project starts with a free, no-pressure in-home consultation.
           </p>
         </div>
       </section>
@@ -137,7 +137,7 @@ export default function ContactPage() {
                   Free In-Home Consultation
                 </h3>
                 <p className="text-sm text-warm-gray-600 leading-relaxed">
-                  Mark comes to you — no showroom visit required. He&apos;ll measure your windows,
+                  We come to you — no showroom visit required. We&apos;ll measure your windows,
                   discuss your needs, show you samples in your actual space and light, and provide
                   a complete quote. No obligation, no pressure.
                 </p>
@@ -151,7 +151,7 @@ export default function ContactPage() {
                   Request Your Free Consultation
                 </h2>
                 <p className="text-warm-gray-500 text-sm mb-8">
-                  Fill out the form below and Mark will get back to you promptly.
+                  Fill out the form below and we&apos;ll get back to you promptly.
                 </p>
                 <ContactForm />
               </div>

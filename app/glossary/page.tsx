@@ -156,15 +156,15 @@ export default function GlossaryPage() {
             Have a question we didn&apos;t cover?
           </h2>
           <p className="text-base md:text-lg text-warm-gray-600 leading-relaxed mb-6">
-            Mark has been installing custom window treatments for 24 years. If there&apos;s
-            a term, product, or installation question you want a plain-English answer to,
-            ask him directly.
+            With 24 years of hands-on experience installing custom window treatments,
+            we can give you a plain-English answer to any term, product, or installation
+            question you have.
           </p>
           <Link
             href="/contact"
             className="inline-flex items-center gap-2 bg-charcoal hover:bg-gold text-white font-semibold px-6 py-3 rounded-full transition-colors"
           >
-            Ask Mark a Question
+            Ask Us a Question
           </Link>
         </div>
       </section>

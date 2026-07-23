@@ -199,7 +199,7 @@ export default async function ProductPage({ params }: Props) {
               href={BUSINESS.phoneHref}
               className="inline-flex items-center justify-center gap-2 border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-white font-semibold px-8 py-4 rounded-full text-lg transition-all"
             >
-              Call Mark: {BUSINESS.phone}
+              Call us: {BUSINESS.phone}
             </a>
           </div>
         </div>
@@ -269,7 +269,7 @@ export default async function ProductPage({ params }: Props) {
                 </svg>
               </div>
               <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">
-                Mark&apos;s Installer Insight
+                Installer&apos;s Insight
               </h2>
             </div>
             <p className="text-warm-gray-600 leading-relaxed text-[17px] italic">
@@ -406,7 +406,7 @@ export default async function ProductPage({ params }: Props) {
           </h2>
           <p className="mt-6 text-lg text-warm-gray-400 leading-relaxed">
             Start with our free concierge consultation to get personalized recommendations,
-            or call Mark directly to schedule a free in-home visit.
+            or call us directly to schedule a free in-home visit.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a

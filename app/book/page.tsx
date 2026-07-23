@@ -50,7 +50,7 @@ export default function BookPage() {
       if (!res.ok) throw new Error("Submit failed");
       setSubmitted(true);
     } catch {
-      setErrors({ form: "Something went wrong. Please call Mark directly at 208-660-8643 or email mark@luxewindowworks.com." });
+      setErrors({ form: "Something went wrong. Please call us at 208-660-8643 or email mark@luxewindowworks.com." });
     } finally {
       setSubmitting(false);
     }
@@ -99,10 +99,10 @@ export default function BookPage() {
             Book Your Free In-Home Consultation
           </h1>
           <p className="text-warm-gray-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Mark personally visits your home to see your windows, understand
-            your goals, and recommend the right solution. No pressure, no
-            guesswork — just honest advice from someone who&apos;s been doing
-            this for 24 years.
+            We come to your home to see your windows, understand your goals,
+            and recommend the right solution. No pressure, no guesswork —
+            just honest advice from a team with 24 years of hands-on
+            experience.
           </p>
         </div>
       </div>
@@ -132,9 +132,9 @@ export default function BookPage() {
                 You&apos;re All Set!
               </h2>
               <p className="text-warm-gray-600 leading-relaxed mb-6">
-                Your request has been sent to Mark. He&apos;ll personally reach
-                out within <strong>24 hours</strong> to schedule your free
-                in-home consultation.
+                Your request has been received. We&apos;ll be in touch within
+                <strong> 24 hours</strong> to schedule your free in-home
+                consultation.
               </p>
               <p className="text-sm text-warm-gray-500 mb-8">
                 Prefer to reach out directly?{" "}
@@ -230,7 +230,7 @@ export default function BookPage() {
               </button>
 
               <p className="text-center text-xs text-warm-gray-400">
-                Mark will personally reach out within 24 hours.
+                We&apos;ll be in touch within 24 hours.
               </p>
             </form>
           )}
@@ -246,23 +246,23 @@ export default function BookPage() {
               {[
                 {
                   num: "1",
-                  title: "Mark calls you",
-                  body: "Within 24 hours, Mark reaches out personally to introduce himself and find a time that works.",
+                  title: "We call you",
+                  body: "Within 24 hours, we reach out to introduce ourselves and find a time that works.",
                 },
                 {
                   num: "2",
                   title: "Free in-home visit",
-                  body: "Mark comes to your home, measures your windows, and assesses the light, layout, and your goals.",
+                  body: "We come to your home, measure your windows, and assess the light, layout, and your goals.",
                 },
                 {
                   num: "3",
                   title: "Honest recommendation",
-                  body: "He walks you through exactly what he'd recommend and why — no upsell, no pressure.",
+                  body: "We walk you through exactly what we'd recommend and why — no upsell, no pressure.",
                 },
                 {
                   num: "4",
                   title: "Expert installation",
-                  body: "When you're ready, Mark handles everything. Every install is backed by his lifetime guarantee.",
+                  body: "When you're ready, we handle everything. Every install is backed by our lifetime guarantee.",
                 },
               ].map((step) => (
                 <div key={step.num} className="flex gap-4">

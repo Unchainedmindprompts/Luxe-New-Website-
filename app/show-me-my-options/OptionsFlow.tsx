@@ -71,7 +71,7 @@ export default function OptionsFlow() {
       setSubmitted(true);
     } catch {
       setError(
-        "Something went wrong. Please call Mark at 208-660-8643 or email mark@luxewindowworks.com."
+        "Something went wrong. Please call us at 208-660-8643 or email mark@luxewindowworks.com."
       );
     } finally {
       setSubmitting(false);
@@ -101,8 +101,8 @@ export default function OptionsFlow() {
           You&apos;re All Set!
         </h2>
         <p className="text-warm-gray-600 leading-relaxed mb-6">
-          Mark will personally reach out within <strong>24 hours</strong> to
-          talk through your options and schedule your free consultation.
+          We&apos;ll be in touch within <strong>24 hours</strong> to talk
+          through your options and schedule your free consultation.
         </p>
         <p className="text-sm text-warm-gray-500">
           Prefer to reach out directly?{" "}
@@ -188,7 +188,7 @@ export default function OptionsFlow() {
         <span>Step 2 of 2</span>
       </div>
       <h2 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal leading-tight mb-2">
-        Where should Mark reach you?
+        Where should we reach you?
       </h2>
       <p className="text-warm-gray-500 text-sm mb-6">
         We&apos;ll only use this to talk through your options — no spam, no
@@ -256,7 +256,7 @@ export default function OptionsFlow() {
             rows={4}
             value={form.message}
             onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
-            placeholder="Which rooms, any specific goals, or anything Mark should know."
+            placeholder="Which rooms, any specific goals, or anything we should know."
             className="w-full bg-white border border-warm-gray-200 rounded-xl px-4 py-3 text-sm text-charcoal placeholder:text-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition-colors resize-none"
           />
         </div>
@@ -283,7 +283,7 @@ export default function OptionsFlow() {
           {submitting ? "Sending…" : "Send My Request"}
         </button>
         <p className="text-center text-xs text-warm-gray-400">
-          Mark will personally reach out within 24 hours.
+          We&apos;ll be in touch within 24 hours.
         </p>
       </form>
     </div>

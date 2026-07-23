@@ -42,7 +42,7 @@ export default function ContactForm() {
 
       setSubmitted(true);
     } catch {
-      setError("Something went wrong. Please call Mark at 208-660-8643 or email mark@luxewindowworks.com.");
+      setError("Something went wrong. Please call us at 208-660-8643 or email mark@luxewindowworks.com.");
     } finally {
       setSubmitting(false);
     }
@@ -60,7 +60,7 @@ export default function ContactForm() {
           Thank You!
         </h3>
         <p className="text-warm-gray-600">
-          Mark will be in touch soon to schedule your free consultation.
+          We&apos;ll be in touch soon to schedule your free consultation.
         </p>
       </div>
     );
@@ -171,7 +171,7 @@ export default function ContactForm() {
       </button>
 
       <p className="text-xs text-warm-gray-400 text-center">
-        No obligation. Mark will reach out to discuss your needs and schedule
+        No obligation. We&apos;ll reach out to discuss your needs and schedule
         a convenient time for your free in-home consultation.
       </p>
     </form>

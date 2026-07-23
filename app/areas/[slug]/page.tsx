@@ -357,7 +357,7 @@ export default async function AreaPage({ params }: Props) {
                   </svg>
                 </div>
                 <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">
-                  Mark&apos;s Local Insight
+                  Local Insight
                 </h2>
               </div>
               <p className="text-warm-gray-600 leading-relaxed text-[17px] italic">
