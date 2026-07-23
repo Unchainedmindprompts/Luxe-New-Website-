@@ -181,7 +181,7 @@ const businessNode = {
         itemListElement: [
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Horizontal Blinds" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Wood Blinds" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Faux Wood Blinds", url: `${BASE}/shop/faux-wood-blinds` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Faux Wood Blinds", url: `${BASE}/products/blinds` } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Composite Blinds" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Composite Wood Blinds" } },
         ],
@@ -252,19 +252,9 @@ const HOMEPAGE_FAQS = [
       "We serve Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint, and the surrounding Kootenai County area. Free in-home consultations are available throughout Northern Idaho.",
   },
   {
-    question: "Can I buy custom window treatments online from Luxe Window Works?",
-    answer:
-      "Yes — we offer direct online ordering of custom Norman shades through our shop. Norman SmartPrivacy faux wood blinds and 9/16\" Portrait cellular shades can be configured to your exact width and height and shipped at cost. All other products — Lafayette, Corradi USA exterior shades, plantation shutters, and motorized systems — are quoted and professionally installed through an in-home consultation.",
-  },
-  {
     question: "What's included in the lifetime installation guarantee?",
     answer:
       "Every window treatment we professionally install is backed by a lifetime installation guarantee. If a treatment we installed develops any installation-related issue — a loose bracket, a misaligned headrail, anything tied to how it was put up — we come back and make it right for as long as you own the home.",
-  },
-  {
-    question: "How does shipping work on online orders?",
-    answer:
-      "Shipping is passed through at actual freight cost — no markup. The flat rate is $25 for the first unit and $11 for each additional unit on the same order.",
   },
   {
     question: "Why do you recommend cellular shades for Northern Idaho homes?",
@@ -320,6 +310,69 @@ const HOMEPAGE_PRODUCT_COPY: Record<string, string> = {
     "Control hard-to-reach or everyday shades by remote, wall switch, app, or smart home system.",
 };
 
+function SunIcon() {
+  return (
+    <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <circle cx="12" cy="12" r="4" />
+      <path strokeLinecap="round" d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4" />
+    </svg>
+  );
+}
+
+function EyeIcon() {
+  return (
+    <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M2.5 12s3.5-7 9.5-7 9.5 7 9.5 7-3.5 7-9.5 7S2.5 12 2.5 12z" />
+      <circle cx="12" cy="12" r="2.75" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M20 15.5A8 8 0 0 1 8.5 4a8 8 0 1 0 11.5 11.5z" />
+    </svg>
+  );
+}
+
+function RemoteIcon() {
+  return (
+    <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <rect x="7.5" y="3" width="9" height="18" rx="2" />
+      <path strokeLinecap="round" d="M10.5 8h3M10.5 12h3" />
+      <circle cx="12" cy="16.5" r="0.75" fill="currentColor" />
+    </svg>
+  );
+}
+
+const PROBLEM_PATHS = [
+  {
+    title: "Too Much Heat or Glare",
+    body: "Reduce harsh sun, UV exposure, and room overheating.",
+    href: "/products/solar-shades",
+    Icon: SunIcon,
+  },
+  {
+    title: "Need More Privacy Without Losing Light",
+    body: "Find the right balance of privacy, filtered light, and views.",
+    href: "/products/banded-shades",
+    Icon: EyeIcon,
+  },
+  {
+    title: "Better Sleep or Blackout",
+    body: "Create darker bedrooms and better light control where it matters most.",
+    href: "/products/cellular-shades",
+    Icon: MoonIcon,
+  },
+  {
+    title: "Want Motorized Shades",
+    body: "Control everyday or hard-to-reach shades by remote, app, wall switch, or smart home system.",
+    href: "/products/motorization",
+    Icon: RemoteIcon,
+  },
+] as const;
+
 const PROCESS_STEPS = [
   {
     title: "We Bring the Samples to You",
@@ -362,50 +415,30 @@ export default function HomePage() {
         />
         <div className="absolute inset-0 bg-charcoal/55" />
 
-        {/* Shop quick link — upper right of hero */}
-        <div className="hidden md:block absolute top-28 right-6 lg:right-10 z-10">
-          <Link
-            href="/shop"
-            className="inline-flex items-center gap-2 bg-white/95 hover:bg-white text-charcoal font-semibold pl-6 pr-5 py-3 rounded-full text-base shadow-md hover:shadow-lg transition-all"
-          >
-            Shop Online
-            <svg className="w-4 h-4 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-
         <div className="container-luxe relative">
           <div className="max-w-3xl">
             <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight text-balance">
               Custom Window Treatments. 24 Years of Selling, Designing, and Installing Them.
             </h1>
             <p className="mt-6 md:mt-8 text-lg md:text-xl text-warm-gray-200 leading-relaxed max-w-2xl">
-              24 years across sales, design, and installation means I know what each product can do, what it can&apos;t, and what&apos;s right for each room in your home. I&apos;ll bring samples to you, measure professionally, and stand behind every installation with a lifetime guarantee. No overpromising.
+              You don&apos;t need to know which window treatment to buy. I bring the options to your home, help you choose what works room by room, measure everything, and install it with a lifetime guarantee.
             </p>
-
-            {/* Mobile shop pill — desktop has it floating upper-right */}
-            <div className="md:hidden mt-6">
-              <Link
-                href="/shop"
-                className="inline-flex items-center gap-2 bg-white/95 text-charcoal font-semibold px-5 py-2.5 rounded-full text-sm shadow-md"
-              >
-                Shop Online
-                <svg className="w-3.5 h-3.5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
 
             <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4">
               <Link
-                href="/book"
+                href="/show-me-my-options"
                 className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
               >
-                Book a Free In-Home Consultation
+                Show Me My Options
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
+              </Link>
+              <Link
+                href="/book"
+                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all border border-white/30 hover:border-white/60 backdrop-blur-sm"
+              >
+                Book a Free In-Home Consultation
               </Link>
             </div>
           </div>
@@ -433,6 +466,23 @@ export default function HomePage() {
             <span className="hidden md:inline text-warm-gray-600">|</span>
             <span className="text-warm-gray-300">Serving North Idaho</span>
           </div>
+        </div>
+      </section>
+
+      {/* 2b. Featured testimonial — early social proof */}
+      <section className="py-14 md:py-20 bg-warm-white">
+        <div className="container-luxe max-w-3xl text-center">
+          <div className="flex justify-center gap-1 mb-5">
+            {[...Array(5)].map((_, i) => (
+              <StarIcon key={i} />
+            ))}
+          </div>
+          <blockquote className="font-serif text-2xl md:text-3xl text-charcoal leading-snug italic">
+            &ldquo;His design recommendation proved to be perfect.&rdquo;
+          </blockquote>
+          <p className="mt-5 text-sm text-warm-gray-500 font-medium tracking-wide">
+            — Brad G.
+          </p>
         </div>
       </section>
 
@@ -473,6 +523,55 @@ export default function HomePage() {
                   </p>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3b. Problem-first — start with the problem, get to the right product */}
+      <section className="py-20 md:py-28 bg-cream">
+        <div className="container-luxe">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
+              What Are You Trying to Solve?
+            </h2>
+            <p className="mt-4 text-lg text-warm-gray-600 leading-relaxed">
+              Start with the problem. We&apos;ll help you find the right treatment.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {PROBLEM_PATHS.map((path) => (
+              <Link
+                key={path.title}
+                href={path.href}
+                className="group bg-white rounded-2xl border border-warm-gray-200/60 p-8 hover:shadow-lg hover:border-gold/30 transition-all flex flex-col"
+              >
+                <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center mb-5 group-hover:bg-gold/20 transition-colors">
+                  <path.Icon />
+                </div>
+                <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold transition-colors leading-snug">
+                  {path.title}
+                </h3>
+                <p className="mt-3 text-sm text-warm-gray-500 leading-relaxed flex-1">
+                  {path.body}
+                </p>
+                <span className="inline-flex items-center gap-1 mt-5 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
+                  See what works
+                  <svg
+                    className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </span>
+              </Link>
             ))}
           </div>
         </div>

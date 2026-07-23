@@ -190,7 +190,7 @@ export default function AreasHubPage() {
             Ready to schedule a free in-home consultation?
           </h2>
           <p className="mt-6 text-lg text-warm-gray-400 leading-relaxed">
-            Mark comes to your home, measures every window, and walks you through
+            We come to your home, measure every window, and walk you through
             the options for your specific space. No pressure, no hidden costs.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">

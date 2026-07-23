@@ -217,7 +217,7 @@ export default function BlogPage() {
             Have Questions About Your Windows?
           </h2>
           <p className="text-warm-gray-500 mb-8">
-            Mark offers free in-home consultations throughout Northern Idaho.
+            We offer free in-home consultations throughout Northern Idaho.
             Get personalized advice for your specific situation.
           </p>
           <Link

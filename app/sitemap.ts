@@ -67,25 +67,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly',
       priority: 0.4,
     },
-    // Shop pages — direct online ordering of Norman shades
-    {
-      url: `${baseUrl}/shop`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/shop/faux-wood-blinds`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/shop/cellular-shades`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
     // Product pages
     {
       url: `${baseUrl}/products/blinds`,

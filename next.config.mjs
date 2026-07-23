@@ -88,6 +88,39 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
+      // Shop routes — retired. Norman price increases made the online catalog
+      // uncompetitive, so the shop was removed entirely. Redirect old links to
+      // the closest matching product page (or homepage) so no bookmark 404s.
+      {
+        source: '/shop',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/shop/cellular-shades',
+        destination: '/products/cellular-shades',
+        permanent: true,
+      },
+      {
+        source: '/shop/faux-wood-blinds',
+        destination: '/products/blinds',
+        permanent: true,
+      },
+      {
+        source: '/shop/cart',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/shop/success',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/shop/cancel',
+        destination: '/',
+        permanent: true,
+      },
     ];
 
     return [
