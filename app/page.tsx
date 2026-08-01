@@ -399,7 +399,10 @@ const PROCESS_STEPS = [
 function HeroCopy() {
   return (
     <div className="max-w-xl">
-      <p className="text-gold text-[11px] sm:text-xs font-semibold uppercase tracking-[0.18em] mb-4">
+      {/* Charcoal rather than the usual gold kicker: gold on the sunlit beige
+          wall in the hero photo is too low-contrast to read. Gold still reads
+          fine for kickers elsewhere on white and cream backgrounds. */}
+      <p className="text-charcoal/75 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.18em] mb-4">
         Custom Window Treatments &middot; North Idaho
       </p>
       <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] text-charcoal leading-[1.05] tracking-tight text-balance">
@@ -407,8 +410,8 @@ function HeroCopy() {
         <br />
         Lose the glare.
       </h1>
-      <p className="mt-6 text-base sm:text-lg text-warm-gray-600 leading-relaxed max-w-md">
-        You don&apos;t need to know what to buy. I bring the options to your
+      <p className="mt-6 text-base sm:text-lg text-warm-gray-700 leading-relaxed max-w-sm md:max-w-[22rem] lg:max-w-md">
+        You don&apos;t need to know what to buy. We bring the options to your
         home, measure everything, and install it with a lifetime guarantee.
       </p>
 
@@ -484,7 +487,14 @@ export default function HomePage() {
             sizes="100vw"
             quality={88}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-warm-white/95 via-warm-white/70 to-transparent" />
+          {/* Scrim is confined to the copy column and fully clear by 44%, which
+              is just before the lake. The wall in the photo ends around 38% of
+              the width but the copy runs wider than that, so the small type
+              (kicker, subhead) would otherwise sit unreadable on the bright
+              window. Earlier versions ran warm-white/70 through the midpoint
+              and visibly milked out the lake and pines — the whole point of
+              the picture. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-warm-white/92 from-8% via-warm-white/62 via-26% to-transparent to-44%" />
         </div>
 
         {/* Mobile: copy stacked above the photo */}
