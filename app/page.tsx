@@ -39,7 +39,7 @@ const businessNode = {
   name: BUSINESS.name,
   legalName: "Luxe Window Works LLC",
   description:
-    "Premium custom window treatments in North Idaho — 24 years of installer expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
+    "Premium custom window treatments in North Idaho — 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
   url: BASE,
   telephone: BUSINESS.phoneE164,
   email: BUSINESS.email,
@@ -234,7 +234,7 @@ const webpageNode = {
   url: BASE,
   name: "Premium Custom Window Treatments in Northern Idaho | Luxe Window Works",
   description:
-    "Custom blinds, shades, shutters, and motorized window treatments in Coeur d'Alene, Post Falls, and Northern Idaho. 24 years of installer expertise. Lifetime installation guarantee.",
+    "Custom blinds, shades, shutters, and motorized window treatments in Coeur d'Alene, Post Falls, and Northern Idaho. 24 years consulting, designing, and installing. Lifetime installation guarantee.",
   isPartOf: { "@id": `${BASE}/#website` },
   about: { "@id": `${BASE}/#business` },
   mainEntity: { "@id": `${BASE}/#business` },
@@ -471,7 +471,7 @@ function HeroCopy({ fluid = false }: { fluid?: boolean }) {
             }`}
           >
             {BUSINESS.google.rating.toFixed(1)}
-            {" on Google "}&middot;{" 24 years selling & installing"}
+            {" on Google "}&middot;{" 24 years consulting & installing"}
           </span>
         </div>
         <p className={`text-warm-gray-600 ${fluid ? "text-[0.9vw]" : "text-sm"}`}>
@@ -795,7 +795,7 @@ export default function HomePage() {
           </div>
           <div className="space-y-6 text-lg text-warm-gray-600 leading-relaxed">
             <p>
-              With 24 years of hands-on installation experience, Luxe Window Works helps North Idaho homeowners avoid the most common window treatment mistakes: poor measurements, wrong product choices, bad light gaps, harsh glare, and treatments that do not fit the way the room actually lives.
+              With 24 years consulting, designing, and installing window treatments, Luxe Window Works helps North Idaho homeowners avoid the most common window treatment mistakes: poor measurements, wrong product choices, bad light gaps, harsh glare, and treatments that do not fit the way the room actually lives.
             </p>
             <p>
               We are not here to push one product. We help you choose what works — for your windows, your home, your budget, and the way you use each room.

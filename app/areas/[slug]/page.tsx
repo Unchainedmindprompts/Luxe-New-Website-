@@ -72,7 +72,7 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
     "@id": `${areaUrl}#service`,
     name: `Custom Window Treatments in ${areaName}, Idaho`,
     serviceType: "Custom Window Treatments",
-    description: `Professional custom window treatment installation in ${areaName}, Idaho. Luxe Window Works offers cellular shades, plantation shutters, solar shades, roller shades, motorized window treatments, and free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities.`,
+    description: `Custom window treatment consultation, design, and installation in ${areaName}, Idaho. Luxe Window Works offers cellular shades, plantation shutters, solar shades, roller shades, motorized window treatments, and free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities.`,
     provider: { "@id": `${BUSINESS.url}/#business` },
     areaServed: {
       "@type": "City",
@@ -159,7 +159,7 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
           name: `Who does custom window treatments in ${areaName}, Idaho?`,
           acceptedAnswer: {
             "@type": "Answer",
-            text: `Luxe Window Works provides custom window treatment installation in ${areaName}, Idaho. Founded by Mark Abplanalp — who has worked in the window treatment industry since 2002 — Luxe offers free in-home consultations, professional installation, and a lifetime workmanship guarantee. Call ${BUSINESS.phone} to schedule.`,
+            text: `Luxe Window Works consults, designs, and installs custom window treatments in ${areaName}, Idaho. Founded by Mark Abplanalp — who has worked in the window treatment industry since 2002 — Luxe offers free in-home consultations, professional installation, and a lifetime workmanship guarantee. Call ${BUSINESS.phone} to schedule.`,
           },
         },
         {
