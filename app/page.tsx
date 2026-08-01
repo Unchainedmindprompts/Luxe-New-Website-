@@ -425,8 +425,12 @@ function HeroCopy({ fluid = false }: { fluid?: boolean }) {
         home, measure everything, and install it with a lifetime guarantee.
       </p>
 
+      {/* w-fit collapses this column to the width of its widest child (the
+          button), so items-center centres the secondary link under the button
+          rather than under the whole copy column. The block itself stays
+          left-aligned with the rest of the copy. */}
       <div
-        className={`flex flex-col items-start ${
+        className={`flex flex-col items-center w-fit ${
           fluid ? "mt-[2vw] gap-[1vw]" : "mt-8 gap-4"
         }`}
       >
@@ -558,7 +562,11 @@ export default function HomePage() {
       {/* 2. Trust Bar */}
       <section className="bg-charcoal text-white py-5">
         <div className="container-luxe">
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm md:text-base">
+          {/* Tighter gaps and a slightly smaller step at md than before:
+              "24 Years Consulting, Designing & Installing" is long enough that
+              the previous gap-x-8 / text-base combination wrapped "Serving
+              North Idaho" onto a second row around 2000px. */}
+          <div className="flex flex-wrap items-center justify-center gap-x-5 lg:gap-x-7 gap-y-3 text-sm lg:text-[15px]">
             <span className="text-warm-gray-300">{BUSINESS.experience}</span>
             <span className="hidden md:inline text-warm-gray-600">|</span>
             <span className="text-warm-gray-300">{BUSINESS.guarantee}</span>
