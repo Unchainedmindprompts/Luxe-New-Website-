@@ -471,7 +471,7 @@ function HeroCopy({ fluid = false }: { fluid?: boolean }) {
             }`}
           >
             {BUSINESS.google.rating.toFixed(1)}
-            {" on Google "}&middot;{" 24 years installing"}
+            {" on Google "}&middot;{" 24 years selling & installing"}
           </span>
         </div>
         <p className={`text-warm-gray-600 ${fluid ? "text-[0.9vw]" : "text-sm"}`}>

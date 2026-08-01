@@ -484,7 +484,7 @@ export const productPages: Record<string, ProductPageData> = {
       idSlug: "video-motorization-2025-08-22",
       youtubeId: "nY_XVjk9Bco",
       title: "The Dog Days Of Summer!",
-      description: "Motorized window shades from Luxe Window Works. Push-button operation, no cords, safe for kids and pets, and perfect for hard-to-reach windows. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint in North Idaho. Free in-home consultations and 24 years of installer experience.",
+      description: "Motorized window shades from Luxe Window Works. Push-button operation, no cords, safe for kids and pets, and perfect for hard-to-reach windows. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint in North Idaho. Free in-home consultations and 24 years selling, designing, and installing window treatments.",
       uploadDate: "2025-08-22",
       duration: "PT9S",
     },
