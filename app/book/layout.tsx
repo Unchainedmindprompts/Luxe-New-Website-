@@ -4,7 +4,7 @@ import { BUSINESS } from "@/lib/constants";
 export const metadata: Metadata = {
   title: "Book a Free Consultation | Luxe Window Works",
   description:
-    "Schedule your free in-home window treatment consultation with Mark Abplanalp. 24 years of installer expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint — no pressure.",
+    "Schedule your free in-home window treatment consultation with Mark Abplanalp. 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint — no pressure.",
   alternates: {
     canonical: "https://www.luxewindowworks.com/book",
   },
@@ -45,7 +45,7 @@ const webpageSchema = {
   url: PAGE_URL,
   name: "Book a Free Consultation | Luxe Window Works",
   description:
-    "Schedule your free in-home window treatment consultation with Mark Abplanalp. 24 years of installer expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint — no pressure.",
+    "Schedule your free in-home window treatment consultation with Mark Abplanalp. 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint — no pressure.",
   isPartOf: { "@id": `${BUSINESS.url}/#website` },
   about: { "@id": `${BUSINESS.url}/#business` },
   breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },

@@ -37,7 +37,10 @@ export const BUSINESS = {
     { day: "Saturday",  open: "9:00 AM", close: "2:00 PM" },
     { day: "Sunday",    open: null,      close: null },
   ],
-  experience: "24 Years of Installer Experience",
+  // "Installer Experience" read as a subcontractor who only hangs what someone
+  // else sold. Luxe sells, designs and installs — the phrasing has to carry all
+  // three or it undersells the business.
+  experience: "24 Years Consulting, Designing & Installing",
   guarantee: "Lifetime Installation Guarantee",
   brands: ["Alta", "Norman", "Lafayette", "Corradi USA", "The Window Outfitters"],
   url: "https://www.luxewindowworks.com",

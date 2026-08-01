@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    "Premium custom window treatments in North Idaho — 24 years of installer expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
+    "Premium custom window treatments in North Idaho — 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
   keywords: [
     "window treatments",
     "custom blinds",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     siteName: BUSINESS.name,
     title: "Luxe Window Works | Custom Window Treatments, North Idaho",
     description:
-      "Premium custom window treatments — 24 years of installer expertise. Free in-home consultation. Serving North Idaho.",
+      "Premium custom window treatments — 24 years consulting, designing, and installing. Free in-home consultation. Serving North Idaho.",
     images: [
       {
         url: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Luxe Window Works | Custom Window Treatments, North Idaho",
     description:
-      "Premium custom window treatments — 24 years of installer expertise. Free in-home consultation.",
+      "Premium custom window treatments — 24 years consulting, designing, and installing. Free in-home consultation.",
     images: ["https://www.luxewindowworks.com/images/hero-modern-living.webp"],
   },
   robots: {

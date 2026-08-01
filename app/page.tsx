@@ -39,7 +39,7 @@ const businessNode = {
   name: BUSINESS.name,
   legalName: "Luxe Window Works LLC",
   description:
-    "Premium custom window treatments in North Idaho — 24 years of installer expertise. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
+    "Premium custom window treatments in North Idaho — 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
   url: BASE,
   telephone: BUSINESS.phoneE164,
   email: BUSINESS.email,
@@ -47,10 +47,10 @@ const businessNode = {
   foundingDate: "2025",
   image: {
     "@type": "ImageObject",
-    url: `${BASE}/images/hero-modern-living.webp`,
-    contentUrl: `${BASE}/images/hero-modern-living.webp`,
-    width: 900,
-    height: 780,
+    url: `${BASE}/images/hero-lake-view.webp`,
+    contentUrl: `${BASE}/images/hero-lake-view.webp`,
+    width: 1672,
+    height: 941,
   },
   logo: {
     "@type": "ImageObject",
@@ -234,13 +234,13 @@ const webpageNode = {
   url: BASE,
   name: "Premium Custom Window Treatments in Northern Idaho | Luxe Window Works",
   description:
-    "Custom blinds, shades, shutters, and motorized window treatments in Coeur d'Alene, Post Falls, and Northern Idaho. 24 years of installer expertise. Lifetime installation guarantee.",
+    "Custom blinds, shades, shutters, and motorized window treatments in Coeur d'Alene, Post Falls, and Northern Idaho. 24 years consulting, designing, and installing. Lifetime installation guarantee.",
   isPartOf: { "@id": `${BASE}/#website` },
   about: { "@id": `${BASE}/#business` },
   mainEntity: { "@id": `${BASE}/#business` },
   primaryImageOfPage: {
     "@type": "ImageObject",
-    url: `${BASE}/images/hero-modern-living.webp`,
+    url: `${BASE}/images/hero-lake-view.webp`,
   },
   inLanguage: "en-US",
 };
@@ -394,6 +394,105 @@ const PROCESS_STEPS = [
   },
 ];
 
+/** Hero copy. One definition, two call sites (mobile stack, desktop wall), so
+ *  the wording can only be edited in one place.
+ *  `fluid` switches every size to vw units for the desktop pass — the copy has
+ *  to scale at the same rate as the wall it sits on, or it outgrows it. */
+function HeroCopy({ fluid = false }: { fluid?: boolean }) {
+  return (
+    <div>
+      {/* This carries the page's only <h1>. The display headline that used to
+          sit here was removed for looking busy, so the semantic heading moves
+          onto this line rather than disappearing — a page with no h1 loses a
+          real ranking signal, and a hidden one is worse than an honest small
+          one. It still names the service and the region, which is what the
+          heading needs to do. */}
+      {/* gold-dark (#B8943D), not gold (#C9A96E) — the lighter brand gold sits
+          too close in value to the sunlit beige wall behind it to read. */}
+      <h1
+        className={`text-gold-dark font-semibold uppercase tracking-[0.18em] ${
+          fluid ? "text-[0.85vw] mb-[1.4vw]" : "text-[11px] mb-4"
+        }`}
+      >
+        Custom Window Treatments &middot; North Idaho
+      </h1>
+      <p
+        className={`text-charcoal leading-relaxed ${
+          fluid ? "text-[1.35vw]" : "text-lg sm:text-xl"
+        }`}
+      >
+        You don&apos;t need to know what to buy. We bring the options to your
+        home, measure everything, and install it with a lifetime guarantee.
+      </p>
+
+      {/* w-fit collapses this column to the width of its widest child (the
+          button), so items-center centres the secondary link under the button
+          rather than under the whole copy column. The block itself stays
+          left-aligned with the rest of the copy. */}
+      <div
+        className={`flex flex-col items-center w-fit ${
+          fluid ? "mt-[2vw] gap-[1vw]" : "mt-8 gap-4"
+        }`}
+      >
+        <Link
+          href="/book"
+          className={`inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold rounded-full transition-all hover:shadow-lg ${
+            fluid ? "text-[1vw] px-[2vw] py-[1.05vw]" : "text-base px-7 py-4"
+          }`}
+        >
+          Book My Free In-Home Consultation
+        </Link>
+        <Link
+          href="/show-me-my-options"
+          className={`inline-flex items-center gap-2 text-charcoal hover:text-gold font-semibold transition-colors group ${
+            fluid ? "text-[1vw]" : "text-base"
+          }`}
+        >
+          Show Me My Options
+          <svg
+            className={`group-hover:translate-x-1 transition-transform ${
+              fluid ? "w-[1vw] h-[1vw]" : "w-4 h-4"
+            }`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </Link>
+      </div>
+
+      <div className={fluid ? "mt-[2vw] space-y-[0.35vw]" : "mt-8 space-y-1.5"}>
+        <div className={`flex items-center ${fluid ? "gap-[0.7vw]" : "gap-3"}`}>
+          <span className="flex">
+            {[...Array(5)].map((_, i) => (
+              <StarIcon key={i} />
+            ))}
+          </span>
+          <span
+            className={`text-charcoal font-medium ${
+              fluid ? "text-[0.9vw]" : "text-sm"
+            }`}
+          >
+            {BUSINESS.google.rating.toFixed(1)}
+            {" on Google "}&middot;{" 24 years consulting & installing"}
+          </span>
+        </div>
+        <p className={`text-warm-gray-600 ${fluid ? "text-[0.9vw]" : "text-sm"}`}>
+          Post Falls &middot; Coeur d&apos;Alene &middot; Hayden &middot; Rathdrum
+        </p>
+        <p className={`text-warm-gray-500 ${fluid ? "text-[0.9vw]" : "text-sm"}`}>
+          Or call / text{" "}
+          <a href={BUSINESS.phoneHref} className="hover:text-gold transition-colors">
+            {BUSINESS.phone}
+          </a>{" "}
+          &mdash; usually same-day
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function HomePage() {
   return (
     <>
@@ -402,45 +501,60 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageGraph) }}
       />
 
-      {/* 1. Hero */}
-      <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[600px] md:min-h-[700px] lg:min-h-[75vh] xl:min-h-[82vh] 2xl:min-h-[88vh] flex items-center">
-        <Image
-          src="/images/hero-modern-living.webp"
-          alt="Modern living room with custom cellular shades and a mountain view"
-          fill
-          className="object-cover object-center"
-          priority
-          sizes="100vw"
-          quality={85}
-        />
-        <div className="absolute inset-0 bg-charcoal/55" />
+      {/* 1. Hero
+          The copy sits on the sunlit wall inside the photo, as designed.
 
-        <div className="container-luxe relative">
-          <div className="max-w-3xl">
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight text-balance">
-              Custom Window Treatments. 24 Years of Selling, Designing, and Installing Them.
-            </h1>
-            <p className="mt-6 md:mt-8 text-lg md:text-xl text-warm-gray-200 leading-relaxed max-w-2xl">
-              You don&apos;t need to know which window treatment to buy. I bring the options to your home, help you choose what works room by room, measure everything, and install it with a lifetime guarantee.
-            </p>
+          Everything on the desktop side is sized in vw, and that is the whole
+          trick. The photo is full-bleed and the container is always wider than
+          the image's 1.78 aspect at these heights, so the full image width is
+          always shown and the wall corner lands at a fixed 38.5% of the
+          viewport (measured off the file by edge detection, not guessed). A
+          copy block sized in vw therefore scales at exactly the same rate as
+          the wall and can never outgrow it.
 
-            <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/show-me-my-options"
-                className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
-              >
-                Show Me My Options
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <Link
-                href="/book"
-                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all border border-white/30 hover:border-white/60 backdrop-blur-sm"
-              >
-                Book a Free In-Home Consultation
-              </Link>
-            </div>
+          The earlier version anchored the copy to container-luxe, whose left
+          edge is 50vw minus a constant. That grows faster than 38.5vw does, so
+          past roughly 1700px the copy slid off the wall onto the bright
+          windows and the small type became unreadable. Do not reintroduce a
+          centered container or a rem-based max-width here. */}
+      <section className="relative overflow-hidden">
+        {/* Mobile: copy on cream, photo beneath. The wall is far too narrow
+            once the frame is cropped to a phone to hold any of this. */}
+        <div className="md:hidden">
+          <div className="bg-warm-white pt-28 pb-10 px-5">
+            <HeroCopy />
+          </div>
+          <div className="relative w-full aspect-[4/3]">
+            <Image
+              src="/images/hero-lake-view.webp"
+              alt="Modern North Idaho lakefront living room with solar roller shades filtering afternoon light over a lake and pine view"
+              fill
+              className="object-cover object-[45%_center]"
+              priority
+              sizes="100vw"
+              quality={90}
+            />
+          </div>
+        </div>
+
+        {/* Desktop: copy on the wall. */}
+        <div className="hidden md:flex relative items-center min-h-[600px] lg:min-h-[72vh] xl:min-h-[78vh]">
+          <Image
+            src="/images/hero-lake-view.webp"
+            alt="Modern North Idaho lakefront living room with solar roller shades filtering afternoon light over a lake and pine view"
+            fill
+            className="object-cover object-center"
+            priority
+            sizes="100vw"
+            quality={90}
+          />
+          {/* Lifts the wall only. Clears at 36%, just inside the 38.5% corner,
+              so the windows, lake and pines are never touched. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-warm-white/75 via-warm-white/45 via-18% to-transparent to-36%" />
+          {/* 5vw margin + 30vw column = right edge at 35vw, clear of the
+              38.5% corner at every width. */}
+          <div className="relative ml-[5vw] w-[30vw]">
+            <HeroCopy fluid />
           </div>
         </div>
       </section>
@@ -448,7 +562,11 @@ export default function HomePage() {
       {/* 2. Trust Bar */}
       <section className="bg-charcoal text-white py-5">
         <div className="container-luxe">
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm md:text-base">
+          {/* Tighter gaps and a slightly smaller step at md than before:
+              "24 Years Consulting, Designing & Installing" is long enough that
+              the previous gap-x-8 / text-base combination wrapped "Serving
+              North Idaho" onto a second row around 2000px. */}
+          <div className="flex flex-wrap items-center justify-center gap-x-5 lg:gap-x-7 gap-y-3 text-sm lg:text-[15px]">
             <span className="text-warm-gray-300">{BUSINESS.experience}</span>
             <span className="hidden md:inline text-warm-gray-600">|</span>
             <span className="text-warm-gray-300">{BUSINESS.guarantee}</span>
@@ -685,7 +803,7 @@ export default function HomePage() {
           </div>
           <div className="space-y-6 text-lg text-warm-gray-600 leading-relaxed">
             <p>
-              With 24 years of hands-on installation experience, Luxe Window Works helps North Idaho homeowners avoid the most common window treatment mistakes: poor measurements, wrong product choices, bad light gaps, harsh glare, and treatments that do not fit the way the room actually lives.
+              With 24 years consulting, designing, and installing window treatments, Luxe Window Works helps North Idaho homeowners avoid the most common window treatment mistakes: poor measurements, wrong product choices, bad light gaps, harsh glare, and treatments that do not fit the way the room actually lives.
             </p>
             <p>
               We are not here to push one product. We help you choose what works — for your windows, your home, your budget, and the way you use each room.

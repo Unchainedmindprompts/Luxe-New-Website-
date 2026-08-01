@@ -95,7 +95,7 @@ export default function GlossaryPage() {
           </h1>
           <p className="mt-4 text-base md:text-lg text-warm-gray-500 leading-relaxed">
             Plain-English definitions of the terms that matter when you&apos;re buying
-            custom blinds, shades, and shutters — written by a 24-year industry installer.
+            custom blinds, shades, and shutters — written from 24 years consulting, designing, and installing them.
           </p>
         </div>
       </section>
@@ -156,7 +156,7 @@ export default function GlossaryPage() {
             Have a question we didn&apos;t cover?
           </h2>
           <p className="text-base md:text-lg text-warm-gray-600 leading-relaxed mb-6">
-            With 24 years of hands-on experience installing custom window treatments,
+            With 24 years consulting, designing, and installing custom window treatments,
             we can give you a plain-English answer to any term, product, or installation
             question you have.
           </p>
