@@ -401,25 +401,22 @@ const PROCESS_STEPS = [
 function HeroCopy({ fluid = false }: { fluid?: boolean }) {
   return (
     <div>
-      <p
+      {/* This carries the page's only <h1>. The display headline that used to
+          sit here was removed for looking busy, so the semantic heading moves
+          onto this line rather than disappearing — a page with no h1 loses a
+          real ranking signal, and a hidden one is worse than an honest small
+          one. It still names the service and the region, which is what the
+          heading needs to do. */}
+      <h1
         className={`text-charcoal/70 font-semibold uppercase tracking-[0.18em] ${
           fluid ? "text-[0.85vw] mb-[1.4vw]" : "text-[11px] mb-4"
         }`}
       >
         Custom Window Treatments &middot; North Idaho
-      </p>
-      <h1
-        className={`font-serif text-charcoal leading-[1.05] tracking-tight ${
-          fluid ? "text-[3.7vw]" : "text-4xl sm:text-5xl"
-        }`}
-      >
-        Keep the view.
-        <br />
-        Lose the glare.
       </h1>
       <p
-        className={`text-warm-gray-700 leading-relaxed ${
-          fluid ? "text-[1.05vw] mt-[1.6vw]" : "text-base sm:text-lg mt-6"
+        className={`text-charcoal leading-relaxed ${
+          fluid ? "text-[1.35vw]" : "text-lg sm:text-xl"
         }`}
       >
         You don&apos;t need to know what to buy. We bring the options to your
