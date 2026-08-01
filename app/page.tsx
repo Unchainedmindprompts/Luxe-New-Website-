@@ -407,8 +407,10 @@ function HeroCopy({ fluid = false }: { fluid?: boolean }) {
           real ranking signal, and a hidden one is worse than an honest small
           one. It still names the service and the region, which is what the
           heading needs to do. */}
+      {/* gold-dark (#B8943D), not gold (#C9A96E) — the lighter brand gold sits
+          too close in value to the sunlit beige wall behind it to read. */}
       <h1
-        className={`text-charcoal/70 font-semibold uppercase tracking-[0.18em] ${
+        className={`text-gold-dark font-semibold uppercase tracking-[0.18em] ${
           fluid ? "text-[0.85vw] mb-[1.4vw]" : "text-[11px] mb-4"
         }`}
       >
