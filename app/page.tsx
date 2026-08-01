@@ -394,61 +394,91 @@ const PROCESS_STEPS = [
   },
 ];
 
-/** Hero copy. Rendered twice — once in the mobile stack, once over the
- *  desktop photo — so the wording can only ever be edited in one place. */
-function HeroCopy() {
+/** Hero copy. One definition, two call sites (mobile stack, desktop wall), so
+ *  the wording can only be edited in one place.
+ *  `fluid` switches every size to vw units for the desktop pass — the copy has
+ *  to scale at the same rate as the wall it sits on, or it outgrows it. */
+function HeroCopy({ fluid = false }: { fluid?: boolean }) {
   return (
-    <div className="max-w-xl">
-      {/* Charcoal rather than the usual gold kicker: gold on the sunlit beige
-          wall in the hero photo is too low-contrast to read. Gold still reads
-          fine for kickers elsewhere on white and cream backgrounds. */}
-      <p className="text-charcoal/75 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.18em] mb-4">
+    <div>
+      <p
+        className={`text-charcoal/70 font-semibold uppercase tracking-[0.18em] ${
+          fluid ? "text-[0.85vw] mb-[1.4vw]" : "text-[11px] mb-4"
+        }`}
+      >
         Custom Window Treatments &middot; North Idaho
       </p>
-      <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] text-charcoal leading-[1.05] tracking-tight text-balance">
+      <h1
+        className={`font-serif text-charcoal leading-[1.05] tracking-tight ${
+          fluid ? "text-[3.7vw]" : "text-4xl sm:text-5xl"
+        }`}
+      >
         Keep the view.
         <br />
         Lose the glare.
       </h1>
-      <p className="mt-6 text-base sm:text-lg text-warm-gray-700 leading-relaxed max-w-sm md:max-w-[22rem] lg:max-w-md">
+      <p
+        className={`text-warm-gray-700 leading-relaxed ${
+          fluid ? "text-[1.05vw] mt-[1.6vw]" : "text-base sm:text-lg mt-6"
+        }`}
+      >
         You don&apos;t need to know what to buy. We bring the options to your
         home, measure everything, and install it with a lifetime guarantee.
       </p>
 
-      <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+      <div
+        className={`flex flex-col items-start ${
+          fluid ? "mt-[2vw] gap-[1vw]" : "mt-8 gap-4"
+        }`}
+      >
         <Link
           href="/book"
-          className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-7 py-4 rounded-full text-base transition-all hover:shadow-lg"
+          className={`inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold rounded-full transition-all hover:shadow-lg ${
+            fluid ? "text-[1vw] px-[2vw] py-[1.05vw]" : "text-base px-7 py-4"
+          }`}
         >
           Book My Free In-Home Consultation
         </Link>
         <Link
           href="/show-me-my-options"
-          className="inline-flex items-center justify-center gap-2 text-charcoal hover:text-gold font-semibold text-base transition-colors group"
+          className={`inline-flex items-center gap-2 text-charcoal hover:text-gold font-semibold transition-colors group ${
+            fluid ? "text-[1vw]" : "text-base"
+          }`}
         >
           Show Me My Options
-          <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg
+            className={`group-hover:translate-x-1 transition-transform ${
+              fluid ? "w-[1vw] h-[1vw]" : "w-4 h-4"
+            }`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
         </Link>
       </div>
 
-      <div className="mt-8 space-y-1.5">
-        <div className="flex items-center gap-3">
+      <div className={fluid ? "mt-[2vw] space-y-[0.35vw]" : "mt-8 space-y-1.5"}>
+        <div className={`flex items-center ${fluid ? "gap-[0.7vw]" : "gap-3"}`}>
           <span className="flex">
             {[...Array(5)].map((_, i) => (
               <StarIcon key={i} />
             ))}
           </span>
-          <span className="text-sm text-charcoal font-medium">
+          <span
+            className={`text-charcoal font-medium ${
+              fluid ? "text-[0.9vw]" : "text-sm"
+            }`}
+          >
             {BUSINESS.google.rating.toFixed(1)}
             {" on Google "}&middot;{" 24 years installing"}
           </span>
         </div>
-        <p className="text-sm text-warm-gray-600">
+        <p className={`text-warm-gray-600 ${fluid ? "text-[0.9vw]" : "text-sm"}`}>
           Post Falls &middot; Coeur d&apos;Alene &middot; Hayden &middot; Rathdrum
         </p>
-        <p className="text-sm text-warm-gray-500">
+        <p className={`text-warm-gray-500 ${fluid ? "text-[0.9vw]" : "text-sm"}`}>
           Or call / text{" "}
           <a href={BUSINESS.phoneHref} className="hover:text-gold transition-colors">
             {BUSINESS.phone}
@@ -469,42 +499,28 @@ export default function HomePage() {
       />
 
       {/* 1. Hero
-          Two layouts, one set of copy (HeroCopy). On md+ the photo fills the
-          section and the copy sits over the sunlit wall on the left. On mobile
-          the crop is far too narrow to keep that wall behind the text — the
-          copy lands on the bright window and no amount of scrim keeps it both
-          legible and attractive — so the two stack instead: copy on cream, then
-          the photo underneath at full strength with nothing washing it out. */}
-      <section className="relative overflow-hidden md:flex md:items-center md:pt-32 md:pb-24 md:min-h-[700px] lg:min-h-[78vh] xl:min-h-[84vh]">
-        {/* Desktop background */}
-        <div className="hidden md:block absolute inset-0">
-          <Image
-            src="/images/hero-lake-view.webp"
-            alt="Modern North Idaho lakefront living room with solar roller shades filtering afternoon light over a lake and pine view"
-            fill
-            className="object-cover object-center"
-            priority
-            sizes="100vw"
-            quality={88}
-          />
-          {/* Scrim is confined to the copy column and fully clear by 44%, which
-              is just before the lake. The wall in the photo ends around 38% of
-              the width but the copy runs wider than that, so the small type
-              (kicker, subhead) would otherwise sit unreadable on the bright
-              window. Earlier versions ran warm-white/70 through the midpoint
-              and visibly milked out the lake and pines — the whole point of
-              the picture. */}
-          <div className="absolute inset-0 bg-gradient-to-r from-warm-white/92 from-8% via-warm-white/62 via-26% to-transparent to-44%" />
-        </div>
+          The copy sits on the sunlit wall inside the photo, as designed.
 
-        {/* Mobile: copy stacked above the photo */}
+          Everything on the desktop side is sized in vw, and that is the whole
+          trick. The photo is full-bleed and the container is always wider than
+          the image's 1.78 aspect at these heights, so the full image width is
+          always shown and the wall corner lands at a fixed 38.5% of the
+          viewport (measured off the file by edge detection, not guessed). A
+          copy block sized in vw therefore scales at exactly the same rate as
+          the wall and can never outgrow it.
+
+          The earlier version anchored the copy to container-luxe, whose left
+          edge is 50vw minus a constant. That grows faster than 38.5vw does, so
+          past roughly 1700px the copy slid off the wall onto the bright
+          windows and the small type became unreadable. Do not reintroduce a
+          centered container or a rem-based max-width here. */}
+      <section className="relative overflow-hidden">
+        {/* Mobile: copy on cream, photo beneath. The wall is far too narrow
+            once the frame is cropped to a phone to hold any of this. */}
         <div className="md:hidden">
           <div className="bg-warm-white pt-28 pb-10 px-5">
             <HeroCopy />
           </div>
-          {/* 45% lands the crop on the windows, lake and pines and stops just
-              short of the figure at the right edge — at higher percentages she
-              gets sliced mid-body, which reads as a mistake. */}
           <div className="relative w-full aspect-[4/3]">
             <Image
               src="/images/hero-lake-view.webp"
@@ -513,16 +529,30 @@ export default function HomePage() {
               className="object-cover object-[45%_center]"
               priority
               sizes="100vw"
-              quality={88}
+              quality={90}
             />
           </div>
         </div>
 
-        {/* Desktop copy — w-full is required because the section is a flex
-            container here; without it this div shrinks to its content width and
-            mx-auto drifts it off the wall and onto the windows. */}
-        <div className="hidden md:block container-luxe relative w-full">
-          <HeroCopy />
+        {/* Desktop: copy on the wall. */}
+        <div className="hidden md:flex relative items-center min-h-[600px] lg:min-h-[72vh] xl:min-h-[78vh]">
+          <Image
+            src="/images/hero-lake-view.webp"
+            alt="Modern North Idaho lakefront living room with solar roller shades filtering afternoon light over a lake and pine view"
+            fill
+            className="object-cover object-center"
+            priority
+            sizes="100vw"
+            quality={90}
+          />
+          {/* Lifts the wall only. Clears at 36%, just inside the 38.5% corner,
+              so the windows, lake and pines are never touched. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-warm-white/75 via-warm-white/45 via-18% to-transparent to-36%" />
+          {/* 5vw margin + 30vw column = right edge at 35vw, clear of the
+              38.5% corner at every width. */}
+          <div className="relative ml-[5vw] w-[30vw]">
+            <HeroCopy fluid />
+          </div>
         </div>
       </section>
 
