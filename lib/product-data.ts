@@ -97,7 +97,7 @@ export const productPages: Record<string, ProductPageData> = {
   "cellular-shades": {
     slug: "cellular-shades",
     name: "Cellular Shades",
-    image: "/images/cellular-shades.jpeg",
+    image: "/images/cellular-shades.webp",
     headline: "Tired of Watching Your Energy Bills Climb Every Season?",
     subheadline: "Cellular shades are the most energy-efficient window covering available — and in Northern Idaho, that matters more than most places.",
     problem: "Northern Idaho doesn't do moderate weather. January mornings hit single digits. July afternoons push into the 90s. And through all of it, your windows are the weakest link in your home's insulation. Single-pane windows in older Coeur d'Alene homes bleed heat all winter long. Even newer double-pane windows in Post Falls subdivisions let more energy escape than most homeowners realize.",

@@ -213,12 +213,18 @@ export default async function ProductPage({ params }: Props) {
           </div>
         ) : product.image ? (
           <div className="max-w-4xl mx-auto relative aspect-[16/9] rounded-2xl overflow-hidden">
+            {/* sizes is required on a fill image. Without it Next assumes
+                100vw and picks a variant for the wrong slot — this hero was
+                being served a 675px file into an 896px box and upscaled by the
+                browser. The container is capped by max-w-4xl at 896px, so say
+                so. The gallery images below already do this correctly. */}
             <Image
               src={product.image}
               alt={`${product.name} — installed by Luxe Window Works`}
               fill
               className="object-cover"
               priority
+              sizes="(min-width: 896px) 896px, 100vw"
             />
           </div>
         ) : (
