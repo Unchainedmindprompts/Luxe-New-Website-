@@ -1,11 +1,12 @@
 ---
 title: "Custom Window Coverings Near Post Falls and Coeur d'Alene: Why Local Expertise Makes All the Difference"
 slug: custom-window-coverings-near-post-falls-coeur-dalene-local-expertise
+seoTitle: "Custom Window Coverings Near Post Falls & Coeur d'Alene"
 date: "2026-04-16T00:00:00.000Z"
 dateModified: "2026-04-16"
 author: Mark Abplanalp
 excerpt: "Looking for custom window coverings near Post Falls or Coeur d'Alene? A local window treatment specialist explains why independent expertise beats a franchise catalog — and what to ask before you hire anyone."
-metaDescription: "Looking for custom window coverings near Post Falls or Coeur d'Alene? A local window treatment specialist explains why independent expertise beats a franchise catalog — and what to ask before you hire anyone."
+metaDescription: "Looking for custom window coverings near Post Falls or Coeur d'Alene? Why independent local expertise beats a franchise catalog — and what to ask first."
 featuredImage: /images/IMG_6457.jpeg
 featuredImageAlt: "Custom window coverings consultation in a Northern Idaho home — Luxe Window Works"
 category: BUYING GUIDE
