@@ -56,11 +56,12 @@ export default function ContactPage() {
 
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-20 overflow-hidden min-h-[350px] md:min-h-[400px] flex items-center">
         <Image
-          src="/images/top-down-bottom-up-shades.jpeg"
-          alt="Living room with top-down bottom-up shades overlooking a lake"
+          src="/images/area-hero-living-room.webp"
+          alt="Sunlit living room with sheer horizontal shades across floor-to-ceiling windows, a woman and child reading on the sofa"
           fill
-          className="object-cover"
+          className="object-cover object-[right_center] sm:object-[center_70%]"
           priority
+          sizes="100vw"
         />
         <div className="absolute inset-0 bg-charcoal/55" />
         <div className="container-luxe relative max-w-4xl">
