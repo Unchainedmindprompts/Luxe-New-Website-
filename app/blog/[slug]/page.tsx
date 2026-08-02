@@ -22,6 +22,8 @@ interface Props {
 
 /** Per-slug keyword overrides for articles that need exact keyword targeting */
 const SLUG_KEYWORDS: Record<string, string> = {
+  "what-is-an-entity-graph":
+    "entity graph, schema markup, local SEO, structured data, knowledge graph, local business SEO, JSON-LD, schema.org",
   // Carried over verbatim from the hand-written designer route, which set its
   // own keywords rather than using the derived set.
   "designer-window-treatments-coeur-dalene-post-falls":
@@ -376,6 +378,21 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
   // Preserves the subject the hand-written route declared before migration.
   "designer-window-treatments-coeur-dalene-post-falls": {
     about: { "@id": `${BUSINESS.url}/areas/coeur-d-alene#service` },
+  },
+  // Also carried over from a hand-written route. This one is about structured
+  // data itself rather than window coverings, so the generic catalog subject
+  // would have been actively wrong. Three concept nodes, two corroborated by
+  // external references, exactly as the route declared them.
+  "what-is-an-entity-graph": {
+    about: [
+      {
+        "@type": "Thing",
+        name: "Entity Graph",
+        sameAs: "https://en.wikipedia.org/wiki/Knowledge_graph",
+      },
+      { "@type": "Thing", name: "Structured Data", sameAs: "https://schema.org" },
+      { "@type": "Thing", name: "Local SEO" },
+    ],
   },
   "are-costco-window-treatments-worth-it-a-local-dealer-tells-you-the-truth": {
     citation: [
