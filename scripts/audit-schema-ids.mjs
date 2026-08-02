@@ -31,9 +31,20 @@ function walk(dir) {
 ROOTS.forEach(walk);
 
 // Normalize variable base URLs so `${BASE}/#x` and `${BUSINESS.url}/#x` collide.
+//
+// Only OUR host collapses to <HOST>. An earlier version collapsed every host,
+// which meant any two external entities sharing a fragment were reported as the
+// same @id — normanwindowfashions.com/#brand and altawindowfashions.com/#brand
+// both became <HOST>/#brand, as did myavista.com/#organization and
+// energy.gov/#organization. Those are four distinct real-world entities and the
+// duplicate report was the script's error, not the graph's. External hosts are
+// left intact so they stay distinguishable.
+const SITE_HOST_RE =
+  /https?:\/\/(?:www\.)?luxewindowworks\.com/gi;
+
 function normalize(id) {
   return id
-    .replace(/https?:\/\/(?:www\.)?[a-z0-9-]+\.[a-z]{2,}(?:\.[a-z]{2,})?/gi, "<HOST>")
+    .replace(SITE_HOST_RE, "<HOST>")
     .replace(/\$\{[^}]*(?:BASE|BUSINESS\.url|SITE|BASE_URL|SITE_URL|URL)[^}]*\}/g, "<HOST>");
 }
 

@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
+import { NORMAN_BRAND, ALTA_BRAND } from "@/lib/brands";
 import { cityNode } from "@/lib/cities";
 import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
 import type { BlogPost } from "@/lib/blog";
@@ -274,6 +275,55 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
   "moving-into-a-new-home-window-coverings-north-idaho": {
     mentions: [
       { "@id": `${BUSINESS.url}/blog/window-coverings-for-new-construction-in-coeur-dalene-rathdrum#article` },
+      // One node per outbound link in the body, so mentions and links stay 1:1.
+      // The external URLs live in sameAs as corroboration; @id is what makes
+      // the entity the same node everywhere it appears on the site.
+      //
+      // Norman is referenced, not redefined — it is already defined once in
+      // lib/brands.ts and emitted on the product pages. Defining it again here
+      // with a normanusa.com @id, as the supplied draft did, would have split
+      // one manufacturer into two unconnected nodes. normanusa.com is folded
+      // into that node's sameAs instead.
+      { "@id": NORMAN_BRAND["@id"] },
+      ALTA_BRAND,
+      {
+        "@type": "Organization",
+        "@id": "https://www.myavista.com/#organization",
+        name: "Avista Corporation",
+        url: "https://www.myavista.com",
+        sameAs: [
+          "https://www.myavista.com/your-account/moving",
+          "https://en.wikipedia.org/wiki/Avista",
+        ],
+      },
+      {
+        "@type": "AdministrativeArea",
+        "@id": "https://www.kcgov.us/#administrativearea",
+        name: "Kootenai County",
+        url: "https://www.kcgov.us",
+        containedInPlace: { "@type": "State", name: "Idaho" },
+        sameAs: [
+          "https://www.kcgov.us/1054/Population",
+          "https://en.wikipedia.org/wiki/Kootenai_County,_Idaho",
+        ],
+      },
+      {
+        "@type": "GovernmentOrganization",
+        "@id": "https://www.energy.gov/#organization",
+        name: "United States Department of Energy",
+        alternateName: "DOE",
+        url: "https://www.energy.gov",
+        sameAs: ["https://en.wikipedia.org/wiki/United_States_Department_of_Energy"],
+      },
+    ],
+    citation: [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.energy.gov/sites/default/files/2021-12/bto-cellular-shades-factsheet-112221.pdf",
+        url: "https://www.energy.gov/sites/default/files/2021-12/bto-cellular-shades-factsheet-112221.pdf",
+        name: "Cellular Shades — Building Technologies Office fact sheet",
+        publisher: { "@id": "https://www.energy.gov/#organization" },
+      },
     ],
     relatedLink: [
       `${BUSINESS.url}/blog/window-coverings-for-new-construction-in-coeur-dalene-rathdrum`,
