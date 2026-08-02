@@ -120,11 +120,11 @@ export default function AboutPage() {
                 priority
               />
             </div>
-            <div className="space-y-6 text-stone-700 leading-relaxed">
-              <p className="text-sm uppercase tracking-widest text-amber-700 font-medium">
+            <div className="space-y-6 text-warm-gray-700 leading-relaxed">
+              <p className="text-sm uppercase tracking-widest text-gold-dark font-medium">
                 Why Luxe Window Works
               </p>
-              <h2 className="text-4xl md:text-5xl font-semibold text-stone-900 leading-tight">
+              <h2 className="text-4xl md:text-5xl font-semibold text-charcoal leading-tight">
                 Built for North Idaho Homes
               </h2>
               <p>
@@ -139,7 +139,7 @@ export default function AboutPage() {
               <div>
                 <Link
                   href="/book"
-                  className="inline-flex items-center justify-center bg-amber-700 text-white px-8 py-4 rounded-lg font-medium hover:bg-amber-800 transition-colors"
+                  className="inline-flex items-center justify-center bg-gold text-white px-8 py-4 rounded-lg font-medium hover:bg-gold-dark transition-colors"
                 >
                   Book a Free Consultation
                 </Link>
@@ -152,7 +152,7 @@ export default function AboutPage() {
         {/* Expertise callouts */}
         <section className="py-16 px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl font-semibold text-stone-900 mb-10">
+            <h2 className="text-2xl font-semibold text-charcoal mb-10">
               24 Years. Every Product Category. Every Project Type.
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
@@ -170,9 +170,9 @@ export default function AboutPage() {
                   body: "Corradi USA exterior solar shades, awnings, and motorized aluminum pergola systems with rotating roofs.",
                 },
               ].map((item) => (
-                <div key={item.title} className="border border-stone-200 rounded-lg p-6">
-                  <h3 className="font-semibold text-stone-900 mb-3">{item.title}</h3>
-                  <p className="text-stone-600 text-sm leading-relaxed">{item.body}</p>
+                <div key={item.title} className="border border-warm-gray-200 rounded-lg p-6">
+                  <h3 className="font-semibold text-charcoal mb-3">{item.title}</h3>
+                  <p className="text-warm-gray-600 text-sm leading-relaxed">{item.body}</p>
                 </div>
               ))}
             </div>
@@ -180,12 +180,12 @@ export default function AboutPage() {
         </section>
 
         {/* Brands */}
-        <section className="bg-stone-50 border-t border-stone-200 py-16 px-6">
+        <section className="bg-cream border-t border-warm-gray-200 py-16 px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl font-semibold text-stone-900 mb-4">
+            <h2 className="text-2xl font-semibold text-charcoal mb-4">
               Brands Mark Has Worked With
             </h2>
-            <p className="text-stone-600 mb-8">
+            <p className="text-warm-gray-600 mb-8">
               Over 24 years, Mark has sold and installed products from every major manufacturer in the industry. At Luxe, he carries the ones he trusts.
             </p>
             <div className="flex flex-wrap gap-3">
@@ -197,7 +197,7 @@ export default function AboutPage() {
               ].map((brand) => (
                 <span
                   key={brand}
-                  className="bg-white border border-stone-200 text-stone-700 text-sm px-4 py-2 rounded-full"
+                  className="bg-white border border-warm-gray-200 text-warm-gray-700 text-sm px-4 py-2 rounded-full"
                 >
                   {brand}
                 </span>
@@ -209,22 +209,22 @@ export default function AboutPage() {
         {/* CTA */}
         <section className="py-16 px-6">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-semibold text-stone-900 mb-4">
+            <h2 className="text-3xl font-semibold text-charcoal mb-4">
               Ready to Get It Right the First Time?
             </h2>
-            <p className="text-stone-600 mb-8">
+            <p className="text-warm-gray-600 mb-8">
               Schedule a free in-home consultation with Mark. No pressure, no catalog overwhelm — just honest advice from someone who has been doing this for 24 years.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/book"
-                className="bg-amber-700 text-white px-8 py-4 rounded-lg font-medium hover:bg-amber-800 transition-colors"
+                className="bg-gold text-white px-8 py-4 rounded-lg font-medium hover:bg-gold-dark transition-colors"
               >
                 Book a Free Consultation
               </Link>
               <Link
                 href="tel:+12086608643"
-                className="border border-stone-300 text-stone-800 px-8 py-4 rounded-lg font-medium hover:bg-stone-50 transition-colors"
+                className="border border-warm-gray-300 text-charcoal px-8 py-4 rounded-lg font-medium hover:bg-cream transition-colors"
               >
                 Call 208-660-8643
               </Link>
