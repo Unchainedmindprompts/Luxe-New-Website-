@@ -286,16 +286,12 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       // into that node's sameAs instead.
       { "@id": NORMAN_BRAND["@id"] },
       ALTA_BRAND,
-      {
-        "@type": "Organization",
-        "@id": "https://www.myavista.com/#organization",
-        name: "Avista Corporation",
-        url: "https://www.myavista.com",
-        sameAs: [
-          "https://www.myavista.com/your-account/moving",
-          "https://en.wikipedia.org/wiki/Avista",
-        ],
-      },
+      // Avista and the DOE were dropped from mentions. Avista appears once, about
+      // utility hookups, and does not define what the article is about; the body
+      // link stays. The DOE stays in the graph where it belongs — as publisher of
+      // the cited fact sheet — rather than also claiming to be a subject of the
+      // article. Mentions that overreach get discounted, so the honest set is
+      // the smaller one.
       {
         "@type": "AdministrativeArea",
         "@id": "https://www.kcgov.us/#administrativearea",
@@ -307,14 +303,6 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
           "https://en.wikipedia.org/wiki/Kootenai_County,_Idaho",
         ],
       },
-      {
-        "@type": "GovernmentOrganization",
-        "@id": "https://www.energy.gov/#organization",
-        name: "United States Department of Energy",
-        alternateName: "DOE",
-        url: "https://www.energy.gov",
-        sameAs: ["https://en.wikipedia.org/wiki/United_States_Department_of_Energy"],
-      },
     ],
     citation: [
       {
@@ -322,7 +310,14 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
         "@id": "https://www.energy.gov/sites/default/files/2021-12/bto-cellular-shades-factsheet-112221.pdf",
         url: "https://www.energy.gov/sites/default/files/2021-12/bto-cellular-shades-factsheet-112221.pdf",
         name: "Cellular Shades — Building Technologies Office fact sheet",
-        publisher: { "@id": "https://www.energy.gov/#organization" },
+        publisher: {
+          "@type": "GovernmentOrganization",
+          "@id": "https://www.energy.gov/#organization",
+          name: "United States Department of Energy",
+          alternateName: "DOE",
+          url: "https://www.energy.gov",
+          sameAs: ["https://en.wikipedia.org/wiki/United_States_Department_of_Energy"],
+        },
       },
     ],
     relatedLink: [
@@ -478,7 +473,11 @@ function deriveArticleAbout(post: BlogPost): object {
       return { "@id": `${BUSINESS.url}/products/${productSlug}#service` };
     }
   }
-  return { "@type": "Thing", name: post.category || "Custom Window Coverings" };
+  // Fall back to the business's own window treatment catalog rather than an
+  // anonymous Thing. An anonymous node connects to nothing and reinforces
+  // nothing; the catalog is a real entity defined once on the homepage, so a
+  // topical article now points at something the rest of the graph knows about.
+  return { "@id": `${BUSINESS.url}/#window-treatments` };
 }
 
 function ArticleSchema({ post }: { post: BlogPost }) {
@@ -497,10 +496,58 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     cityNode("Sandpoint"),
   ];
 
+  const pageUrl = `${BUSINESS.url}/blog/${post.slug}`;
+  const articleSubject = deriveArticleAbout(post);
+  const imageUrl = post.featuredImage?.startsWith("http")
+    ? post.featuredImage
+    : `${BUSINESS.url}${post.featuredImage ?? ""}`;
+
+  /**
+   * The page as an entity, distinct from the article as a work. Without this
+   * the article was a rich but free-floating object: mainEntityOfPage was a
+   * bare URL string pointing at nothing declared, so nothing tied the article
+   * to the website, the breadcrumb or the image. This is the hinge that joins
+   * them.
+   */
+  const webpageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: post.seoTitle || post.title,
+    description: post.metaDescription || post.excerpt,
+    isPartOf: { "@id": `${BUSINESS.url}/#website` },
+    about: articleSubject,
+    mainEntity: { "@id": `${pageUrl}#article` },
+    breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
+    ...(post.featuredImage && {
+      primaryImageOfPage: { "@id": `${pageUrl}#primaryimage` },
+    }),
+    inLanguage: "en-US",
+  };
+
+  /**
+   * Dimensions come from the file rather than the previous hard-coded
+   * 1200x630, which was wrong for every post — this one's hero is 1672x941.
+   */
+  const primaryImageSchema = post.featuredImage
+    ? {
+        "@context": "https://schema.org",
+        "@type": "ImageObject",
+        "@id": `${pageUrl}#primaryimage`,
+        url: imageUrl,
+        contentUrl: imageUrl,
+        ...(post.featuredImageWidth && post.featuredImageHeight
+          ? { width: post.featuredImageWidth, height: post.featuredImageHeight }
+          : {}),
+        caption: post.featuredImageAlt || post.title,
+      }
+    : null;
+
   const schema = {
     "@context": "https://schema.org",
-    "@type": "Article",
-    "@id": `${BUSINESS.url}/blog/${post.slug}#article`,
+    "@type": "BlogPosting",
+    "@id": `${pageUrl}#article`,
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
@@ -511,9 +558,13 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     inLanguage: "en-US",
     author: markAuthorRef,
     publisher: { "@id": `${BUSINESS.url}/#business` },
-    mainEntityOfPage: `${BUSINESS.url}/blog/${post.slug}`,
+    // Resolves to the WebPage node above rather than a bare URL string.
+    mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
+    // ${BUSINESS.url}/blog is the Blog entity the /blog route already defines
+    // and the ID the whole site already uses. Minting a competing
+    // /blog#collection would have split one collection into two.
     isPartOf: { "@id": `${BUSINESS.url}/blog` },
-    about: deriveArticleAbout(post),
+    about: articleSubject,
     mentions: [...baseMentions, ...(extensions?.mentions ?? [])],
     ...(extensions?.citation && { citation: extensions.citation }),
     ...(extensions?.relatedLink && { relatedLink: extensions.relatedLink }),
@@ -521,19 +572,9 @@ function ArticleSchema({ post }: { post: BlogPost }) {
       "@type": "SpeakableSpecification",
       cssSelector: ["h1", ".post-excerpt"],
     },
-    ...(post.featuredImage && {
-      image: {
-        "@type": "ImageObject",
-        url: post.featuredImage.startsWith("http")
-          ? post.featuredImage
-          : `${BUSINESS.url}${post.featuredImage}`,
-        contentUrl: post.featuredImage.startsWith("http")
-          ? post.featuredImage
-          : `${BUSINESS.url}${post.featuredImage}`,
-        width: 1200,
-        height: 630,
-      },
-    }),
+    // References the ImageObject defined above instead of restating an
+    // anonymous copy of it inline.
+    ...(post.featuredImage && { image: { "@id": `${pageUrl}#primaryimage` } }),
   };
 
   const breadcrumbSchema = {
@@ -550,7 +591,8 @@ function ArticleSchema({ post }: { post: BlogPost }) {
   const faqSchema = post.faqs.length > 0 ? {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "@id": `${BUSINESS.url}/blog/${post.slug}#faq`,
+    "@id": `${pageUrl}#faq`,
+    isPartOf: { "@id": `${pageUrl}#webpage` },
     mainEntity: post.faqs.map((faq) => ({
       "@type": "Question",
       name: faq.question,
@@ -591,8 +633,18 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     <>
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
+      {primaryImageSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(primaryImageSchema) }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
@@ -704,6 +756,34 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
           </div>
         </section>
+
+        {/* FAQs — visible, because the FAQPage schema was being emitted for
+            content no reader could actually see. Google's structured data
+            policy requires FAQ markup to reflect content visible on the page,
+            and beyond the policy it was simply a claim the page didn't back up.
+            Rendered as a plain definition list in the article's own voice, not
+            an accordion, so nothing is hidden behind an interaction. */}
+        {post.faqs.length > 0 && (
+          <section className="py-12 md:py-16 bg-warm-white border-t border-warm-gray-200/60">
+            <div className="container-luxe max-w-3xl">
+              <h2 className="font-serif text-2xl md:text-3xl text-charcoal mb-8">
+                Common questions
+              </h2>
+              <dl className="space-y-8">
+                {post.faqs.map((faq) => (
+                  <div key={faq.question}>
+                    <dt className="font-serif text-lg md:text-xl text-charcoal leading-snug">
+                      {faq.question}
+                    </dt>
+                    <dd className="mt-2 text-base md:text-lg text-warm-gray-600 leading-relaxed">
+                      {faq.answer}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </section>
+        )}
 
         {/* Tags */}
         {post.tags.length > 0 && (

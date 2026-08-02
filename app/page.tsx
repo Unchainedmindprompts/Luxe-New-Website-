@@ -173,6 +173,12 @@ const businessNode = {
   },
   hasOfferCatalog: {
     "@type": "OfferCatalog",
+    // Identity added, entity unchanged. This catalog already existed and
+    // already enumerated everything Luxe sells; it just had no @id, so nothing
+    // could point at it. Articles now use it as their canonical subject rather
+    // than each minting an anonymous Thing named "Custom Window Coverings".
+    // No new entity is introduced — an existing one becomes referenceable.
+    "@id": `${BASE}/#window-treatments`,
     name: "Window Treatments",
     itemListElement: [
       {
