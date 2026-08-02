@@ -267,6 +267,26 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
   mentions?: object[];
   relatedLink?: string[];
 }> = {
+  // Move-in article and the new-construction guide serve the same reader at
+  // two different depths — this one is the "what nobody told you" primer, that
+  // one is the phase-and-budget plan. Linked both ways so the pair reads as a
+  // cluster rather than two unrelated posts.
+  "moving-into-a-new-home-window-coverings-north-idaho": {
+    mentions: [
+      { "@id": `${BUSINESS.url}/blog/window-coverings-for-new-construction-in-coeur-dalene-rathdrum#article` },
+    ],
+    relatedLink: [
+      `${BUSINESS.url}/blog/window-coverings-for-new-construction-in-coeur-dalene-rathdrum`,
+    ],
+  },
+  "window-coverings-for-new-construction-in-coeur-dalene-rathdrum": {
+    mentions: [
+      { "@id": `${BUSINESS.url}/blog/moving-into-a-new-home-window-coverings-north-idaho#article` },
+    ],
+    relatedLink: [
+      `${BUSINESS.url}/blog/moving-into-a-new-home-window-coverings-north-idaho`,
+    ],
+  },
   "are-costco-window-treatments-worth-it-a-local-dealer-tells-you-the-truth": {
     citation: [
       {

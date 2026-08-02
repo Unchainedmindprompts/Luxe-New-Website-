@@ -207,18 +207,46 @@ export default async function ProductPage({ params }: Props) {
 
       {/* Product image or video */}
       <section className="container-luxe -mt-4 mb-16">
-        {product.video ? (
+        {product.heroVideo ? (
+          /* Square, and capped narrower than the image hero, because the clip
+             is 720x720 and the motion that matters — the shade travelling up
+             and down — happens at the top and bottom of frame. Forcing it into
+             the 16:9 box the image hero uses would crop away the actual
+             demonstration. */
+          <div className="max-w-xl mx-auto relative aspect-square rounded-2xl overflow-hidden bg-warm-gray-100">
+            <video
+              className="absolute inset-0 w-full h-full object-cover"
+              src={product.heroVideo.src}
+              poster={product.heroVideo.poster}
+              aria-label={product.heroVideo.label}
+              /* muted and playsInline are both load-bearing: browsers block
+                 autoplay with sound, and without playsInline iOS Safari takes
+                 the video fullscreen instead of playing it in place. */
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+            />
+          </div>
+        ) : product.video ? (
           <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden">
             <YoutubeEmbed videoId={product.video.youtubeId} title={product.video.title} />
           </div>
         ) : product.image ? (
           <div className="max-w-4xl mx-auto relative aspect-[16/9] rounded-2xl overflow-hidden">
+            {/* sizes is required on a fill image. Without it Next assumes
+                100vw and picks a variant for the wrong slot — this hero was
+                being served a 675px file into an 896px box and upscaled by the
+                browser. The container is capped by max-w-4xl at 896px, so say
+                so. The gallery images below already do this correctly. */}
             <Image
               src={product.image}
               alt={`${product.name} — installed by Luxe Window Works`}
               fill
               className="object-cover"
               priority
+              sizes="(min-width: 896px) 896px, 100vw"
             />
           </div>
         ) : (
