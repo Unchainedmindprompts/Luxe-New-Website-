@@ -22,6 +22,10 @@ interface Props {
 
 /** Per-slug keyword overrides for articles that need exact keyword targeting */
 const SLUG_KEYWORDS: Record<string, string> = {
+  // Carried over verbatim from the hand-written designer route, which set its
+  // own keywords rather than using the derived set.
+  "designer-window-treatments-coeur-dalene-post-falls":
+    "designer window treatments, interior designer window treatments, Coeur d'Alene window treatments, Post Falls window treatments, custom window treatments, North Idaho, Luxe Window Works, Mark Abplanalp",
   "custom-window-coverings-near-post-falls-coeur-dalene-local-expertise":
     "custom window coverings near me, window coverings near me, custom blinds near me, blind near me, window blinds near me, window treatments near me, Post Falls Idaho, Coeur d'Alene, Northern Idaho, buying guide, local expertise, Luxe Window Works, Mark Abplanalp",
 };
@@ -254,6 +258,36 @@ const highPressureHowToSchema = {
 
 /** Slug-specific HowTo schema — FAQPage is now generated dynamically from [slug].faqs.json */
 const SLUG_SCHEMA: Record<string, object[]> = {
+  /**
+   * Caroline Di Diego's review, carried over verbatim from the hand-written
+   * designer route. The @id is preserved exactly — #review-caroline-didiego,
+   * not the slug-derived ID the generic review path would mint — because it is
+   * already a stable published identifier for this review. Reviewer name, job
+   * title, rating, body, date, source URL and itemReviewed are unchanged.
+   */
+  "designer-window-treatments-coeur-dalene-post-falls": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Review",
+      "@id": `${BUSINESS.url}/#review-caroline-didiego`,
+      url: "https://maps.app.goo.gl/LK59b24y9xTy7Jcw8",
+      datePublished: "2025-11-09",
+      reviewBody:
+        "Outstanding experience with Mark at Luxe Window Works! As designers we love to work with professionals to implement our designs. We always have very 'custom' requirements, and that was certainly the case with Mark and Luxe Window Works. Mark paid super close attention during the ordering process, and it really paid off! Our design criteria was realized meticulously, and Mark's installation was thorough (and fast!), with the end result exceeding our expectations. Window treatments can make or break an interior design, so it's mandatory to have a resource that offers a curated selection of the best made, proven quality products, as Luxe does. In the end it saves time and money, and results in very happy clients. And we all want happy clients!",
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: "5",
+        bestRating: "5",
+        worstRating: "1",
+      },
+      author: {
+        "@type": "Person",
+        name: "Caroline Di Diego",
+        jobTitle: "Interior Designer",
+      },
+      itemReviewed: { "@id": `${BUSINESS.url}/#business` },
+    },
+  ],
   "your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works": [
     installationHowToSchema,
   ],
@@ -267,6 +301,13 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
   citation?: object[];
   mentions?: object[];
   relatedLink?: string[];
+  /**
+   * Overrides deriveArticleAbout when an article's real subject is not what
+   * its slug implies. Added for the designer article, whose hand-written route
+   * pointed `about` at the Coeur d'Alene area service — a deliberate choice the
+   * slug patterns would not have reproduced.
+   */
+  about?: object;
 }> = {
   // Move-in article and the new-construction guide serve the same reader at
   // two different depths — this one is the "what nobody told you" primer, that
@@ -331,6 +372,10 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
     relatedLink: [
       `${BUSINESS.url}/blog/moving-into-a-new-home-window-coverings-north-idaho`,
     ],
+  },
+  // Preserves the subject the hand-written route declared before migration.
+  "designer-window-treatments-coeur-dalene-post-falls": {
+    about: { "@id": `${BUSINESS.url}/areas/coeur-d-alene#service` },
   },
   "are-costco-window-treatments-worth-it-a-local-dealer-tells-you-the-truth": {
     citation: [
@@ -497,7 +542,7 @@ function ArticleSchema({ post }: { post: BlogPost }) {
   ];
 
   const pageUrl = `${BUSINESS.url}/blog/${post.slug}`;
-  const articleSubject = deriveArticleAbout(post);
+  const articleSubject = extensions?.about ?? deriveArticleAbout(post);
   const imageUrl = post.featuredImage?.startsWith("http")
     ? post.featuredImage
     : `${BUSINESS.url}${post.featuredImage ?? ""}`;
