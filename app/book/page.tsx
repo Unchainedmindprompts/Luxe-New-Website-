@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Script from "next/script";
+import { BUSINESS } from "@/lib/constants";
 
 export default function BookPage() {
   const [form, setForm] = useState({
@@ -104,6 +106,52 @@ export default function BookPage() {
             just honest advice from a team with 24 years of hands-on
             experience.
           </p>
+        </div>
+      </div>
+
+      {/* Scheduler — the primary path. Self-booking converts better than
+          "we'll call you back" because it closes in one sitting instead of
+          depending on a callback landing while the visitor is still warm. The
+          form below stays as a fallback for anyone who would rather be called,
+          and the phone number stays prominent for anyone who would rather
+          talk — three doors, not one. */}
+      <div className="max-w-4xl mx-auto px-4 pt-12">
+        <div className="text-center mb-6">
+          <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">
+            Pick a time that works for you
+          </h2>
+          <p className="mt-2 text-warm-gray-600">
+            Choose a slot below and it&apos;s booked — no waiting on a callback.
+          </p>
+        </div>
+        {/* Height is generous on purpose. At 700px the widget's own content
+            overflowed and produced a scrollbar *inside* the frame — the time
+            list was cut off mid-morning and the event header was clipped off
+            the top. People do not reliably scroll inside an embedded box,
+            especially on a phone, so that was losing bookings. Mobile needs
+            more than desktop because Calendly stacks the calendar above the
+            time list rather than beside it. */}
+        <div
+          className="calendly-inline-widget rounded-2xl overflow-hidden border border-warm-gray-200 bg-white h-[1180px] sm:h-[1020px] lg:h-[980px]"
+          data-url={`${BUSINESS.calendlyUrl}?hide_gdpr_banner=1&background_color=fdfcfa&primary_color=c9a96e&text_color=2e2e2e`}
+          style={{ minWidth: "320px" }}
+        />
+        {/* lazyOnload keeps a third-party script off the critical path — this
+            page's LCP should not wait on Calendly. */}
+        <Script
+          src="https://assets.calendly.com/assets/external/widget.js"
+          strategy="lazyOnload"
+        />
+      </div>
+
+      {/* Divider into the fallback path */}
+      <div className="max-w-4xl mx-auto px-4 pt-14">
+        <div className="flex items-center gap-4">
+          <div className="h-px bg-warm-gray-200 flex-1" />
+          <p className="text-sm text-warm-gray-500 whitespace-nowrap">
+            Or have us call you instead
+          </p>
+          <div className="h-px bg-warm-gray-200 flex-1" />
         </div>
       </div>
 

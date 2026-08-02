@@ -22,6 +22,15 @@ export const BUSINESS = {
     reviewCount: 17,
     mapsUrl: "https://share.google/pRM5IoXZgRTksImvp",
   },
+  /**
+   * Calendly event embedded on /book. Deliberately the only place this URL
+   * appears — every public reference (Google Business Profile, email
+   * signature, cards, ads, blog CTAs) should point at
+   * luxewindowworks.com/book, never at calendly.com directly. Changing
+   * scheduling platforms then means editing this line and nothing else, with
+   * no external links to chase down.
+   */
+  calendlyUrl: "https://calendly.com/mark-luxewindowworks/30min",
   yelp: {
     url: "https://www.yelp.com/biz/luxe-window-works-post-falls",
   },

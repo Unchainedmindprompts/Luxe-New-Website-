@@ -104,6 +104,24 @@ export default function OptionsFlow() {
           We&apos;ll be in touch within <strong>24 hours</strong> to talk
           through your options and schedule your free consultation.
         </p>
+        {/* Offer the booking path here too. The request is already in — this
+            just lets anyone who would rather not wait on a callback close it
+            themselves, which is the whole reason for having a scheduler. */}
+        <div className="mt-2 mb-7 pt-6 border-t border-warm-gray-200">
+          <p className="text-charcoal font-medium mb-3">
+            Don&apos;t want to wait for the call?
+          </p>
+          <Link
+            href="/book"
+            className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-7 py-3.5 rounded-full text-base transition-all hover:shadow-lg"
+          >
+            Pick a Time Now
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </div>
+
         <p className="text-sm text-warm-gray-500">
           Prefer to reach out directly?{" "}
           <a
