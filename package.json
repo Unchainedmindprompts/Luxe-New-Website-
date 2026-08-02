@@ -9,7 +9,9 @@
     "start": "next start",
     "lint": "next lint",
     "audit:schema": "node scripts/audit-schema-ids.mjs",
-    "prepare": "husky"
+    "prepare": "husky",
+    "audit:rendered": "node scripts/audit-rendered-schema.mjs",
+    "postbuild": "node scripts/audit-rendered-schema.mjs"
   },
   "engines": {
     "node": ">=18.17.0"

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
+import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS, PRODUCTS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
@@ -201,26 +201,13 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
 
   return (
     <>
-      <Script
-        id={`area-webpage-schema-${slug}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
-      />
-      <Script
-        id={`area-service-schema-${slug}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
-      />
-      <Script
-        id={`area-breadcrumb-schema-${slug}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <Script
-        id={`area-faq-schema-${slug}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      {/* JsonLd, not next/script — see the same fix on /about. All five area
+          pages were shipping their Service entity only in the RSC payload, so
+          the local service schema for every city was uncrawlable. */}
+      <JsonLd data={webpageSchema} />
+      <JsonLd data={serviceSchema} />
+      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={faqSchema} />
     </>
   );
 }

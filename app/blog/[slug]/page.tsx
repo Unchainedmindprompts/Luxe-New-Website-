@@ -322,12 +322,14 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       // The external URLs live in sameAs as corroboration; @id is what makes
       // the entity the same node everywhere it appears on the site.
       //
-      // Norman is referenced, not redefined — it is already defined once in
-      // lib/brands.ts and emitted on the product pages. Defining it again here
-      // with a normanusa.com @id, as the supplied draft did, would have split
-      // one manufacturer into two unconnected nodes. normanusa.com is folded
-      // into that node's sameAs instead.
-      { "@id": NORMAN_BRAND["@id"] },
+      // normanusa.com is folded into NORMAN_BRAND's sameAs rather than given a
+      // second @id, so one manufacturer stays one node.
+      // Full node, not a bare { "@id": ... }. Nothing else on the site renders
+      // NORMAN_BRAND — it lives in lib/brands.ts and is only imported here —
+      // so a reference-only mention pointed at an entity that existed in
+      // source but never in published JSON-LD. Spread it, exactly as ALTA_BRAND
+      // is spread below.
+      NORMAN_BRAND,
       ALTA_BRAND,
       // Avista and the DOE were dropped from mentions. Avista appears once, about
       // utility hookups, and does not define what the article is about; the body
