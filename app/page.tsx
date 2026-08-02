@@ -47,8 +47,8 @@ const businessNode = {
   foundingDate: "2025",
   image: {
     "@type": "ImageObject",
-    url: `${BASE}/images/hero-lake-view.webp`,
-    contentUrl: `${BASE}/images/hero-lake-view.webp`,
+    url: `${BASE}/images/hero-lake-room.webp`,
+    contentUrl: `${BASE}/images/hero-lake-room.webp`,
     width: 1672,
     height: 941,
   },
@@ -240,7 +240,7 @@ const webpageNode = {
   mainEntity: { "@id": `${BASE}/#business` },
   primaryImageOfPage: {
     "@type": "ImageObject",
-    url: `${BASE}/images/hero-lake-view.webp`,
+    url: `${BASE}/images/hero-lake-room.webp`,
   },
   inLanguage: "en-US",
 };
@@ -394,105 +394,6 @@ const PROCESS_STEPS = [
   },
 ];
 
-/** Hero copy. One definition, two call sites (mobile stack, desktop wall), so
- *  the wording can only be edited in one place.
- *  `fluid` switches every size to vw units for the desktop pass — the copy has
- *  to scale at the same rate as the wall it sits on, or it outgrows it. */
-function HeroCopy({ fluid = false }: { fluid?: boolean }) {
-  return (
-    <div>
-      {/* This carries the page's only <h1>. The display headline that used to
-          sit here was removed for looking busy, so the semantic heading moves
-          onto this line rather than disappearing — a page with no h1 loses a
-          real ranking signal, and a hidden one is worse than an honest small
-          one. It still names the service and the region, which is what the
-          heading needs to do. */}
-      {/* gold-dark (#B8943D), not gold (#C9A96E) — the lighter brand gold sits
-          too close in value to the sunlit beige wall behind it to read. */}
-      <h1
-        className={`text-gold-dark font-semibold uppercase tracking-[0.18em] ${
-          fluid ? "text-[0.85vw] mb-[1.4vw]" : "text-[11px] mb-4"
-        }`}
-      >
-        Custom Window Treatments &middot; North Idaho
-      </h1>
-      <p
-        className={`text-charcoal leading-relaxed ${
-          fluid ? "text-[1.35vw]" : "text-lg sm:text-xl"
-        }`}
-      >
-        You don&apos;t need to know what to buy. We bring the options to your
-        home, measure everything, and install it with a lifetime guarantee.
-      </p>
-
-      {/* w-fit collapses this column to the width of its widest child (the
-          button), so items-center centres the secondary link under the button
-          rather than under the whole copy column. The block itself stays
-          left-aligned with the rest of the copy. */}
-      <div
-        className={`flex flex-col items-center w-fit ${
-          fluid ? "mt-[2vw] gap-[1vw]" : "mt-8 gap-4"
-        }`}
-      >
-        <Link
-          href="/book"
-          className={`inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold rounded-full transition-all hover:shadow-lg ${
-            fluid ? "text-[1vw] px-[2vw] py-[1.05vw]" : "text-base px-7 py-4"
-          }`}
-        >
-          Book My Free In-Home Consultation
-        </Link>
-        <Link
-          href="/show-me-my-options"
-          className={`inline-flex items-center gap-2 text-charcoal hover:text-gold font-semibold transition-colors group ${
-            fluid ? "text-[1vw]" : "text-base"
-          }`}
-        >
-          Show Me My Options
-          <svg
-            className={`group-hover:translate-x-1 transition-transform ${
-              fluid ? "w-[1vw] h-[1vw]" : "w-4 h-4"
-            }`}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </Link>
-      </div>
-
-      <div className={fluid ? "mt-[2vw] space-y-[0.35vw]" : "mt-8 space-y-1.5"}>
-        <div className={`flex items-center ${fluid ? "gap-[0.7vw]" : "gap-3"}`}>
-          <span className="flex">
-            {[...Array(5)].map((_, i) => (
-              <StarIcon key={i} />
-            ))}
-          </span>
-          <span
-            className={`text-charcoal font-medium ${
-              fluid ? "text-[0.9vw]" : "text-sm"
-            }`}
-          >
-            {BUSINESS.google.rating.toFixed(1)}
-            {" on Google "}&middot;{" 24 years consulting & installing"}
-          </span>
-        </div>
-        <p className={`text-warm-gray-600 ${fluid ? "text-[0.9vw]" : "text-sm"}`}>
-          Post Falls &middot; Coeur d&apos;Alene &middot; Hayden &middot; Rathdrum
-        </p>
-        <p className={`text-warm-gray-500 ${fluid ? "text-[0.9vw]" : "text-sm"}`}>
-          Or call / text{" "}
-          <a href={BUSINESS.phoneHref} className="hover:text-gold transition-colors">
-            {BUSINESS.phone}
-          </a>{" "}
-          &mdash; usually same-day
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export default function HomePage() {
   return (
     <>
@@ -501,70 +402,98 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageGraph) }}
       />
 
-      {/* 1. Hero
-          The copy sits on the sunlit wall inside the photo, as designed.
+      {/* 1. Hero — Hunter Douglas layout.
+          Their format, deliberately: the image sits in a contained band with
+          page background either side rather than bleeding to the viewport
+          edge; it carries exactly one line of type, low, white, all caps, wide
+          tracking, centred; and every other piece of copy waits until you are
+          off the photograph. Nothing overlaps the image but the headline.
 
-          Everything on the desktop side is sized in vw, and that is the whole
-          trick. The photo is full-bleed and the container is always wider than
-          the image's 1.78 aspect at these heights, so the full image width is
-          always shown and the wall corner lands at a fixed 38.5% of the
-          viewport (measured off the file by edge detection, not guessed). A
-          copy block sized in vw therefore scales at exactly the same rate as
-          the wall and can never outgrow it.
-
-          The earlier version anchored the copy to container-luxe, whose left
-          edge is 50vw minus a constant. That grows faster than 38.5vw does, so
-          past roughly 1700px the copy slid off the wall onto the bright
-          windows and the small type became unreadable. Do not reintroduce a
-          centered container or a rem-based max-width here. */}
-      <section className="relative overflow-hidden">
-        {/* Mobile: photo first, copy on cream beneath it. The wall is far too
-            narrow once the frame is cropped to a phone to carry any of the
-            copy, so the two stack rather than overlapping. */}
-        <div className="md:hidden">
-          {/* Anchored right, and square rather than 4:3. The figure sits at the
-              far right of the source (roughly 87–97% of its width), so an
-              earlier object-[45%] crop excluded her entirely — the phone frame
-              only sees about a quarter of the image width. object-right brings
-              her in; the square frame scales the image up enough that she reads
-              at a usable size instead of a speck.
-              pt-16 offsets the fixed header, which is 64px tall on mobile —
-              without it the top of the photo sits underneath the header bar.
-              Desktop is a separate block and is unaffected by anything here. */}
-          <div className="relative w-full aspect-square mt-16">
+          This replaces a left-aligned block that sat on a bare wall inside the
+          previous photo. That only worked because that image had roughly a
+          third of its width empty. This one is furnished edge to edge, so
+          there is no negative space to sit in — which is exactly the situation
+          HD's layout is built for. */}
+      <section className="bg-warm-white pt-16 md:pt-20">
+        {/* Contained band. max-w is wider than container-luxe on purpose so the
+            hero reads as more immersive than the sections below it, while
+            still clearly being a band and not a bleed. */}
+        <div className="mx-auto max-w-[1700px] px-4 sm:px-6 lg:px-10">
+          <div className="relative w-full overflow-hidden aspect-[4/5] sm:aspect-[16/10] lg:aspect-[2/1]">
             <Image
-              src="/images/hero-lake-view.webp"
-              alt="Modern North Idaho lakefront living room with solar roller shades filtering afternoon light over a lake and pine view"
+              src="/images/hero-lake-room.webp"
+              alt="North Idaho lakefront dining room with cellular shades lowered over floor-to-ceiling windows looking onto a mountain lake"
               fill
-              className="object-cover object-right"
+              /* Anchored right on phones: the figure sits at roughly 85–97% of
+                 the source width, so a centred crop clips her mid-body. Right
+                 also keeps the lake and the mountains in frame. */
+              className="object-cover object-right sm:object-center"
               priority
               sizes="100vw"
               quality={90}
             />
-          </div>
-          <div className="bg-warm-white pt-9 pb-10 px-5">
-            <HeroCopy />
+            {/* Bottom-anchored only, clearing by 45% up so the lake, the
+                mountains and the shades are never touched. */}
+            <div className="absolute inset-0 bg-gradient-to-t from-charcoal/75 via-charcoal/30 via-20% to-transparent to-45%" />
+
+            <div className="absolute inset-x-0 bottom-0 px-5 pb-6 sm:pb-8 lg:pb-10 text-center">
+              {/* Tracking eases off on phones so the line stays on one row —
+                  at 0.2em it wrapped and stranded "IDAHO" by itself. */}
+              <h1 className="text-white font-semibold uppercase text-[9.5px] sm:text-base md:text-xl lg:text-2xl xl:text-[1.9vw] tracking-[0.1em] sm:tracking-[0.24em] leading-snug [text-shadow:0_2px_10px_rgb(0_0_0_/_45%)]">
+                Custom Window Treatments &middot; North Idaho
+              </h1>
+            </div>
           </div>
         </div>
 
-        {/* Desktop: copy on the wall. */}
-        <div className="hidden md:flex relative items-center min-h-[600px] lg:min-h-[72vh] xl:min-h-[78vh]">
-          <Image
-            src="/images/hero-lake-view.webp"
-            alt="Modern North Idaho lakefront living room with solar roller shades filtering afternoon light over a lake and pine view"
-            fill
-            className="object-cover object-center"
-            priority
-            sizes="100vw"
-            quality={90}
-          />
-          {/* Lifts the wall only. Clears at 36%, just inside the 38.5% corner,
-              so the windows, lake and pines are never touched. */}
-          <div className="absolute inset-0 bg-gradient-to-r from-warm-white/75 via-warm-white/45 via-18% to-transparent to-36%" />
-          {/* 5vw margin + 30vw column = right edge at 35vw, clear of the
-              38.5% corner at every width. */}
-          <div className="relative ml-[5vw] w-[30vw]">
-            <HeroCopy fluid />
+        {/* Everything else, off the photo and centred. */}
+        <div className="container-luxe py-9 md:py-12 text-center">
+          <p className="text-lg md:text-xl text-charcoal leading-relaxed max-w-2xl mx-auto">
+            You don&apos;t need to know what to buy. We bring the options to
+            your home, measure everything, and install it with a lifetime
+            guarantee.
+          </p>
+
+          <div className="mt-7 flex flex-col items-center gap-3.5">
+            <Link
+              href="/book"
+              className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-base transition-all hover:shadow-lg"
+            >
+              Book My Free In-Home Consultation
+            </Link>
+            <Link
+              href="/show-me-my-options"
+              className="inline-flex items-center gap-2 text-charcoal hover:text-gold font-semibold text-base transition-colors group"
+            >
+              Show Me My Options
+              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
+
+          <div className="mt-7 space-y-1.5">
+            <div className="flex items-center justify-center gap-3">
+              <span className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon key={i} />
+                ))}
+              </span>
+              <span className="text-sm text-charcoal font-medium">
+                {BUSINESS.google.rating.toFixed(1)}
+                {" on Google "}&middot;{" 24 years consulting & installing"}
+              </span>
+            </div>
+            <p className="text-sm text-warm-gray-600">
+              Post Falls &middot; Coeur d&apos;Alene &middot; Hayden &middot; Rathdrum
+            </p>
+            <p className="text-sm text-warm-gray-500">
+              Or call / text{" "}
+              <a href={BUSINESS.phoneHref} className="hover:text-gold transition-colors">
+                {BUSINESS.phone}
+              </a>{" "}
+              &mdash; usually same-day
+            </p>
           </div>
         </div>
       </section>
