@@ -210,7 +210,7 @@ export default function AboutPage() {
         <section className="py-16 px-6">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl font-semibold text-stone-900 mb-4">
-              Ready to Work With Someone Who Actually Knows Windows?
+              Ready to Get It Right the First Time?
             </h2>
             <p className="text-stone-600 mb-8">
               Schedule a free in-home consultation with Mark. No pressure, no catalog overwhelm — just honest advice from someone who has been doing this for 24 years.
