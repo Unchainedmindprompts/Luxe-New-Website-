@@ -494,8 +494,12 @@ export default function HomePage() {
                 {" on Google "}&middot;{" 24 years consulting & installing"}
               </span>
             </div>
+            {/* Built from SERVICE_AREAS rather than typed out. The hard-coded
+                version was missing Sandpoint even though the constant has had
+                all five all along — deriving it means the hero cannot fall out
+                of step with the areas we actually publish pages for. */}
             <p className="text-sm text-warm-gray-600">
-              Post Falls &middot; Coeur d&apos;Alene &middot; Hayden &middot; Rathdrum
+              {SERVICE_AREAS.map((a) => a.name).join(" · ")}
             </p>
             <p className="text-sm text-warm-gray-500">
               Or call / text{" "}
