@@ -34,7 +34,7 @@ We see it constantly, because [Kootenai County keeps growing](https://www.kcgov.
 
 ### Resale: window treatments stay with the house
 
-Resale comes with a different problem. Window treatments are built to fit specific windows and mounted to the wall, so they're treated as fixtures and stay with the house — which means you inherit whatever the last owner chose. Sometimes that's fine. Often it's twelve-year-old blinds, sun-faded on the south side, with a wand missing and a couple of slats that won't close all the way.
+Resale comes with a different problem. Window treatments are built to fit specific windows and mounted to the wall, so they're generally treated as fixtures and usually stay with the home unless the purchase agreement says otherwise — which means you typically inherit whatever the last owner chose. Sometimes that's fine. Often it's twelve-year-old blinds, sun-faded on the south side, with a wand missing and a couple of slats that won't close all the way.
 
 Either way, you end up doing what everyone does — a run to the big box store for a pile of paper temporary shades, and an evening you don't have spent sticking them up crooked.
 
