@@ -30,7 +30,7 @@ export const BUSINESS = {
    * scheduling platforms then means editing this line and nothing else, with
    * no external links to chase down.
    */
-  calendlyUrl: "https://calendly.com/mark-luxewindowworks/30min",
+  calendlyUrl: "https://calendly.com/mark-luxewindowworks/2hr",
   yelp: {
     url: "https://www.yelp.com/biz/luxe-window-works-post-falls",
   },
