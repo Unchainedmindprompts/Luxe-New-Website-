@@ -15,11 +15,27 @@ export interface ProductVideo {
   duration: string;
 }
 
+/**
+ * Self-hosted looping hero clip, as distinct from `video` above, which is a
+ * YouTube embed with play controls and VideoObject schema. This one autoplays
+ * muted on loop as the hero media — no controls, no sound, no chrome.
+ */
+export interface ProductHeroVideo {
+  /** H.264 mp4. Must not be HEVC: Chrome and Firefox will not play it. */
+  src: string;
+  /** Shown while the clip loads, and in place of it if autoplay is blocked. */
+  poster: string;
+  /** Describes the clip for screen readers, same job as an image's alt. */
+  label: string;
+}
+
 export interface ProductPageData {
   slug: string;
   name: string;
   image?: string;
   video?: ProductVideo;
+  /** Takes precedence over `image` for the hero when present. */
+  heroVideo?: ProductHeroVideo;
   secondVideo?: ProductVideo;
   /** Optional install-photo gallery rendered after Local Context. */
   gallery?: { src: string; alt: string }[];
@@ -151,7 +167,15 @@ export const productPages: Record<string, ProductPageData> = {
   "solar-shades": {
     slug: "solar-shades",
     name: "Solar Shades",
+    // image is kept as the fallback and is still what the homepage product
+    // card and any social preview use — heroVideo only replaces the hero.
     image: "/images/solar-shades.jpeg",
+    heroVideo: {
+      src: "/videos/solar-shades-loop.mp4",
+      poster: "/videos/solar-shades-loop-poster.webp",
+      label:
+        "Motorized solar shades lowering over floor-to-ceiling windows, cutting glare while keeping the mountain view",
+    },
     headline: "Love Your View but Hate the Glare?",
     subheadline: "Solar shades let you keep the scenery while blocking the UV rays, heat gain, and glare that come with it.",
     problem: "Living in Northern Idaho means incredible views — Coeur d'Alene Lake, the Bitterroot Range, sunsets over the Rathdrum Prairie. But those west-facing and south-facing windows that give you those views also bring intense afternoon glare, UV damage to your furniture and floors, and serious heat gain in summer. You shouldn't have to choose between your view and your comfort.",
