@@ -415,11 +415,17 @@ export default function HomePage() {
           there is no negative space to sit in — which is exactly the situation
           HD's layout is built for. */}
       <section className="bg-warm-white pt-16 md:pt-20">
-        {/* Contained band. max-w is wider than container-luxe on purpose so the
-            hero reads as more immersive than the sections below it, while
-            still clearly being a band and not a bleed. */}
-        <div className="mx-auto max-w-[1700px] px-4 sm:px-6 lg:px-10">
-          <div className="relative w-full overflow-hidden aspect-[4/5] sm:aspect-[16/10] lg:aspect-[2/1]">
+        {/* Full bleed — edge to edge at every width.
+            Worth knowing what this changes versus the contained version, since
+            Hunter Douglas uses contained: a capped band fills the screen on a
+            laptop (viewport under the cap) but shows margins on a large
+            monitor (viewport over it). That is why their hero looks full bleed
+            on a 15" and banded on a 24". This does not do that — it is edge to
+            edge everywhere.
+            max-h keeps the 2:1 ratio from eating the whole screen on a big
+            display; object-cover absorbs the difference. */}
+        <div className="w-full">
+          <div className="relative w-full overflow-hidden aspect-[4/5] sm:aspect-[16/10] lg:aspect-[2/1] lg:max-h-[74vh]">
             <Image
               src="/images/hero-lake-room.webp"
               alt="North Idaho lakefront dining room with cellular shades lowered over floor-to-ceiling windows looking onto a mountain lake"
@@ -437,9 +443,13 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-t from-charcoal/75 via-charcoal/30 via-20% to-transparent to-45%" />
 
             <div className="absolute inset-x-0 bottom-0 px-5 pb-6 sm:pb-8 lg:pb-10 text-center">
-              {/* Tracking eases off on phones so the line stays on one row —
-                  at 0.2em it wrapped and stranded "IDAHO" by itself. */}
-              <h1 className="text-white font-semibold uppercase text-[9.5px] sm:text-base md:text-xl lg:text-2xl xl:text-[1.9vw] tracking-[0.1em] sm:tracking-[0.24em] leading-snug [text-shadow:0_2px_10px_rgb(0_0_0_/_45%)]">
+              {/* The min() cap stays even though the container is now full
+                  width. It costs nothing here and it is the guard that keeps
+                  the headline from outrunning its box if this ever goes back
+                  to a capped band — which is exactly how "IDAHO" ended up
+                  stranded on its own row. Tracking eases off on phones for the
+                  same reason at the other end of the range. */}
+              <h1 className="text-white font-semibold uppercase text-[9.5px] sm:text-base md:text-xl lg:text-2xl xl:text-[min(1.9vw,48px)] tracking-[0.1em] sm:tracking-[0.24em] leading-snug [text-shadow:0_2px_10px_rgb(0_0_0_/_45%)]">
                 Custom Window Treatments &middot; North Idaho
               </h1>
             </div>
