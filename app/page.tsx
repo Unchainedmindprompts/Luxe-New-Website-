@@ -524,12 +524,19 @@ export default function HomePage() {
           <div className="bg-warm-white pt-28 pb-10 px-5">
             <HeroCopy />
           </div>
-          <div className="relative w-full aspect-[4/3]">
+          {/* Anchored right, and square rather than 4:3. The figure sits at the
+              far right of the source (roughly 87–97% of its width), so the
+              earlier object-[45%] crop excluded her entirely — the phone frame
+              only sees about a quarter of the image width. object-right brings
+              her in; the square frame scales the image up enough that she reads
+              at a usable size instead of a speck. Desktop is a separate block
+              and is unaffected by anything here. */}
+          <div className="relative w-full aspect-square">
             <Image
               src="/images/hero-lake-view.webp"
               alt="Modern North Idaho lakefront living room with solar roller shades filtering afternoon light over a lake and pine view"
               fill
-              className="object-cover object-[45%_center]"
+              className="object-cover object-right"
               priority
               sizes="100vw"
               quality={90}
