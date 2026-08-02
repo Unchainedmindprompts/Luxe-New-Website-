@@ -243,12 +243,21 @@ export default async function AreaPage({ params }: Props) {
 
       {/* Hero */}
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden min-h-[400px] md:min-h-[500px] flex items-center">
+        {/* Object-position is doing real work here and both halves matter.
+            The family on the sofa sits low and far right in the source, and
+            the hero crops on a different axis at each breakpoint: it is short
+            and wide on desktop, so the crop is vertical, and narrow on mobile,
+            so the crop is horizontal. A plain centred cover drops them
+            entirely on mobile and slices them off at the bottom edge on
+            desktop. 82% down holds the woman and the child on desktop;
+            anchoring right keeps them on a phone. */}
         <Image
-          src="/images/top-down-bottom-up-shades.jpeg"
-          alt="Living room with top-down bottom-up shades overlooking a lake"
+          src="/images/area-hero-living-room.webp"
+          alt="Sunlit living room with sheer horizontal shades across floor-to-ceiling windows, a woman and child reading on the sofa"
           fill
-          className="object-cover"
+          className="object-cover object-[right_center] sm:object-[center_82%]"
           priority
+          sizes="100vw"
         />
         <div className="absolute inset-0 bg-charcoal/55" />
         <div className="container-luxe relative max-w-4xl">
