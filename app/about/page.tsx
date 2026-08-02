@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import Image from "next/image";
+import { JsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import { BUSINESS } from "@/lib/constants";
 import { OWNER_STUB } from "@/lib/schema";
@@ -96,16 +96,13 @@ const webpageSchema = {
 export default function AboutPage() {
   return (
     <>
-      <Script
-        id="person-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
-      />
-      <Script
-        id="webpage-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
-      />
+      {/* JsonLd, not next/script. <Script> defers to the client, so this
+          page's schema lived only in the RSC payload and never appeared in the
+          server-rendered HTML a crawler receives — meaning the owner Person
+          entity, the site's whole E-E-A-T signal, was effectively invisible.
+          JsonLd emits a real <script type="application/ld+json"> during SSR. */}
+      <JsonLd data={personSchema} />
+      <JsonLd data={webpageSchema} />
       <main className="bg-white">
         {/* Intro. Carries the page's h1 — the previous version of this page had
             none at all, only h2s, which gave up a ranking signal on a page that

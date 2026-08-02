@@ -1,0 +1,22 @@
+[
+  {
+    "question": "What is an entity graph?",
+    "answer": "An entity graph is a structured set of facts about a person, place, or business that search engines use to understand who you are — not just what keywords appear on your site. For a local business, it connects your name, location, services, and people into a machine-readable identity that Google can trust and surface in relevant searches."
+  },
+  {
+    "question": "How is an entity graph different from regular SEO?",
+    "answer": "Traditional SEO targets keywords — words that match what searchers type. Entity-based SEO targets identity — making sure Google understands who you are well enough to associate you with a topic automatically. A strong entity graph means you can be recommended even when your exact name or phrase wasn't searched."
+  },
+  {
+    "question": "Does a small local business need an entity graph?",
+    "answer": "Yes — arguably more than a national brand. Google's local search results are heavily influenced by entity signals: consistent business name, address, and phone across citations; a verified Google Business Profile; and structured data on your website that ties everything together. A local business with a well-defined entity graph outperforms competitors who rely on keywords alone."
+  },
+  {
+    "question": "What is JSON-LD and how does it relate to entity graphs?",
+    "answer": "JSON-LD is the format Google recommends for adding structured data to web pages. It lets you embed machine-readable facts directly in your HTML — describing your business, the people behind it, the services you offer, and how those things relate to each other. A well-written JSON-LD implementation is the technical foundation of an entity graph on your own website."
+  },
+  {
+    "question": "How does Luxe Window Works use an entity graph?",
+    "answer": "Every page on this site carries structured data that describes the business, its owner, the services offered, and the cities served. Blog articles reference the same owner and business entities, creating a consistent, interconnected identity across the site. This helps Google understand that Luxe Window Works is the authoritative local source for custom window treatments in Northern Idaho — not just a site that mentions those words."
+  }
+]
