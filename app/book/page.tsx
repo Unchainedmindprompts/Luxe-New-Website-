@@ -124,10 +124,17 @@ export default function BookPage() {
             Choose a slot below and it&apos;s booked — no waiting on a callback.
           </p>
         </div>
+        {/* Height is generous on purpose. At 700px the widget's own content
+            overflowed and produced a scrollbar *inside* the frame — the time
+            list was cut off mid-morning and the event header was clipped off
+            the top. People do not reliably scroll inside an embedded box,
+            especially on a phone, so that was losing bookings. Mobile needs
+            more than desktop because Calendly stacks the calendar above the
+            time list rather than beside it. */}
         <div
-          className="calendly-inline-widget rounded-2xl overflow-hidden border border-warm-gray-200 bg-white"
+          className="calendly-inline-widget rounded-2xl overflow-hidden border border-warm-gray-200 bg-white h-[1180px] sm:h-[1020px] lg:h-[980px]"
           data-url={`${BUSINESS.calendlyUrl}?hide_gdpr_banner=1&background_color=fdfcfa&primary_color=c9a96e&text_color=2e2e2e`}
-          style={{ minWidth: "320px", height: "700px" }}
+          style={{ minWidth: "320px" }}
         />
         {/* lazyOnload keeps a third-party script off the critical path — this
             page's LCP should not wait on Calendly. */}
