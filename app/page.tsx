@@ -518,20 +518,20 @@ export default function HomePage() {
           windows and the small type became unreadable. Do not reintroduce a
           centered container or a rem-based max-width here. */}
       <section className="relative overflow-hidden">
-        {/* Mobile: copy on cream, photo beneath. The wall is far too narrow
-            once the frame is cropped to a phone to hold any of this. */}
+        {/* Mobile: photo first, copy on cream beneath it. The wall is far too
+            narrow once the frame is cropped to a phone to carry any of the
+            copy, so the two stack rather than overlapping. */}
         <div className="md:hidden">
-          <div className="bg-warm-white pt-28 pb-10 px-5">
-            <HeroCopy />
-          </div>
           {/* Anchored right, and square rather than 4:3. The figure sits at the
-              far right of the source (roughly 87–97% of its width), so the
+              far right of the source (roughly 87–97% of its width), so an
               earlier object-[45%] crop excluded her entirely — the phone frame
               only sees about a quarter of the image width. object-right brings
               her in; the square frame scales the image up enough that she reads
-              at a usable size instead of a speck. Desktop is a separate block
-              and is unaffected by anything here. */}
-          <div className="relative w-full aspect-square">
+              at a usable size instead of a speck.
+              pt-16 offsets the fixed header, which is 64px tall on mobile —
+              without it the top of the photo sits underneath the header bar.
+              Desktop is a separate block and is unaffected by anything here. */}
+          <div className="relative w-full aspect-square mt-16">
             <Image
               src="/images/hero-lake-view.webp"
               alt="Modern North Idaho lakefront living room with solar roller shades filtering afternoon light over a lake and pine view"
@@ -541,6 +541,9 @@ export default function HomePage() {
               sizes="100vw"
               quality={90}
             />
+          </div>
+          <div className="bg-warm-white pt-9 pb-10 px-5">
+            <HeroCopy />
           </div>
         </div>
 
