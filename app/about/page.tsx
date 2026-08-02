@@ -107,7 +107,9 @@ export default function AboutPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
       />
       <main className="bg-white">
-        {/* Main bio */}
+        {/* Intro. Carries the page's h1 — the previous version of this page had
+            none at all, only h2s, which gave up a ranking signal on a page that
+            targets the core service term. */}
         <section className="py-16 px-6">
           <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-start">
             <div>
@@ -116,30 +118,33 @@ export default function AboutPage() {
                 alt="Mark Abplanalp, Owner and Installer at Luxe Window Works"
                 width={600}
                 height={700}
-                className="rounded-lg object-cover w-full"
+                className="rounded-2xl object-cover w-full"
                 priority
               />
             </div>
-            <div className="space-y-6 text-stone-700 leading-relaxed">
-              <p className="text-sm uppercase tracking-widest text-amber-700 font-medium">
+            <div className="space-y-6 text-warm-gray-700 leading-relaxed">
+              <p className="text-sm uppercase tracking-widest text-gold-dark font-medium">
                 Why Luxe Window Works
               </p>
-              <h2 className="text-4xl md:text-5xl font-semibold text-stone-900 leading-tight">
-                Built for North Idaho Homes
-              </h2>
+              <h1 className="font-serif text-4xl md:text-5xl text-charcoal leading-tight">
+                Custom Window Treatments for North Idaho Homes
+              </h1>
               <p>
-                For 24 years, owner Mark Abplanalp has specialized in window treatments that perform in our unique climate — from intense summer sun reflecting off the lake to freezing winters that demand real insulation.
-              </p>
-              <p>
-                Luxe Window Works was founded on that deep experience. We don&apos;t just sell products. We engineer complete solutions tailored to your home, your views, your lifestyle, and the specific challenges of North Idaho living. Every project includes precise measurements, expert recommendations, and professional installation backed by a lifetime guarantee.
-              </p>
-              <p>
-                Homes throughout Coeur d&apos;Alene, Post Falls, Hayden, Rathdrum, and Sandpoint trust us because we understand this region — the lake-view glare, the temperature swings, and the practical needs of both new construction and established homes.
+                Luxe Window Works measures, sources, and installs custom window
+                treatments in{" "}
+                <Link href="/areas/coeur-d-alene" className="text-gold-dark hover:text-charcoal transition-colors">Coeur d&apos;Alene</Link>,{" "}
+                <Link href="/areas/post-falls" className="text-gold-dark hover:text-charcoal transition-colors">Post Falls</Link>,{" "}
+                <Link href="/areas/hayden" className="text-gold-dark hover:text-charcoal transition-colors">Hayden</Link>,{" "}
+                <Link href="/areas/rathdrum" className="text-gold-dark hover:text-charcoal transition-colors">Rathdrum</Link>, and{" "}
+                <Link href="/areas/sandpoint" className="text-gold-dark hover:text-charcoal transition-colors">Sandpoint</Link>.
+                Consultations are free and done at your house, because the right
+                recommendation depends on the light, the view, and the actual
+                windows.
               </p>
               <div>
                 <Link
                   href="/book"
-                  className="inline-flex items-center justify-center bg-amber-700 text-white px-8 py-4 rounded-lg font-medium hover:bg-amber-800 transition-colors"
+                  className="inline-flex items-center justify-center bg-gold text-white px-8 py-4 rounded-full font-semibold hover:bg-gold-dark transition-colors"
                 >
                   Book a Free Consultation
                 </Link>
@@ -148,56 +153,82 @@ export default function AboutPage() {
           </div>
         </section>
 
-
-        {/* Expertise callouts */}
-        <section className="py-16 px-6">
+        {/* How we work */}
+        <section className="bg-cream border-t border-warm-gray-200 py-16 px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl font-semibold text-stone-900 mb-10">
-              24 Years. Every Product Category. Every Project Type.
+            <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-10">
+              How we work
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
-                  title: "Residential",
-                  body: "From new construction in Post Falls to lakeside homes in Coeur d'Alene. Every window type, every budget, every style.",
+                  title: "Timelines you can plan around.",
+                  body: "Custom shades run about four weeks from order to installation. Shutters and custom drapery can take up to eight. You get that time frame before you order, and if it changes on the manufacturer's end, you hear it from us instead of finding out when nothing shows up.",
                 },
                 {
-                  title: "Commercial",
-                  body: "High-end commercial fenestration projects including Apple retail locations. Understanding how light affects productivity, comfort, and wellbeing.",
+                  title: "One price, quoted once.",
+                  body: "We don't inflate a list price so we can advertise 40% off it later. You get one number for what the product costs, and it's the same number any other customer would get for the same job. It's also among the most competitive in North Idaho, and we'll look at a competing bid if you have one.",
                 },
                 {
-                  title: "Exterior",
-                  body: "Corradi USA exterior solar shades, awnings, and motorized aluminum pergola systems with rotating roofs.",
+                  title: "A lifetime installation guarantee.",
+                  body: "For as long as you own the home: if a bracket pulls loose, a headrail sags, or anything about the way we mounted it stops holding, we come back and fix it at no charge.",
                 },
               ].map((item) => (
-                <div key={item.title} className="border border-stone-200 rounded-lg p-6">
-                  <h3 className="font-semibold text-stone-900 mb-3">{item.title}</h3>
-                  <p className="text-stone-600 text-sm leading-relaxed">{item.body}</p>
+                <div key={item.title}>
+                  <h3 className="font-semibold text-charcoal mb-3">{item.title}</h3>
+                  <p className="text-warm-gray-600 text-sm leading-relaxed">{item.body}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Brands */}
-        <section className="bg-stone-50 border-t border-stone-200 py-16 px-6">
+        {/* Products that work in this climate */}
+        <section className="py-16 px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl font-semibold text-stone-900 mb-4">
-              Brands Mark Has Worked With
+            <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-6">
+              Products that work in this climate
             </h2>
-            <p className="text-stone-600 mb-8">
-              Over 24 years, Mark has sold and installed products from every major manufacturer in the industry. At Luxe, he carries the ones he trusts.
-            </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="space-y-6 text-warm-gray-700 leading-relaxed">
+              <p>
+                Windows here have to do two opposite jobs. In July, west- and
+                south-facing glass brings in glare and heat all afternoon and
+                fades whatever it lands on. In January, that same glass is the
+                coldest surface in the house. A lot of homes in this area were
+                also built around the view, with large windows nobody wants to
+                cover permanently.
+              </p>
+              <p>
+                That&apos;s what makes the product choice matter: which{" "}
+                <Link href="/products/cellular-shades" className="text-gold-dark hover:text-charcoal transition-colors">cellular shade</Link>{" "}
+                actually holds heat, where a{" "}
+                <Link href="/products/solar-shades" className="text-gold-dark hover:text-charcoal transition-colors">solar shade</Link>{" "}
+                is worth the cost, and which rooms need light control rather
+                than insulation.
+              </p>
+              <p>
+                We carry every category —{" "}
+                <Link href="/products/blinds" className="text-gold-dark hover:text-charcoal transition-colors">blinds</Link>,
+                cellular shades, solar and exterior solar shades, roller,
+                banded, and roman shades,{" "}
+                <Link href="/products/shutters" className="text-gold-dark hover:text-charcoal transition-colors">shutters</Link>, and{" "}
+                <Link href="/products/motorization" className="text-gold-dark hover:text-charcoal transition-colors">motorization</Link>{" "}
+                — from Alta, Norman, Lafayette, Corradi USA, and The Window
+                Outfitters. That matters because a company carrying one line has
+                to recommend that line for every window in the house.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 mt-8">
               {[
-                "Lafayette Interior Fashions",
-                "Norman Window Fashions",
                 "Alta Window Fashions",
+                "Norman Window Fashions",
+                "Lafayette Interior Fashions",
                 "Corradi USA",
+                "The Window Outfitters",
               ].map((brand) => (
                 <span
                   key={brand}
-                  className="bg-white border border-stone-200 text-stone-700 text-sm px-4 py-2 rounded-full"
+                  className="bg-white border border-warm-gray-200 text-warm-gray-700 text-sm px-4 py-2 rounded-full"
                 >
                   {brand}
                 </span>
@@ -206,27 +237,50 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* CTA */}
+        {/* The experience behind it */}
+        <section className="bg-cream border-t border-warm-gray-200 py-16 px-6">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-6">
+              The experience behind it
+            </h2>
+            <div className="space-y-6 text-warm-gray-700 leading-relaxed">
+              <p>
+                Luxe Window Works is owned by Mark Abplanalp, who has worked in
+                this trade since 2002 — first in Issaquah, Washington, then
+                Bend, Oregon, and in North Idaho since 2025. In 2023, that work
+                included commercial installations at Apple retail locations
+                nationwide, including the Apple Visitor Center in Cupertino and
+                Apple Union Square in San Francisco.
+              </p>
+              <p>
+                Twenty-four years of measuring and installing is the reason we
+                can put a lifetime guarantee on the work.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Get a quote */}
         <section className="py-16 px-6">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-semibold text-stone-900 mb-4">
-              Ready to Work With Someone Who Actually Knows Windows?
+            <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-4">
+              Get a quote
             </h2>
-            <p className="text-stone-600 mb-8">
-              Schedule a free in-home consultation with Mark. No pressure, no catalog overwhelm — just honest advice from someone who has been doing this for 24 years.
+            <p className="text-warm-gray-600 mb-8">
+              Free in-home consultations throughout North Idaho.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/book"
-                className="bg-amber-700 text-white px-8 py-4 rounded-lg font-medium hover:bg-amber-800 transition-colors"
+                className="bg-gold text-white px-8 py-4 rounded-full font-semibold hover:bg-gold-dark transition-colors"
               >
                 Book a Free Consultation
               </Link>
               <Link
-                href="tel:+12086608643"
-                className="border border-stone-300 text-stone-800 px-8 py-4 rounded-lg font-medium hover:bg-stone-50 transition-colors"
+                href={BUSINESS.phoneHref}
+                className="border border-warm-gray-300 text-charcoal px-8 py-4 rounded-full font-semibold hover:bg-cream transition-colors"
               >
-                Call 208-660-8643
+                Call {BUSINESS.phone}
               </Link>
             </div>
           </div>

@@ -186,12 +186,18 @@ export default function BlogPage() {
 
       {/* Hero — renders immediately before the DB query completes */}
       <section className="relative pt-24 md:pt-32 pb-12 md:pb-16 overflow-hidden min-h-[350px] md:min-h-[400px] flex items-center">
+        {/* Same photo as the service area pages, but positioned at 70% rather
+            than their 82%: this hero is 400px tall against their 500px, so the
+            vertical crop is tighter and 82% would clip the top of the woman's
+            head. Right-anchored under sm, where the crop flips to horizontal
+            and a centred cover loses the figures entirely. */}
         <Image
-          src="/images/top-down-bottom-up-shades.jpeg"
-          alt="Living room with top-down bottom-up shades overlooking a lake"
+          src="/images/area-hero-living-room.webp"
+          alt="Sunlit living room with sheer horizontal shades across floor-to-ceiling windows, a woman and child reading on the sofa"
           fill
-          className="object-cover"
+          className="object-cover object-[right_center] sm:object-[center_70%]"
           priority
+          sizes="100vw"
         />
         <div className="absolute inset-0 bg-charcoal/55" />
         <div className="container-luxe relative max-w-4xl">

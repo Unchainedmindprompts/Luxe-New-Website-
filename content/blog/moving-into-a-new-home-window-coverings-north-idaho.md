@@ -7,8 +7,8 @@ dateModified: "2026-08-02"
 author: Mark Abplanalp
 excerpt: "New construction comes with bare glass on every window. Resale comes with whatever the last owner left behind. Here's how long custom window treatments actually take, and how we cover your windows for free while you wait."
 metaDescription: "Custom shades take about four weeks; shutters and drapery up to eight. Luxe Window Works covers your windows with free temporary shades while you wait. Serving Post Falls, Coeur d'Alene, Hayden, Rathdrum and North Idaho."
-featuredImage: ""
-featuredImageAlt: "Bare windows in a newly built North Idaho home on moving day"
+featuredImage: "/images/moving-into-new-home-hero.webp"
+featuredImageAlt: "Open-plan North Idaho living room on moving day — packing boxes and house keys on the counter, cellular shades lowered across the windows"
 category: Custom Window Coverings
 tags: [new-home, moving, new-construction, home, timelines]
 wordCount: 780
