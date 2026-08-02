@@ -14,6 +14,16 @@ export const NORMAN_BRAND = {
   url: "https://www.normanwindowfashions.com",
   sameAs: [
     "https://www.normanwindowfashions.com",
+    "https://normanusa.com",
     "https://en.wikipedia.org/wiki/Norman_(window_treatment_brand)",
   ],
+} as const;
+
+export const ALTA_BRAND = {
+  "@type": "Brand",
+  "@id": "https://www.altawindowfashions.com/#brand",
+  name: "Alta",
+  alternateName: "Alta Window Fashions",
+  url: "https://www.altawindowfashions.com",
+  sameAs: ["https://www.altawindowfashions.com"],
 } as const;

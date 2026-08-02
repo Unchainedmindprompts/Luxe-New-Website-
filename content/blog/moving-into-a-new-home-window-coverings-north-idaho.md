@@ -18,7 +18,7 @@ Buying a home is one of the best days you'll have. Whether it's your first place
 
 And then you have to actually move.
 
-Packing every dish you own. Praying the boxes marked FRAGILE survive the truck. Scheduling internet, TV, water, gas, and electric — each one with its own hold music, its own four-hour arrival window, and its own version of "we'll have someone out between 8 and 12." You take a day off work. Nobody shows. You call back and start over.
+Packing every dish you own. Praying the boxes marked FRAGILE survive the truck. Scheduling internet, TV, water, [gas and electric](https://www.myavista.com/your-account/moving) — each one with its own hold music, its own four-hour arrival window, and its own version of "we'll have someone out between 8 and 12." You take a day off work. Nobody shows. You call back and start over.
 
 By the time you're standing in your new living room at nine at night surrounded by boxes, the last thing you want is one more thing to handle.
 
@@ -30,9 +30,11 @@ Here's the one most people don't see coming.
 
 If you bought new construction, there's nothing on the windows. Not a blind, not a shade, not a curtain rod. Every window in the house is a clear pane of glass, and that includes your bedroom, your bathroom, and whatever room you were planning to collapse in.
 
+We see it constantly, because [Kootenai County keeps growing](https://www.kcgov.us/1054/Population) and the subdivisions keep going up. Window coverings aren't part of the build, and they aren't in the builder's allowance on most homes out here. You close, you get keys, and the glass is bare.
+
 ### Resale: window treatments stay with the house
 
-Resale comes with a different problem. Window treatments are built to fit specific windows and mounted to the wall, so they stay with the house — which means you inherit whatever the last owner chose. Sometimes that's fine. Often it's twelve-year-old blinds, sun-faded on the south side, with a wand missing and a couple of slats that won't close all the way.
+Resale comes with a different problem. Window treatments are built to fit specific windows and mounted to the wall, so they're treated as fixtures and stay with the house — which means you inherit whatever the last owner chose. Sometimes that's fine. Often it's twelve-year-old blinds, sun-faded on the south side, with a wand missing and a couple of slats that won't close all the way.
 
 Either way, you end up doing what everyone does — a run to the big box store for a pile of paper temporary shades, and an evening you don't have spent sticking them up crooked.
 
@@ -42,13 +44,13 @@ Custom window treatments are not something you take home the same day. They're b
 
 ### Custom shades: about four weeks
 
-Most [custom shades](/products/cellular-shades) run about four weeks from the day you place the order to the day we install them.
+Most [custom shades](/products/cellular-shades) run about four weeks from the day you place the order to the day we install them. The cellular ones are worth the wait for more than looks — the Department of Energy has measured [how much cellular shades cut heat loss through the glass](https://www.energy.gov/sites/default/files/2021-12/bto-cellular-shades-factsheet-112221.pdf), which matters in a North Idaho January.
 
 ### Shutters and custom drapery: up to eight weeks
 
-[Shutters](/products/shutters) and custom drapery can take up to eight weeks. They're a bigger build, and the extra time goes into the product.
+[Shutters](/products/shutters) and custom drapery can take up to eight weeks. They're a bigger build, and the extra time goes into the product — [Norman](https://normanusa.com/window-treatments/shutters/) and [Alta](https://www.altawindowfashions.com/) don't pull a shutter off a shelf, they build yours.
 
-Those are real timelines, and we'd rather you hear them from us at the kitchen table than discover them three weeks in. But it does leave you with a gap — a month or more of bare glass in the rooms where you want it least.
+Those are real time frames, and you'll have them before you order rather than three weeks in when you're wondering what happened. But it does leave you with a gap — a month or more of bare glass in the rooms where you want it least.
 
 ## We cover your windows for free while you wait
 
@@ -60,7 +62,7 @@ It's a small thing. It also happens to be the small thing people thank us for th
 
 ## What else you get when you order from Luxe Window Works
 
-### Clear communication and timelines we hit
+### Clear communication and time frames we hit
 
 You'll know when your order is placed, when it ships, and when we're arriving — and "arriving" means a real appointment window, not a vague half-day where you rearrange your life around a maybe. If something slips on the manufacturer's end, you hear it from us first, not after you've already wondered.
 
@@ -70,7 +72,7 @@ We don't inflate a list price so we can advertise 40% off it later. You get one 
 
 ### Installation guaranteed for as long as you're in the home
 
-If a cord stops working, a bracket pulls loose from the wall, a headrail sags, or anything about the way we installed it stops performing the way it should — call us. We come back out and fix it. No charge, no argument, no expiration date on the paperwork.
+If a bracket pulls loose from the wall, a headrail sags, or anything about the way we installed it stops holding the way it should — call us. We come back out and fix it. No charge, no argument, no expiration date on the paperwork.
 
 ## Why a local shop runs it this way
 
