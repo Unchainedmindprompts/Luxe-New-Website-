@@ -212,7 +212,7 @@ export const productPages: Record<string, ProductPageData> = {
       },
       {
         question: "Do solar shades provide privacy at night?",
-        answer: "No — and this is the most important thing to understand before buying solar shades. During daylight hours, the brighter exterior makes it harder to see in from outside. But at night, when your interior lights are on and it's dark outside, that contrast reverses completely — people outside can see in clearly. For rooms where nighttime privacy matters, solar shades are typically paired with a blackout roller shade or drapery on the same window. Mark will always flag this during a consultation if privacy is a concern.",
+        answer: "No — and this is the most important thing to understand before buying solar shades. During daylight hours, the brighter exterior makes it harder to see in from outside. But at night, when your interior lights are on and it's dark outside, that contrast reverses completely — people outside can see in clearly. For rooms where nighttime privacy matters, solar shades are typically paired with a blackout roller shade or drapery on the same window. We will always flag this during a consultation if privacy is a concern.",
       },
       {
         question: "How do solar shade fabrics hold up in Northern Idaho's climate?",
@@ -262,7 +262,7 @@ export const productPages: Record<string, ProductPageData> = {
       },
       {
         question: "Should roller shades be inside mounted or outside mounted?",
-        answer: "Inside mount fits the shade within the window frame for a clean, architectural look. Outside mount covers the full frame and typically hangs higher, which makes windows appear larger and provides better light blockage at the edges. In Northern Idaho homes — especially older construction in Coeur d'Alene where freeze-thaw cycles have caused frames to shift out of square — outside mount often produces a more polished result because it hides frame imperfections. Mark evaluates each window and recommends based on the actual frame condition and the look you're after.",
+        answer: "Inside mount fits the shade within the window frame for a clean, architectural look. Outside mount covers the full frame and typically hangs higher, which makes windows appear larger and provides better light blockage at the edges. In Northern Idaho homes — especially older construction in Coeur d'Alene where freeze-thaw cycles have caused frames to shift out of square — outside mount often produces a more polished result because it hides frame imperfections. We evaluate each window and recommend based on the actual frame condition and the look you're after.",
       },
       {
         question: "How do I clean roller shades without damaging the fabric?",
@@ -350,11 +350,11 @@ export const productPages: Record<string, ProductPageData> = {
     faqs: [
       {
         question: "What fabric should I choose for Roman shades in my home?",
-        answer: "Bring samples into the actual room at different times of day before deciding — a fabric that looks warm in a showroom can read very differently with Northern Idaho morning light versus afternoon sun, especially near water. Natural linens and textured fabrics tend to complement the wood and stone elements common in Idaho craftsman and lodge-style homes. Mark always recommends in-room sample review before finalizing any fabric selection.",
+        answer: "Bring samples into the actual room at different times of day before deciding — a fabric that looks warm in a showroom can read very differently with Northern Idaho morning light versus afternoon sun, especially near water. Natural linens and textured fabrics tend to complement the wood and stone elements common in Idaho craftsman and lodge-style homes. We always recommend in-room sample review before finalizing any fabric selection.",
       },
       {
         question: "What is the difference between flat fold and hobbled Roman shades?",
-        answer: "Flat fold Roman shades stack in crisp, even horizontal pleats — a clean, tailored look that works in both modern and traditional settings and ages well. Hobbled (or relaxed) Roman shades have cascading, puffed folds even when lowered, creating a softer, more traditional appearance. Mark recommends flat fold for most of today's homes as it has a more contemporary feel and wears better over time.",
+        answer: "Flat fold Roman shades stack in crisp, even horizontal pleats — a clean, tailored look that works in both modern and traditional settings and ages well. Hobbled (or relaxed) Roman shades have cascading, puffed folds even when lowered, creating a softer, more traditional appearance. We recommend flat fold for most of today's homes as it has a more contemporary feel and wears better over time.",
       },
       {
         question: "Can Roman shades have a blackout lining?",
@@ -522,8 +522,14 @@ export const productPages: Record<string, ProductPageData> = {
       uploadDate: "2025-08-22",
       duration: "PT9S",
     },
-    headline: "One Tap. Every Shade. Perfect Position.",
-    subheadline: "Smart motorized shades you can control from your phone, your voice, or the wall — because some things should just be easy.",
+    // Motorization is the largest block of unmet local demand in Search
+    // Console: roughly 700 impressions across "motorized shades / blinds /
+    // window treatments / curtains" and "power shades" in Post Falls and
+    // Coeur d'Alene, all sitting at position 20-26 with no clicks. The old
+    // headline contained no product word at all, so the page competed for
+    // none of it. The original line is kept intact behind the product name.
+    headline: "Motorized Shades — One Tap. Every Shade. Perfect Position.",
+    subheadline: "Motorized shades, blinds, and drapery you control from your phone, your voice, or the wall — because some things should just be easy. Installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.",
     problem: "You've got windows you can't easily reach — above the stairs, in a vaulted ceiling, behind furniture. Or maybe you want all your shades to go down at sunset without getting up from the couch. Or you travel and want your home to look occupied. Manual shades are fine for accessible windows, but modern homes — and modern life — call for something smarter.",
     solution: "Motorization transforms any shade into a smart device. Open and close your window treatments with a remote, your phone, your voice through Alexa or Google Home, or programmed schedules tied to sunrise and sunset. Available for cellular shades, roller shades, Roman shades, and banded shades. Battery-powered options mean no hardwiring required in most cases.",
     expertInsight: "I've watched motorization go from a luxury add-on to one of the most requested features in the window treatment industry. And the technology is genuinely good now. Battery-powered motors from Alta and Norman last 1-2 years on a single charge and are whisper-quiet. The app integration is reliable, and setting up sunrise/sunset schedules is straightforward. My practical advice: if you're motorizing multiple shades in one room, invest in a multi-channel remote or app setup so you can control them as a group. And if you're building new construction, have your electrician run power to your window frames — hardwired motors never need battery changes and can handle heavier shades. I handle the complete setup, programming, and integration so everything works seamlessly from day one.",
@@ -544,15 +550,22 @@ export const productPages: Record<string, ProductPageData> = {
       "Anyone who values convenience and modern functionality",
       "Vacation homes and rental properties for security (occupied appearance)",
     ],
-    localContext: "Motorization is increasingly popular in Northern Idaho, especially in the new construction happening around Post Falls and Rathdrum. Many of these homes have great rooms with soaring ceilings and large windows that would be impractical to operate manually. For lakefront homes in Coeur d'Alene and Sandpoint, automated sunset schedules mean your privacy shades lower exactly when you need them without lifting a finger.",
+    localContext: "Motorized window treatments are increasingly popular in Northern Idaho, especially in the new construction happening around Post Falls and Rathdrum. Many of these homes have great rooms with soaring ceilings and large windows that would be impractical to operate manually. For lakefront homes in Coeur d'Alene and Sandpoint, automated sunset schedules mean your privacy shades lower exactly when you need them without lifting a finger.",
     faqs: [
       {
+        // Buyers search this product under five different names and the page
+        // answered to one of them. Written as a direct answer because it is
+        // also the shape an AI Overview can quote whole.
+        question: "What is the difference between motorized shades, motorized blinds, and power shades?",
+        answer: "Mostly just wording — they are all the same idea, a window covering with a motor in it. In the trade, motorized blinds usually means a slatted product like wood, faux wood, or aluminum, where the motor tilts the slats and raises the stack. Motorized shades means a fabric product — cellular, roller, Roman, or banded — where the motor raises and lowers the whole panel. Power shades is a retail term for the same thing. Motorized curtains or motorized drapery means a track system that draws panels open and closed. We install all four across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint, and the motor, remote, and app work the same regardless of which covering you pick — so choose the covering you actually want in the room and let the motor follow.",
+      },
+      {
         question: "Do motorized shades require an electrician to install?",
-        answer: "Not typically. Battery-powered motors from Alta, Norman, and Lafayette require no hardwiring — Mark installs them in a single visit with no construction work needed. Battery motors last 1–2 years per charge. For new construction, Mark recommends having an electrician run power to window frames if you want hardwired motors, which last indefinitely without battery changes and handle heavier shade fabrics.",
+        answer: "Not typically. Battery-powered motors from Alta, Norman, and Lafayette require no hardwiring — We install them in a single visit with no construction work needed. Battery motors last 1–2 years per charge. For new construction, we recommend having an electrician run power to window frames if you want hardwired motors, which last indefinitely without battery changes and handle heavier shade fabrics.",
       },
       {
         question: "What smart home systems are compatible with motorized shades?",
-        answer: "Alta, Norman, and Lafayette all offer motorized models compatible with Amazon Alexa, Google Home, and Apple HomeKit — though exact compatibility varies by product line. Mark will confirm which specific motor system works with your existing smart home setup during the consultation and handles complete programming and integration after installation.",
+        answer: "Alta, Norman, and Lafayette all offer motorized models compatible with Amazon Alexa, Google Home, and Apple HomeKit — though exact compatibility varies by product line. We will confirm which specific motor system works with your existing smart home setup during the consultation and handles complete programming and integration after installation.",
       },
       {
         question: "How long do battery-powered motorized shades last on a charge?",
@@ -560,11 +573,11 @@ export const productPages: Record<string, ProductPageData> = {
       },
       {
         question: "Can I control all my motorized shades in a room with a single command?",
-        answer: "Yes — group control is one of the most useful features of a well-designed motorization setup. You can group shades by room, floor, or the entire house and control them together. A single 'good morning' command raises every shade at once. 'Movie time' lowers the great room shades without touching anything else. Mark programs all group scenes and schedules during installation, so everything is working correctly from day one — no technical setup required on your end.",
+        answer: "Yes — group control is one of the most useful features of a well-designed motorization setup. You can group shades by room, floor, or the entire house and control them together. A single 'good morning' command raises every shade at once. 'Movie time' lowers the great room shades without touching anything else. We program all group scenes and schedules during installation, so everything is working correctly from day one — no technical setup required on your end.",
       },
       {
         question: "What happens if a motorized shade stops working?",
-        answer: "The most common issues — dead batteries or a dropped wireless connection — are easy to fix. True motor failure is rare in quality brands, but if it does happen, virtually every motor we install can still be operated manually as a backup, so you're never stuck with a shade you can't move. Mark handles warranty claims and service on every installation, so you're not left troubleshooting alone. The motors we use typically outlast the shade fabric itself, which is why we treat motorization as a long-term system investment, not just an add-on.",
+        answer: "The most common issues — dead batteries or a dropped wireless connection — are easy to fix. True motor failure is rare in quality brands, but if it does happen, virtually every motor we install can still be operated manually as a backup, so you're never stuck with a shade you can't move. We handle warranty claims and service on every installation, so you're not left troubleshooting alone. The motors we use typically outlast the shade fabric itself, which is why we treat motorization as a long-term system investment, not just an add-on.",
       },
     ],
     metaTitle: "Motorized Shades, North Idaho | Voice & App Control",

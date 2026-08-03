@@ -435,7 +435,10 @@ export default async function ProductPage({ params }: Props) {
       <section className="py-20 md:py-28 bg-charcoal text-white">
         <div className="container-luxe text-center max-w-3xl mx-auto">
           <h2 className="font-serif text-3xl sm:text-4xl leading-tight">
-            Ready to See If {product.name} Are Right for Your Home?
+            {/* "Are" agreed with the plural product names and broke on the
+                singular ones — "Ready to See If Motorization Are Right".
+                This phrasing reads correctly for every entry in the set. */}
+            Ready to See What {product.name} Can Do in Your Home?
           </h2>
           <p className="mt-6 text-lg text-warm-gray-400 leading-relaxed">
             Start with our free concierge consultation to get personalized recommendations,
