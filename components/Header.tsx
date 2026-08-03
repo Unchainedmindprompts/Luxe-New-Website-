@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { BUSINESS, NAV_LINKS } from "@/lib/constants";
 
 export default function Header() {
@@ -11,13 +12,35 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-warm-white/95 backdrop-blur-sm border-b border-warm-gray-200/60">
       <div className="container-luxe flex items-center justify-between h-16 md:h-20">
-        {/* Logo */}
-        <Link href="/" className="flex flex-col" onClick={() => setMobileOpen(false)}>
-          <span className="font-serif text-xl md:text-2xl font-bold text-charcoal tracking-tight">
-            Luxe Window Works
-          </span>
-          <span className="text-[10px] md:text-xs text-warm-gray-500 tracking-widest uppercase -mt-1">
-            North Idaho
+        {/* Logo. The mark already reads "LUXE / WINDOW WORKS", so stacking the
+            wordmark under it would repeat the name. "North Idaho" sits beside
+            it behind a hairline rule instead — a lockup rather than a stack —
+            which keeps the local signal without a third line of type. The rule
+            and tagline drop away under sm so the mark never gets crowded on a
+            phone. Explicit width/height are the intrinsic size so Next can
+            reserve space and avoid layout shift; h-* + w-auto does the sizing. */}
+        <Link
+          href="/"
+          className="flex items-center gap-3 shrink-0"
+          onClick={() => setMobileOpen(false)}
+          aria-label="Luxe Window Works — home"
+        >
+          <Image
+            src="/images/luxe-logo.webp"
+            alt="Luxe Window Works"
+            width={925}
+            height={388}
+            priority
+            className="h-10 md:h-14 w-auto"
+          />
+          <span
+            aria-hidden="true"
+            className="hidden sm:block h-8 md:h-10 w-px bg-warm-gray-200"
+          />
+          <span className="hidden sm:block text-[10px] md:text-[11px] text-warm-gray-500 tracking-[0.2em] uppercase leading-none">
+            North
+            <br />
+            Idaho
           </span>
         </Link>
 
