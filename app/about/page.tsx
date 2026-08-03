@@ -46,6 +46,10 @@ const personSchema = {
     addressCountry: "US",
   },
   worksFor: { "@id": `${BUSINESS.url}/#business` },
+  // LinkedIn belongs on the Person, not on the business: it is a personal
+  // profile (/in/…), not a company page. The business sameAs on the homepage
+  // carries the accounts that represent the company itself.
+  sameAs: ["https://www.linkedin.com/in/mark-abplanalp-46a272371/"],
   hasOccupation: {
     "@type": "Occupation",
     name: "Window Treatment Specialist",
