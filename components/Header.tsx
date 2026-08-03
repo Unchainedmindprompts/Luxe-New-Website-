@@ -30,7 +30,7 @@ export default function Header() {
           aria-label="Luxe Window Works — home"
         >
           <Image
-            src="/images/luxe-logo.webp"
+            src="/images/luxe-logo-white.webp"
             alt="Luxe Window Works"
             width={925}
             height={388}
