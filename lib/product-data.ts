@@ -376,8 +376,18 @@ export const productPages: Record<string, ProductPageData> = {
     slug: "shutters",
     name: "Plantation Shutters",
     image: "/images/shutters.jpeg",
-    headline: "Norman Shutters — The One Window Treatment That Actually Adds Value to Your Home.",
-    subheadline: "A Norman dealer since 2009, we install Norman plantation shutters across North Idaho — Normandy hardwood, Woodlore Plus composite, and the InvisibleTilt hidden-gear system, measured and installed precisely.",
+    // Headline and subheadline lead with the product and the place rather than
+    // the manufacturer. Search Console showed this page pulling 11,402
+    // impressions at position 52.9 — most of them Woodlore and Normandy queries
+    // from Pittsburgh-area towns, which converted zero times and never will.
+    // The page named three Norman product lines in its first thirty words and
+    // one city in its first hundred, so it read as a Norman product page that
+    // happens to be in Idaho. The claim itself is unchanged; "plantation
+    // shutters" simply replaces "Norman shutters" at the front, and the five
+    // cities move up into the subheadline. Norman stays as the credential it
+    // is, and the product lines still appear throughout features and FAQs.
+    headline: "Plantation Shutters — The One Window Treatment That Actually Adds Value to Your Home.",
+    subheadline: "Custom plantation shutters measured and installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint — by a Norman dealer since 2009.",
     problem: "Window treatments typically depreciate the moment they're installed — they're decorating, not improving. And most of them need to be replaced every 5-10 years. If you're investing in your home, especially a home you plan to keep or a property where resale value matters, you want something that lasts and actually adds to the home's worth.",
     solution: "Norman plantation shutters are built to last decades. We install Norman exclusively for interior shutters because the quality is consistent, the engineering is thoughtful, and they hold up to North Idaho's four-season climate. The Normandy line is built from Paulownia — a hardwood with an exceptional strength-to-weight ratio that resists warping through January cold and August heat. The Woodlore and Woodlore Plus composite lines are dimensionally stable and moisture-resistant, the right call for bathrooms, kitchens, and lakefront humidity. Every frame is custom-built to your exact window opening, becomes a permanent part of your home's architecture, and is backed by Norman's limited lifetime warranty. For specialty and exterior applications, we also carry aluminum shutters by The Window Outfitters.",
     expertInsight: "Shutters are where my extensive hands-on expertise matters most, and being a Norman partner since 2009 is a big part of why. Here's why precision matters: shutters require the most precise measurement of any window treatment. Every frame is custom-built to fit your specific window opening, and the tolerances are incredibly tight. A shade can be off by 1/8 inch and nobody notices. A shutter frame that's off by 1/8 inch won't close properly. I've fixed installations from other companies where the frames were built from measurements that didn't account for window frames being out of square — which happens more often than you'd think, especially in Northern Idaho homes that settle with our freeze-thaw cycles. I also help clients choose the right Norman line for each room: Normandy hardwood for the premium look of real wood in living rooms and bedrooms, and Woodlore Plus composite for bathrooms and kitchens where moisture would warp lesser materials. For the cleanest look, I'll usually walk you through Norman's InvisibleTilt — a hidden gear that tilts the louvers with no center bar splitting your view.",
