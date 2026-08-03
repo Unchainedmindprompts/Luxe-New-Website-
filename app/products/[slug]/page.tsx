@@ -104,7 +104,7 @@ function BreadcrumbSchema({ product, slug }: { product: ProductPageData; slug: s
     "@id": `${pageUrl}#breadcrumb`,
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
-      { "@type": "ListItem", position: 2, name: "Products", item: `${BUSINESS.url}/products/cellular-shades` },
+      { "@type": "ListItem", position: 2, name: "Products", item: `${BUSINESS.url}/products` },
       { "@type": "ListItem", position: 3, name: product.name, item: pageUrl },
     ],
   };
@@ -176,7 +176,7 @@ export default async function ProductPage({ params }: Props) {
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
-          { label: "Products", href: "/products/cellular-shades" },
+          { label: "Products", href: "/products" },
           { label: product.name },
         ]}
       />

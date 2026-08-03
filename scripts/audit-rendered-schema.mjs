@@ -155,6 +155,11 @@ const MUST_EMIT = [
   { file: "/areas/rathdrum.html", label: "/areas/rathdrum", entity: `${SITE}/areas/rathdrum#service` },
   { file: "/areas/sandpoint.html", label: "/areas/sandpoint", entity: `${SITE}/areas/sandpoint#service` },
   { file: "/index.html", label: "/", entity: `${SITE}/#business` },
+  // Both hubs. /areas shipped with next/script for months and published no
+  // structured data at all — the same defect as /about, missed here because
+  // this list named the city pages but not the index above them.
+  { file: "/areas.html", label: "/areas", entity: `${SITE}/areas#webpage` },
+  { file: "/products.html", label: "/products", entity: `${SITE}/products#webpage` },
 ];
 
 for (const { file, label, entity } of MUST_EMIT) {
