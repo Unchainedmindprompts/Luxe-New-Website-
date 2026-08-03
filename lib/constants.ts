@@ -188,7 +188,7 @@ export const NAV_LINKS: NavLink[] = [
   { label: "About", href: "/about" },
   {
     label: "Products",
-    href: "/products/cellular-shades",
+    href: "/products",
     children: PRODUCTS.map((p) => ({ label: p.name, href: `/products/${p.slug}` })),
   },
   {

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Script from "next/script";
+import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
@@ -69,18 +69,15 @@ function AreasHubSchema() {
     ],
   };
 
+  // Plain <script>, not next/script. <Script> defers to the client, so the
+  // JSON-LD landed only in the RSC flight payload and never in the HTML a
+  // crawler reads — this page was publishing zero structured data. Same defect
+  // that hit /about and the city pages; this index was missed because the
+  // audit's must-emit list did not name it. It does now.
   return (
     <>
-      <Script
-        id="areas-hub-collection-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
-      />
-      <Script
-        id="areas-hub-breadcrumb-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+      <JsonLd data={collectionPageSchema} />
+      <JsonLd data={breadcrumbSchema} />
     </>
   );
 }

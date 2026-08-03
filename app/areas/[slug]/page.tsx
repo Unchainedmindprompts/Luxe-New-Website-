@@ -424,8 +424,8 @@ export default async function AreaPage({ params }: Props) {
             <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">
               Products Available in {area.name}
             </h2>
-            <p className="mt-3 text-warm-gray-500">
-              Every product we carry is available for homes in {area.name} and surrounding areas.
+            <p className="mt-3 text-warm-gray-600 max-w-2xl mx-auto leading-relaxed">
+              {area.productIntro}
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">

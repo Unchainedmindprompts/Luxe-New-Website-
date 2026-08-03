@@ -88,13 +88,31 @@ function walk(node, file) {
 
 const files = htmlFiles(APP_DIR);
 const perFileBlockCount = new Map();
+const notFoundPages = [];
 for (const f of files) {
-  const blocks = publicJsonLd(readFileSync(f, "utf-8"));
+  const html = readFileSync(f, "utf-8");
+  // A prerendered page that resolved to notFound() still writes an .html file,
+  // so "the build succeeded" says nothing about whether the page exists.
+  if (html.includes("NEXT_HTTP_ERROR_FALLBACK;404")) notFoundPages.push(f);
+  const blocks = publicJsonLd(html);
   perFileBlockCount.set(f, blocks.length);
   blocks.forEach((b) => walk(b, f));
 }
 
 const failures = [];
+
+// ── 0. Prerendered 404s ───────────────────────────────────────────────────
+// A blog post whose filename contained a percent-encoded ½ shipped this way:
+// generateStaticParams produced the encoded slug, Next decoded it before
+// calling the page, the markdown lookup missed, and the route rendered its
+// not-found UI. The URL sat in the sitemap and on /blog for months serving a
+// 404 to every crawler that followed it, and nothing in the build complained.
+for (const f of notFoundPages) {
+  failures.push(
+    `Prerendered page renders a 404: ${f.replace(APP_DIR, "")}\n` +
+      `    it is in the build output and likely the sitemap, but has no content`
+  );
+}
 
 // ── 1. Conflicting definitions ────────────────────────────────────────────
 // Identical repeats are fine and expected: shared constants legitimately
@@ -137,6 +155,11 @@ const MUST_EMIT = [
   { file: "/areas/rathdrum.html", label: "/areas/rathdrum", entity: `${SITE}/areas/rathdrum#service` },
   { file: "/areas/sandpoint.html", label: "/areas/sandpoint", entity: `${SITE}/areas/sandpoint#service` },
   { file: "/index.html", label: "/", entity: `${SITE}/#business` },
+  // Both hubs. /areas shipped with next/script for months and published no
+  // structured data at all — the same defect as /about, missed here because
+  // this list named the city pages but not the index above them.
+  { file: "/areas.html", label: "/areas", entity: `${SITE}/areas#webpage` },
+  { file: "/products.html", label: "/products", entity: `${SITE}/products#webpage` },
 ];
 
 for (const { file, label, entity } of MUST_EMIT) {

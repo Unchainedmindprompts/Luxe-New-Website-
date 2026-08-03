@@ -2,7 +2,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { BUSINESS } from "@/lib/constants";
+import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
+import { cityNode } from "@/lib/cities";
 import { productPages } from "@/lib/product-data";
 import type { ProductPageData, ProductVideo } from "@/lib/product-data";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
@@ -49,10 +50,14 @@ function ServiceSchema({ product, slug }: { product: ProductPageData; slug: stri
     "@id": `${BUSINESS.url}/products/${slug}#service`,
     name: `${product.name} Installation`,
     provider: { "@id": `${BUSINESS.url}/#business` },
-    areaServed: {
-      "@type": "State",
-      name: "Idaho",
-    },
+    // The five cities we actually serve, not the state. "Idaho" spans 480
+    // miles; Search Console shows these pages drawing impressions from Idaho
+    // Falls and Boise, which are six hours away and will never convert. The
+    // area pages have carried city-level data all along — the product pages,
+    // which are the ones meant to win local searches, claimed the whole state.
+    // cityNode carries sameAs identifiers, so these resolve to real places
+    // rather than to strings that happen to look like town names.
+    areaServed: SERVICE_AREAS.map((area) => cityNode(area.name)),
     description: product.solution,
     speakable: {
       "@type": "SpeakableSpecification",
@@ -99,7 +104,7 @@ function BreadcrumbSchema({ product, slug }: { product: ProductPageData; slug: s
     "@id": `${pageUrl}#breadcrumb`,
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
-      { "@type": "ListItem", position: 2, name: "Products", item: `${BUSINESS.url}/products/cellular-shades` },
+      { "@type": "ListItem", position: 2, name: "Products", item: `${BUSINESS.url}/products` },
       { "@type": "ListItem", position: 3, name: product.name, item: pageUrl },
     ],
   };
@@ -171,7 +176,7 @@ export default async function ProductPage({ params }: Props) {
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
-          { label: "Products", href: "/products/cellular-shades" },
+          { label: "Products", href: "/products" },
           { label: product.name },
         ]}
       />
@@ -430,7 +435,10 @@ export default async function ProductPage({ params }: Props) {
       <section className="py-20 md:py-28 bg-charcoal text-white">
         <div className="container-luxe text-center max-w-3xl mx-auto">
           <h2 className="font-serif text-3xl sm:text-4xl leading-tight">
-            Ready to See If {product.name} Are Right for Your Home?
+            {/* "Are" agreed with the plural product names and broke on the
+                singular ones — "Ready to See If Motorization Are Right".
+                This phrasing reads correctly for every entry in the set. */}
+            Ready to See What {product.name} Can Do in Your Home?
           </h2>
           <p className="mt-6 text-lg text-warm-gray-400 leading-relaxed">
             Start with our free concierge consultation to get personalized recommendations,

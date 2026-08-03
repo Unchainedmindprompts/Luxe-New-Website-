@@ -69,6 +69,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     // Product pages
     {
+      url: `${baseUrl}/products`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/products/blinds`,
       lastModified: currentDate,
       changeFrequency: 'monthly',

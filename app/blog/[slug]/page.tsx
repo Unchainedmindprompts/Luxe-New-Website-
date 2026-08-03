@@ -9,6 +9,7 @@ import { BUSINESS } from "@/lib/constants";
 import { NORMAN_BRAND, ALTA_BRAND } from "@/lib/brands";
 import { cityNode } from "@/lib/cities";
 import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
+import { addInternalLinks } from "@/lib/internal-links";
 import type { BlogPost } from "@/lib/blog";
 
 // Re-render pages at most once per hour; new Payload posts appear within ~60 min
@@ -187,7 +188,7 @@ const installationHowToSchema = {
       "@type": "HowToStep",
       position: 1,
       name: "Free In-Home Consultation",
-      text: "Mark visits your home to assess your windows, discuss your functional requirements, and explore design possibilities. This is a collaborative planning session — no pressure, no sales pitch.",
+      text: "We visit your home to assess your windows, discuss your functional requirements, and explore design possibilities. This is a collaborative planning session — no pressure, no sales pitch.",
       url: `${BUSINESS.url}/book`,
     },
     {
@@ -816,7 +817,13 @@ export default async function BlogPostPage({ params }: Props) {
                 prose-img:rounded-xl prose-img:mx-auto
                 prose-figure:my-8
                 prose-li:text-warm-gray-600">
-              <ReactMarkdown rehypePlugins={[rehypeRaw]}>{post.content}</ReactMarkdown>
+              {/* Product and area links are woven in here rather than in the
+                  source markdown, so the articles themselves stay plain prose
+                  and posts from Payload get the same treatment as posts from
+                  content/blog. See lib/internal-links.ts for why this exists. */}
+              <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                {addInternalLinks(post.content, { title: post.title })}
+              </ReactMarkdown>
             </div>
           </div>
         </section>

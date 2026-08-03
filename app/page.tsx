@@ -158,6 +158,7 @@ const businessNode = {
     "https://www.bbb.org/us/id/post-falls/profile/blinds/luxe-window-works-llc-1296-1000188314",
     "https://www.yellowpages.com/post-falls-id/mip/luxe-window-works-llc-579719675",
     "https://www.youtube.com/@LuxeWindowWorks7",
+    "https://www.tiktok.com/@luxewindowworks77",
     "https://www.instagram.com/luxewindowworks",
     "https://www.facebook.com/profile.php?id=61573190815920",
     "https://www.houzz.com/pro/webuser-472935533/luxe-window-works-llc",
