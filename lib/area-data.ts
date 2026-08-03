@@ -27,6 +27,15 @@ export interface AreaPageData {
   markInsight?: string;
   faqs?: AreaFAQ[];
   relatedPosts?: AreaRelatedPost[];
+  /**
+   * Opens the "Products Available in {city}" section. Search Console shows the
+   * in-market demand is almost entirely [product] + [city] — "roman shades post
+   * falls idaho", "motorized window shades coeur d'alene" — while these pages
+   * carried one generic sentence that named no product at all. Written per city
+   * rather than templated, because five near-identical paragraphs across five
+   * city pages is the thing Google treats as doorway content.
+   */
+  productIntro: string;
   localCTA: string;
   metaTitle: string;
   metaDescription: string;
@@ -80,6 +89,8 @@ export const areaPages: Record<string, AreaPageData> = {
         slug: "moisture-proof-window-treatments-kitchens-bathrooms-lake-homes",
       },
     ],
+    productIntro:
+      "Lake views and big south-facing glass make solar shades and motorized shades the two we install most often in Coeur d'Alene. Plantation shutters are common in the older homes near downtown, and cellular shades handle the bedrooms in almost every project.",
     localCTA: "Ready to find the right window treatments for your Coeur d'Alene home? Mark offers free in-home consultations throughout the Coeur d'Alene area — from lakefront properties to downtown neighborhoods.",
     metaTitle: "Coeur d'Alene Window Treatments | Luxe Window Works",
     metaDescription: "Custom window treatments for Coeur d'Alene homes — lakefront, historic, and new construction. Free in-home consultation. 24 years consulting, designing, and installing window treatments.",
@@ -131,6 +142,8 @@ export const areaPages: Record<string, AreaPageData> = {
         slug: "how-much-does-battery-operated-motorized-shades-installation-cost-in-post-falls-coeur-dalene-id",
       },
     ],
+    productIntro:
+      "Post Falls homes usually start with cellular shades, because the temperature swings here are sharper without the lake to moderate them. Motorized shades follow close behind — new construction favors tall windows and wide spans that are awkward to reach. Plantation shutters and roman shades round out most whole-home projects.",
     localCTA: "We're based right here in Post Falls and know these neighborhoods well. Schedule a free in-home consultation — Mark can usually get to Post Falls homes the fastest since it's his home base.",
     metaTitle: "Post Falls Window Treatments | Luxe Window Works",
     metaDescription: "Custom window treatments for Post Falls homes — new construction and established neighborhoods. Free in-home consultation. 24 years consulting, designing, and installing window treatments.",
@@ -182,6 +195,8 @@ export const areaPages: Record<string, AreaPageData> = {
         slug: "smart-shade-motorization-guide-for-northern-idaho-homes",
       },
     ],
+    productIntro:
+      "Hayden splits two ways. Lake properties need solar shades for glare and heat off the water, while the family homes along Government Way are mostly cellular shades and wood blinds. Plantation shutters show up in the newer builds on the north end.",
     localCTA: "Whether you're on Hayden Lake or in one of the family neighborhoods, Mark provides free in-home consultations throughout the Hayden area. Let's find the right solution for your space.",
     metaTitle: "Hayden Window Treatments | Luxe Window Works",
     metaDescription: "Custom window treatments for Hayden, ID homes — including Hayden Lake properties. Free in-home consultation. 24 years consulting, designing, and installing window treatments.",
@@ -233,6 +248,8 @@ export const areaPages: Record<string, AreaPageData> = {
         slug: "energy-efficient-window-treatments-for-northern-idaho-homes",
       },
     ],
+    productIntro:
+      "Rathdrum's new subdivisions mean a lot of bare windows at once, so cellular shades and roller shades cover a whole house without the budget getting away from you. Motorized shades are worth it on anything above a stairwell or out of easy reach.",
     localCTA: "Rathdrum is growing fast, and we're growing with it. Whether you're in a brand-new subdivision or one of the established neighborhoods, Mark offers free in-home consultations throughout the Rathdrum area.",
     metaTitle: "Rathdrum Window Treatments | Luxe Window Works",
     metaDescription: "Custom window treatments for Rathdrum, ID homes — new construction and growing neighborhoods. Free in-home consultation. 24 years consulting, designing, and installing window treatments.",
@@ -284,6 +301,8 @@ export const areaPages: Record<string, AreaPageData> = {
         slug: "why-performance-solar-shade-fabrics-are-worth-every-penny-a-window-pros-honest-take",
       },
     ],
+    productIntro:
+      "Sandpoint homes lean toward big glass and long views, so solar shades and motorized shades lead here — you want the view preserved and the glare gone. Plantation shutters suit the architecture on the older streets above the lake, and cellular shades earn their keep through a Sandpoint winter.",
     localCTA: "Mark serves the greater Sandpoint area including lakefront properties, downtown homes, and the Schweitzer corridor. Schedule a free in-home consultation — the drive to Sandpoint is one of his favorites.",
     metaTitle: "Sandpoint Window Treatments | Luxe Window Works",
     metaDescription: "Luxury window treatments for Sandpoint, ID — Lake Pend Oreille waterfront and mountain homes. Free consultation. 24 years consulting, designing, and installing window treatments.",

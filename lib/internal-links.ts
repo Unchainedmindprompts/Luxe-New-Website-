@@ -91,37 +91,81 @@ const PROTECTED = [
  * keeps a bare term from biting into a longer word, and lets the multi-word
  * entries above claim the whole compound instead.
  */
-const MATCHER = new RegExp(
-  "(?<![\\w-])(" + TERMS.map(([p]) => p.replace(/ /g, "[\\s-]+")).join("|") + ")(?![\\w-])",
-  "gi"
-);
+/**
+ * The five service-area cities. Search Console shows the demand here is almost
+ * entirely [product] + [city] — "roman shades post falls idaho", "motorized
+ * window shades coeur d'alene" — with the area pages ranking 15th to 22nd for
+ * them. They were as starved of internal links as the product pages were: 4 of
+ * 52 articles linked to one, and the articles are frequently *about* these
+ * towns.
+ *
+ * Apostrophes are matched in both straight and curly form because the corpus
+ * contains both, and so do the queries.
+ */
+const AREA_TERMS: ReadonlyArray<readonly [string, string]> = [
+  ["coeur d'alene", "coeur-d-alene"],
+  ["post falls", "post-falls"],
+  ["rathdrum", "rathdrum"],
+  ["sandpoint", "sandpoint"],
+  ["hayden", "hayden"],
+];
 
-export interface LinkProductsOptions {
-  /**
-   * Most links to add to one article. Five keeps a ~1,000-word post reading
-   * like prose rather than a link farm, while still giving every product page
-   * inbound edges once it is spread across 52 articles.
-   */
-  max?: number;
+const AREA_LOOKUP = new Map(AREA_TERMS.map(([phrase, slug]) => [phrase, slug]));
+
+/**
+ * Two links is enough for cities: the articles name their town repeatedly, and
+ * past the first mention the repetition reads as keyword stuffing rather than
+ * as writing.
+ */
+const AREA_MAX = 2;
+
+/**
+ * Every way an apostrophe appears in this corpus. The CMS export writes
+ * "Coeur d&apos;Alene" as an HTML entity, so a pattern looking only for ' or ’
+ * matches nothing at all on the very articles that are about the town.
+ */
+const APOSTROPHE = "(?:['’]|&(?:apos|#39|#x27|rsquo|#8217);)";
+
+/** Builds the alternation for one group of terms. */
+function matcherFor(terms: ReadonlyArray<readonly [string, string]>): RegExp {
+  const alternation = terms
+    .map(([p]) => p.replace(/ /g, "[\\s-]+").replace(/'/g, APOSTROPHE))
+    .join("|");
+  return new RegExp("(?<![\\w-])(" + alternation + ")(?![\\w-])", "gi");
+}
+
+const PRODUCT_MATCHER = matcherFor(TERMS);
+const AREA_MATCHER = matcherFor(AREA_TERMS);
+
+/** Normalises a matched phrase — or a title — back to its lookup key. */
+function key(match: string): string {
+  return match
+    .toLowerCase()
+    .replace(/&(?:apos|#39|#x27|rsquo|#8217);/g, "'")
+    .replace(/’/g, "'")
+    .replace(/\s+/g, " ");
 }
 
 /**
- * Wraps the first mention of each product in a markdown link to its page.
- * Returns the markdown unchanged when there is nothing eligible to link.
+ * Wraps the first mention of each term in one group with a link to its page,
+ * skipping every protected region. Runs over the whole document in a single
+ * pass so protected and free spans cannot drift out of sync.
  */
-export function linkProducts(
-  markdown: string,
-  { max = 5 }: LinkProductsOptions = {}
+function linkGroup(
+  source: string,
+  matcher: RegExp,
+  lookup: Map<string, string>,
+  prefix: string,
+  max: number,
+  alreadyLinked: ReadonlySet<string> = new Set()
 ): string {
-  if (!markdown) return markdown;
-
-  const linked = new Set<string>();
+  const linked = new Set<string>(alreadyLinked);
   let added = 0;
 
   const linkFreeText = (text: string): string =>
-    text.replace(MATCHER, (match) => {
+    text.replace(matcher, (match) => {
       if (added >= max) return match;
-      const slug = LOOKUP.get(match.toLowerCase().replace(/\s+/g, " "));
+      const slug = lookup.get(key(match));
       if (!slug || linked.has(slug)) return match;
       linked.add(slug);
       added += 1;
@@ -131,7 +175,7 @@ export function linkProducts(
       // block, so `[text](url)` renders as literal punctuation on those posts.
       // Inline HTML is valid inside markdown too, and rehype-raw is already
       // enabled here, so one form works correctly for both kinds of post.
-      return `<a href="/products/${slug}">${match}</a>`;
+      return `<a href="${prefix}${slug}">${match}</a>`;
     });
 
   // Split into protected and free spans, then rewrite only the free ones. A
@@ -142,12 +186,58 @@ export function linkProducts(
   let cursor = 0;
   let match: RegExpExecArray | null;
 
-  while ((match = protectedRe.exec(markdown)) !== null) {
-    out += linkFreeText(markdown.slice(cursor, match.index));
+  while ((match = protectedRe.exec(source)) !== null) {
+    out += linkFreeText(source.slice(cursor, match.index));
     out += match[0];
     cursor = match.index + match[0].length;
   }
-  out += linkFreeText(markdown.slice(cursor));
+  out += linkFreeText(source.slice(cursor));
 
+  return out;
+}
+
+/**
+ * Adds contextual links from an article body to the product and area pages it
+ * already mentions. Products and cities have separate budgets so a town name
+ * appearing early cannot eat a product's slot.
+ *
+ * The two passes run in sequence rather than as one combined matcher, which is
+ * safe because the anchors written by the first pass are themselves a protected
+ * region for the second — a city name inside a product link stays untouched.
+ *
+ * Two links is enough for cities: the articles name their town repeatedly, and
+ * beyond the first mention the repetition reads as keyword stuffing rather than
+ * as writing.
+ */
+export function addInternalLinks(
+  markdown: string,
+  { title = "" }: { title?: string } = {}
+): string {
+  if (!markdown) return markdown;
+
+  let out = linkGroup(markdown, PRODUCT_MATCHER, LOOKUP, "/products/", 5);
+
+  // Cities named in the article's title get first claim on the area budget.
+  // Ordering by first mention alone gave the wrong answer often enough to
+  // matter: an article titled "…Near Post Falls & Coeur d'Alene" happened to
+  // say "Hayden" earlier in its body and spent a slot there, leaving the two
+  // towns it is actually about unlinked.
+  const linkedAreas = (s: string) =>
+    new Set([...s.matchAll(/href="\/areas\/([^"]+)"/g)].map((m) => m[1]));
+
+  const titleKey = key(title);
+  const fromTitle = AREA_TERMS.filter(
+    ([phrase]) => titleKey.includes(phrase) || titleKey.includes(phrase.replace(/'/g, ""))
+  );
+
+  let claimed = linkedAreas(out); // respects any hand-written area link already present
+  if (fromTitle.length) {
+    out = linkGroup(out, matcherFor(fromTitle), new Map(fromTitle), "/areas/", AREA_MAX, claimed);
+    claimed = linkedAreas(out);
+  }
+  const remaining = AREA_MAX - claimed.size;
+  if (remaining > 0) {
+    out = linkGroup(out, AREA_MATCHER, AREA_LOOKUP, "/areas/", remaining, claimed);
+  }
   return out;
 }
