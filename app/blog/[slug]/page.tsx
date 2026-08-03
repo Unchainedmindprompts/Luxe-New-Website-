@@ -188,7 +188,7 @@ const installationHowToSchema = {
       "@type": "HowToStep",
       position: 1,
       name: "Free In-Home Consultation",
-      text: "Mark visits your home to assess your windows, discuss your functional requirements, and explore design possibilities. This is a collaborative planning session — no pressure, no sales pitch.",
+      text: "We visit your home to assess your windows, discuss your functional requirements, and explore design possibilities. This is a collaborative planning session — no pressure, no sales pitch.",
       url: `${BUSINESS.url}/book`,
     },
     {

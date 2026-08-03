@@ -48,7 +48,7 @@ export const areaPages: Record<string, AreaPageData> = {
     wikipediaSameAs: "https://en.wikipedia.org/wiki/Coeur_d%27Alene,_Idaho",
     headline: "Custom Window Treatments for Coeur d'Alene Homes",
     subheadline: "From lakefront estates to downtown bungalows — window coverings designed for the way Coeur d'Alene lives.",
-    description: "Coeur d'Alene is one of the most beautiful places in the Pacific Northwest, and its homes reflect that — from historic downtown craftsman homes to modern lakefront properties with floor-to-ceiling glass. Each presents unique window treatment challenges. Lake-facing windows need solar protection without sacrificing the view. Older homes have windows that aren't perfectly square after decades of settling. Newer construction along the lake often features oversized windows that need custom-engineered solutions. With 24 years in the industry across the Pacific Northwest, Mark understands these local nuances intimately.",
+    description: "Coeur d'Alene is one of the most beautiful places in the Pacific Northwest, and its homes reflect that — from historic downtown craftsman homes to modern lakefront properties with floor-to-ceiling glass. Each presents unique window treatment challenges. Lake-facing windows need solar protection without sacrificing the view. Older homes have windows that aren't perfectly square after decades of settling. Newer construction along the lake often features oversized windows that need custom-engineered solutions. With 24 years in the industry across the Pacific Northwest, we understand these local nuances intimately.",
     neighborhoods: ["Downtown Coeur d'Alene", "Sanders Beach", "Fernan Hill", "Coeur d'Alene Place", "Riverstone", "Northwest Boulevard", "Canfield Mountain", "Best Hill"],
     housingTypes: "Coeur d'Alene features an eclectic mix of housing — historic craftsman homes downtown, mid-century ranches in established neighborhoods, newer construction in planned communities, and premium lakefront and view properties. Each style has its own window treatment considerations, from the charming but uneven window frames of 1920s bungalows to the massive window walls in contemporary lakefront builds.",
     climateConsiderations: "Lake Coeur d'Alene creates its own microclimate. Homes near the water experience more humidity, which affects material choices (composite shutters over wood for lake-adjacent rooms). West-facing lakefront windows deal with intense afternoon sun reflecting off the water — solar shades with low openness factors are essential. In winter, the lake effect moderates temperatures slightly compared to inland areas, but older homes with original windows still benefit enormously from the insulating properties of cellular shades.",
@@ -91,7 +91,7 @@ export const areaPages: Record<string, AreaPageData> = {
     ],
     productIntro:
       "Lake views and big south-facing glass make solar shades and motorized shades the two we install most often in Coeur d'Alene. Plantation shutters are common in the older homes near downtown, and cellular shades handle the bedrooms in almost every project.",
-    localCTA: "Ready to find the right window treatments for your Coeur d'Alene home? Mark offers free in-home consultations throughout the Coeur d'Alene area — from lakefront properties to downtown neighborhoods.",
+    localCTA: "Ready to find the right window treatments for your Coeur d'Alene home? We offer free in-home consultations throughout the Coeur d'Alene area — from lakefront properties to downtown neighborhoods.",
     metaTitle: "Coeur d'Alene Window Treatments | Luxe Window Works",
     metaDescription: "Custom window treatments for Coeur d'Alene homes — lakefront, historic, and new construction. Free in-home consultation. 24 years consulting, designing, and installing window treatments.",
   },
@@ -144,7 +144,7 @@ export const areaPages: Record<string, AreaPageData> = {
     ],
     productIntro:
       "Post Falls homes usually start with cellular shades, because the temperature swings here are sharper without the lake to moderate them. Motorized shades follow close behind — new construction favors tall windows and wide spans that are awkward to reach. Plantation shutters and roman shades round out most whole-home projects.",
-    localCTA: "We're based right here in Post Falls and know these neighborhoods well. Schedule a free in-home consultation — Mark can usually get to Post Falls homes the fastest since it's his home base.",
+    localCTA: "We're based right here in Post Falls and know these neighborhoods well. Schedule a free in-home consultation — we can usually get to Post Falls homes the fastest since it's our home base.",
     metaTitle: "Post Falls Window Treatments | Luxe Window Works",
     metaDescription: "Custom window treatments for Post Falls homes — new construction and established neighborhoods. Free in-home consultation. 24 years consulting, designing, and installing window treatments.",
   },
@@ -197,7 +197,7 @@ export const areaPages: Record<string, AreaPageData> = {
     ],
     productIntro:
       "Hayden splits two ways. Lake properties need solar shades for glare and heat off the water, while the family homes along Government Way are mostly cellular shades and wood blinds. Plantation shutters show up in the newer builds on the north end.",
-    localCTA: "Whether you're on Hayden Lake or in one of the family neighborhoods, Mark provides free in-home consultations throughout the Hayden area. Let's find the right solution for your space.",
+    localCTA: "Whether you're on Hayden Lake or in one of the family neighborhoods, we provide free in-home consultations throughout the Hayden area. Let's find the right solution for your space.",
     metaTitle: "Hayden Window Treatments | Luxe Window Works",
     metaDescription: "Custom window treatments for Hayden, ID homes — including Hayden Lake properties. Free in-home consultation. 24 years consulting, designing, and installing window treatments.",
   },
@@ -207,7 +207,7 @@ export const areaPages: Record<string, AreaPageData> = {
     wikipediaSameAs: "https://en.wikipedia.org/wiki/Rathdrum,_Idaho",
     headline: "Window Treatments for Rathdrum's Expanding Neighborhoods",
     subheadline: "New homes, new families, and window coverings that match the energy of a growing community.",
-    description: "Rathdrum has transformed from a quiet small town into one of Northern Idaho's most exciting growth areas. New subdivisions are bringing hundreds of families into modern, well-designed homes that need equally thoughtful window treatments. Rathdrum's blend of new construction, rural-adjacent properties, and small-town charm creates a unique set of window treatment needs that Mark's 24 years in the trade are well-suited to handle.",
+    description: "Rathdrum has transformed from a quiet small town into one of Northern Idaho's most exciting growth areas. New subdivisions are bringing hundreds of families into modern, well-designed homes that need equally thoughtful window treatments. Rathdrum's blend of new construction, rural-adjacent properties, and small-town charm creates a unique set of window treatment needs that our 24 years in the trade are well-suited to handle.",
     neighborhoods: ["Rathdrum proper", "Westmond area", "Twin Lakes vicinity", "Highway 41 corridor", "Spirit Lake cutoff area", "Prairie developments"],
     housingTypes: "Rathdrum's housing is predominantly newer construction — ranch-style and two-story homes in planned subdivisions, many featuring open floor plans with large windows. There's also a mix of established small-town homes near Rathdrum's downtown core and larger rural properties on the outskirts. New builds typically have modern window sizes and shapes that work well with contemporary treatments like banded shades and roller shades.",
     climateConsiderations: "Rathdrum sits on the Rathdrum Prairie at a slightly higher elevation than Post Falls or Coeur d'Alene, which means colder winters and more exposure to weather. Wind can be a factor on the prairie, making well-fitted window treatments important for both insulation and comfort. The combination of newer construction (which tends to be more energy-efficient) and extreme temperatures makes cellular shades a particularly smart investment here — they complement modern insulation rather than fighting against drafty older windows.",
@@ -250,7 +250,7 @@ export const areaPages: Record<string, AreaPageData> = {
     ],
     productIntro:
       "Rathdrum's new subdivisions mean a lot of bare windows at once, so cellular shades and roller shades cover a whole house without the budget getting away from you. Motorized shades are worth it on anything above a stairwell or out of easy reach.",
-    localCTA: "Rathdrum is growing fast, and we're growing with it. Whether you're in a brand-new subdivision or one of the established neighborhoods, Mark offers free in-home consultations throughout the Rathdrum area.",
+    localCTA: "Rathdrum is growing fast, and we're growing with it. Whether you're in a brand-new subdivision or one of the established neighborhoods, we offer free in-home consultations throughout the Rathdrum area.",
     metaTitle: "Rathdrum Window Treatments | Luxe Window Works",
     metaDescription: "Custom window treatments for Rathdrum, ID homes — new construction and growing neighborhoods. Free in-home consultation. 24 years consulting, designing, and installing window treatments.",
   },
@@ -303,7 +303,7 @@ export const areaPages: Record<string, AreaPageData> = {
     ],
     productIntro:
       "Sandpoint homes lean toward big glass and long views, so solar shades and motorized shades lead here — you want the view preserved and the glare gone. Plantation shutters suit the architecture on the older streets above the lake, and cellular shades earn their keep through a Sandpoint winter.",
-    localCTA: "Mark serves the greater Sandpoint area including lakefront properties, downtown homes, and the Schweitzer corridor. Schedule a free in-home consultation — the drive to Sandpoint is one of his favorites.",
+    localCTA: "We serve the greater Sandpoint area including lakefront properties, downtown homes, and the Schweitzer corridor. Schedule a free in-home consultation — the drive to Sandpoint is one of our favorites.",
     metaTitle: "Sandpoint Window Treatments | Luxe Window Works",
     metaDescription: "Luxury window treatments for Sandpoint, ID — Lake Pend Oreille waterfront and mountain homes. Free consultation. 24 years consulting, designing, and installing window treatments.",
   },
