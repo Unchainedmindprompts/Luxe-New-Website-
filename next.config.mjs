@@ -61,7 +61,70 @@ const nextConfig = {
   },
 
   async redirects() {
+    // Everything Search Console reported under "Not found (404)" on 2026-08-04.
+    // Nearly all of it is the old WordPress top-level structure — product and
+    // city pages that used to live at the root — plus a handful of articles
+    // that no longer exist anywhere. Mapped to the closest live equivalent so
+    // the accumulated external links land somewhere useful instead of dying.
+    const legacyPages = [
+      // Product pages, formerly at the root
+      ['/solar-shades', '/products/solar-shades'],
+      ['/cellular-shades', '/products/cellular-shades'],
+      ['/roman-shades', '/products/roman-shades'],
+      ['/roller-shades', '/products/roller-shades'],
+      ['/banded-shades', '/products/banded-shades'],
+      ['/shutters', '/products/shutters'],
+      ['/motorization', '/products/motorization'],
+      // City pages, formerly /window-coverings-<city>. The Post Falls variant
+      // was never crawled into the 404 report but follows the same pattern and
+      // is linked from at least one old article footer.
+      ['/window-coverings-coeur-d-alene', '/areas/coeur-d-alene'],
+      ['/window-coverings-post-falls-id', '/areas/post-falls'],
+      ['/window-coverings-hayden-id', '/areas/hayden'],
+      ['/window-coverings-rathdrum-id', '/areas/rathdrum'],
+      ['/window-coverings-sandpoint-id', '/areas/sandpoint'],
+      // Core pages
+      ['/about-us', '/about'],
+      ['/contact-us', '/contact'],
+      ['/book-now', '/book'],
+      ['/recent-projects', '/blog'],
+      // Articles that exist nowhere in the repo or the build — they were
+      // authored in Payload and are gone. Pointed at the nearest surviving
+      // piece on the same question rather than left to 404. The Costco one
+      // matters most: 1,036 impressions and 20 clicks in the last 12 months.
+      ['/blog/are-costco-window-treatments-worth-it-a-local-dealer-tells-you-the-truth',
+       '/blog/why-are-window-treatments-so-expensive-a-first-time-buyers-guide-to-smart-stylish-and-budget-friendly-choices'],
+      ['/blog/why-custom-window-treatments-in-coeur-d-alene-and-post-falls-don-t-have-to-cost-twice-what-they-should',
+       '/blog/why-are-window-treatments-so-expensive-a-first-time-buyers-guide-to-smart-stylish-and-budget-friendly-choices'],
+      ['/blog/extend-your-outdoor-season-solar-screens-louvered-roofs-and-the-art-of-living-outside-longer-in-the-inland-northwest',
+       '/products/exterior-solar-shades'],
+      ['/blog/window-treatments-for-northern-idaho-second-homes-what-to-look-for-in-an-installer-when-you-re-not-there',
+       '/blog/custom-window-coverings-near-post-falls-coeur-dalene-local-expertise'],
+      ['/blog/why-a-local-window-treatment-company-in-coeur-d-alene-and-post-falls-should-answer-the-phone-and-show-up-the-next-day',
+       '/blog/custom-window-coverings-near-post-falls-coeur-dalene-local-expertise'],
+      ['/post/why-cheap-blinds-are-costing-you-more-than-you-think',
+       '/blog/performance-window-treatments-why-efficiency-fit-and-installation-matter-more-than-you-think'],
+    ].map(([source, destination]) => ({ source, destination, permanent: true }));
+
     const staticRedirects = [
+      ...legacyPages,
+      {
+        // Renamed with no entry in the generated map, so it 404s under both
+        // the flat and the dated permalink. Same article, current slug.
+        source: '/blog/why-your-motorized-shades-dont-respond-half-the-time-and-how-to-actually-fix-it',
+        destination: '/blog/why-motorized-shades-fail-in-northern-idaho-and-how-to-fix-them',
+        permanent: true,
+      },
+      {
+        // Consolidated duplicate. Two articles covered moisture-proof window
+        // treatments at ~2,900 words each and competed with each other; the
+        // kitchens/lake-homes one was the stronger of the pair in Search
+        // Console (72 impressions at position 16.5 against 29 at 19.7), so the
+        // bathrooms-only article folded into it and redirects here.
+        source: '/blog/moisture-proof-window-treatments-for-coeur-dalene-bathrooms',
+        destination: '/blog/moisture-proof-window-treatments-kitchens-bathrooms-lake-homes',
+        permanent: true,
+      },
       {
         source: '/explore-motorized-shades-plantation-shutters-have-a-question-lets-start-the-c',
         destination: '/blog',
@@ -130,6 +193,37 @@ const nextConfig = {
         destination: r.destination,
         permanent: true, // 301 redirect — preserves SEO juice
       })),
+
+      // Dated WordPress permalinks. The generated map above only covers the
+      // flat /slug form, but the old site published /YYYY/MM/DD/slug/ — which
+      // is the shape of every link posted to Bing, Facebook, and anywhere else
+      // over the years. Those were all 404ing.
+      //
+      // Stripping the date segment lands on /blog/<slug>. Where a slug also
+      // changed, the /blog/X -> /blog/Y entries above pick it up on a second
+      // hop, which browsers and crawlers both follow. Listed last so no
+      // explicit mapping is ever shadowed by the pattern.
+      //
+      // Safe as a catch-all: no route in this app begins with a digit, so this
+      // cannot match a real page.
+      {
+        source: '/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug',
+        destination: '/blog/:slug',
+        permanent: true,
+      },
+      {
+        // Some installs used /YYYY/MM/slug/ instead.
+        source: '/:year(\\d{4})/:month(\\d{2})/:slug',
+        destination: '/blog/:slug',
+        permanent: true,
+      },
+      {
+        // The old site also served articles from /post/<slug>. Listed after the
+        // explicit mappings above so a renamed one is not caught by the pattern.
+        source: '/post/:slug',
+        destination: '/blog/:slug',
+        permanent: true,
+      },
     ];
   },
 };
