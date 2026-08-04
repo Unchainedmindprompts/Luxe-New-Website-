@@ -63,6 +63,13 @@ const nextConfig = {
   async redirects() {
     const staticRedirects = [
       {
+        // Renamed with no entry in the generated map, so it 404s under both
+        // the flat and the dated permalink. Same article, current slug.
+        source: '/blog/why-your-motorized-shades-dont-respond-half-the-time-and-how-to-actually-fix-it',
+        destination: '/blog/why-motorized-shades-fail-in-northern-idaho-and-how-to-fix-them',
+        permanent: true,
+      },
+      {
         // Consolidated duplicate. Two articles covered moisture-proof window
         // treatments at ~2,900 words each and competed with each other; the
         // kitchens/lake-homes one was the stronger of the pair in Search
@@ -140,6 +147,30 @@ const nextConfig = {
         destination: r.destination,
         permanent: true, // 301 redirect — preserves SEO juice
       })),
+
+      // Dated WordPress permalinks. The generated map above only covers the
+      // flat /slug form, but the old site published /YYYY/MM/DD/slug/ — which
+      // is the shape of every link posted to Bing, Facebook, and anywhere else
+      // over the years. Those were all 404ing.
+      //
+      // Stripping the date segment lands on /blog/<slug>. Where a slug also
+      // changed, the /blog/X -> /blog/Y entries above pick it up on a second
+      // hop, which browsers and crawlers both follow. Listed last so no
+      // explicit mapping is ever shadowed by the pattern.
+      //
+      // Safe as a catch-all: no route in this app begins with a digit, so this
+      // cannot match a real page.
+      {
+        source: '/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug',
+        destination: '/blog/:slug',
+        permanent: true,
+      },
+      {
+        // Some installs used /YYYY/MM/slug/ instead.
+        source: '/:year(\\d{4})/:month(\\d{2})/:slug',
+        destination: '/blog/:slug',
+        permanent: true,
+      },
     ];
   },
 };
