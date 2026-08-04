@@ -1,4 +1,3 @@
-import { withPayload } from "@payloadcms/next/withPayload";
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -35,11 +34,6 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "img.youtube.com",
-      },
-      {
-        // Vercel Blob Storage — for images uploaded via Payload CMS admin
-        protocol: "https",
-        hostname: "*.public.blob.vercel-storage.com",
       },
     ],
   },
@@ -228,4 +222,4 @@ const nextConfig = {
   },
 };
 
-export default withPayload(nextConfig);
+export default nextConfig;

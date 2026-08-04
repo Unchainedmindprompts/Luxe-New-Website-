@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
 
-export const revalidate = 3600;
+// Fully static: the post list comes from markdown read at build time.
+export const dynamicParams = false;
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -211,7 +212,7 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* Post Grid — streams in after Payload/Neon query, hero already visible */}
+      {/* Post grid stays inside Suspense so the hero paints first */}
       <Suspense fallback={<PostGridSkeleton />}>
         <PostGrid />
       </Suspense>

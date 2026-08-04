@@ -12,10 +12,12 @@ import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
 import { addInternalLinks } from "@/lib/internal-links";
 import type { BlogPost } from "@/lib/blog";
 
-// Re-render pages at most once per hour; new Payload posts appear within ~60 min
-export const revalidate = 3600;
-// Allow slugs not known at build time (new Payload posts) to render on demand
-export const dynamicParams = true;
+// Every article is a markdown file read at build time, so the full set of
+// slugs is known and nothing can appear between deploys. Both of these existed
+// to let posts written in the CMS show up without a rebuild; with the CMS gone,
+// revalidation regenerates pages that cannot have changed, and dynamicParams
+// lets an unknown slug render a request before deciding it is a 404.
+export const dynamicParams = false;
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -819,8 +821,8 @@ export default async function BlogPostPage({ params }: Props) {
                 prose-li:text-warm-gray-600">
               {/* Product and area links are woven in here rather than in the
                   source markdown, so the articles themselves stay plain prose
-                  and posts from Payload get the same treatment as posts from
-                  content/blog. See lib/internal-links.ts for why this exists. */}
+                  and every future article is covered without author effort.
+                  See lib/internal-links.ts for why this exists. */}
               <ReactMarkdown rehypePlugins={[rehypeRaw]}>
                 {addInternalLinks(post.content, { title: post.title })}
               </ReactMarkdown>
