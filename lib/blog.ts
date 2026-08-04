@@ -1,10 +1,5 @@
 import { readFileSync, readdirSync, existsSync } from "fs";
 import { join } from "path";
-import {
-  getPayloadPost,
-  getAllPayloadPosts,
-  getAllPayloadSlugs,
-} from "./payload-blog";
 
 export interface FAQ {
   question: string;
@@ -238,43 +233,34 @@ function getAllMarkdownSlugs(): string[] {
   }
 }
 
-// ── Public async API — Payload first, markdown fallback ───────────────────────
+// ── Public async API ──────────────────────────────────────────────────────────
+//
+// Markdown in content/blog is the single source of truth. These stay async
+// because every caller awaits them and the route files are written against
+// that signature; there is nothing asynchronous left to do.
+//
+// This used to read Payload first and fall back to markdown. Payload lost five
+// published articles — one of them ranking at position 8.6 with 1,036
+// impressions — and the failure was completely silent, because a CMS outage
+// looks identical to an empty collection. Files in git cannot fail that way:
+// every post has a history, and a deletion is a diff somebody can see and undo.
 
-/** Returns the post from Payload if published there, otherwise falls back to markdown. */
+/** Returns the post for a slug, or null if no article has it. */
 export async function getPost(slug: string): Promise<BlogPost | null> {
-  const payloadPost = await getPayloadPost(slug);
-  if (payloadPost) return payloadPost;
   return getMarkdownPost(slug);
 }
 
-/**
- * Returns all published posts from both Payload and markdown, merged and
- * sorted newest-first. Payload takes precedence when a slug exists in both.
- */
+/** Returns every published post, newest first. */
 export async function getAllPosts(): Promise<BlogPost[]> {
-  const [payloadPosts, markdownPosts] = await Promise.all([
-    getAllPayloadPosts(),
-    Promise.resolve(getAllMarkdownPosts()),
-  ]);
-
-  const payloadSlugs = new Set(payloadPosts.map((p) => p.slug));
-  const markdownOnly = markdownPosts.filter((p) => !payloadSlugs.has(p.slug));
-
-  return [...payloadPosts, ...markdownOnly].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  return getAllMarkdownPosts();
 }
 
-/** Returns all slugs from both Payload and markdown (deduplicated). */
+/** Returns every published slug. */
 export async function getAllSlugs(): Promise<string[]> {
-  const [payloadSlugs, markdownSlugs] = await Promise.all([
-    getAllPayloadSlugs(),
-    Promise.resolve(getAllMarkdownSlugs()),
-  ]);
-  return [...new Set([...payloadSlugs, ...markdownSlugs])];
+  return getAllMarkdownSlugs();
 }
 
-/** Returns all unique tags across both sources. */
+/** Returns all unique tags across every post. */
 export async function getAllTags(): Promise<string[]> {
   const posts = await getAllPosts();
   const tagSet = new Set<string>();
