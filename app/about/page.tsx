@@ -107,7 +107,10 @@ export default function AboutPage() {
           JsonLd emits a real <script type="application/ld+json"> during SSR. */}
       <JsonLd data={personSchema} />
       <JsonLd data={webpageSchema} />
-      <main className="bg-white">
+      {/* A div, not <main>: the layout already provides the single <main>
+          landmark, and nesting a second one is invalid and confuses the
+          "skip to main content" target. */}
+      <div className="bg-white">
         {/* Intro. Carries the page's h1 — the previous version of this page had
             none at all, only h2s, which gave up a ranking signal on a page that
             targets the core service term. */}
@@ -286,7 +289,7 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
-      </main>
+      </div>
     </>
   );
 }
