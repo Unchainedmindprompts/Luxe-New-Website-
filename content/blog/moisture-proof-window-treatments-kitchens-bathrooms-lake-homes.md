@@ -69,6 +69,16 @@ wordCount: 2250
 
 <p><strong>Watch out:</strong> Make sure you're getting actual moisture-rated materials, not standard fabric shades installed in a humid space.</p>
 
+<h3>Marine-Grade Aluminum Shutters for Direct Water Contact</h3>
+
+<p>For a window actually inside a shower enclosure — where direct spray is unavoidable rather than occasional — aluminum shutters are the only honest answer. Marine-grade options use the same corrosion-resistant aluminum specified for coastal and boat applications, environments considerably harsher than any bathroom.</p>
+
+<p>Construction is solid aluminum throughout with finishes chemically bonded to resist water and cleaning chemicals. No rust, no corrosion, no swelling. Louvers keep adjusting smoothly no matter the humidity, and the panel can be removed entirely for a deep clean.</p>
+
+<p>The look is decidedly modern — clean lines, slim profiles, usually powder-coated. If your bathroom leans traditional they will fight the room. In a modern, transitional, or spa-style space they look deliberate.</p>
+
+<p><strong>Best for:</strong> Windows inside walk-in showers, wet rooms, and lakefront spa bathrooms where the glass gets sprayed daily. They are a premium investment, but for a shower window there is nothing else that lasts.</p>
+
 <h2>Window Treatments That Fail in High-Moisture Spaces</h2>
 
 <p>Real wood blinds do not belong in bathrooms, over kitchen sinks, in laundry rooms, or anywhere else with regular moisture exposure. They will warp. It's not a question of if, it's when.</p>
@@ -132,6 +142,36 @@ wordCount: 2250
 <p><strong>Also works:</strong> Screen shades alone if you primarily want view preservation with some glare reduction.</p>
 
 <p><strong>Avoid:</strong> Standard fabric shades or untreated materials. Even if the room itself isn't wet, the ambient humidity from lake air will eventually cause problems.</p>
+
+<h2>Ventilation: The Part Nobody Budgets For</h2>
+
+<p>The best material in the world fails early if the humidity never leaves the room. Two of the three worst moisture failures I have been called out to were material problems on paper and ventilation problems in reality.</p>
+
+<h3>Run the fan longer than you think</h3>
+
+<p>Twenty minutes after the shower stops, minimum. That single habit does more for your window coverings — and your paint, and your trim — than any upgrade on this page.</p>
+
+<h3>Give the treatment airflow</h3>
+
+<p>Position treatments so air from the vent or fan can actually reach them. A pocket of humid air trapped behind closed shutters is where mildew starts, and it starts there even on materials that are rated for the room.</p>
+
+<h3>Consider a humidity-sensing fan</h3>
+
+<p>Fans that switch themselves on above a set humidity threshold remove the human factor entirely. It is a small upgrade that protects the whole bathroom, not just the window.</p>
+
+<h2>Keeping Them Performing</h2>
+
+<h3>Wipe down after steam</h3>
+
+<p>A soft damp cloth, especially after a hot shower. This clears mineral residue before it hardens and stops mildew getting a foothold.</p>
+
+<h3>Skip the harsh cleaners</h3>
+
+<p>No bleach and no ammonia on faux wood, vinyl, poly, or aluminum finishes. They dull the surface and can break down the protective coating that makes the product moisture-resistant in the first place. Mild soap and water is genuinely the right answer.</p>
+
+<h3>Exercise the mechanism seasonally</h3>
+
+<p>Every few months, run each treatment through its full range. If anything feels stiff, a silicone-safe lubricant sorts it. Catching a tight mechanism early is the difference between a five-minute fix and a replacement.</p>
 
 <h2>Why Professional Measuring and Installation Matter in High-Moisture Spaces</h2>
 

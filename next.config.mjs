@@ -63,6 +63,16 @@ const nextConfig = {
   async redirects() {
     const staticRedirects = [
       {
+        // Consolidated duplicate. Two articles covered moisture-proof window
+        // treatments at ~2,900 words each and competed with each other; the
+        // kitchens/lake-homes one was the stronger of the pair in Search
+        // Console (72 impressions at position 16.5 against 29 at 19.7), so the
+        // bathrooms-only article folded into it and redirects here.
+        source: '/blog/moisture-proof-window-treatments-for-coeur-dalene-bathrooms',
+        destination: '/blog/moisture-proof-window-treatments-kitchens-bathrooms-lake-homes',
+        permanent: true,
+      },
+      {
         source: '/explore-motorized-shades-plantation-shutters-have-a-question-lets-start-the-c',
         destination: '/blog',
         permanent: true,
