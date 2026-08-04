@@ -46,6 +46,23 @@ async function toPost(doc: any): Promise<BlogPost> {
   };
 }
 
+/**
+ * Payload is optional at build time — the markdown corpus renders without it —
+ * so a failed query must not break the build. It must not be silent either.
+ * Search Console found five published articles returning 404, one of them with
+ * 1,036 impressions and 20 clicks, because a swallowed error here drops every
+ * Payload-authored post out of the sitemap and the route map with a completely
+ * green build. Loud in the log is the difference between noticing in a minute
+ * and noticing in a quarter.
+ */
+function warnPayload(fn: string, err: unknown) {
+  console.warn(
+    `[PAYLOAD_UNAVAILABLE] ${fn} failed — any post authored in Payload will be ` +
+      `absent from this build and will 404 in production. ` +
+      `${err instanceof Error ? err.message : String(err)}`
+  );
+}
+
 export async function getPayloadPost(slug: string): Promise<BlogPost | null> {
   try {
     const payload = await getPayload({ config });
@@ -59,7 +76,8 @@ export async function getPayloadPost(slug: string): Promise<BlogPost | null> {
       },
     });
     return docs[0] ? toPost(docs[0]) : null;
-  } catch {
+  } catch (err) {
+    warnPayload("getPayloadPost", err);
     return null;
   }
 }
@@ -76,7 +94,8 @@ export async function getAllPayloadPosts(): Promise<BlogPost[]> {
       where: { published: { equals: true } },
     });
     return Promise.all(docs.map(toPost));
-  } catch {
+  } catch (err) {
+    warnPayload("getAllPayloadPosts", err);
     return [];
   }
 }
@@ -93,7 +112,8 @@ export async function getAllPayloadSlugs(): Promise<string[]> {
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (docs as any[]).map((d) => d.slug as string).filter(Boolean);
-  } catch {
+  } catch (err) {
+    warnPayload("getAllPayloadSlugs", err);
     return [];
   }
 }
