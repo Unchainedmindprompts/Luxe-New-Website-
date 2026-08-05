@@ -123,4 +123,3 @@ We’ll match the solution to how you use the door and how much stacking space y
 <h2 data-start="4490" data-end="4514">Ready to get started?</h2>
 <p data-start="4515" data-end="4704">If you’d like help choosing the right blinds, shades, or shutters, schedule a <strong data-start="4593" data-end="4622">free in-home consultation</strong>. We’ll bring samples, take exact measurements, and show options for every budget.</p>
 <p data-start="4706" data-end="4775"><strong data-start="4706" data-end="4720">Call/Text:</strong> 208-660-8643<br data-start="4733" data-end="4736" /><strong data-start="4736" data-end="4755">Or book online:</strong> (your booking link)</p>
-<p data-start="4706" data-end="4775"><img class="alignnone wp-image-2790 size-medium" src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/11/2018_DU_PV_Alexa_KitchenDetail-300x289.jpg" alt="Blinds, Shades, and Shutters in North Idaho: Your Questions Answered" width="300" height="289" /></p>
