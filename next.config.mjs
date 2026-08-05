@@ -13,7 +13,14 @@ try {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
-    // Lint is run separately in CI; don't block production builds
+    // Not run during `next build`. It is run by `npm run lint`, which is part
+    // of `npm run check`.
+    //
+    // The previous comment here claimed lint ran "separately in CI". No CI
+    // existed, and the lint script itself was `next lint`, which Next 16
+    // removed — so ESLint had never executed at all. Both are fixed; this stays
+    // false only until a CI workflow enforces `npm run check` on push, which is
+    // deliberately out of scope for this phase.
     ignoreDuringBuilds: true,
   },
 
