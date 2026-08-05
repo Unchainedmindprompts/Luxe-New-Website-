@@ -11,6 +11,8 @@
     "typecheck": "tsc --noEmit",
     "validate:source": "node scripts/validate-source-assets.mjs",
     "check": "npm run typecheck && npm run lint && npm run validate:source",
+    "validate:legacy": "node scripts/validate-legacy-urls.mjs",
+    "verify:legacy": "npm run build && npm run validate:legacy",
     "audit:schema": "node scripts/audit-schema-ids.mjs",
     "prepare": "husky",
     "audit:rendered": "node scripts/audit-rendered-schema.mjs",

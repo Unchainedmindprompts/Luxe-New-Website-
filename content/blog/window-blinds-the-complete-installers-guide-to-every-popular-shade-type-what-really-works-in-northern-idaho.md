@@ -131,7 +131,7 @@ wordCount: 4404
 <p style="margin:0 0 .5rem;font-weight:600;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:#a8862d;">Continue Exploring Blinds</p>
 <ul style="margin:0;padding-left:1.25rem;">
 <li><a href="/blog/faux-wood-vs-composite-blinds-which-holds-up-better-in-northern-idaho">Faux wood vs. composite blinds: which holds up better in Northern Idaho?</a></li>
-<li><a href="/blog/2%c2%bd-inch-wood-vs-2-inch-blinds-the-smarter-upgrade-for-idaho-homes">Why 2½-inch wood or faux wood blinds are better than standard 2-inch — the smarter upgrade</a></li>
+<li><a href="/blog/2-5-inch-wood-vs-2-inch-blinds-the-smarter-upgrade-for-idaho-homes">Why 2½-inch wood or faux wood blinds are better than standard 2-inch — the smarter upgrade</a></li>
 <li><a href="/blog/how-to-restring-blinds-like-a-pro-step-by-step-guide">How to restring blinds: the complete DIY guide from a pro</a></li>
 </ul>
 </div>
