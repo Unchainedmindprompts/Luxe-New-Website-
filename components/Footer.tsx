@@ -157,6 +157,9 @@ export default function Footer() {
             <Link href="/glossary" className="hover:text-gold transition-colors">
               Glossary
             </Link>
+            <Link href="/privacy" className="hover:text-gold transition-colors">
+              Privacy Policy
+            </Link>
             <span>Custom window treatments for North Idaho homes.</span>
           </div>
         </div>
