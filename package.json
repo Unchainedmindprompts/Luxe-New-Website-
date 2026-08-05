@@ -7,14 +7,17 @@
     "prebuild": "node scripts/audit-schema-ids.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "validate:source": "node scripts/validate-source-assets.mjs",
+    "check": "npm run typecheck && npm run lint && npm run validate:source",
     "audit:schema": "node scripts/audit-schema-ids.mjs",
     "prepare": "husky",
     "audit:rendered": "node scripts/audit-rendered-schema.mjs",
     "postbuild": "node scripts/audit-rendered-schema.mjs"
   },
   "engines": {
-    "node": ">=18.17.0"
+    "node": ">=22.0.0"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",

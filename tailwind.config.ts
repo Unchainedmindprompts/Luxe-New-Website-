@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
 
 const config: Config = {
   content: [
@@ -40,6 +41,10 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("@tailwindcss/typography")],
+  // Imported rather than require()d: this file is already an ES module, and
+  // @typescript-eslint/no-require-imports flags the CommonJS form. Behaviour is
+  // identical — the plugin is a CJS default export and Node's interop resolves
+  // it the same way Tailwind did before.
+  plugins: [typography],
 };
 export default config;
