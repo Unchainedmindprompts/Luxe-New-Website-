@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
@@ -158,6 +158,28 @@ function deriveKeywords(post: BlogPost): string {
   }
 
   return Array.from(kw).join(", ");
+}
+
+/**
+ * Article link sanitiser.
+ *
+ * react-markdown's built-in sanitiser allows only https, http, irc, ircs,
+ * mailto, and xmpp. Everything else is rewritten to an empty string. Four
+ * articles wrote `<a href="tel:+12086608643">` and rendered `<a href="">`, so
+ * seven click-to-call links were silently dead — the markdown was correct and
+ * the page was broken, which is exactly the class of defect no source-level
+ * check can see.
+ *
+ * This adds `tel:` and nothing else. Anything that is not a well-formed
+ * telephone URI falls through to `defaultUrlTransform`, so javascript:, data:,
+ * vbscript:, and every unknown scheme are still stripped by the library's own
+ * logic rather than by a rule written here. The pattern requires a leading
+ * digit or +, then only characters valid in a dialable number — a payload like
+ * `tel:javascript:alert(1)` does not match and is handed to the default.
+ */
+function articleUrlTransform(url: string): string {
+  if (/^tel:\+?[0-9][0-9\s().-]*$/i.test(url)) return url;
+  return defaultUrlTransform(url);
 }
 
 /** Author reference — the full Person entity lives in the homepage @graph (#owner). */
@@ -823,7 +845,7 @@ export default async function BlogPostPage({ params }: Props) {
                   source markdown, so the articles themselves stay plain prose
                   and every future article is covered without author effort.
                   See lib/internal-links.ts for why this exists. */}
-              <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+              <ReactMarkdown rehypePlugins={[rehypeRaw]} urlTransform={articleUrlTransform}>
                 {addInternalLinks(post.content, { title: post.title })}
               </ReactMarkdown>
             </div>

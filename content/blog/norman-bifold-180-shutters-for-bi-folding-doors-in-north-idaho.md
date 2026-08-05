@@ -49,4 +49,4 @@ wordCount: 1357
 <p>Ready to see how the Norman® BiFold 180 can transform your space? Contact us today to schedule your personalized consultation.</p>
 <p>&nbsp;</p>
 <p><a href="https://normanusa.com/window-treatments/shutters/" data-type="link" data-id="https://normanusa.com/window-treatments/shutters/">https://normanusa.com/window-treatments/shutters/</a></p>
-<p><a href="https://luxewindowworks.com/trends-in-window-coverings-2025/" data-type="link" data-id="https://luxewindowworks.com/trends-in-window-coverings-2025/">https://luxewindowworks.com/trends-in-window-coverings-2025/</a></p>
+<p>https://luxewindowworks.com/trends-in-window-coverings-2025/</p>

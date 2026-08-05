@@ -69,6 +69,6 @@ wordCount: 1505
 <li><strong>Don't:</strong> Scrub the fabric, which can damage the pleats and distort the shade's appearance.</li>
 </ul>
 <p>Remember, most manufacturers and installers are happy to answer your questions. Before you try anything new, check their website or give them a call. Taking a little time to do it right is the best way to keep your shades looking beautiful and performing perfectly for years to come</p>
-<p><a href="https://luxewindowworks.com/trends-in-window-coverings-2025/" data-type="link" data-id="https://luxewindowworks.com/trends-in-window-coverings-2025/">https://luxewindowworks.com/trends-in-window-coverings-2025/</a></p>
+<p>https://luxewindowworks.com/trends-in-window-coverings-2025/</p>
 <p>.<a href="https://www.youtube.com/watch?v=NlyDZ4l7bfo#ddg-play" data-type="link" data-id="https://www.youtube.com/watch?v=NlyDZ4l7bfo#ddg-play">https://www.youtube.com/watch?v=NlyDZ4l7bfo#ddg-play</a></p>
 <p>&nbsp;</p>

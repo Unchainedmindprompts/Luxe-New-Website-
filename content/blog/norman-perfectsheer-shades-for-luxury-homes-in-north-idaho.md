@@ -47,7 +47,7 @@ wordCount: 1689
 <p>Your home is your sanctuary. Don't settle for anything less than a window treatment that enhances your lifestyle and reflects your unique taste.</p>
 <p>Discover how <strong>Norman PerfectSheer Shades</strong> can elevate your home's aesthetic, provide unparalleled comfort, and create the perfect ambiance.</p>
 <p>Contact Luxe Window Works today to schedule your private design consultation. Let us show you why our expertise, combined with the premium quality of Norman, is the ultimate choice for <strong>custom window shades in Post Falls</strong>, Coeur d'Alene, Hayden, and the surrounding Northern Idaho area</p>
-<p>.<a href="https://luxewindowworks.com/trends-in-window-coverings-2025/" data-type="link" data-id="https://luxewindowworks.com/trends-in-window-coverings-2025/">https://luxewindowworks.com/trends-in-window-coverings-2025/</a><a href="https://normanusa.com/product/perfectsheer-shades/" data-type="link" data-id="https://normanusa.com/product/perfectsheer-shades/">https://normanusa.com/product/perfectsheer-shades/</a></p>
+<p>.https://luxewindowworks.com/trends-in-window-coverings-2025/<a href="https://normanusa.com/product/perfectsheer-shades/" data-type="link" data-id="https://normanusa.com/product/perfectsheer-shades/">https://normanusa.com/product/perfectsheer-shades/</a></p>
 <p>&nbsp;</p>
 <p>208-660-8643</p>
 <p><a href="http://www.luxewindowworks.com" data-type="link" data-id="www.luxewindowworks.com">www.luxewindowworks.com</a></p>
