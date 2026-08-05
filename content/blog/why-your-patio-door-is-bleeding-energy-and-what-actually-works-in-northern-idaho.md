@@ -389,7 +389,7 @@ Schedule a free in-home consultation with Luxe Window Works. I'll measure your s
 <strong>Call or text: 208-660-8643</strong>
 <strong>Email: mark@luxewindowworks.com</strong>
 
-<strong>Serving Coeur d'Alene <a href="https://luxewindowworks.com/service-areas/window-coverings-sandpoint-idaho/">https://luxewindowworks.com/service-areas/window-coverings-sandpoint-idaho/</a>, Post Falls <a href="https://luxewindowworks.com/service-areas/window-coverings-post-falls-id/">https://luxewindowworks.com/service-areas/window-coverings-post-falls-id/</a>, Hayden,  <a href="https://luxewindowworks.com/service-areas/window-coverings-hayden-id/">https://luxewindowworks.com/service-areas/window-coverings-hayden-id/ </a>Sandpoint, <a href="https://luxewindowworks.com/service-areas/window-coverings-sandpoint-idaho/">https://luxewindowworks.com/service-areas/window-coverings-sandpoint-idaho/</a>and surrounding areas</strong>
+<strong>Serving Coeur d'Alene <a href="/areas/sandpoint">/areas/sandpoint</a>, Post Falls <a href="/areas/post-falls">/areas/post-falls</a>, Hayden,  <a href="/areas/hayden">/areas/hayden </a>Sandpoint, <a href="/areas/sandpoint">/areas/sandpoint</a>and surrounding areas</strong>
 
 <hr />
 

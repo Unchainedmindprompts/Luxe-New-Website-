@@ -48,5 +48,5 @@ wordCount: 804
 </ul>
 <p>At Luxe Window Works, we understand the unique design sensibilities and practical needs of homeowners in <strong>Coeur d'Alene</strong>. We specialize in bringing these innovative solutions directly to you.</p>
 <p>Ready to elevate your modern living experience? Contact Luxe Window Works today for a complimentary in-home consultation. We'll help you explore these stunning options and find the perfect shades to complement your beautiful Coeur d'Alene home.</p>
-<p><a href="https://luxewindowworks.com/trends-in-window-coverings-2025/" data-type="link" data-id="https://luxewindowworks.com/trends-in-window-coverings-2025/">https://luxewindowworks.com/trends-in-window-coverings-2025/</a></p>
+<p>https://luxewindowworks.com/trends-in-window-coverings-2025/</p>
 <p>&nbsp;</p>

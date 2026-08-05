@@ -449,7 +449,7 @@ wordCount: 8296
 <p><a href="https://normanusa.com/about-norman/" data-type="link" data-id="https://normanusa.com/about-norman/">https://normanusa.com/about-norman/</a></p>
 <p><a href="https://www.corradiusa.com/us" data-type="link" data-id="https://www.corradiusa.com/us">https://www.corradiusa.com/us</a></p>
 <p><strong>Recent Projects! </strong></p>
-<p><a href="https://luxewindowworks.com/2025/10/16/the-layered-luxe-look-combining-shutters-with-motorized-shades-for-ultimate-light-control-and-energy-efficiency/" data-type="link" data-id="https://luxewindowworks.com/2025/10/16/the-layered-luxe-look-combining-shutters-with-motorized-shades-for-ultimate-light-control-and-energy-efficiency/">https://luxewindowworks.com/2025/10/16/the-layered-luxe-look-combining-shutters-with-motorized-shades-for-ultimate-light-control-and-energy-efficiency/</a></p>
-<p><a href="https://luxewindowworks.com/trends-in-window-coverings-2025/" data-type="link" data-id="https://luxewindowworks.com/trends-in-window-coverings-2025/">https://luxewindowworks.com/trends-in-window-coverings-2025/</a></p>
+<p><a href="/blog/layered-shutters-motorized-shades-for-northern-idaho-homes" data-type="link" data-id="/blog/layered-shutters-motorized-shades-for-northern-idaho-homes">/blog/layered-shutters-motorized-shades-for-northern-idaho-homes</a></p>
+<p>https://luxewindowworks.com/trends-in-window-coverings-2025/</p>
 <p>Installed by Luxe Window Works — proudly based in Post Falls, ID and serving the greater Coeur d’Alene area.</p>
 <p>&nbsp;</p>

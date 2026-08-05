@@ -59,7 +59,7 @@ wordCount: 1699
 </div>
 <hr/>
 <p><em>Ready to experience the comfort difference of performance solar shade fabrics? Contact Luxe Window Works for a consultation. We'll help you choose the right openness factor and fabric technology for your specific comfort needs—because every window deserves a solution as sophisticated as your lifestyle.</em></p>
-<p><a href="https://luxewindowworks.com/trends-in-window-coverings-2025/" data-type="link" data-id="https://luxewindowworks.com/trends-in-window-coverings-2025/">https://luxewindowworks.com/trends-in-window-coverings-2025/</a></p>
+<p>https://luxewindowworks.com/trends-in-window-coverings-2025/</p>
 <p><a href="https://normanusa.com/product/soluna-roller-shades/" data-type="link" data-id="https://normanusa.com/product/soluna-roller-shades/">https://normanusa.com/product/soluna-roller-shades/</a></p>
 <hr/>
 <p><strong>References:</strong></p>

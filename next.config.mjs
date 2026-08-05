@@ -127,6 +127,16 @@ const nextConfig = {
         permanent: true,
       },
       {
+        // The truncated form below is a literal character-for-character prefix of
+        // this one — the same former WordPress URL, cut short somewhere in the
+        // migration. It is not a page in the export (it only ever appears as a
+        // body link), so it gets no manifest entry; it is a link target that
+        // needs to land somewhere, and it lands where its own prefix already does.
+        source: '/explore-motorized-shades-plantation-shutters-have-a-question-lets-start-the-conversation',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
         source: '/explore-motorized-shades-plantation-shutters-have-a-question-lets-start-the-c',
         destination: '/blog',
         permanent: true,
