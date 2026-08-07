@@ -37,9 +37,9 @@ tie-break bug to fix.
 | `lib/advisor/knowledge/products.ts` | 12 product directions, 3 cross-cutting options, declared site coverage. |
 | `lib/advisor/knowledge/priorities.ts` | The 17 customer priorities and what distinguishes each. |
 | `lib/advisor/knowledge/rules.ts` | 7 rule families + 9 canonical business policies. |
-| `lib/advisor/knowledge/guardrails.ts` | 22 hard prohibitions. |
+| `lib/advisor/knowledge/guardrails.ts` | 23 hard prohibitions. |
 | `lib/advisor/engine.ts` | The evaluator. Pure function of (facts, knowledge). |
-| `scripts/advisor-scenarios.json` | The 30 approved scenarios. |
+| `scripts/advisor-scenarios.json` | The approved scenarios — 30 from Phase A, 4 added in A.1. |
 | `scripts/test-advisor-engine.mjs` | Three-pass harness. |
 
 ## Rules are data, not code
@@ -132,14 +132,45 @@ That inversion is what makes the record readable: **whatever banded overrides is
 by construction, exactly where it differs** — the horizontal banded appearance,
 the modern/contemporary skew of the fabric options, and view behaviour.
 
-View behaviour is the one that carries a rule. Aligning the alternating bands
-gives a real but partial "peek-a-boo" view, which is not the broad continuous
-view-through of a solar shade. Because that resemblance is exactly what invites
-the mistake, banded carries a `banded-view-not-continuous` contraindication that
-deprioritizes it whenever preserving the view is a leading priority, so solar
-comes out ahead. Interior roller does *not* carry the equivalent rule, and that
-asymmetry is deliberate: a roller has no alignment feature to be mistaken for a
-view product, so there is no confusion to guard against.
+View behaviour is the one that carries a rule — see below.
+
+## Preserving the view *while the treatment is down*
+
+The single most important distinction in this layer, and the one it was easiest
+to get wrong.
+
+**Seeing out through a lowered treatment** and **clear glass when the treatment
+is raised** are different requirements, served by different products. The first
+is `view-preservation` / `viewImportance`; the second is
+`clear-glass-when-open` / `windowUse: raised-to-clear-glass`.
+
+When keeping the view *while deployed* is a leading priority, **interior solar
+is the direction that survives**, because the mesh keeps continuous outward
+visibility. Everything opaque or semi-opaque is deprioritized against it:
+
+| Direction | Why it deprioritizes |
+|---|---|
+| `interior-solar` | — it is the answer |
+| `banded-shades` | aligned bands give a partial, peek-a-boo view, not continuous view-through |
+| `interior-roller` | a normal opaque roller fabric covers the view when down |
+| `cellular` | no outward view while deployed |
+
+**Deprioritized, never excluded.** Privacy, room darkening, aesthetics, cost or
+how the window is actually used can all outweigh daytime view, and the homeowner
+still gets to choose.
+
+All four reference one shared `VIEW_WHILE_DEPLOYED_IS_LEADING` condition rather
+than restating the trigger, so the rule cannot drift apart across directions
+while each keeps its own honest explanation.
+
+An earlier revision applied this to banded and cellular but **not** to interior
+roller, on the reasoning that only banded has an alignment feature that could be
+mistaken for a view product. Luxe corrected that: an opaque roller covers the
+view just as completely, and the rule is about the product's behaviour, not
+about which product a customer is most likely to misread. Scenario 34 exists to
+hold the *other* half of the line — a homeowner who raises the covering for
+clear glass, with no view-while-deployed requirement, still gets roller as a
+strong candidate.
 
 ## Constraints: exclude versus deprioritize
 
@@ -334,26 +365,26 @@ engine misbehaving.
 | Verification rules | 16 | **17** |
 | Escalation rules | 15 | 15 |
 | Conflict rules | 12 | **13** |
-| Contraindications | 29 | **31** |
+| Contraindications | 29 | **32** |
 | Guardrails | 22 (14 / 8) | **23 (14 always, 9 conditional)** |
 | Business policies | 9 | 9 |
-| Scenarios | 30 | **33** |
-| Assertions | 225 | **245** |
-| **Scenarios passing** | 30 / 30 | **33 / 33** |
+| Scenarios | 30 | **34** |
+| Assertions | 225 | **254** |
+| **Scenarios passing** | 30 / 30 | **34 / 34** |
 
 ## Are the assertions actually discriminating?
 
 Everything passing on the first run is not evidence of anything by itself. Every
 scenario's assertion set was therefore run against every *other* scenario's facts
-— 7,840 off-diagonal checks. If the assertions were vacuous, most would pass
+— 8,382 off-diagonal checks. If the assertions were vacuous, most would pass
 anyway.
 
-**16.3% satisfied off-diagonal** (16.2% before Phase A.1 — adding three
-scenarios and two assertion types did not dilute it). Only 5 of 1,056
+**17.0% satisfied off-diagonal** (16.2% before Phase A.1). Only 5 of 1,122
 wrong-facts pairings satisfied a scenario's whole assertion set, and all five are
-near-duplicate pairs by construction: 01/30 both west-facing view-plus-severe-heat,
-15/20 both rarely-operated, 18/27 both very-wide, and 08 against 31 and 32, whose
-facts both include the modern-minimal aesthetic that 08's assertions test.
+near-duplicate pairs by construction: 01/30 both west-facing
+view-plus-severe-heat, 15/20 both rarely-operated, 18/27 both very-wide, and 08
+against two scenarios whose facts include the modern-minimal aesthetic that 08's
+assertions test.
 
 Per assertion type, off-diagonal satisfaction — lower is stronger:
 
@@ -367,10 +398,10 @@ Per assertion type, off-diagonal satisfaction — lower is stronger:
 | `mustRecognize` | 7% |
 | `mustSurfaceOption` | 8% |
 | `mustRequireVerification` | 9% |
-| `mustStronglyConsider` | 11% |
-| `mustDeprioritize` | 16% |
-| `mustApplyGuardrail` | 20% |
-| `mustAskOrResolve` | 21% |
+| `mustStronglyConsider` | 12% |
+| `mustDeprioritize` | 18% |
+| `mustApplyGuardrail` | 19% |
+| `mustAskOrResolve` | 20% |
 | `mustIncludeCandidate` | **99%** |
 
 `mustIncludeCandidate` is weak by construction and is reported honestly rather
@@ -403,6 +434,7 @@ harness doing the job it exists for.
 | P1 | banded shades' `siteProductSlugs` emptied | cross-check reported `banded-shades` unclaimed — the same drift finding that previously guarded it as an unrepresented declaration | **1** |
 | P2 | `corded-operation`'s `deprioritizedWhen` rewired so child safety never triggers it | scenario 33 failed on `mustDeprioritizeOption: corded-operation`, with no structural error | **1** |
 | P3 | drapery stack-back restored to `exclude` | scenario 10 failed on both `mustIncludeCandidate: drapery` and `mustDeprioritize: drapery` | **1** |
+| P4 | `roller-view-while-deployed` deleted | scenario 32 failed on `mustDeprioritize: interior-roller`, with no structural error | **1** |
 
 P3 is worth noting in both directions. The same scenario passed under the old
 `exclude` rule and passes under the new `deprioritize` rule, because its
@@ -510,12 +542,13 @@ Added in Phase A.1:
     the child-safety rules even when the priority is not stated. Reasonable, but
     it is an inference the brief does not make explicitly.
 
-14. **Banded shades deprioritize on a view priority; interior roller does not.**
-    Both are opaque when deployed, so neither preserves a view — but only banded
-    has an alignment feature that can be mistaken for one, and only banded is
-    named in the rule about not being equivalent to solar. The asymmetry is
-    intentional; if Luxe wants roller treated the same way, it is one more
-    contraindication.
+14. ~~**Banded shades deprioritize on a view priority; interior roller does
+    not.**~~ **Corrected by Luxe.** Both deprioritize now, along with cellular,
+    against interior solar. The original reasoning — that only banded has an
+    alignment feature that could be mistaken for view-through — described which
+    product a customer might misread rather than what the product does. An
+    opaque roller covers the view just as completely. See "Preserving the view
+    while the treatment is down" above.
 
 15. **"Horizontal detail" is a design preference, not a product name.** Banded
     shades are surfaced from an aesthetic flag describing what the homeowner

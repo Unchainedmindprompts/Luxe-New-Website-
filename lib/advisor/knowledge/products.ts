@@ -19,6 +19,7 @@
  * or added category is caught as a real change rather than a string mismatch.
  */
 import type {
+  Condition,
   Contraindication,
   CrossCuttingOption,
   ProductDirection,
@@ -27,6 +28,29 @@ import type {
 
 /** Fabric and wood products the brief says to move away from in splash zones. */
 const DIRECT_SPLASH = { fact: "moistureExposure", is: ["direct-splash"] } as const;
+
+/**
+ * Keeping the outside view **while the treatment is deployed** is a leading
+ * priority.
+ *
+ * This is deliberately not the same thing as wanting clear glass when the
+ * covering is raised — that is `clear-glass-when-open`, and a roller shade
+ * serves it well. Confusing the two is the mistake this shared definition
+ * exists to prevent, so every direction that cannot show a view while it is
+ * down references this one condition rather than restating it.
+ *
+ * Interior solar is the direction that survives it, because the mesh keeps
+ * continuous outward visibility. Everything opaque or semi-opaque is
+ * deprioritized against solar — never excluded, because privacy, darkening,
+ * aesthetics, cost or how the window is actually used can outweigh daytime
+ * view.
+ */
+const VIEW_WHILE_DEPLOYED_IS_LEADING: Condition = {
+  any: [
+    { priority: "view-preservation", withinTop: 2 },
+    { fact: "viewImportance", is: ["high", "critical"] },
+  ],
+};
 
 /**
  * Behaviour shared by the roller family — interior roller shades and banded
@@ -134,12 +158,7 @@ export const PRODUCT_DIRECTIONS: readonly ProductDirection[] = [
       {
         id: "cellular-view-while-deployed",
         effect: "deprioritize",
-        when: {
-          any: [
-            { priority: "view-preservation", withinTop: 2 },
-            { fact: "viewImportance", is: ["high", "critical"] },
-          ],
-        },
+        when: VIEW_WHILE_DEPLOYED_IS_LEADING,
         reason:
           "Cellular is not ideal when seeing out while the shade is deployed is a leading priority. It insulates well, but that is not a reason to make it the primary daytime answer for a view window.",
       },
@@ -172,13 +191,24 @@ export const PRODUCT_DIRECTIONS: readonly ProductDirection[] = [
       "Leaves clear glass when raised.",
     ],
     weakFits: [
+      "Preserving the outside view while the shade is deployed — an opaque fabric covers it. That is a solar shade.",
       "Maximum room darkening, particularly inside-mounted.",
       "Situations where the fabric is meant to contribute to the room's design.",
     ],
     ...ROLLER_FAMILY,
-    viewBehavior: "Clear glass when raised. No outward view through an opaque fabric when lowered.",
+    viewBehavior:
+      "Clear glass when raised — which is a different thing from seeing out while it is down. A normal opaque roller fabric covers the view when deployed.",
     designCharacteristics: "Minimal, architectural, intended to recede.",
-    contraindications: [rollerFamilyDarkening("roller")],
+    contraindications: [
+      rollerFamilyDarkening("roller"),
+      {
+        id: "roller-view-while-deployed",
+        effect: "deprioritize",
+        when: VIEW_WHILE_DEPLOYED_IS_LEADING,
+        reason:
+          "A normal opaque roller fabric covers the view when it is down. When keeping the view while the shade is deployed is a leading priority, solar is the stronger direction. Still eligible: privacy, darkening, styling or cost can outweigh daytime view, and a roller still leaves clear glass when raised.",
+      },
+    ],
   },
 
   // ── banded shades ─────────────────────────────────────────────────────────
@@ -220,14 +250,9 @@ export const PRODUCT_DIRECTIONS: readonly ProductDirection[] = [
       {
         id: "banded-view-not-continuous",
         effect: "deprioritize",
-        when: {
-          any: [
-            { priority: "view-preservation", withinTop: 2 },
-            { fact: "viewImportance", is: ["high", "critical"] },
-          ],
-        },
+        when: VIEW_WHILE_DEPLOYED_IS_LEADING,
         reason:
-          "The band alignment gives a partial view, not the broad continuous view-through of a solar shade. When keeping the view is a leading priority, solar is the stronger direction.",
+          "Aligning the bands gives a partial, peek-a-boo view — not the broad continuous view-through of a solar shade. When keeping the view while the shade is down is a leading priority, solar is the stronger direction. Still eligible: privacy, darkening, styling or cost can outweigh daytime view.",
       },
     ],
   },

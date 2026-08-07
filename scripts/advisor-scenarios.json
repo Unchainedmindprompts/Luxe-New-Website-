@@ -587,9 +587,9 @@
       }
     },
     {
-      "id": "32-banded-vs-solar-view-priority",
-      "title": "Banded vs solar — broad view preservation is the priority",
-      "narrative": "Same modern taste and the same interest in horizontal detail, but now keeping the west-facing lake view while the shade is down is the most important thing.",
+      "id": "32-continuous-view-favours-solar",
+      "title": "Continuous view while deployed — solar over roller and banded",
+      "narrative": "Same modern taste and the same interest in horizontal detail, but now keeping the west-facing lake view while the treatment is down is the most important thing.",
       "facts": {
         "priorities": ["view-preservation", "aesthetics"],
         "room": "living",
@@ -600,8 +600,8 @@
       "assertions": {
         "mustRecognize": ["valuable-view", "horizontal-detail-wanted"],
         "mustStronglyConsider": ["interior-solar"],
-        "mustIncludeCandidate": ["banded-shades"],
-        "mustDeprioritize": ["banded-shades", "cellular"],
+        "mustIncludeCandidate": ["banded-shades", "interior-roller", "cellular"],
+        "mustDeprioritize": ["banded-shades", "interior-roller", "cellular"],
         "mustAskOrResolve": ["q-nighttime-privacy"]
       }
     },
@@ -620,6 +620,22 @@
         "mustDeprioritizeOption": ["corded-operation"],
         "mustRequireVerification": ["verify-cordless-or-motorized-availability"],
         "mustApplyGuardrail": ["no-assumed-cordless-or-motorized-availability"]
+      }
+    },
+    {
+      "id": "34-clear-glass-when-raised-not-view-when-down",
+      "title": "Clear glass when raised — the distinction from view-while-deployed",
+      "narrative": "They pull the covering all the way up during the day and want nothing on the glass. Seeing out through a lowered shade is not something they have asked for.",
+      "facts": {
+        "priorities": ["clear-glass-when-open", "aesthetics"],
+        "room": "living",
+        "windowUse": "raised-to-clear-glass",
+        "aesthetic": ["modern-minimal"]
+      },
+      "assertions": {
+        "mustRecognize": ["clear-glass-preference", "modern-minimal-aesthetic"],
+        "mustStronglyConsider": ["interior-roller", "banded-shades", "cellular"],
+        "mustAskOrResolve": ["q-window-use"]
       }
     }
   ]
