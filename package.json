@@ -15,6 +15,7 @@
     "verify:legacy": "npm run build && npm run validate:legacy",
     "validate:routes": "node scripts/validate-routes.mjs",
     "validate:links": "node scripts/validate-links.mjs",
+    "test:advisor": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-engine.mjs",
     "verify:build": "npm run validate:routes && npm run validate:links",
     "verify": "npm run check && npm run build && npm run validate:legacy && npm run verify:build",
     "audit:schema": "node scripts/audit-schema-ids.mjs",
