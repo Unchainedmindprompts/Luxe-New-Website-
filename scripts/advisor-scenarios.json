@@ -1,0 +1,642 @@
+{
+  "$comment": "Luxe Window Advisor behavioural harness — the 30 approved scenario categories. Each scenario supplies structured project facts and asserts required direction and prohibited behaviour, never exact wording and never an exact product ranking. See docs/quality/advisor-behavioral-harness.md.",
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "01-west-lake-view-severe-heat",
+      "title": "West-facing lake view + severe afternoon heat",
+      "narrative": "Huge west-facing windows over the lake, afternoon heat is unbearable, but keeping the view is the single most important thing.",
+      "facts": {
+        "priorities": ["view-preservation", "energy-efficiency", "glare-control"],
+        "room": "living",
+        "exposure": "west",
+        "solarHeat": "severe",
+        "viewImportance": "critical"
+      },
+      "assertions": {
+        "mustRecognize": ["severe-solar-heat", "valuable-view", "west-exposure"],
+        "mustStronglyConsider": ["exterior-solar"],
+        "mustIncludeCandidate": ["interior-solar"],
+        "mustDeprioritize": ["cellular"],
+        "mustIdentifyTradeoff": ["heat-reflection-vs-outward-visibility"],
+        "mustAskOrResolve": [
+          "q-nighttime-privacy",
+          "q-exterior-mounting",
+          "q-wind-exposure",
+          "q-power-availability",
+          "q-door-access-conflict"
+        ],
+        "mustEscalateFor": ["escalate-exterior-mounting"],
+        "mustApplyGuardrail": [
+          "no-guaranteed-temperature-reduction",
+          "no-guaranteed-wind-performance",
+          "no-mounting-safety-claim-without-inspection"
+        ]
+      }
+    },
+    {
+      "id": "02-east-nursery-maximum-darkness",
+      "title": "East-facing nursery + maximum darkness",
+      "narrative": "The baby's room faces east and the sunrise wakes her at 5am. They want it as dark as possible.",
+      "facts": {
+        "priorities": ["room-darkening", "lifestyle-requirement"],
+        "room": "nursery",
+        "exposure": "east",
+        "roomDarkening": "maximum",
+        "privacyNeed": "both"
+      },
+      "assertions": {
+        "mustRecognize": ["east-exposure", "maximum-darkening-required"],
+        "mustStronglyConsider": ["cellular"],
+        "mustDeprioritize": ["interior-roller", "shutters", "interior-solar"],
+        "mustIdentifyTradeoff": ["inside-mount-vs-room-darkening"],
+        "mustAskOrResolve": ["q-darkening-level"],
+        "mustEscalateFor": ["escalate-severe-room-darkening"],
+        "mustApplyGuardrail": ["no-total-blackout-guarantee"]
+      }
+    },
+    {
+      "id": "03-says-blinds-wants-clear-glass",
+      "title": "Customer says \"blinds\" but wants clear glass",
+      "narrative": "They asked for faux wood blinds, then said they always pull the covering all the way up so they can see out the window.",
+      "facts": {
+        "requestedProducts": ["faux-composite-blinds"],
+        "room": "living",
+        "windowUse": "raised-to-clear-glass"
+      },
+      "assertions": {
+        "mustRecognize": ["clear-glass-preference", "product-named-by-customer"],
+        "mustStronglyConsider": ["interior-roller", "cellular"],
+        "mustDeprioritize": ["faux-composite-blinds", "wood-blinds"],
+        "mustSurfaceConflict": ["conflict-blinds-vs-clear-glass-use"],
+        "mustAskOrResolve": ["q-window-use", "q-goal-behind-product-request"],
+        "mustApplyGuardrail": ["no-recommendation-from-product-name-alone"]
+      }
+    },
+    {
+      "id": "04-adjustable-directional-light",
+      "title": "Customer wants adjustable directional light",
+      "narrative": "They leave the covering down all day and want to aim the light up off the television without losing the room.",
+      "facts": {
+        "priorities": ["directional-light-control", "aesthetics"],
+        "room": "living",
+        "windowUse": "left-down-louvers-adjusted"
+      },
+      "assertions": {
+        "mustRecognize": ["directional-light-wanted"],
+        "mustStronglyConsider": ["shutters", "wood-blinds", "faux-composite-blinds"],
+        "mustAskOrResolve": ["q-window-use"]
+      }
+    },
+    {
+      "id": "05-inside-mount-roller-blackout-request",
+      "title": "Inside-mount roller + total blackout request",
+      "narrative": "They want inside-mount roller shades and asked for total blackout in the master bedroom.",
+      "facts": {
+        "priorities": ["room-darkening"],
+        "room": "bedroom",
+        "roomDarkening": "total-blackout-requested",
+        "requestedProducts": ["interior-roller"],
+        "requestedFeatures": ["inside-mount", "total-blackout"]
+      },
+      "assertions": {
+        "mustRecognize": ["total-blackout-requested", "maximum-darkening-required"],
+        "mustStronglyConsider": ["cellular"],
+        "mustDeprioritize": ["interior-roller", "shutters", "interior-solar"],
+        "mustSurfaceConflict": ["conflict-roller-vs-blackout-request"],
+        "mustIdentifyTradeoff": ["inside-mount-vs-room-darkening"],
+        "mustEscalateFor": ["escalate-severe-room-darkening"],
+        "mustApplyGuardrail": ["no-total-blackout-guarantee", "no-hardcoded-gap-dimensions"]
+      }
+    },
+    {
+      "id": "06-roman-behind-kitchen-faucet",
+      "title": "Roman shade behind a kitchen faucet",
+      "narrative": "They want a patterned Roman shade on the window directly behind the kitchen sink.",
+      "facts": {
+        "requestedProducts": ["roman-shades"],
+        "room": "kitchen",
+        "moistureExposure": "direct-splash",
+        "openings": ["obstruction-faucet"]
+      },
+      "assertions": {
+        "mustRecognize": ["direct-splash-exposure", "shutter-swing-obstruction"],
+        "mustExclude": ["roman-shades", "cellular", "wood-blinds", "drapery"],
+        "mustStronglyConsider": ["faux-composite-blinds"],
+        "mustDeprioritize": ["shutters"],
+        "mustIncludeCandidate": ["interior-roller"],
+        "mustAskOrResolve": ["q-moisture-exposure"]
+      }
+    },
+    {
+      "id": "07-traditional-home-insulation-priority",
+      "title": "Traditional home + insulation priority",
+      "narrative": "A traditional interior where the winter heating bill is the reason they called.",
+      "facts": {
+        "priorities": ["energy-efficiency", "aesthetics"],
+        "room": "living",
+        "aesthetic": ["traditional"]
+      },
+      "assertions": {
+        "mustRecognize": ["energy-efficiency-priority", "traditional-aesthetic"],
+        "mustStronglyConsider": ["shutters", "cellular"],
+        "mustDeprioritize": ["wood-blinds", "faux-composite-blinds"],
+        "mustAskOrResolve": ["q-obstructions"]
+      }
+    },
+    {
+      "id": "08-modern-minimalist-home",
+      "title": "Modern minimalist home",
+      "narrative": "New construction, very clean lines, they want the windows to look untreated.",
+      "facts": {
+        "priorities": ["aesthetics"],
+        "room": "living",
+        "aesthetic": ["modern-minimal"]
+      },
+      "assertions": {
+        "mustRecognize": ["modern-minimal-aesthetic"],
+        "mustStronglyConsider": ["interior-roller"],
+        "mustDeprioritize": ["roman-shades"]
+      }
+    },
+    {
+      "id": "09-generic-luxury-request",
+      "title": "Generic \"luxury\" request",
+      "narrative": "They said they want something luxurious and left it at that.",
+      "facts": {
+        "priorities": ["aesthetics"],
+        "room": "living",
+        "aesthetic": ["luxury-unspecified"]
+      },
+      "assertions": {
+        "mustRecognize": ["luxury-request-unspecified"],
+        "mustIncludeCandidate": [
+          "shutters",
+          "roman-shades",
+          "cellular",
+          "functional-shade-plus-stationary-panels"
+        ],
+        "mustSurfaceConflict": ["conflict-luxury-assumed-to-mean-drapery"],
+        "mustIdentifyTradeoff": ["drapery-fabric-vs-glass-coverage"],
+        "mustAskOrResolve": ["q-stack-back"]
+      }
+    },
+    {
+      "id": "10-full-drapery-inadequate-stack-back",
+      "title": "Full drapery + inadequate stack-back",
+      "narrative": "They want full traversing drapery, but there is almost no wall beside the window for it to stack onto.",
+      "facts": {
+        "priorities": ["aesthetics"],
+        "room": "living",
+        "aesthetic": ["fabric-forward"],
+        "requestedFeatures": ["full-functional-drapery"],
+        "openings": ["inadequate-stack-back"]
+      },
+      "assertions": {
+        "mustRecognize": ["inadequate-stack-back", "fabric-forward-aesthetic"],
+        "mustIncludeCandidate": ["drapery"],
+        "mustDeprioritize": ["drapery"],
+        "mustStronglyConsider": ["functional-shade-plus-stationary-panels", "roman-shades"],
+        "mustSurfaceConflict": ["conflict-full-drapery-without-stack-back"],
+        "mustIdentifyTradeoff": ["drapery-fabric-vs-glass-coverage", "minimal-stack-vs-fabric-design"],
+        "mustEscalateFor": ["escalate-complex-drapery-layout"],
+        "mustRequireVerification": ["verify-stack-back"]
+      }
+    },
+    {
+      "id": "11-drapery-look-budget-concern",
+      "title": "Drapery look + budget concern",
+      "narrative": "They love the drapery look but the quote they got elsewhere was far more than they wanted to spend.",
+      "facts": {
+        "priorities": ["aesthetics", "budget"],
+        "room": "living",
+        "aesthetic": ["fabric-forward"],
+        "budgetSensitivity": "high",
+        "requestedFeatures": ["full-functional-drapery"]
+      },
+      "assertions": {
+        "mustRecognize": ["drapery-look-with-budget-pressure", "competing-priorities"],
+        "mustStronglyConsider": ["functional-shade-plus-stationary-panels"],
+        "mustDeprioritize": ["drapery"],
+        "mustSurfaceConflict": ["conflict-drapery-look-under-budget-pressure"],
+        "mustIdentifyTradeoff": ["drapery-fabric-vs-glass-coverage", "minimal-stack-vs-fabric-design"]
+      }
+    },
+    {
+      "id": "12-exterior-solar-over-patio-door",
+      "title": "Exterior solar over a frequently used patio door",
+      "narrative": "They want exterior shades across the back of the house — including over the slider everyone uses to get to the deck.",
+      "facts": {
+        "priorities": ["view-preservation", "energy-efficiency"],
+        "room": "living",
+        "solarHeat": "severe",
+        "viewImportance": "high",
+        "requestedProducts": ["exterior-solar"],
+        "openings": ["patio-door-frequent-use", "sliding-door"]
+      },
+      "assertions": {
+        "mustRecognize": ["patio-door-access-conflict", "sliding-door-opening", "severe-solar-heat"],
+        "mustIncludeCandidate": ["exterior-solar"],
+        "mustDeprioritize": ["exterior-solar"],
+        "mustIdentifyTradeoff": ["exterior-shade-vs-door-access"],
+        "mustEscalateFor": ["escalate-complicated-slider-or-door", "escalate-exterior-mounting"],
+        "mustApplyGuardrail": ["no-guaranteed-wind-performance"]
+      }
+    },
+    {
+      "id": "13-exterior-solar-high-wind",
+      "title": "Exterior solar + high wind",
+      "narrative": "The house sits on an exposed bluff and the wind comes straight up the lake.",
+      "facts": {
+        "priorities": ["view-preservation", "energy-efficiency"],
+        "room": "living",
+        "solarHeat": "severe",
+        "viewImportance": "high",
+        "requestedProducts": ["exterior-solar"],
+        "exteriorConditions": ["high-wind-exposure"]
+      },
+      "assertions": {
+        "mustRecognize": ["high-wind-exposure"],
+        "mustStronglyConsider": ["exterior-solar"],
+        "mustEscalateFor": ["escalate-exterior-wind-exposure", "escalate-exterior-mounting"],
+        "mustAskOrResolve": ["q-wind-exposure", "q-door-access-conflict"],
+        "mustApplyGuardrail": ["no-guaranteed-wind-performance", "no-mounting-safety-claim-without-inspection"]
+      }
+    },
+    {
+      "id": "14-cheap-free-hanging-exterior-request",
+      "title": "Cheap free-hanging exterior shade request",
+      "narrative": "They saw a roll-down shade online that just hangs off the eave and want that, cheap.",
+      "facts": {
+        "room": "patio",
+        "solarHeat": "severe",
+        "budgetSensitivity": "high",
+        "requestedFeatures": ["free-hanging-exterior-shade"]
+      },
+      "assertions": {
+        "mustRecognize": ["unsecured-exterior-request", "severe-solar-heat"],
+        "mustStronglyConsider": ["exterior-solar"],
+        "mustSurfaceConflict": ["conflict-free-hanging-exterior-shade"],
+        "mustEscalateFor": ["escalate-exterior-mounting", "escalate-unknown-mounting-structure"],
+        "mustApplyGuardrail": ["no-unsecured-exterior-shade", "no-guaranteed-wind-performance"]
+      }
+    },
+    {
+      "id": "15-second-home-rarely-operated-cordless",
+      "title": "Second home + rarely operated cordless cellular",
+      "narrative": "A lake house used a few weekends a year. They want cordless cellular shades and expect to leave them alone.",
+      "facts": {
+        "room": "living",
+        "requestedProducts": ["cellular"],
+        "operationFrequency": "rare",
+        "windowUse": "rarely-operated"
+      },
+      "assertions": {
+        "mustRecognize": ["rarely-operated", "cordless-system-rarely-operated"],
+        "mustIncludeCandidate": ["cellular"],
+        "mustAskOrResolve": ["q-goal-behind-product-request"]
+      }
+    },
+    {
+      "id": "16-cellular-blocked-by-furniture",
+      "title": "Cellular blocked by furniture",
+      "narrative": "A built-in bench and a large sectional sit right against the window they want covered.",
+      "facts": {
+        "room": "living",
+        "requestedProducts": ["cellular"],
+        "access": ["furniture-blocked"]
+      },
+      "assertions": {
+        "mustRecognize": ["furniture-blocked-window", "hard-to-reach-window"],
+        "mustIncludeCandidate": ["cellular"],
+        "mustSurfaceOption": ["motorization"],
+        "mustEscalateFor": ["escalate-inaccessible-window"]
+      }
+    },
+    {
+      "id": "17-extremely-tall-narrow-roller",
+      "title": "Extremely tall, narrow roller",
+      "narrative": "A two-storey stairwell window, very tall and quite narrow, they want a single roller shade on it.",
+      "facts": {
+        "room": "other",
+        "requestedProducts": ["interior-roller"],
+        "geometry": ["extremely-tall-narrow"]
+      },
+      "assertions": {
+        "mustRecognize": ["extremely-tall-narrow-opening"],
+        "mustIncludeCandidate": ["interior-roller"],
+        "mustEscalateFor": ["escalate-unusual-size", "escalate-product-size-limits"],
+        "mustApplyGuardrail": ["no-guaranteed-maximum-size"]
+      }
+    },
+    {
+      "id": "18-very-wide-roller",
+      "title": "Very wide roller",
+      "narrative": "One continuous roller across a very wide great-room window wall.",
+      "facts": {
+        "room": "living",
+        "requestedProducts": ["interior-roller"],
+        "geometry": ["very-wide"]
+      },
+      "assertions": {
+        "mustRecognize": ["very-wide-opening"],
+        "mustIncludeCandidate": ["interior-roller"],
+        "mustDeprioritize": ["wood-blinds", "faux-composite-blinds", "roman-shades"],
+        "mustEscalateFor": ["escalate-unusual-size", "escalate-product-size-limits"],
+        "mustApplyGuardrail": ["no-guaranteed-maximum-size"]
+      }
+    },
+    {
+      "id": "19-multi-window-bank-gap-minimisation",
+      "title": "Multi-window bank + gap minimisation",
+      "narrative": "Five windows in a row across the dining wall, and they do not want to see uneven gaps between them.",
+      "facts": {
+        "priorities": ["aesthetics"],
+        "room": "dining",
+        "geometry": ["multi-window-bank"]
+      },
+      "assertions": {
+        "mustRecognize": ["multi-window-bank"],
+        "mustEscalateFor": ["escalate-unusual-architectural-conditions"]
+      }
+    },
+    {
+      "id": "20-motorization-where-operation-is-rare",
+      "title": "Motorization where operation is rare",
+      "narrative": "They asked for motorization on a window they can reach easily and almost never touch.",
+      "facts": {
+        "room": "living",
+        "requestedProducts": ["cellular"],
+        "motorizationInterest": "requested",
+        "operationFrequency": "rare"
+      },
+      "assertions": {
+        "mustRecognize": ["rarely-operated", "cordless-system-rarely-operated"],
+        "mustSurfaceOption": ["motorization"],
+        "mustSurfaceConflict": ["conflict-motorization-without-an-operating-reason"],
+        "mustAskOrResolve": ["q-operation-frequency"]
+      }
+    },
+    {
+      "id": "21-hard-to-reach-tub-window",
+      "title": "Hard-to-reach tub window",
+      "narrative": "The window sits behind a soaking tub. Nobody can reach it without climbing in.",
+      "facts": {
+        "priorities": ["accessibility", "moisture-resistance", "privacy"],
+        "room": "bathroom",
+        "moistureExposure": "humid",
+        "access": ["above-tub", "hard-to-reach"]
+      },
+      "assertions": {
+        "mustRecognize": ["hard-to-reach-window", "humid-environment"],
+        "mustStronglyConsider": ["shutters", "faux-composite-blinds"],
+        "mustDeprioritize": ["roman-shades"],
+        "mustSurfaceOption": ["motorization"],
+        "mustEscalateFor": ["escalate-inaccessible-window"],
+        "mustAskOrResolve": ["q-reach-and-operation", "q-moisture-exposure"]
+      }
+    },
+    {
+      "id": "22-stained-synthetic-shutter-request",
+      "title": "Stained synthetic shutter request",
+      "narrative": "They want the look of stained wood shutters but asked for a synthetic material to save money.",
+      "facts": {
+        "room": "living",
+        "aesthetic": ["traditional"],
+        "requestedFeatures": ["stained-synthetic-shutter"]
+      },
+      "assertions": {
+        "mustRecognize": ["stained-synthetic-request", "traditional-aesthetic"],
+        "mustStronglyConsider": ["shutters"],
+        "mustSurfaceConflict": ["conflict-stained-synthetic-shutter"],
+        "mustIdentifyTradeoff": ["wood-appearance-vs-moisture-tolerance"],
+        "mustAskOrResolve": ["q-obstructions"]
+      }
+    },
+    {
+      "id": "23-bathroom-shutter",
+      "title": "Bathroom shutter",
+      "narrative": "Shutters in a full bathroom that gets steamy but where the window is not over the tub.",
+      "facts": {
+        "priorities": ["privacy", "moisture-resistance"],
+        "room": "bathroom",
+        "moistureExposure": "humid",
+        "requestedProducts": ["shutters"]
+      },
+      "assertions": {
+        "mustRecognize": ["humid-environment", "product-named-by-customer"],
+        "mustStronglyConsider": ["shutters", "faux-composite-blinds"],
+        "mustDeprioritize": ["roman-shades"],
+        "mustAskOrResolve": ["q-moisture-exposure", "q-obstructions"]
+      }
+    },
+    {
+      "id": "24-tilt-in-window-inside-shutter",
+      "title": "Tilt-in window + inside-mounted shutter",
+      "narrative": "They want inside-mounted shutters on windows whose sashes tilt in for cleaning.",
+      "facts": {
+        "room": "bedroom",
+        "requestedProducts": ["shutters"],
+        "requestedFeatures": ["inside-mount"],
+        "openings": ["tilt-in-window"]
+      },
+      "assertions": {
+        "mustRecognize": ["tilt-in-window-conflict"],
+        "mustDeprioritize": ["shutters"],
+        "mustEscalateFor": ["escalate-tilt-in-conflict"],
+        "mustAskOrResolve": ["q-obstructions", "q-darkening-level"]
+      }
+    },
+    {
+      "id": "25-sliding-door-shutters",
+      "title": "Sliding door + shutters",
+      "narrative": "They want shutters across a sliding glass door in a traditional living room.",
+      "facts": {
+        "room": "living",
+        "aesthetic": ["traditional"],
+        "requestedProducts": ["shutters"],
+        "openings": ["sliding-door"]
+      },
+      "assertions": {
+        "mustRecognize": ["sliding-door-opening", "traditional-aesthetic"],
+        "mustDeprioritize": ["shutters"],
+        "mustIdentifyTradeoff": ["bypass-shutter-vs-glass-coverage"],
+        "mustEscalateFor": ["escalate-complicated-slider-or-door"]
+      }
+    },
+    {
+      "id": "26-small-window-oversized-louvers",
+      "title": "Small window + oversized shutter louvers",
+      "narrative": "A small office window, and they want the biggest louvers available because they saw them in a magazine.",
+      "facts": {
+        "room": "office",
+        "requestedProducts": ["shutters"],
+        "requestedFeatures": ["oversized-louvers"],
+        "geometry": ["small-window"]
+      },
+      "assertions": {
+        "mustRecognize": ["oversized-louvers-on-small-window"],
+        "mustIncludeCandidate": ["shutters"],
+        "mustSurfaceConflict": ["conflict-oversized-louvers-on-small-window"],
+        "mustIdentifyTradeoff": ["louver-size-vs-window-proportion"]
+      }
+    },
+    {
+      "id": "27-very-wide-wood-blind",
+      "title": "Very wide wood blind",
+      "narrative": "One real wood blind across a very wide opening.",
+      "facts": {
+        "room": "living",
+        "requestedProducts": ["wood-blinds"],
+        "geometry": ["very-wide"]
+      },
+      "assertions": {
+        "mustRecognize": ["very-wide-opening", "product-named-by-customer"],
+        "mustDeprioritize": ["wood-blinds"],
+        "mustEscalateFor": ["escalate-unusual-size", "escalate-product-size-limits"],
+        "mustAskOrResolve": ["q-window-use"],
+        "mustApplyGuardrail": ["no-guaranteed-maximum-size"]
+      }
+    },
+    {
+      "id": "28-energy-efficiency-faux-wood-request",
+      "title": "Energy efficiency + faux wood request",
+      "narrative": "They asked for faux wood blinds and said cutting the heating bill is their number one priority.",
+      "facts": {
+        "priorities": ["energy-efficiency", "budget"],
+        "room": "living",
+        "requestedProducts": ["faux-composite-blinds"]
+      },
+      "assertions": {
+        "mustRecognize": ["energy-efficiency-priority", "product-named-by-customer"],
+        "mustStronglyConsider": ["cellular", "shutters"],
+        "mustDeprioritize": ["faux-composite-blinds", "wood-blinds"],
+        "mustSurfaceConflict": ["conflict-blinds-vs-energy-priority"],
+        "mustAskOrResolve": ["q-window-use"],
+        "mustApplyGuardrail": ["no-recommendation-from-product-name-alone"]
+      }
+    },
+    {
+      "id": "29-large-pattern-roman",
+      "title": "Large-pattern Roman",
+      "narrative": "A bold large-repeat fabric they have already picked, made into Roman shades for the dining room.",
+      "facts": {
+        "room": "dining",
+        "aesthetic": ["fabric-forward"],
+        "requestedProducts": ["roman-shades"],
+        "requestedFeatures": ["large-pattern-fabric"]
+      },
+      "assertions": {
+        "mustRecognize": ["large-pattern-fabric-request", "fabric-forward-aesthetic"],
+        "mustStronglyConsider": ["roman-shades"],
+        "mustIdentifyTradeoff": ["minimal-stack-vs-fabric-design"]
+      }
+    },
+    {
+      "id": "30-multiple-competing-priorities",
+      "title": "Multiple competing priorities",
+      "narrative": "West-facing lake windows. They want the view, they want the room dark for movie nights, they want privacy after dark, and they are watching the budget.",
+      "facts": {
+        "priorities": ["view-preservation", "room-darkening", "privacy", "budget"],
+        "room": "living",
+        "exposure": "west",
+        "solarHeat": "severe",
+        "viewImportance": "high",
+        "privacyNeed": "both",
+        "roomDarkening": "maximum",
+        "budgetSensitivity": "high"
+      },
+      "assertions": {
+        "mustRecognize": [
+          "competing-priorities",
+          "valuable-view",
+          "maximum-darkening-required",
+          "nighttime-privacy-required"
+        ],
+        "mustStronglyConsider": ["exterior-solar", "exterior-solar-plus-interior-privacy"],
+        "mustDeprioritize": ["cellular", "interior-solar", "interior-roller", "shutters"],
+        "mustIdentifyTradeoff": [
+          "view-vs-privacy",
+          "heat-reflection-vs-outward-visibility",
+          "solar-openness-vs-daytime-privacy",
+          "inside-mount-vs-room-darkening"
+        ],
+        "mustEscalateFor": ["escalate-severe-room-darkening", "escalate-exterior-mounting"],
+        "mustApplyGuardrail": [
+          "no-total-blackout-guarantee",
+          "no-guaranteed-nighttime-privacy-from-solar",
+          "no-guaranteed-temperature-reduction"
+        ]
+      }
+    },
+    {
+      "id": "31-banded-shades-modern-look",
+      "title": "Banded shades — modern look with horizontal detail",
+      "narrative": "A contemporary great room. They want something clean and modern with horizontal visual interest, and like the idea of being able to see out a little when the bands line up.",
+      "facts": {
+        "priorities": ["aesthetics", "functionality"],
+        "room": "living",
+        "aesthetic": ["modern-minimal", "horizontal-detail"],
+        "viewImportance": "moderate"
+      },
+      "assertions": {
+        "mustRecognize": ["modern-minimal-aesthetic", "horizontal-detail-wanted"],
+        "mustStronglyConsider": ["banded-shades"],
+        "mustIncludeCandidate": ["interior-roller"],
+        "mustDeprioritize": ["roman-shades"]
+      }
+    },
+    {
+      "id": "32-continuous-view-favours-solar",
+      "title": "Continuous view while deployed — solar over roller and banded",
+      "narrative": "Same modern taste and the same interest in horizontal detail, but now keeping the west-facing lake view while the treatment is down is the most important thing.",
+      "facts": {
+        "priorities": ["view-preservation", "aesthetics"],
+        "room": "living",
+        "exposure": "west",
+        "viewImportance": "critical",
+        "aesthetic": ["modern-minimal", "horizontal-detail"]
+      },
+      "assertions": {
+        "mustRecognize": ["valuable-view", "horizontal-detail-wanted"],
+        "mustStronglyConsider": ["interior-solar"],
+        "mustIncludeCandidate": ["banded-shades", "interior-roller", "cellular"],
+        "mustDeprioritize": ["banded-shades", "interior-roller", "cellular"],
+        "mustAskOrResolve": ["q-nighttime-privacy"]
+      }
+    },
+    {
+      "id": "33-child-safety-young-children",
+      "title": "Child safety — young children in the house",
+      "narrative": "Two toddlers. They have read about cord hazards and say child safety is their number one concern.",
+      "facts": {
+        "goals": ["Two toddlers in the house; worried about window covering cords"],
+        "priorities": ["child-safety", "functionality", "budget"],
+        "room": "living"
+      },
+      "assertions": {
+        "mustRecognize": ["child-safety-priority"],
+        "mustSurfaceOption": ["cordless-operation", "motorization"],
+        "mustDeprioritizeOption": ["corded-operation"],
+        "mustRequireVerification": ["verify-cordless-or-motorized-availability"],
+        "mustApplyGuardrail": ["no-assumed-cordless-or-motorized-availability"]
+      }
+    },
+    {
+      "id": "34-clear-glass-when-raised-not-view-when-down",
+      "title": "Clear glass when raised — the distinction from view-while-deployed",
+      "narrative": "They pull the covering all the way up during the day and want nothing on the glass. Seeing out through a lowered shade is not something they have asked for.",
+      "facts": {
+        "priorities": ["clear-glass-when-open", "aesthetics"],
+        "room": "living",
+        "windowUse": "raised-to-clear-glass",
+        "aesthetic": ["modern-minimal"]
+      },
+      "assertions": {
+        "mustRecognize": ["clear-glass-preference", "modern-minimal-aesthetic"],
+        "mustStronglyConsider": ["interior-roller", "banded-shades", "cellular"],
+        "mustAskOrResolve": ["q-window-use"]
+      }
+    }
+  ]
+}
