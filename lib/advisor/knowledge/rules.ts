@@ -199,7 +199,13 @@ export const RECOGNITION_RULES: readonly RecognitionRule[] = [
             { fact: "windowUse", is: ["rarely-operated"] },
           ],
         },
-        { any: [{ requestedProduct: "cellular" }, { requestedProduct: "interior-roller" }] },
+        {
+          any: [
+            { requestedProduct: "cellular" },
+            { requestedProduct: "interior-roller" },
+            { requestedProduct: "banded-shades" },
+          ],
+        },
       ],
     },
   },
@@ -208,8 +214,18 @@ export const RECOGNITION_RULES: readonly RecognitionRule[] = [
     label: "Energy efficiency is a leading priority",
     when: { priority: "energy-efficiency", withinTop: 2 },
   },
+  {
+    id: "child-safety-priority",
+    label: "Child safety is a priority in this room",
+    when: { any: [{ priority: "child-safety" }, { fact: "room", is: ["nursery"] }] },
+  },
   { id: "traditional-aesthetic", label: "Traditional or architectural design direction", when: { any: [{ has: "traditional" }, { has: "architectural" }, { has: "formal" }] } },
   { id: "modern-minimal-aesthetic", label: "Modern, minimal design direction", when: { has: "modern-minimal" } },
+  {
+    id: "horizontal-detail-wanted",
+    label: "Horizontal visual detail is part of the look they want",
+    when: { has: "horizontal-detail" },
+  },
   { id: "fabric-forward-aesthetic", label: "The fabric should contribute to the room", when: { has: "fabric-forward" } },
   {
     id: "luxury-request-unspecified",
@@ -534,6 +550,32 @@ export const PROMOTION_RULES: readonly PromotionRule[] = [
     weight: 2,
     rationale: "Clean, minimal, intended to recede — the direction when the treatment should disappear.",
   },
+  // Banded shades. The roller-family promotions are mirrored because the
+  // approved knowledge treats the two as functionally the same; the
+  // horizontal-detail promotion is the one that is banded's alone.
+  {
+    id: "promote-banded-horizontal-detail",
+    direction: "banded-shades",
+    when: { has: "horizontal-detail" },
+    weight: 3,
+    rationale:
+      "The horizontal banded appearance is the point of this product — and aligning the bands gives a partial view out.",
+  },
+  {
+    id: "promote-banded-modern-minimal",
+    direction: "banded-shades",
+    when: { has: "modern-minimal" },
+    weight: 2,
+    rationale:
+      "Clean, modern, contemporary look; the fabric and style options skew that way.",
+  },
+  {
+    id: "promote-banded-clear-glass",
+    direction: "banded-shades",
+    when: { any: [{ fact: "windowUse", is: ["raised-to-clear-glass"] }, { priority: "clear-glass-when-open", withinTop: 3 }] },
+    weight: 2,
+    rationale: "Leaves clear glass when raised, the same as a roller shade.",
+  },
   {
     id: "promote-roller-large-glass",
     direction: "interior-roller",
@@ -679,7 +721,14 @@ export const QUESTION_RULES: readonly QuestionRule[] = [
       "When you use this window day to day, do you raise the covering to expose clear glass, or leave it down and adjust it?",
     when: BLIND_IN_PLAY,
     askOnlyIfUnknown: ["windowUse"],
-    materialTo: ["wood-blinds", "faux-composite-blinds", "interior-roller", "cellular", "roman-shades"],
+    materialTo: [
+      "wood-blinds",
+      "faux-composite-blinds",
+      "interior-roller",
+      "banded-shades",
+      "cellular",
+      "roman-shades",
+    ],
   },
   {
     id: "q-goal-behind-product-request",
@@ -809,6 +858,23 @@ export const VERIFICATION_RULES: readonly VerificationRule[] = [
     when: { any: [{ requestedFeature: "oversized-louvers" }, { all: [{ has: "small-window" }, SHUTTERS_IN_PLAY] }] },
   },
   { id: "verify-lift-system-load", label: "Weight and lift-system load on a wide covering", when: { has: "very-wide" } },
+  {
+    // The approved child-safety rule prefers cordless and motorized operation,
+    // and in the same breath forbids claiming that every product and size can
+    // be supplied that way. This is where that second half lands: the
+    // preference is stated, and the availability question goes to the people
+    // who can actually answer it.
+    id: "verify-cordless-or-motorized-availability",
+    label:
+      "Whether the selected product, size and application can be supplied cordless or motorized",
+    when: {
+      any: [
+        { priority: "child-safety" },
+        { fact: "room", is: ["nursery"] },
+        { fact: "motorizationInterest", is: ["requested"] },
+      ],
+    },
+  },
   {
     id: "verify-electrical",
     label: "Electrical work needed for motorization",
@@ -969,6 +1035,19 @@ export const CONFLICT_RULES: readonly ConflictRule[] = [
     redirectTo: ["shutters"],
     explanation:
       "Larger louvers do give better view-through, but they have to stay proportionate to the window. On a small window an oversized louver reads wrong and eats the opening.",
+  },
+  {
+    id: "conflict-corded-operation-with-child-safety",
+    requested: "corded-operation",
+    when: {
+      all: [
+        { requestedFeature: "corded-operation" },
+        { any: [{ priority: "child-safety" }, { fact: "room", is: ["nursery"] }] },
+      ],
+    },
+    redirectTo: [],
+    explanation:
+      "Where child safety matters, Luxe favours an operating system with no accessible cord or chain — cordless or motorized. Which of those is available depends on the product, the size and the application, and Luxe confirms that at the consultation.",
   },
   {
     id: "conflict-motorization-without-an-operating-reason",

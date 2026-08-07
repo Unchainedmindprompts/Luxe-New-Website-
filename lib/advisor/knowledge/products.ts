@@ -19,6 +19,7 @@
  * or added category is caught as a real change rather than a string mismatch.
  */
 import type {
+  Contraindication,
   CrossCuttingOption,
   ProductDirection,
   UnrepresentedSiteProduct,
@@ -26,6 +27,52 @@ import type {
 
 /** Fabric and wood products the brief says to move away from in splash zones. */
 const DIRECT_SPLASH = { fact: "moistureExposure", is: ["direct-splash"] } as const;
+
+/**
+ * Behaviour shared by the roller family — interior roller shades and banded
+ * shades.
+ *
+ * The approved knowledge is explicit that banded shades follow roller logic on
+ * strengths, limitations, mounting, operation, room darkening, access and
+ * motorization, and diverge only on appearance and view behaviour. Sharing the
+ * record rather than restating it means the two cannot drift apart on a
+ * dimension where Luxe considers them the same product, and it keeps the
+ * divergences visible: whatever a family member overrides is, by construction,
+ * exactly where it differs.
+ */
+const ROLLER_FAMILY = {
+  privacyBehavior: "Full privacy when down with an opaque fabric.",
+  roomDarkeningBehavior:
+    "Inside-mount roller shades are generally not Luxe's preferred solution when maximum room darkening is the primary goal. Typical side gaps run roughly 3/4 inch on the drive side, sometimes more, and roughly 5/8 inch on the idle side. Manufacturer and window conditions vary; these are not guaranteed dimensions.",
+  energyBehavior: "Not the energy-efficiency direction in the Luxe range.",
+  moistureConsiderations: "Depends on fabric selection, which Luxe confirms at the consultation.",
+  accessConsiderations: "Motorization is a strong option on high or hard-to-reach windows.",
+  motorizationConsiderations:
+    "Motorize for a real access or operation reason. The drive side is also the wider gap side, which matters when darkening is a goal.",
+  scaleConsiderations:
+    "Suits large glass and multi-window banks. Extremely tall/narrow and very wide openings need product-size confirmation.",
+  knownTradeoffs: ["inside-mount-vs-room-darkening", "minimal-stack-vs-fabric-design"],
+  verificationTriggers: ["verify-dimensions"],
+} as const;
+
+/**
+ * The roller family's shared room-darkening contraindication. Id-namespaced per
+ * member so each direction's finding is traceable to the direction it came from.
+ */
+function rollerFamilyDarkening(prefix: string): Contraindication {
+  return {
+    id: `${prefix}-max-darkening`,
+    effect: "deprioritize",
+    when: {
+      any: [
+        { fact: "roomDarkening", is: ["maximum", "total-blackout-requested"] },
+        { priority: "room-darkening", withinTop: 1 },
+      ],
+    },
+    reason:
+      "Not Luxe's preferred direction when maximum room darkening is the goal — the perimeter gaps at the sides remain, and an inside mount does not close them.",
+  };
+}
 
 export const PRODUCT_DIRECTIONS: readonly ProductDirection[] = [
   // ── cellular ──────────────────────────────────────────────────────────────
@@ -128,32 +175,59 @@ export const PRODUCT_DIRECTIONS: readonly ProductDirection[] = [
       "Maximum room darkening, particularly inside-mounted.",
       "Situations where the fabric is meant to contribute to the room's design.",
     ],
+    ...ROLLER_FAMILY,
     viewBehavior: "Clear glass when raised. No outward view through an opaque fabric when lowered.",
-    privacyBehavior: "Full privacy when down with an opaque fabric.",
-    roomDarkeningBehavior:
-      "Inside-mount roller shades are generally not Luxe's preferred solution when maximum room darkening is the primary goal. Typical side gaps run roughly 3/4 inch on the drive side, sometimes more, and roughly 5/8 inch on the idle side. Manufacturer and window conditions vary; these are not guaranteed dimensions.",
-    energyBehavior: "Not the energy-efficiency direction in the Luxe range.",
-    moistureConsiderations: "Depends on fabric selection, which Luxe confirms at the consultation.",
-    accessConsiderations: "Motorization is a strong option on high or hard-to-reach windows.",
-    motorizationConsiderations:
-      "Motorize for a real access or operation reason. The drive side is also the wider gap side, which matters when darkening is a goal.",
-    scaleConsiderations:
-      "Suits large glass and multi-window banks. Extremely tall/narrow and very wide openings need product-size confirmation.",
     designCharacteristics: "Minimal, architectural, intended to recede.",
-    knownTradeoffs: ["inside-mount-vs-room-darkening", "minimal-stack-vs-fabric-design"],
-    verificationTriggers: ["verify-dimensions"],
+    contraindications: [rollerFamilyDarkening("roller")],
+  },
+
+  // ── banded shades ─────────────────────────────────────────────────────────
+  // A roller variant. Everything inherited from ROLLER_FAMILY is a dimension on
+  // which Luxe treats the two as the same product; everything overridden below
+  // is a dimension on which it does not.
+  {
+    id: "banded-shades",
+    kind: "single",
+    variantOf: "interior-roller",
+    label: "Banded shades",
+    siteProductSlugs: ["banded-shades"],
+    siteCoverageNote: "One-to-one with the public Banded Shades product page.",
+    prioritiesServed: [
+      "aesthetics",
+      "clear-glass-when-open",
+      "functionality",
+      "budget",
+      "privacy",
+    ],
+    strengths: [
+      "Functionally very similar to a roller shade; the difference is how it looks.",
+      "The horizontal banded appearance creates a clean, modern, contemporary look.",
+      "Aligning the alternating bands gives a partial 'peek-a-boo' view to the outside.",
+      "Leaves clear glass when raised.",
+    ],
+    weakFits: [
+      "Preserving a broad, continuous outward view while deployed — that is a solar shade, not a banded shade.",
+      "Maximum room darkening, particularly inside-mounted.",
+      "Interiors where the horizontal banding fights the design direction.",
+    ],
+    ...ROLLER_FAMILY,
+    viewBehavior:
+      "Clear glass when raised. While deployed, aligning the bands gives a partial 'peek-a-boo' view — real, but not the broad continuous view-through of a solar shade. Do not present the two as equivalent for keeping a view.",
+    designCharacteristics:
+      "Horizontal banded appearance. Fabric and style options generally skew modern and contemporary.",
     contraindications: [
+      rollerFamilyDarkening("banded"),
       {
-        id: "roller-max-darkening",
+        id: "banded-view-not-continuous",
         effect: "deprioritize",
         when: {
           any: [
-            { fact: "roomDarkening", is: ["maximum", "total-blackout-requested"] },
-            { priority: "room-darkening", withinTop: 1 },
+            { priority: "view-preservation", withinTop: 2 },
+            { fact: "viewImportance", is: ["high", "critical"] },
           ],
         },
         reason:
-          "Not Luxe's preferred direction when maximum room darkening is the goal — the perimeter gaps at the sides remain, and an inside mount does not close them.",
+          "The band alignment gives a partial view, not the broad continuous view-through of a solar shade. When keeping the view is a leading priority, solar is the stronger direction.",
       },
     ],
   },
@@ -578,7 +652,7 @@ export const PRODUCT_DIRECTIONS: readonly ProductDirection[] = [
       "Mounting high where the architecture permits creates strong vertical lines and moves most fabric off the glass when open.",
     ],
     weakFits: [
-      "Openings without adequate stack-back.",
+      "Openings without adequate stack-back — weaker there, but not ruled out.",
       "Direct water exposure, heat-source conflicts and vent conflicts.",
       "Architecture that strongly conflicts with horizontal treatment lines.",
       "Budget-sensitive projects, where pattern repeat and seam matching drive fabric cost up.",
@@ -600,10 +674,10 @@ export const PRODUCT_DIRECTIONS: readonly ProductDirection[] = [
     contraindications: [
       {
         id: "drapery-inadequate-stack-back",
-        effect: "exclude",
+        effect: "deprioritize",
         when: { has: "inadequate-stack-back" },
         reason:
-          "Without adequate stack-back, full drapery covers substantial glass, reduces natural light and visually shrinks the window.",
+          "Limited stack-back does not make functional drapery impossible, it makes it a weaker solution — the fabric covers substantial glass, reduces natural light, visually shrinks the opening and can make the room feel smaller. Consider a functional shade with stationary decorative side panels before recommending full drapery here.",
       },
       {
         id: "drapery-direct-water",
@@ -789,6 +863,7 @@ export const CROSS_CUTTING_OPTIONS: readonly CrossCuttingOption[] = [
         { has: "furniture-blocked" },
         { has: "mobility-or-age-limited" },
         { priority: "accessibility" },
+        { priority: "child-safety" },
         { fact: "motorizationInterest", is: ["requested"] },
       ],
     },
@@ -796,6 +871,39 @@ export const CROSS_CUTTING_OPTIONS: readonly CrossCuttingOption[] = [
       "Do not recommend motorization simply because it is a premium upgrade — there has to be a real access or operation reason.",
       "For meaningful exterior sizes motorization is generally the preferred Luxe direction, and those systems generally require hardwired power. Luxe does not use rechargeable battery systems on exterior shades.",
       "Manual override is valuable in case power fails while an exterior shade needs retracting.",
+      "Motorized operation removes the accessible operating cord, which is why it is a child-safety direction as well as a convenience one. Never claim every product or size can be motorized — Luxe confirms that for the selected product.",
+    ],
+  },
+  {
+    id: "cordless-operation",
+    label: "Cordless operating system",
+    siteProductSlugs: [],
+    siteCoverageNote:
+      "An operating system rather than a product, so it has no product page of its own. It applies across directions and is selected per product at the consultation.",
+    indicatedWhen: {
+      any: [
+        { priority: "child-safety" },
+        { fact: "room", is: ["nursery"] },
+      ],
+    },
+    cautions: [
+      "Never claim every product, size or application is available cordless. Luxe confirms availability for the selected product.",
+      "A large or heavy covering, or an unusual size, can limit cordless options — that is something Luxe verifies at the opening.",
+      "Cordless spring systems that are almost never operated can lose performance over time; periodic operation is beneficial.",
+    ],
+  },
+  {
+    id: "corded-operation",
+    label: "Corded or chain operating system",
+    siteProductSlugs: [],
+    siteCoverageNote:
+      "An operating system rather than a product, so it has no product page of its own.",
+    indicatedWhen: { requestedFeature: "corded-operation" },
+    deprioritizedWhen: {
+      any: [{ priority: "child-safety" }, { fact: "room", is: ["nursery"] }],
+    },
+    cautions: [
+      "Where child safety matters, favour an operating system that eliminates the accessible cord or chain.",
     ],
   },
 ];
@@ -807,9 +915,7 @@ export const CROSS_CUTTING_OPTIONS: readonly CrossCuttingOption[] = [
  * unrepresented, and adding to it is a visible decision in review.
  */
 export const UNREPRESENTED_SITE_PRODUCTS: readonly UnrepresentedSiteProduct[] = [
-  {
-    slug: "banded-shades",
-    reason:
-      "The approved Luxe Advisor brief contains no banded/zebra shade knowledge — no strengths, no weak fits, no tradeoffs, no contraindications. Rather than invent product behaviour, this category is declared unrepresented. The advisor will not recommend it until Luxe supplies the knowledge.",
-  },
+  // Empty as of Phase A.1. `banded-shades` was the only entry; Luxe supplied
+  // the knowledge, so it is now a represented direction above rather than a
+  // declared gap. Every product category on the public site is reasoned about.
 ];

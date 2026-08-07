@@ -115,6 +115,7 @@ export type AestheticId =
   | "architectural"
   | "fabric-forward"
   | "formal"
+  | "horizontal-detail"
   | "luxury-unspecified";
 
 export type AccessConditionId =
@@ -164,7 +165,8 @@ export type RequestedFeatureId =
   | "inside-mount"
   | "full-functional-drapery"
   | "large-pattern-fabric"
-  | "battery-powered-exterior";
+  | "battery-powered-exterior"
+  | "corded-operation";
 
 /** Every list-valued fact member, flattened, for `{ has: … }` conditions. */
 export type FactFlag =
@@ -179,6 +181,7 @@ export type FactFlag =
 export type SingleDirectionId =
   | "cellular"
   | "interior-roller"
+  | "banded-shades"
   | "interior-solar"
   | "shutters"
   | "wood-blinds"
@@ -274,6 +277,13 @@ export interface ProductDirection {
   /** Present only on layered directions. */
   readonly components?: readonly SingleDirectionId[];
   /**
+   * This direction is a variant of another and inherits its reasoning except
+   * where it explicitly diverges. Declared rather than implied so a reviewer
+   * can see at a glance that the shared behaviour is intentional, and so the
+   * harness can require the parent to exist.
+   */
+  readonly variantOf?: SingleDirectionId;
+  /**
    * Product slugs on the public site this direction corresponds to, declared
    * explicitly rather than inferred from display names. Empty is legitimate and
    * must be explained in `siteCoverageNote`. The drift cross-check reads this.
@@ -310,6 +320,13 @@ export interface CrossCuttingOption {
   readonly siteProductSlugs: readonly string[];
   readonly siteCoverageNote: string;
   readonly indicatedWhen: Condition;
+  /**
+   * Conditions under which this option should be steered away from. Takes
+   * precedence over `indicatedWhen`, mirroring how a contraindication beats a
+   * promotion on a product direction. An accessible operating cord is the
+   * case this exists for.
+   */
+  readonly deprioritizedWhen?: Condition;
   readonly cautions: readonly string[];
 }
 
@@ -531,6 +548,13 @@ export interface AdvisorAssessment {
   readonly deprioritizedDirections: readonly RankedDirection[];
   readonly excludedDirections: readonly RankedDirection[];
   readonly crossCuttingOptions: readonly SurfacedCrossCuttingOption[];
+  /**
+   * Operating options to steer away from for this project. Separate from
+   * `crossCuttingOptions` for the same reason `deprioritizedDirections` is
+   * separate from `strongCandidates`: "avoid this" and "consider this" are
+   * different instructions and must not be collapsed into one list.
+   */
+  readonly deprioritizedOptions: readonly SurfacedCrossCuttingOption[];
   readonly tradeoffs: readonly SurfacedTradeoff[];
   readonly unresolvedQuestions: readonly UnresolvedQuestion[];
   readonly verificationRequirements: readonly VerificationRequirement[];

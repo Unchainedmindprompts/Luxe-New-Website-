@@ -4,6 +4,12 @@ Converts the approved Luxe Window Advisor business knowledge into a
 deterministic, version-controlled domain layer, plus the harness that proves it
 behaves the way Luxe decided it should.
 
+> **Phase A.1** closed the two knowledge gaps Phase A reported and applied one
+> approved business-rule correction: banded shades are now a represented
+> direction, child safety now materially changes the assessment, and drapery
+> with inadequate stack-back deprioritizes instead of excluding. No file was
+> created and no architecture changed.
+
 **Phase A has no model, no API route, no UI, and no network access.** Nothing
 here is customer-facing. What it produces is structured reasoning data that a
 later phase can constrain a model with.
@@ -28,7 +34,7 @@ tie-break bug to fix.
 | File | Role |
 |---|---|
 | `lib/advisor/types.ts` | The vocabulary. Facts, rules, directions, assessment shape. |
-| `lib/advisor/knowledge/products.ts` | 11 product directions, 1 cross-cutting option, declared site coverage. |
+| `lib/advisor/knowledge/products.ts` | 12 product directions, 3 cross-cutting options, declared site coverage. |
 | `lib/advisor/knowledge/priorities.ts` | The 17 customer priorities and what distinguishes each. |
 | `lib/advisor/knowledge/rules.ts` | 7 rule families + 9 canonical business policies. |
 | `lib/advisor/knowledge/guardrails.ts` | 22 hard prohibitions. |
@@ -92,10 +98,10 @@ possible".
 
 ## Product directions
 
-Nine single directions — cellular, interior roller, interior solar, shutters,
-real wood blinds, faux/composite blinds, Roman shades, drapery, exterior solar —
-plus two **layered directions** that are first-class candidates in their own
-right:
+Ten single directions — cellular, interior roller, banded shades, interior
+solar, shutters, real wood blinds, faux/composite blinds, Roman shades, drapery,
+exterior solar — plus two **layered directions** that are first-class candidates
+in their own right:
 
 - `exterior-solar-plus-interior-privacy`
 - `functional-shade-plus-stationary-panels`
@@ -111,6 +117,30 @@ hedges are preserved rather than hardened: roller side gaps stay "roughly 3/4
 inch on the drive side, sometimes more", because the brief explicitly says not to
 hard-code them as guaranteed dimensions.
 
+### Banded shades are a declared roller variant
+
+Luxe's position is that banded shades are functionally very similar to roller
+shades and differ in how they look. Restating roller's knowledge under a second
+id would let the two drift apart on dimensions where Luxe considers them the
+same product, so banded shades declare `variantOf: "interior-roller"` and share
+a `ROLLER_FAMILY` record covering privacy, room darkening, energy, moisture,
+access, motorization, scale, tradeoffs and verification. The shared
+room-darkening contraindication comes from one factory, id-namespaced per member
+so each finding is still traceable to the direction that produced it.
+
+That inversion is what makes the record readable: **whatever banded overrides is,
+by construction, exactly where it differs** — the horizontal banded appearance,
+the modern/contemporary skew of the fabric options, and view behaviour.
+
+View behaviour is the one that carries a rule. Aligning the alternating bands
+gives a real but partial "peek-a-boo" view, which is not the broad continuous
+view-through of a solar shade. Because that resemblance is exactly what invites
+the mistake, banded carries a `banded-view-not-continuous` contraindication that
+deprioritizes it whenever preserving the view is a leading priority, so solar
+comes out ahead. Interior roller does *not* carry the equivalent rule, and that
+asymmetry is deliberate: a roller has no alignment feature to be mistaken for a
+view product, so there is no confusion to guard against.
+
 ## Constraints: exclude versus deprioritize
 
 - `exclude` removes a direction from consideration entirely.
@@ -124,6 +154,30 @@ it. Scenario 12 is the clearest case: exterior solar over a frequently used
 patio door is promoted hard *and* deprioritized for the access conflict, so the
 output says "this is the right product and here is the problem with it", not
 "no".
+
+Drapery against inadequate stack-back is the same shape, and Phase A.1 corrected
+it. It was originally an `exclude`, on a reading of the brief's word "avoid".
+Luxe's position is that limited stack-back does not make functional drapery
+impossible — it makes it a weaker answer, because the fabric covers substantial
+glass, cuts natural light, visually shrinks the opening and can make the room
+feel smaller. So it now deprioritizes: drapery stays eligible, the functional
+shade with stationary side panels is promoted hard, and the homeowner still gets
+to choose full drapery with the tradeoff stated.
+
+### Operating systems
+
+Cordless and corded/chain operation join motorization as cross-cutting options —
+things that apply *across* directions rather than competing with them. They
+carry the same two-tier treatment directions get: `deprioritizedWhen` beats
+`indicatedWhen`, mirroring how a contraindication beats a promotion, so an
+option that is contraindicated stays contraindicated even when it was explicitly
+asked for.
+
+Where child safety is a priority, cordless and motorized operation surface and
+corded/chain operation is steered away from. What the advisor deliberately does
+**not** do is assert which products can be supplied cordless or motorized — that
+depends on product, size and application, so it becomes a verification
+requirement and a guardrail rather than a claim.
 
 ## Ranking, and what the harness refuses to assert
 
@@ -247,11 +301,15 @@ required direction and prohibited behaviour — never wording, never ranking.
 | `mustApplyGuardrail` | the guardrail is in force |
 | `mustSurfaceConflict` | the request conflict is surfaced |
 | `mustSurfaceOption` | the cross-cutting option is indicated |
+| `mustDeprioritizeOption` | the cross-cutting option is steered away from |
+| `mustRequireVerification` | Luxe is required to confirm this at the opening |
 
-The last two are additions to the list the brief sketched, which said the
-categories "may include" the nine it named. Request conflicts and motorization
-are both first-class engine outputs, and asserting on them any other way would
-have meant testing them indirectly.
+The last four are additions to the list the brief sketched, which said the
+categories "may include" the nine it named. Request conflicts, operating-system
+options and verification requirements are all first-class engine outputs, and
+asserting on them any other way would have meant testing them indirectly.
+`mustRequireVerification` closed a real hole — verification requirements had
+been an output no assertion could reach.
 
 `mustAskOrResolve` carries the only real logic, and it is the assertion that
 encodes a business rule rather than an outcome: a scenario can insist something
@@ -264,51 +322,55 @@ engine misbehaving.
 
 ## Current state
 
-| Measure | Value |
-|---|---:|
-| Product directions | 11 (9 single, 2 layered) |
-| Cross-cutting options | 1 |
-| Priorities | 17 |
-| Recognition rules | 39 |
-| Promotion rules | 30 |
-| Tradeoff rules | 11 |
-| Question rules | 14 |
-| Verification rules | 16 |
-| Escalation rules | 15 |
-| Conflict rules | 12 |
-| Contraindications | 29 |
-| Guardrails | 22 (14 always, 8 conditional) |
-| Business policies | 9 |
-| Scenarios | 30 |
-| Assertions | 225 |
-| **Scenarios passing** | **30 / 30** |
+| Measure | Phase A | Phase A.1 |
+|---|---:|---:|
+| Product directions | 11 (9 single, 2 layered) | **12 (10 single, 2 layered)** |
+| Cross-cutting options | 1 | **3** |
+| Priorities | 17 | 17 |
+| Recognition rules | 39 | **41** |
+| Promotion rules | 30 | **33** |
+| Tradeoff rules | 11 | 11 |
+| Question rules | 14 | 14 |
+| Verification rules | 16 | **17** |
+| Escalation rules | 15 | 15 |
+| Conflict rules | 12 | **13** |
+| Contraindications | 29 | **31** |
+| Guardrails | 22 (14 / 8) | **23 (14 always, 9 conditional)** |
+| Business policies | 9 | 9 |
+| Scenarios | 30 | **33** |
+| Assertions | 225 | **245** |
+| **Scenarios passing** | 30 / 30 | **33 / 33** |
 
 ## Are the assertions actually discriminating?
 
-Thirty of thirty passing on the first run is not evidence of anything by itself.
-Every scenario's assertion set was therefore run against every *other* scenario's
-facts — 6,525 off-diagonal checks. If the assertions were vacuous, most would
-pass anyway.
+Everything passing on the first run is not evidence of anything by itself. Every
+scenario's assertion set was therefore run against every *other* scenario's facts
+— 7,840 off-diagonal checks. If the assertions were vacuous, most would pass
+anyway.
 
-**16.2% satisfied off-diagonal.** Only 3 of 870 wrong-facts pairings satisfied a
-scenario's whole assertion set, and all three are near-duplicate pairs by
-construction (01/30 both west-facing view-plus-severe-heat; 15/20 both
-rarely-operated; 18/27 both very-wide).
+**16.3% satisfied off-diagonal** (16.2% before Phase A.1 — adding three
+scenarios and two assertion types did not dilute it). Only 5 of 1,056
+wrong-facts pairings satisfied a scenario's whole assertion set, and all five are
+near-duplicate pairs by construction: 01/30 both west-facing view-plus-severe-heat,
+15/20 both rarely-operated, 18/27 both very-wide, and 08 against 31 and 32, whose
+facts both include the modern-minimal aesthetic that 08's assertions test.
 
 Per assertion type, off-diagonal satisfaction — lower is stronger:
 
 | Assertion | Rate |
 |---|---:|
 | `mustSurfaceConflict` | 0% |
-| `mustExclude` | 1% |
+| `mustExclude` | 0% |
+| `mustDeprioritizeOption` | 3% |
 | `mustIdentifyTradeoff` | 5% |
-| `mustEscalateFor` | 7% |
-| `mustSurfaceOption` | 7% |
-| `mustRecognize` | 8% |
-| `mustStronglyConsider` | 12% |
+| `mustEscalateFor` | 6% |
+| `mustRecognize` | 7% |
+| `mustSurfaceOption` | 8% |
+| `mustRequireVerification` | 9% |
+| `mustStronglyConsider` | 11% |
 | `mustDeprioritize` | 16% |
-| `mustApplyGuardrail` | 21% |
-| `mustAskOrResolve` | 22% |
+| `mustApplyGuardrail` | 20% |
+| `mustAskOrResolve` | 21% |
 | `mustIncludeCandidate` | **99%** |
 
 `mustIncludeCandidate` is weak by construction and is reported honestly rather
@@ -334,28 +396,48 @@ Test D is the one that matters. It removes a business rule without breaking
 anything structural, and only the behavioural layer catches it. That is the
 harness doing the job it exists for.
 
+### Phase A.1 probes
+
+| Probe | Injected | Result | Exit |
+|---|---|---|---:|
+| P1 | banded shades' `siteProductSlugs` emptied | cross-check reported `banded-shades` unclaimed — the same drift finding that previously guarded it as an unrepresented declaration | **1** |
+| P2 | `corded-operation`'s `deprioritizedWhen` rewired so child safety never triggers it | scenario 33 failed on `mustDeprioritizeOption: corded-operation`, with no structural error | **1** |
+| P3 | drapery stack-back restored to `exclude` | scenario 10 failed on both `mustIncludeCandidate: drapery` and `mustDeprioritize: drapery` | **1** |
+
+P3 is worth noting in both directions. The same scenario passed under the old
+`exclude` rule and passes under the new `deprioritize` rule, because its
+assertions were rewritten alongside the rule — which is exactly what should
+happen when a business decision changes. What the probe proves is that the
+assertions are load-bearing: reverting the rule without reverting the assertions
+fails immediately.
+
 ## Knowledge gaps the harness reports without failing
 
-Three diagnostics print on every run. None fails the build, because failing
+Two diagnostics print on every run. Neither fails the build, because failing
 would only pressure someone into inventing knowledge Luxe has not supplied —
 which is itself a hard guardrail.
 
-**`banded-shades` has a product page and zero advisor knowledge.** The approved
-brief contains no banded/zebra shade material at all — no strengths, no weak
-fits, no tradeoffs. It is declared unrepresented, and the advisor will not
-recommend it until Luxe supplies the knowledge.
+**Every product category on the public site is now represented.**
+`UNREPRESENTED_SITE_PRODUCTS` is empty as of Phase A.1; `banded-shades` was its
+only entry and is now a full direction.
 
-**Drapery has substantial knowledge and no product page.** The reverse gap.
+**Drapery has substantial knowledge and no product page.** The reverse gap, and
+the only one left. Two layered directions likewise have no page, which is
+expected — they are compositions, not products.
 
-**Five priorities have no rule behind them:** `functionality`, `child-safety`,
-`convenience`, `moisture-resistance`, `lifestyle-requirement`. They are in the
-vocabulary because the brief lists them; nothing reasons about them yet.
-`child-safety` is the most significant — the brief names it as a priority but
-supplies no cord or operating-system safety knowledge.
+**Four priorities have no rule behind them:** `functionality`, `convenience`,
+`moisture-resistance`, `lifestyle-requirement`. They are in the vocabulary
+because the brief lists them; nothing reasons about them yet. `child-safety` was
+the fifth and the most significant, and Phase A.1 closed it.
 
-`moisture-resistance` is inert for a different and deliberate reason: the wet-area
-rules key off the *condition* (`moistureExposure`), not off the customer having
-named moisture as a priority. The condition is the more reliable signal.
+Two of the four are inert for deliberate reasons rather than missing knowledge.
+`moisture-resistance` is inert because the wet-area rules key off the *condition*
+(`moistureExposure`), not off the customer having named moisture as a priority —
+the condition is the more reliable signal. `convenience` overlaps almost entirely
+with the access and motorization rules, which fire on physical facts instead.
+
+`functionality` and `lifestyle-requirement` are genuinely too generic to
+discriminate between directions on the knowledge Luxe has supplied so far.
 
 ## Judgment calls made where the brief was silent or ambiguous
 
@@ -374,12 +456,12 @@ them could be reversed by Luxe with a one-line change.
 
 3. **Shutter obstructions deprioritize rather than exclude.** The brief says
    physical conditions "must be evaluated", not "avoid". A stricter reading
-   would exclude.
+   would exclude. *Confirmed by Luxe in Phase A.1 — keep.*
 
-4. **Drapery is *excluded* on inadequate stack-back.** The brief says "avoid
-   drapery where … inadequate stack-back exists", and "avoid" was read as
-   exclude. If Luxe would still sell it there with the tradeoff explained, this
-   should become a deprioritize.
+4. ~~**Drapery is *excluded* on inadequate stack-back.**~~ **Corrected in Phase
+   A.1 to `deprioritize`.** The original encoding read the brief's "avoid" as a
+   hard exclusion. Luxe's position is that limited stack-back makes full
+   drapery weaker, not impossible.
 
 5. **Humid ≠ direct splash for real wood.** The brief says avoid real wood in
    "repeated direct moisture exposure", so a merely humid bathroom leaves real
@@ -410,6 +492,35 @@ them could be reversed by Luxe with a one-line change.
 11. **`room: "commercial"` currently changes nothing.** "Luxe serves residential
     and commercial" is recorded as a business policy, but the brief supplies no
     commercial-specific product knowledge.
+
+Added in Phase A.1:
+
+12. **Child safety changes operating systems, not product directions.** The rule
+    says favour treatments *and* operating systems that eliminate accessible
+    cords, but naming which directions are cord-free would mean asserting
+    cordless availability per product — which the same rule forbids. So child
+    safety surfaces cordless and motorized operation, deprioritizes corded, and
+    routes availability to verification. It promotes and excludes no direction.
+    Shutters are the one direction the approved knowledge already describes as
+    operated at the louvers rather than by a lift cord; promoting shutters on
+    child safety would be defensible, but it is a derivation rather than a rule
+    Luxe has stated, so it was left out.
+
+13. **A nursery is treated as implying child safety.** `room: "nursery"` triggers
+    the child-safety rules even when the priority is not stated. Reasonable, but
+    it is an inference the brief does not make explicitly.
+
+14. **Banded shades deprioritize on a view priority; interior roller does not.**
+    Both are opaque when deployed, so neither preserves a view — but only banded
+    has an alignment feature that can be mistaken for one, and only banded is
+    named in the rule about not being equivalent to solar. The asymmetry is
+    intentional; if Luxe wants roller treated the same way, it is one more
+    contraindication.
+
+15. **"Horizontal detail" is a design preference, not a product name.** Banded
+    shades are surfaced from an aesthetic flag describing what the homeowner
+    wants the treatment to look like, so the advisor is never simply matching a
+    product to its own description.
 
 ## Deliberately out of scope for Phase A
 

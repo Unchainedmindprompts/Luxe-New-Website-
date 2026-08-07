@@ -194,11 +194,13 @@
       },
       "assertions": {
         "mustRecognize": ["inadequate-stack-back", "fabric-forward-aesthetic"],
-        "mustExclude": ["drapery"],
+        "mustIncludeCandidate": ["drapery"],
+        "mustDeprioritize": ["drapery"],
         "mustStronglyConsider": ["functional-shade-plus-stationary-panels", "roman-shades"],
         "mustSurfaceConflict": ["conflict-full-drapery-without-stack-back"],
         "mustIdentifyTradeoff": ["drapery-fabric-vs-glass-coverage", "minimal-stack-vs-fabric-design"],
-        "mustEscalateFor": ["escalate-complex-drapery-layout"]
+        "mustEscalateFor": ["escalate-complex-drapery-layout"],
+        "mustRequireVerification": ["verify-stack-back"]
       }
     },
     {
@@ -565,6 +567,59 @@
           "no-guaranteed-nighttime-privacy-from-solar",
           "no-guaranteed-temperature-reduction"
         ]
+      }
+    },
+    {
+      "id": "31-banded-shades-modern-look",
+      "title": "Banded shades — modern look with horizontal detail",
+      "narrative": "A contemporary great room. They want something clean and modern with horizontal visual interest, and like the idea of being able to see out a little when the bands line up.",
+      "facts": {
+        "priorities": ["aesthetics", "functionality"],
+        "room": "living",
+        "aesthetic": ["modern-minimal", "horizontal-detail"],
+        "viewImportance": "moderate"
+      },
+      "assertions": {
+        "mustRecognize": ["modern-minimal-aesthetic", "horizontal-detail-wanted"],
+        "mustStronglyConsider": ["banded-shades"],
+        "mustIncludeCandidate": ["interior-roller"],
+        "mustDeprioritize": ["roman-shades"]
+      }
+    },
+    {
+      "id": "32-banded-vs-solar-view-priority",
+      "title": "Banded vs solar — broad view preservation is the priority",
+      "narrative": "Same modern taste and the same interest in horizontal detail, but now keeping the west-facing lake view while the shade is down is the most important thing.",
+      "facts": {
+        "priorities": ["view-preservation", "aesthetics"],
+        "room": "living",
+        "exposure": "west",
+        "viewImportance": "critical",
+        "aesthetic": ["modern-minimal", "horizontal-detail"]
+      },
+      "assertions": {
+        "mustRecognize": ["valuable-view", "horizontal-detail-wanted"],
+        "mustStronglyConsider": ["interior-solar"],
+        "mustIncludeCandidate": ["banded-shades"],
+        "mustDeprioritize": ["banded-shades", "cellular"],
+        "mustAskOrResolve": ["q-nighttime-privacy"]
+      }
+    },
+    {
+      "id": "33-child-safety-young-children",
+      "title": "Child safety — young children in the house",
+      "narrative": "Two toddlers. They have read about cord hazards and say child safety is their number one concern.",
+      "facts": {
+        "goals": ["Two toddlers in the house; worried about window covering cords"],
+        "priorities": ["child-safety", "functionality", "budget"],
+        "room": "living"
+      },
+      "assertions": {
+        "mustRecognize": ["child-safety-priority"],
+        "mustSurfaceOption": ["cordless-operation", "motorization"],
+        "mustDeprioritizeOption": ["corded-operation"],
+        "mustRequireVerification": ["verify-cordless-or-motorized-availability"],
+        "mustApplyGuardrail": ["no-assumed-cordless-or-motorized-availability"]
       }
     }
   ]

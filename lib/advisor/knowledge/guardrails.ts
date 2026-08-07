@@ -250,6 +250,22 @@ export const GUARDRAILS: readonly Guardrail[] = [
     source: "PRODUCT KNOWLEDGE — EXTERIOR SOLAR",
   },
   {
+    id: "no-assumed-cordless-or-motorized-availability",
+    prohibition:
+      "Never claim that every product, size or application is available cordless or motorized, and never state manufacturer-specific availability for either.",
+    scope: "conditional",
+    when: {
+      any: [
+        { priority: "child-safety" },
+        { fact: "room", is: ["nursery"] },
+        { fact: "motorizationInterest", is: ["requested"] },
+      ],
+    },
+    permittedInstead:
+      "State the preference plainly — where child safety matters, favour an operating system with no accessible cord — and say Luxe will confirm which options the selected product, size and application actually support.",
+    source: "PHASE A.1 — CHILD SAFETY",
+  },
+  {
     id: "no-hardcoded-gap-dimensions",
     prohibition:
       "Never state roller side-gap dimensions as guaranteed. Manufacturer and window conditions vary.",

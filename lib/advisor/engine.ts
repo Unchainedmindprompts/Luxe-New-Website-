@@ -235,9 +235,16 @@ export function assess(facts: ProjectFacts, knowledge: AdvisorKnowledge): Adviso
     .filter((r) => matches(r.when))
     .map((r) => ({ id: r.id, label: r.label }));
 
-  const crossCuttingOptions: SurfacedCrossCuttingOption[] = knowledge.crossCuttingOptions
-    .filter((o) => matches(o.indicatedWhen))
-    .map((o) => ({ id: o.id, label: o.label, cautions: o.cautions }));
+  // An option that is contraindicated is contraindicated whether or not it was
+  // also asked for, so `deprioritizedWhen` is checked first — the same
+  // precedence a contraindication has over a promotion on a direction.
+  const crossCuttingOptions: SurfacedCrossCuttingOption[] = [];
+  const deprioritizedOptions: SurfacedCrossCuttingOption[] = [];
+  for (const o of knowledge.crossCuttingOptions) {
+    const surfaced = { id: o.id, label: o.label, cautions: o.cautions };
+    if (o.deprioritizedWhen && matches(o.deprioritizedWhen)) deprioritizedOptions.push(surfaced);
+    else if (matches(o.indicatedWhen)) crossCuttingOptions.push(surfaced);
+  }
 
   const tradeoffs: SurfacedTradeoff[] = knowledge.tradeoffs
     .filter((t) => matches(t.when))
@@ -299,6 +306,7 @@ export function assess(facts: ProjectFacts, knowledge: AdvisorKnowledge): Adviso
     deprioritizedDirections,
     excludedDirections,
     crossCuttingOptions,
+    deprioritizedOptions,
     tradeoffs,
     unresolvedQuestions,
     verificationRequirements,

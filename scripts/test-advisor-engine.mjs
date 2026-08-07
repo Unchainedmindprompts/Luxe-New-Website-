@@ -142,6 +142,12 @@ for (const direction of KNOWLEDGE.directions) {
   } else if (direction.components) {
     fail("structure", `single direction "${direction.id}" should not declare components`);
   }
+  if (direction.variantOf !== undefined) {
+    if (!SINGLE_DIRECTION_IDS.has(direction.variantOf))
+      fail("structure", `direction "${direction.id}" is a variant of unknown direction "${direction.variantOf}"`);
+    if (direction.variantOf === direction.id)
+      fail("structure", `direction "${direction.id}" declares itself as its own variant parent`);
+  }
   if (!direction.siteProductSlugs.length && !direction.siteCoverageNote.trim()) {
     fail(
       "structure",
@@ -228,8 +234,14 @@ for (const [family, list, field] of [
   for (const rule of list) walkCondition(rule[field], `${family} "${rule.id}"`);
 }
 for (const g of KNOWLEDGE.guardrails) if (g.when) walkCondition(g.when, `guardrail "${g.id}"`);
-for (const o of KNOWLEDGE.crossCuttingOptions)
+for (const o of KNOWLEDGE.crossCuttingOptions) {
   walkCondition(o.indicatedWhen, `option "${o.id}"`);
+  if (o.deprioritizedWhen) walkCondition(o.deprioritizedWhen, `option "${o.id}" (deprioritizedWhen)`);
+  if (!o.siteProductSlugs.length && !o.siteCoverageNote.trim())
+    fail("structure", `option "${o.id}" claims no site product and gives no coverage note`);
+  if (!o.cautions.length)
+    fail("structure", `option "${o.id}" carries no cautions`);
+}
 for (const d of KNOWLEDGE.directions)
   for (const c of d.contraindications)
     walkCondition(c.when, `contraindication "${c.id}"`);
@@ -401,6 +413,14 @@ const ASSERTIONS = {
   mustSurfaceOption: {
     catalogue: OPTION_IDS,
     satisfied: (a, id) => a.crossCuttingOptions.some((x) => x.id === id),
+  },
+  mustDeprioritizeOption: {
+    catalogue: OPTION_IDS,
+    satisfied: (a, id) => a.deprioritizedOptions.some((x) => x.id === id),
+  },
+  mustRequireVerification: {
+    catalogue: VERIFICATION_IDS,
+    satisfied: (a, id) => a.verificationRequirements.some((x) => x.id === id),
   },
 };
 
