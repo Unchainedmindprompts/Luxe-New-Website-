@@ -79,10 +79,13 @@ export default function PrivacyPage() {
             <p>
               Three places on this site ask for information: the contact form,
               the consultation request on the booking page, and the
-              &ldquo;Show Me My Options&rdquo; questionnaire. Between them they
-              collect your <strong>name, phone number, email address, street
-              address, city, a description of what you need</strong>, and how
-              you would prefer to be contacted.
+              &ldquo;have Luxe contact me&rdquo; form on our window-treatment
+              advisor page. Between them they collect your <strong>name, phone
+              number, email address, street address, city, a description of what
+              you need</strong>, and how you would prefer to be contacted. The
+              advisor&rsquo;s form is the shortest of the three: a name, a phone
+              number, an email address if you want to give one, and anything you
+              choose to add.
             </p>
             <p>
               We ask for the address because we come to your home to measure. We
@@ -134,13 +137,15 @@ export default function PrivacyPage() {
               provider.
             </p>
             <p>
-              <strong>What we keep.</strong> Nothing. There is no database
-              behind the advisor and we do not store or log your conversation.
-              While you are using it, the conversation lives in your own browser
-              and is passed back to our server with each message so it can
-              follow the thread. Close the tab and it is gone. Anthropic&rsquo;s
-              own handling of what it receives is covered by their privacy
-              policy, linked below.
+              <strong>What we keep of the conversation.</strong> Nothing. There
+              is no database behind the advisor and we do not store or log what
+              you type into it. While you are using it, the conversation lives
+              in your own browser and is passed back to our server with each
+              message so it can follow the thread. Close the tab and it is gone.
+              Anthropic&rsquo;s own handling of what it receives is covered by
+              their privacy policy, linked below. This applies to the
+              conversation only &mdash; anything you deliberately send us
+              through a form is different, and we do receive and keep that.
             </p>
             <p>
               <strong>If you ask us to contact you.</strong> The page offers a
