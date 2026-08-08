@@ -238,6 +238,8 @@
         "mustRecognize": ["patio-door-access-conflict", "sliding-door-opening", "severe-solar-heat"],
         "mustIncludeCandidate": ["exterior-solar"],
         "mustDeprioritize": ["exterior-solar"],
+        "mustNotExclude": ["exterior-solar"],
+        "mustSurfaceConflict": ["conflict-exterior-shade-over-used-door"],
         "mustIdentifyTradeoff": ["exterior-shade-vs-door-access"],
         "mustEscalateFor": ["escalate-complicated-slider-or-door", "escalate-exterior-mounting"],
         "mustApplyGuardrail": ["no-guaranteed-wind-performance"]
@@ -258,6 +260,7 @@
       "assertions": {
         "mustRecognize": ["high-wind-exposure"],
         "mustStronglyConsider": ["exterior-solar"],
+        "mustNotSurfaceConflict": ["conflict-exterior-shade-over-used-door"],
         "mustEscalateFor": ["escalate-exterior-wind-exposure", "escalate-exterior-mounting"],
         "mustAskOrResolve": ["q-wind-exposure", "q-door-access-conflict"],
         "mustApplyGuardrail": ["no-guaranteed-wind-performance", "no-mounting-safety-claim-without-inspection"]
@@ -636,6 +639,42 @@
         "mustRecognize": ["clear-glass-preference", "modern-minimal-aesthetic"],
         "mustStronglyConsider": ["interior-roller", "banded-shades", "cellular"],
         "mustAskOrResolve": ["q-window-use"]
+      }
+    },
+    {
+      "id": "35-used-patio-door-without-an-exterior-request",
+      "title": "A door in daily use, with no exterior shade asked for",
+      "narrative": "The slider to the deck is in constant use, but nobody has asked for an exterior shade. There is no request to be in conflict with.",
+      "facts": {
+        "priorities": ["privacy", "aesthetics"],
+        "room": "living",
+        "openings": ["patio-door-frequent-use", "sliding-door"]
+      },
+      "assertions": {
+        "mustRecognize": ["patio-door-access-conflict", "sliding-door-opening"],
+        "mustNotSurfaceConflict": ["conflict-exterior-shade-over-used-door"]
+      }
+    },
+    {
+      "id": "36-exterior-request-conflicts-with-door-access",
+      "title": "Exterior shade asked for over the door the household uses",
+      "narrative": "West-facing sliders make the house hot and they want an exterior shade, but those doors are how everyone reaches the patio. The heat answer and the access reality pull against each other, and the homeowner is owed that reason.",
+      "facts": {
+        "priorities": ["energy-efficiency"],
+        "exposure": "west",
+        "solarHeat": "severe",
+        "requestedProducts": ["exterior-solar"],
+        "openings": ["sliding-door", "patio-door-frequent-use"],
+        "exteriorConditions": ["high-wind-exposure"]
+      },
+      "assertions": {
+        "mustRecognize": ["patio-door-access-conflict", "severe-solar-heat", "west-exposure"],
+        "mustSurfaceConflict": ["conflict-exterior-shade-over-used-door"],
+        "mustStronglyConsider": ["cellular"],
+        "mustIncludeCandidate": ["exterior-solar"],
+        "mustDeprioritize": ["exterior-solar"],
+        "mustNotExclude": ["exterior-solar"],
+        "mustIdentifyTradeoff": ["exterior-shade-vs-door-access"]
       }
     }
   ]

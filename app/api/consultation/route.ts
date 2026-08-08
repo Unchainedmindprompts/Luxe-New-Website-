@@ -26,8 +26,9 @@ interface ConsultationPayload {
   message?: string;
   needs?: string;
   contactMethod?: string;
-  // Populated when the visitor came through the "Show Me My Options" flow.
-  // Value is one of the eight problem labels shown in step 1.
+  // A short tag for the subject line. The advisor sends "Advisor callback
+  // request" here so a request to be contacted is never mistaken for a booked
+  // consultation in the inbox.
   problem?: string;
   source?: string;
   // Honeypot — hidden field bots love to fill, humans never see.
@@ -71,7 +72,7 @@ export async function POST(req: Request) {
       ? "/book"
       : source === "contact"
       ? "/contact"
-      : source === "show-me-my-options"
+      : source === "show-me-my-options" || source === "luxe-advisor"
       ? "/show-me-my-options"
       : `/${source}`;
   const subject = problem

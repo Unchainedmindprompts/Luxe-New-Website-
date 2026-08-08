@@ -364,6 +364,12 @@ const questionsById = new Map(KNOWLEDGE.questions.map((q) => [q.id, q]));
  * still open OR when every dimension it would resolve is already known. That is
  * what lets a scenario say "this must be dealt with" without forcing the
  * advisor to ask something the homeowner already answered.
+ *
+ * The `mustNot*` entries exist because a conditional rule is only half tested
+ * by the case that fires it. A conflict that surfaces whenever its product is
+ * named — rather than only when the condition it describes is present — passes
+ * every positive assertion while telling homeowners their request is a problem
+ * when it is not. Asserting the silence is what pins the condition down.
  */
 const ASSERTIONS = {
   mustRecognize: {
@@ -409,6 +415,14 @@ const ASSERTIONS = {
   mustSurfaceConflict: {
     catalogue: CONFLICT_IDS,
     satisfied: (a, id) => a.requestConflicts.some((x) => x.id === id),
+  },
+  mustNotSurfaceConflict: {
+    catalogue: CONFLICT_IDS,
+    satisfied: (a, id) => !a.requestConflicts.some((x) => x.id === id),
+  },
+  mustNotExclude: {
+    catalogue: DIRECTION_IDS,
+    satisfied: (a, id) => !a.excludedDirections.some((x) => x.id === id),
   },
   mustSurfaceOption: {
     catalogue: OPTION_IDS,

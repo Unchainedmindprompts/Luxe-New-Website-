@@ -1073,6 +1073,16 @@ export const CONFLICT_RULES: readonly ConflictRule[] = [
       "Where child safety matters, Luxe favours an operating system with no accessible cord or chain — cordless or motorized. Which of those is available depends on the product, the size and the application, and Luxe confirms that at the consultation.",
   },
   {
+    id: "conflict-exterior-shade-over-used-door",
+    requested: "exterior-solar",
+    when: {
+      all: [{ requestedProduct: "exterior-solar" }, { has: "patio-door-frequent-use" }],
+    },
+    redirectTo: [],
+    explanation:
+      "An exterior shade is the strongest heat strategy there is, but over a door the household uses every day it sits in the path of the doorway. That access conflict decides whether the exterior application is workable here, and it is settled at the opening — not from a description.",
+  },
+  {
     id: "conflict-motorization-without-an-operating-reason",
     requested: "cellular",
     when: {

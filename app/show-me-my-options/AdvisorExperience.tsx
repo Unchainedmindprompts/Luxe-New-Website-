@@ -22,6 +22,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { toAdvisorTurn, type AdvisorTurn, type OpaqueState } from "@/lib/advisor/client/contract";
+import ContactRequest, { type LeadPlacement } from "./ContactRequest";
 import {
   advisorBookHandoff,
   advisorBookingClicked,
@@ -145,12 +146,16 @@ export default function AdvisorExperience() {
       <div className="max-w-2xl mx-auto px-4 pb-20">
         {started && (
           <ol className="space-y-6" aria-label="Your conversation with Luxe Window Works">
-            {exchanges.map((exchange) => (
+            {exchanges.map((exchange, index) => (
               <li key={exchange.id}>
                 {exchange.from === "homeowner" ? (
                   <HomeownerSaid text={exchange.text} />
                 ) : (
-                  <LuxeSaid exchange={exchange} turns={homeownerTurns} />
+                  <LuxeSaid
+                    exchange={exchange}
+                    turns={homeownerTurns}
+                    isLatest={index === exchanges.length - 1}
+                  />
                 )}
               </li>
             ))}
@@ -173,7 +178,7 @@ export default function AdvisorExperience() {
           started={started}
         />
 
-        {started && !pending && <ClosingBooking status={latest?.status ?? ""} turns={homeownerTurns} />}
+        {started && !pending && <ClosingBooking turn={latest} turns={homeownerTurns} />}
       </div>
     </div>
   );
@@ -239,9 +244,39 @@ function HomeownerSaid({ text }: { text: string }) {
   );
 }
 
-function LuxeSaid({ exchange, turns }: { exchange: Exchange; turns: number }) {
+/**
+ * When the quieter "have Luxe contact me" option belongs on a turn — and, by
+ * returning null, when it does not.
+ *
+ * A callback option under every single reply is pressure, and pressure is what
+ * makes people close the tab. It appears at the moments where someone has
+ * actually been given something and might want a person: a recommendation,
+ * real guidance, or a turn that could not take them further. A plain question
+ * turn gets nothing; the useful thing to do there is answer the question.
+ */
+function inlineLeadPlacement(turn: AdvisorTurn | null | undefined): LeadPlacement | null {
+  if (!turn) return null;
+  if (turn.status === "RECOMMENDATION_READY") return "recommendation";
+  if (turn.status === "GUIDANCE_READY" && turn.offerConsultation) return "guidance";
+  if (turn.status === "ADVISOR_UNAVAILABLE") return "fallback";
+  if (turn.status === "NEED_MORE_INFORMATION" && !turn.question) return "fallback";
+  return null;
+}
+
+function LuxeSaid({
+  exchange,
+  turns,
+  isLatest,
+}: {
+  exchange: Exchange;
+  turns: number;
+  isLatest: boolean;
+}) {
   const turn = exchange.turn;
   const isRecommendation = turn?.status === "RECOMMENDATION_READY";
+  // Only ever on the current turn. Scrolling back through a conversation past
+  // three stale contact forms is not what a premium page does.
+  const leadPlacement = isLatest ? inlineLeadPlacement(turn) : null;
 
   return (
     <div className="max-w-[92%]">
@@ -250,11 +285,16 @@ function LuxeSaid({ exchange, turns }: { exchange: Exchange; turns: number }) {
       </p>
       <p className="text-charcoal text-base leading-relaxed whitespace-pre-wrap">{exchange.text}</p>
 
-      {isRecommendation && turn && <RecommendationPanel turn={turn} turns={turns} />}
+      {isRecommendation && turn && (
+        <RecommendationPanel turn={turn} turns={turns} offerCallback={leadPlacement !== null} />
+      )}
 
       {turn?.status === "GUIDANCE_READY" && turn.offerConsultation && (
         <div className="mt-5">
           <BookLink placement="guidance" status={turn.status} turns={turns} variant="quiet" />
+          {leadPlacement === "guidance" && (
+            <ContactRequest placement="guidance" turn={turn} turns={turns} />
+          )}
         </div>
       )}
 
@@ -265,12 +305,18 @@ function LuxeSaid({ exchange, turns }: { exchange: Exchange; turns: number }) {
       {turn?.status === "NEED_MORE_INFORMATION" && !turn.question && (
         <div className="mt-5">
           <BookLink placement="guidance" status={turn.status} turns={turns} variant="solid" />
+          {leadPlacement === "fallback" && (
+            <ContactRequest placement="fallback" turn={turn} turns={turns} />
+          )}
         </div>
       )}
 
       {turn?.status === "ADVISOR_UNAVAILABLE" && (
         <div className="mt-5">
           <BookLink placement="fallback" status={turn.status} turns={turns} variant="solid" />
+          {leadPlacement === "fallback" && (
+            <ContactRequest placement="fallback" turn={null} turns={turns} />
+          )}
         </div>
       )}
     </div>
@@ -285,7 +331,15 @@ function LuxeSaid({ exchange, turns }: { exchange: Exchange; turns: number }) {
  * needs to see. `verify-dimensions` is filtered upstream because it is true of
  * every project and so tells this homeowner nothing.
  */
-function RecommendationPanel({ turn, turns }: { turn: AdvisorTurn; turns: number }) {
+function RecommendationPanel({
+  turn,
+  turns,
+  offerCallback,
+}: {
+  turn: AdvisorTurn;
+  turns: number;
+  offerCallback: boolean;
+}) {
   return (
     <section className="mt-6 border border-warm-gray-200 rounded-xl overflow-hidden bg-white">
       {turn.direction && (
@@ -338,6 +392,7 @@ function RecommendationPanel({ turn, turns }: { turn: AdvisorTurn; turns: number
           Seeing the windows in the room is how we confirm fit, measure properly, and review fabrics
           in your home&rsquo;s actual light.
         </p>
+        {offerCallback && <ContactRequest placement="recommendation" turn={turn} turns={turns} />}
       </div>
     </section>
   );
@@ -481,11 +536,19 @@ function BookLink({
  * a prominent one — repeating the CTA after every message reads as pressure,
  * and pressure is what makes people leave.
  */
-function ClosingBooking({ status, turns }: { status: string; turns: number }) {
+function ClosingBooking({ turn, turns }: { turn: AdvisorTurn | null; turns: number }) {
+  const status = turn?.status ?? "";
   if (status === "RECOMMENDATION_READY" || status === "ADVISOR_UNAVAILABLE") return null;
+
+  // Never twice on one screen: if the current turn already carries the callback
+  // option, the footer stays a booking link and nothing else. And it is not
+  // offered to someone one sentence in — there is nothing to call them about yet.
+  const offerCallback = inlineLeadPlacement(turn) === null && turns >= 2;
+
   return (
     <div className="mt-10 pt-6 border-t border-warm-gray-200 text-center">
       <BookLink placement="footer" status={status} turns={turns} variant="quiet" />
+      {offerCallback && <ContactRequest placement="footer" turn={turn} turns={turns} />}
     </div>
   );
 }

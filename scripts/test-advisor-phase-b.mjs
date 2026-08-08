@@ -1382,6 +1382,59 @@ await test("68 phrasing prompts ask for tool-belt discipline, not lectures", asy
   t.ok(/do not restate them/i.test(recommendation), "the recommendation prompt may duplicate the card");
 });
 
+await test("69 a requested exterior shade over a used door reaches the phrasing layer", async (t) => {
+  // Phase A now names this conflict. The point of the test is the handoff: the
+  // engine surfaces it, the summary carries it, and the phrasing input receives
+  // it — without which the homeowner is told a different product is better and
+  // never told why the one they asked for is not.
+  const facts = {
+    priorities: ["energy-efficiency"],
+    exposure: "west",
+    solarHeat: "severe",
+    requestedProducts: ["exterior-solar"],
+    openings: ["sliding-door", "patio-door-frequent-use"],
+    exteriorConditions: ["high-wind-exposure"],
+  };
+  const assessment = engine.assess(facts, KNOWLEDGE);
+  const conflict = assessment.requestConflicts.find(
+    (c) => c.id === "conflict-exterior-shade-over-used-door"
+  );
+  t.ok(Boolean(conflict), "the engine surfaced no conflict for a requested exterior shade over a used door");
+  t.ok(conflict ? conflict.explanation.length > 40 : false, "the conflict carries no explanation to phrase");
+  // The explanation is customer-facing prose, not a rule name or a fragment.
+  for (const leak of [/exterior-solar\b/, /patio-door-frequent-use/, /conflict-/]) {
+    t.ok(conflict ? !leak.test(conflict.explanation) : false, `the explanation leaks an identifier: ${leak}`);
+  }
+
+  const provider = mockProvider({ extractions: [facts] });
+  const r = await makeAdvisor(provider).runTurn({
+    message: "West sliders cook the house. We want an exterior shade but that's how we reach the patio.",
+    state: {},
+  });
+  t.ok(
+    r.assessment.requestConflicts.some((c) => c.id === "conflict-exterior-shade-over-used-door"),
+    "the conflict did not survive into the response summary"
+  );
+  t.ok(
+    r.consultationCta.reasons.includes("request-conflict-needs-discussion"),
+    "the conflict is not a reason to talk to someone"
+  );
+  // The recommendation itself is unchanged: the conflict explains, it does not
+  // overrule. Exterior solar stays a real alternative rather than being struck.
+  t.ok(
+    !r.assessment.excluded.some((c) => c.id === "exterior-solar"),
+    "the requested product was excluded outright rather than explained"
+  );
+});
+
+await test("70 the recommendation prompt must explain a request it did not lead with", async (t) => {
+  const prompt = prompts.recommendationSystemPrompt(engine.assess({ room: "living" }, KNOWLEDGE), []);
+  t.ok(/conflict/i.test(prompt), "the prompt never mentions the conflict input it is given");
+  t.ok(/one short sentence/i.test(prompt), "the conflict instruction sets no length discipline");
+  // Length discipline is not weakened to make room for it.
+  t.ok(/35 to 75 words/.test(prompt), "the tightened length target was lost");
+});
+
 // ── report ──────────────────────────────────────────────────────────────────
 
 console.log("Luxe Window Advisor — Phase B deterministic tests");

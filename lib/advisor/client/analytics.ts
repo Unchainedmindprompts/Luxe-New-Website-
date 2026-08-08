@@ -22,7 +22,10 @@ export type AdvisorEvent =
   | "advisor_recommendation_rendered"
   | "advisor_booking_clicked"
   | "advisor_fallback"
-  | "advisor_book_handoff";
+  | "advisor_book_handoff"
+  | "advisor_lead_opened"
+  | "advisor_lead_submitted"
+  | "advisor_lead_failed";
 
 type Props = Record<string, string | number | boolean>;
 
@@ -80,3 +83,28 @@ export const advisorFallback = (reason: string) =>
  */
 export const advisorBookHandoff = (turns: number, status: string) =>
   emit("advisor_book_handoff", { turns, status });
+
+/* ── secondary lead capture ─────────────────────────────────────────────────
+ *
+ * THESE ARE NOT BOOKED CONSULTATIONS AND MUST NEVER BE REPORTED AS ANY.
+ * `advisor_lead_submitted` counts one thing only: a homeowner asked Luxe to
+ * contact them and the request reached the consultation endpoint. Whether that
+ * turns into an appointment is decided afterwards, by a person, off this site —
+ * so this number belongs in a "callback requests" column of its own, never
+ * added to bookings and never used as a booking proxy.
+ */
+
+/** The callback form was opened, and from where. Interest, not a lead. */
+export const advisorLeadOpened = (
+  placement: "recommendation" | "guidance" | "fallback" | "footer"
+) => emit("advisor_lead_opened", { placement });
+
+/** The request was accepted by the consultation endpoint. Still not a booking. */
+export const advisorLeadSubmitted = (
+  placement: "recommendation" | "guidance" | "fallback" | "footer",
+  turns: number
+) => emit("advisor_lead_submitted", { placement, turns });
+
+/** A submission that failed, so a silent drop-off is visible rather than assumed. */
+export const advisorLeadFailed = (reason: string) =>
+  emit("advisor_lead_failed", { reason });

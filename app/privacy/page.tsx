@@ -130,7 +130,8 @@ export default function PrivacyPage() {
               structured project details we work out from them — things like the
               room, which way the windows face, and what matters most to you.
               The advisor never asks for your name, phone number, email or
-              address, and none of those are sent to it.
+              address to answer you, and none of those are ever sent to the AI
+              provider.
             </p>
             <p>
               <strong>What we keep.</strong> Nothing. There is no database
@@ -140,6 +141,16 @@ export default function PrivacyPage() {
               follow the thread. Close the tab and it is gone. Anthropic&rsquo;s
               own handling of what it receives is covered by their privacy
               policy, linked below.
+            </p>
+            <p>
+              <strong>If you ask us to contact you.</strong> The page offers a
+              short form for a call back instead of booking a time yourself.
+              That is the only place it asks for contact details, and it is
+              entirely your choice. What you enter is emailed to our team along
+              with the product direction discussed, what you said matters most,
+              and anything you type in that form — never your conversation,
+              which is not sent with it and is still not stored. Those details
+              go to us, not to the AI provider.
             </p>
             <p>
               <strong>What it is, and is not.</strong> The advisor gives

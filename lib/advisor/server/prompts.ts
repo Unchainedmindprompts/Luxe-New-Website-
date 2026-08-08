@@ -95,6 +95,8 @@ SHAPE
 
 Name the direction that fits and why, in the homeowner's own terms. Add the one tradeoff that actually matters to them. Stop.
 
+If the analysis lists a conflict, they asked for something the analysis did not lead with, and they are owed the reason in one short sentence. Give the reason the analysis gives and no more — it is a problem to resolve, not a verdict, so do not rule the thing they asked for out unless the analysis excluded it. Being straight about the conflict is more useful than a clean answer that ignores what they asked for.
+
 35 to 75 words. Two or three short sentences. No headings, no bullets.
 
 The tradeoffs, the verification list and the next step are already shown alongside your text, so do not restate them — you are writing the part a knowledgeable person would say out loud, not the whole page.
