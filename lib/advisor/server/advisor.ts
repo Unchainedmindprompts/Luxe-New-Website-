@@ -34,6 +34,7 @@ import type {
 import type { FactUpdate, ValidatedUpdates } from "./extraction";
 import type { FactLedger, LedgerApplication } from "./ledger";
 import type { ClassifiedQuestion, QuestionTier } from "./counterfactual";
+import type { BrandResponseMatch } from "./brand-response";
 import type {
   AdvisorProvider,
   AdvisorResponse,
@@ -124,6 +125,15 @@ export interface AdvisorDeps {
   };
   /** Brand names Luxe genuinely carries, for invented-product detection. */
   readonly allowedBrands: readonly string[];
+  /**
+   * Approved verbatim answers to brand questions. Returns null unless the
+   * homeowner actually asked — a passing mention is not a question.
+   */
+  readonly matchBrandResponse: (
+    message: string,
+    responses: AdvisorKnowledge["brandResponses"],
+    approvedBrands: readonly string[]
+  ) => BrandResponseMatch | null;
   readonly signal?: AbortSignal;
 }
 
@@ -457,10 +467,49 @@ export function createAdvisor(deps: AdvisorDeps) {
     });
 
     const nextTurnCount = turnCount + 1;
+
+    // ── 3a. a direct brand question is answered in approved words ──────────
+    //
+    // Placed after extraction and assessment so the conversation still moves
+    // forward — the homeowner has not stopped describing their project just
+    // because they also asked about a brand. Only the customer-facing message
+    // is replaced.
+    //
+    // This text bypasses generated-text guardrail validation on purpose. Those
+    // checks exist to police what a model writes; this is approved copy that a
+    // human wrote and signed off, and it legitimately names a brand Luxe does
+    // not carry — which the invented-product check would otherwise reject. It
+    // is still sanitised, and its wording is pinned by test.
+    const brandAnswer = deps.matchBrandResponse(
+      input.message,
+      deps.knowledge.brandResponses,
+      deps.allowedBrands
+    );
+
     const questionGates = !(selection.readyToRecommend || !selection.next);
     const status = deriveStatus(assessment, questionGates);
 
     // ── 4. phrasing, validated ─────────────────────────────────────────────
+    if (brandAnswer) {
+      return {
+        status,
+        state: {
+          ledger: ledger as Record<string, unknown>,
+          facts,
+          turnCount: nextTurnCount,
+          askedQuestionIds,
+          unrankedConcerns: carriedConcerns,
+        },
+        assessment: summarise(assessment),
+        nextQuestion: null,
+        message: deps.sanitizeForOutput(brandAnswer.response, MAX_RECOMMENDATION_CHARS),
+        canonicalResponseId: brandAnswer.id,
+        consultationCta: consultationIntent(assessment, status),
+        guardrailInterventions: interventions,
+        error: null,
+      };
+    }
+
     if (status === "NEED_MORE_INFORMATION" && selection.next) {
       const question = selection.next;
       const phrased = await phraseSafely(
@@ -495,6 +544,7 @@ export function createAdvisor(deps: AdvisorDeps) {
           materialTo: question.materialTo,
         },
         message: phrased,
+        canonicalResponseId: null,
         consultationCta: consultationIntent(assessment, status),
         guardrailInterventions: interventions,
         error: null,
@@ -542,6 +592,7 @@ export function createAdvisor(deps: AdvisorDeps) {
       assessment: summarise(assessment),
       nextQuestion: null,
       message,
+      canonicalResponseId: null,
       consultationCta: consultationIntent(assessment, status),
       guardrailInterventions: interventions,
       error: null,
@@ -566,6 +617,7 @@ export function unavailable(
     state,
     assessment: null,
     nextQuestion: null,
+    canonicalResponseId: null,
     message:
       "We could not work through that just now. Our team can go through it with you directly — would you like to schedule a consultation?",
     consultationCta: { recommended: true, reasons: ["recommendation-ready"] },

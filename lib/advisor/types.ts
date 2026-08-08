@@ -450,6 +450,28 @@ export interface Guardrail {
   readonly source: string;
 }
 
+/**
+ * An approved, verbatim answer to a question about a specific brand.
+ *
+ * Returned word for word rather than phrased by the model: what Luxe says
+ * about another company is a business and reputational statement, and the
+ * exact wording is the decision. See `knowledge/brand-responses.ts`.
+ */
+export interface BrandResponse {
+  readonly id: string;
+  /** Human-readable label for the brand this answers about. */
+  readonly brand: string;
+  /** Lowercase terms that name the brand in a homeowner's message. */
+  readonly brandTerms: readonly string[];
+  /**
+   * Set when this answers "what do you carry instead?" rather than a question
+   * about one named brand.
+   */
+  readonly asksWhatIsCarried?: boolean;
+  /** The approved copy. `{brands}` is filled from the approved brand list. */
+  readonly response: string;
+}
+
 /** Canonical business facts that are not product knowledge. */
 export interface BusinessPolicy {
   readonly id: string;
@@ -512,6 +534,7 @@ export interface AdvisorKnowledge {
   readonly conflicts: readonly ConflictRule[];
   readonly guardrails: readonly Guardrail[];
   readonly businessPolicies: readonly BusinessPolicy[];
+  readonly brandResponses: readonly BrandResponse[];
 }
 
 // ───────────────────────────── engine output ────────────────────────────────

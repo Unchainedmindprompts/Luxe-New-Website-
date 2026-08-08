@@ -25,6 +25,7 @@ import {
   BUSINESS_POLICIES,
 } from "./rules";
 import { GUARDRAILS } from "./guardrails";
+import { BRAND_RESPONSES } from "./brand-responses";
 
 export const LUXE_KNOWLEDGE: AdvisorKnowledge = {
   directions: PRODUCT_DIRECTIONS,
@@ -40,4 +41,5 @@ export const LUXE_KNOWLEDGE: AdvisorKnowledge = {
   conflicts: CONFLICT_RULES,
   guardrails: GUARDRAILS,
   businessPolicies: BUSINESS_POLICIES,
+  brandResponses: BRAND_RESPONSES,
 };

@@ -139,6 +139,12 @@ export interface AdvisorResponse {
   readonly nextQuestion: NextQuestion | null;
   /** Customer-facing prose, already guardrail-validated. */
   readonly message: string;
+  /**
+   * Set when `message` is approved copy returned verbatim rather than model
+   * output — currently the canonical brand answers. Phase C can render these
+   * differently; analytics can count them separately.
+   */
+  readonly canonicalResponseId: string | null;
   readonly consultationCta: ConsultationCtaIntent;
   /**
    * Guardrail ids that fired on generated text and forced a regeneration or a

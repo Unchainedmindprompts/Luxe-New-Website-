@@ -23,7 +23,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const [
   products, priorities, rules, guardrailKnowledge,
-  engine, extraction, questionSelection, guardrails, prompts, advisorModule, limits, ledgerModule, counterfactual,
+  engine, extraction, questionSelection, guardrails, prompts, advisorModule, limits, ledgerModule, counterfactual, brandKnowledge, brandResponse,
 ] = await Promise.all([
   import("../lib/advisor/knowledge/products.ts"),
   import("../lib/advisor/knowledge/priorities.ts"),
@@ -38,6 +38,8 @@ const [
   import("../lib/advisor/server/limits.ts"),
   import("../lib/advisor/server/ledger.ts"),
   import("../lib/advisor/server/counterfactual.ts"),
+  import("../lib/advisor/knowledge/brand-responses.ts"),
+  import("../lib/advisor/server/brand-response.ts"),
 ]);
 
 const KNOWLEDGE = {
@@ -54,10 +56,11 @@ const KNOWLEDGE = {
   conflicts: rules.CONFLICT_RULES,
   guardrails: guardrailKnowledge.GUARDRAILS,
   businessPolicies: rules.BUSINESS_POLICIES,
+  brandResponses: brandKnowledge.BRAND_RESPONSES,
 };
 
-/** The brands Luxe genuinely carries, mirrored from lib/constants.ts. */
-const ALLOWED_BRANDS = ["Norman", "Corradi USA", "Somfy"];
+/** The brands Luxe genuinely carries — mirrors BUSINESS.brands in lib/constants.ts. */
+const ALLOWED_BRANDS = ["Alta", "Norman", "Lafayette", "Corradi USA", "The Window Outfitters"];
 
 // ── mock provider ───────────────────────────────────────────────────────────
 
@@ -145,6 +148,7 @@ function makeAdvisor(provider) {
       phrasingUserMessage: prompts.phrasingUserMessage,
     },
     allowedBrands: ALLOWED_BRANDS,
+    matchBrandResponse: brandResponse.matchBrandResponse,
   });
 }
 
@@ -1158,6 +1162,127 @@ await test("55 view plus nighttime privacy has no best fit, and says so", async 
   t.ok(r.assessment.tradeoffs.length > 0 || r.assessment.alternatives.length > 0, "nothing useful to guide on");
   t.equal(r.status, "GUIDANCE_READY", `expected guidance, got ${r.status}`);
   t.ok(r.consultationCta.reasons.includes("guidance-ready"), "guidance did not earn a CTA reason");
+});
+
+// ── 56-63: canonical brand responses ───────────────────────────────────────
+
+const HD = brandKnowledge.BRAND_RESPONSES.find((r) => r.id === "hunter-douglas-not-carried");
+const matchBrand = (msg) =>
+  brandResponse.matchBrandResponse(msg, brandKnowledge.BRAND_RESPONSES, ALLOWED_BRANDS);
+
+await test("56 the approved Hunter Douglas wording is stored verbatim", async (t) => {
+  const expected =
+    "We no longer carry Hunter Douglas. After the company came under 3G Capital\u2019s controlling ownership, " +
+    "we felt the direction of the brand was no longer the best fit for Luxe Window Works or the level of " +
+    "product quality, dealer support, and customer service we want for our clients. We\u2019ve chosen instead " +
+    "to work with suppliers whose products and support better align with our client-first approach.";
+  t.ok(HD !== undefined, "the Hunter Douglas response is missing");
+  t.equal(HD?.response, expected, "the approved wording has drifted");
+});
+
+await test("57 a direct question about Hunter Douglas returns the approved answer", async (t) => {
+  for (const ask of [
+    "Do you carry Hunter Douglas?",
+    "Why don't you carry Hunter Douglas any more?",
+    "Do you sell Hunter Douglas blinds?",
+    "What about Hunter Douglas?",
+    "Does Luxe stock HunterDouglas?",
+    "Why did you stop carrying Hunter Douglas?",
+  ]) {
+    const m = matchBrand(ask);
+    t.equal(m?.id, "hunter-douglas-not-carried", `did not answer: ${ask}`);
+    t.equal(m?.response, HD.response, `answer was not verbatim for: ${ask}`);
+  }
+});
+
+await test("58 a passing mention is never treated as a question", async (t) => {
+  // Volunteering competitor commentary at someone who did not ask is the
+  // failure mode this guards against.
+  for (const passing of [
+    "We replaced our Hunter Douglas blinds last year.",
+    "The previous owners left Hunter Douglas shades in the living room.",
+    "Our Hunter Douglas shades are falling apart.",
+    "We have Hunter Douglas in the bedroom already.",
+  ]) {
+    t.equal(matchBrand(passing), null, `volunteered commentary on: ${passing}`);
+  }
+});
+
+await test("59 the answer is never volunteered on an ordinary project message", async (t) => {
+  for (const ordinary of [
+    "We have huge west-facing windows over the lake and the room gets hot.",
+    "The nursery needs to be as dark as possible.",
+    "I think we want blinds.",
+    "",
+  ]) {
+    t.equal(matchBrand(ordinary), null, `fired on an unrelated message: ${ordinary}`);
+  }
+});
+
+await test("60 the approved text makes no causal claim and no allegation", async (t) => {
+  const text = HD.response.toLowerCase();
+  // States Luxe's own judgement, and stops there.
+  t.ok(text.includes("we felt"), "the text no longer frames this as Luxe's own judgement");
+  for (const causal of [
+    /3g capital (caused|led to|resulted in|is responsible)/,
+    /\bbecause of 3g\b/,
+    /\b(defective|faulty|unsafe|fraud|lawsuit|illegal|scam)\b/,
+    /\bthey (ruined|destroyed|degraded)\b/,
+  ]) {
+    t.ok(!causal.test(text), `the text makes a causal or adversarial claim matching ${causal}`);
+  }
+  // And it must not smuggle in anything the guardrails exist to stop.
+  t.ok(!/\$\s?\d/.test(HD.response), "the approved text contains a price");
+  t.ok(!/\bguarantee/i.test(HD.response), "the approved text contains a guarantee");
+  t.ok(!/\bMark\b/.test(HD.response), "the approved text names the owner");
+});
+
+await test("61 asking what Luxe carries instead answers from the approved brand list", async (t) => {
+  for (const ask of [
+    "What do you carry instead?",
+    "What brands do you carry?",
+    "Which manufacturers do you work with?",
+  ]) {
+    const m = matchBrand(ask);
+    t.equal(m?.id, "brands-carried", `did not answer: ${ask}`);
+    for (const brand of ALLOWED_BRANDS) {
+      t.ok(m?.response.includes(brand), `${brand} missing from the answer to: ${ask}`);
+    }
+    t.ok(!m?.response.includes("{brands}"), "the placeholder was not filled");
+    t.ok(!/hunter douglas/i.test(m?.response ?? ""), "the brand list mentions a brand Luxe does not carry");
+  }
+});
+
+await test("62 a named brand outranks the generic list answer", async (t) => {
+  // "What do you carry instead of Hunter Douglas?" satisfies both patterns.
+  // The specific question deserves the specific answer.
+  const m = matchBrand("What do you carry instead of Hunter Douglas?");
+  t.equal(m?.id, "hunter-douglas-not-carried", "the generic list pre-empted the specific answer");
+});
+
+await test("63 the advisor returns the approved answer verbatim, unphrased", async (t) => {
+  const provider = mockProvider({
+    extractions: [{ room: "living" }],
+    phrasings: ["A rewritten version that must never be used."],
+  });
+  const r = await makeAdvisor(provider).runTurn({
+    message: "Do you carry Hunter Douglas?",
+    state: {},
+  });
+  t.equal(r.message, HD.response, "the approved wording was altered or replaced");
+  t.equal(r.canonicalResponseId, "hunter-douglas-not-carried", "the response was not marked canonical");
+  t.equal(r.nextQuestion, null, "a question was appended to a brand answer");
+  t.equal(r.guardrailInterventions.length, 0, "approved copy tripped a guardrail");
+  // The conversation still moved: state advanced and the assessment ran.
+  t.equal(r.state.turnCount, 1, "the turn did not advance");
+  t.ok(r.assessment !== null, "the assessment was skipped");
+  t.equal(r.state.facts.room, "living", "facts from the same message were lost");
+
+  // An ordinary turn is unaffected and still model-phrased.
+  const ordinary = await makeAdvisor(
+    mockProvider({ extractions: [{ room: "living" }], phrasings: ["Model wording."] })
+  ).runTurn({ message: "It is the living room.", state: {} });
+  t.equal(ordinary.canonicalResponseId, null, "an ordinary turn was marked canonical");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────
