@@ -165,47 +165,141 @@ const LIST_FIELDS = {
 /** Guards against a runaway list from a confused or adversarial response. */
 const MAX_LIST_LENGTH = 12;
 
-// ───────────────────────────── JSON schema ──────────────────────────────────
+export type ExtractionFieldName = keyof typeof SCALAR_FIELDS | keyof typeof LIST_FIELDS;
+
+// ───────────────────────────── extraction groups ────────────────────────────
 
 /**
- * The structured-output schema handed to the provider.
+ * WHY THIS IS SPLIT.
  *
- * Every property is required and nullable rather than optional: strict schema
- * modes want a closed object, and `null` carries the "not stated" meaning more
- * clearly than an absent key. `additionalProperties: false` is what stops the
- * model inventing a field.
+ * The first implementation sent all twenty fields as one structured-output
+ * schema. Against the real API that fails every time, and the live evaluation
+ * proved it: `Schemas contains too many parameters with union types (20 ...
+ * limit: 16)`, and once the unions were removed, `Schema is too complex`. A
+ * schema this wide is simply not a shape the structured-output compiler
+ * accepts.
+ *
+ * So extraction is three narrow calls instead of one wide one. Each group is
+ * comfortably inside the limits, and each is validated against the real API by
+ * `npm run test:advisor:schema` — the check whose absence let the original bug
+ * reach a live run.
+ *
+ * The split is also better prompting. Asking one call to simultaneously judge
+ * what someone *wants*, what their *window physically is*, and what they
+ * *asked for by name* is three unrelated judgments in one breath. Each group
+ * now gets a system prompt about one thing.
+ *
+ * GROUPS ARE DISJOINT. Every field appears in exactly one group, enforced by
+ * `assertGroupsPartitionFields()` and asserted in the test suite. That is what
+ * makes cross-extractor conflict structurally impossible rather than merely
+ * unlikely — see `mergeExtractionGroups`.
  */
-export function buildExtractionSchema(): Record<string, unknown> {
-  const properties: Record<string, unknown> = {};
-  for (const [name, values] of Object.entries(SCALAR_FIELDS)) {
-    properties[name] = { anyOf: [{ type: "string", enum: [...values] }, { type: "null" }] };
-  }
-  for (const [name, values] of Object.entries(LIST_FIELDS)) {
-    properties[name] = {
-      anyOf: [
-        { type: "array", items: { type: "string", enum: [...values] } },
-        { type: "null" },
-      ],
-    };
+export interface ExtractionGroup {
+  readonly id: "intent" | "physical" | "product";
+  /** Names the group's subject for its system prompt. */
+  readonly subject: string;
+  readonly fields: readonly ExtractionFieldName[];
+}
+
+export const EXTRACTION_GROUPS: readonly ExtractionGroup[] = [
+  {
+    id: "intent",
+    subject:
+      "what the homeowner wants from the room — the outcome they are after, not the window itself",
+    fields: [
+      "priorities",
+      "unrankedConcerns",
+      "viewImportance",
+      "privacyNeed",
+      "roomDarkening",
+      "budgetSensitivity",
+      "aesthetic",
+    ],
+  },
+  {
+    id: "physical",
+    subject:
+      "the physical reality of the room and the opening — observable conditions, not preferences",
+    fields: [
+      "room",
+      "exposure",
+      "solarHeat",
+      "windowUse",
+      "geometry",
+      "moistureExposure",
+      "access",
+      "openings",
+      "exteriorConditions",
+    ],
+  },
+  {
+    id: "product",
+    subject:
+      "products the homeowner named and how they expect to operate them",
+    fields: [
+      "requestedProducts",
+      "requestedFeatures",
+      "motorizationInterest",
+      "operationFrequency",
+    ],
+  },
+];
+
+/**
+ * Fails loudly if the groups stop being a clean partition of the vocabulary.
+ * Called by the test suite; a missing field would silently become unextractable
+ * and a duplicated one would create the cross-group conflict the merge step
+ * assumes cannot happen.
+ */
+export function assertGroupsPartitionFields(): { missing: string[]; duplicated: string[] } {
+  const all = [...Object.keys(SCALAR_FIELDS), ...Object.keys(LIST_FIELDS)];
+  const seen = new Map<string, number>();
+  for (const group of EXTRACTION_GROUPS) {
+    for (const field of group.fields) seen.set(field, (seen.get(field) ?? 0) + 1);
   }
   return {
-    type: "object",
-    properties,
-    required: [...Object.keys(SCALAR_FIELDS), ...Object.keys(LIST_FIELDS)],
-    additionalProperties: false,
+    missing: all.filter((f) => !seen.has(f)),
+    duplicated: [...seen.entries()].filter(([, n]) => n > 1).map(([f]) => f),
   };
 }
 
-/** Field names and their allowed values, for the system prompt. */
-export function describeVocabulary(): string {
-  const lines: string[] = [];
-  for (const [name, values] of Object.entries(SCALAR_FIELDS)) {
-    lines.push(`${name}: ${values.join(" | ")}`);
+// ───────────────────────────── JSON schema ──────────────────────────────────
+
+/**
+ * The structured-output schema for one group.
+ *
+ * Fields are OPTIONAL rather than nullable. The first design made every field
+ * `anyOf: [value, null]` to express "not stated", which is what blew the
+ * union-type limit. Omission carries the same meaning at zero schema cost: an
+ * absent key means the homeowner did not say, an empty array means they said
+ * there are none, and a present value means they said it. Three states, no
+ * unions.
+ *
+ * `additionalProperties: false` is what stops the model inventing a field.
+ */
+export function buildGroupSchema(group: ExtractionGroup): Record<string, unknown> {
+  const properties: Record<string, unknown> = {};
+  for (const field of group.fields) {
+    if (field in SCALAR_FIELDS) {
+      const values = SCALAR_FIELDS[field as keyof typeof SCALAR_FIELDS];
+      properties[field] = { type: "string", enum: [...values] };
+    } else {
+      const values = LIST_FIELDS[field as keyof typeof LIST_FIELDS];
+      properties[field] = { type: "array", items: { type: "string", enum: [...values] } };
+    }
   }
-  for (const [name, values] of Object.entries(LIST_FIELDS)) {
-    lines.push(`${name}[]: ${values.join(" | ")}`);
-  }
-  return lines.join("\n");
+  return { type: "object", properties, required: [], additionalProperties: false };
+}
+
+/** Field names and allowed values for one group, for its system prompt. */
+export function describeGroupVocabulary(group: ExtractionGroup): string {
+  return group.fields
+    .map((field) =>
+      field in SCALAR_FIELDS
+        ? `${field}: ${SCALAR_FIELDS[field as keyof typeof SCALAR_FIELDS].join(" | ")}`
+        : `${field}[]: ${LIST_FIELDS[field as keyof typeof LIST_FIELDS].join(" | ")}`
+    )
+    .join("\n");
 }
 
 // ───────────────────────────── validation ───────────────────────────────────
@@ -276,6 +370,93 @@ export function validateFacts(raw: unknown): ValidatedFacts {
     unrankedConcerns: (unranked ?? []) as PriorityId[],
     dropped,
   };
+}
+
+/**
+ * Combines the per-group extractions from one turn into a single fact set.
+ *
+ * CONFLICT HANDLING. `EXTRACTION_GROUPS` is a strict partition — every field
+ * belongs to exactly one group — so two extractors cannot legitimately report
+ * the same field, and `assertGroupsPartitionFields()` plus a test keep it that
+ * way. This function still handles the case rather than assuming it away: if a
+ * field arrives from more than one group, the value from the earlier group in
+ * declaration order wins, the loser is recorded in `conflicts`, and nothing is
+ * silently dropped. A non-empty `conflicts` means the partition has been
+ * broken and the grouping needs fixing — it is a bug signal, not a routine
+ * outcome.
+ *
+ * The ranked/unranked overlap is a real conflict and is resolved here on its
+ * own terms: a concern the homeowner ranked is removed from `unrankedConcerns`,
+ * because a stated ranking answers the question that list exists to raise.
+ */
+export interface CombinedExtraction {
+  readonly facts: ProjectFacts;
+  readonly unrankedConcerns: readonly PriorityId[];
+  readonly dropped: readonly string[];
+  readonly conflicts: readonly string[];
+}
+
+export function mergeExtractionGroups(
+  results: readonly { groupId: string; validated: ValidatedFacts }[]
+): CombinedExtraction {
+  const facts: Record<string, unknown> = {};
+  const owner = new Map<string, string>();
+  const conflicts: string[] = [];
+  const dropped: string[] = [];
+  let unranked: PriorityId[] = [];
+
+  for (const { groupId, validated } of results) {
+    dropped.push(...validated.dropped);
+    unranked = [...unranked, ...validated.unrankedConcerns.filter((c) => !unranked.includes(c))];
+    for (const [field, value] of Object.entries(validated.facts)) {
+      if (value === undefined) continue;
+      const existing = owner.get(field);
+      if (existing && existing !== groupId) {
+        conflicts.push(`${field}: kept ${existing}, discarded ${groupId}`);
+        continue;
+      }
+      facts[field] = value;
+      owner.set(field, groupId);
+    }
+  }
+
+  const ranked = new Set((facts.priorities as PriorityId[] | undefined) ?? []);
+  return {
+    facts: facts as ProjectFacts,
+    unrankedConcerns: unranked.filter((c) => !ranked.has(c)),
+    dropped,
+    conflicts,
+  };
+}
+
+/** True when the homeowner has settled this dimension — `[]` counts as settled. */
+export function isFieldKnown(facts: ProjectFacts, field: ExtractionFieldName): boolean {
+  return (facts as Record<string, unknown>)[field] !== undefined;
+}
+
+/**
+ * Which groups are worth calling this turn.
+ *
+ * A group with nothing left to learn is skipped, which saves a model call late
+ * in a conversation. Correctness is preferred over saving calls: the first turn
+ * always runs every group, and if the rule would skip everything the whole set
+ * runs instead, so the advisor can never go deaf.
+ *
+ * KNOWN LIMIT: once every field in a group is settled, that group stops being
+ * called, so a homeowner correcting an already-settled fact in it ("actually
+ * it's the bedroom") will not be heard. Groups this wide rarely fill up before
+ * a recommendation, and the alternative — re-running all three every turn
+ * forever — costs a call per turn to catch a rare correction. Revisit if live
+ * conversations show corrections being missed.
+ */
+export function groupsForTurn(
+  facts: ProjectFacts,
+  turnCount: number,
+  groups: readonly ExtractionGroup[] = EXTRACTION_GROUPS
+): readonly ExtractionGroup[] {
+  if (turnCount <= 0) return groups;
+  const open = groups.filter((group) => group.fields.some((field) => !isFieldKnown(facts, field)));
+  return open.length ? open : groups;
 }
 
 /**

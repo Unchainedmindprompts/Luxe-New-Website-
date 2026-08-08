@@ -31,6 +31,7 @@ import type {
   PriorityId,
   ProjectFacts,
 } from "../types";
+import type { ExtractionGroup } from "./extraction";
 import type {
   AdvisorProvider,
   AdvisorResponse,
@@ -60,8 +61,27 @@ export interface AdvisorDeps {
     dropped: readonly string[];
   };
   readonly mergeFacts: (prior: ProjectFacts, incoming: ProjectFacts) => ProjectFacts;
-  readonly buildExtractionSchema: () => Record<string, unknown>;
-  readonly describeVocabulary: () => string;
+  /**
+   * Extraction is several narrow calls rather than one wide one, because the
+   * provider rejects a twenty-field schema outright. These hooks describe one
+   * group at a time; `groupsForTurn` decides which are worth running.
+   */
+  readonly extractionGroups: readonly ExtractionGroup[];
+  readonly buildGroupSchema: (group: ExtractionGroup) => Record<string, unknown>;
+  readonly describeGroupVocabulary: (group: ExtractionGroup) => string;
+  readonly groupsForTurn: (
+    facts: ProjectFacts,
+    turnCount: number,
+    groups: readonly ExtractionGroup[]
+  ) => readonly ExtractionGroup[];
+  readonly mergeExtractionGroups: (
+    results: readonly { groupId: string; validated: { facts: ProjectFacts; unrankedConcerns: readonly PriorityId[]; dropped: readonly string[] } }[]
+  ) => {
+    facts: ProjectFacts;
+    unrankedConcerns: readonly PriorityId[];
+    dropped: readonly string[];
+    conflicts: readonly string[];
+  };
   readonly selectNextQuestion: (input: {
     assessment: AdvisorAssessment;
     questionRules: AdvisorKnowledge["questions"];
@@ -79,7 +99,7 @@ export interface AdvisorDeps {
   ) => readonly { guardrailId: string; evidence: string }[];
   readonly sanitizeForOutput: (text: string, maxLength: number) => string;
   readonly prompts: {
-    extractionSystemPrompt: (vocabulary: string, knownFacts: ProjectFacts) => string;
+    extractionSystemPrompt: (subject: string, vocabulary: string, knownFacts: ProjectFacts) => string;
     questionSystemPrompt: (guardrails: readonly Guardrail[]) => string;
     recommendationSystemPrompt: (
       assessment: AdvisorAssessment,
@@ -220,23 +240,44 @@ export function createAdvisor(deps: AdvisorDeps) {
       (id) => typeof id === "string"
     );
 
-    // ── 1. extraction ──────────────────────────────────────────────────────
-    let extracted: ProjectFacts;
-    let unrankedConcerns: readonly PriorityId[];
+    // ── 1. extraction — one narrow call per relevant group ────────────────
+    //
+    // Groups run concurrently: they are independent, and three sequential
+    // round trips would triple the homeowner's wait for no benefit.
+    //
+    // A group that fails takes the whole turn down rather than silently
+    // producing a partial fact set. A recommendation built on two thirds of
+    // what someone said, with no signal that the third went missing, is worse
+    // than saying the advisor is unavailable.
+    const groups = deps.groupsForTurn(priorValidated.facts, turnCount, deps.extractionGroups);
+    let combined: {
+      facts: ProjectFacts;
+      unrankedConcerns: readonly PriorityId[];
+      conflicts: readonly string[];
+    };
     try {
-      const raw = await deps.provider.extract({
-        system: deps.prompts.extractionSystemPrompt(deps.describeVocabulary(), priorValidated.facts),
-        userMessage: input.message,
-        schema: deps.buildExtractionSchema(),
-        signal: deps.signal,
-      });
-      const validated = deps.validateFacts(raw);
-      extracted = validated.facts;
-      unrankedConcerns = validated.unrankedConcerns;
+      const settled = await Promise.all(
+        groups.map(async (group) => {
+          const raw = await deps.provider.extract({
+            system: deps.prompts.extractionSystemPrompt(
+              group.subject,
+              deps.describeGroupVocabulary(group),
+              priorValidated.facts
+            ),
+            userMessage: input.message,
+            schema: deps.buildGroupSchema(group),
+            signal: deps.signal,
+          });
+          return { groupId: group.id, validated: deps.validateFacts(raw) };
+        })
+      );
+      combined = deps.mergeExtractionGroups(settled);
     } catch (error) {
       const code = providerFailureCode(error);
       return unavailable(code ?? "extraction-failed", priorState);
     }
+    const extracted = combined.facts;
+    const unrankedConcerns = combined.unrankedConcerns;
 
     const facts = deps.mergeFacts(priorValidated.facts, extracted);
     // A ranking supersedes the open question it answers.

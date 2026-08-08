@@ -42,38 +42,106 @@ The key is read inside the call, never at module scope, mirroring the lazy-init
 shape `app/api/consultation/route.ts` already uses for Resend. **A missing key
 cannot break the build** — verified by building this branch with no key set.
 
-## Extraction
+## Extraction — three narrow calls, not one wide one
 
-Native structured output (`output_config.format` with a JSON schema). No
-free-form JSON parsing, no regex over prose.
+### Why it was rebuilt
 
-Three properties carry the weight:
+The first implementation sent all twenty `ProjectFacts` fields as a single
+structured-output schema. It passed 20/20 deterministic tests and **failed 100%
+of the time against the real API.** The live evaluation produced eight identical
+failures and zero behavioural data:
 
-**The schema and the validator cannot drift.** Both are generated from the same
-runtime vocabulary tables, and each table is typed `Record<SomeUnion, true>`, so
-TypeScript rejects a value that is not in the Phase A union *and* a value
-missing from it. Adding a fact to Phase A and forgetting it here is a compile
-error.
+```
+400 invalid_request_error
+"Schemas contains too many parameters with union types (20 parameters with
+ type arrays or anyOf) ... limit: 16 parameters with unions"
+```
 
-**Unknown stays unknown.** Every field is nullable. `null` means "did not say";
-an empty array means "asked, none". Phase A treats those as different, which is
-what stops the advisor re-asking an answered question and what stops it
-inventing a fact from silence.
+Removing the nullable unions cleared that limit and hit a second one — `Schema
+is too complex.` at 20 fields / 144 enum members. A schema that wide is simply
+not a shape the structured-output compiler accepts.
 
-**The model cannot widen the vocabulary.** Validation is an allowlist. An
-unrecognised value is dropped and counted, never coerced to a near match.
+**Mocking the provider could not have caught this**, and no number of additional
+mocked tests would have. That gap is now closed by
+`npm run test:advisor:schema` (below).
 
-`goals` (free-text problem statements) is deliberately **not** extracted. The
-engine does not reason over it, so carrying homeowner prose would add PII
-surface and an injection round-trip for no reasoning value.
+### The groups
 
-### Priority order is never fabricated
+Each is well inside the limits and validated against the real API. Fields are
+existing `ProjectFacts` names — no new concepts.
 
-A ranking changes almost every Phase A rule, since the condition grammar is
-rank-aware (`withinTop`). So extraction has two fields: `priorities` (ranked —
-used only when the homeowner made the order clear, or named exactly one thing)
-and `unrankedConcerns` (raised, order unstated). Only the first reaches
-`ProjectFacts`; the second becomes the highest-scoring question.
+| Group | Subject | Fields | Enum members | Unions |
+|---|---|---:|---:|---:|
+| `intent` | What the homeowner wants from the room | 7 | 61 | 0 |
+| `physical` | The room and opening as they physically are | 9 | 56 | 0 |
+| `product` | Products named and how they expect to operate them | 4 | 27 | 0 |
+
+`intent` — `priorities`, `unrankedConcerns`, `viewImportance`, `privacyNeed`,
+`roomDarkening`, `budgetSensitivity`, `aesthetic`
+`physical` — `room`, `exposure`, `solarHeat`, `windowUse`, `geometry`,
+`moistureExposure`, `access`, `openings`, `exteriorConditions`
+`product` — `requestedProducts`, `requestedFeatures`, `motorizationInterest`,
+`operationFrequency`
+
+Child-safety and lifestyle requirements are **not** separate fields — they are
+`child-safety` and `lifestyle-requirement` members of the `priorities`
+vocabulary, so they live in `intent`. Adding parallel fields would have
+duplicated a concept Phase A already models.
+
+The split is also better prompting: judging what someone *wants*, what their
+window physically *is*, and what they *asked for by name* are three unrelated
+judgments, and each now gets a system prompt about one thing.
+
+### Optional, not nullable
+
+Fields are omitted rather than sent as `null`. Omission carries the same meaning
+at zero schema cost — **absent means not stated, `[]` means they said there are
+none, a value means they said it.** Three states, no unions. Phase A's
+distinction between unknown and empty is preserved exactly.
+
+### Conflict handling
+
+`EXTRACTION_GROUPS` is a strict partition — every field belongs to exactly one
+group — so two extractors cannot legitimately report the same field.
+`assertGroupsPartitionFields()` and test 21 keep it that way, checking for both
+duplicated fields and fields no group extracts.
+
+`mergeExtractionGroups` still handles a collision rather than assuming it away:
+the earlier group in declaration order wins, the discarded value is recorded in
+`conflicts`, and nothing is silently dropped. **A non-empty `conflicts` is a bug
+signal, not a routine outcome.**
+
+Two conflicts are real and resolved on their own terms:
+
+- **Ranked vs unranked.** A concern the homeowner ranked is removed from
+  `unrankedConcerns`, because a stated ranking answers the question that list
+  exists to raise.
+- **Turn over turn.** New scalars replace old ones (the latest statement is
+  current truth, including a correction); lists union (each extraction sees only
+  the newest message, so replacing would forget earlier conditions); a fresh
+  ranking supersedes the old one outright.
+
+### Call routing
+
+The three groups run **concurrently** — they are independent, and three
+sequential round trips would triple the wait for nothing.
+
+The first turn runs every group. Later turns skip any group whose fields are all
+settled. If that rule would skip everything, all three run instead, so the
+advisor can never go deaf.
+
+**Known limit:** once every field in a group is settled, a homeowner correcting
+an already-settled fact in it will not be heard. Groups this wide rarely fill up
+before a recommendation, and the alternative costs a call every turn to catch a
+rare correction. Revisit if live conversations show corrections being missed.
+
+### Still deliberately not extracted
+
+`goals` (free-text problem statements) remains excluded. The engine does not
+reason over it, so carrying arbitrary homeowner prose would add PII surface and
+an injection round-trip for no reasoning value. It is listed in the recommended
+grouping for this phase but is a deliberate omission, not an oversight — say the
+word and it becomes one string field in `intent`.
 
 ## Question selection
 
@@ -216,9 +284,24 @@ request content and nothing downstream needs them to choose a safe response.
 
 ```
 npm run test:advisor          Phase A behavioural harness — unchanged, 34/34
-npm run test:advisor:server   Phase B deterministic suite  — 20/20
+npm run test:advisor:server   Phase B deterministic suite  — 23/23, mocked
+npm run test:advisor:schema   real-provider schema contract — opt-in, needs a key
 npm run eval:advisor:live     opt-in, billable, gates nothing
 ```
+
+### The real-provider schema test
+
+`test:advisor:schema` is the check whose absence let the original bug reach a
+live run. For each group it sends the actual schema to Anthropic, proves the API
+accepts it, parses the response, and requires that response to survive the same
+closed-vocabulary validator the pipeline uses — schema acceptance alone would
+not prove the two agree. It also asserts no group has reintroduced a union type
+or crossed the field limit.
+
+It needs `ANTHROPIC_API_KEY`, costs a few cents, and is **not** in `check`,
+`build`, `verify`, or any hook. If Anthropic tightens schema constraints again,
+this fails with the API's own message rather than a live conversation failing
+silently.
 
 The deterministic suite mocks the provider **at the `AdvisorProvider` port**, so
 every test drives the real extraction validator, the real Phase A engine, the

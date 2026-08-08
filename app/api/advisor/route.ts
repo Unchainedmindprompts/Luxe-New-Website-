@@ -18,8 +18,11 @@ import { assess } from "@/lib/advisor/engine";
 import { LUXE_KNOWLEDGE } from "@/lib/advisor/knowledge";
 import { createAdvisor, unavailable, MAX_TURNS } from "@/lib/advisor/server/advisor";
 import {
-  buildExtractionSchema,
-  describeVocabulary,
+  EXTRACTION_GROUPS,
+  buildGroupSchema,
+  describeGroupVocabulary,
+  groupsForTurn,
+  mergeExtractionGroups,
   mergeFacts,
   validateFacts,
 } from "@/lib/advisor/server/extraction";
@@ -107,8 +110,11 @@ export async function POST(request: Request) {
     assess,
     validateFacts,
     mergeFacts,
-    buildExtractionSchema,
-    describeVocabulary,
+    extractionGroups: EXTRACTION_GROUPS,
+    buildGroupSchema,
+    describeGroupVocabulary,
+    groupsForTurn,
+    mergeExtractionGroups,
     selectNextQuestion,
     validateGeneratedText,
     sanitizeForOutput,

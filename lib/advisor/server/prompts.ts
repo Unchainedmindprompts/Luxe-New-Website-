@@ -14,7 +14,11 @@
  */
 import type { AdvisorAssessment, Guardrail, ProjectFacts } from "../types";
 
-export function extractionSystemPrompt(vocabulary: string, knownFacts: ProjectFacts): string {
+export function extractionSystemPrompt(
+  subject: string,
+  vocabulary: string,
+  knownFacts: ProjectFacts
+): string {
   const known = Object.entries(knownFacts)
     .filter(([, v]) => v !== undefined && (!Array.isArray(v) || v.length))
     .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : String(v)}`)
@@ -22,21 +26,23 @@ export function extractionSystemPrompt(vocabulary: string, knownFacts: ProjectFa
 
   return `You extract structured facts about a window-treatment project from what a homeowner writes. You do not advise, recommend, or reply to them.
 
+This pass covers one thing only: ${subject}. Ignore anything outside it — another pass handles the rest, so nothing is lost by leaving it alone.
+
 Return one JSON object matching the provided schema. Only these fields and values exist:
 
 ${vocabulary}
 
 RULES
 
-Use null when the homeowner did not say. Use an empty array when they said there is none of something. These mean different things and both matter — null keeps a question open, an empty array closes it.
+Omit any field the homeowner did not say anything about. Use an empty array only when they said there is none of something. Those mean different things — an omitted field keeps a question open, an empty array closes it.
 
-Never infer a fact from silence, and never convert vague language into precision. Specifically, do not infer:
+Never infer a fact from silence, and never turn vague language into precision. Specifically, do not infer:
 - measurements or sizes of any kind
 - what an exterior system would mount to
 - whether a product, size or option is available
 - budget, unless they actually talked about cost
 
-"Big windows" is not a measurement. "Nice view" is not viewImportance: critical. If you are unsure, use null. An unknown fact is useful; a wrong one is not.
+"Big windows" is not a measurement. "Nice view" is not viewImportance: critical. If you are unsure, leave the field out. An unknown fact is useful; a wrong one is not.
 
 PRIORITY ORDER
 

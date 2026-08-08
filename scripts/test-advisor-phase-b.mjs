@@ -67,14 +67,18 @@ const ALLOWED_BRANDS = ["Norman", "Corradi USA", "Somfy"];
 function mockProvider({ extractions = [], phrasings = [], failExtract, failPhrase } = {}) {
   const ex = [...extractions];
   const ph = [...phrasings];
-  const calls = { extract: 0, phrase: 0, lastExtractSystem: "", lastPhraseSystem: "", lastPhraseUser: "" };
+  const calls = { extract: 0, phrase: 0, groupsPerTurn: 3, lastExtractSystem: "", lastPhraseSystem: "", lastPhraseUser: "" };
   return {
     calls,
     async extract({ system }) {
       calls.extract++;
       calls.lastExtractSystem = system;
       if (failExtract) throw failExtract;
-      return ex.length ? ex.shift() : {};
+      // Extraction is now one call per group per turn. The scripted queue is
+      // per TURN, so every group in the same turn sees the same scripted
+      // object; validateFacts then keeps only the fields that group owns.
+      const turn = Math.ceil(calls.extract / Math.max(1, calls.groupsPerTurn));
+      return ex.length >= turn ? ex[turn - 1] : (ex[ex.length - 1] ?? {});
     },
     async phrase({ system, userMessage }) {
       calls.phrase++;
@@ -93,8 +97,11 @@ function makeAdvisor(provider) {
     assess: engine.assess,
     validateFacts: extraction.validateFacts,
     mergeFacts: extraction.mergeFacts,
-    buildExtractionSchema: extraction.buildExtractionSchema,
-    describeVocabulary: extraction.describeVocabulary,
+    extractionGroups: extraction.EXTRACTION_GROUPS,
+    buildGroupSchema: extraction.buildGroupSchema,
+    describeGroupVocabulary: extraction.describeGroupVocabulary,
+    groupsForTurn: extraction.groupsForTurn,
+    mergeExtractionGroups: extraction.mergeExtractionGroups,
     selectNextQuestion: questionSelection.selectNextQuestion,
     validateGeneratedText: guardrails.validateGeneratedText,
     sanitizeForOutput: guardrails.sanitizeForOutput,
@@ -536,6 +543,75 @@ await test("20 the engine owns candidates — phrasing is told only what it may 
   const system = provider.calls.lastPhraseSystem;
   t.ok(system.includes("may name only these product directions"), "phrasing prompt did not constrain the product set");
   t.ok(!/\bBanded shades\b/.test(system) || system.includes("Banded shades"), "prompt product list is malformed");
+});
+
+// ── extra: extraction groups are a clean partition ─────────────────────────
+
+await test("21 extraction groups partition the vocabulary exactly once each", async (t) => {
+  const { missing, duplicated } = extraction.assertGroupsPartitionFields();
+  t.equal(missing.length, 0, `fields no group extracts: ${missing.join(", ")}`);
+  t.equal(duplicated.length, 0, `fields more than one group extracts: ${duplicated.join(", ")}`);
+
+  // Every schema must stay inside the limits that broke the original design:
+  // at most 16 union-typed parameters, and no unions at all in this shape.
+  for (const group of extraction.EXTRACTION_GROUPS) {
+    const schema = extraction.buildGroupSchema(group);
+    const props = Object.values(schema.properties);
+    const unions = props.filter((p) => p.anyOf || Array.isArray(p.type)).length;
+    t.equal(unions, 0, `group ${group.id} reintroduced ${unions} union-typed parameter(s)`);
+    t.ok(props.length <= 16, `group ${group.id} has ${props.length} fields, at/over the union limit`);
+    t.equal(schema.additionalProperties, false, `group ${group.id} does not close additionalProperties`);
+  }
+});
+
+// ── extra: cross-group conflict handling is deterministic ──────────────────
+
+await test("22 a cross-group conflict is resolved deterministically and reported", async (t) => {
+  // Disjoint groups make this unreachable in practice; the merge must still
+  // behave predictably rather than silently picking a winner.
+  const combined = extraction.mergeExtractionGroups([
+    { groupId: "physical", validated: extraction.validateFacts({ room: "bedroom" }) },
+    { groupId: "product", validated: extraction.validateFacts({ room: "kitchen" }) },
+  ]);
+  t.equal(combined.facts.room, "bedroom", "earlier group did not win");
+  t.equal(combined.conflicts.length, 1, "conflict was not reported");
+  t.ok(combined.conflicts[0].includes("room"), "conflict does not name the field");
+
+  // A ranked priority clears the matching unranked concern.
+  const resolved = extraction.mergeExtractionGroups([
+    {
+      groupId: "intent",
+      validated: extraction.validateFacts({
+        priorities: ["view-preservation"],
+        unrankedConcerns: ["view-preservation", "budget"],
+      }),
+    },
+  ]);
+  t.ok(!resolved.unrankedConcerns.includes("view-preservation"), "ranked concern still listed as unranked");
+  t.ok(resolved.unrankedConcerns.includes("budget"), "unranked concern was lost");
+  t.equal(resolved.conflicts.length, 0, "ranked/unranked overlap reported as a bug-level conflict");
+});
+
+// ── extra: turn routing skips settled groups but never goes deaf ───────────
+
+await test("23 extraction routing skips settled groups and never runs zero", async (t) => {
+  const all = extraction.EXTRACTION_GROUPS;
+  t.equal(extraction.groupsForTurn({}, 0, all).length, all.length, "first turn did not run every group");
+
+  // Settle the whole product group; it should drop out on a later turn.
+  const productSettled = {
+    requestedProducts: [], requestedFeatures: [],
+    motorizationInterest: "open", operationFrequency: "daily",
+  };
+  const routed = extraction.groupsForTurn(productSettled, 2, all).map((g) => g.id);
+  t.ok(!routed.includes("product"), "a fully settled group was still called");
+  t.ok(routed.includes("physical"), "a group with unknowns was skipped");
+
+  // With nothing left to learn anywhere, fall back to running everything
+  // rather than making no call at all.
+  const everything = {};
+  for (const g of all) for (const f of g.fields) everything[f] = Array.isArray(productSettled[f]) ? [] : "unknown-ish";
+  t.equal(extraction.groupsForTurn(everything, 3, all).length, all.length, "routing produced an empty set");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────

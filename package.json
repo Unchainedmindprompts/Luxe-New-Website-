@@ -17,6 +17,7 @@
     "validate:links": "node scripts/validate-links.mjs",
     "test:advisor": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-engine.mjs",
     "test:advisor:server": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-phase-b.mjs",
+    "test:advisor:schema": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-schema-live.mjs",
     "eval:advisor:live": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/eval-advisor-live.mjs",
     "verify:build": "npm run validate:routes && npm run validate:links",
     "verify": "npm run check && npm run build && npm run validate:legacy && npm run verify:build",
