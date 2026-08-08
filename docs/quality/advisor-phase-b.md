@@ -42,106 +42,89 @@ The key is read inside the call, never at module scope, mirroring the lazy-init
 shape `app/api/consultation/route.ts` already uses for Resend. **A missing key
 cannot break the build** — verified by building this branch with no key set.
 
-## Extraction — three narrow calls, not one wide one
+## Extraction — a delta, not a snapshot
 
-### Why it was rebuilt
+### Why it was rebuilt, twice
 
-The first implementation sent all twenty `ProjectFacts` fields as a single
-structured-output schema. It passed 20/20 deterministic tests and **failed 100%
-of the time against the real API.** The live evaluation produced eight identical
-failures and zero behavioural data:
+The first design sent all twenty `ProjectFacts` fields as one schema. Anthropic
+rejected it on every call (`too many parameters with union types … limit: 16`,
+then `Schema is too complex`), so the first live evaluation produced eight
+identical failures and no data.
 
+Splitting it into three narrower slot-filling schemas made it work — and
+exposed the deeper problem. **A schema presenting empty properties invites
+completion.** "We do want privacy at night, yes" reliably produced a spurious
+`room`, because eleven empty slots are a request to fill them. No wording of
+"omit what they didn't say" survives that pressure; the instruction fights the
+shape of the object.
+
+### The contract
+
+The model no longer receives an object to fill. It lists the updates the
+**current message** supports, each carrying a verbatim quote:
+
+```jsonc
+{ "field": "privacyNeed", "value": "nighttime",
+  "evidence": "privacy at night", "basis": "stated" }
 ```
-400 invalid_request_error
-"Schemas contains too many parameters with union types (20 parameters with
- type arrays or anyOf) ... limit: 16 parameters with unions"
-```
 
-Removing the nullable unions cleared that limit and hit a second one — `Schema
-is too complex.` at 20 fields / 144 enum members. A schema that wide is simply
-not a shape the structured-output compiler accepts.
+One call, four properties, one 21-member field enum, **zero unions** — far
+inside the limits that rejected the original. An empty list is now the natural
+default rather than an act of restraint.
 
-**Mocking the provider could not have caught this**, and no number of additional
-mocked tests would have. That gap is now closed by
-`npm run test:advisor:schema` (below).
+`value` is an untyped string on purpose: typing it per field needs a 21-branch
+`oneOf`, which is exactly the complexity that failed. Validity stays in the
+allowlist validator where it already lived. Invalid *values* were never the
+failure mode — spurious *fields* were.
 
-### The groups
+### Evidence validation
 
-Each is well inside the limits and validated against the real API. Fields are
-existing `ProjectFacts` names — no new concepts.
+**The load-bearing change.** Every quote must appear in the message being
+processed: case- and whitespace-insensitive, otherwise exact. If it isn't
+there, the update is dropped — never repaired, never guessed.
 
-| Group | Subject | Fields | Enum members | Unions |
-|---|---|---:|---:|---:|
-| `intent` | What the homeowner wants from the room | 7 | 61 | 0 |
-| `physical` | The room and opening as they physically are | 9 | 56 | 0 |
-| `product` | Products named and how they expect to operate them | 4 | 27 | 0 |
+That converts "trust the model" into "verify mechanically". A fabricated field
+now requires a fabricated quote, and a fabricated quote is checkable.
 
-`intent` — `priorities`, `unrankedConcerns`, `viewImportance`, `privacyNeed`,
-`roomDarkening`, `budgetSensitivity`, `aesthetic`
-`physical` — `room`, `exposure`, `solarHeat`, `windowUse`, `geometry`,
-`moistureExposure`, `access`, `openings`, `exteriorConditions`
-`product` — `requestedProducts`, `requestedFeatures`, `motorizationInterest`,
-`operationFrequency`
+Deliberately conservative. A looser match would let a paraphrase stand in for a
+quote and give the whole guarantee away. If live evaluation shows legitimate
+facts being dropped, loosen it against that measurement — not before.
 
-Child-safety and lifestyle requirements are **not** separate fields — they are
-`child-safety` and `lifestyle-requirement` members of the `priorities`
-vocabulary, so they live in `intent`. Adding parallel fields would have
-duplicated a concept Phase A already models.
+### Supported inference still works
 
-The split is also better prompting: judging what someone *wants*, what their
-window physically *is*, and what they *asked for by name* are three unrelated
-judgments, and each now gets a system prompt about one thing.
+`huge west-facing windows` → `geometry: large-architectural-glass`,
+`basis: "inferred"`. Inference is permitted; it just has to point at the words
+carrying it. And it can never become a dimension, because there is no width,
+height or size-eligibility field for a number to land in.
 
-### Optional, not nullable
+## The fact ledger — what we know, and why we think we know it
 
-Fields are omitted rather than sent as `null`. Omission carries the same meaning
-at zero schema cost — **absent means not stated, `[]` means they said there are
-none, a value means they said it.** Three states, no unions. Phase A's
-distinction between unknown and empty is preserved exactly.
+State is a ledger of `{ value, basis, evidence, turn }` per fact, kept
+**outside `ProjectFacts`**. The engine receives a plain projection and never
+learns provenance exists — which is what keeps this entirely inside the server
+layer.
 
-### Conflict handling
+**Unknown is not a value.** There is no third basis for "system default". A
+dimension nobody has spoken about has no record, so it cannot silently become a
+customer fact; absence is the representation.
 
-`EXTRACTION_GROUPS` is a strict partition — every field belongs to exactly one
-group — so two extractors cannot legitimately report the same field.
-`assertGroupsPartitionFields()` and test 21 keep it that way, checking for both
-duplicated fields and fields no group extracts.
+### Precedence
 
-`mergeExtractionGroups` still handles a collision rather than assuming it away:
-the earlier group in declaration order wins, the discarded value is recorded in
-`conflicts`, and nothing is silently dropped. **A non-empty `conflicts` is a bug
-signal, not a routine outcome.**
+| Incoming | Established | Result |
+|---|---|---|
+| any | absent | accept |
+| `stated` | `inferred` | replace |
+| `stated` | `stated` | replace — the latest statement is current truth |
+| `inferred` | `stated` | **reject**, and record the suppression |
+| `inferred` | `inferred` | replace |
 
-Two conflicts are real and resolved on their own terms:
+Lists accumulate rather than replace: naming a second condition adds to what is
+true of the opening.
 
-- **Ranked vs unranked.** A concern the homeowner ranked is removed from
-  `unrankedConcerns`, because a stated ranking answers the question that list
-  exists to raise.
-- **Turn over turn.** New scalars replace old ones (the latest statement is
-  current truth, including a correction); lists union (each extraction sees only
-  the newest message, so replacing would forget earlier conditions); a fresh
-  ranking supersedes the old one outright.
-
-### Call routing
-
-The three groups run **concurrently** — they are independent, and three
-sequential round trips would triple the wait for nothing.
-
-The first turn runs every group. Later turns skip any group whose fields are all
-settled. If that rule would skip everything, all three run instead, so the
-advisor can never go deaf.
-
-**Known limit:** once every field in a group is settled, a homeowner correcting
-an already-settled fact in it will not be heard. Groups this wide rarely fill up
-before a recommendation, and the alternative costs a call every turn to catch a
-rare correction. Revisit if live conversations show corrections being missed.
-
-### Still deliberately not extracted
-
-`goals` (free-text problem statements) remains excluded. The engine does not
-reason over it, so carrying arbitrary homeowner prose would add PII surface and
-an injection round-trip for no reasoning value. It is listed in the recommended
-grouping for this phase but is a deliberate omission, not an oversight — say the
-word and it becomes one string field in `intent`.
+This replaced the `corrects` flag entirely. That flag existed because a bare
+value could not say whether it was a correction or a passing mention. An update
+carrying its own justification does not need to be told — evidence decides
+whether it exists, basis decides whether it outranks what is there.
 
 ## Mounting substrate — a question the advisor can now hear answered
 

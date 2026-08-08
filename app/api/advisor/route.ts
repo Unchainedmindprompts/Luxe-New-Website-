@@ -18,14 +18,16 @@ import { assess } from "@/lib/advisor/engine";
 import { LUXE_KNOWLEDGE } from "@/lib/advisor/knowledge";
 import { createAdvisor, unavailable, MAX_TURNS } from "@/lib/advisor/server/advisor";
 import {
-  EXTRACTION_GROUPS,
-  buildGroupSchema,
-  describeGroupVocabulary,
-  groupsForTurn,
-  mergeExtractionGroups,
-  mergeFacts,
-  validateFacts,
+  EXTRACTION_FIELDS,
+  allowedValues,
+  buildDeltaSchema,
+  describeVocabulary,
+  isListField,
+  validateUpdates,
 } from "@/lib/advisor/server/extraction";
+import { applyUpdates, projectFacts, validateLedger } from "@/lib/advisor/server/ledger";
+import type { ExtractionFieldName } from "@/lib/advisor/server/extraction";
+import type { FactLedger, FactRecord } from "@/lib/advisor/server/ledger";
 import { sanitizeForOutput, validateGeneratedText } from "@/lib/advisor/server/guardrails";
 import {
   extractionSystemPrompt,
@@ -58,6 +60,24 @@ function rateLimited(key: string): boolean {
   if (hits.size > RATE_LIMIT_MAX_KEYS) hits.clear();
   hits.set(key, decision.history);
   return decision.limited;
+}
+
+/**
+ * Renders the ledger for the extraction prompt: values only, with basis, so the
+ * model knows what is already settled and how firmly. Evidence is deliberately
+ * left out — replaying the homeowner's earlier words into a later system prompt
+ * would reopen the injection surface the delta contract just closed.
+ */
+function describeLedger(ledger: FactLedger): string {
+  return Object.entries(ledger)
+    .map(([field, entry]) => {
+      const values = Array.isArray(entry)
+        ? (entry as readonly FactRecord[]).map((r) => `${r.value} (${r.basis})`).join(", ")
+        : `${(entry as FactRecord).value} (${(entry as FactRecord).basis})`;
+      return values ? `${field}: ${values}` : "";
+    })
+    .filter(Boolean)
+    .join("\n");
 }
 
 function fingerprint(request: Request): string {
@@ -108,13 +128,22 @@ export async function POST(request: Request) {
     provider: createAnthropicProvider(),
     knowledge: LUXE_KNOWLEDGE,
     assess,
-    validateFacts,
-    mergeFacts,
-    extractionGroups: EXTRACTION_GROUPS,
-    buildGroupSchema,
-    describeGroupVocabulary,
-    groupsForTurn,
-    mergeExtractionGroups,
+    validateUpdates,
+    buildDeltaSchema,
+    describeVocabulary,
+    isListField: (field: string) => isListField(field as ExtractionFieldName),
+    ledger: {
+      validate: (raw: unknown) =>
+        validateLedger(
+          raw,
+          (field) => (EXTRACTION_FIELDS as readonly string[]).includes(field),
+          (field, value) => allowedValues(field as ExtractionFieldName).includes(value),
+          (field) => isListField(field as ExtractionFieldName)
+        ),
+      apply: applyUpdates,
+      project: projectFacts,
+      describe: describeLedger,
+    },
     selectNextQuestion,
     validateGeneratedText,
     sanitizeForOutput,

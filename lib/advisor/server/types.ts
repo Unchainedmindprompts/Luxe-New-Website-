@@ -29,7 +29,17 @@ import type {
  * re-validated server-side.
  */
 export interface ConversationState {
-  /** Facts gathered so far. Re-validated against the Phase A vocabulary. */
+  /**
+   * What the advisor knows and why — value, basis, evidence and turn per fact.
+   * Re-validated on arrival exactly like a model response, then projected into
+   * plain `ProjectFacts` for the engine, which never sees provenance.
+   */
+  readonly ledger?: Record<string, unknown>;
+  /**
+   * The plain projection, echoed for callers that only need the values.
+   * Derived output — the ledger is the source of truth, and anything sent here
+   * by a client is ignored.
+   */
   readonly facts?: ProjectFacts;
   /** How many advisor turns have already happened. Clamped server-side. */
   readonly turnCount?: number;

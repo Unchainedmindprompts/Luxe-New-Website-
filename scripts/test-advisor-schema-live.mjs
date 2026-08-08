@@ -55,103 +55,89 @@ if (!process.env.ANTHROPIC_API_KEY) {
 }
 
 const load = (p) => import(pathToFileURL(join(ROOT, p)).href);
-const { EXTRACTION_GROUPS, buildGroupSchema, describeGroupVocabulary, validateFacts, assertGroupsPartitionFields } =
-  await load("lib/advisor/server/extraction.ts");
+const {
+  buildDeltaSchema, describeVocabulary, validateUpdates, evidenceSupports, EXTRACTION_FIELDS,
+} = await load("lib/advisor/server/extraction.ts");
+const { extractionSystemPrompt } = await load("lib/advisor/server/prompts.ts");
 const { ADVISOR_MODEL } = await load("lib/advisor/server/provider.ts");
 const Anthropic = (await import("@anthropic-ai/sdk")).default;
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
-/** One short message per group that should yield at least one field. */
-const PROBES = {
-  intent: "Keeping the view matters more to us than anything else.",
-  physical: "It's the living room and the windows face west.",
-  product: "We were thinking roller shades, and we'd like them motorized.",
-};
+const schema = buildDeltaSchema();
+const system = extractionSystemPrompt(describeVocabulary(), "");
 
 let failures = 0;
-const rows = [];
+const check = (ok, label, detail) => {
+  console.log(`  ${ok ? "pass" : "FAIL"}  ${label}`);
+  if (detail) console.log(`          ${detail}`);
+  if (!ok) failures++;
+};
 
-// ── structural check first — free, and it guards the merge contract ─────────
-const partition = assertGroupsPartitionFields();
-if (partition.missing.length || partition.duplicated.length) {
-  failures++;
-  console.log("FAIL  extraction groups are not a clean partition of the vocabulary");
-  if (partition.missing.length) console.log(`        unextractable fields: ${partition.missing.join(", ")}`);
-  if (partition.duplicated.length) console.log(`        duplicated fields:   ${partition.duplicated.join(", ")}`);
-} else {
-  console.log("pass  extraction groups partition the vocabulary exactly once each");
+// ── the schema must be inside the limits that rejected the original design ──
+const props = schema.properties.updates.items.properties;
+const unions = Object.values(props).filter((p) => p.anyOf || Array.isArray(p.type)).length;
+check(unions === 0, "delta schema has no union-typed parameters", `${EXTRACTION_FIELDS.length} fields in one enum, ${unions} unions`);
+check(schema.additionalProperties === false && props !== undefined, "schema is closed");
+
+// ── the real API must accept it and return usable updates ──────────────────
+async function extract(message) {
+  const response = await client.messages.create({
+    model: ADVISOR_MODEL, max_tokens: 2048, system,
+    output_config: { effort: "medium", format: { type: "json_schema", schema } },
+    messages: [{ role: "user", content: message }],
+  });
+  const text = response.content.filter((b) => b.type === "text").map((b) => b.text).join("").trim();
+  return { raw: JSON.parse(text), text };
 }
 
-// ── each schema must be accepted by the real API ────────────────────────────
-for (const group of EXTRACTION_GROUPS) {
-  const schema = buildGroupSchema(group);
-  const fieldCount = Object.keys(schema.properties).length;
-  const enumMembers = Object.values(schema.properties).reduce(
-    (total, property) => total + (property.enum?.length ?? property.items?.enum?.length ?? 0),
-    0
-  );
-  const unions = Object.values(schema.properties).filter(
-    (property) => property.anyOf || Array.isArray(property.type)
-  ).length;
+console.log(`\nReal-provider delta-extraction contract — model ${ADVISOR_MODEL}\n`);
 
-  let status = "";
-  let extracted = "";
-  try {
-    const response = await client.messages.create({
-      model: ADVISOR_MODEL,
-      max_tokens: 1024,
-      system:
-        `Extract only what the homeowner stated about ${group.subject}. ` +
-        `Omit any field they did not state.\n\n${describeGroupVocabulary(group)}`,
-      output_config: { effort: "low", format: { type: "json_schema", schema } },
-      messages: [{ role: "user", content: PROBES[group.id] }],
-    });
-
-    const text = response.content
-      .filter((block) => block.type === "text")
-      .map((block) => block.text)
-      .join("")
-      .trim();
-
-    // The response must parse AND survive our own closed-vocabulary validator —
-    // schema acceptance alone would not prove the two agree.
-    const parsed = JSON.parse(text);
-    const validated = validateFacts(parsed);
-    if (validated.dropped.length) {
-      throw new Error(`validator rejected model output: ${validated.dropped.join("; ")}`);
-    }
-    extracted = JSON.stringify({ ...validated.facts, ...(validated.unrankedConcerns.length ? { unrankedConcerns: validated.unrankedConcerns } : {}) });
-    status = "pass";
-  } catch (error) {
-    failures++;
-    status = "FAIL";
-    const apiMessage = /message":"([^"]+)"/.exec(error?.message ?? "")?.[1];
-    extracted = apiMessage ?? error?.message ?? String(error);
-  }
-
-  rows.push({ id: group.id, fieldCount, enumMembers, unions, status, extracted });
+try {
+  const message = "We have huge west-facing windows looking over the lake and the room gets incredibly hot.";
+  const { raw } = await extract(message);
+  const { accepted, rejected } = validateUpdates(raw, message);
+  check(accepted.length > 0, "real extraction succeeds and survives validation",
+    accepted.map((u) => `${u.field}=${u.value} [${u.basis}]`).join(", "));
+  check(accepted.every((u) => evidenceSupports(message, u.evidence)),
+    "every accepted update's evidence is present in the message");
+  const scale = accepted.find((u) => u.field === "geometry");
+  check(scale === undefined || scale.basis === "inferred",
+    "qualitative scale, when recorded, is marked as inference not statement",
+    scale ? `geometry=${scale.value} <- "${scale.evidence}"` : "no geometry update this run");
+  if (rejected.length) console.log(`          dropped: ${rejected.join("; ")}`);
+} catch (error) {
+  const apiMessage = /message":"([^"]+)"/.exec(error?.message ?? "")?.[1];
+  check(false, "real extraction succeeds", apiMessage ?? error?.message);
 }
 
-// ── report ──────────────────────────────────────────────────────────────────
-console.log(`\nReal-provider schema compatibility — model ${ADVISOR_MODEL}`);
-console.log(`  known API limits: max 16 union-typed parameters, bounded overall complexity\n`);
-
-for (const row of rows) {
-  console.log(
-    `  ${row.status}  ${row.id.padEnd(9)} ${String(row.fieldCount).padStart(2)} fields, ` +
-      `${String(row.enumMembers).padStart(3)} enum members, ${row.unions} unions`
-  );
-  console.log(`          ${row.status === "pass" ? "extracted: " : "error: "}${row.extracted}`);
+// ── the spurious-field case that motivated the redesign ────────────────────
+try {
+  const message = "We do want privacy at night, yes.";
+  const { raw } = await extract(message);
+  const { accepted } = validateUpdates(raw, message);
+  const fields = accepted.map((u) => u.field);
+  check(!fields.includes("room"), "a message about privacy does not assert a room",
+    fields.length ? `updated: ${fields.join(", ")}` : "no updates");
+} catch (error) {
+  check(false, "spurious-field probe ran", error?.message);
 }
 
+// ── unsupported evidence must be dropped, not repaired ─────────────────────
+{
+  const message = "We do want privacy at night, yes.";
+  const fabricated = { updates: [
+    { field: "room", value: "other", basis: "inferred", evidence: "the living room downstairs" },
+    { field: "privacyNeed", value: "nighttime", basis: "stated", evidence: "privacy at night" },
+  ] };
+  const { accepted, rejected } = validateUpdates(fabricated, message);
+  check(accepted.length === 1 && accepted[0].field === "privacyNeed",
+    "an update quoting words that are not in the message is dropped",
+    `kept ${accepted.map((u) => u.field).join(", ") || "nothing"}; dropped ${rejected.length}`);
+}
+
+// ── report ─────────────────────────────────────────────────────────────────
 if (failures) {
-  console.log(
-    `\nFAIL — ${failures} check(s) failed. Anthropic did not accept a schema, or the\n` +
-      "model's output did not survive our validator. If the API message mentions\n" +
-      "union types or complexity, the constraints have tightened: narrow the groups\n" +
-      "in EXTRACTION_GROUPS further. Do not work around this by loosening validation."
-  );
+  console.log(`\nFAIL — ${failures} check(s) failed. If the API message mentions union types or\ncomplexity, the constraints have tightened: narrow the schema. Do not work\naround this by loosening evidence validation.`);
   process.exit(1);
 }
-console.log("\nPASS — every extraction schema is accepted by the real API and every response survives the closed-vocabulary validator.");
+console.log("\nPASS — Anthropic accepts the delta schema, real extraction survives the closed-vocabulary\nand evidence checks, and unsupported evidence is dropped rather than repaired.");

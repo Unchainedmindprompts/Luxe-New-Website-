@@ -23,7 +23,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const [
   products, priorities, rules, guardrailKnowledge,
-  engine, extraction, questionSelection, guardrails, prompts, advisorModule, limits,
+  engine, extraction, questionSelection, guardrails, prompts, advisorModule, limits, ledgerModule,
 ] = await Promise.all([
   import("../lib/advisor/knowledge/products.ts"),
   import("../lib/advisor/knowledge/priorities.ts"),
@@ -36,6 +36,7 @@ const [
   import("../lib/advisor/server/prompts.ts"),
   import("../lib/advisor/server/advisor.ts"),
   import("../lib/advisor/server/limits.ts"),
+  import("../lib/advisor/server/ledger.ts"),
 ]);
 
 const KNOWLEDGE = {
@@ -67,18 +68,19 @@ const ALLOWED_BRANDS = ["Norman", "Corradi USA", "Somfy"];
 function mockProvider({ extractions = [], phrasings = [], failExtract, failPhrase } = {}) {
   const ex = [...extractions];
   const ph = [...phrasings];
-  const calls = { extract: 0, phrase: 0, groupsPerTurn: 3, lastExtractSystem: "", lastPhraseSystem: "", lastPhraseUser: "" };
+  const calls = { extract: 0, phrase: 0, lastExtractSystem: "", lastPhraseSystem: "", lastPhraseUser: "" };
   return {
     calls,
-    async extract({ system }) {
+    async extract({ system, userMessage }) {
       calls.extract++;
       calls.lastExtractSystem = system;
       if (failExtract) throw failExtract;
-      // Extraction is now one call per group per turn. The scripted queue is
-      // per TURN, so every group in the same turn sees the same scripted
-      // object; validateFacts then keeps only the fields that group owns.
-      const turn = Math.ceil(calls.extract / Math.max(1, calls.groupsPerTurn));
-      return ex.length >= turn ? ex[turn - 1] : (ex[ex.length - 1] ?? {});
+      // One delta call per turn. Scenarios are written as plain fact objects
+      // for readability; this converts them to updates whose evidence is the
+      // message itself, so evidence validation passes and the test is about
+      // merge behaviour rather than quoting.
+      const scripted = ex.length >= calls.extract ? ex[calls.extract - 1] : (ex[ex.length - 1] ?? {});
+      return { updates: toUpdates(scripted, userMessage) };
     },
     async phrase({ system, userMessage }) {
       calls.phrase++;
@@ -90,18 +92,44 @@ function mockProvider({ extractions = [], phrasings = [], failExtract, failPhras
   };
 }
 
+/** Turns a readable fact object into a delta whose evidence is the message. */
+function toUpdates(facts, message) {
+  const updates = [];
+  for (const [field, value] of Object.entries(facts ?? {})) {
+    if (value === undefined || value === null) continue;
+    const basis = (facts.__basis ?? {})[field] ?? "stated";
+    const evidence = (facts.__evidence ?? {})[field] ?? message;
+    if (field.startsWith("__")) continue;
+    for (const v of Array.isArray(value) ? value : [value]) {
+      updates.push({ field, value: String(v), basis, evidence });
+    }
+  }
+  return updates;
+}
+
+const LEDGER = {
+  validate: (raw) =>
+    ledgerModule.validateLedger(
+      raw,
+      (f) => extraction.EXTRACTION_FIELDS.includes(f),
+      (f, v) => extraction.allowedValues(f).includes(v),
+      (f) => extraction.isListField(f)
+    ),
+  apply: ledgerModule.applyUpdates,
+  project: ledgerModule.projectFacts,
+  describe: (l) => Object.keys(l).join(", "),
+};
+
 function makeAdvisor(provider) {
   return advisorModule.createAdvisor({
     provider,
     knowledge: KNOWLEDGE,
     assess: engine.assess,
-    validateFacts: extraction.validateFacts,
-    mergeFacts: extraction.mergeFacts,
-    extractionGroups: extraction.EXTRACTION_GROUPS,
-    buildGroupSchema: extraction.buildGroupSchema,
-    describeGroupVocabulary: extraction.describeGroupVocabulary,
-    groupsForTurn: extraction.groupsForTurn,
-    mergeExtractionGroups: extraction.mergeExtractionGroups,
+    validateUpdates: extraction.validateUpdates,
+    buildDeltaSchema: extraction.buildDeltaSchema,
+    describeVocabulary: extraction.describeVocabulary,
+    isListField: extraction.isListField,
+    ledger: LEDGER,
     selectNextQuestion: questionSelection.selectNextQuestion,
     validateGeneratedText: guardrails.validateGeneratedText,
     sanitizeForOutput: guardrails.sanitizeForOutput,
@@ -208,24 +236,24 @@ await test("2  priority order — an unranked list is not turned into a ranking"
 
 // ── 3. unknown stays unknown ────────────────────────────────────────────────
 
-await test("3  unknown facts remain unknown — nulls and junk are never coerced", async (t) => {
-  const v = extraction.validateFacts({
-    room: null, exposure: "unknown", solarHeat: "blazing", viewImportance: undefined,
-    priorities: ["view-preservation", "not-a-priority"], openings: "not-an-array",
-  });
-  t.ok(!("room" in v.facts), "null became a value");
-  t.ok(!("exposure" in v.facts), '"unknown" was carried instead of normalised away');
-  t.ok(!("solarHeat" in v.facts), "an out-of-vocabulary value was accepted");
-  t.equal(v.facts.priorities?.length, 1, "invalid priority member not dropped");
-  t.ok(!("openings" in v.facts), "a non-array list field was accepted");
-  t.ok(v.dropped.length >= 3, "drops were not reported");
+await test("3  unknown stays unknown — junk updates are dropped, never coerced", async (t) => {
+  const msg = "It faces west and gets very hot.";
+  const { accepted, rejected } = extraction.validateUpdates({ updates: [
+    { field: "exposure", value: "west", basis: "stated", evidence: "It faces west" },
+    { field: "solarHeat", value: "blazing", basis: "stated", evidence: "gets very hot" },
+    { field: "notAField", value: "x", basis: "stated", evidence: "It faces west" },
+    { field: "room", value: "unknown", basis: "stated", evidence: "It faces west" },
+    { field: "privacyNeed", value: "both", basis: "guessed", evidence: "It faces west" },
+  ] }, msg);
+  t.equal(accepted.length, 1, "more than the one valid update survived");
+  t.equal(accepted[0].field, "exposure", "the valid update was not the survivor");
+  t.equal(rejected.length, 4, "invalid updates were not all reported");
 
-  const provider = mockProvider({ extractions: [{ room: "bedroom" }] });
-  const result = await makeAdvisor(provider).runTurn({ message: "It's the bedroom.", state: {} });
-  t.ok(result.assessment.unknownDimensions.includes("exposure"), "exposure not reported as unknown");
+  const facts = LEDGER.project(LEDGER.apply({}, accepted, 1, extraction.isListField).ledger);
+  t.ok(!("solarHeat" in facts), "an out-of-vocabulary value reached the facts");
+  t.ok(!("room" in facts), "an explicit unknown was recorded as a value");
+  t.ok(engine.assess(facts, KNOWLEDGE).unknownDimensions.includes("room"), "room is not reported as unknown");
 });
-
-// ── 4. "blinds" does not force a blind ──────────────────────────────────────
 
 await test('4  "blinds" does not force a blind recommendation', async (t) => {
   const provider = mockProvider({
@@ -547,74 +575,58 @@ await test("20 the engine owns candidates — phrasing is told only what it may 
 
 // ── extra: extraction groups are a clean partition ─────────────────────────
 
-await test("21 extraction groups partition the vocabulary exactly once each", async (t) => {
-  const { missing, duplicated } = extraction.assertGroupsPartitionFields();
-  t.equal(missing.length, 0, `fields no group extracts: ${missing.join(", ")}`);
-  t.equal(duplicated.length, 0, `fields more than one group extracts: ${duplicated.join(", ")}`);
-
-  // Every schema must stay inside the limits that broke the original design:
-  // at most 16 union-typed parameters, and no unions at all in this shape.
-  for (const group of extraction.EXTRACTION_GROUPS) {
-    const schema = extraction.buildGroupSchema(group);
-    const props = Object.values(schema.properties);
-    const unions = props.filter((p) => p.anyOf || Array.isArray(p.type)).length;
-    t.equal(unions, 0, `group ${group.id} reintroduced ${unions} union-typed parameter(s)`);
-    t.ok(props.length <= 16, `group ${group.id} has ${props.length} fields, at/over the union limit`);
-    t.equal(schema.additionalProperties, false, `group ${group.id} does not close additionalProperties`);
+await test("21 the delta schema stays inside the limits that broke the first design", async (t) => {
+  const schema = extraction.buildDeltaSchema();
+  const item = schema.properties.updates.items;
+  const unions = Object.values(item.properties).filter((p) => p.anyOf || Array.isArray(p.type)).length;
+  t.equal(unions, 0, `schema reintroduced ${unions} union-typed parameter(s)`);
+  t.equal(schema.additionalProperties, false, "top-level object is not closed");
+  t.equal(item.additionalProperties, false, "update object is not closed");
+  for (const key of ["field", "value", "basis", "evidence"]) {
+    t.ok(item.required.includes(key), `${key} is not required`);
   }
+  t.equal(item.properties.field.enum.length, extraction.EXTRACTION_FIELDS.length, "field enum drifted from the vocabulary");
+  t.ok(item.properties.value.enum === undefined, "value was typed per field, which is what blew the complexity limit");
 });
 
-// ── extra: cross-group conflict handling is deterministic ──────────────────
+await test("22 evidence must be present in the current message", async (t) => {
+  const msg = "We do want privacy at night, yes.";
+  const { accepted, rejected } = extraction.validateUpdates({ updates: [
+    { field: "privacyNeed", value: "nighttime", basis: "stated", evidence: "privacy at night" },
+    { field: "room", value: "other", basis: "inferred", evidence: "the living room downstairs" },
+  ] }, msg);
+  t.equal(accepted.length, 1, "an unsupported update survived");
+  t.equal(accepted[0].field, "privacyNeed", "the supported update was dropped instead");
+  t.ok(rejected.some((r) => r.includes("evidence")), "the drop reason does not mention evidence");
 
-await test("22 a cross-group conflict is resolved deterministically and reported", async (t) => {
-  // Disjoint groups make this unreachable in practice; the merge must still
-  // behave predictably rather than silently picking a winner.
-  const combined = extraction.mergeExtractionGroups([
-    { groupId: "physical", validated: extraction.validateFacts({ room: "bedroom" }) },
-    { groupId: "product", validated: extraction.validateFacts({ room: "kitchen" }) },
-  ]);
-  t.equal(combined.facts.room, "bedroom", "earlier group did not win");
-  t.equal(combined.conflicts.length, 1, "conflict was not reported");
-  t.ok(combined.conflicts[0].includes("room"), "conflict does not name the field");
-
-  // A ranked priority clears the matching unranked concern.
-  const resolved = extraction.mergeExtractionGroups([
-    {
-      groupId: "intent",
-      validated: extraction.validateFacts({
-        priorities: ["view-preservation"],
-        unrankedConcerns: ["view-preservation", "budget"],
-      }),
-    },
-  ]);
-  t.ok(!resolved.unrankedConcerns.includes("view-preservation"), "ranked concern still listed as unranked");
-  t.ok(resolved.unrankedConcerns.includes("budget"), "unranked concern was lost");
-  t.equal(resolved.conflicts.length, 0, "ranked/unranked overlap reported as a bug-level conflict");
+  t.equal(extraction.evidenceSupports(msg, "PRIVACY   AT  night"), true, "case/whitespace normalisation is too strict");
+  t.equal(extraction.evidenceSupports(msg, "they want darkness"), false, "a paraphrase was accepted as a quote");
+  t.equal(extraction.evidenceSupports(msg, ""), false, "an empty quote was accepted");
 });
 
-// ── extra: turn routing skips settled groups but never goes deaf ───────────
+await test("23 ledger precedence — stated outranks inferred, newer stated wins", async (t) => {
+  const isList = extraction.isListField;
+  const u = (field, value, basis) => ({ field, value, basis, evidence: "x" });
 
-await test("23 extraction routing skips settled groups and never runs zero", async (t) => {
-  const all = extraction.EXTRACTION_GROUPS;
-  t.equal(extraction.groupsForTurn({}, 0, all).length, all.length, "first turn did not run every group");
+  let l = LEDGER.apply({}, [u("room", "nursery", "stated")], 1, isList).ledger;
+  const blocked = LEDGER.apply(l, [u("room", "living", "inferred")], 2, isList);
+  t.equal(LEDGER.project(blocked.ledger).room, "nursery", "an inference overwrote a stated fact");
+  t.ok(blocked.suppressed.length > 0, "the suppressed inference was not reported");
 
-  // Settle the whole product group; it should drop out on a later turn.
-  const productSettled = {
-    requestedProducts: [], requestedFeatures: [],
-    motorizationInterest: "open", operationFrequency: "daily",
-  };
-  const routed = extraction.groupsForTurn(productSettled, 2, all).map((g) => g.id);
-  t.ok(!routed.includes("product"), "a fully settled group was still called");
-  t.ok(routed.includes("physical"), "a group with unknowns was skipped");
+  l = LEDGER.apply({}, [u("room", "living", "inferred")], 1, isList).ledger;
+  l = LEDGER.apply(l, [u("room", "bedroom", "stated")], 2, isList).ledger;
+  t.equal(LEDGER.project(l).room, "bedroom", "a stated fact did not replace an inference");
 
-  // With nothing left to learn anywhere, fall back to running everything
-  // rather than making no call at all.
-  const everything = {};
-  for (const g of all) for (const f of g.fields) everything[f] = Array.isArray(productSettled[f]) ? [] : "unknown-ish";
-  t.equal(extraction.groupsForTurn(everything, 3, all).length, all.length, "routing produced an empty set");
+  l = LEDGER.apply(l, [u("room", "kitchen", "stated")], 3, isList).ledger;
+  t.equal(LEDGER.project(l).room, "kitchen", "a newer statement did not replace an older one");
+
+  let lists = LEDGER.apply({}, [u("openings", "sliding-door", "stated")], 1, isList).ledger;
+  lists = LEDGER.apply(lists, [u("openings", "french-door", "stated")], 2, isList).ledger;
+  t.equal(LEDGER.project(lists).openings.length, 2, "list members replaced instead of accumulating");
+  t.equal(lists.openings[0].basis, "stated", "basis was not retained");
+  t.equal(typeof lists.openings[0].turn, "number", "turn was not retained");
+  t.ok(!("basis" in LEDGER.project(lists)), "provenance leaked into the ProjectFacts projection");
 });
-
-// ── 24-33: Phase B quality corrections ─────────────────────────────────────
 
 await test("24 a stated stone substrate resolves the mounting question", async (t) => {
   const facts = {
@@ -718,33 +730,35 @@ await test("27 unresolved mounting/wind/power surface as verification, not quest
   t.equal(gated.next?.id, "q-nighttime-privacy", "the gating question is not the preference one");
 });
 
-await test("28 an established room survives a later unrelated answer", async (t) => {
-  const prior = { room: "nursery", roomDarkening: "maximum" };
-  // A later turn mentions another room in passing, with no correction flagged.
-  const merged = extraction.mergeFacts(prior, { room: "living", exposure: "east" }, []);
-  t.equal(merged.room, "nursery", "established room was overwritten by a passing mention");
-  t.equal(merged.exposure, "east", "a genuinely new fact was not recorded");
-  t.equal(merged.roomDarkening, "maximum", "an unrelated established fact was lost");
+await test("28 an established room survives later messages that omit it", async (t) => {
+  const provider = mockProvider({ extractions: [
+    { room: "nursery", roomDarkening: "maximum" },
+    { privacyNeed: "nighttime" },
+    { exposure: "east" },
+  ] });
+  const advisor = makeAdvisor(provider);
+  let r = await advisor.runTurn({ message: "The nursery needs to be as dark as possible.", state: {} });
+  t.equal(r.state.facts.room, "nursery", "room not established on turn 1");
+  r = await advisor.runTurn({ message: "We do want privacy at night, yes.", state: r.state });
+  t.equal(r.state.facts.room, "nursery", "room lost when a later message omitted it");
+  r = await advisor.runTurn({ message: "It faces east.", state: r.state });
+  t.equal(r.state.facts.room, "nursery", "room lost two turns later");
+  t.equal(r.state.facts.roomDarkening, "maximum", "an unrelated established fact was lost");
+  t.equal(r.state.facts.exposure, "east", "a genuinely new fact was not recorded");
 });
 
-await test("29 an explicit correction does replace a prior fact", async (t) => {
-  const merged = extraction.mergeFacts(
-    { room: "nursery", motorizationInterest: "requested" },
-    { room: "bedroom", motorizationInterest: "uninterested" },
-    ["room", "motorizationInterest"]
-  );
-  t.equal(merged.room, "bedroom", "an explicit correction was ignored");
-  t.equal(merged.motorizationInterest, "uninterested", "an explicit scalar correction was ignored");
-
-  // Corrected lists are replaced, uncorrected lists still union.
-  const lists = extraction.mergeFacts(
-    { openings: ["sliding-door"], access: ["high-window"] },
-    { openings: ["french-door"], access: ["hard-to-reach"] },
-    ["openings"]
-  );
-  t.equal(lists.openings.length, 1, "corrected list was unioned instead of replaced");
-  t.equal(lists.openings[0], "french-door", "corrected list kept the wrong value");
-  t.equal(lists.access.length, 2, "uncorrected list stopped unioning");
+await test("29 a stated correction replaces; a later inference cannot", async (t) => {
+  const provider = mockProvider({ extractions: [
+    { room: "nursery" },
+    { room: "bedroom" },
+    { room: "living", __basis: { room: "inferred" } },
+  ] });
+  const advisor = makeAdvisor(provider);
+  let r = await advisor.runTurn({ message: "It is the nursery.", state: {} });
+  r = await advisor.runTurn({ message: "Actually it is the bedroom.", state: r.state });
+  t.equal(r.state.facts.room, "bedroom", "an explicit correction was ignored");
+  r = await advisor.runTurn({ message: "We spend most evenings downstairs.", state: r.state });
+  t.equal(r.state.facts.room, "bedroom", "a later inference overwrote a stated correction");
 });
 
 await test("30 phrasing prompts carry the length and anti-boilerplate instruction", async (t) => {
@@ -782,42 +796,56 @@ await test("31 the deterministic fallback is polished customer-facing prose", as
   t.ok(/consultation|our team/i.test(text), "fallback lost the consultation path");
 });
 
-await test("32 explicit scale language may map to qualitative geometry", async (t) => {
-  const v = extraction.validateFacts({ geometry: ["large-architectural-glass"] });
-  t.equal(v.dropped.length, 0, "qualitative large-scale geometry was rejected");
-  t.equal(v.facts.geometry?.[0], "large-architectural-glass", "qualitative geometry not recorded");
+await test("32 explicit scale language produces qualitative geometry as an inference", async (t) => {
+  const msg = "We have huge west-facing windows looking over the lake.";
+  const { accepted } = extraction.validateUpdates({ updates: [
+    { field: "geometry", value: "large-architectural-glass", basis: "inferred", evidence: "huge west-facing windows" },
+  ] }, msg);
+  t.equal(accepted.length, 1, "supported qualitative scale was rejected");
+  t.equal(accepted[0].basis, "inferred", "qualitative scale was recorded as a statement");
 
-  // The fact reaches the engine as a settled dimension. Phase A has no
-  // recognition rule keyed on scale alone, so this asserts that it is known —
-  // not that it fires a condition it was never wired to fire.
-  const a = engine.assess({ geometry: ["large-architectural-glass"], room: "living" }, KNOWLEDGE);
-  t.ok(!a.unknownDimensions.includes("geometry"), "qualitative scale did not register as known");
-
-  // It is in the physical group's schema, so the model can actually report it.
-  const physical = extraction.EXTRACTION_GROUPS.find((g) => g.id === "physical");
-  const geometryValues = extraction.buildGroupSchema(physical).properties.geometry.items.enum;
-  t.ok(geometryValues.includes("large-architectural-glass"), "scale vocabulary not offered to the model");
+  const facts = LEDGER.project(LEDGER.apply({}, accepted, 1, extraction.isListField).ledger);
+  t.equal(facts.geometry?.[0], "large-architectural-glass", "qualitative geometry not projected");
+  t.ok(!engine.assess(facts, KNOWLEDGE).unknownDimensions.includes("geometry"), "scale did not register as known");
+  t.ok(/SCALE IS NOT SIZE/.test(prompts.extractionSystemPrompt(extraction.describeVocabulary(), "")), "prompt does not draw the scale/size distinction");
 });
 
-await test('33 "huge" can never become a dimension', async (t) => {
-  // There is no dimension field to populate — the vocabulary has no width,
-  // height, or size-eligibility concept, so a number has nowhere to land.
-  const dimensionish = ["width", "height", "squareFeet", "sizeInches", "dimensions", "maxWidth"];
-  const schemaFields = new Set(
-    extraction.EXTRACTION_GROUPS.flatMap((g) => Object.keys(extraction.buildGroupSchema(g).properties))
-  );
-  for (const field of dimensionish) {
-    t.ok(!schemaFields.has(field), `extraction schema exposes a dimension field: ${field}`);
+await test("33 no dimension can be invented", async (t) => {
+  for (const field of ["width", "height", "squareFeet", "sizeInches", "dimensions", "maxWidth"]) {
+    t.ok(!extraction.EXTRACTION_FIELDS.includes(field), `vocabulary exposes a dimension field: ${field}`);
   }
-  // And anything numeric the model tries to send is dropped, not coerced.
-  const v = extraction.validateFacts({ geometry: ["96 inches"], room: "living" });
-  t.equal(v.facts.geometry?.length, 0, "a measurement was accepted as geometry");
-  t.ok(v.dropped.some((d) => d.includes("geometry")), "the measurement was not reported as dropped");
+  const msg = "The windows are huge, easily 96 inches across.";
+  const { accepted, rejected } = extraction.validateUpdates({ updates: [
+    { field: "geometry", value: "96 inches", basis: "stated", evidence: "96 inches across" },
+    { field: "geometry", value: "large-architectural-glass", basis: "inferred", evidence: "The windows are huge" },
+  ] }, msg);
+  t.equal(accepted.length, 1, "a measurement was accepted as geometry");
+  t.equal(accepted[0].value, "large-architectural-glass", "the qualitative update was dropped instead");
+  t.ok(rejected.some((r) => r.includes("vocabulary")), "the measurement was not reported as out-of-vocabulary");
+  t.ok(/never supports a dimension/i.test(prompts.extractionSystemPrompt("x", "")), "prompt does not forbid dimensions");
+});
 
-  // The extraction prompt states the distinction explicitly.
-  const promptText = prompts.extractionSystemPrompt("the opening", "geometry[]: x", {});
-  t.ok(/SCALE IS NOT SIZE/.test(promptText), "extraction prompt does not draw the scale/size distinction");
-  t.ok(/never conclude a width/i.test(promptText), "extraction prompt does not forbid inferring dimensions");
+await test("34 the ProjectFacts projection stays valid for the Phase A engine", async (t) => {
+  const isList = extraction.isListField;
+  const updates = [
+    { field: "room", value: "living", basis: "stated", evidence: "x" },
+    { field: "exposure", value: "west", basis: "stated", evidence: "x" },
+    { field: "priorities", value: "view-preservation", basis: "stated", evidence: "x" },
+    { field: "openings", value: "sliding-door", basis: "stated", evidence: "x" },
+    { field: "mountingSubstrate", value: "stone", basis: "stated", evidence: "x" },
+  ];
+  const facts = LEDGER.project(LEDGER.apply({}, updates, 1, isList).ledger);
+  t.equal(typeof facts.room, "string", "a scalar did not project as a string");
+  t.ok(Array.isArray(facts.priorities), "a list did not project as an array");
+  for (const value of Object.values(facts)) {
+    for (const v of Array.isArray(value) ? value : [value]) {
+      t.equal(typeof v, "string", "a projected value is not a plain string");
+    }
+  }
+  const a = engine.assess(facts, KNOWLEDGE);
+  t.ok(ids(a.recognizedConditions).includes("west-exposure"), "the engine did not see the projected exposure");
+  t.ok(ids(a.recognizedConditions).includes("mounting-substrate-known"), "the engine did not see the projected substrate");
+  t.ok(!a.unknownDimensions.includes("openings"), "a projected list did not register as known");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────

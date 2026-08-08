@@ -31,12 +31,8 @@ import type {
   PriorityId,
   ProjectFacts,
 } from "../types";
-import type {
-  CombinedExtraction,
-  ExtractionFieldName,
-  ExtractionGroup,
-  ValidatedFacts,
-} from "./extraction";
+import type { FactUpdate, ValidatedUpdates } from "./extraction";
+import type { FactLedger, LedgerApplication } from "./ledger";
 import type {
   AdvisorProvider,
   AdvisorResponse,
@@ -60,28 +56,23 @@ export interface AdvisorDeps {
   readonly provider: AdvisorProvider;
   readonly knowledge: AdvisorKnowledge;
   readonly assess: (facts: ProjectFacts, knowledge: AdvisorKnowledge) => AdvisorAssessment;
-  readonly validateFacts: (raw: unknown) => ValidatedFacts;
-  readonly mergeFacts: (
-    prior: ProjectFacts,
-    incoming: ProjectFacts,
-    corrects?: readonly ExtractionFieldName[]
-  ) => ProjectFacts;
-  /**
-   * Extraction is several narrow calls rather than one wide one, because the
-   * provider rejects a twenty-field schema outright. These hooks describe one
-   * group at a time; `groupsForTurn` decides which are worth running.
-   */
-  readonly extractionGroups: readonly ExtractionGroup[];
-  readonly buildGroupSchema: (group: ExtractionGroup) => Record<string, unknown>;
-  readonly describeGroupVocabulary: (group: ExtractionGroup) => string;
-  readonly groupsForTurn: (
-    facts: ProjectFacts,
-    turnCount: number,
-    groups: readonly ExtractionGroup[]
-  ) => readonly ExtractionGroup[];
-  readonly mergeExtractionGroups: (
-    results: readonly { groupId: string; validated: ValidatedFacts }[]
-  ) => CombinedExtraction;
+  /** Validates a model delta against the vocabulary AND the current message. */
+  readonly validateUpdates: (raw: unknown, message: string) => ValidatedUpdates;
+  readonly buildDeltaSchema: () => Record<string, unknown>;
+  readonly describeVocabulary: () => string;
+  readonly isListField: (field: string) => boolean;
+  /** Ledger operations. Provenance lives here and never reaches the engine. */
+  readonly ledger: {
+    validate: (raw: unknown) => FactLedger;
+    apply: (
+      ledger: FactLedger,
+      updates: readonly FactUpdate[],
+      turn: number,
+      isList: (field: string) => boolean
+    ) => LedgerApplication;
+    project: (ledger: FactLedger) => ProjectFacts;
+    describe: (ledger: FactLedger) => string;
+  };
   readonly selectNextQuestion: (input: {
     assessment: AdvisorAssessment;
     questionRules: AdvisorKnowledge["questions"];
@@ -99,7 +90,7 @@ export interface AdvisorDeps {
   ) => readonly { guardrailId: string; evidence: string }[];
   readonly sanitizeForOutput: (text: string, maxLength: number) => string;
   readonly prompts: {
-    extractionSystemPrompt: (subject: string, vocabulary: string, knownFacts: ProjectFacts) => string;
+    extractionSystemPrompt: (vocabulary: string, established: string) => string;
     questionSystemPrompt: (guardrails: readonly Guardrail[]) => string;
     recommendationSystemPrompt: (
       assessment: AdvisorAssessment,
@@ -284,56 +275,60 @@ export function createAdvisor(deps: AdvisorDeps) {
     // The client's facts are re-validated exactly like the model's. Anything
     // outside the Phase A vocabulary is dropped rather than corrected, so a
     // crafted payload can only assert facts the engine already understands.
-    const priorValidated = deps.validateFacts(priorState.facts ?? {});
+    const priorLedger = deps.ledger.validate(priorState.ledger ?? {});
     const turnCount = Math.max(0, Math.min(MAX_TURNS, Math.trunc(priorState.turnCount ?? 0)));
     const askedQuestionIds = (priorState.askedQuestionIds ?? []).filter(
       (id) => typeof id === "string"
     );
 
-    // ── 1. extraction — one narrow call per relevant group ────────────────
+    // ── 1. extraction — a delta, not a snapshot ───────────────────────────
     //
-    // Groups run concurrently: they are independent, and three sequential
-    // round trips would triple the homeowner's wait for no benefit.
-    //
-    // A group that fails takes the whole turn down rather than silently
-    // producing a partial fact set. A recommendation built on two thirds of
-    // what someone said, with no signal that the third went missing, is worse
-    // than saying the advisor is unavailable.
-    const groups = deps.groupsForTurn(priorValidated.facts, turnCount, deps.extractionGroups);
-    let combined: CombinedExtraction;
+    // One call. The model lists only what THIS message supports, each update
+    // carrying a verbatim quote, and every quote is checked against the message
+    // server-side. An update whose evidence is not there is dropped, never
+    // repaired — that is what stops "We do want privacy at night, yes" from
+    // quietly asserting a room.
+    let validated: ValidatedUpdates;
     try {
-      const settled = await Promise.all(
-        groups.map(async (group) => {
-          const raw = await deps.provider.extract({
-            system: deps.prompts.extractionSystemPrompt(
-              group.subject,
-              deps.describeGroupVocabulary(group),
-              priorValidated.facts
-            ),
-            userMessage: input.message,
-            schema: deps.buildGroupSchema(group),
-            signal: deps.signal,
-          });
-          return { groupId: group.id, validated: deps.validateFacts(raw) };
-        })
-      );
-      combined = deps.mergeExtractionGroups(settled);
+      const raw = await deps.provider.extract({
+        system: deps.prompts.extractionSystemPrompt(
+          deps.describeVocabulary(),
+          deps.ledger.describe(priorLedger)
+        ),
+        userMessage: input.message,
+        schema: deps.buildDeltaSchema(),
+        signal: deps.signal,
+      });
+      validated = deps.validateUpdates(raw, input.message);
     } catch (error) {
       const code = providerFailureCode(error);
       return unavailable(code ?? "extraction-failed", priorState);
     }
-    const extracted = combined.facts;
-    const unrankedConcerns = combined.unrankedConcerns;
 
-    // `combined.corrects` is what lets an established fact be replaced. Without
-    // it a resolved fact is sticky, so a later message that merely mentions a
-    // different room cannot quietly overwrite the one under discussion.
-    const facts = deps.mergeFacts(priorValidated.facts, extracted, combined.corrects);
-    // A ranking supersedes the open question it answers.
-    const rankedNow = new Set(facts.priorities ?? []);
+    // Precedence, not guesswork: a stated value always outranks an inferred
+    // one, so a later guess cannot undo something the homeowner actually said.
+    const application = deps.ledger.apply(
+      priorLedger,
+      validated.accepted,
+      turnCount + 1,
+      deps.isListField
+    );
+    const ledger = application.ledger;
+    const projected = deps.ledger.project(ledger) as Record<string, unknown>;
+
+    // `unrankedConcerns` is a Phase B concept, not a Phase A fact — it exists
+    // so an arbitrary array order is never read as a stated ranking. It is
+    // separated out here so the engine receives a clean `ProjectFacts`.
+    const { unrankedConcerns: ledgerConcerns, ...factValues } = projected;
+    const facts = factValues as ProjectFacts;
+
+    const rankedNow = new Set<PriorityId>((facts.priorities ?? []) as PriorityId[]);
     const carriedConcerns = [
-      ...new Set([...(priorState.unrankedConcerns ?? []), ...unrankedConcerns]),
-    ].filter((c) => !rankedNow.has(c));
+      ...new Set([
+        ...(priorState.unrankedConcerns ?? []),
+        ...((ledgerConcerns ?? []) as PriorityId[]),
+      ]),
+    ].filter((concern) => !rankedNow.has(concern));
 
     // ── 2. deterministic assessment ────────────────────────────────────────
     const assessment = deps.assess(facts, deps.knowledge);
@@ -378,6 +373,7 @@ export function createAdvisor(deps: AdvisorDeps) {
       return {
         status: "NEED_MORE_INFORMATION",
         state: {
+          ledger: ledger as Record<string, unknown>,
           facts,
           turnCount: nextTurnCount,
           askedQuestionIds: [...askedQuestionIds, question.id],
@@ -421,6 +417,7 @@ export function createAdvisor(deps: AdvisorDeps) {
     return {
       status: "RECOMMENDATION_READY",
       state: {
+        ledger: ledger as Record<string, unknown>,
         facts,
         turnCount: nextTurnCount,
         askedQuestionIds,
