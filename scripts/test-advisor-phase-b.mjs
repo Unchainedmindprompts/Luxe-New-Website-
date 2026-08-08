@@ -785,7 +785,7 @@ await test("30 phrasing prompts carry the length and anti-boilerplate instructio
     engine.assess({ room: "living" }, KNOWLEDGE), []
   );
   t.ok(/under 40 words/.test(question), "question prompt has no length ceiling");
-  t.ok(/50 to 100 words/.test(recommendation), "recommendation prompt has no length target");
+  t.ok(/35 to 75 words/.test(recommendation), "recommendation prompt has no length target");
   for (const [name, text] of [["question", question], ["recommendation", recommendation]]) {
     t.ok(/Thank you for sharing/.test(text), `${name} prompt does not name the boilerplate to avoid`);
     t.ok(/gratitude/.test(text), `${name} prompt does not forbid gratitude openings`);
@@ -1033,10 +1033,18 @@ async function statusFor(extractions, message = "anything") {
   return makeAdvisor(provider).runTurn({ message, state: {} });
 }
 
-await test("45 nothing actionable yet is NEED_MORE_INFORMATION", async (t) => {
+await test("45 a turn with nothing to go on is never a dead end", async (t) => {
+  // This used to assert NEED_MORE_INFORMATION, which was the dead end itself:
+  // that status with no question leaves the homeowner nothing to answer and
+  // nothing to do. The contract now is that the two never disagree.
   const r = await statusFor([{}]);
-  t.equal(r.status, "NEED_MORE_INFORMATION", "an empty turn claimed more than it had");
   t.equal(r.assessment.strongCandidates.length, 0, "a candidate appeared from nothing");
+  t.ok(
+    r.status !== "NEED_MORE_INFORMATION" || r.nextQuestion !== null,
+    "NEED_MORE_INFORMATION was returned with nothing to answer"
+  );
+  t.ok(r.status !== "RECOMMENDATION_READY", "a recommendation was claimed with no candidate");
+  t.ok(r.message.trim().length > 0, "the turn returned no customer-facing text");
 });
 
 await test("46 child-safety-only is GUIDANCE_READY, not a recommendation", async (t) => {
@@ -1283,6 +1291,148 @@ await test("63 the advisor returns the approved answer verbatim, unphrased", asy
     mockProvider({ extractions: [{ room: "living" }], phrasings: ["Model wording."] })
   ).runTurn({ message: "It is the living room.", state: {} });
   t.equal(ordinary.canonicalResponseId, null, "an ordinary turn was marked canonical");
+});
+
+// ── 64-68: the NEED_MORE_INFORMATION contract, and prose discipline ────────
+
+await test("64 NEED_MORE_INFORMATION always carries exactly one question", async (t) => {
+  // Across a spread of fact sets, the status and the question must never
+  // disagree — that pairing is the whole contract.
+  const factSets = [
+    {},
+    { room: "bedroom" },
+    { priorities: ["child-safety"] },
+    { room: "living", windowUse: "raised-to-clear-glass", viewImportance: "high" },
+    { room: "living", exposure: "west", solarHeat: "severe", viewImportance: "critical" },
+    { requestedProducts: ["faux-composite-blinds"], windowUse: "raised-to-clear-glass" },
+  ];
+  for (const facts of factSets) {
+    const provider = mockProvider({ extractions: [facts] });
+    const r = await makeAdvisor(provider).runTurn({ message: "anything at all", state: {} });
+    if (r.status === "NEED_MORE_INFORMATION") {
+      t.ok(r.nextQuestion !== null, `no question with NEED_MORE_INFORMATION for ${JSON.stringify(facts)}`);
+      t.ok((r.nextQuestion?.phrased ?? "").trim().length > 0, "the question is empty");
+    }
+    if (r.nextQuestion === null) {
+      t.ok(r.status !== "NEED_MORE_INFORMATION", `dead end for ${JSON.stringify(facts)}`);
+    }
+  }
+});
+
+await test("65 a turn with nothing worth asking becomes GUIDANCE_READY", async (t) => {
+  // The scenario-3 shape: no strong candidate and nothing the counterfactual
+  // oracle considers worth a turn.
+  const provider = mockProvider({
+    extractions: [{ windowUse: "raised-to-clear-glass", viewImportance: "high", privacyNeed: "nighttime", room: "living" }],
+  });
+  const r = await makeAdvisor(provider).runTurn({
+    message: "I think I want blinds, but I want clear glass when they are open.",
+    state: {},
+  });
+  t.ok(r.status !== "NEED_MORE_INFORMATION" || r.nextQuestion !== null, "the dead end came back");
+  if (r.assessment.strongCandidates.length === 0 && r.nextQuestion === null) {
+    t.equal(r.status, "GUIDANCE_READY", "a no-question, no-candidate turn is not guidance");
+  }
+});
+
+await test("66 a strong candidate still reports RECOMMENDATION_READY", async (t) => {
+  const provider = mockProvider({
+    extractions: [{ room: "bedroom", roomDarkening: "maximum", priorities: ["room-darkening"], exposure: "east", privacyNeed: "nighttime" }],
+  });
+  const r = await makeAdvisor(provider).runTurn({ message: "Dark bedroom, faces east, privacy at night.", state: {} });
+  t.equal(r.status, "RECOMMENDATION_READY", `expected a recommendation, got ${r.status}`);
+  t.ok(r.assessment.strongCandidates.length > 0, "claimed a recommendation with no candidate");
+});
+
+await test("67 the fix introduces no forced or irrelevant question", async (t) => {
+  // Gating is untouched: the questions offered are exactly the ones the
+  // counterfactual oracle classified as must-ask, and never a filler.
+  const facts = { room: "living", windowUse: "raised-to-clear-glass", viewImportance: "high", privacyNeed: "nighttime" };
+  const assessment = engine.assess(facts, KNOWLEDGE);
+  const verificationIds = new Set(assessment.verificationRequirements.map((v) => v.id));
+  const classified = counterfactual.classifyQuestions({
+    facts, assessment, knowledge: KNOWLEDGE, assess: engine.assess,
+    questionRules: KNOWLEDGE.questions, unrankedConcerns: [], askedQuestionIds: [],
+    isVerificationClass: (id) => questionSelection.isVerificationClass(id, verificationIds),
+    isListField: extraction.isListField, allowedValues: extraction.allowedValues,
+  });
+  const mustAsk = classified.filter((q) => q.tier === "must-ask-now").map((q) => q.id);
+
+  const provider = mockProvider({ extractions: [facts] });
+  const r = await makeAdvisor(provider).runTurn({ message: "clear glass when open please", state: {} });
+  if (r.nextQuestion) {
+    t.ok(mustAsk.includes(r.nextQuestion.id), `asked ${r.nextQuestion.id}, which gating did not classify as must-ask`);
+  } else {
+    t.equal(mustAsk.length, 0, "a must-ask question existed but none was asked");
+  }
+});
+
+await test("68 phrasing prompts ask for tool-belt discipline, not lectures", async (t) => {
+  const recommendation = prompts.recommendationSystemPrompt(
+    engine.assess({ room: "living" }, KNOWLEDGE), []
+  );
+  const guidance = prompts.guidanceSystemPrompt(engine.assess({ room: "living" }, KNOWLEDGE), []);
+  for (const [name, text] of [["recommendation", recommendation], ["guidance", guidance]]) {
+    t.ok(/35 to 75 words/.test(text), `${name} prompt has no tightened length target`);
+    t.ok(/tool belt/i.test(text), `${name} prompt does not state the tool-belt principle`);
+    t.ok(/Two or three short sentences/.test(text), `${name} prompt does not cap sentence count`);
+    t.ok(!/50 to 100 words/.test(text), `${name} prompt still carries the old length target`);
+  }
+  // The card already carries these, so the prose must not repeat them.
+  t.ok(/do not restate them/i.test(recommendation), "the recommendation prompt may duplicate the card");
+});
+
+await test("69 a requested exterior shade over a used door reaches the phrasing layer", async (t) => {
+  // Phase A now names this conflict. The point of the test is the handoff: the
+  // engine surfaces it, the summary carries it, and the phrasing input receives
+  // it — without which the homeowner is told a different product is better and
+  // never told why the one they asked for is not.
+  const facts = {
+    priorities: ["energy-efficiency"],
+    exposure: "west",
+    solarHeat: "severe",
+    requestedProducts: ["exterior-solar"],
+    openings: ["sliding-door", "patio-door-frequent-use"],
+    exteriorConditions: ["high-wind-exposure"],
+  };
+  const assessment = engine.assess(facts, KNOWLEDGE);
+  const conflict = assessment.requestConflicts.find(
+    (c) => c.id === "conflict-exterior-shade-over-used-door"
+  );
+  t.ok(Boolean(conflict), "the engine surfaced no conflict for a requested exterior shade over a used door");
+  t.ok(conflict ? conflict.explanation.length > 40 : false, "the conflict carries no explanation to phrase");
+  // The explanation is customer-facing prose, not a rule name or a fragment.
+  for (const leak of [/exterior-solar\b/, /patio-door-frequent-use/, /conflict-/]) {
+    t.ok(conflict ? !leak.test(conflict.explanation) : false, `the explanation leaks an identifier: ${leak}`);
+  }
+
+  const provider = mockProvider({ extractions: [facts] });
+  const r = await makeAdvisor(provider).runTurn({
+    message: "West sliders cook the house. We want an exterior shade but that's how we reach the patio.",
+    state: {},
+  });
+  t.ok(
+    r.assessment.requestConflicts.some((c) => c.id === "conflict-exterior-shade-over-used-door"),
+    "the conflict did not survive into the response summary"
+  );
+  t.ok(
+    r.consultationCta.reasons.includes("request-conflict-needs-discussion"),
+    "the conflict is not a reason to talk to someone"
+  );
+  // The recommendation itself is unchanged: the conflict explains, it does not
+  // overrule. Exterior solar stays a real alternative rather than being struck.
+  t.ok(
+    !r.assessment.excluded.some((c) => c.id === "exterior-solar"),
+    "the requested product was excluded outright rather than explained"
+  );
+});
+
+await test("70 the recommendation prompt must explain a request it did not lead with", async (t) => {
+  const prompt = prompts.recommendationSystemPrompt(engine.assess({ room: "living" }, KNOWLEDGE), []);
+  t.ok(/conflict/i.test(prompt), "the prompt never mentions the conflict input it is given");
+  t.ok(/one short sentence/i.test(prompt), "the conflict instruction sets no length discipline");
+  // Length discipline is not weakened to make room for it.
+  t.ok(/35 to 75 words/.test(prompt), "the tightened length target was lost");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────

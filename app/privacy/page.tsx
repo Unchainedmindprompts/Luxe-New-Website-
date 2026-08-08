@@ -79,10 +79,13 @@ export default function PrivacyPage() {
             <p>
               Three places on this site ask for information: the contact form,
               the consultation request on the booking page, and the
-              &ldquo;Show Me My Options&rdquo; questionnaire. Between them they
-              collect your <strong>name, phone number, email address, street
-              address, city, a description of what you need</strong>, and how
-              you would prefer to be contacted.
+              &ldquo;have Luxe contact me&rdquo; form on our window-treatment
+              advisor page. Between them they collect your <strong>name, phone
+              number, email address, street address, city, a description of what
+              you need</strong>, and how you would prefer to be contacted. The
+              advisor&rsquo;s form is the shortest of the three: a name, a phone
+              number, an email address if you want to give one, and anything you
+              choose to add.
             </p>
             <p>
               We ask for the address because we come to your home to measure. We
@@ -115,6 +118,61 @@ export default function PrivacyPage() {
             </p>
           </Section>
 
+          <Section title="The window-treatment advisor">
+            <p>
+              Our{" "}
+              <Link href="/show-me-my-options" className="text-gold underline underline-offset-2">
+                Find the Right Window Treatments
+              </Link>{" "}
+              page lets you describe your project in your own words and get
+              suggestions back. It is AI-assisted, and here is exactly what that
+              means for your information.
+            </p>
+            <p>
+              <strong>What is sent.</strong> The messages you type, and the
+              structured project details we work out from them — things like the
+              room, which way the windows face, and what matters most to you.
+              The advisor never asks for your name, phone number, email or
+              address to answer you, and none of those are ever sent to the AI
+              provider.
+            </p>
+            <p>
+              <strong>What we keep of the conversation.</strong> Nothing. There
+              is no database behind the advisor and we do not store or log what
+              you type into it. While you are using it, the conversation lives
+              in your own browser and is passed back to our server with each
+              message so it can follow the thread. Close the tab and it is gone.
+              Anthropic&rsquo;s own handling of what it receives is covered by
+              their privacy policy, linked below. This applies to the
+              conversation only &mdash; anything you deliberately send us
+              through a form is different, and we do receive and keep that.
+            </p>
+            <p>
+              <strong>If you ask us to contact you.</strong> The page offers a
+              short form for a call back instead of booking a time yourself.
+              That is the only place it asks for contact details, and it is
+              entirely your choice. What you enter is emailed to our team along
+              with the product direction discussed, what you said matters most,
+              and anything you type in that form — never your conversation,
+              which is not sent with it and is still not stored. Those details
+              go to us, not to the AI provider.
+            </p>
+            <p>
+              <strong>What it is, and is not.</strong> The advisor gives
+              guidance, not a quote, a measurement or a commitment. Product
+              suitability, fit, mounting and final pricing all depend on your
+              actual windows, which is why we confirm them during the in-home
+              consultation. Nothing the advisor says is binding on us or on you.
+            </p>
+            <p>
+              <strong>You never have to use it.</strong> You can{" "}
+              <Link href="/book" className="text-gold underline underline-offset-2">
+                book a free in-home consultation
+              </Link>{" "}
+              directly, or call or email us, without going near the advisor.
+            </p>
+          </Section>
+
           <Section title="Third-party services we use">
             <p>These services run on our site and receive some data directly:</p>
             <ul className="list-disc pl-6 space-y-3">
@@ -134,6 +192,17 @@ export default function PrivacyPage() {
                 performance. Privacy-focused and does not use cookies to track
                 you across sites.{" "}
                 <a href="https://vercel.com/legal/privacy-policy" className={EXTERNAL} rel="noopener" target="_blank">Privacy policy</a>
+              </li>
+              <li>
+                <strong>Anthropic</strong> — provides the AI that powers the
+                window-treatment advisor on our{" "}
+                <Link href="/show-me-my-options" className="text-gold underline underline-offset-2">
+                  Find the Right Window Treatments
+                </Link>{" "}
+                page. When you use the advisor, the messages you type there, and
+                the project details we derive from them, are sent to Anthropic to
+                be processed and answered.{" "}
+                <a href="https://www.anthropic.com/legal/privacy" className={EXTERNAL} rel="noopener" target="_blank">Privacy policy</a>
               </li>
               <li>
                 <strong>Calendly</strong> — powers the appointment scheduler on
