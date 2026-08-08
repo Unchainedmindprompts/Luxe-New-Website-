@@ -45,6 +45,7 @@ import {
 import { createAnthropicProvider } from "@/lib/advisor/server/provider";
 import { isVerificationClass, selectNextQuestion } from "@/lib/advisor/server/question-selection";
 import { classifyQuestions } from "@/lib/advisor/server/counterfactual";
+import { matchBrandResponse } from "@/lib/advisor/server/brand-response";
 import type { AdvisorRequest, ConversationState } from "@/lib/advisor/server/types";
 
 export const runtime = "nodejs";
@@ -160,6 +161,7 @@ export async function POST(request: Request) {
       phrasingUserMessage,
     },
     allowedBrands: BUSINESS.brands,
+    matchBrandResponse,
     signal: request.signal,
   });
 
