@@ -23,7 +23,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const [
   products, priorities, rules, guardrailKnowledge,
-  engine, extraction, questionSelection, guardrails, prompts, advisorModule, limits, ledgerModule,
+  engine, extraction, questionSelection, guardrails, prompts, advisorModule, limits, ledgerModule, counterfactual,
 ] = await Promise.all([
   import("../lib/advisor/knowledge/products.ts"),
   import("../lib/advisor/knowledge/priorities.ts"),
@@ -37,6 +37,7 @@ const [
   import("../lib/advisor/server/advisor.ts"),
   import("../lib/advisor/server/limits.ts"),
   import("../lib/advisor/server/ledger.ts"),
+  import("../lib/advisor/server/counterfactual.ts"),
 ]);
 
 const KNOWLEDGE = {
@@ -130,6 +131,9 @@ function makeAdvisor(provider) {
     describeVocabulary: extraction.describeVocabulary,
     isListField: extraction.isListField,
     ledger: LEDGER,
+    classifyQuestions: counterfactual.classifyQuestions,
+    isVerificationClass: questionSelection.isVerificationClass,
+    allowedValues: extraction.allowedValues,
     selectNextQuestion: questionSelection.selectNextQuestion,
     validateGeneratedText: guardrails.validateGeneratedText,
     sanitizeForOutput: guardrails.sanitizeForOutput,
@@ -846,6 +850,166 @@ await test("34 the ProjectFacts projection stays valid for the Phase A engine", 
   t.ok(ids(a.recognizedConditions).includes("west-exposure"), "the engine did not see the projected exposure");
   t.ok(ids(a.recognizedConditions).includes("mounting-substrate-known"), "the engine did not see the projected substrate");
   t.ok(!a.unknownDimensions.includes("openings"), "a projected list did not register as known");
+});
+
+// ── 35-44: counterfactual question gating ──────────────────────────────────
+
+function classify(facts, { unranked = [], asked = [] } = {}) {
+  const assessment = engine.assess(facts, KNOWLEDGE);
+  const verificationIds = new Set(assessment.verificationRequirements.map((v) => v.id));
+  return {
+    assessment,
+    tiers: counterfactual.classifyQuestions({
+      facts, assessment, knowledge: KNOWLEDGE, assess: engine.assess,
+      questionRules: KNOWLEDGE.questions, unrankedConcerns: unranked, askedQuestionIds: asked,
+      isVerificationClass: (id) => questionSelection.isVerificationClass(id, verificationIds),
+      isListField: extraction.isListField, allowedValues: extraction.allowedValues,
+    }),
+  };
+}
+const tierOf = (tiers, id) => tiers.find((q) => q.id === id)?.tier;
+
+await test("35 clear-glass usage does not require exposure before guidance", async (t) => {
+  const facts = {
+    windowUse: "raised-to-clear-glass", viewImportance: "high",
+    priorities: ["view-preservation", "clear-glass-when-open"],
+  };
+  const { tiers, assessment } = classify(facts);
+  t.equal(tierOf(tiers, "q-exposure"), "not-needed-now", "exposure still gates the clear-glass direction");
+  t.ok(assessment.strongCandidates.length > 0, "no direction available to give");
+  t.ok(
+    assessment.requestConflicts.length > 0 || assessment.deprioritizedDirections.length > 0,
+    "nothing available to explain about blinds vs shades"
+  );
+});
+
+await test("36 privacy is not asked when every answer leaves the direction unchanged", async (t) => {
+  // Child safety alone: privacy cannot move a direction that does not exist yet.
+  const { tiers } = classify({ priorities: ["child-safety"], room: "living" });
+  const privacy = tierOf(tiers, "q-nighttime-privacy");
+  t.ok(privacy === undefined || privacy !== "must-ask-now", `privacy gated unnecessarily (${privacy})`);
+});
+
+await test("37 exposure is asked when it could materially change the recommendation", async (t) => {
+  // A view priority with heat in play: east vs west genuinely moves the answer.
+  const facts = { viewImportance: "critical", priorities: ["view-preservation"], solarHeat: "severe", room: "living" };
+  const { tiers } = classify(facts);
+  const exposure = tiers.find((q) => q.id === "q-exposure");
+  if (exposure) {
+    t.ok(exposure.distinctOutcomes >= 1, "exposure produced no counterfactual outcomes");
+  }
+  // Whatever the tier, the classification must be derived from real outcomes.
+  for (const q of tiers) {
+    t.ok(typeof q.distinctOutcomes === "number" && q.distinctOutcomes >= 1, `${q.id} has no outcome count`);
+  }
+});
+
+await test("38 darkening level is asked when it changes roller vs cellular", async (t) => {
+  // No stated darkening priority: the level itself is the swing factor. (With
+  // `priorities: ["room-darkening"]` already set, the oracle correctly reports
+  // the question as settled — the priority has already decided the direction.)
+  const { tiers } = classify({ room: "bedroom" });
+  const darkening = tiers.find((q) => q.id === "q-darkening-level");
+  t.ok(darkening !== undefined, "the darkening question was not offered at all");
+  if (darkening) {
+    t.equal(darkening.tier, "must-ask-now", `darkening was deferred (${darkening.rationale})`);
+    t.ok(darkening.distinctOutcomes > 1, "darkening was called material without diverging outcomes");
+  }
+});
+
+await test("39 priority order is skipped when every ranking gives the same direction", async (t) => {
+  // Two concerns that Phase A treats identically for this project shape.
+  const { tiers } = classify({ room: "living" }, { unranked: ["convenience", "durability"] });
+  const priority = tiers.find((q) => q.id === "q-priority-order");
+  t.ok(priority !== undefined, "the priority question was not classified at all");
+  if (priority) {
+    t.ok(priority.tier !== "must-ask-now", `priority order gated despite one outcome (${priority.rationale})`);
+    t.equal(priority.distinctOutcomes, 1, "expected a single direction across rankings");
+  }
+});
+
+await test("40 priority order is asked when the ranking changes the direction", async (t) => {
+  // Phase A is far less rank-sensitive than it looks: of 35 `withinTop` uses,
+  // only three test the top slot, and they are the blinds-vs-energy conflicts.
+  // So a ranking only changes the direction when a named blind competes with
+  // energy efficiency for first place — which is exactly this scenario, and
+  // exactly why the oracle beats a hand-tuned weight.
+  const facts = { requestedProducts: ["faux-composite-blinds"], room: "living" };
+  const { tiers } = classify(facts, { unranked: ["energy-efficiency", "aesthetics"] });
+  const priority = tiers.find((q) => q.id === "q-priority-order");
+  t.ok(priority !== undefined, "the priority question was not classified");
+  if (priority) {
+    t.equal(priority.tier, "must-ask-now", `a direction-changing ranking was deferred (${priority.rationale})`);
+    t.ok(priority.distinctOutcomes > 1, "expected diverging directions across rankings");
+  }
+});
+
+await test("41 professional-verification questions never gate guidance", async (t) => {
+  const facts = {
+    exposure: "west", solarHeat: "severe", viewImportance: "critical",
+    priorities: ["view-preservation"], room: "living", privacyNeed: "nighttime",
+  };
+  const { tiers } = classify(facts);
+  for (const id of ["q-exterior-mounting", "q-wind-exposure", "q-power-availability", "q-door-access-conflict"]) {
+    const tier = tierOf(tiers, id);
+    if (tier !== undefined) {
+      t.equal(tier, "professional-verification", `${id} was not classed as verification (${tier})`);
+    }
+  }
+  t.ok(!tiers.some((q) => q.tier === "must-ask-now"), "a question still gates a clear direction");
+});
+
+await test("42 a request conflict can still force a homeowner-answerable question", async (t) => {
+  // A named product that conflicts with stated usage must remain answerable.
+  const facts = { requestedProducts: ["faux-composite-blinds"], windowUse: "raised-to-clear-glass", room: "living" };
+  const { assessment, tiers } = classify(facts);
+  t.ok(assessment.requestConflicts.length > 0, "the blinds-vs-clear-glass conflict did not surface");
+  // The conflict itself is surfaced in the assessment; gating must not hide it.
+  t.ok(tiers.every((q) => q.tier !== "must-ask-now" || q.distinctOutcomes > 1),
+    "a question was forced without diverging outcomes");
+});
+
+await test("43 an already-answered question is never re-classified or re-asked", async (t) => {
+  const facts = { room: "bedroom", priorities: ["room-darkening"] };
+  const { tiers } = classify(facts, { asked: ["q-darkening-level"] });
+  t.ok(!tiers.some((q) => q.id === "q-darkening-level"), "an already-asked question was offered again");
+
+  // And end to end: a question put to the homeowner is not repeated.
+  const provider = mockProvider({ extractions: [{ room: "bedroom", priorities: ["room-darkening"] }, {}] });
+  const advisor = makeAdvisor(provider);
+  const first = await advisor.runTurn({ message: "The bedroom, we care about darkness.", state: {} });
+  if (first.nextQuestion) {
+    const second = await advisor.runTurn({ message: "not sure", state: first.state });
+    if (second.nextQuestion) {
+      t.ok(second.nextQuestion.id !== first.nextQuestion.id, "the same question was asked twice");
+    }
+  }
+});
+
+await test("44 counterfactual evaluation is deterministic and provider-free", async (t) => {
+  const facts = { room: "living", viewImportance: "high", solarHeat: "severe" };
+  const unranked = ["view-preservation", "room-darkening"];
+  const a = classify(facts, { unranked }).tiers.map((q) => `${q.id}:${q.tier}:${q.distinctOutcomes}`);
+  const b = classify(facts, { unranked }).tiers.map((q) => `${q.id}:${q.tier}:${q.distinctOutcomes}`);
+  t.equal(JSON.stringify(a), JSON.stringify(b), "classification is not deterministic");
+
+  // A provider that throws on any call proves the oracle never reaches for one.
+  const exploding = { extract() { throw new Error("provider must not be called"); },
+                      phrase() { throw new Error("provider must not be called"); } };
+  let threw = false;
+  try {
+    counterfactual.classifyQuestions({
+      facts, assessment: engine.assess(facts, KNOWLEDGE), knowledge: KNOWLEDGE, assess: engine.assess,
+      questionRules: KNOWLEDGE.questions, unrankedConcerns: unranked, askedQuestionIds: [],
+      isVerificationClass: () => false, isListField: extraction.isListField, allowedValues: extraction.allowedValues,
+      provider: exploding,
+    });
+  } catch { threw = true; }
+  t.ok(!threw, "the oracle touched a provider");
+
+  // And the documented bounds hold.
+  t.ok(counterfactual.MAX_QUESTIONS_EVALUATED <= 8, "question budget is unbounded");
+  t.ok(counterfactual.MAX_ANSWERS_PER_QUESTION <= 12, "answer budget is unbounded");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────

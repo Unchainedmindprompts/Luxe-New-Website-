@@ -94,7 +94,7 @@ const VERIFICATION_CLASS_QUESTIONS: Readonly<Record<string, string>> = {
  * assumed, so a question only becomes deferrable when Luxe is genuinely going
  * to look at it.
  */
-function isVerificationClass(questionId: string, verificationIds: ReadonlySet<string>): boolean {
+export function isVerificationClass(questionId: string, verificationIds: ReadonlySet<string>): boolean {
   const covering = VERIFICATION_CLASS_QUESTIONS[questionId];
   return covering !== undefined && verificationIds.has(covering);
 }
@@ -125,6 +125,12 @@ export function escalationBlockingKeys(escalations: readonly EscalationRule[]): 
 }
 
 export interface SelectionInput {
+  /**
+   * Tier per unresolved question, from the counterfactual oracle. Supplied
+   * rather than computed here so this module stays a pure ranking step and the
+   * oracle stays independently testable.
+   */
+  readonly tiers?: ReadonlyMap<string, "must-ask-now" | "useful-but-deferrable" | "professional-verification" | "not-needed-now">;
   readonly assessment: AdvisorAssessment;
   readonly questionRules: readonly QuestionRule[];
   readonly escalations: readonly EscalationRule[];
@@ -159,7 +165,11 @@ export function selectNextQuestion(input: SelectionInput): SelectionResult {
   // The homeowner named several concerns without saying which leads. Almost
   // every Phase A rule is rank-aware (`withinTop`), so this outranks everything
   // — answering it can reshuffle the whole assessment.
-  if (unrankedConcerns.length >= 2 && !asked.has(PRIORITY_ORDER_QUESTION_ID)) {
+  if (
+    unrankedConcerns.length >= 2 &&
+    !asked.has(PRIORITY_ORDER_QUESTION_ID) &&
+    (!input.tiers || input.tiers.has(PRIORITY_ORDER_QUESTION_ID))
+  ) {
     ranked.push({
       id: PRIORITY_ORDER_QUESTION_ID,
       canonical: `Of these, which matters most to you: ${unrankedConcerns.join(", ")}?`,
@@ -224,7 +234,16 @@ export function selectNextQuestion(input: SelectionInput): SelectionResult {
   ranked.sort((a, b) => b.score - a.score);
 
   // Only direction-determining questions gate a recommendation.
-  const material = ranked.filter((q) => !q.verificationClass && q.score >= MATERIAL_THRESHOLD);
+  //
+  // When the counterfactual oracle has classified this turn, its verdict wins:
+  // it measured, against the real business rules, whether any plausible answer
+  // would change the direction. The weighted score below is the fallback for
+  // callers that do not supply tiers, and the tie-breaker for ordering within
+  // a tier.
+  const tiers = input.tiers;
+  const material = tiers
+    ? ranked.filter((q) => tiers.get(q.id) === "must-ask-now")
+    : ranked.filter((q) => !q.verificationClass && q.score >= MATERIAL_THRESHOLD);
 
   if (turnCount >= MAX_QUESTIONS) {
     return { next: null, ranked, readyToRecommend: true, readyReason: "question-limit-reached" };

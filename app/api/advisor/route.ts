@@ -42,7 +42,8 @@ import {
   recordAndCheckRate,
 } from "@/lib/advisor/server/limits";
 import { createAnthropicProvider } from "@/lib/advisor/server/provider";
-import { selectNextQuestion } from "@/lib/advisor/server/question-selection";
+import { isVerificationClass, selectNextQuestion } from "@/lib/advisor/server/question-selection";
+import { classifyQuestions } from "@/lib/advisor/server/counterfactual";
 import type { AdvisorRequest, ConversationState } from "@/lib/advisor/server/types";
 
 export const runtime = "nodejs";
@@ -144,6 +145,9 @@ export async function POST(request: Request) {
       project: projectFacts,
       describe: describeLedger,
     },
+    classifyQuestions,
+    isVerificationClass,
+    allowedValues: (field: string) => allowedValues(field as ExtractionFieldName),
     selectNextQuestion,
     validateGeneratedText,
     sanitizeForOutput,

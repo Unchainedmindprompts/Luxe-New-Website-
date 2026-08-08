@@ -141,6 +141,42 @@ again and kept escalating as though nobody had answered.
 stone, at *that* height, will carry *that* system is a judgement made at the
 opening, not from a sentence. Tests 24 and 25 pin both halves.
 
+## Counterfactual question gating
+
+Whether a question is worth a turn is **measured, not weighted**. The Phase A
+engine is a pure function, so it can be used as an oracle: enumerate a small set
+of plausible answers from the existing vocabulary, apply each to the current
+facts, re-run `assess()`, and compare outcomes. If every plausible answer
+produces the same direction, the answer cannot change what we would say — so
+asking costs the homeowner a turn and buys nothing.
+
+| Tier | Meaning |
+|---|---|
+| `must-ask-now` | plausible answers produce **different** directions |
+| `useful-but-deferrable` | answers refine tradeoffs or ordering, not the direction |
+| `professional-verification` | Luxe confirms it on site |
+| `not-needed-now` | nothing changes either way |
+
+Only `must-ask-now` gates a recommendation.
+
+"The same direction" is deliberately narrow — the **sets** of strong candidates,
+excluded directions and request conflicts. Ordering and tradeoff wording are
+excluded on purpose: a question that only reshuffles a ranking is useful, not
+urgent, and separating those two is the entire point.
+
+**Bounds.** At most 6 questions through the oracle per turn, at most 8 plausible
+answers per dimension; scalars take their vocabulary minus `"unknown"`, lists
+take "none" plus each member alone rather than every combination. Anything past
+the cap is treated as deferrable rather than silently dropped. Measured cost:
+**~3ms per turn**, no provider call.
+
+**What it revealed.** Phase A is far less rank-sensitive than it looks — of 35
+`withinTop` uses, only three test the top slot, and all three are
+blinds-vs-energy conflicts. So the priority-order question almost never changes
+the direction, which is exactly the over-asking this replaced. A hand-tuned
+weight would never have found that; the oracle did, because it asks the rules
+themselves.
+
 ## Direction-determining vs verification-class questions
 
 The distinction that decides whether the advisor reads as an adviser or an

@@ -33,6 +33,7 @@ import type {
 } from "../types";
 import type { FactUpdate, ValidatedUpdates } from "./extraction";
 import type { FactLedger, LedgerApplication } from "./ledger";
+import type { ClassifiedQuestion, QuestionTier } from "./counterfactual";
 import type {
   AdvisorProvider,
   AdvisorResponse,
@@ -73,6 +74,24 @@ export interface AdvisorDeps {
     project: (ledger: FactLedger) => ProjectFacts;
     describe: (ledger: FactLedger) => string;
   };
+  /**
+   * Counterfactual gating: given the current facts, which unresolved questions
+   * could actually change the direction. Deterministic, no provider call.
+   */
+  readonly classifyQuestions: (input: {
+    facts: ProjectFacts;
+    assessment: AdvisorAssessment;
+    knowledge: AdvisorKnowledge;
+    assess: (facts: ProjectFacts, knowledge: AdvisorKnowledge) => AdvisorAssessment;
+    questionRules: AdvisorKnowledge["questions"];
+    unrankedConcerns: readonly PriorityId[];
+    askedQuestionIds: readonly string[];
+    isVerificationClass: (questionId: string) => boolean;
+    isListField: (field: string) => boolean;
+    allowedValues: (field: string) => readonly string[];
+  }) => readonly ClassifiedQuestion[];
+  readonly isVerificationClass: (questionId: string, verificationIds: ReadonlySet<string>) => boolean;
+  readonly allowedValues: (field: string) => readonly string[];
   readonly selectNextQuestion: (input: {
     assessment: AdvisorAssessment;
     questionRules: AdvisorKnowledge["questions"];
@@ -80,6 +99,7 @@ export interface AdvisorDeps {
     unrankedConcerns: readonly PriorityId[];
     askedQuestionIds: readonly string[];
     turnCount: number;
+    tiers?: ReadonlyMap<string, QuestionTier>;
   }) => {
     next: { id: string; canonical: string; materialTo: readonly DirectionId[] } | null;
     readyToRecommend: boolean;
@@ -339,7 +359,27 @@ export function createAdvisor(deps: AdvisorDeps) {
       ...assessment.excludedDirections,
     ].map((d) => d.label);
 
-    // ── 3. deterministic question selection ────────────────────────────────
+    // ── 3. counterfactual gating, then selection ───────────────────────────
+    //
+    // The engine is a pure function, so it can be asked directly whether a
+    // question matters: try each plausible answer, re-assess, and see whether
+    // the direction actually moves. A question every answer leaves unchanged
+    // costs the homeowner a turn and buys nothing.
+    const verificationIds = new Set(assessment.verificationRequirements.map((v) => v.id));
+    const classified = deps.classifyQuestions({
+      facts,
+      assessment,
+      knowledge: deps.knowledge,
+      assess: deps.assess,
+      questionRules: deps.knowledge.questions,
+      unrankedConcerns: carriedConcerns,
+      askedQuestionIds,
+      isVerificationClass: (id) => deps.isVerificationClass(id, verificationIds),
+      isListField: deps.isListField,
+      allowedValues: deps.allowedValues,
+    });
+    const tiers = new Map(classified.map((q) => [q.id, q.tier] as const));
+
     const selection = deps.selectNextQuestion({
       assessment,
       questionRules: deps.knowledge.questions,
@@ -347,6 +387,7 @@ export function createAdvisor(deps: AdvisorDeps) {
       unrankedConcerns: carriedConcerns,
       askedQuestionIds,
       turnCount,
+      tiers,
     });
 
     const nextTurnCount = turnCount + 1;
