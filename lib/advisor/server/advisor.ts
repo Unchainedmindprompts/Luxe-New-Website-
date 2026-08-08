@@ -31,7 +31,12 @@ import type {
   PriorityId,
   ProjectFacts,
 } from "../types";
-import type { ExtractionGroup } from "./extraction";
+import type {
+  CombinedExtraction,
+  ExtractionFieldName,
+  ExtractionGroup,
+  ValidatedFacts,
+} from "./extraction";
 import type {
   AdvisorProvider,
   AdvisorResponse,
@@ -55,12 +60,12 @@ export interface AdvisorDeps {
   readonly provider: AdvisorProvider;
   readonly knowledge: AdvisorKnowledge;
   readonly assess: (facts: ProjectFacts, knowledge: AdvisorKnowledge) => AdvisorAssessment;
-  readonly validateFacts: (raw: unknown) => {
-    facts: ProjectFacts;
-    unrankedConcerns: readonly PriorityId[];
-    dropped: readonly string[];
-  };
-  readonly mergeFacts: (prior: ProjectFacts, incoming: ProjectFacts) => ProjectFacts;
+  readonly validateFacts: (raw: unknown) => ValidatedFacts;
+  readonly mergeFacts: (
+    prior: ProjectFacts,
+    incoming: ProjectFacts,
+    corrects?: readonly ExtractionFieldName[]
+  ) => ProjectFacts;
   /**
    * Extraction is several narrow calls rather than one wide one, because the
    * provider rejects a twenty-field schema outright. These hooks describe one
@@ -75,13 +80,8 @@ export interface AdvisorDeps {
     groups: readonly ExtractionGroup[]
   ) => readonly ExtractionGroup[];
   readonly mergeExtractionGroups: (
-    results: readonly { groupId: string; validated: { facts: ProjectFacts; unrankedConcerns: readonly PriorityId[]; dropped: readonly string[] } }[]
-  ) => {
-    facts: ProjectFacts;
-    unrankedConcerns: readonly PriorityId[];
-    dropped: readonly string[];
-    conflicts: readonly string[];
-  };
+    results: readonly { groupId: string; validated: ValidatedFacts }[]
+  ) => CombinedExtraction;
   readonly selectNextQuestion: (input: {
     assessment: AdvisorAssessment;
     questionRules: AdvisorKnowledge["questions"];
@@ -168,21 +168,71 @@ function consultationIntent(
   return { recommended: reasons.length > 0, reasons };
 }
 
-/** Deterministic recommendation text, used when the model's is unusable. */
+/**
+ * Deterministic recommendation text, used when the model's is unusable.
+ *
+ * This is what a homeowner reads when the model wrote something that crossed a
+ * guardrail twice, so it has to be genuinely presentable — not a debug string.
+ * It is assembled from the assessment into complete sentences, and it never
+ * exposes a rule id, an engine term, or an internal state name. Phase A's
+ * labels and notes are already customer-facing prose, which is what makes this
+ * possible.
+ */
 function fallbackRecommendation(assessment: AdvisorAssessment): string {
   const best = assessment.strongCandidates[0];
+  const sentences: string[] = [];
+
   if (!best) {
-    return "There is enough here for our team to work with. Luxe Window Works will evaluate the opening in the room and confirm the right direction with you.";
+    sentences.push(
+      "No single direction stands out from what you have described yet, which is a fair place to be before anyone has seen the window."
+    );
+  } else {
+    const reason = trimReason(best.reasons[0]);
+    sentences.push(
+      reason
+        ? `${sentenceCase(best.label)} is the direction we would look at first — ${reason}`
+        : `${sentenceCase(best.label)} is the direction we would look at first.`
+    );
+    const alternative = assessment.strongCandidates[1] ?? assessment.deprioritizedDirections[0];
+    if (alternative) {
+      sentences.push(`${sentenceCase(alternative.label)} is the other option worth weighing.`);
+    }
   }
-  const alt = assessment.strongCandidates[1] ?? assessment.deprioritizedDirections[0];
+
   const tradeoff = assessment.tradeoffs[0];
-  const parts = [
-    `Based on what you have described, ${best.label.toLowerCase()} is the direction we would look at first — ${best.reasons[0] ?? "it fits what you have told us matters most"}`,
-  ];
-  if (alt) parts.push(`${alt.label} is the alternative worth weighing.`);
-  if (tradeoff) parts.push(`The tradeoff to be aware of: ${tradeoff.note}`);
-  parts.push("Luxe Window Works will confirm the details at the opening before anything is selected.");
-  return parts.join(" ").replace(/\s+/g, " ");
+  if (tradeoff) sentences.push(`One thing to be aware of: ${lowerFirst(trimReason(tradeoff.note) ?? "")}`);
+
+  sentences.push(
+    "Our team will confirm the details at the opening before anything is selected, and we can walk through it with you at a consultation."
+  );
+
+  return sentences
+    .map((sentence) => sentence.trim())
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .replace(/\s+([.,])/g, "$1");
+}
+
+/** Deterministic question text, used when the model's phrasing is unusable. */
+function fallbackQuestion(canonical: string): string {
+  return canonical.trim();
+}
+
+/** Normalises a knowledge-base fragment into something that reads mid-sentence. */
+function trimReason(reason: string | undefined): string | undefined {
+  if (!reason) return undefined;
+  const text = reason.trim();
+  if (!text) return undefined;
+  return /[.!?]$/.test(text) ? text : `${text}.`;
+}
+
+function sentenceCase(label: string): string {
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+function lowerFirst(text: string): string {
+  return text.charAt(0).toLowerCase() + text.slice(1);
 }
 
 export interface AdvisorTurnInput {
@@ -250,11 +300,7 @@ export function createAdvisor(deps: AdvisorDeps) {
     // what someone said, with no signal that the third went missing, is worse
     // than saying the advisor is unavailable.
     const groups = deps.groupsForTurn(priorValidated.facts, turnCount, deps.extractionGroups);
-    let combined: {
-      facts: ProjectFacts;
-      unrankedConcerns: readonly PriorityId[];
-      conflicts: readonly string[];
-    };
+    let combined: CombinedExtraction;
     try {
       const settled = await Promise.all(
         groups.map(async (group) => {
@@ -279,7 +325,10 @@ export function createAdvisor(deps: AdvisorDeps) {
     const extracted = combined.facts;
     const unrankedConcerns = combined.unrankedConcerns;
 
-    const facts = deps.mergeFacts(priorValidated.facts, extracted);
+    // `combined.corrects` is what lets an established fact be replaced. Without
+    // it a resolved fact is sticky, so a later message that merely mentions a
+    // different room cannot quietly overwrite the one under discussion.
+    const facts = deps.mergeFacts(priorValidated.facts, extracted, combined.corrects);
     // A ranking supersedes the open question it answers.
     const rankedNow = new Set(facts.priorities ?? []);
     const carriedConcerns = [
@@ -322,7 +371,7 @@ export function createAdvisor(deps: AdvisorDeps) {
         QUESTION_TOKENS,
         MAX_QUESTION_CHARS,
         allowedProductLabels,
-        question.canonical,
+        fallbackQuestion(question.canonical),
         interventions
       );
 

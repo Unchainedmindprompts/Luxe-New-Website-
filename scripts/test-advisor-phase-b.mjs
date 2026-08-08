@@ -614,6 +614,212 @@ await test("23 extraction routing skips settled groups and never runs zero", asy
   t.equal(extraction.groupsForTurn(everything, 3, all).length, all.length, "routing produced an empty set");
 });
 
+// ── 24-33: Phase B quality corrections ─────────────────────────────────────
+
+await test("24 a stated stone substrate resolves the mounting question", async (t) => {
+  const facts = {
+    requestedProducts: ["exterior-solar"], solarHeat: "severe",
+    viewImportance: "high", room: "living", mountingSubstrate: "stone",
+  };
+  const a = engine.assess(facts, KNOWLEDGE);
+  const askable = a.unresolvedQuestions.map((q) => q.id);
+  t.ok(!askable.includes("q-exterior-mounting"), "still asking what it mounts to after being told");
+  t.ok(ids(a.recognizedConditions).includes("mounting-substrate-known"), "answered substrate not recognized");
+  t.ok(
+    !ids(a.escalation.triggers).includes("escalate-unknown-mounting-structure"),
+    "still escalating unknown mounting after the homeowner answered"
+  );
+
+  // Unstated is still unknown, and still escalates.
+  const without = engine.assess({ ...facts, mountingSubstrate: undefined }, KNOWLEDGE);
+  t.ok(
+    ids(without.escalation.triggers).includes("escalate-unknown-mounting-structure"),
+    "unknown substrate no longer escalates"
+  );
+});
+
+await test("25 a known substrate does not imply structural safety", async (t) => {
+  const a = engine.assess(
+    { requestedProducts: ["exterior-solar"], solarHeat: "severe", room: "living", mountingSubstrate: "stone" },
+    KNOWLEDGE
+  );
+  t.ok(
+    ids(a.verificationRequirements).includes("verify-exterior-mounting"),
+    "mounting verification dropped once the substrate was named"
+  );
+  t.ok(
+    a.applicableGuardrails.some((g) => g.id === "no-mounting-safety-claim-without-inspection"),
+    "mounting-safety guardrail no longer in force"
+  );
+});
+
+await test("26 west + view + heat recommends while verification items remain", async (t) => {
+  // Privacy is included because it is a preference only the homeowner can
+  // answer — Luxe cannot discover it by visiting the house, so it legitimately
+  // gates a recommendation in a way mounting and wind do not. What this test
+  // pins is that the *verification* unknowns no longer force extra turns.
+  const provider = mockProvider({
+    extractions: [{
+      exposure: "west", solarHeat: "severe", viewImportance: "critical",
+      priorities: ["view-preservation"], room: "living", privacyNeed: "nighttime",
+    }],
+  });
+  const result = await makeAdvisor(provider).runTurn({
+    message: "Huge west-facing windows over the lake, brutal afternoon heat, the view matters most. We want privacy after dark.",
+    state: {},
+  });
+  t.equal(result.status, "RECOMMENDATION_READY", "still interrogating when a direction is already clear");
+  t.ok(ids(result.assessment.strongCandidates).includes("exterior-solar"), "exterior solar not leading");
+
+  // ...and the physical unknowns travelled with it rather than blocking it.
+  const verify = ids(result.assessment.verificationRequirements);
+  for (const item of ["verify-exterior-mounting", "verify-wind-exposure", "verify-power", "verify-door-access"]) {
+    t.ok(verify.includes(item), `${item} was not carried as a verification item`);
+  }
+});
+
+await test("27 unresolved mounting/wind/power surface as verification, not questions", async (t) => {
+  const assessment = engine.assess(
+    {
+      exposure: "west", solarHeat: "severe", viewImportance: "critical",
+      priorities: ["view-preservation"], room: "living", privacyNeed: "nighttime",
+    },
+    KNOWLEDGE
+  );
+  const selection = questionSelection.selectNextQuestion({
+    assessment, questionRules: KNOWLEDGE.questions, escalations: KNOWLEDGE.escalations,
+    unrankedConcerns: [], askedQuestionIds: [], turnCount: 1,
+  });
+  t.ok(selection.readyToRecommend, "verification-class questions still gate the recommendation");
+
+  const verify = ids(assessment.verificationRequirements);
+  t.ok(verify.includes("verify-exterior-mounting"), "mounting not carried as a verification item");
+  t.ok(verify.includes("verify-wind-exposure"), "wind not carried as a verification item");
+
+  const deferred = selection.ranked.filter((q) => q.verificationClass).map((q) => q.id);
+  for (const q of ["q-exterior-mounting", "q-wind-exposure", "q-power-availability", "q-door-access-conflict"]) {
+    t.ok(deferred.includes(q), `${q} not classed as verification`);
+  }
+  for (const q of selection.ranked) {
+    if (q.verificationClass) t.ok(q.score < 4, `${q.id} still scores as blocking`);
+  }
+
+  // A preference-only question is NOT deferrable — Luxe cannot answer it by
+  // visiting, so it must still be able to gate.
+  const withoutPrivacy = engine.assess(
+    { exposure: "west", solarHeat: "severe", viewImportance: "critical", priorities: ["view-preservation"], room: "living" },
+    KNOWLEDGE
+  );
+  const gated = questionSelection.selectNextQuestion({
+    assessment: withoutPrivacy, questionRules: KNOWLEDGE.questions, escalations: KNOWLEDGE.escalations,
+    unrankedConcerns: [], askedQuestionIds: [], turnCount: 1,
+  });
+  t.ok(!gated.readyToRecommend, "a preference-only question stopped gating");
+  t.equal(gated.next?.id, "q-nighttime-privacy", "the gating question is not the preference one");
+});
+
+await test("28 an established room survives a later unrelated answer", async (t) => {
+  const prior = { room: "nursery", roomDarkening: "maximum" };
+  // A later turn mentions another room in passing, with no correction flagged.
+  const merged = extraction.mergeFacts(prior, { room: "living", exposure: "east" }, []);
+  t.equal(merged.room, "nursery", "established room was overwritten by a passing mention");
+  t.equal(merged.exposure, "east", "a genuinely new fact was not recorded");
+  t.equal(merged.roomDarkening, "maximum", "an unrelated established fact was lost");
+});
+
+await test("29 an explicit correction does replace a prior fact", async (t) => {
+  const merged = extraction.mergeFacts(
+    { room: "nursery", motorizationInterest: "requested" },
+    { room: "bedroom", motorizationInterest: "uninterested" },
+    ["room", "motorizationInterest"]
+  );
+  t.equal(merged.room, "bedroom", "an explicit correction was ignored");
+  t.equal(merged.motorizationInterest, "uninterested", "an explicit scalar correction was ignored");
+
+  // Corrected lists are replaced, uncorrected lists still union.
+  const lists = extraction.mergeFacts(
+    { openings: ["sliding-door"], access: ["high-window"] },
+    { openings: ["french-door"], access: ["hard-to-reach"] },
+    ["openings"]
+  );
+  t.equal(lists.openings.length, 1, "corrected list was unioned instead of replaced");
+  t.equal(lists.openings[0], "french-door", "corrected list kept the wrong value");
+  t.equal(lists.access.length, 2, "uncorrected list stopped unioning");
+});
+
+await test("30 phrasing prompts carry the length and anti-boilerplate instruction", async (t) => {
+  const question = prompts.questionSystemPrompt([]);
+  const recommendation = prompts.recommendationSystemPrompt(
+    engine.assess({ room: "living" }, KNOWLEDGE), []
+  );
+  t.ok(/under 40 words/.test(question), "question prompt has no length ceiling");
+  t.ok(/50 to 100 words/.test(recommendation), "recommendation prompt has no length target");
+  for (const [name, text] of [["question", question], ["recommendation", recommendation]]) {
+    t.ok(/Thank you for sharing/.test(text), `${name} prompt does not name the boilerplate to avoid`);
+    t.ok(/gratitude/.test(text), `${name} prompt does not forbid gratitude openings`);
+  }
+  t.ok(/Do not sell/.test(recommendation), "recommendation prompt does not forbid selling");
+});
+
+await test("31 the deterministic fallback is polished customer-facing prose", async (t) => {
+  // Force both generations to violate, so the fallback is what ships.
+  const provider = mockProvider({
+    extractions: [{ room: "bedroom", roomDarkening: "maximum", priorities: ["room-darkening"] }],
+    phrasings: ["We guarantee complete blackout.", "Total blackout, guaranteed."],
+  });
+  const result = await runToRecommendation(provider, "I need the bedroom very dark.");
+  const text = result.message;
+
+  t.ok(result.guardrailInterventions.length > 0, "guardrail did not fire, so this is not the fallback path");
+  t.ok(/^[A-Z]/.test(text), "fallback does not start with a capital letter");
+  t.ok(/[.!?]$/.test(text), "fallback does not end in a complete sentence");
+  t.ok(!/\s{2,}/.test(text), "fallback contains collapsed whitespace artefacts");
+  t.ok(!/\.\s*\./.test(text), "fallback contains doubled sentence punctuation");
+  // Never leak internals.
+  for (const leak of [/\bq-[a-z-]+/, /\bverify-[a-z-]+/, /\bescalate-[a-z-]+/, /\bconflict-[a-z-]+/, /\bno-[a-z-]{6,}/, /strongCandidates|deprioritized|assessment/]) {
+    t.ok(!leak.test(text), `fallback leaked engine terminology matching ${leak}`);
+  }
+  t.ok(/consultation|our team/i.test(text), "fallback lost the consultation path");
+});
+
+await test("32 explicit scale language may map to qualitative geometry", async (t) => {
+  const v = extraction.validateFacts({ geometry: ["large-architectural-glass"] });
+  t.equal(v.dropped.length, 0, "qualitative large-scale geometry was rejected");
+  t.equal(v.facts.geometry?.[0], "large-architectural-glass", "qualitative geometry not recorded");
+
+  // The fact reaches the engine as a settled dimension. Phase A has no
+  // recognition rule keyed on scale alone, so this asserts that it is known —
+  // not that it fires a condition it was never wired to fire.
+  const a = engine.assess({ geometry: ["large-architectural-glass"], room: "living" }, KNOWLEDGE);
+  t.ok(!a.unknownDimensions.includes("geometry"), "qualitative scale did not register as known");
+
+  // It is in the physical group's schema, so the model can actually report it.
+  const physical = extraction.EXTRACTION_GROUPS.find((g) => g.id === "physical");
+  const geometryValues = extraction.buildGroupSchema(physical).properties.geometry.items.enum;
+  t.ok(geometryValues.includes("large-architectural-glass"), "scale vocabulary not offered to the model");
+});
+
+await test('33 "huge" can never become a dimension', async (t) => {
+  // There is no dimension field to populate — the vocabulary has no width,
+  // height, or size-eligibility concept, so a number has nowhere to land.
+  const dimensionish = ["width", "height", "squareFeet", "sizeInches", "dimensions", "maxWidth"];
+  const schemaFields = new Set(
+    extraction.EXTRACTION_GROUPS.flatMap((g) => Object.keys(extraction.buildGroupSchema(g).properties))
+  );
+  for (const field of dimensionish) {
+    t.ok(!schemaFields.has(field), `extraction schema exposes a dimension field: ${field}`);
+  }
+  // And anything numeric the model tries to send is dropped, not coerced.
+  const v = extraction.validateFacts({ geometry: ["96 inches"], room: "living" });
+  t.equal(v.facts.geometry?.length, 0, "a measurement was accepted as geometry");
+  t.ok(v.dropped.some((d) => d.includes("geometry")), "the measurement was not reported as dropped");
+
+  // The extraction prompt states the distinction explicitly.
+  const promptText = prompts.extractionSystemPrompt("the opening", "geometry[]: x", {});
+  t.ok(/SCALE IS NOT SIZE/.test(promptText), "extraction prompt does not draw the scale/size distinction");
+  t.ok(/never conclude a width/i.test(promptText), "extraction prompt does not forbid inferring dimensions");
+});
+
 // ── report ──────────────────────────────────────────────────────────────────
 
 console.log("Luxe Window Advisor — Phase B deterministic tests");

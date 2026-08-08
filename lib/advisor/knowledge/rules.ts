@@ -259,6 +259,16 @@ export const RECOGNITION_RULES: readonly RecognitionRule[] = [
     when: { requestedFeature: "free-hanging-exterior-shade" },
   },
   {
+    id: "mounting-substrate-known",
+    label: "Exterior mounting substrate stated",
+    when: {
+      all: [
+        { not: { unknown: "mountingSubstrate" } },
+        { not: { fact: "mountingSubstrate", is: ["unknown"] } },
+      ],
+    },
+  },
+  {
     id: "unknown-mounting-substrate",
     label: "What the exterior system would mount to is unknown",
     when: { has: "unknown-mounting-substrate" },
@@ -762,7 +772,10 @@ export const QUESTION_RULES: readonly QuestionRule[] = [
     id: "q-exterior-mounting",
     question: "What would an exterior system mount to — stone, siding, fascia, soffit, or structural framing?",
     when: EXTERIOR_IN_PLAY,
-    askOnlyIfUnknown: ["exteriorConditions"],
+    // Gated on the substrate itself, not on `exteriorConditions`. Wind and
+    // power live in that list too, so gating there meant a homeowner who
+    // answered this question was still asked it again.
+    askOnlyIfUnknown: ["mountingSubstrate"],
     materialTo: ["exterior-solar", "exterior-solar-plus-interior-privacy"],
   },
   {
@@ -891,7 +904,17 @@ export const ESCALATION_RULES: readonly EscalationRule[] = [
   {
     id: "escalate-unknown-mounting-structure",
     label: "Unknown exterior mounting structure",
-    when: { any: [{ has: "unknown-mounting-substrate" }, { all: [EXTERIOR_IN_PLAY, { unknown: "exteriorConditions" }] }] },
+    // Escalates while the substrate is genuinely unknown — either never stated,
+    // or stated as not known. A named substrate closes this; it does not make
+    // the mounting safe, which is why `verify-exterior-mounting` is unchanged
+    // and still fires on every exterior project.
+    when: {
+      any: [
+        { has: "unknown-mounting-substrate" },
+        { fact: "mountingSubstrate", is: ["unknown"] },
+        { all: [EXTERIOR_IN_PLAY, { unknown: "mountingSubstrate" }] },
+      ],
+    },
   },
   { id: "escalate-tilt-in-conflict", label: "Tilt-in window conflict", when: { has: "tilt-in-window" } },
   { id: "escalate-shutter-obstruction", label: "Shutters with an obstruction at the opening", when: { all: [SHUTTERS_IN_PLAY, SHUTTER_OBSTRUCTION] } },

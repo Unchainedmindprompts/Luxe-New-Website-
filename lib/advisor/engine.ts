@@ -57,6 +57,7 @@ const SCALAR_KEYS: readonly ScalarFactKey[] = [
   "budgetSensitivity",
   "moistureExposure",
   "motorizationInterest",
+  "mountingSubstrate",
 ];
 
 const LIST_KEYS: readonly ListFactKey[] = [

@@ -37,6 +37,7 @@ import type {
   Importance,
   MoistureExposure,
   MotorizationInterest,
+  MountingSubstrateId,
   OpeningConditionId,
   OperationFrequency,
   PriorityId,
@@ -89,6 +90,10 @@ const BUDGET: Record<BudgetSensitivity, true> = {
 };
 const MOISTURE: Record<MoistureExposure, true> = {
   none: true, humid: true, "direct-splash": true, unknown: true,
+};
+const MOUNTING: Record<MountingSubstrateId, true> = {
+  stone: true, siding: true, fascia: true, soffit: true,
+  "structural-framing": true, other: true, unknown: true,
 };
 const MOTORIZATION: Record<MotorizationInterest, true> = {
   requested: true, open: true, uninterested: true, unknown: true,
@@ -147,6 +152,7 @@ const SCALAR_FIELDS = {
   budgetSensitivity: keys(BUDGET),
   moistureExposure: keys(MOISTURE),
   motorizationInterest: keys(MOTORIZATION),
+  mountingSubstrate: keys(MOUNTING),
 } as const;
 
 /** List fields: name → allowed members. */
@@ -230,6 +236,7 @@ export const EXTRACTION_GROUPS: readonly ExtractionGroup[] = [
       "access",
       "openings",
       "exteriorConditions",
+      "mountingSubstrate",
     ],
   },
   {
@@ -277,8 +284,19 @@ export function assertGroupsPartitionFields(): { missing: string[]; duplicated: 
  *
  * `additionalProperties: false` is what stops the model inventing a field.
  */
+export const CORRECTS_FIELD = "corrects";
+
 export function buildGroupSchema(group: ExtractionGroup): Record<string, unknown> {
   const properties: Record<string, unknown> = {};
+  // An explicit channel for "the homeowner changed their mind about X".
+  // Without it, merge cannot tell a correction from a passing mention, and a
+  // resolved fact gets silently overwritten — which is how an established
+  // nursery became a living room when someone said "mostly the living room
+  // and the kids' rooms".
+  properties[CORRECTS_FIELD] = {
+    type: "array",
+    items: { type: "string", enum: [...group.fields] },
+  };
   for (const field of group.fields) {
     if (field in SCALAR_FIELDS) {
       const values = SCALAR_FIELDS[field as keyof typeof SCALAR_FIELDS];
@@ -307,6 +325,8 @@ export function describeGroupVocabulary(group: ExtractionGroup): string {
 export interface ValidatedFacts {
   readonly facts: ProjectFacts;
   readonly unrankedConcerns: readonly PriorityId[];
+  /** Fields the homeowner explicitly changed their mind about this turn. */
+  readonly corrects: readonly ExtractionFieldName[];
   /** Values the model or client supplied that are not in the vocabulary. */
   readonly dropped: readonly string[];
 }
@@ -364,10 +384,13 @@ export function validateFacts(raw: unknown): ValidatedFacts {
   }
 
   const unranked = cleanList(source.unrankedConcerns, keys(PRIORITY), "unrankedConcerns", dropped);
+  const allFields = [...Object.keys(SCALAR_FIELDS), ...Object.keys(LIST_FIELDS)];
+  const corrects = cleanList(source[CORRECTS_FIELD], allFields, CORRECTS_FIELD, dropped);
 
   return {
     facts: facts as ProjectFacts,
     unrankedConcerns: (unranked ?? []) as PriorityId[],
+    corrects: (corrects ?? []) as ExtractionFieldName[],
     dropped,
   };
 }
@@ -392,6 +415,7 @@ export function validateFacts(raw: unknown): ValidatedFacts {
 export interface CombinedExtraction {
   readonly facts: ProjectFacts;
   readonly unrankedConcerns: readonly PriorityId[];
+  readonly corrects: readonly ExtractionFieldName[];
   readonly dropped: readonly string[];
   readonly conflicts: readonly string[];
 }
@@ -403,10 +427,12 @@ export function mergeExtractionGroups(
   const owner = new Map<string, string>();
   const conflicts: string[] = [];
   const dropped: string[] = [];
+  const corrects: ExtractionFieldName[] = [];
   let unranked: PriorityId[] = [];
 
   for (const { groupId, validated } of results) {
     dropped.push(...validated.dropped);
+    for (const field of validated.corrects) if (!corrects.includes(field)) corrects.push(field);
     unranked = [...unranked, ...validated.unrankedConcerns.filter((c) => !unranked.includes(c))];
     for (const [field, value] of Object.entries(validated.facts)) {
       if (value === undefined) continue;
@@ -424,6 +450,7 @@ export function mergeExtractionGroups(
   return {
     facts: facts as ProjectFacts,
     unrankedConcerns: unranked.filter((c) => !ranked.has(c)),
+    corrects,
     dropped,
     conflicts,
   };
@@ -462,20 +489,39 @@ export function groupsForTurn(
 /**
  * Folds a new extraction into what was already known.
  *
- * Scalars: a new value replaces the old one, because the homeowner's latest
- * statement is the current truth — including a correction.
+ * A RESOLVED FACT IS STICKY. Once the homeowner has settled a dimension it is
+ * not overwritten just because a later message mentions something adjacent —
+ * only when they explicitly change it. Before this rule, "mostly the living
+ * room and the kids' rooms" silently replaced an established nursery, and the
+ * whole assessment moved with it.
  *
- * Lists: unioned rather than replaced. Each extraction sees only the newest
- * message, so replacing would silently forget a condition mentioned two turns
- * ago. The exception is `priorities`: a fresh ranking supersedes the old one
- * outright, since merging two orderings would produce a ranking nobody stated.
+ * So a scalar is replaced only when it was previously unknown, or when the
+ * extraction reports the field in `corrects` — an explicit signal that the
+ * homeowner changed their mind rather than an inference drawn from a passing
+ * mention.
+ *
+ * Lists are unioned rather than replaced, because each extraction sees only
+ * the newest message and replacing would forget a condition mentioned two
+ * turns ago. A corrected list is replaced outright, since that is what a
+ * correction means.
+ *
+ * `priorities` is the one field a fresh non-empty value always replaces:
+ * merging two orderings would produce a ranking nobody stated.
  */
-export function mergeFacts(prior: ProjectFacts, incoming: ProjectFacts): ProjectFacts {
+export function mergeFacts(
+  prior: ProjectFacts,
+  incoming: ProjectFacts,
+  corrects: readonly ExtractionFieldName[] = []
+): ProjectFacts {
   const merged: Record<string, unknown> = { ...prior };
+  const corrected = new Set<string>(corrects);
 
   for (const field of Object.keys(SCALAR_FIELDS)) {
     const value = (incoming as Record<string, unknown>)[field];
-    if (value !== undefined) merged[field] = value;
+    if (value === undefined) continue;
+    const alreadyResolved = merged[field] !== undefined;
+    if (alreadyResolved && !corrected.has(field)) continue;
+    merged[field] = value;
   }
 
   for (const field of Object.keys(LIST_FIELDS)) {
@@ -484,6 +530,10 @@ export function mergeFacts(prior: ProjectFacts, incoming: ProjectFacts): Project
     if (next === undefined) continue;
     if (field === "priorities") {
       if (next.length) merged[field] = next;
+      continue;
+    }
+    if (corrected.has(field)) {
+      merged[field] = next;
       continue;
     }
     const before = (merged[field] as string[] | undefined) ?? [];

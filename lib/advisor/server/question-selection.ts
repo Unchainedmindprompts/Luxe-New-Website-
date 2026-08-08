@@ -63,12 +63,50 @@ const MATERIAL_THRESHOLD = 4;
 /** Stop asking and give direction, however much is still unknown. */
 export const MAX_QUESTIONS = 8;
 
+/**
+ * Questions whose answer Luxe is going to confirm at the opening anyway.
+ *
+ * This is the distinction that decides whether the advisor feels like an
+ * adviser or an intake form: information needed to CHOOSE A DIRECTION is worth
+ * a turn, information Luxe MUST VERIFY BEFORE FINAL SELECTION is not. Each
+ * question below has a verification requirement that covers the same ground —
+ * mounting substrate, wind, power, door clearance, stack-back, reach — so
+ * asking it holds up a recommendation the homeowner could already act on,
+ * while the unknown still travels with them as something the consultation
+ * settles.
+ *
+ * They are not dropped. They stay askable, score below direction-determining
+ * questions, and surface in `verificationRequirements` either way. What changes
+ * is that they no longer block readiness once a direction exists.
+ */
+const VERIFICATION_CLASS_QUESTIONS: Readonly<Record<string, string>> = {
+  "q-exterior-mounting": "verify-exterior-mounting",
+  "q-wind-exposure": "verify-wind-exposure",
+  "q-power-availability": "verify-power",
+  "q-door-access-conflict": "verify-door-access",
+  "q-stack-back": "verify-stack-back",
+  "q-reach-and-operation": "verify-reach-and-operation",
+};
+
+/**
+ * True when the assessment already carries the verification requirement that
+ * covers this question. Checked against the live assessment rather than
+ * assumed, so a question only becomes deferrable when Luxe is genuinely going
+ * to look at it.
+ */
+function isVerificationClass(questionId: string, verificationIds: ReadonlySet<string>): boolean {
+  const covering = VERIFICATION_CLASS_QUESTIONS[questionId];
+  return covering !== undefined && verificationIds.has(covering);
+}
+
 export interface ScoredQuestion {
   readonly id: string;
   readonly canonical: string;
   readonly materialTo: readonly DirectionId[];
   readonly score: number;
   readonly rationale: readonly string[];
+  /** Luxe will confirm this at the opening, so it does not block a recommendation. */
+  readonly verificationClass: boolean;
 }
 
 /** Collects every `{ unknown: K }` key tested anywhere in a condition tree. */
@@ -112,6 +150,7 @@ export function selectNextQuestion(input: SelectionInput): SelectionResult {
   const strong = new Set<DirectionId>(assessment.strongCandidates.map((c) => c.id));
   const eligible = new Set<DirectionId>(assessment.eligibleDirections);
   const blocking = escalationBlockingKeys(escalations);
+  const verificationIds = new Set(assessment.verificationRequirements.map((v) => v.id));
   const rulesById = new Map(questionRules.map((r) => [r.id, r]));
   const asked = new Set(askedQuestionIds);
 
@@ -127,6 +166,7 @@ export function selectNextQuestion(input: SelectionInput): SelectionResult {
       materialTo: [],
       score: WEIGHTS.priorityOrder,
       rationale: ["priority order is unstated and nearly every rule is rank-aware"],
+      verificationClass: false,
     });
   }
 
@@ -161,12 +201,21 @@ export function selectNextQuestion(input: SelectionInput): SelectionResult {
       rationale.push("its being unknown is itself an escalation trigger");
     }
 
+    const verificationClass = isVerificationClass(question.id, verificationIds);
+    if (verificationClass) {
+      // Still askable, but never ahead of a question that could change the
+      // answer. Luxe is going to look at this in the home regardless.
+      score = Math.min(score, MATERIAL_THRESHOLD - 1);
+      rationale.push("Luxe verifies this at the opening, so it does not gate a recommendation");
+    }
+
     ranked.push({
       id: question.id,
       canonical: question.question,
       materialTo: question.materialTo,
       score,
       rationale,
+      verificationClass,
     });
   }
 
@@ -174,7 +223,8 @@ export function selectNextQuestion(input: SelectionInput): SelectionResult {
   // facts always produce the same question.
   ranked.sort((a, b) => b.score - a.score);
 
-  const material = ranked.filter((q) => q.score >= MATERIAL_THRESHOLD);
+  // Only direction-determining questions gate a recommendation.
+  const material = ranked.filter((q) => !q.verificationClass && q.score >= MATERIAL_THRESHOLD);
 
   if (turnCount >= MAX_QUESTIONS) {
     return { next: null, ranked, readyToRecommend: true, readyReason: "question-limit-reached" };

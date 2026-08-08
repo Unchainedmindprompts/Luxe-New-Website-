@@ -133,6 +133,29 @@ export type GeometryConditionId =
   | "small-window"
   | "large-architectural-glass";
 
+/**
+ * What an exterior system would attach to.
+ *
+ * Separate from `exteriorConditions` because those are *conditions* — things
+ * true of the site — whereas this is the answer to a question. Before this
+ * existed, a homeowner who said "it mounts to stone" was recorded as
+ * `unknown-mounting-substrate`, so the advisor asked again and kept escalating
+ * as though nobody had answered.
+ *
+ * KNOWING THE SUBSTRATE IS NOT A SAFETY FINDING. It closes the question and
+ * nothing more: `verify-exterior-mounting` still applies on every exterior
+ * project, because whether *that* stone, at *that* height, will carry *that*
+ * system is a judgement made at the opening, not from a sentence.
+ */
+export type MountingSubstrateId =
+  | "stone"
+  | "siding"
+  | "fascia"
+  | "soffit"
+  | "structural-framing"
+  | "other"
+  | "unknown";
+
 export type ExteriorConditionId =
   | "high-wind-exposure"
   | "unknown-mounting-substrate"
@@ -216,7 +239,8 @@ export type ScalarFactKey =
   | "operationFrequency"
   | "budgetSensitivity"
   | "moistureExposure"
-  | "motorizationInterest";
+  | "motorizationInterest"
+  | "mountingSubstrate";
 
 /** List facts addressable by a condition. */
 export type ListFactKey =
@@ -459,6 +483,12 @@ export interface ProjectFacts {
   readonly access?: readonly AccessConditionId[];
   readonly geometry?: readonly GeometryConditionId[];
   readonly exteriorConditions?: readonly ExteriorConditionId[];
+  /**
+   * What an exterior system would mount to, when the homeowner has said.
+   * Answering this stops the question being re-asked; it does not make the
+   * mounting safe — see `MountingSubstrateId`.
+   */
+  readonly mountingSubstrate?: MountingSubstrateId;
   readonly openings?: readonly OpeningConditionId[];
   readonly requestedProducts?: readonly SingleDirectionId[];
   readonly requestedFeatures?: readonly RequestedFeatureId[];

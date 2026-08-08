@@ -143,6 +143,55 @@ an injection round-trip for no reasoning value. It is listed in the recommended
 grouping for this phase but is a deliberate omission, not an oversight — say the
 word and it becomes one string field in `intent`.
 
+## Mounting substrate — a question the advisor can now hear answered
+
+`ProjectFacts.mountingSubstrate` (`stone` · `siding` · `fascia` · `soffit` ·
+`structural-framing` · `other` · `unknown`) is separate from
+`exteriorConditions` because those are *conditions of the site* while this is
+*the answer to a question*. Before it existed, a homeowner who said "it mounts
+to stone" was recorded as `unknown-mounting-substrate`, so the advisor asked
+again and kept escalating as though nobody had answered.
+
+**A named substrate closes the question and nothing more.**
+`verify-exterior-mounting` still applies on every exterior project, and
+`no-mounting-safety-claim-without-inspection` stays in force — whether *that*
+stone, at *that* height, will carry *that* system is a judgement made at the
+opening, not from a sentence. Tests 24 and 25 pin both halves.
+
+## Direction-determining vs verification-class questions
+
+The distinction that decides whether the advisor reads as an adviser or an
+intake form.
+
+**Direction-determining** — the answer changes which product is right, and only
+the homeowner has it. Privacy after dark, darkening level, how the window is
+used. These still gate a recommendation.
+
+**Verification-class** — Luxe is going to confirm it at the opening anyway.
+Mounting substrate, wind, power, door clearance, stack-back, reach. Each is
+paired with the verification requirement that covers it, and a question is only
+deferred when that requirement is actually present in the live assessment. They
+stay askable, score below the material threshold, and travel with the
+recommendation as "what Luxe will verify" — they no longer cost a turn.
+
+## Context preservation
+
+A resolved fact is **sticky**. It is replaced only when it was previously
+unknown, or when extraction reports the field in `corrects` — an explicit
+signal that the homeowner changed their mind. Mentioning another room in
+passing is not a correction, which is what stopped "mostly the living room and
+the kids' rooms" from silently replacing an established nursery.
+
+## Scale is not size
+
+Explicit scale language — huge, massive, oversized, floor-to-ceiling — may
+record qualitative geometry such as `large-architectural-glass`. That is the
+homeowner describing the character of the opening.
+
+It never becomes a dimension. There is no width, height, or size-eligibility
+field in the vocabulary, so a number has nowhere to land, and anything numeric
+is dropped by the validator rather than coerced. Tests 32 and 33.
+
 ## Question selection
 
 Deterministic. The model phrases; it does not choose.
