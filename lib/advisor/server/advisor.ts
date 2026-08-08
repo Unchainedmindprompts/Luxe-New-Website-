@@ -199,26 +199,6 @@ function consultationIntent(
 }
 
 /**
- * Whether the assessment holds anything the homeowner could act on, short of a
- * product choice.
- *
- * This is what separates "we have nothing yet" from "we have something real to
- * tell you, just not a best fit". Cordless operation for a house with toddlers
- * is genuinely useful before any product direction exists, and so is naming a
- * conflict between what they asked for and what they described.
- */
-function hasActionableGuidance(assessment: AdvisorAssessment): boolean {
-  return (
-    assessment.crossCuttingOptions.length > 0 ||
-    assessment.deprioritizedOptions.length > 0 ||
-    assessment.requestConflicts.length > 0 ||
-    assessment.excludedDirections.length > 0 ||
-    assessment.deprioritizedDirections.length > 0 ||
-    assessment.tradeoffs.length > 0
-  );
-}
-
-/**
  * The one place the response's honesty is decided.
  *
  * `RECOMMENDATION_READY` requires an actual strong candidate — never merely the
@@ -228,12 +208,22 @@ function hasActionableGuidance(assessment: AdvisorAssessment): boolean {
  */
 function deriveStatus(
   assessment: AdvisorAssessment,
-  questionGates: boolean
+  questionGates: boolean,
+  hasQuestion: boolean
 ): "NEED_MORE_INFORMATION" | "GUIDANCE_READY" | "RECOMMENDATION_READY" {
-  if (questionGates) return "NEED_MORE_INFORMATION";
+  // NEED_MORE_INFORMATION is a promise that there is something to answer.
+  // Live testing produced turns carrying that status with no question and no
+  // recommendation — the homeowner was told there was not enough to go on,
+  // with nothing to answer and nothing to do. Requiring the question here
+  // makes that shape unreachable rather than something the UI has to paper
+  // over.
+  //
+  // Note this adds no question: counterfactual gating still decides whether
+  // one is worth asking, and a turn with nothing worth asking simply reports
+  // what it does have instead.
+  if (questionGates && hasQuestion) return "NEED_MORE_INFORMATION";
   if (assessment.strongCandidates.length > 0) return "RECOMMENDATION_READY";
-  if (hasActionableGuidance(assessment)) return "GUIDANCE_READY";
-  return "NEED_MORE_INFORMATION";
+  return "GUIDANCE_READY";
 }
 
 /** Deterministic guidance text, used when the model's is unusable. */
@@ -487,7 +477,7 @@ export function createAdvisor(deps: AdvisorDeps) {
     );
 
     const questionGates = !(selection.readyToRecommend || !selection.next);
-    const status = deriveStatus(assessment, questionGates);
+    const status = deriveStatus(assessment, questionGates, Boolean(selection.next));
 
     // ── 4. phrasing, validated ─────────────────────────────────────────────
     if (brandAnswer) {
