@@ -249,12 +249,19 @@ export function selectNextQuestion(input: SelectionInput): SelectionResult {
     return { next: null, ranked, readyToRecommend: true, readyReason: "question-limit-reached" };
   }
   if (!material.length) {
-    // Nothing left worth asking. Ready only if there is actually something to
-    // recommend — otherwise the advisor would hand back an empty answer, and
-    // the least-bad remaining question is better than that.
-    if (assessment.strongCandidates.length) {
+    // Nothing left worth asking.
+    //
+    // When the counterfactual oracle has ruled, its verdict is complete: it
+    // measured every plausible answer and none of them moves the direction, so
+    // there is no "least-bad question" left to fall back on. Whether the turn
+    // can recommend, can only guide, or genuinely has nothing is decided
+    // downstream from the assessment — asking anyway would be asking a question
+    // we have already proven cannot change the answer.
+    if (tiers || assessment.strongCandidates.length) {
       return { next: null, ranked, readyToRecommend: true, readyReason: "no-material-questions-remain" };
     }
+    // No oracle supplied (legacy callers): without candidates, the least-bad
+    // remaining question still beats an empty answer.
     return {
       next: ranked[0] ?? null,
       ranked,

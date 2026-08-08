@@ -31,6 +31,7 @@ import type { FactLedger, FactRecord } from "@/lib/advisor/server/ledger";
 import { sanitizeForOutput, validateGeneratedText } from "@/lib/advisor/server/guardrails";
 import {
   extractionSystemPrompt,
+  guidanceSystemPrompt,
   phrasingUserMessage,
   questionSystemPrompt,
   recommendationSystemPrompt,
@@ -155,6 +156,7 @@ export async function POST(request: Request) {
       extractionSystemPrompt,
       questionSystemPrompt,
       recommendationSystemPrompt,
+      guidanceSystemPrompt,
       phrasingUserMessage,
     },
     allowedBrands: BUSINESS.brands,

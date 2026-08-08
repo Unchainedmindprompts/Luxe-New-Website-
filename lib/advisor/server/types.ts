@@ -61,8 +61,22 @@ export interface AdvisorRequest {
 
 // ───────────────────────────── response ─────────────────────────────────────
 
+/**
+ * How much the advisor can honestly claim this turn.
+ *
+ * `GUIDANCE_READY` exists because the previous three-state contract forced a
+ * lie: a turn that stopped asking questions was labelled
+ * `RECOMMENDATION_READY` even when the prose it carried said "no single
+ * direction stands out". The text was honest and the status field was not, and
+ * anything keying off the status — rendering, analytics, CTA logic — would have
+ * read it as a firm recommendation.
+ */
 export type AdvisorStatus =
+  /** Nothing actionable yet, or a homeowner-answerable question still gates it. */
   | "NEED_MORE_INFORMATION"
+  /** Genuinely useful direction exists, but no best-fit product has been selected. */
+  | "GUIDANCE_READY"
+  /** A strong candidate exists and nothing material is still blocking it. */
   | "RECOMMENDATION_READY"
   | "ADVISOR_UNAVAILABLE";
 
@@ -97,6 +111,7 @@ export interface ConsultationCtaIntent {
   readonly recommended: boolean;
   readonly reasons: readonly (
     | "recommendation-ready"
+    | "guidance-ready"
     | "requires-physical-verification"
     | "high-complexity-project"
     | "exterior-mounting-or-power-conditions"

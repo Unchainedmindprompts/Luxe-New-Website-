@@ -116,6 +116,10 @@ export interface AdvisorDeps {
       assessment: AdvisorAssessment,
       guardrails: readonly Guardrail[]
     ) => string;
+    guidanceSystemPrompt: (
+      assessment: AdvisorAssessment,
+      guardrails: readonly Guardrail[]
+    ) => string;
     phrasingUserMessage: (parts: Record<string, string | undefined>) => string;
   };
   /** Brand names Luxe genuinely carries, for invented-product detection. */
@@ -159,10 +163,15 @@ function summarise(assessment: AdvisorAssessment): AssessmentSummary {
  */
 function consultationIntent(
   assessment: AdvisorAssessment,
-  ready: boolean
+  status: "NEED_MORE_INFORMATION" | "GUIDANCE_READY" | "RECOMMENDATION_READY"
 ): ConsultationCtaIntent {
   const reasons: ConsultationCtaIntent["reasons"][number][] = [];
-  if (ready) reasons.push("recommendation-ready");
+  // A consultation is not only worth offering once a product is chosen. When
+  // there is useful direction but no best fit, the visit is precisely what
+  // resolves it — so guidance earns its own reason rather than borrowing the
+  // recommendation's.
+  if (status === "RECOMMENDATION_READY") reasons.push("recommendation-ready");
+  if (status === "GUIDANCE_READY") reasons.push("guidance-ready");
 
   const verifications = new Set(assessment.verificationRequirements.map((v) => v.id));
   // `verify-dimensions` is always present, so it says nothing about this
@@ -177,6 +186,63 @@ function consultationIntent(
   if (assessment.requestConflicts.length) reasons.push("request-conflict-needs-discussion");
 
   return { recommended: reasons.length > 0, reasons };
+}
+
+/**
+ * Whether the assessment holds anything the homeowner could act on, short of a
+ * product choice.
+ *
+ * This is what separates "we have nothing yet" from "we have something real to
+ * tell you, just not a best fit". Cordless operation for a house with toddlers
+ * is genuinely useful before any product direction exists, and so is naming a
+ * conflict between what they asked for and what they described.
+ */
+function hasActionableGuidance(assessment: AdvisorAssessment): boolean {
+  return (
+    assessment.crossCuttingOptions.length > 0 ||
+    assessment.deprioritizedOptions.length > 0 ||
+    assessment.requestConflicts.length > 0 ||
+    assessment.excludedDirections.length > 0 ||
+    assessment.deprioritizedDirections.length > 0 ||
+    assessment.tradeoffs.length > 0
+  );
+}
+
+/**
+ * The one place the response's honesty is decided.
+ *
+ * `RECOMMENDATION_READY` requires an actual strong candidate — never merely the
+ * absence of a further question. A turn that has stopped asking but has nothing
+ * to recommend is `GUIDANCE_READY` when it has something useful to say, and
+ * `NEED_MORE_INFORMATION` when it does not.
+ */
+function deriveStatus(
+  assessment: AdvisorAssessment,
+  questionGates: boolean
+): "NEED_MORE_INFORMATION" | "GUIDANCE_READY" | "RECOMMENDATION_READY" {
+  if (questionGates) return "NEED_MORE_INFORMATION";
+  if (assessment.strongCandidates.length > 0) return "RECOMMENDATION_READY";
+  if (hasActionableGuidance(assessment)) return "GUIDANCE_READY";
+  return "NEED_MORE_INFORMATION";
+}
+
+/** Deterministic guidance text, used when the model's is unusable. */
+function fallbackGuidance(assessment: AdvisorAssessment): string {
+  const sentences: string[] = [];
+  const favour = assessment.crossCuttingOptions[0];
+  const avoid = assessment.deprioritizedOptions[0];
+  const conflict = assessment.requestConflicts[0];
+
+  if (conflict) sentences.push(trimReason(conflict.explanation) ?? "");
+  if (favour) sentences.push(`Where it matters, we would favour ${lowerFirst(favour.label)}.`);
+  if (avoid) sentences.push(`We would steer away from ${lowerFirst(avoid.label)}.`);
+  if (!sentences.length) {
+    sentences.push("There is not enough here yet to point you at one direction with confidence.");
+  }
+  sentences.push(
+    "Our team will look at the opening and work through the options with you at a consultation."
+  );
+  return sentences.map((x) => x.trim()).filter(Boolean).join(" ").replace(/\s+/g, " ");
 }
 
 /**
@@ -391,10 +457,11 @@ export function createAdvisor(deps: AdvisorDeps) {
     });
 
     const nextTurnCount = turnCount + 1;
-    const ready = selection.readyToRecommend || !selection.next;
+    const questionGates = !(selection.readyToRecommend || !selection.next);
+    const status = deriveStatus(assessment, questionGates);
 
     // ── 4. phrasing, validated ─────────────────────────────────────────────
-    if (!ready && selection.next) {
+    if (status === "NEED_MORE_INFORMATION" && selection.next) {
       const question = selection.next;
       const phrased = await phraseSafely(
         deps.prompts.questionSystemPrompt(guardrails),
@@ -428,15 +495,23 @@ export function createAdvisor(deps: AdvisorDeps) {
           materialTo: question.materialTo,
         },
         message: phrased,
-        consultationCta: consultationIntent(assessment, false),
+        consultationCta: consultationIntent(assessment, status),
         guardrailInterventions: interventions,
         error: null,
       };
     }
 
-    const fallback = fallbackRecommendation(assessment);
+    // A turn with no strong candidate must not be handed the recommendation
+    // prompt: it opens with "lead with the direction that fits", which is the
+    // one claim this turn is not entitled to make.
+    const givingGuidance = status === "GUIDANCE_READY";
+    const fallback = givingGuidance
+      ? fallbackGuidance(assessment)
+      : fallbackRecommendation(assessment);
     const message = await phraseSafely(
-      deps.prompts.recommendationSystemPrompt(assessment, guardrails),
+      givingGuidance
+        ? deps.prompts.guidanceSystemPrompt(assessment, guardrails)
+        : deps.prompts.recommendationSystemPrompt(assessment, guardrails),
       deps.prompts.phrasingUserMessage({
         "best fit": assessment.strongCandidates
           .map((c) => `${c.label} — ${c.reasons.join(" ")}`)
@@ -456,7 +531,7 @@ export function createAdvisor(deps: AdvisorDeps) {
     );
 
     return {
-      status: "RECOMMENDATION_READY",
+      status,
       state: {
         ledger: ledger as Record<string, unknown>,
         facts,
@@ -467,7 +542,7 @@ export function createAdvisor(deps: AdvisorDeps) {
       assessment: summarise(assessment),
       nextQuestion: null,
       message,
-      consultationCta: consultationIntent(assessment, true),
+      consultationCta: consultationIntent(assessment, status),
       guardrailInterventions: interventions,
       error: null,
     };

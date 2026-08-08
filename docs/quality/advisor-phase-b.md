@@ -211,6 +211,37 @@ It never becomes a dimension. There is no width, height, or size-eligibility
 field in the vocabulary, so a number has nowhere to land, and anything numeric
 is dropped by the validator rather than coerced. Tests 32 and 33.
 
+## Response states
+
+| Status | When | Carries |
+|---|---|---|
+| `NEED_MORE_INFORMATION` | a homeowner-answerable question still changes the direction, or nothing actionable exists yet | one question |
+| `GUIDANCE_READY` | something genuinely useful to say, but no best fit selected | options to favour/avoid, conflicts, tradeoffs, CTA intent |
+| `RECOMMENDATION_READY` | a strong candidate exists and nothing material gates it | best fit, alternatives, tradeoffs, verification items |
+| `ADVISOR_UNAVAILABLE` | any failure path | safe text, consultation still offered |
+
+**`RECOMMENDATION_READY` requires an actual strong candidate — never merely the
+absence of a further question.** The three-state contract forced a lie: a turn
+that had stopped asking was labelled a recommendation even when the prose it
+carried said "no single direction stands out". The text was honest and the
+status field was not, and anything downstream keying off status — rendering,
+analytics, CTA logic — would have read it as a firm recommendation.
+
+`GUIDANCE_READY` gets its **own phrasing prompt**, not the recommendation one.
+That prompt opens with "lead with the direction that fits", which is exactly the
+claim such a turn is not entitled to make — and a model handed it with no strong
+candidate will manufacture one.
+
+**CTA is not tied to recommendations.** Guidance earns its own
+`guidance-ready` reason rather than borrowing `recommendation-ready`: when there
+is useful direction but no best fit, the in-home visit is precisely what
+resolves it.
+
+A worked case: clear-glass usage with a valuable view and **nighttime privacy**
+has no best fit under Luxe's rules — a solar shade keeps the view and reverses
+after dark, so nothing wins outright. That is `GUIDANCE_READY`, and test 55
+pins it.
+
 ## Question selection
 
 Deterministic. The model phrases; it does not choose.
