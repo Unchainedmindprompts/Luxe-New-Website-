@@ -65,6 +65,18 @@ export const advisorBookingClicked = (
 export const advisorFallback = (reason: string) =>
   emit("advisor_fallback", { reason });
 
-/** Fired as the visitor leaves for /book, so the handoff itself is countable. */
+/**
+ * Fired as the visitor leaves for /book, so the handoff itself is countable.
+ *
+ * KNOWN GAP: THIS IS NOT A BOOKING. Completed-booking attribution is unsolved.
+ * `/book` embeds Calendly as a third-party script and exposes no reliable
+ * completion event we can listen for, so nothing here can tell a visitor who
+ * booked from one who left the page. This event measures departures toward
+ * booking, and conversion reporting must not treat it as more than that.
+ *
+ * Closing it needs either Calendly's own event surface or the scheduling API,
+ * both of which belong to the deferred capability phase — not to a client-side
+ * guess made here.
+ */
 export const advisorBookHandoff = (turns: number, status: string) =>
   emit("advisor_book_handoff", { turns, status });
