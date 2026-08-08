@@ -16,6 +16,8 @@
     "validate:routes": "node scripts/validate-routes.mjs",
     "validate:links": "node scripts/validate-links.mjs",
     "test:advisor": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-engine.mjs",
+    "test:advisor:server": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-phase-b.mjs",
+    "eval:advisor:live": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/eval-advisor-live.mjs",
     "verify:build": "npm run validate:routes && npm run validate:links",
     "verify": "npm run check && npm run build && npm run validate:legacy && npm run verify:build",
     "audit:schema": "node scripts/audit-schema-ids.mjs",
@@ -27,6 +29,7 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.116.0",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/playfair-display": "^5.2.8",
     "@stripe/stripe-js": "^9.7.0",
