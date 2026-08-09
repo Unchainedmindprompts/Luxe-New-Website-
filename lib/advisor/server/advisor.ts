@@ -61,7 +61,14 @@ export interface AdvisorDeps {
   /** Validates a model delta against the vocabulary AND the current message. */
   readonly validateUpdates: (raw: unknown, message: string) => ValidatedUpdates;
   readonly buildDeltaSchema: () => Record<string, unknown>;
-  readonly describeVocabulary: () => string;
+  /**
+   * The vocabulary block for the extraction prompt. Takes the priority
+   * definitions so the model is shown Phase A's own meanings rather than a
+   * list of bare identifiers it has to guess the semantics of.
+   */
+  readonly describeVocabulary: (
+    priorityDefinitions: AdvisorKnowledge["priorities"]
+  ) => string;
   readonly isListField: (field: string) => boolean;
   /** Ledger operations. Provenance lives here and never reaches the engine. */
   readonly ledger: {
@@ -112,14 +119,17 @@ export interface AdvisorDeps {
   readonly sanitizeForOutput: (text: string, maxLength: number) => string;
   readonly prompts: {
     extractionSystemPrompt: (vocabulary: string, established: string) => string;
-    questionSystemPrompt: (guardrails: readonly Guardrail[]) => string;
+    /** `corrected` is true only when this turn actually retracted a fact. */
+    questionSystemPrompt: (guardrails: readonly Guardrail[], corrected?: boolean) => string;
     recommendationSystemPrompt: (
       assessment: AdvisorAssessment,
-      guardrails: readonly Guardrail[]
+      guardrails: readonly Guardrail[],
+      corrected?: boolean
     ) => string;
     guidanceSystemPrompt: (
       assessment: AdvisorAssessment,
-      guardrails: readonly Guardrail[]
+      guardrails: readonly Guardrail[],
+      corrected?: boolean
     ) => string;
     phrasingUserMessage: (parts: Record<string, string | undefined>) => string;
   };
@@ -147,8 +157,14 @@ function providerFailureCode(error: unknown): "provider-unavailable" | "provider
 function summarise(assessment: AdvisorAssessment): AssessmentSummary {
   const rank = (list: AdvisorAssessment["strongCandidates"]) =>
     list.map((c) => ({ id: c.id, label: c.label, reasons: c.reasons }));
+  // Chosen once, here, from the engine's own ordering — never by the model and
+  // never a second time by the UI.
+  const primary = assessment.strongCandidates[0];
   return {
     recognizedConditions: assessment.recognizedConditions.map((c) => ({ id: c.id, label: c.label })),
+    primaryRecommendation: primary
+      ? { id: primary.id, label: primary.label, reasons: primary.reasons }
+      : null,
     strongCandidates: rank(assessment.strongCandidates),
     alternatives: rank(assessment.deprioritizedDirections),
     excluded: rank(assessment.excludedDirections),
@@ -378,7 +394,7 @@ export function createAdvisor(deps: AdvisorDeps) {
     try {
       const raw = await deps.provider.extract({
         system: deps.prompts.extractionSystemPrompt(
-          deps.describeVocabulary(),
+          deps.describeVocabulary(deps.knowledge.priorities),
           deps.ledger.describe(priorLedger)
         ),
         userMessage: input.message,
@@ -401,6 +417,11 @@ export function createAdvisor(deps: AdvisorDeps) {
     );
     const ledger = application.ledger;
     const projected = deps.ledger.project(ledger) as Record<string, unknown>;
+
+    // A retraction this turn is the difference between the advisor sounding
+    // attentive and actually being it. The engine below already reasons from
+    // the corrected facts — this is only so the reply can say so out loud.
+    const corrected = application.retracted.length > 0;
 
     // `unrankedConcerns` is a Phase B concept, not a Phase A fact — it exists
     // so an arbitrary array order is never read as a stated ranking. It is
@@ -503,7 +524,7 @@ export function createAdvisor(deps: AdvisorDeps) {
     if (status === "NEED_MORE_INFORMATION" && selection.next) {
       const question = selection.next;
       const phrased = await phraseSafely(
-        deps.prompts.questionSystemPrompt(guardrails),
+        deps.prompts.questionSystemPrompt(guardrails, corrected),
         deps.prompts.phrasingUserMessage({
           "question to ask": question.canonical,
           "why it matters": question.materialTo.length
@@ -550,8 +571,8 @@ export function createAdvisor(deps: AdvisorDeps) {
       : fallbackRecommendation(assessment);
     const message = await phraseSafely(
       givingGuidance
-        ? deps.prompts.guidanceSystemPrompt(assessment, guardrails)
-        : deps.prompts.recommendationSystemPrompt(assessment, guardrails),
+        ? deps.prompts.guidanceSystemPrompt(assessment, guardrails, corrected)
+        : deps.prompts.recommendationSystemPrompt(assessment, guardrails, corrected),
       deps.prompts.phrasingUserMessage({
         "best fit": assessment.strongCandidates
           .map((c) => `${c.label} — ${c.reasons.join(" ")}`)

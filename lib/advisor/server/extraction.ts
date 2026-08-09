@@ -48,6 +48,7 @@ import type {
   MountingSubstrateId,
   OpeningConditionId,
   OperationFrequency,
+  PriorityDefinition,
   PriorityId,
   PrivacyNeed,
   RequestedFeatureId,
@@ -206,11 +207,26 @@ const MAX_UPDATES = 24;
 
 export type UpdateBasis = "stated" | "inferred";
 
+/**
+ * Assert adds or strengthens; retract takes back.
+ *
+ * WITHOUT RETRACT THE CONTRACT IS MONOTONIC, AND A MONOTONIC CONTRACT CANNOT
+ * REPRESENT A CUSTOMER CHANGING THEIR MIND. A scalar could at least be
+ * overwritten, but a list member — a priority, a condition — could never leave
+ * once it arrived, whatever the homeowner said afterwards. Live conversation
+ * proved the cost: a homeowner said plainly that seeing out through a lowered
+ * shade was not what they meant, twice, and `view-preservation` stayed in their
+ * priorities and kept driving the recommendation, because nothing in the system
+ * could remove it.
+ */
+export type UpdateOperation = "assert" | "retract";
+
 export interface FactUpdate {
   readonly field: ExtractionFieldName;
   readonly value: string;
   readonly basis: UpdateBasis;
   readonly evidence: string;
+  readonly operation: UpdateOperation;
 }
 
 /**
@@ -236,8 +252,9 @@ export function buildDeltaSchema(): Record<string, unknown> {
             value: { type: "string" },
             basis: { type: "string", enum: ["stated", "inferred"] },
             evidence: { type: "string" },
+            operation: { type: "string", enum: ["assert", "retract"] },
           },
-          required: ["field", "value", "basis", "evidence"],
+          required: ["field", "value", "basis", "evidence", "operation"],
           additionalProperties: false,
         },
       },
@@ -247,11 +264,60 @@ export function buildDeltaSchema(): Record<string, unknown> {
   };
 }
 
-/** Every field and its allowed values, for the system prompt. */
-export function describeVocabulary(): string {
-  return EXTRACTION_FIELDS.map((field) =>
-    `${field}${isListField(field) ? "[]" : ""}: ${allowedValues(field).join(" | ")}`
-  ).join("\n");
+/**
+ * Meanings for the values whose *names* invite the wrong reading.
+ *
+ * A bare identifier list is not a vocabulary, it is a word association test.
+ * "I hate how much they block the window" scored `view-preservation` because
+ * that identifier contains the concept "view" and the sentence contains a
+ * window — while the value that actually meant what the homeowner said,
+ * `clear-glass-when-open`, sat unexplained one line below it.
+ *
+ * Only genuinely confusable entries are listed. A gloss on every value would
+ * bury these in noise, which is the same failure in a different shape.
+ */
+const DISAMBIGUATION: Readonly<Record<string, string>> = {
+  viewImportance:
+    "How much seeing OUT THROUGH the covering matters WHILE IT IS DOWN. Nothing to do with how much of the window is covered when it is up — that is clear-glass-when-open.",
+  "windowUse:raised-to-clear-glass":
+    "They pull the covering fully up during the day and want the glass unobstructed. Says nothing about seeing out while it is down.",
+  "windowUse:left-down-louvers-adjusted":
+    "The covering stays down and they tilt or adjust it in place.",
+  "openings:inadequate-stack-back":
+    "There is not enough clear WALL BESIDE the window to park drapery panels. About wall space either side, never about how much of the glass a raised covering stacks over.",
+  "openings:shallow-room-depth":
+    "The room is too shallow for the covering to project into, not a comment on the window.",
+};
+
+/**
+ * Every field and its allowed values, for the system prompt.
+ *
+ * Priority meanings come from Phase A's own `clarifies` text rather than a copy
+ * kept here. Phase A already draws the distinction this defect turned on —
+ * "seeing out while the treatment is deployed, not only when it is raised" —
+ * and it was never being shown to the model. Injecting the definitions means
+ * the two can never drift apart.
+ */
+export function describeVocabulary(
+  priorityDefinitions: readonly PriorityDefinition[] = []
+): string {
+  const clarifies = new Map(priorityDefinitions.map((p) => [p.id as string, p.clarifies]));
+
+  return EXTRACTION_FIELDS.map((field) => {
+    const isList = isListField(field);
+    const lines = [`${field}${isList ? "[]" : ""}: ${allowedValues(field).join(" | ")}`];
+
+    const fieldNote = DISAMBIGUATION[field];
+    if (fieldNote) lines.push(`    ${fieldNote}`);
+
+    for (const value of allowedValues(field)) {
+      const note =
+        DISAMBIGUATION[`${field}:${value}`] ??
+        ((field === "priorities" || field === "unrankedConcerns") ? clarifies.get(value) : undefined);
+      if (note) lines.push(`    - ${value}: ${note}`);
+    }
+    return lines.join("\n");
+  }).join("\n");
 }
 
 // ───────────────────────────── evidence ─────────────────────────────────────
@@ -273,6 +339,84 @@ export function evidenceSupports(message: string, evidence: string): boolean {
   const quote = normaliseForEvidence(evidence);
   if (quote.length < 2) return false;
   return normaliseForEvidence(message).includes(quote);
+}
+
+// ───────────────────────── retraction targeting ─────────────────────────────
+
+/**
+ * Words that signal something is being taken back rather than described.
+ *
+ * Generic withdrawal language, not sentences from any transcript. A cue alone
+ * proves nothing — it must be paired with a link to the specific fact, which is
+ * what stops a bare "No." erasing whatever happens to be nearby.
+ */
+const WITHDRAWAL_CUES = [
+  "not", "n't", "no longer", "never", "forget", "drop", "skip", "ignore",
+  "changed my mind", "instead of", "without", "scratch", "nevermind",
+  "don t", "doesn t", "didn t", "isn t", "won t", "wasn t", "aren t",
+];
+
+/** Tokens too generic to identify anything. */
+const UNIDENTIFYING = new Set([
+  "when", "with", "that", "this", "from", "into", "onto", "over", "than",
+  "unknown", "other", "none", "both", "some", "very", "more", "most", "less",
+  "mild", "high", "moderate", "severe", "maximum", "minimum", "requested",
+  "unspecified", "mixed", "rare", "daily", "occasional", "true", "false",
+]);
+
+const tokenise = (text: string): readonly string[] =>
+  text
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .toLowerCase()
+    .split(/[^a-z]+/)
+    .filter((word) => word.length >= 4 && !UNIDENTIFYING.has(word));
+
+/** Loose stem match, so "dark" reaches "darkening" and "preserving" reaches "preservation". */
+function related(a: string, b: string): boolean {
+  if (a === b) return true;
+  const stem = (word: string) => word.replace(/(ing|ion|ions|ed|es|s)$/, "");
+  const [x, y] = [stem(a), stem(b)];
+  if (x.length < 4 || y.length < 4) return false;
+  return x === y || x.startsWith(y) || y.startsWith(x);
+}
+
+/**
+ * Whether a quote genuinely takes back THIS fact, rather than merely sitting
+ * near it in the conversation.
+ *
+ * THE DEFECT THIS EXISTS FOR: a homeowner answering a question with "No. I need
+ * privacy" had `clear-glass-when-open` retracted. The quote was real, present in
+ * the message and stated — every existing gate passed — and it identified
+ * nothing at all. Proximity was doing the work.
+ *
+ * Two independent conditions, both required:
+ *
+ *   1. WITHDRAWAL LANGUAGE. Something in the quote has to mean "take this away".
+ *      "I need privacy" describes a requirement; it cannot remove one.
+ *   2. A LINK TO THE TARGET. The quote must contain a word belonging to the
+ *      value being withdrawn — or, when the value is a bare magnitude like
+ *      "high", to the field it belongs to. "No." names nothing, so it retracts
+ *      nothing, however emphatic it is.
+ *
+ * Both are derived from the field and value themselves, so a new fact added to
+ * the vocabulary is covered the day it is added, with no list to maintain.
+ */
+export function retractionTargeted(field: string, value: string, evidence: string): boolean {
+  const quote = normaliseForEvidence(evidence).replace(/['’]/g, " ");
+  const words = quote.split(/[^a-z]+/).filter(Boolean);
+  // Whole words only: "nothing" and "another" contain "not" and mean nothing
+  // like it. Multi-word cues are matched against the quote as written.
+  const cued = WITHDRAWAL_CUES.some((cue) =>
+    cue.includes(" ") ? quote.includes(cue) : words.includes(cue)
+  );
+  if (!cued) return false;
+
+  // A meaningful value identifies itself; a magnitude borrows its field's name.
+  const valueTokens = tokenise(value);
+  const targets = valueTokens.length ? valueTokens : tokenise(field);
+  if (!targets.length) return false;
+
+  return targets.some((target) => words.some((word) => related(word, target)));
 }
 
 // ───────────────────────────── validation ───────────────────────────────────
@@ -305,7 +449,7 @@ export function validateUpdates(raw: unknown, message: string): ValidatedUpdates
       rejected.push("update was not an object");
       continue;
     }
-    const { field, value, basis, evidence } = item as Record<string, unknown>;
+    const { field, value, basis, evidence, operation } = item as Record<string, unknown>;
 
     if (typeof field !== "string" || !(EXTRACTION_FIELDS as readonly string[]).includes(field)) {
       rejected.push(`unknown field: ${typeof field === "string" ? field : typeof field}`);
@@ -331,12 +475,30 @@ export function validateUpdates(raw: unknown, message: string): ValidatedUpdates
       rejected.push(`${name}: evidence not found in the current message`);
       continue;
     }
+    if (operation !== "assert" && operation !== "retract") {
+      rejected.push(`${name}: unrecognised operation`);
+      continue;
+    }
+    // A retraction erases something the homeowner is on record as having said,
+    // so it is the one operation that may not rest on a guess. Inference is a
+    // hypothesis; it may propose a fact, never withdraw one.
+    if (operation === "retract" && basis !== "stated") {
+      rejected.push(`${name}: inferred retraction refused`);
+      continue;
+    }
+    // A quote that does not name what it withdraws is retracting by proximity,
+    // which is how "No. I need privacy" erased an unrelated requirement.
+    if (operation === "retract" && !retractionTargeted(name, value, evidence)) {
+      rejected.push(`${name}: retraction evidence does not identify ${value}`);
+      continue;
+    }
 
     accepted.push({
       field: name,
       value,
       basis,
       evidence: evidence.trim().slice(0, MAX_EVIDENCE_CHARS),
+      operation,
     });
   }
 

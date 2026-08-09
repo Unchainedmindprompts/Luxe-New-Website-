@@ -18,6 +18,13 @@
  * mention. An update that carries its own justification does not need to be
  * told: the evidence check decides whether it exists at all, and basis decides
  * whether it outranks what is already there.
+ *
+ * That reasoning held for *replacing* a value and quietly failed for *removing*
+ * one. A homeowner who says "that is not what I meant" is not offering a new
+ * value for the slot — they are emptying it, and a contract that can only
+ * assert has no way to hear them. Hence `operation: "retract"`, which is not a
+ * return of the `corrects` flag: it names an action, not a claim about whether
+ * some other update was a correction.
  */
 import type { ProjectFacts } from "../types";
 import type { FactUpdate, UpdateBasis } from "./extraction";
@@ -41,6 +48,8 @@ export type FactLedger = Readonly<Record<string, FactRecord | readonly FactRecor
 export interface LedgerApplication {
   readonly ledger: FactLedger;
   readonly applied: readonly FactUpdate[];
+  /** What this turn took back. Drives the advisor's acknowledgement. */
+  readonly retracted: readonly FactUpdate[];
   /** Updates refused by precedence, with the reason. Diagnostics only. */
   readonly suppressed: readonly string[];
 }
@@ -92,6 +101,13 @@ function applyListMember(
  * `isList` is a parameter rather than an import so this stays a pure function
  * of its inputs — the same discipline the rest of the reasoning path follows,
  * and what lets the test harness load it with no build step.
+ *
+ * RETRACTION IS UNCONDITIONAL. It does not negotiate with `outranks`, because
+ * the thing it is undoing is precisely a fact that already won that argument.
+ * A homeowner saying "that is not what I meant" is the strongest signal in the
+ * conversation, and it has to be able to remove a value they themselves stated
+ * a moment earlier — otherwise the advisor is arguing with the customer about
+ * what the customer wants.
  */
 export function applyUpdates(
   ledger: FactLedger,
@@ -101,16 +117,48 @@ export function applyUpdates(
 ): LedgerApplication {
   const next: Record<string, FactRecord | readonly FactRecord[]> = { ...ledger };
   const applied: FactUpdate[] = [];
+  const retracted: FactUpdate[] = [];
   const suppressed: string[] = [];
 
-  for (const update of updates) {
+  // Retractions run first so a turn that corrects and replaces in one breath —
+  // "not the view when it's down, I meant when it's raised" — cannot have the
+  // replacement clobbered by the removal that was meant to precede it.
+  const ordered = [
+    ...updates.filter((u) => u.operation === "retract"),
+    ...updates.filter((u) => u.operation !== "retract"),
+  ];
+
+  for (const update of ordered) {
+    const current = next[update.field];
+
+    if (update.operation === "retract") {
+      if (Array.isArray(current)) {
+        const list = current as readonly FactRecord[];
+        const kept = list.filter((record) => record.value !== update.value);
+        // An emptied list stays as `[]` rather than vanishing: the homeowner
+        // has spoken about this dimension, and absence would re-open a question
+        // they have already answered.
+        if (kept.length !== list.length) retracted.push(update);
+        else suppressed.push(`${update.field}: nothing to retract`);
+        next[update.field] = kept;
+      } else if (current && (current as FactRecord).value === update.value) {
+        // Scalars are deleted outright. Absence is how this ledger spells
+        // "unknown" — writing a placeholder would make the retracted value
+        // look like a fresh customer statement.
+        delete next[update.field];
+        retracted.push(update);
+      } else {
+        suppressed.push(`${update.field}: nothing to retract`);
+      }
+      continue;
+    }
+
     const record: FactRecord = {
       value: update.value,
       basis: update.basis,
       evidence: update.evidence,
       turn,
     };
-    const current = next[update.field];
 
     if (Array.isArray(current) || isList(update.field)) {
       const list = (Array.isArray(current) ? current : []) as readonly FactRecord[];
@@ -126,7 +174,7 @@ export function applyUpdates(
     next[update.field] = after;
   }
 
-  return { ledger: next, applied, suppressed };
+  return { ledger: next, applied, retracted, suppressed };
 }
 
 /**
