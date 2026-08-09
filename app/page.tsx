@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   },
 };
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
+import { HOMEPAGE_FAQS } from "@/lib/homepage-faqs";
 import { OWNER_STUB } from "@/lib/schema";
 import { productPages } from "@/lib/product-data";
 
@@ -252,23 +253,7 @@ const webpageNode = {
   inLanguage: "en-US",
 };
 
-const HOMEPAGE_FAQS = [
-  {
-    question: "What areas does Luxe Window Works serve?",
-    answer:
-      "We serve Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint, and the surrounding Kootenai County area. Free in-home consultations are available throughout Northern Idaho.",
-  },
-  {
-    question: "What's included in the lifetime installation guarantee?",
-    answer:
-      "Every window treatment we professionally install is backed by a lifetime installation guarantee. If a treatment we installed develops any installation-related issue — a loose bracket, a misaligned headrail, anything tied to how it was put up — we come back and make it right for as long as you own the home.",
-  },
-  {
-    question: "Why do you recommend cellular shades for Northern Idaho homes?",
-    answer:
-      "Cellular (honeycomb) shades trap air inside their hexagonal cells, making them the most energy-efficient window covering available — R-values up to 7.86 on double-cell blackout configurations. In Northern Idaho's heating-dominated climate, that translates to meaningfully lower winter heat loss and reduced summer heat gain.",
-  },
-] as const;
+
 
 const faqPageNode = {
   "@type": "FAQPage",
@@ -479,7 +464,7 @@ export default function HomePage() {
               Book My Free In-Home Consultation
             </Link>
             <Link
-              href="/show-me-my-options"
+              href="/ask-luxe"
               className="inline-flex items-center gap-2 text-charcoal hover:text-gold font-semibold text-base transition-colors group"
             >
               Show Me My Options

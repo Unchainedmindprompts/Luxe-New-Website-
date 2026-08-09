@@ -24,6 +24,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const [
   products, priorities, rules, guardrailKnowledge,
   engine, extraction, questionSelection, guardrails, prompts, advisorModule, limits, ledgerModule, counterfactual, brandKnowledge, brandResponse,
+  answerKnowledge, answerSelection, productData, areaData, homepageFaqs, constants,
 ] = await Promise.all([
   import("../lib/advisor/knowledge/products.ts"),
   import("../lib/advisor/knowledge/priorities.ts"),
@@ -40,7 +41,36 @@ const [
   import("../lib/advisor/server/counterfactual.ts"),
   import("../lib/advisor/knowledge/brand-responses.ts"),
   import("../lib/advisor/server/brand-response.ts"),
+  import("../lib/advisor/knowledge/answers.ts"),
+  import("../lib/advisor/server/answer-selection.ts"),
+  import("../lib/product-data.ts"),
+  import("../lib/area-data.ts"),
+  import("../lib/homepage-faqs.ts"),
+  import("../lib/constants.ts"),
 ]);
+
+/**
+ * The advisor's answer knowledge, assembled here exactly as
+ * `knowledge/index.ts` assembles it for the app — from the site's own published
+ * FAQs rather than a copy. If the two ever diverge, this harness is testing
+ * something the customer never sees.
+ */
+const ANSWER_TOPICS = [
+  ...answerKnowledge.BUSINESS_ANSWERS,
+  ...answerKnowledge.answerTopicsFromBusiness({
+    hours: constants.BUSINESS.hours,
+    phone: constants.BUSINESS.phone,
+    email: constants.BUSINESS.email,
+    serviceAreas: constants.SERVICE_AREAS,
+  }),
+  ...answerKnowledge.answerTopicsFromFaqs(homepageFaqs.HOMEPAGE_FAQS, "Published homepage FAQ", "faq-home"),
+  ...Object.values(productData.productPages).flatMap((page) =>
+    answerKnowledge.answerTopicsFromFaqs(page.faqs, `Published FAQ on /products/${page.slug}`, `faq-product-${page.slug}`)
+  ),
+  ...Object.values(areaData.areaPages).flatMap((page) =>
+    answerKnowledge.answerTopicsFromFaqs(page.faqs ?? [], `Published FAQ on /areas/${page.slug}`, `faq-area-${page.slug}`)
+  ),
+];
 
 const KNOWLEDGE = {
   directions: products.PRODUCT_DIRECTIONS,
@@ -57,6 +87,7 @@ const KNOWLEDGE = {
   guardrails: guardrailKnowledge.GUARDRAILS,
   businessPolicies: rules.BUSINESS_POLICIES,
   brandResponses: brandKnowledge.BRAND_RESPONSES,
+  answers: ANSWER_TOPICS,
 };
 
 /** The brands Luxe genuinely carries — mirrors BUSINESS.brands in lib/constants.ts. */
@@ -84,7 +115,10 @@ function mockProvider({ extractions = [], phrasings = [], failExtract, failPhras
       // message itself, so evidence validation passes and the test is about
       // merge behaviour rather than quoting.
       const scripted = ex.length >= calls.extract ? ex[calls.extract - 1] : (ex[ex.length - 1] ?? {});
-      return { updates: toUpdates(scripted, userMessage) };
+      // Scenarios describe project facts unless they say otherwise, which
+      // matches the schema default and keeps every pre-existing test on the
+      // product path it was written for.
+      return { updates: toUpdates(scripted, userMessage), intent: scripted?.__intent ?? "project" };
     },
     async phrase({ system, userMessage }) {
       calls.phrase++;
@@ -145,6 +179,10 @@ function makeAdvisor(provider) {
     buildDeltaSchema: extraction.buildDeltaSchema,
     describeVocabulary: extraction.describeVocabulary,
     isListField: extraction.isListField,
+    isInformational: extraction.isInformational,
+    selectAnswerTopics: answerSelection.selectAnswerTopics,
+    selectNamedDirections: answerSelection.selectNamedDirections,
+    describeDirection: answerSelection.describeDirection,
     ledger: LEDGER,
     classifyQuestions: counterfactual.classifyQuestions,
     isVerificationClass: questionSelection.isVerificationClass,
@@ -154,6 +192,8 @@ function makeAdvisor(provider) {
     sanitizeForOutput: guardrails.sanitizeForOutput,
     prompts: {
       extractionSystemPrompt: prompts.extractionSystemPrompt,
+      answerSystemPrompt: prompts.answerSystemPrompt,
+      discoverySystemPrompt: prompts.discoverySystemPrompt,
       questionSystemPrompt: prompts.questionSystemPrompt,
       recommendationSystemPrompt: prompts.recommendationSystemPrompt,
       guidanceSystemPrompt: prompts.guidanceSystemPrompt,
@@ -1761,6 +1801,175 @@ await test("82 the canonical answer path is untouched by any of this", async (t)
   t.equal(r.message, brandKnowledge.BRAND_RESPONSES.find((b) => b.id === "hunter-douglas-not-carried").response,
     "the approved wording changed");
   t.equal(provider.calls.phrase, 0, "the approved answer was sent through phrasing");
+});
+
+// ── 83-92: Ask Luxe — answering the question they actually asked ────────────
+
+/** Runs one turn with a declared intent and a scripted model answer. */
+async function ask(message, intent, answer = "A clean neutral answer from our team.") {
+  const provider = mockProvider({
+    extractions: [{ __intent: intent }],
+    phrasings: [answer],
+  });
+  const result = await makeAdvisor(provider).runTurn({ message, state: {} });
+  return { result, provider };
+}
+
+/** The approved material actually handed to the phrasing model. */
+const approvedFor = (provider) => provider.calls.lastPhraseSystem;
+
+await test("83 the consultation question is answered, not turned into qualification", async (t) => {
+  const { result, provider } = await ask("What happens during an in-home consultation?", "consultation");
+  t.equal(result.status, "ANSWERED", `expected ANSWERED, got ${result.status}`);
+  t.equal(result.nextQuestion, null, "a qualification question was asked instead of answering");
+
+  const system = approvedFor(provider);
+  t.ok(/look at the windows and how you actually use the space/.test(system), "the approved consultation answer was not retrieved");
+  t.ok(/no pressure and no obligation/.test(system), "the no-pressure positioning was not included");
+  // The answer prompt forbids the qualification reflex outright.
+  t.ok(/Do not ask what room it is for/.test(system), "nothing stops the answer becoming an interrogation");
+  t.ok(!/strongest energy direction|Recommended direction/.test(system), "product reasoning leaked into a consultation answer");
+});
+
+await test("84 approved business answers are retrieved for the question asked", async (t) => {
+  const cases = [
+    ["What are your hours?", "general", /Monday to Friday, 9:00 AM to 5:00 PM/],
+    ["What areas do you serve?", "general", /Coeur d'Alene, Post Falls, Hayden, Rathdrum and Sandpoint/],
+    ["Do you work on just one window?", "general", /no project minimum/i],
+    ["What happens if a shade I bought from you breaks?", "general", /limited lifetime warranty for the original purchaser/],
+    ["How long does it take after ordering?", "general", /approximately four weeks/],
+    ["How much do window treatments cost?", "general", /don't publish generic price ranges/],
+    ["Do you service blinds you didn't install?", "general", /only service what we sold/i],
+    ["What's included in the lifetime installation guarantee?", "general", /as long as you own the home/],
+  ];
+  for (const [message, intent, expected] of cases) {
+    const { result, provider } = await ask(message, intent);
+    t.equal(result.status, "ANSWERED", `"${message}" produced ${result.status}`);
+    t.ok(expected.test(approvedFor(provider)), `"${message}" did not retrieve its approved answer`);
+  }
+});
+
+await test("85 shutters timing and the four-week norm are both stated, neither guaranteed", async (t) => {
+  const { provider } = await ask("How long do shutters take?", "general");
+  const system = approvedFor(provider);
+  t.ok(/six to eight weeks/.test(system), "the shutter timing is missing");
+  t.ok(/approximately|typically/.test(system), "timing is stated without hedging");
+  for (const banned of [/guaranteed/i, /we promise/i, /exactly \w+ weeks/i]) {
+    t.ok(!banned.test(system), `timing was turned into a guarantee: ${banned}`);
+  }
+});
+
+await test("86 a product comparison is answered from product knowledge, not qualified", async (t) => {
+  const { result, provider } = await ask("What's the difference between cellular and roller shades?", "product");
+  t.equal(result.status, "ANSWERED", `expected ANSWERED, got ${result.status}`);
+  t.equal(result.nextQuestion, null, "a comparison was answered with a question");
+
+  const system = approvedFor(provider);
+  t.ok(/Cellular shades:/.test(system), "cellular knowledge was not retrieved");
+  t.ok(/Interior roller shades:/.test(system) || /Roller shades:/.test(system), "roller knowledge was not retrieved");
+  // Only the two named products — a comparison is not an excuse for a catalogue.
+  t.ok(!/Shutters:/.test(system), "an unrelated product was added to the comparison");
+});
+
+await test("87 nothing approved means nothing invented", async (t) => {
+  const topics = answerSelection.selectAnswerTopics("Do you install hot tubs?", ANSWER_TOPICS);
+  t.equal(topics.length, 0, "an unrelated question matched an approved topic");
+
+  // Retrieval must not fire on a question that merely shares generic words.
+  t.equal(
+    answerSelection.selectAnswerTopics("how much light does a cellular shade block", ANSWER_TOPICS)
+      .filter((s) => s.topic.id === "pricing").length,
+    0,
+    "'how much light' reached the pricing answer"
+  );
+
+  // And the prompt itself refuses to fill a gap.
+  const prompt = prompts.answerSystemPrompt("", KNOWLEDGE.guardrails, false);
+  t.ok(/nothing approved covers this question/.test(prompt), "an empty knowledge set is not stated as empty");
+  t.ok(/rather have someone confirm it than guess/.test(prompt), "the prompt offers no way to decline");
+  t.ok(/Do not add a fact, a figure, a timescale, a product, a brand or a policy/.test(prompt), "the prompt permits invention");
+});
+
+await test("88 an informational answer never fabricates a project", async (t) => {
+  // The exact failure this replaces: "what are your hours" came back talking
+  // about glare, and a cellular-vs-roller question came back about bathrooms.
+  for (const [message, intent] of [["What are your hours?", "general"], ["Do you offer financing?", "general"]]) {
+    const { result, provider } = await ask(message, intent);
+    t.equal(result.status, "ANSWERED", `${message} produced ${result.status}`);
+    t.equal(Object.keys(result.state.facts).length, 0, `${message} invented project facts`);
+    const system = approvedFor(provider);
+    for (const invented of [/glare/i, /bathroom/i, /west-facing/i, /privacy at night/i, /room-darkening/i]) {
+      t.ok(!invented.test(system), `${message} was handed an invented scenario: ${invented}`);
+    }
+  }
+});
+
+await test("89 discovery reassures and asks one easy question", async (t) => {
+  const { result, provider } = await ask("I have no idea what I want.", "discovery");
+  t.equal(result.status, "ANSWERED", `expected ANSWERED, got ${result.status}`);
+  const system = approvedFor(provider);
+  t.ok(/do not need to know/i.test(system), "the reassurance is missing");
+  t.ok(/exactly one question at the end/.test(system), "more than one question is permitted");
+  t.ok(/Do not name products/.test(system), "discovery may open with a product list");
+  t.ok(/Do not ask about window direction, room type, mounting, measurements or budget/.test(system), "discovery may still interrogate");
+});
+
+await test("90 a project message still reaches the product engine", async (t) => {
+  const provider = mockProvider({
+    extractions: [{ __intent: "project", room: "bedroom", exposure: "east", priorities: ["room-darkening"] }],
+  });
+  const r = await makeAdvisor(provider).runTurn({ message: "Our bedroom is too bright in the morning.", state: {} });
+  t.ok(r.status !== "ANSWERED", "a real project was answered instead of reasoned about");
+  t.ok(r.assessment.recognizedConditions.length > 0, "the engine did not run on a project message");
+  t.equal(r.state.facts.room, "bedroom", "project facts were not recorded");
+});
+
+await test("91 the canonical brand answers survive the new routing", async (t) => {
+  const hd = await ask("Do you carry Hunter Douglas?", "product");
+  t.equal(hd.result.canonicalResponseId, "hunter-douglas-not-carried", "the Hunter Douglas answer no longer fires");
+  t.equal(
+    hd.result.message,
+    brandKnowledge.BRAND_RESPONSES.find((b) => b.id === "hunter-douglas-not-carried").response,
+    "the approved wording changed"
+  );
+  t.equal(hd.provider.calls.phrase, 0, "the approved answer was sent through phrasing");
+
+  const brands = await ask("What brands do you carry?", "product");
+  t.equal(brands.result.canonicalResponseId, "brands-carried", "the brand list answer no longer fires");
+  for (const brand of ALLOWED_BRANDS) {
+    t.ok(brands.result.message.includes(brand), `${brand} is missing from the brand list`);
+  }
+});
+
+await test("92 approved knowledge is read from the site, not copied beside it", async (t) => {
+  // The reconciled count: 3 homepage + 51 product + 20 area.
+  const page = ANSWER_TOPICS.filter((topic) => topic.priority === "page");
+  t.equal(page.length, 74, "the published FAQ count has drifted");
+  t.equal(
+    answerKnowledge.answerTopicsFromFaqs(homepageFaqs.HOMEPAGE_FAQS, "x", "y").length, 3,
+    "the homepage FAQ count has drifted"
+  );
+  t.equal(
+    Object.values(productData.productPages).reduce((n, p) => n + p.faqs.length, 0), 51,
+    "the product FAQ count has drifted"
+  );
+  t.equal(
+    Object.values(areaData.areaPages).reduce((n, p) => n + (p.faqs?.length ?? 0), 0), 20,
+    "the area FAQ count has drifted"
+  );
+
+  // Every published answer is the page's own text, character for character.
+  const guarantee = homepageFaqs.HOMEPAGE_FAQS.find((f) => /lifetime installation guarantee/i.test(f.question));
+  t.ok(
+    page.some((topic) => topic.answer === guarantee.answer),
+    "a published answer was altered on its way into the advisor"
+  );
+
+  // Business answers outrank page FAQs, so a policy question gets the policy.
+  const business = ANSWER_TOPICS.filter((topic) => topic.priority === "business");
+  t.equal(business.length, 14, "the business answer count has drifted");
+  const top = answerSelection.selectAnswerTopics("How much does it cost?", ANSWER_TOPICS)[0];
+  t.equal(top?.topic.id, "pricing", "a page FAQ outranked the approved pricing policy");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────

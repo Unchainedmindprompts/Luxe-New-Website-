@@ -24,12 +24,20 @@ import {
   describeVocabulary,
   isListField,
   validateUpdates,
+  isInformational,
 } from "@/lib/advisor/server/extraction";
+import {
+  describeDirection,
+  selectAnswerTopics,
+  selectNamedDirections,
+} from "@/lib/advisor/server/answer-selection";
 import { applyUpdates, projectFacts, validateLedger } from "@/lib/advisor/server/ledger";
 import type { ExtractionFieldName } from "@/lib/advisor/server/extraction";
 import type { FactLedger, FactRecord } from "@/lib/advisor/server/ledger";
 import { sanitizeForOutput, validateGeneratedText } from "@/lib/advisor/server/guardrails";
 import {
+  answerSystemPrompt,
+  discoverySystemPrompt,
   extractionSystemPrompt,
   guidanceSystemPrompt,
   phrasingUserMessage,
@@ -153,8 +161,14 @@ export async function POST(request: Request) {
     selectNextQuestion,
     validateGeneratedText,
     sanitizeForOutput,
+    isInformational,
+    selectAnswerTopics,
+    selectNamedDirections,
+    describeDirection,
     prompts: {
       extractionSystemPrompt,
+      answerSystemPrompt,
+      discoverySystemPrompt,
       questionSystemPrompt,
       recommendationSystemPrompt,
       guidanceSystemPrompt,

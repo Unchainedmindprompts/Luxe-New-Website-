@@ -73,7 +73,7 @@ export async function POST(req: Request) {
       : source === "contact"
       ? "/contact"
       : source === "show-me-my-options" || source === "luxe-advisor"
-      ? "/show-me-my-options"
+      ? "/ask-luxe"
       : `/${source}`;
   const subject = problem
     ? `New Consultation Request — ${name} — ${problem}`

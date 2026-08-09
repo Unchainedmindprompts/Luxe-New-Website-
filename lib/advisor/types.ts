@@ -472,10 +472,64 @@ export interface BrandResponse {
   readonly response: string;
 }
 
+/** One day's opening hours, mirroring `BUSINESS.hours`. */
+export interface BusinessHours {
+  readonly day: string;
+  readonly open: string | null;
+  readonly close: string | null;
+}
+
+/** One served location, mirroring `SERVICE_AREAS`. */
+export interface ServiceArea {
+  readonly name: string;
+}
+
 /** Canonical business facts that are not product knowledge. */
 export interface BusinessPolicy {
   readonly id: string;
   readonly statement: string;
+}
+
+/**
+ * An approved answer to a question a visitor might actually ask.
+ *
+ * THE ADVISOR MAY NOT ANSWER FROM ANYTHING ELSE. A visitor asking about the
+ * warranty, the consultation or how soon Luxe can come out is asking a business
+ * question, and a model with no approved source will invent a plausible answer —
+ * live testing produced exactly that, including a reply about bathroom moisture
+ * to someone who asked how cellular and roller shades differ. Retrieval is what
+ * makes "we don't have that" reachable instead of improvisation.
+ *
+ * `answer` is approved wording. The phrasing layer may shorten it and make it
+ * conversational; it may never add a fact that is not in it.
+ */
+export interface AnswerTopic {
+  readonly id: string;
+  /** Where the approved wording came from, for auditability. */
+  readonly source: string;
+  /** The question this answers, in the visitor's likely words. */
+  readonly question: string;
+  /** Approved answer text. */
+  readonly answer: string;
+  /**
+   * Lowercase terms that suggest this topic. Scored, not required — a single
+   * shared word is weak evidence and the selector treats it that way.
+   */
+  readonly terms: readonly string[];
+  /**
+   * At least one of these must appear for the topic to be eligible at all.
+   * This is what stops "how much light does it block" reaching the pricing
+   * answer because both contain "how much".
+   */
+  readonly requires: readonly string[];
+  /**
+   * Curated business answers outrank page FAQs on a tie: they are the ones
+   * written for this purpose, and a product FAQ that happens to share wording
+   * should not displace the policy a visitor actually asked about.
+   */
+  readonly priority?: "business" | "page";
+  /** Whether offering the consultation reads naturally after this answer. */
+  readonly invitesConsultation?: boolean;
 }
 
 // ───────────────────────────── engine input ─────────────────────────────────
@@ -535,6 +589,8 @@ export interface AdvisorKnowledge {
   readonly guardrails: readonly Guardrail[];
   readonly businessPolicies: readonly BusinessPolicy[];
   readonly brandResponses: readonly BrandResponse[];
+  /** Approved answers to non-product questions. See `AnswerTopic`. */
+  readonly answers: readonly AnswerTopic[];
 }
 
 // ───────────────────────────── engine output ────────────────────────────────

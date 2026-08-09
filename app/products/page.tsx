@@ -177,7 +177,7 @@ export default function ProductsHubPage() {
           </p>
           <p className="text-warm-gray-600 leading-relaxed text-lg">
             <Link
-              href="/show-me-my-options"
+              href="/ask-luxe"
               className="text-gold hover:text-gold-dark font-medium"
             >
               Answer a few questions

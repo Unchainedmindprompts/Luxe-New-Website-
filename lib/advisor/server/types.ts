@@ -72,6 +72,13 @@ export interface AdvisorRequest {
  * read it as a firm recommendation.
  */
 export type AdvisorStatus =
+  /**
+   * A question was answered from approved knowledge. Not a recommendation and
+   * not a stalled product flow — most of what a visitor wants is simply an
+   * answer, and forcing that into a product status is what made the page feel
+   * like a funnel.
+   */
+  | "ANSWERED"
   /** Nothing actionable yet, or a homeowner-answerable question still gates it. */
   | "NEED_MORE_INFORMATION"
   /** Genuinely useful direction exists, but no best-fit product has been selected. */

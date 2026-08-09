@@ -40,14 +40,18 @@ const MAX_MESSAGE_CHARS = 2000;
 const BOOK_CTA = "Schedule My Free In-Home Consultation";
 
 /**
- * For someone who does not know what to type. Phrased as real sentences a
- * homeowner might actually write, not as categories to pick from — the point
- * is to unblock, not to funnel them back into a questionnaire.
+ * For someone who does not know what to type.
+ *
+ * Chosen to show the BREADTH of what can be asked, not to funnel toward a
+ * product. A page that opens with three window problems teaches the visitor
+ * that window problems are all it takes — and most people arrive wanting to
+ * know what happens during the visit, not which shade to buy.
  */
 const STARTERS = [
-  "Our west-facing living room gets incredibly hot but we don't want to lose the view.",
-  "We need the nursery much darker so the baby sleeps past sunrise.",
-  "I think I want blinds, but I hate how much they block the window.",
+  "What happens during an in-home consultation?",
+  "What works best for west-facing windows?",
+  "Do you carry Hunter Douglas?",
+  "I have no idea what kind of shades I need.",
 ] as const;
 
 interface Exchange {
@@ -197,11 +201,15 @@ function Opening({ onStart, started }: { onStart: (text: string) => void; starte
           Free &middot; No Obligation
         </p>
         <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-          Find the Right Window Treatments for Your Home
+          How Can We Help?
         </h1>
         <p className="text-white/80 text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
-          Answer a few questions and get personalized recommendations based on your home, your
-          priorities, and how you actually use your windows.
+          Thanks for stopping by Luxe Window Works. Whether you&rsquo;re just starting to explore
+          window treatments or already have something specific in mind, we&rsquo;re happy to help.
+        </p>
+        <p className="text-white/70 text-sm sm:text-base leading-relaxed max-w-xl mx-auto mt-3">
+          Ask us anything about window treatments, your home, our products, how our consultations
+          work, or Luxe Window Works.
         </p>
 
         {!started && (
@@ -222,9 +230,11 @@ function Opening({ onStart, started }: { onStart: (text: string) => void; starte
               </div>
             </div>
 
-            {/* The consultation is the goal, not a fallback — so it is offered
-                up front, on equal footing, never framed as opting out. */}
+            {/* Present and easy to find, but quieter than the invitation to
+                ask — the welcome is the message, and a page that leads with a
+                booking button is a landing page, not a help desk. */}
             <div className="mt-8 pt-8 border-t border-white/15">
+              <p className="text-white/60 text-sm mb-2">Ready for us to take a look?</p>
               <BookLink placement="opening" status="opening" turns={0} variant="quiet" />
             </div>
           </>
@@ -257,6 +267,9 @@ function HomeownerSaid({ text }: { text: string }) {
 function inlineLeadPlacement(turn: AdvisorTurn | null | undefined): LeadPlacement | null {
   if (!turn) return null;
   if (turn.status === "RECOMMENDATION_READY") return "recommendation";
+  // A plain answer earns the callback option only where booking was already
+  // judged relevant; otherwise the visitor asked a question and got a form.
+  if (turn.status === "ANSWERED") return turn.offerConsultation ? "guidance" : null;
   if (turn.status === "GUIDANCE_READY" && turn.offerConsultation) return "guidance";
   if (turn.status === "ADVISOR_UNAVAILABLE") return "fallback";
   if (turn.status === "NEED_MORE_INFORMATION" && !turn.question) return "fallback";
@@ -287,6 +300,19 @@ function LuxeSaid({
 
       {isRecommendation && turn && (
         <RecommendationPanel turn={turn} turns={turns} offerCallback={leadPlacement !== null} />
+      )}
+
+      {/* ANSWERED is a reply, not a result. No card, no qualification, and a
+          consultation link only when the server said this topic genuinely
+          invites one — a booking prompt under every answer is what turns a
+          help desk back into a funnel. */}
+      {turn?.status === "ANSWERED" && turn.offerConsultation && (
+        <div className="mt-5">
+          <BookLink placement="guidance" status={turn.status} turns={turns} variant="quiet" />
+          {leadPlacement === "guidance" && (
+            <ContactRequest placement="guidance" turn={turn} turns={turns} />
+          )}
+        </div>
       )}
 
       {turn?.status === "GUIDANCE_READY" && turn.offerConsultation && (
@@ -443,7 +469,7 @@ function Composer({
       }}
     >
       <label htmlFor="advisor-input" className="block font-serif text-lg text-charcoal mb-3">
-        {started ? "Anything else?" : "What's going on with your windows?"}
+        {started ? "Anything else?" : "What can we help you with?"}
       </label>
       <textarea
         ref={ref}
@@ -459,8 +485,8 @@ function Composer({
         rows={started ? 2 : 4}
         placeholder={
           started
-            ? "Add anything that might matter…"
-            : "Tell us about the room, the windows, and what's bothering you."
+            ? "Ask another question, or add anything that might matter…"
+            : "Ask a question or tell us what you're working on…"
         }
         aria-describedby={error || tooLong ? "advisor-input-error" : undefined}
         aria-invalid={Boolean(error || tooLong)}
@@ -480,11 +506,11 @@ function Composer({
           disabled={pending || !draft.trim() || tooLong}
           className="bg-gold text-charcoal font-semibold px-6 py-3 rounded-lg hover:bg-gold/90 focus:outline-none focus:ring-2 focus:ring-gold/40 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {pending ? "One moment…" : started ? "Send" : "Find My Best Options"}
+          {pending ? "One moment…" : started ? "Send" : "Ask Luxe"}
         </button>
         {!started && (
           <p className="text-warm-gray-500 text-sm">
-            No contact details needed to get started.
+            No contact details needed to ask.
           </p>
         )}
       </div>

@@ -20,11 +20,11 @@ export const CATEGORIES = [
 
 export const allowlist = [
   {
-    path: "/show-me-my-options",
+    path: "/ask-luxe",
     category: "sitemapExclusions",
     reason:
-      "Guided questionnaire that walks a visitor from a problem ('a room that bakes in the afternoon') " +
-      "to a product recommendation. It is a funnel step reached from CTAs on the homepage and the " +
+      "Conversational help desk that answers whatever a visitor came to ask — the consultation, " +
+      "policies, products, or their own windows. It is a funnel step reached from CTAs on the homepage and the " +
       "products hub, not a destination anyone should arrive at from a search result — its value depends " +
       "entirely on the visitor having context the page itself does not provide. " +
       "It renders <meta name=\"robots\" content=\"noindex, follow\">, verified in the built HTML, so " +

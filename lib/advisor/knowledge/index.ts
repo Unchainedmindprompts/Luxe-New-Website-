@@ -26,6 +26,46 @@ import {
 } from "./rules";
 import { GUARDRAILS } from "./guardrails";
 import { BRAND_RESPONSES } from "./brand-responses";
+import {
+  BUSINESS_ANSWERS,
+  answerTopicsFromBusiness,
+  answerTopicsFromFaqs,
+} from "./answers";
+import { BUSINESS, SERVICE_AREAS } from "../../constants";
+import { productPages } from "../../product-data";
+import { areaPages } from "../../area-data";
+import { HOMEPAGE_FAQS } from "../../homepage-faqs";
+
+/**
+ * The advisor's answer knowledge, assembled rather than authored twice.
+ *
+ * The 74 question-and-answer pairs already published on this site — 51 across
+ * the product pages, 20 across the area pages, 3 on the homepage — are read
+ * here rather than copied. That is the point: a visitor asking the advisor
+ * about the lifetime guarantee and a visitor reading the homepage get the same
+ * sentence, and editing one edits both. Only the answers with no published home
+ * (`BUSINESS_ANSWERS`) are authored in the knowledge layer itself.
+ */
+const PAGE_FAQS = [
+  ...answerTopicsFromFaqs(HOMEPAGE_FAQS, "Published homepage FAQ", "faq-home"),
+  ...Object.values(productPages).flatMap((page) =>
+    answerTopicsFromFaqs(page.faqs, `Published FAQ on /products/${page.slug}`, `faq-product-${page.slug}`)
+  ),
+  ...Object.values(areaPages).flatMap((page) =>
+    answerTopicsFromFaqs(page.faqs ?? [], `Published FAQ on /areas/${page.slug}`, `faq-area-${page.slug}`)
+  ),
+];
+
+export const ANSWER_TOPICS = [
+  ...BUSINESS_ANSWERS,
+  ...answerTopicsFromBusiness({
+    hours: BUSINESS.hours,
+    phone: BUSINESS.phone,
+    email: BUSINESS.email,
+    serviceAreas: SERVICE_AREAS,
+  }),
+  ...PAGE_FAQS,
+];
 
 export const LUXE_KNOWLEDGE: AdvisorKnowledge = {
   directions: PRODUCT_DIRECTIONS,
@@ -42,4 +82,5 @@ export const LUXE_KNOWLEDGE: AdvisorKnowledge = {
   guardrails: GUARDRAILS,
   businessPolicies: BUSINESS_POLICIES,
   brandResponses: BRAND_RESPONSES,
+  answers: ANSWER_TOPICS,
 };

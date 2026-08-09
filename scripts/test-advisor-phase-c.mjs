@@ -34,12 +34,12 @@ const renderable = (source) =>
 /** JSX wraps prose across lines; collapse it before matching sentences. */
 const flat = (source) => source.replace(/\s+/g, " ");
 
-const EXPERIENCE = read("app/show-me-my-options/AdvisorExperience.tsx");
-const PAGE = read("app/show-me-my-options/page.tsx");
+const EXPERIENCE = read("app/ask-luxe/AdvisorExperience.tsx");
+const PAGE = read("app/ask-luxe/page.tsx");
 const PRIVACY = read("app/privacy/page.tsx");
 const ANALYTICS = read("lib/advisor/client/analytics.ts");
 const CONTRACT_SRC = read("lib/advisor/client/contract.ts");
-const CONTACT = read("app/show-me-my-options/ContactRequest.tsx");
+const CONTACT = read("app/ask-luxe/ContactRequest.tsx");
 const LEAD_SRC = read("lib/advisor/client/lead.ts");
 const CONSULTATION_ROUTE = read("app/api/consultation/route.ts");
 
@@ -87,26 +87,57 @@ const serverTurn = (over = {}) => ({
 
 // ── 1-4: route, opening, booking, transport ────────────────────────────────
 
-test("1  the advisor lives at /show-me-my-options and stays out of search", (t) => {
+test("1  the advisor lives at /ask-luxe and stays out of search", (t) => {
   t.ok(/AdvisorExperience/.test(PAGE), "the page does not render the advisor");
   t.ok(/index:\s*false/.test(PAGE), "the page is no longer noindex");
-  t.ok(/show-me-my-options/.test(PAGE), "the canonical no longer points at this route");
+  t.ok(/follow:\s*true/.test(PAGE), "the follow posture changed");
+  t.ok(/ask-luxe/.test(PAGE), "the canonical no longer points at this route");
   const allowlist = read("config/verify-allowlist.mjs");
-  t.ok(/show-me-my-options/.test(allowlist), "the sitemap exclusion was dropped");
+  t.ok(/ask-luxe/.test(allowlist), "the sitemap exclusion was dropped");
+  t.ok(!/show-me-my-options/.test(allowlist), "the allowlist still names the retired route");
+
+  // The old path is not abandoned — it has been live and may sit in histories.
+  const config = read("next.config.mjs");
+  t.ok(/source: '\/show-me-my-options'/.test(config), "the old route has no redirect");
+  t.ok(/destination: '\/ask-luxe'/.test(config), "the redirect does not point at the new route");
+
+  // Every inbound CTA moved with it.
+  for (const page of ["app/page.tsx", "app/products/page.tsx", "app/privacy/page.tsx"]) {
+    t.ok(!/href="\/show-me-my-options"/.test(read(page)), `${page} still links to the retired route`);
+  }
 });
 
-test("2  the opening asks for natural language, not a fixed choice", (t) => {
-  t.ok(/What's going on with your windows\?/.test(EXPERIENCE), "the open prompt is missing");
-  t.ok(/Find the Right Window Treatments for Your Home/.test(EXPERIENCE), "the H1 copy has drifted");
-  t.ok(/Find My Best Options/.test(EXPERIENCE), "the primary CTA has drifted");
+test("2  the opening welcomes rather than qualifies", (t) => {
+  const flatText = flat(EXPERIENCE);
+  t.ok(/How Can We Help\?/.test(EXPERIENCE), "the welcoming H1 is missing");
+  t.ok(/What can we help you with\?/.test(EXPERIENCE), "the open prompt is missing");
+  t.ok(/Ask a question or tell us what you're working on/.test(EXPERIENCE), "the placeholder has drifted");
+  t.ok(/"Ask Luxe"/.test(EXPERIENCE), "the submit label has drifted");
+  t.ok(/Thanks for stopping by Luxe Window Works/.test(flatText), "the welcome copy is missing");
+  t.ok(/Ask us anything about window treatments/.test(flatText), "the breadth invitation is missing");
   t.ok(/textarea/.test(EXPERIENCE), "there is no free-text input");
-  // Optional starters are sentences, not categories to pick from.
-  t.ok(/STARTERS/.test(EXPERIENCE), "no starter prompts for someone who is stuck");
+
+  // The old product-discovery framing must be gone, not merely demoted.
+  for (const retired of [/Find the Right Window Treatments for Your Home/, /Find My Best Options/, /What's going on with your windows/]) {
+    t.ok(!retired.test(EXPERIENCE), `the retired product-discovery framing survives: ${retired}`);
+  }
+
+  // Starters demonstrate breadth. At most four, and not all about products.
+  const starters = /const STARTERS = \[([\s\S]*?)\] as const;/.exec(EXPERIENCE)?.[1] ?? "";
+  const lines = starters.split("\n").filter((l) => l.trim().startsWith('"'));
+  t.equal(lines.length, 4, "the starter count is wrong");
+  t.ok(/in-home consultation/.test(starters), "no consultation starter");
+  t.ok(/Hunter Douglas/.test(starters), "no brand starter");
+  t.ok(/no idea what kind of shades/.test(starters), "no discovery starter");
+  t.ok(!/cost|price|how much/i.test(starters), "pricing was added as a starter before it was approved for one");
 });
 
 test("3  booking is offered up front and never framed as opting out", (t) => {
   t.ok(/Schedule My Free In-Home Consultation/.test(EXPERIENCE), "the booking CTA has drifted");
   t.ok(/placement="opening"/.test(EXPERIENCE), "booking is not offered on the opening state");
+  t.ok(/Ready for us to take a look\?/.test(flat(EXPERIENCE)), "the booking invitation copy is missing");
+  // Present but quiet: the welcome is the message, not the CTA.
+  t.ok(/placement="opening"[\s\S]{0,120}variant="quiet"/.test(EXPERIENCE), "the opening booking link dominates the welcome");
   for (const banned of [/Prefer to talk/i, /Skip the AI/i, /Talk to Mark/i, /instead of the advisor/i, /human instead/i]) {
     t.ok(!banned.test(EXPERIENCE), `booking is framed as a fallback: ${banned}`);
   }
@@ -470,6 +501,56 @@ test("25 the card renders the server's canonical direction, never its own pick",
 
   // Alternatives are still available to the prose — they are simply not the card.
   t.equal(contract.toAdvisorTurn(many, {}).status, "RECOMMENDATION_READY", "the multi-candidate turn stopped recommending");
+});
+
+// ── 26: ANSWERED is a reply, not a result ──────────────────────────────────
+
+test("26 ANSWERED renders an answer and never a recommendation card", (t) => {
+  // What the server sends for "what are your hours?" — no candidates, no
+  // question, no card to render, and deliberately no consultation pitch.
+  const answered = serverTurn({
+    status: "ANSWERED",
+    message: "We're open Monday to Friday, 9:00 AM to 5:00 PM, and Saturday until 2:00 PM.",
+    nextQuestion: null,
+    assessment: {
+      ...serverTurn().assessment,
+      primaryRecommendation: null,
+      strongCandidates: [],
+      tradeoffs: [],
+      verificationRequirements: [],
+    },
+    consultationCta: { recommended: false, reasons: [] },
+    state: { facts: {} },
+  });
+  const turn = contract.toAdvisorTurn(answered, {});
+
+  t.equal(turn.status, "ANSWERED", "the status was not carried through the client contract");
+  t.equal(turn.direction, null, "a product direction was claimed on a plain answer");
+  t.equal(turn.question, null, "a qualification question was rendered on an answer");
+  t.equal(turn.tradeoff, null, "a product tradeoff was attached to a business answer");
+  t.equal(turn.confirmInHome.length, 0, "an in-home checklist was attached to a business answer");
+  t.equal(turn.offerConsultation, false, "a consultation was pushed after a question that did not invite one");
+  t.ok(turn.message.includes("9:00 AM"), "the answer text did not survive");
+
+  // The panel is gated on RECOMMENDATION_READY, so ANSWERED cannot reach it.
+  t.ok(
+    /isRecommendation = turn\?\.status === "RECOMMENDATION_READY"/.test(EXPERIENCE),
+    "the recommendation panel is no longer gated on the recommendation status"
+  );
+  t.ok(/turn\?\.status === "ANSWERED" && turn\.offerConsultation/.test(EXPERIENCE), "ANSWERED has no rendering branch");
+  // And the callback form does not appear under an answer that never invited one.
+  t.ok(
+    /if \(turn\.status === "ANSWERED"\) return turn\.offerConsultation \? "guidance" : null;/.test(EXPERIENCE),
+    "the callback form can appear under any answer"
+  );
+
+  // When the topic does invite a consultation, the offer is available.
+  const inviting = contract.toAdvisorTurn(
+    { ...answered, consultationCta: { recommended: true, reasons: ["guidance-ready"] } },
+    {}
+  );
+  t.equal(inviting.offerConsultation, true, "a consultation-relevant answer cannot offer one");
+  t.equal(inviting.direction, null, "an inviting answer still claimed a direction");
 });
 
 function toCamel(event) {

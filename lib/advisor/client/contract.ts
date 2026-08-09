@@ -16,6 +16,8 @@
  */
 
 export type AdvisorStatus =
+  /** A question answered from approved knowledge. No card, no qualification. */
+  | "ANSWERED"
   | "NEED_MORE_INFORMATION"
   | "GUIDANCE_READY"
   | "RECOMMENDATION_READY"
@@ -120,7 +122,8 @@ export function toAdvisorTurn(raw: unknown, priorState: OpaqueState): AdvisorTur
   const body = (raw ?? {}) as RawShape;
   const status = ((): AdvisorStatus => {
     const value = body.status;
-    return value === "NEED_MORE_INFORMATION" ||
+    return value === "ANSWERED" ||
+      value === "NEED_MORE_INFORMATION" ||
       value === "GUIDANCE_READY" ||
       value === "RECOMMENDATION_READY"
       ? value

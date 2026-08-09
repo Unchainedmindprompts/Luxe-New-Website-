@@ -221,6 +221,29 @@ export type UpdateBasis = "stated" | "inferred";
  */
 export type UpdateOperation = "assert" | "retract";
 
+/**
+ * What kind of help this message is asking for.
+ *
+ * Read on the same call that extracts facts — the model is already reading the
+ * sentence, so this costs no extra request and no extra latency. It exists
+ * because the server previously had one shape for every message: extract
+ * product facts, assess, qualify. "What are your hours?" went through window
+ * qualification and came back talking about glare.
+ *
+ * Only `project` and `discovery` reach the product pipeline. The rest are
+ * answered from approved knowledge and stop.
+ */
+export type MessageIntent = "general" | "consultation" | "product" | "project" | "discovery";
+
+export const MESSAGE_INTENTS: readonly MessageIntent[] = [
+  "general", "consultation", "product", "project", "discovery",
+];
+
+/** Intents that should be answered outright rather than qualified. */
+export function isInformational(intent: MessageIntent): boolean {
+  return intent === "general" || intent === "consultation" || intent === "product";
+}
+
 export interface FactUpdate {
   readonly field: ExtractionFieldName;
   readonly value: string;
@@ -258,8 +281,9 @@ export function buildDeltaSchema(): Record<string, unknown> {
           additionalProperties: false,
         },
       },
+      intent: { type: "string", enum: [...MESSAGE_INTENTS] },
     },
-    required: ["updates"],
+    required: ["updates", "intent"],
     additionalProperties: false,
   };
 }
@@ -422,6 +446,8 @@ export function retractionTargeted(field: string, value: string, evidence: strin
 // ───────────────────────────── validation ───────────────────────────────────
 
 export interface ValidatedUpdates {
+  /** What the visitor is asking for. Defaults to `project` — see `readIntent`. */
+  readonly intent: MessageIntent;
   readonly accepted: readonly FactUpdate[];
   /** Human-readable reasons, for diagnostics. Never contains homeowner text. */
   readonly rejected: readonly string[];
@@ -440,8 +466,10 @@ export function validateUpdates(raw: unknown, message: string): ValidatedUpdates
   const rejected: string[] = [];
   const list = (raw as { updates?: unknown } | null)?.updates;
 
+  const intent = readIntent(raw);
+
   if (!Array.isArray(list)) {
-    return { accepted, rejected: ["payload had no updates array"] };
+    return { intent, accepted, rejected: ["payload had no updates array"] };
   }
 
   for (const item of list.slice(0, MAX_UPDATES)) {
@@ -502,5 +530,19 @@ export function validateUpdates(raw: unknown, message: string): ValidatedUpdates
     });
   }
 
-  return { accepted, rejected };
+  return { intent, accepted, rejected };
+}
+
+/**
+ * The declared intent, or `project` when it is missing or unrecognised.
+ *
+ * Defaulting to `project` keeps a malformed response on the path that has
+ * always existed and is fully guardrailed, rather than routing it to the newer
+ * answer path on a value nobody validated.
+ */
+export function readIntent(raw: unknown): MessageIntent {
+  const value = (raw as { intent?: unknown } | null)?.intent;
+  return typeof value === "string" && (MESSAGE_INTENTS as readonly string[]).includes(value)
+    ? (value as MessageIntent)
+    : "project";
 }

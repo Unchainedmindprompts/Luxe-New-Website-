@@ -121,7 +121,7 @@ export default function PrivacyPage() {
           <Section title="The window-treatment advisor">
             <p>
               Our{" "}
-              <Link href="/show-me-my-options" className="text-gold underline underline-offset-2">
+              <Link href="/ask-luxe" className="text-gold underline underline-offset-2">
                 Find the Right Window Treatments
               </Link>{" "}
               page lets you describe your project in your own words and get
@@ -196,7 +196,7 @@ export default function PrivacyPage() {
               <li>
                 <strong>Anthropic</strong> — provides the AI that powers the
                 window-treatment advisor on our{" "}
-                <Link href="/show-me-my-options" className="text-gold underline underline-offset-2">
+                <Link href="/ask-luxe" className="text-gold underline underline-offset-2">
                   Find the Right Window Treatments
                 </Link>{" "}
                 page. When you use the advisor, the messages you type there, and

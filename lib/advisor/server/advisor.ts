@@ -24,6 +24,7 @@
  * makes the provider a one-file swap.
  */
 import type {
+  ProductDirection,
   AdvisorAssessment,
   AdvisorKnowledge,
   DirectionId,
@@ -31,7 +32,8 @@ import type {
   PriorityId,
   ProjectFacts,
 } from "../types";
-import type { FactUpdate, ValidatedUpdates } from "./extraction";
+import type { FactUpdate, MessageIntent, ValidatedUpdates } from "./extraction";
+import type { ScoredTopic } from "./answer-selection";
 import type { FactLedger, LedgerApplication } from "./ledger";
 import type { ClassifiedQuestion, QuestionTier } from "./counterfactual";
 import type { BrandResponseMatch } from "./brand-response";
@@ -51,7 +53,9 @@ const MAX_QUESTION_CHARS = 400;
 const MAX_RECOMMENDATION_CHARS = 1400;
 
 /** Model output budget. Small on purpose — long answers are not the goal. */
+const MAX_ANSWER_CHARS = 900;
 const QUESTION_TOKENS = 150;
+const ANSWER_TOKENS = 260;
 const RECOMMENDATION_TOKENS = 400;
 
 export interface AdvisorDeps {
@@ -70,6 +74,19 @@ export interface AdvisorDeps {
     priorityDefinitions: AdvisorKnowledge["priorities"]
   ) => string;
   readonly isListField: (field: string) => boolean;
+  /** True when a message should be answered rather than qualified. */
+  readonly isInformational: (intent: MessageIntent) => boolean;
+  /** Deterministic retrieval over approved answers. Empty means "we don't have that". */
+  readonly selectAnswerTopics: (
+    message: string,
+    topics: AdvisorKnowledge["answers"]
+  ) => readonly ScoredTopic[];
+  /** Product directions the visitor named, for comparison questions. */
+  readonly selectNamedDirections: (
+    message: string,
+    directions: AdvisorKnowledge["directions"]
+  ) => readonly ProductDirection[];
+  readonly describeDirection: (direction: ProductDirection) => string;
   /** Ledger operations. Provenance lives here and never reaches the engine. */
   readonly ledger: {
     validate: (raw: unknown) => FactLedger;
@@ -119,6 +136,12 @@ export interface AdvisorDeps {
   readonly sanitizeForOutput: (text: string, maxLength: number) => string;
   readonly prompts: {
     extractionSystemPrompt: (vocabulary: string, established: string) => string;
+    answerSystemPrompt: (
+      approved: string,
+      guardrails: readonly Guardrail[],
+      invitesConsultation: boolean
+    ) => string;
+    discoverySystemPrompt: (guardrails: readonly Guardrail[]) => string;
     /** `corrected` is true only when this turn actually retracted a fact. */
     questionSystemPrompt: (guardrails: readonly Guardrail[], corrected?: boolean) => string;
     recommendationSystemPrompt: (
@@ -146,6 +169,16 @@ export interface AdvisorDeps {
   ) => BrandResponseMatch | null;
   readonly signal?: AbortSignal;
 }
+
+/**
+ * Used when the model's answer is unusable. Deliberately not a product pitch —
+ * a broken phrasing call is not a reason to start qualifying someone.
+ */
+const ANSWER_FALLBACK =
+  "That is a fair question, and I would rather have someone confirm it than guess. Our team can answer it directly — give us a call or book a consultation and we will go through it with you.";
+
+const DISCOVERY_FALLBACK =
+  "You don't need to know what you want — that's genuinely what we're for. What would you most like to be different about the room: too bright, too hot, not enough privacy, or just the way it looks?";
 
 /** Structural provider-failure check — no runtime import of the adapter. */
 function providerFailureCode(error: unknown): "provider-unavailable" | "provider-timeout" | null {
@@ -370,6 +403,45 @@ export function createAdvisor(deps: AdvisorDeps) {
     return fallback;
   }
 
+  /**
+   * Answers a question from approved knowledge, or returns null when nothing
+   * approved covers it.
+   *
+   * NULL IS THE IMPORTANT RETURN VALUE. It is what makes "we would rather have
+   * someone confirm that than guess" reachable, and it is the whole reason the
+   * retrieval step is deterministic — a model asked to decide whether it knows
+   * something will always decide that it does.
+   */
+  async function answerDirectly(
+    message: string,
+    guardrails: readonly Guardrail[],
+    interventions: string[]
+  ): Promise<{ message: string; invitesConsultation: boolean } | null> {
+    const topics = deps.selectAnswerTopics(message, deps.knowledge.answers);
+    const named = deps.selectNamedDirections(message, deps.knowledge.directions);
+    if (!topics.length && !named.length) return null;
+
+    const approved = [
+      ...topics.map((t) => `${t.topic.question}\n${t.topic.answer}`),
+      ...named.map((d) => deps.describeDirection(d)),
+    ].join("\n\n");
+
+    const invitesConsultation = topics.some((t) => t.topic.invitesConsultation === true);
+
+    const message_ = await phraseSafely(
+      deps.prompts.answerSystemPrompt(approved, guardrails, invitesConsultation),
+      deps.prompts.phrasingUserMessage({ "their question": message }),
+      ANSWER_TOKENS,
+      MAX_ANSWER_CHARS,
+      // A comparison may name the products it compares; a business answer has
+      // none to name, so the invented-product check stays fully armed there.
+      named.map((d) => d.label),
+      ANSWER_FALLBACK,
+      interventions
+    );
+    return { message: message_, invitesConsultation };
+  }
+
   async function runTurn(input: AdvisorTurnInput): Promise<AdvisorResponse> {
     const interventions: string[] = [];
     const priorState = input.state ?? {};
@@ -498,12 +570,24 @@ export function createAdvisor(deps: AdvisorDeps) {
     );
 
     const questionGates = !(selection.readyToRecommend || !selection.next);
-    const status = deriveStatus(assessment, questionGates, Boolean(selection.next));
+    const productStatus = deriveStatus(assessment, questionGates, Boolean(selection.next));
+
+    const conversationState = {
+      ledger: ledger as Record<string, unknown>,
+      facts,
+      turnCount: nextTurnCount,
+      askedQuestionIds,
+      unrankedConcerns: carriedConcerns,
+    };
 
     // ── 4. phrasing, validated ─────────────────────────────────────────────
     if (brandAnswer) {
       return {
-        status,
+        // A brand question asked and answered. It was reporting a product
+        // status — the same kind of dishonesty GUIDANCE_READY was added to
+        // fix — and offering a consultation off the back of "do you carry X",
+        // which is a sales reflex rather than a next step that follows.
+        status: "ANSWERED",
         state: {
           ledger: ledger as Record<string, unknown>,
           facts,
@@ -515,11 +599,67 @@ export function createAdvisor(deps: AdvisorDeps) {
         nextQuestion: null,
         message: deps.sanitizeForOutput(brandAnswer.response, MAX_RECOMMENDATION_CHARS),
         canonicalResponseId: brandAnswer.id,
-        consultationCta: consultationIntent(assessment, status),
+        consultationCta: { recommended: false, reasons: [] },
         guardrailInterventions: interventions,
         error: null,
       };
     }
+
+    // ── 3b. a question we can simply answer ────────────────────────────────
+    //
+    // Most visitors are not asking us to choose a product. They want to know
+    // what happens during the visit, whether there is a minimum, what it costs.
+    // Routing that through window qualification is what produced replies about
+    // glare to someone asking the opening hours.
+    if (deps.isInformational(validated.intent)) {
+      const answered = await answerDirectly(input.message, guardrails, interventions);
+      if (answered) {
+        return {
+          status: "ANSWERED",
+          state: conversationState,
+          assessment: summarise(assessment),
+          nextQuestion: null,
+          message: answered.message,
+          canonicalResponseId: null,
+          consultationCta: {
+            recommended: answered.invitesConsultation,
+            reasons: answered.invitesConsultation ? ["guidance-ready"] : [],
+          },
+          guardrailInterventions: interventions,
+          error: null,
+        };
+      }
+      // Nothing approved covers it. Fall through to the product path rather
+      // than improvising — the engine at least reasons from real knowledge.
+    }
+
+    // ── 3c. they want help and do not know where to start ──────────────────
+    if (validated.intent === "discovery" && assessment.strongCandidates.length === 0) {
+      const message = await phraseSafely(
+        deps.prompts.discoverySystemPrompt(guardrails),
+        deps.prompts.phrasingUserMessage({
+          "what they said": "They are not sure what they want yet.",
+        }),
+        ANSWER_TOKENS,
+        MAX_ANSWER_CHARS,
+        [],
+        DISCOVERY_FALLBACK,
+        interventions
+      );
+      return {
+        status: "ANSWERED",
+        state: conversationState,
+        assessment: summarise(assessment),
+        nextQuestion: null,
+        message,
+        canonicalResponseId: null,
+        consultationCta: { recommended: false, reasons: [] },
+        guardrailInterventions: interventions,
+        error: null,
+      };
+    }
+
+    const status = productStatus;
 
     if (status === "NEED_MORE_INFORMATION" && selection.next) {
       const question = selection.next;

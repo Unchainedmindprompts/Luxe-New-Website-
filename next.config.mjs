@@ -142,6 +142,13 @@ const nextConfig = {
         permanent: true,
       },
       {
+        // "Show Me My Options" promised a catalogue and delivered a
+        // conversation. The page is now /ask-luxe, which says what it is.
+        source: '/show-me-my-options',
+        destination: '/ask-luxe',
+        permanent: true,
+      },
+      {
         source: '/services',
         destination: '/',
         permanent: true,
