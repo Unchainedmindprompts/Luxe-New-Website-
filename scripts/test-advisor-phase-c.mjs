@@ -111,25 +111,53 @@ test("2  the opening welcomes rather than qualifies", (t) => {
   const flatText = flat(EXPERIENCE);
   t.ok(/How Can We Help\?/.test(EXPERIENCE), "the welcoming H1 is missing");
   t.ok(/What can we help you with\?/.test(EXPERIENCE), "the open prompt is missing");
-  t.ok(/Ask a question or tell us what you're working on/.test(EXPERIENCE), "the placeholder has drifted");
+  t.ok(/Ask a question or tell us what brought you here/.test(EXPERIENCE), "the placeholder has drifted");
   t.ok(/"Ask Luxe"/.test(EXPERIENCE), "the submit label has drifted");
-  t.ok(/Thanks for stopping by Luxe Window Works/.test(flatText), "the welcome copy is missing");
-  t.ok(/Ask us anything about window treatments/.test(flatText), "the breadth invitation is missing");
-  t.ok(/textarea/.test(EXPERIENCE), "there is no free-text input");
+  t.ok(
+    /Thanks for stopping by Luxe Window Works\. If you have any questions about window treatments, your project, or working with Luxe, just ask\./.test(flatText),
+    "the welcome copy has drifted"
+  );
+  t.ok(/Not sure where to start\? Just tell us what brought you here\./.test(flatText), "the helper text is missing");
+  t.ok(/textarea/.test(EXPERIENCE), "there is no free-text input — natural language is not primary");
 
   // The old product-discovery framing must be gone, not merely demoted.
   for (const retired of [/Find the Right Window Treatments for Your Home/, /Find My Best Options/, /What's going on with your windows/]) {
     t.ok(!retired.test(EXPERIENCE), `the retired product-discovery framing survives: ${retired}`);
   }
+});
 
-  // Starters demonstrate breadth. At most four, and not all about products.
-  const starters = /const STARTERS = \[([\s\S]*?)\] as const;/.exec(EXPERIENCE)?.[1] ?? "";
-  const lines = starters.split("\n").filter((l) => l.trim().startsWith('"'));
-  t.equal(lines.length, 4, "the starter count is wrong");
-  t.ok(/in-home consultation/.test(starters), "no consultation starter");
-  t.ok(/Hunter Douglas/.test(starters), "no brand starter");
-  t.ok(/no idea what kind of shades/.test(starters), "no discovery starter");
-  t.ok(!/cost|price|how much/i.test(starters), "pricing was added as a starter before it was approved for one");
+test("2a nothing on the opening screen nudges toward a topic", (t) => {
+  const visible = renderable(EXPERIENCE);
+
+  // No starter list of any kind, under any name.
+  t.ok(!/STARTERS/.test(EXPERIENCE), "a starter prompt list still exists");
+  // Against the renderable source: the doc comment explaining why there are no
+  // suggested questions must not itself read as one.
+  for (const shape of [/const (SUGGESTIONS|EXAMPLES|PROMPTS|CHIPS|TOPICS)\b/, /Try one of these/i, /suggested questions?/i]) {
+    t.ok(!shape.test(visible), `a suggestion mechanism was reintroduced: ${shape}`);
+  }
+
+  // The opening renders exactly one button — submit — and one link, booking.
+  const opening = /function Opening\(([\s\S]*?)\n}/.exec(EXPERIENCE)?.[1] ?? "";
+  t.ok(opening.length > 0, "the Opening component could not be found");
+  t.ok(!/<button/.test(opening), "the opening screen renders clickable topic buttons");
+  t.ok(!/\.map\(/.test(opening), "the opening screen renders a list of options");
+
+  // Nothing proactively raises a topic before the visitor does.
+  for (const topic of [
+    /Hunter Douglas/, /consultation\?/i, /west-facing/i, /cellular/i, /roller/i, /shutters/i,
+    /how much (do|does)/i, /\bprice\b/i, /\bcost\b/i, /warranty/i, /minimum/i, /pressure/i,
+  ]) {
+    t.ok(!topic.test(opening), `the opening screen raises a topic unprompted: ${topic}`);
+  }
+
+  // And no product category is named anywhere on the opening screen.
+  for (const category of [/blinds/i, /shades/i, /drapery/i, /motoriz/i]) {
+    t.ok(!category.test(opening), `a product category appears on the opening screen: ${category}`);
+  }
+
+  // The entry analytics no longer claims a dimension that cannot vary.
+  t.ok(!/"typed" \| "prompt"/.test(visible + ANALYTICS), "the retired starter entry mode still exists");
 });
 
 test("3  booking is offered up front and never framed as opting out", (t) => {
@@ -315,6 +343,7 @@ test("16 analytics fire from intended interactions and carry no content", (t) =>
   }
   // Engagement is deliberately not a page view and not the first message.
   t.ok(/turnNumber === 2\) advisorEngaged/.test(EXPERIENCE), "engagement is not the second message");
+  t.ok(/turnNumber === 1\) advisorStarted\(\)/.test(EXPERIENCE), "the first message is not counted");
   // No message text, facts or state in any event payload.
   for (const leak of [/track\([^)]*message/, /track\([^)]*facts/, /track\([^)]*state/, /draft/]) {
     t.ok(!leak.test(ANALYTICS), `an event payload may carry content: ${leak}`);

@@ -39,8 +39,15 @@ function emit(event: AdvisorEvent, props: Props = {}): void {
 
 export const advisorViewed = () => emit("advisor_viewed");
 
-export const advisorStarted = (entry: "typed" | "prompt") =>
-  emit("advisor_started", { entry });
+/**
+ * The visitor sent a first message.
+ *
+ * Carried an `entry` of "typed" or "prompt" while the opening offered starter
+ * questions. There are no starters any more — the visitor types or nothing
+ * happens — so a field that can only ever hold one value is noise in the
+ * report rather than a dimension of it.
+ */
+export const advisorStarted = () => emit("advisor_started");
 
 /**
  * ENGAGEMENT IS DELIBERATELY NOT A PAGE VIEW, AND NOT A FIRST MESSAGE EITHER.

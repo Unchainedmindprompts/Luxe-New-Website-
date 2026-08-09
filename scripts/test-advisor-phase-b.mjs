@@ -20,6 +20,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const read = (p) => readFileSync(join(ROOT, p), "utf8");
 
 const [
   products, priorities, rules, guardrailKnowledge,
@@ -1904,14 +1905,32 @@ await test("88 an informational answer never fabricates a project", async (t) =>
   }
 });
 
-await test("89 discovery reassures and asks one easy question", async (t) => {
-  const { result, provider } = await ask("I have no idea what I want.", "discovery");
+await test("89 discovery reassures and asks one BROAD question", async (t) => {
+  const { result, provider } = await ask("I don't know where to start.", "discovery");
   t.equal(result.status, "ANSWERED", `expected ANSWERED, got ${result.status}`);
+  t.equal(result.nextQuestion, null, "discovery produced a qualification question");
+
   const system = approvedFor(provider);
   t.ok(/do not need to know/i.test(system), "the reassurance is missing");
   t.ok(/exactly one question at the end/.test(system), "more than one question is permitted");
+  t.ok(/broad, open question/.test(system), "the question is not required to be open-ended");
+
+  // A menu with a question mark on the end is the failure this guards against.
+  // The live opening previously asked "too bright, too hot, hard to get
+  // privacy, or just looking a little tired?" — the visitor's own words
+  // replaced by ours.
+  t.ok(/A QUESTION WITH OPTIONS IN IT IS NOT AN OPEN QUESTION/.test(system), "a disguised form is still permitted");
+  t.ok(/No lists, no "or", no menu/.test(system), "option lists are not forbidden");
+  t.ok(/STYLE, not a script/.test(system), "the example questions read as a script to recite");
   t.ok(/Do not name products/.test(system), "discovery may open with a product list");
   t.ok(/Do not ask about window direction, room type, mounting, measurements or budget/.test(system), "discovery may still interrogate");
+
+  // And the deterministic fallback must obey the same rule.
+  const advisorSource = read("lib/advisor/server/advisor.ts");
+  const fallback = /const DISCOVERY_FALLBACK =\s*\n?\s*"([^"]+)"/.exec(advisorSource)?.[1] ?? "";
+  t.ok(fallback.length > 0, "the discovery fallback could not be found");
+  t.equal((fallback.match(/\?/g) ?? []).length, 1, "the fallback asks more than one question");
+  t.ok(!/, or /.test(fallback), "the fallback offers a menu of options");
 });
 
 await test("90 a project message still reaches the product engine", async (t) => {

@@ -172,13 +172,17 @@ export interface AdvisorDeps {
 
 /**
  * Used when the model's answer is unusable. Deliberately not a product pitch —
- * a broken phrasing call is not a reason to start qualifying someone.
+ * a broken phrasing call is not a reason to start qualifying someone — and
+ * deliberately one OPEN question. An earlier version offered "too bright, too
+ * hot, not enough privacy, or just the way it looks", which is a form with a
+ * question mark on it: it hands the visitor our categories and gets one of our
+ * words back instead of one of theirs.
  */
 const ANSWER_FALLBACK =
   "That is a fair question, and I would rather have someone confirm it than guess. Our team can answer it directly — give us a call or book a consultation and we will go through it with you.";
 
 const DISCOVERY_FALLBACK =
-  "You don't need to know what you want — that's genuinely what we're for. What would you most like to be different about the room: too bright, too hot, not enough privacy, or just the way it looks?";
+  "You don't need to know what you want yet — that's genuinely what we're for, and most people start right here. What are you hoping to improve?";
 
 /** Structural provider-failure check — no runtime import of the adapter. */
 function providerFailureCode(error: unknown): "provider-unavailable" | "provider-timeout" | null {

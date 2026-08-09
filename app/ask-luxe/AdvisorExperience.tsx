@@ -40,19 +40,14 @@ const MAX_MESSAGE_CHARS = 2000;
 const BOOK_CTA = "Schedule My Free In-Home Consultation";
 
 /**
- * For someone who does not know what to type.
+ * THERE ARE NO SUGGESTED QUESTIONS HERE, AND THAT IS THE DESIGN.
  *
- * Chosen to show the BREADTH of what can be asked, not to funnel toward a
- * product. A page that opens with three window problems teaches the visitor
- * that window problems are all it takes — and most people arrive wanting to
- * know what happens during the visit, not which shade to buy.
+ * Every example put on screen teaches the visitor what this page is for, and
+ * therefore what it is not for. Four buttons about consultations, brands and
+ * shades quietly announce "these are your options" — which is a quiz, however
+ * warmly it is worded. The visitor leads the subject; Luxe leads the
+ * conversation. An empty box asks nothing of them and forecloses nothing.
  */
-const STARTERS = [
-  "What happens during an in-home consultation?",
-  "What works best for west-facing windows?",
-  "Do you carry Hunter Douglas?",
-  "I have no idea what kind of shades I need.",
-] as const;
 
 interface Exchange {
   readonly id: number;
@@ -87,7 +82,7 @@ export default function AdvisorExperience() {
   }, [exchanges, pending, started]);
 
   const send = useCallback(
-    async (text: string, entry: "typed" | "prompt") => {
+    async (text: string) => {
       const message = text.trim();
       if (!message || pending) return;
 
@@ -101,7 +96,7 @@ export default function AdvisorExperience() {
       setInputError(null);
       const turnNumber = homeownerTurns + 1;
       setHomeownerTurns(turnNumber);
-      if (turnNumber === 1) advisorStarted(entry);
+      if (turnNumber === 1) advisorStarted();
       // Engagement is the second message: the first reply has been read and
       // the visitor chose to keep going. See the note in analytics.ts.
       if (turnNumber === 2) advisorEngaged(turnNumber);
@@ -145,7 +140,7 @@ export default function AdvisorExperience() {
 
   return (
     <div className="bg-warm-white min-h-screen">
-      <Opening onStart={(text) => send(text, "prompt")} started={started} />
+      <Opening started={started} />
 
       <div className="max-w-2xl mx-auto px-4 pb-20">
         {started && (
@@ -176,7 +171,7 @@ export default function AdvisorExperience() {
           ref={inputRef}
           draft={draft}
           setDraft={setDraft}
-          onSend={() => send(draft, "typed")}
+          onSend={() => send(draft)}
           pending={pending}
           error={inputError}
           started={started}
@@ -193,7 +188,7 @@ const FALLBACK_TEXT =
 
 /* ─────────────────────────── opening ─────────────────────────────────────── */
 
-function Opening({ onStart, started }: { onStart: (text: string) => void; started: boolean }) {
+function Opening({ started }: { started: boolean }) {
   return (
     <header className="bg-charcoal text-white pt-28 pb-14 px-4">
       <div className="max-w-2xl mx-auto text-center">
@@ -204,40 +199,18 @@ function Opening({ onStart, started }: { onStart: (text: string) => void; starte
           How Can We Help?
         </h1>
         <p className="text-white/80 text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
-          Thanks for stopping by Luxe Window Works. Whether you&rsquo;re just starting to explore
-          window treatments or already have something specific in mind, we&rsquo;re happy to help.
-        </p>
-        <p className="text-white/70 text-sm sm:text-base leading-relaxed max-w-xl mx-auto mt-3">
-          Ask us anything about window treatments, your home, our products, how our consultations
-          work, or Luxe Window Works.
+          Thanks for stopping by Luxe Window Works. If you have any questions about window
+          treatments, your project, or working with Luxe, just ask. We&rsquo;re happy to help.
         </p>
 
         {!started && (
-          <>
-            <div className="mt-8 text-left">
-              <p className="text-white/60 text-sm mb-3">Not sure where to start? Try one of these:</p>
-              <div className="space-y-2">
-                {STARTERS.map((starter) => (
-                  <button
-                    key={starter}
-                    type="button"
-                    onClick={() => onStart(starter)}
-                    className="w-full text-left text-sm text-white/90 bg-white/5 hover:bg-white/10 focus:bg-white/10 border border-white/15 rounded-lg px-4 py-3 leading-snug transition-colors"
-                  >
-                    &ldquo;{starter}&rdquo;
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Present and easy to find, but quieter than the invitation to
-                ask — the welcome is the message, and a page that leads with a
-                booking button is a landing page, not a help desk. */}
-            <div className="mt-8 pt-8 border-t border-white/15">
-              <p className="text-white/60 text-sm mb-2">Ready for us to take a look?</p>
-              <BookLink placement="opening" status="opening" turns={0} variant="quiet" />
-            </div>
-          </>
+          /* Present and easy to find, but quieter than the invitation to ask —
+             the welcome is the message, and a page that leads with a booking
+             button is a landing page, not a help desk. */
+          <div className="mt-8 pt-8 border-t border-white/15">
+            <p className="text-white/60 text-sm mb-2">Ready for us to take a look?</p>
+            <BookLink placement="opening" status="opening" turns={0} variant="quiet" />
+          </div>
         )}
       </div>
     </header>
@@ -486,7 +459,7 @@ function Composer({
         placeholder={
           started
             ? "Ask another question, or add anything that might matter…"
-            : "Ask a question or tell us what you're working on…"
+            : "Ask a question or tell us what brought you here…"
         }
         aria-describedby={error || tooLong ? "advisor-input-error" : undefined}
         aria-invalid={Boolean(error || tooLong)}
@@ -510,7 +483,7 @@ function Composer({
         </button>
         {!started && (
           <p className="text-warm-gray-500 text-sm">
-            No contact details needed to ask.
+            Not sure where to start? Just tell us what brought you here.
           </p>
         )}
       </div>
