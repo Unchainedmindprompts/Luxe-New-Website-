@@ -65,6 +65,7 @@ const serverTurn = (over = {}) => ({
   message: "Exterior solar shades fit here.",
   nextQuestion: null,
   assessment: {
+    primaryRecommendation: { id: "exterior-solar", label: "Exterior solar shades", reasons: ["x"] },
     strongCandidates: [{ id: "exterior-solar", label: "Exterior solar shades", reasons: ["x"] }],
     alternatives: [], excluded: [], recommendedOptions: [], optionsToAvoid: [],
     tradeoffs: [{ id: "view-vs-privacy", label: "View vs privacy", note: "Solar fabric reverses after dark." }],
@@ -126,7 +127,7 @@ test("5  NEED_MORE_INFORMATION shows one question and claims nothing more", (t) 
       status: "NEED_MORE_INFORMATION",
       message: "Do you need privacy after dark?",
       nextQuestion: { id: "q-nighttime-privacy", canonical: "…", phrased: "Do you need privacy after dark?", materialTo: [] },
-      assessment: { ...serverTurn().assessment, strongCandidates: [] },
+      assessment: { ...serverTurn().assessment, strongCandidates: [], primaryRecommendation: null },
     }),
     {}
   );
@@ -143,7 +144,7 @@ test("5  NEED_MORE_INFORMATION shows one question and claims nothing more", (t) 
     serverTurn({
       status: "NEED_MORE_INFORMATION",
       nextQuestion: null,
-      assessment: { ...serverTurn().assessment, strongCandidates: [] },
+      assessment: { ...serverTurn().assessment, strongCandidates: [], primaryRecommendation: null },
     }),
     {}
   );
@@ -156,7 +157,7 @@ test("5  NEED_MORE_INFORMATION shows one question and claims nothing more", (t) 
 
 test("6  GUIDANCE_READY renders without a best-fit claim", (t) => {
   const turn = contract.toAdvisorTurn(
-    serverTurn({ status: "GUIDANCE_READY", assessment: { ...serverTurn().assessment, strongCandidates: [] } }),
+    serverTurn({ status: "GUIDANCE_READY", assessment: { ...serverTurn().assessment, strongCandidates: [], primaryRecommendation: null } }),
     {}
   );
   t.equal(turn.status, "GUIDANCE_READY", "status not carried");
@@ -196,7 +197,7 @@ test("9  a canonical brand answer renders verbatim", (t) => {
     "We no longer carry Hunter Douglas. After the company came under 3G Capital’s controlling ownership, we felt the direction of the brand was no longer the best fit for Luxe Window Works or the level of product quality, dealer support, and customer service we want for our clients. We’ve chosen instead to work with suppliers whose products and support better align with our client-first approach.";
   const turn = contract.toAdvisorTurn(
     serverTurn({ status: "GUIDANCE_READY", message: approved, canonicalResponseId: "hunter-douglas-not-carried",
-      assessment: { ...serverTurn().assessment, strongCandidates: [] } }),
+      assessment: { ...serverTurn().assessment, strongCandidates: [], primaryRecommendation: null } }),
     {}
   );
   t.equal(turn.message, approved, "the approved wording was altered in the client");
@@ -334,7 +335,7 @@ test("19 the callback appears only at moments that earn it", (t) => {
   };
   t.equal(placement(), "recommendation", "a recommendation does not offer the callback");
   t.equal(
-    placement({ status: "GUIDANCE_READY", assessment: { ...serverTurn().assessment, strongCandidates: [] } }),
+    placement({ status: "GUIDANCE_READY", assessment: { ...serverTurn().assessment, strongCandidates: [], primaryRecommendation: null } }),
     "guidance",
     "guidance does not offer the callback"
   );
@@ -430,6 +431,45 @@ test("24 lead analytics separate interest from a request, and claim no bookings"
   t.ok(!/analytics/i.test(CONTACT.replace(/advisor\/client\/analytics/g, "")), "a second analytics vendor reached the form");
   // The failure path is documented as unsolved rather than quietly closed.
   t.ok(/KNOWN GAP: THIS IS NOT A BOOKING/.test(ANALYTICS), "the Calendly attribution gap was dropped");
+});
+
+// ── 25: the card cannot name a different product than the prose ────────────
+
+test("25 the card renders the server's canonical direction, never its own pick", (t) => {
+  // Several strong candidates, and the canonical direction is deliberately NOT
+  // the one a naive `strongCandidates[0]` would show. If the card still picks
+  // for itself, this is where it gets caught.
+  const many = serverTurn({
+    assessment: {
+      ...serverTurn().assessment,
+      primaryRecommendation: { id: "cellular", label: "Cellular shades", reasons: ["x"] },
+      strongCandidates: [
+        { id: "banded-shades", label: "Banded shades", reasons: ["x"] },
+        { id: "cellular", label: "Cellular shades", reasons: ["x"] },
+        { id: "interior-roller", label: "Interior roller shades", reasons: ["x"] },
+      ],
+    },
+  });
+  t.equal(contract.toAdvisorTurn(many, {}).direction, "Cellular shades", "the card chose its own winner");
+
+  // The client must read the canonical field and nothing else.
+  t.ok(/primaryRecommendation/.test(CONTRACT_SRC), "the client does not read the canonical direction");
+  t.ok(!/strongCandidates\?\.\[0\]/.test(CONTRACT_SRC), "the client still derives a direction from the candidate list");
+  t.ok(!/strongCandidates/.test(EXPERIENCE), "the component reaches into the candidate list directly");
+
+  // No canonical direction means no card headline, whatever else is present.
+  const none = serverTurn({
+    status: "GUIDANCE_READY",
+    assessment: { ...serverTurn().assessment, primaryRecommendation: null, strongCandidates: [] },
+  });
+  t.equal(contract.toAdvisorTurn(none, {}).direction, null, "a direction appeared with none established");
+
+  // A malformed or missing field degrades to no claim rather than a guess.
+  const missing = serverTurn({ assessment: { ...serverTurn().assessment, primaryRecommendation: undefined } });
+  t.equal(contract.toAdvisorTurn(missing, {}).direction, null, "a missing canonical direction was filled in by the client");
+
+  // Alternatives are still available to the prose — they are simply not the card.
+  t.equal(contract.toAdvisorTurn(many, {}).status, "RECOMMENDATION_READY", "the multi-candidate turn stopped recommending");
 });
 
 function toCamel(event) {

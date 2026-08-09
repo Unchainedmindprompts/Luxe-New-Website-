@@ -89,6 +89,18 @@ export type AdvisorStatus =
  */
 export interface AssessmentSummary {
   readonly recognizedConditions: readonly { id: string; label: string }[];
+  /**
+   * THE one direction being recommended, or null when none has been earned.
+   *
+   * The single source of truth for "the direction". The phrasing prompt is told
+   * to describe this and nothing else as the answer, and the card renders this
+   * exact value — so the paragraph and the panel beside it cannot name different
+   * products. Before this existed the card showed `strongCandidates[0]` while
+   * the model picked freely from the same list, and a homeowner could read
+   * "interior roller shades are the direction here" directly above a card
+   * headed "Banded shades".
+   */
+  readonly primaryRecommendation: { id: DirectionId; label: string; reasons: readonly string[] } | null;
   readonly strongCandidates: readonly { id: DirectionId; label: string; reasons: readonly string[] }[];
   readonly alternatives: readonly { id: DirectionId; label: string; reasons: readonly string[] }[];
   readonly excluded: readonly { id: DirectionId; label: string; reasons: readonly string[] }[];

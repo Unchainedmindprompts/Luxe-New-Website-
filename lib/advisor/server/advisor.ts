@@ -157,8 +157,14 @@ function providerFailureCode(error: unknown): "provider-unavailable" | "provider
 function summarise(assessment: AdvisorAssessment): AssessmentSummary {
   const rank = (list: AdvisorAssessment["strongCandidates"]) =>
     list.map((c) => ({ id: c.id, label: c.label, reasons: c.reasons }));
+  // Chosen once, here, from the engine's own ordering — never by the model and
+  // never a second time by the UI.
+  const primary = assessment.strongCandidates[0];
   return {
     recognizedConditions: assessment.recognizedConditions.map((c) => ({ id: c.id, label: c.label })),
+    primaryRecommendation: primary
+      ? { id: primary.id, label: primary.label, reasons: primary.reasons }
+      : null,
     strongCandidates: rank(assessment.strongCandidates),
     alternatives: rank(assessment.deprioritizedDirections),
     excluded: rank(assessment.excludedDirections),

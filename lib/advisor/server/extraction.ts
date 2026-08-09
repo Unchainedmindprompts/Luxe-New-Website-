@@ -341,6 +341,84 @@ export function evidenceSupports(message: string, evidence: string): boolean {
   return normaliseForEvidence(message).includes(quote);
 }
 
+// ───────────────────────── retraction targeting ─────────────────────────────
+
+/**
+ * Words that signal something is being taken back rather than described.
+ *
+ * Generic withdrawal language, not sentences from any transcript. A cue alone
+ * proves nothing — it must be paired with a link to the specific fact, which is
+ * what stops a bare "No." erasing whatever happens to be nearby.
+ */
+const WITHDRAWAL_CUES = [
+  "not", "n't", "no longer", "never", "forget", "drop", "skip", "ignore",
+  "changed my mind", "instead of", "without", "scratch", "nevermind",
+  "don t", "doesn t", "didn t", "isn t", "won t", "wasn t", "aren t",
+];
+
+/** Tokens too generic to identify anything. */
+const UNIDENTIFYING = new Set([
+  "when", "with", "that", "this", "from", "into", "onto", "over", "than",
+  "unknown", "other", "none", "both", "some", "very", "more", "most", "less",
+  "mild", "high", "moderate", "severe", "maximum", "minimum", "requested",
+  "unspecified", "mixed", "rare", "daily", "occasional", "true", "false",
+]);
+
+const tokenise = (text: string): readonly string[] =>
+  text
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .toLowerCase()
+    .split(/[^a-z]+/)
+    .filter((word) => word.length >= 4 && !UNIDENTIFYING.has(word));
+
+/** Loose stem match, so "dark" reaches "darkening" and "preserving" reaches "preservation". */
+function related(a: string, b: string): boolean {
+  if (a === b) return true;
+  const stem = (word: string) => word.replace(/(ing|ion|ions|ed|es|s)$/, "");
+  const [x, y] = [stem(a), stem(b)];
+  if (x.length < 4 || y.length < 4) return false;
+  return x === y || x.startsWith(y) || y.startsWith(x);
+}
+
+/**
+ * Whether a quote genuinely takes back THIS fact, rather than merely sitting
+ * near it in the conversation.
+ *
+ * THE DEFECT THIS EXISTS FOR: a homeowner answering a question with "No. I need
+ * privacy" had `clear-glass-when-open` retracted. The quote was real, present in
+ * the message and stated — every existing gate passed — and it identified
+ * nothing at all. Proximity was doing the work.
+ *
+ * Two independent conditions, both required:
+ *
+ *   1. WITHDRAWAL LANGUAGE. Something in the quote has to mean "take this away".
+ *      "I need privacy" describes a requirement; it cannot remove one.
+ *   2. A LINK TO THE TARGET. The quote must contain a word belonging to the
+ *      value being withdrawn — or, when the value is a bare magnitude like
+ *      "high", to the field it belongs to. "No." names nothing, so it retracts
+ *      nothing, however emphatic it is.
+ *
+ * Both are derived from the field and value themselves, so a new fact added to
+ * the vocabulary is covered the day it is added, with no list to maintain.
+ */
+export function retractionTargeted(field: string, value: string, evidence: string): boolean {
+  const quote = normaliseForEvidence(evidence).replace(/['’]/g, " ");
+  const words = quote.split(/[^a-z]+/).filter(Boolean);
+  // Whole words only: "nothing" and "another" contain "not" and mean nothing
+  // like it. Multi-word cues are matched against the quote as written.
+  const cued = WITHDRAWAL_CUES.some((cue) =>
+    cue.includes(" ") ? quote.includes(cue) : words.includes(cue)
+  );
+  if (!cued) return false;
+
+  // A meaningful value identifies itself; a magnitude borrows its field's name.
+  const valueTokens = tokenise(value);
+  const targets = valueTokens.length ? valueTokens : tokenise(field);
+  if (!targets.length) return false;
+
+  return targets.some((target) => words.some((word) => related(word, target)));
+}
+
 // ───────────────────────────── validation ───────────────────────────────────
 
 export interface ValidatedUpdates {
@@ -406,6 +484,12 @@ export function validateUpdates(raw: unknown, message: string): ValidatedUpdates
     // hypothesis; it may propose a fact, never withdraw one.
     if (operation === "retract" && basis !== "stated") {
       rejected.push(`${name}: inferred retraction refused`);
+      continue;
+    }
+    // A quote that does not name what it withdraws is retracting by proximity,
+    // which is how "No. I need privacy" erased an unrelated requirement.
+    if (operation === "retract" && !retractionTargeted(name, value, evidence)) {
+      rejected.push(`${name}: retraction evidence does not identify ${value}`);
       continue;
     }
 

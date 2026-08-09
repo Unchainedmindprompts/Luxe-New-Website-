@@ -599,7 +599,8 @@ await test("20 the engine owns candidates — phrasing is told only what it may 
   const result = await runToRecommendation(provider, "Roman shade behind the kitchen sink.");
   t.ok(ids(result.assessment.excluded).includes("roman-shades"), "splash zone did not exclude the fabric shade");
   const system = provider.calls.lastPhraseSystem;
-  t.ok(system.includes("may name only these product directions"), "phrasing prompt did not constrain the product set");
+  t.ok(system.includes("only as alternatives"), "phrasing prompt did not constrain the product set");
+  t.ok(/The direction is: /.test(system), "phrasing prompt was not given one canonical direction");
   t.ok(!/\bBanded shades\b/.test(system) || system.includes("Banded shades"), "prompt product list is malformed");
 });
 
@@ -1466,7 +1467,8 @@ const CORRECTION_TURNS = [
 await test("71 a retraction removes a list member the homeowner takes back", async (t) => {
   const isList = extraction.isListField;
   const assert_ = (field, value, basis) => ({ field, value, basis, evidence: "x", operation: "assert" });
-  const retract = (field, value) => ({ field, value, basis: "stated", evidence: "x", operation: "retract" });
+  // Evidence has to name what it withdraws now, so these read like real quotes.
+  const retract = (field, value, evidence) => ({ field, value, basis: "stated", evidence, operation: "retract" });
 
   let l = LEDGER.apply({}, [
     assert_("priorities", "view-preservation", "inferred"),
@@ -1474,7 +1476,7 @@ await test("71 a retraction removes a list member the homeowner takes back", asy
   ], 1, isList).ledger;
   t.equal(LEDGER.project(l).priorities.length, 2, "setup did not record both priorities");
 
-  const after = LEDGER.apply(l, [retract("priorities", "view-preservation")], 2, isList);
+  const after = LEDGER.apply(l, [retract("priorities", "view-preservation", "don't care about the view")], 2, isList);
   const priorities = LEDGER.project(after.ledger).priorities;
   t.ok(!priorities.includes("view-preservation"), "the retracted priority survived in ProjectFacts");
   t.ok(priorities.includes("privacy"), "the retraction removed more than it was given");
@@ -1483,7 +1485,7 @@ await test("71 a retraction removes a list member the homeowner takes back", asy
   // A retraction beats a stated fact — that is the entire point, since the
   // thing being taken back is usually something they themselves said.
   let stated = LEDGER.apply({}, [assert_("priorities", "budget", "stated")], 1, isList).ledger;
-  stated = LEDGER.apply(stated, [retract("priorities", "budget")], 2, isList).ledger;
+  stated = LEDGER.apply(stated, [retract("priorities", "budget", "budget is not a concern")], 2, isList).ledger;
   t.ok(!LEDGER.project(stated).priorities.includes("budget"), "a stated fact could not be retracted");
 
   // An emptied list stays present as an empty list: they have spoken about it.
@@ -1515,11 +1517,12 @@ await test("72 a retracted scalar leaves no value behind", async (t) => {
 });
 
 await test("73 inference may propose a fact but never withdraw one", async (t) => {
+  const message = "I don't need privacy and I don't want the view either";
   const { accepted, rejected } = extraction.validateUpdates({ updates: [
-    { field: "priorities", value: "view-preservation", basis: "inferred", evidence: "block the window", operation: "retract" },
-    { field: "priorities", value: "privacy", basis: "stated", evidence: "block the window", operation: "retract" },
-    { field: "room", value: "living", basis: "stated", evidence: "block the window", operation: "sideways" },
-  ] }, "I hate how much they block the window");
+    { field: "priorities", value: "view-preservation", basis: "inferred", evidence: "don't want the view", operation: "retract" },
+    { field: "priorities", value: "privacy", basis: "stated", evidence: "don't need privacy", operation: "retract" },
+    { field: "room", value: "living", basis: "stated", evidence: "don't need privacy", operation: "sideways" },
+  ] }, message);
 
   t.equal(accepted.length, 1, "the wrong number of updates survived");
   t.equal(accepted[0]?.value, "privacy", "the stated retraction was not the one kept");
@@ -1529,7 +1532,7 @@ await test("73 inference may propose a fact but never withdraw one", async (t) =
   // A retraction still has to quote the message, like every other update.
   const unquoted = extraction.validateUpdates({ updates: [
     { field: "priorities", value: "privacy", basis: "stated", evidence: "words never said", operation: "retract" },
-  ] }, "I hate how much they block the window");
+  ] }, message);
   t.equal(unquoted.accepted.length, 0, "a retraction bypassed evidence validation");
 });
 
@@ -1641,6 +1644,123 @@ await test("76 acknowledgement is offered only when something was actually corre
   t.ok(/Do not restate, defend or return to the interpretation/i.test(system), "nothing forbids repeating the old reading");
   // Permission to acknowledge, not a script to recite.
   t.ok(!/Got it — I misunderstood/i.test(system), "the acknowledgement is a canned phrase rather than an instruction");
+});
+
+// ── 77-79: retraction must be aimed, not merely nearby ──────────────────────
+
+await test("77 a bare denial cannot retract anything", async (t) => {
+  const bare = ["No.", "Nope.", "Actually, no.", "No!", "nah"];
+  for (const message of bare) {
+    for (const [field, value] of [["priorities", "clear-glass-when-open"], ["priorities", "privacy"], ["room", "living"]]) {
+      const { accepted } = extraction.validateUpdates({ updates: [
+        { field, value, basis: "stated", evidence: message.replace(/[.!]/g, ""), operation: "retract" },
+      ] }, message);
+      t.equal(accepted.length, 0, `"${message}" retracted ${field}:${value}`);
+    }
+  }
+  // Directly, so the rule is pinned independently of the validator around it.
+  t.ok(!extraction.retractionTargeted("priorities", "clear-glass-when-open", "No"), "a bare no identified a target");
+  t.ok(!extraction.retractionTargeted("priorities", "privacy", "Actually, no"), "a hedged no identified a target");
+});
+
+await test("78 the reported turn asserts privacy without retracting clear glass", async (t) => {
+  // THE EXACT DEFECT. "No. I need privacy" removed clear-glass-when-open by
+  // sitting next to it. The message is a real customer sentence, not a pattern.
+  const message = "No. I need privacy";
+  const { accepted, rejected } = extraction.validateUpdates({ updates: [
+    { field: "priorities", value: "privacy", basis: "stated", evidence: "I need privacy", operation: "assert" },
+    { field: "priorities", value: "clear-glass-when-open", basis: "stated", evidence: "No", operation: "retract" },
+  ] }, message);
+
+  t.equal(accepted.length, 1, "the wrong number of updates survived");
+  t.equal(accepted[0]?.operation, "assert", "the surviving update was not the assertion");
+  t.equal(accepted[0]?.value, "privacy", "privacy was not asserted");
+  t.ok(rejected.some((r) => /does not identify clear-glass-when-open/.test(r)), "the refusal does not name what it protected");
+
+  // Nor can the whole sentence do it — no part of it names clear glass.
+  const whole = extraction.validateUpdates({ updates: [
+    { field: "priorities", value: "clear-glass-when-open", basis: "stated", evidence: message, operation: "retract" },
+  ] }, message);
+  t.equal(whole.accepted.length, 0, "quoting the whole sentence retracted an unnamed fact");
+
+  // A requirement stated positively never withdraws anything, even itself.
+  t.ok(!extraction.retractionTargeted("priorities", "privacy", "I need privacy"), "a positive statement acted as a withdrawal");
+});
+
+await test("79 an explicit negation retracts the thing it names", async (t) => {
+  const cases = [
+    ["priorities", "view-preservation", "I don't care about preserving the view", "I don't care about preserving the view."],
+    ["priorities", "clear-glass-when-open", "I don't need the glass completely clear when it's raised", "I don't need the glass completely clear when it's raised."],
+    ["priorities", "privacy", "Forget the privacy requirement", "Forget the privacy requirement."],
+    ["motorizationInterest", "requested", "I changed my mind about motorization", "I changed my mind about motorization."],
+    ["viewImportance", "high", "I don't care about the view", "I don't care about the view."],
+    ["roomDarkening", "maximum", "we don't need it dark in there", "Actually we don't need it dark in there."],
+  ];
+  for (const [field, value, evidence, message] of cases) {
+    const { accepted } = extraction.validateUpdates({ updates: [
+      { field, value, basis: "stated", evidence, operation: "retract" },
+    ] }, message);
+    t.equal(accepted.length, 1, `"${evidence}" could not retract ${field}:${value}`);
+  }
+
+  // Same-turn "not X, I mean Y" — the shape the whole fix exists for.
+  const message = "I didn't say that I want to keep the view when the shade is down. I just want something that doesn't block a lot of the window when the product is raised";
+  const both = extraction.validateUpdates({ updates: [
+    { field: "priorities", value: "view-preservation", basis: "stated", evidence: "I didn't say that I want to keep the view when the shade is down", operation: "retract" },
+    { field: "priorities", value: "clear-glass-when-open", basis: "stated", evidence: "doesn't block a lot of the window when the product is raised", operation: "assert" },
+  ] }, message);
+  t.equal(both.accepted.length, 2, "the correct-and-replace turn did not survive intact");
+  t.ok(both.accepted.some((u) => u.operation === "retract" && u.value === "view-preservation"), "the retraction was lost");
+  t.ok(both.accepted.some((u) => u.operation === "assert" && u.value === "clear-glass-when-open"), "the replacement was lost");
+});
+
+// ── 80-82: one canonical direction ──────────────────────────────────────────
+
+await test("80 prose and card are handed the same single direction", async (t) => {
+  const provider = mockProvider({
+    // Facts that genuinely produce several strong candidates — the condition
+    // under which the two could previously disagree.
+    extractions: [{ priorities: ["clear-glass-when-open", "aesthetics"], aesthetic: ["modern-minimal"] }],
+  });
+  const r = await makeAdvisor(provider).runTurn({ message: "Something modern that leaves the glass clear when it's up.", state: {} });
+
+  t.ok(r.assessment.strongCandidates.length > 1, "the multi-candidate case did not reproduce");
+  t.ok(Boolean(r.assessment.primaryRecommendation), "no canonical direction was published");
+  t.equal(
+    r.assessment.primaryRecommendation.id,
+    r.assessment.strongCandidates[0].id,
+    "the canonical direction is not the engine's own first choice"
+  );
+
+  // The prompt names that direction, and offers the rest only as alternatives.
+  const system = provider.calls.lastPhraseSystem;
+  t.ok(system.includes(`The direction is: ${r.assessment.primaryRecommendation.label}`), "the prompt was not given the canonical direction");
+  t.ok(/only as alternatives/.test(system), "other candidates are not confined to being alternatives");
+  for (const other of r.assessment.strongCandidates.slice(1)) {
+    t.ok(!system.includes(`The direction is: ${other.label}`), `${other.label} was also offered as the direction`);
+  }
+  t.ok(/Do not say another product "is the fit"/.test(system), "nothing forbids promoting an alternative");
+});
+
+await test("81 no strong candidate means no direction anywhere", async (t) => {
+  const provider = mockProvider({ extractions: [{ priorities: ["child-safety"], room: "living" }] });
+  const r = await makeAdvisor(provider).runTurn({ message: "Toddlers in the house, worried about cords.", state: {} });
+
+  t.equal(r.status, "GUIDANCE_READY", `expected guidance, got ${r.status}`);
+  t.equal(r.assessment.strongCandidates.length, 0, "the no-candidate case did not reproduce");
+  t.equal(r.assessment.primaryRecommendation, null, "a direction was invented with nothing to back it");
+  // Guidance phrasing is used, and it forbids naming an answer.
+  t.ok(/must not invent one/.test(provider.calls.lastPhraseSystem), "the guidance prompt was not the one used");
+  t.ok(!/The direction is: /.test(provider.calls.lastPhraseSystem), "guidance was handed a direction it may not claim");
+});
+
+await test("82 the canonical answer path is untouched by any of this", async (t) => {
+  const provider = mockProvider({ extractions: [{ room: "living" }] });
+  const r = await makeAdvisor(provider).runTurn({ message: "Do you carry Hunter Douglas?", state: {} });
+  t.equal(r.canonicalResponseId, "hunter-douglas-not-carried", "the brand answer no longer fires");
+  t.equal(r.message, brandKnowledge.BRAND_RESPONSES.find((b) => b.id === "hunter-douglas-not-carried").response,
+    "the approved wording changed");
+  t.equal(provider.calls.phrase, 0, "the approved answer was sent through phrasing");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────

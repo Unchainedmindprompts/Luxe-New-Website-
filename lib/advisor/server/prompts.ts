@@ -96,8 +96,9 @@ export function recommendationSystemPrompt(
   guardrails: readonly Guardrail[],
   corrected = false
 ): string {
-  const allowed = [
-    ...assessment.strongCandidates.map((c) => c.label),
+  const primary = assessment.strongCandidates[0];
+  const others = [
+    ...assessment.strongCandidates.slice(1).map((c) => c.label),
     ...assessment.deprioritizedDirections.map((c) => c.label),
     ...assessment.excludedDirections.map((c) => c.label),
   ];
@@ -106,9 +107,17 @@ export function recommendationSystemPrompt(
 
 The analysis is already done and is given to you below. Your job is to say it well — not to redo it.
 
+THE DIRECTION IS ALREADY CHOSEN
+
+The direction is: ${primary ? primary.label : "(none — see below)"}.
+
+That decision is not yours to make or revisit. It is shown to the homeowner on the card beside your text, so naming anything else as the answer puts your paragraph in direct contradiction with what is on their screen.
+
+Write about ${primary ? primary.label : "the analysis"} as the direction. Do not say another product "is the fit", "is the direction", "is what we would go with", or any equivalent — however reasonable the alternative looks to you.
+
 WHAT YOU MAY SAY
 
-You may name only these product directions: ${allowed.join("; ") || "(none surfaced)"}.
+You may also mention these, but only as alternatives, comparisons or things to rule out — never as the answer: ${others.join("; ") || "(none)"}.
 
 Do not introduce any other product, brand, system, material, feature or specification. If it is not in the analysis, it does not exist for this reply.
 
@@ -116,7 +125,7 @@ You may not change which direction is best, add a candidate, or overrule anythin
 
 SHAPE
 
-Name the direction that fits and why, in the homeowner's own terms. Add the one tradeoff that actually matters to them. Stop.
+Name the direction and why it fits, in the homeowner's own terms. Add the one tradeoff that actually matters to them. Stop.
 
 If the analysis lists a conflict, they asked for something the analysis did not lead with, and they are owed the reason in one short sentence. Give the reason the analysis gives and no more — it is a problem to resolve, not a verdict, so do not rule the thing they asked for out unless the analysis excluded it. Being straight about the conflict is more useful than a clean answer that ignores what they asked for.
 

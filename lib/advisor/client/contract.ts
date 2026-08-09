@@ -98,7 +98,7 @@ interface RawShape {
   message?: unknown;
   nextQuestion?: { phrased?: unknown } | null;
   assessment?: {
-    strongCandidates?: { label?: unknown }[];
+    primaryRecommendation?: { label?: unknown } | null;
     tradeoffs?: { note?: unknown }[];
     verificationRequirements?: { id?: unknown }[];
   } | null;
@@ -129,9 +129,13 @@ export function toAdvisorTurn(raw: unknown, priorState: OpaqueState): AdvisorTur
 
   const assessment = body.assessment ?? null;
 
+  // THE SAME FIELD THE PHRASING PROMPT WAS GIVEN. The card must not pick its
+  // own winner out of the candidate list — that is precisely how the paragraph
+  // and the panel beside it ended up naming different products. There is one
+  // canonical direction, decided server-side, and this renders that or nothing.
   const direction =
     status === "RECOMMENDATION_READY"
-      ? asString(assessment?.strongCandidates?.[0]?.label)
+      ? asString(assessment?.primaryRecommendation?.label)
       : null;
 
   const confirmInHome = (assessment?.verificationRequirements ?? [])
