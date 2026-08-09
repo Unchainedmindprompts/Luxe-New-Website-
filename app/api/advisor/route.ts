@@ -88,8 +88,31 @@ function fingerprint(request: Request): string {
   return forwarded.split(",")[0]?.trim() || "unknown";
 }
 
+/**
+ * THE ENDPOINT IS OFF UNLESS SOMETHING TURNS IT ON.
+ *
+ * The customer-facing page is withdrawn pending a redesign, but a route file
+ * is a public endpoint whether or not anything links to it — and this one
+ * spends money at Anthropic on every call. Removing the page and leaving the
+ * API answering would move the liability rather than close it.
+ *
+ * Off is the default and requires no configuration: absence of the variable
+ * means disabled, so nothing has to be set anywhere for production to be safe.
+ * Local development sets ADVISOR_ENABLED=true in .env.local, which is how the
+ * reasoning work stays runnable while the surface is down.
+ */
+function advisorEnabled(): boolean {
+  return process.env.ADVISOR_ENABLED === "true";
+}
+
 export async function POST(request: Request) {
   const state: ConversationState = {};
+
+  // 404, not 403: there is nothing here for a visitor, and an endpoint that
+  // announces "disabled" is an invitation to come back and check.
+  if (!advisorEnabled()) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
 
   let bodyText: string;
   try {

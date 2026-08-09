@@ -176,15 +176,9 @@ export default function ProductsHubPage() {
             mostly about the look you are after.
           </p>
           <p className="text-warm-gray-600 leading-relaxed text-lg">
-            <Link
-              href="/show-me-my-options"
-              className="text-gold hover:text-gold-dark font-medium"
-            >
-              Answer a few questions
-            </Link>{" "}
-            and we&apos;ll narrow it down, or{" "}
+            Still deciding?{" "}
             <Link href="/book" className="text-gold hover:text-gold-dark font-medium">
-              book a free in-home consultation
+              Book a free in-home consultation
             </Link>{" "}
             and we&apos;ll bring samples to your windows, in your light.
           </p>

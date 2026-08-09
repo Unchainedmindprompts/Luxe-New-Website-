@@ -478,15 +478,6 @@ export default function HomePage() {
             >
               Book My Free In-Home Consultation
             </Link>
-            <Link
-              href="/show-me-my-options"
-              className="inline-flex items-center gap-2 text-charcoal hover:text-gold font-semibold text-base transition-colors group"
-            >
-              Show Me My Options
-              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
           </div>
 
           <div className="mt-7 space-y-1.5">
