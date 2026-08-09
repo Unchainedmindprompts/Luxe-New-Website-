@@ -138,7 +138,9 @@ test("2a nothing on the opening screen nudges toward a topic", (t) => {
   }
 
   // The opening renders exactly one button — submit — and one link, booking.
-  const opening = /function Opening\(([\s\S]*?)\n}/.exec(EXPERIENCE)?.[1] ?? "";
+  // From the renderable source: a comment explaining why the eyebrow was
+  // removed must not itself fail the check for the eyebrow.
+  const opening = /function Opening\(([\s\S]*?)\n}/.exec(visible)?.[1] ?? "";
   t.ok(opening.length > 0, "the Opening component could not be found");
   t.ok(!/<button/.test(opening), "the opening screen renders clickable topic buttons");
   t.ok(!/\.map\(/.test(opening), "the opening screen renders a list of options");
@@ -154,6 +156,11 @@ test("2a nothing on the opening screen nudges toward a topic", (t) => {
   // And no product category is named anywhere on the opening screen.
   for (const category of [/blinds/i, /shades/i, /drapery/i, /motoriz/i]) {
     t.ok(!category.test(opening), `a product category appears on the opening screen: ${category}`);
+  }
+
+  // No objection framing before the visitor has said anything.
+  for (const preframe of [/No Obligation/i, /Free &middot;/, /no pressure/i, /risk[- ]free/i]) {
+    t.ok(!preframe.test(opening), `the opening answers an objection nobody raised: ${preframe}`);
   }
 
   // The entry analytics no longer claims a dimension that cannot vary.
@@ -319,6 +326,10 @@ test("14 the layout is mobile-first and accessible", (t) => {
 
 test("15 the privacy policy discloses the advisor accurately", (t) => {
   const policy = flat(PRIVACY);
+  // The link text has to name the page it goes to.
+  t.ok(!/Find the Right Window Treatments/.test(PRIVACY), "the privacy policy links to a page title that no longer exists");
+  t.ok(/>\s*Ask Luxe\s*</.test(PRIVACY), "the privacy policy does not name the advisor page");
+
   for (const required of [
     /Anthropic/, /window-treatment advisor/i, /AI-assisted|AI that powers/i,
     /not a quote/i, /book a free in-home consultation/i,

@@ -122,7 +122,7 @@ export default function PrivacyPage() {
             <p>
               Our{" "}
               <Link href="/ask-luxe" className="text-gold underline underline-offset-2">
-                Find the Right Window Treatments
+                Ask Luxe
               </Link>{" "}
               page lets you describe your project in your own words and get
               suggestions back. It is AI-assisted, and here is exactly what that
@@ -197,7 +197,7 @@ export default function PrivacyPage() {
                 <strong>Anthropic</strong> — provides the AI that powers the
                 window-treatment advisor on our{" "}
                 <Link href="/ask-luxe" className="text-gold underline underline-offset-2">
-                  Find the Right Window Treatments
+                  Ask Luxe
                 </Link>{" "}
                 page. When you use the advisor, the messages you type there, and
                 the project details we derive from them, are sent to Anthropic to

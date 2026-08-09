@@ -192,9 +192,11 @@ function Opening({ started }: { started: boolean }) {
   return (
     <header className="bg-charcoal text-white pt-28 pb-14 px-4">
       <div className="max-w-2xl mx-auto text-center">
-        <p className="text-gold text-xs font-semibold uppercase tracking-widest mb-3">
-          Free &middot; No Obligation
-        </p>
+        {/* No eyebrow. "Free · No Obligation" answers an objection the visitor
+            has not raised, before they have said anything at all — which frames
+            the page as a sales pitch they need reassuring about rather than a
+            desk they can ask a question at. The offer itself is still made,
+            lower down, to someone who has read the welcome. */}
         <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
           How Can We Help?
         </h1>
