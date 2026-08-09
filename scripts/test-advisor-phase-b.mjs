@@ -96,7 +96,13 @@ function mockProvider({ extractions = [], phrasings = [], failExtract, failPhras
   };
 }
 
-/** Turns a readable fact object into a delta whose evidence is the message. */
+/**
+ * Turns a readable fact object into a delta whose evidence is the message.
+ *
+ * `__retract: { field: value | [values] }` emits retractions, which is how a
+ * scenario expresses "the homeowner took that back" without hand-writing the
+ * whole update list.
+ */
 function toUpdates(facts, message) {
   const updates = [];
   for (const [field, value] of Object.entries(facts ?? {})) {
@@ -105,7 +111,13 @@ function toUpdates(facts, message) {
     const evidence = (facts.__evidence ?? {})[field] ?? message;
     if (field.startsWith("__")) continue;
     for (const v of Array.isArray(value) ? value : [value]) {
-      updates.push({ field, value: String(v), basis, evidence });
+      updates.push({ field, value: String(v), basis, evidence, operation: "assert" });
+    }
+  }
+  for (const [field, value] of Object.entries(facts?.__retract ?? {})) {
+    const evidence = (facts.__evidence ?? {})[field] ?? message;
+    for (const v of Array.isArray(value) ? value : [value]) {
+      updates.push({ field, value: String(v), basis: "stated", evidence, operation: "retract" });
     }
   }
   return updates;
@@ -254,11 +266,11 @@ await test("2  priority order — an unranked list is not turned into a ranking"
 await test("3  unknown stays unknown — junk updates are dropped, never coerced", async (t) => {
   const msg = "It faces west and gets very hot.";
   const { accepted, rejected } = extraction.validateUpdates({ updates: [
-    { field: "exposure", value: "west", basis: "stated", evidence: "It faces west" },
-    { field: "solarHeat", value: "blazing", basis: "stated", evidence: "gets very hot" },
-    { field: "notAField", value: "x", basis: "stated", evidence: "It faces west" },
-    { field: "room", value: "unknown", basis: "stated", evidence: "It faces west" },
-    { field: "privacyNeed", value: "both", basis: "guessed", evidence: "It faces west" },
+    { field: "exposure", value: "west", basis: "stated", evidence: "It faces west", operation: "assert" },
+    { field: "solarHeat", value: "blazing", basis: "stated", evidence: "gets very hot", operation: "assert" },
+    { field: "notAField", value: "x", basis: "stated", evidence: "It faces west", operation: "assert" },
+    { field: "room", value: "unknown", basis: "stated", evidence: "It faces west", operation: "assert" },
+    { field: "privacyNeed", value: "both", basis: "guessed", evidence: "It faces west", operation: "assert" },
   ] }, msg);
   t.equal(accepted.length, 1, "more than the one valid update survived");
   t.equal(accepted[0].field, "exposure", "the valid update was not the survivor");
@@ -610,8 +622,8 @@ await test("21 the delta schema stays inside the limits that broke the first des
 await test("22 evidence must be present in the current message", async (t) => {
   const msg = "We do want privacy at night, yes.";
   const { accepted, rejected } = extraction.validateUpdates({ updates: [
-    { field: "privacyNeed", value: "nighttime", basis: "stated", evidence: "privacy at night" },
-    { field: "room", value: "other", basis: "inferred", evidence: "the living room downstairs" },
+    { field: "privacyNeed", value: "nighttime", basis: "stated", evidence: "privacy at night", operation: "assert" },
+    { field: "room", value: "other", basis: "inferred", evidence: "the living room downstairs", operation: "assert" },
   ] }, msg);
   t.equal(accepted.length, 1, "an unsupported update survived");
   t.equal(accepted[0].field, "privacyNeed", "the supported update was dropped instead");
@@ -624,7 +636,7 @@ await test("22 evidence must be present in the current message", async (t) => {
 
 await test("23 ledger precedence — stated outranks inferred, newer stated wins", async (t) => {
   const isList = extraction.isListField;
-  const u = (field, value, basis) => ({ field, value, basis, evidence: "x" });
+  const u = (field, value, basis) => ({ field, value, basis, evidence: "x", operation: "assert" });
 
   let l = LEDGER.apply({}, [u("room", "nursery", "stated")], 1, isList).ledger;
   const blocked = LEDGER.apply(l, [u("room", "living", "inferred")], 2, isList);
@@ -817,7 +829,7 @@ await test("31 the deterministic fallback is polished customer-facing prose", as
 await test("32 explicit scale language produces qualitative geometry as an inference", async (t) => {
   const msg = "We have huge west-facing windows looking over the lake.";
   const { accepted } = extraction.validateUpdates({ updates: [
-    { field: "geometry", value: "large-architectural-glass", basis: "inferred", evidence: "huge west-facing windows" },
+    { field: "geometry", value: "large-architectural-glass", basis: "inferred", evidence: "huge west-facing windows", operation: "assert" },
   ] }, msg);
   t.equal(accepted.length, 1, "supported qualitative scale was rejected");
   t.equal(accepted[0].basis, "inferred", "qualitative scale was recorded as a statement");
@@ -834,8 +846,8 @@ await test("33 no dimension can be invented", async (t) => {
   }
   const msg = "The windows are huge, easily 96 inches across.";
   const { accepted, rejected } = extraction.validateUpdates({ updates: [
-    { field: "geometry", value: "96 inches", basis: "stated", evidence: "96 inches across" },
-    { field: "geometry", value: "large-architectural-glass", basis: "inferred", evidence: "The windows are huge" },
+    { field: "geometry", value: "96 inches", basis: "stated", evidence: "96 inches across", operation: "assert" },
+    { field: "geometry", value: "large-architectural-glass", basis: "inferred", evidence: "The windows are huge", operation: "assert" },
   ] }, msg);
   t.equal(accepted.length, 1, "a measurement was accepted as geometry");
   t.equal(accepted[0].value, "large-architectural-glass", "the qualitative update was dropped instead");
@@ -846,11 +858,11 @@ await test("33 no dimension can be invented", async (t) => {
 await test("34 the ProjectFacts projection stays valid for the Phase A engine", async (t) => {
   const isList = extraction.isListField;
   const updates = [
-    { field: "room", value: "living", basis: "stated", evidence: "x" },
-    { field: "exposure", value: "west", basis: "stated", evidence: "x" },
-    { field: "priorities", value: "view-preservation", basis: "stated", evidence: "x" },
-    { field: "openings", value: "sliding-door", basis: "stated", evidence: "x" },
-    { field: "mountingSubstrate", value: "stone", basis: "stated", evidence: "x" },
+    { field: "room", value: "living", basis: "stated", evidence: "x", operation: "assert" },
+    { field: "exposure", value: "west", basis: "stated", evidence: "x", operation: "assert" },
+    { field: "priorities", value: "view-preservation", basis: "stated", evidence: "x", operation: "assert" },
+    { field: "openings", value: "sliding-door", basis: "stated", evidence: "x", operation: "assert" },
+    { field: "mountingSubstrate", value: "stone", basis: "stated", evidence: "x", operation: "assert" },
   ];
   const facts = LEDGER.project(LEDGER.apply({}, updates, 1, isList).ledger);
   t.equal(typeof facts.room, "string", "a scalar did not project as a string");
@@ -1433,6 +1445,202 @@ await test("70 the recommendation prompt must explain a request it did not lead 
   t.ok(/one short sentence/i.test(prompt), "the conflict instruction sets no length discipline");
   // Length discipline is not weakened to make room for it.
   t.ok(/35 to 75 words/.test(prompt), "the tightened length target was lost");
+});
+
+// ── 71-76: comprehension and correction ─────────────────────────────────────
+//
+// From a real customer conversation. The homeowner said blinds "block the
+// window", meaning the covering eats the opening when it is up. The advisor
+// recorded it as wanting to see out through a lowered shade, and then held that
+// reading through two explicit corrections — the second of which was "why do
+// you not understand what I am saying?".
+
+const CORRECTION_TURNS = [
+  "I think I want blinds, but I hate how much they block the window.",
+  "I'm not sure what I want. I want something stylish that looks modern.",
+  "No. I need privacy.",
+  "I didn't say that I want to keep the view when the shade is down. I just want something that doesn't block a lot of the window when the product is raised.",
+  "I stated I don't care about preserving the view when the shade is down.",
+];
+
+await test("71 a retraction removes a list member the homeowner takes back", async (t) => {
+  const isList = extraction.isListField;
+  const assert_ = (field, value, basis) => ({ field, value, basis, evidence: "x", operation: "assert" });
+  const retract = (field, value) => ({ field, value, basis: "stated", evidence: "x", operation: "retract" });
+
+  let l = LEDGER.apply({}, [
+    assert_("priorities", "view-preservation", "inferred"),
+    assert_("priorities", "privacy", "stated"),
+  ], 1, isList).ledger;
+  t.equal(LEDGER.project(l).priorities.length, 2, "setup did not record both priorities");
+
+  const after = LEDGER.apply(l, [retract("priorities", "view-preservation")], 2, isList);
+  const priorities = LEDGER.project(after.ledger).priorities;
+  t.ok(!priorities.includes("view-preservation"), "the retracted priority survived in ProjectFacts");
+  t.ok(priorities.includes("privacy"), "the retraction removed more than it was given");
+  t.equal(after.retracted.length, 1, "the retraction was not reported");
+
+  // A retraction beats a stated fact — that is the entire point, since the
+  // thing being taken back is usually something they themselves said.
+  let stated = LEDGER.apply({}, [assert_("priorities", "budget", "stated")], 1, isList).ledger;
+  stated = LEDGER.apply(stated, [retract("priorities", "budget")], 2, isList).ledger;
+  t.ok(!LEDGER.project(stated).priorities.includes("budget"), "a stated fact could not be retracted");
+
+  // An emptied list stays present as an empty list: they have spoken about it.
+  t.ok(Array.isArray(LEDGER.project(stated).priorities), "the emptied list vanished instead of staying empty");
+});
+
+await test("72 a retracted scalar leaves no value behind", async (t) => {
+  const isList = extraction.isListField;
+  let l = LEDGER.apply({}, [
+    { field: "viewImportance", value: "high", basis: "stated", evidence: "x", operation: "assert" },
+  ], 1, isList).ledger;
+  const after = LEDGER.apply(l, [
+    { field: "viewImportance", value: "high", basis: "stated", evidence: "x", operation: "retract" },
+  ], 2, isList);
+
+  const facts = LEDGER.project(after.ledger);
+  t.ok(!("viewImportance" in facts), "the retracted scalar is still in ProjectFacts");
+  t.equal(after.retracted.length, 1, "the scalar retraction was not reported");
+
+  // Absence, not a placeholder — the engine must read it as never established.
+  t.ok(engine.assess(facts, KNOWLEDGE).unknownDimensions.includes("viewImportance"), "a retracted field is not unknown again");
+
+  // Retracting a value that is not the established one changes nothing.
+  const mismatch = LEDGER.apply(l, [
+    { field: "viewImportance", value: "low", basis: "stated", evidence: "x", operation: "retract" },
+  ], 3, isList);
+  t.equal(LEDGER.project(mismatch.ledger).viewImportance, "high", "a mismatched retraction erased the wrong value");
+  t.equal(mismatch.retracted.length, 0, "a no-op retraction was reported as a correction");
+});
+
+await test("73 inference may propose a fact but never withdraw one", async (t) => {
+  const { accepted, rejected } = extraction.validateUpdates({ updates: [
+    { field: "priorities", value: "view-preservation", basis: "inferred", evidence: "block the window", operation: "retract" },
+    { field: "priorities", value: "privacy", basis: "stated", evidence: "block the window", operation: "retract" },
+    { field: "room", value: "living", basis: "stated", evidence: "block the window", operation: "sideways" },
+  ] }, "I hate how much they block the window");
+
+  t.equal(accepted.length, 1, "the wrong number of updates survived");
+  t.equal(accepted[0]?.value, "privacy", "the stated retraction was not the one kept");
+  t.ok(rejected.some((r) => /inferred retraction/i.test(r)), "an inferred retraction was not refused by name");
+  t.ok(rejected.some((r) => /unrecognised operation/i.test(r)), "an unknown operation was not refused");
+
+  // A retraction still has to quote the message, like every other update.
+  const unquoted = extraction.validateUpdates({ updates: [
+    { field: "priorities", value: "privacy", basis: "stated", evidence: "words never said", operation: "retract" },
+  ] }, "I hate how much they block the window");
+  t.equal(unquoted.accepted.length, 0, "a retraction bypassed evidence validation");
+});
+
+await test("74 the extractor is shown what the confusable values mean", async (t) => {
+  const vocabulary = extraction.describeVocabulary(KNOWLEDGE.priorities);
+
+  // Phase A already draws this distinction; the defect was never showing it.
+  const viewDef = KNOWLEDGE.priorities.find((p) => p.id === "view-preservation").clarifies;
+  const clearDef = KNOWLEDGE.priorities.find((p) => p.id === "clear-glass-when-open").clarifies;
+  t.ok(vocabulary.includes(viewDef), "the view-preservation meaning is not sent to the model");
+  t.ok(vocabulary.includes(clearDef), "the clear-glass-when-open meaning is not sent to the model");
+  t.ok(/WHILE IT IS DOWN/.test(vocabulary), "viewImportance is not scoped to the deployed covering");
+  t.ok(/clear WALL BESIDE the window/.test(vocabulary), "inadequate-stack-back is still a bare identifier");
+
+  // Meanings come from Phase A, so the two cannot drift apart.
+  t.ok(!extraction.describeVocabulary([]).includes(viewDef), "priority meanings are duplicated in the server layer");
+
+  // The extraction prompt teaches the distinction without matching phrases.
+  const prompt = prompts.extractionSystemPrompt(vocabulary, "");
+  t.ok(/blocked, covered or obstructed/i.test(prompt), "the block-vs-view distinction is not taught");
+  t.ok(/retract/i.test(prompt), "the prompt never explains retraction");
+  t.ok(/Silence is not a retraction/i.test(prompt), "nothing stops over-retraction from omission");
+});
+
+await test("75 the reported conversation ends with the correction honoured", async (t) => {
+  // The model's reads, scripted turn by turn. Turns 1-3 reproduce the original
+  // misunderstanding exactly; turn 4 is the correction the customer actually
+  // wrote, expressed through the contract as a retraction plus the real
+  // requirement. What is under test is what the SYSTEM does with that.
+  const provider = mockProvider({
+    extractions: [
+      { viewImportance: "high", priorities: ["view-preservation"], __basis: { viewImportance: "inferred", priorities: "inferred" } },
+      { aesthetic: ["modern-minimal"] },
+      { privacyNeed: "both", priorities: ["privacy"] },
+      {
+        priorities: ["clear-glass-when-open"],
+        windowUse: "raised-to-clear-glass",
+        __retract: { priorities: "view-preservation", viewImportance: "high" },
+      },
+      {},
+    ],
+    phrasings: ["A clean neutral reply from our team.", "A clean neutral reply from our team.", "A clean neutral reply from our team.", "A clean neutral reply from our team.", "A clean neutral reply from our team."],
+  });
+  const advisor = makeAdvisor(provider);
+
+  let state = {};
+  const seen = [];
+  for (const message of CORRECTION_TURNS) {
+    const r = await advisor.runTurn({ message, state });
+    state = r.state;
+    seen.push(r);
+  }
+
+  const afterFour = seen[3];
+  const facts = afterFour.state.facts;
+
+  // A. deployed-view preservation is NOT an active requirement.
+  t.ok(!(facts.priorities ?? []).includes("view-preservation"), "view-preservation survived an explicit retraction");
+  t.ok(!("viewImportance" in facts), "viewImportance survived an explicit retraction");
+  t.ok(
+    !afterFour.assessment.recognizedConditions.some((c) => c.id === "valuable-view"),
+    "the engine still recognises a valuable view after the correction"
+  );
+
+  // B. minimal obstruction when raised IS active — the separate concept.
+  t.ok((facts.priorities ?? []).includes("clear-glass-when-open"), "the corrected requirement was not recorded");
+  t.ok(
+    afterFour.assessment.recognizedConditions.some((c) => c.id === "clear-glass-preference"),
+    "the engine does not recognise the requirement the homeowner actually gave"
+  );
+
+  // C. solar is not favoured by deployed-view logic any more.
+  t.ok(
+    !afterFour.assessment.strongCandidates.some((c) => c.id === "interior-solar"),
+    "solar is still led by the retracted deployed-view reasoning"
+  );
+
+  // D. the correction propagated on the SAME turn it was made.
+  t.ok(afterFour.assessment.recognizedConditions.length > 0, "the assessment did not run on the corrected facts");
+
+  // E. turn 5 restates the correction; nothing stale may come back.
+  const afterFive = seen[4];
+  t.ok(!(afterFive.state.facts.priorities ?? []).includes("view-preservation"), "the retracted priority returned on a later turn");
+  t.ok(!("viewImportance" in afterFive.state.facts), "the retracted scalar returned on a later turn");
+  t.ok(
+    !afterFive.assessment.recognizedConditions.some((c) => c.id === "valuable-view"),
+    "a stale inference came back after the second correction"
+  );
+});
+
+await test("76 acknowledgement is offered only when something was actually corrected", async (t) => {
+  const plain = mockProvider({ extractions: [{ room: "living", priorities: ["privacy"] }] });
+  const plainRun = await makeAdvisor(plain).runTurn({ message: "The living room needs privacy.", state: {} });
+  t.ok(!/THEY JUST CORRECTED YOU/.test(plain.calls.lastPhraseSystem), "an uncorrected turn was invited to apologise");
+  t.ok(plainRun.status !== "ADVISOR_UNAVAILABLE", "the control turn failed for an unrelated reason");
+
+  const correcting = mockProvider({
+    extractions: [
+      { priorities: ["view-preservation"], __basis: { priorities: "inferred" } },
+      { priorities: ["clear-glass-when-open"], __retract: { priorities: "view-preservation" } },
+    ],
+  });
+  const advisor = makeAdvisor(correcting);
+  let state = (await advisor.runTurn({ message: "I hate how much they block the window.", state: {} })).state;
+  await advisor.runTurn({ message: "I didn't say I want to keep the view when the shade is down.", state });
+
+  const system = correcting.calls.lastPhraseSystem;
+  t.ok(/THEY JUST CORRECTED YOU/.test(system), "a real correction was not surfaced to the phrasing layer");
+  t.ok(/Do not restate, defend or return to the interpretation/i.test(system), "nothing forbids repeating the old reading");
+  // Permission to acknowledge, not a script to recite.
+  t.ok(!/Got it — I misunderstood/i.test(system), "the acknowledgement is a canned phrase rather than an instruction");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────
