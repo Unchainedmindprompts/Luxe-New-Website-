@@ -141,6 +141,31 @@ const nextConfig = {
         destination: '/blog',
         permanent: true,
       },
+      // ── advisor surface, temporarily withdrawn ──────────────────────
+      //
+      // The conversational advisor was removed from the customer-facing site
+      // pending a redesign. These are deliberately TEMPORARY (307): a 308 is
+      // cached by browsers indefinitely, and a visitor who hit the permanent
+      // form once would keep landing on /contact long after the page came
+      // back. Reversing a permanent redirect is not something we can do from
+      // this codebase.
+      //
+      // /contact rather than /book on purpose. On the homepage this page was
+      // the softer of two CTAs, sitting beside "Book My Free In-Home
+      // Consultation" — someone who clicked it was choosing NOT to book yet,
+      // and dropping them on a calendar contradicts the intent they expressed.
+      {
+        source: '/show-me-my-options',
+        destination: '/contact',
+        permanent: false,
+      },
+      {
+        // Never shipped on main, but claimed by the open redesign branch.
+        // Covered so the URL is safe whatever happens to that branch.
+        source: '/ask-luxe',
+        destination: '/contact',
+        permanent: false,
+      },
       {
         source: '/services',
         destination: '/',
