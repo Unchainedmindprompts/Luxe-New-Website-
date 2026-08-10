@@ -35,11 +35,19 @@ import type { SystemPrompt } from "./types";
  * The three lines that do not move, stated once and stated first.
  *
  * Everything Luxe cannot afford to have said on its behalf reduces to these.
- * They were previously spread across four prompts as roughly thirty separate
- * prohibitions — "do not introduce any other product", "do not add a fact, a
- * figure, a timescale", "you may not change which direction is best" — which is
- * the same three rules restated, at a volume that makes each restatement look
- * optional.
+ * They were previously spread across four prompts as separate prohibitions —
+ * "do not introduce any other product", "do not add a fact, a figure, a
+ * timescale", "you may not change which direction is best" — which is the same
+ * three rules restated, at a volume that makes each restatement look optional.
+ *
+ * MEASURED HONESTLY: consolidating them did NOT cut the raw count of negative
+ * instructions in a phrasing prompt, because most of that count was never
+ * prompt prose. Eighteen of them come from the Phase A guardrail block, which
+ * is approved business knowledge this layer does not get to reword. What
+ * changed is that three ranked absolutes now open the prompt instead of nine
+ * prohibitions interleaved with notes about tone. The extraction prompt, which
+ * carries no guardrail block, is the one place the count genuinely fell: 18 to
+ * 15. See `docs/quality/advisor-phase-b.md` for the full before/after.
  */
 const HARD_TRUTH = `HARD TRUTH CONSTRAINTS
 

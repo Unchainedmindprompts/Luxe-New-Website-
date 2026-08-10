@@ -2962,29 +2962,51 @@ await test("132 guardrails stay factual — no stylistic rule was smuggled in", 
   }
 });
 
-await test("133 the negative-instruction load fell without losing a hard constraint", async (t) => {
-  // Measured before Phase 4: extraction 19, recommendation 35, answer 34,
-  // guidance 33. The point is not the number — it is that thirty-plus "do not"
-  // clauses teach a model that each one is optional.
+await test("133 the negative-instruction load, measured like for like", async (t) => {
+  // The audit called this "negative-instruction overload". Measured against the
+  // SAME guardrail set before and after, the volume barely moved — because 18
+  // of every phrasing prompt's negatives come from the Phase A guardrail block,
+  // which is approved business knowledge and not this layer's to reword. What
+  // changed is that three ranked absolutes now sit at the top instead of nine
+  // prohibitions interleaved with tone notes.
   const NEGATIVE = /\b(do not|don't|never|no [a-z]|cannot|must not|avoid)\b/gi;
-  const before = { extraction: 19, recommendation: 35, answer: 34, guidance: 33 };
-  // The same guardrail set the baseline was measured against: the ones Phase A
-  // scopes to a live project, not all twenty-three.
+  const count = (text) => (text.match(NEGATIVE) ?? []).length;
   const inForce = ASSESSMENT.applicableGuardrails;
-  const now = {
-    extraction: renderedPrompts.extractionSystemPrompt(VOCABULARY, ""),
+  const guardrailNegatives = count(inForce.map((g) => `- ${g.prohibition} Instead: ${g.permittedInstead}`).join("\n"));
+  t.ok(guardrailNegatives >= 15, `the guardrail block carries ${guardrailNegatives} negatives — the baseline moved`);
+
+  // Extraction has no guardrail block, so its count is entirely prompt prose.
+  // It is the one prompt where a reduction is this layer's to claim.
+  const extractionNow = count(renderedPrompts.extractionSystemPrompt(VOCABULARY, ""));
+  t.ok(extractionNow < 18, `extraction carries ${extractionNow} negatives, no fewer than the 18 it started with`);
+
+  // The phrasing prompts: what THEY author, with the knowledge block removed.
+  // Built with the same scoped guardrail set the block was measured from.
+  const scoped = {
     recommendation: renderedPrompts.recommendationSystemPrompt(ASSESSMENT, inForce),
-    answer: renderedPrompts.answerSystemPrompt("approved", inForce, true),
     guidance: renderedPrompts.guidanceSystemPrompt(ASSESSMENT, inForce),
+    answer: renderedPrompts.answerSystemPrompt("approved material here", inForce, true),
+    question: renderedPrompts.questionSystemPrompt(inForce),
+    discovery: renderedPrompts.discoverySystemPrompt(inForce),
   };
-  for (const [name, text] of Object.entries(now)) {
-    const count = (text.match(NEGATIVE) ?? []).length;
-    t.ok(count < before[name], `${name} carries ${count} negatives, no fewer than the ${before[name]} it started with`);
+  for (const [name, text] of Object.entries(scoped)) {
+    const authored = count(text) - guardrailNegatives;
+    t.ok(authored <= 11, `${name} authors ${authored} prohibitions of its own, up from at most 11`);
   }
+
   // And nothing factual was traded away to get there.
-  t.ok(/fabricat|invent/i.test(now.recommendation), "the fabrication constraint was dropped");
-  t.ok(/rather have someone confirm it than guess/.test(now.answer), "the decline-rather-than-guess route was dropped");
-  t.ok(/must not invent one/.test(now.guidance), "guidance may now invent a best fit");
+  t.ok(/fabricat|invent/i.test(scoped.recommendation), "the fabrication constraint was dropped");
+  t.ok(/rather have someone confirm it than guess/.test(scoped.answer), "the decline-rather-than-guess route was dropped");
+  t.ok(/must not invent one/.test(scoped.guidance), "guidance may now invent a best fit");
+  // Three rules, numbered, stated once — not a list that grew back.
+  for (const [name, build] of PHRASING_BUILDERS) {
+    const { stable } = build();
+    t.equal(
+      (stable.match(/^\d\. [A-Z]/gm) ?? []).length,
+      3,
+      `${name} does not carry exactly three numbered hard constraints`
+    );
+  }
 });
 
 await test("134 nothing in the conversation can widen what may be said", async (t) => {

@@ -59,10 +59,32 @@ explicitly outranking everything after them:
 Preferences, written as one thing to do rather than eight to avoid.
 
 They were previously interleaved, which taught the model that "never fabricate a
-price" and "never open with thank you" carry the same weight. Negative
-instructions per prompt fell from **35/34/33/19** (recommendation/answer/
-guidance/extraction) to **27/28/26/15**, with no factual constraint dropped —
-pinned by test 133.
+price" and "never open with thank you" carry the same weight.
+
+**On the "negative instruction overload" finding — measured like for like, it
+was smaller than it looked.** Counting `do not | don't | never | no X | cannot |
+must not | avoid` against the same guardrail set before and after:
+
+| prompt | negatives, total | of which authored in the prompt |
+|---|---|---|
+| extraction | 18 → **15** | 18 → **15** |
+| recommendation | 27 → 27 | 9 → 9 |
+| guidance | 26 → 26 | 8 → 8 |
+| answer | 29 → **28** | 11 → **10** |
+| question | 22 → 22 | 4 → 4 |
+| discovery | 24 → 26 | 6 → 8 |
+
+**18 of every phrasing prompt's negatives come from the Phase A guardrail
+block** — approved business knowledge ("do not state a price", "do not
+guarantee blackout"), not prompt style, and not text this layer may reword. The
+prompts' own prohibitions were already 4–11, and the consolidation that removed
+some was spent on the explicit truth hierarchy and the permission to explain.
+
+So the honest result is: **the volume barely moved; the structure did.** Three
+ranked absolutes at the top of a prompt is a different instruction to follow
+than nine prohibitions interleaved with tone notes, even at the same word count.
+Extraction — the one prompt with no guardrail block, and therefore the one where
+the count is all prompt prose — fell 18 → 15. Pinned by test 133.
 
 The advisor is also explicitly *permitted to explain*. An earlier blanket ban
 ("do not explain a product category, teach openness factors or fabric
