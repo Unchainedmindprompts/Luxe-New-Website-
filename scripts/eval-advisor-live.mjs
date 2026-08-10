@@ -141,6 +141,7 @@ const advisor = advisorModule.createAdvisor({
   describeVocabulary: extraction.describeVocabulary,
   isListField: extraction.isListField,
   isInformational: extraction.isInformational,
+  isSchedulingIntent: extraction.isSchedulingIntent,
   selectAnswerTopics: answerSelection.selectAnswerTopics,
   selectNamedDirections: answerSelection.selectNamedDirections,
   describeDirection: answerSelection.describeDirection,
@@ -228,6 +229,33 @@ const CONVERSATIONS = [
     ],
   },
   {
+    name: "phase 2 — a conversation, not an interrogation",
+    turns: [
+      { say: "What's better, cellular or roller shades?", watch: "must answer, not ask what room" },
+      { say: "I mostly care about insulation." },
+      { say: "But I still want a clean look." },
+      { say: "So what would you choose?", watch: "must decide; no booking pitch yet" },
+    ],
+  },
+  {
+    name: "phase 2 — unknown business question",
+    turns: [
+      { say: "Do you have a showroom?", watch: "honest unknown; must NOT ask what room the shades are for" },
+    ],
+  },
+  {
+    name: "phase 2 — product education",
+    turns: [
+      { say: "What do roller shades look like?", watch: "answer; no qualification, no booking prompt" },
+    ],
+  },
+  {
+    name: "phase 2 — genuine next-step intent",
+    turns: [
+      { say: "I think I'm ready to have someone come out.", watch: "booking path SHOULD appear here" },
+    ],
+  },
+  {
     name: "changing rooms without losing the project",
     turns: [
       { say: "West-facing living room, brutal afternoon heat." },
@@ -282,6 +310,11 @@ for (const conversation of selected) {
     if (result.assessment) {
       console.log(`  PRIMARY      ${result.assessment.primaryRecommendation?.label ?? "(none)"}`);
     }
+    console.log(
+      `  BOOKING CTA  ${result.consultationCta.recommended ? "SHOWN" : "not shown"}` +
+        (result.consultationCta.reasons.length ? `  (${result.consultationCta.reasons.join(", ")})` : "")
+    );
+    if (result.nextQuestion) console.log(`  ASKED        ${result.nextQuestion.id}`);
     if (result.error) console.log(`  ERROR        ${result.error}`);
     if (result.guardrailInterventions.length) {
       console.log(`  INTERVENED   ${result.guardrailInterventions.join(", ")}`);

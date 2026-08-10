@@ -140,6 +140,10 @@ export interface AssessmentSummary {
 export interface ConsultationCtaIntent {
   readonly recommended: boolean;
   readonly reasons: readonly (
+    /** They asked to take the next step. Outranks everything. */
+    | "customer-asked-to-schedule"
+    /** The question they asked was itself about the visit. */
+    | "answer-invites-consultation"
     | "recommendation-ready"
     | "guidance-ready"
     | "requires-physical-verification"

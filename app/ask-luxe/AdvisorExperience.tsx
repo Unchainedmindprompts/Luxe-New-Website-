@@ -537,13 +537,29 @@ function BookLink({
  * a prominent one — repeating the CTA after every message reads as pressure,
  * and pressure is what makes people leave.
  */
+/**
+ * The closing next step, when the conversation has earned one.
+ *
+ * THIS USED TO RENDER AFTER EVERY EXCHANGE. It suppressed itself for two
+ * statuses and otherwise ignored what the server had decided, so someone who
+ * asked the opening hours got a consultation button under the answer — and so
+ * did someone asking what top-down/bottom-up means, and someone who had just
+ * said "why?". A booking prompt after every reply is what turns a help desk
+ * into a funnel.
+ *
+ * The server owns the decision now. `offerConsultation` is true when the
+ * customer asked to take the next step, when the question they asked was about
+ * the visit, or when a finished recommendation genuinely needs someone at the
+ * window. This renders that and nothing else.
+ */
 function ClosingBooking({ turn, turns }: { turn: AdvisorTurn | null; turns: number }) {
   const status = turn?.status ?? "";
+  // The recommendation card carries its own; a failed turn carries its own.
   if (status === "RECOMMENDATION_READY" || status === "ADVISOR_UNAVAILABLE") return null;
+  if (!turn?.offerConsultation) return null;
 
   // Never twice on one screen: if the current turn already carries the callback
-  // option, the footer stays a booking link and nothing else. And it is not
-  // offered to someone one sentence in — there is nothing to call them about yet.
+  // option, the footer stays a booking link and nothing else.
   const offerCallback = inlineLeadPlacement(turn) === null && turns >= 2;
 
   return (

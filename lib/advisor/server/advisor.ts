@@ -92,6 +92,8 @@ export interface AdvisorDeps {
   };
   /** True when a message should be answered rather than qualified. */
   readonly isInformational: (intent: MessageIntent) => boolean;
+  /** Whether this message asked to take the next step. The only automatic CTA trigger. */
+  readonly isSchedulingIntent: (intent: MessageIntent) => boolean;
   /** Deterministic retrieval over approved answers. Empty means "we don't have that". */
   readonly selectAnswerTopics: (
     message: string,
@@ -246,19 +248,25 @@ function summarise(assessment: AdvisorAssessment): AssessmentSummary {
  */
 function consultationIntent(
   assessment: AdvisorAssessment,
-  status: "NEED_MORE_INFORMATION" | "GUIDANCE_READY" | "RECOMMENDATION_READY"
+  status: "NEED_MORE_INFORMATION" | "GUIDANCE_READY" | "RECOMMENDATION_READY",
+  askedToSchedule: boolean
 ): ConsultationCtaIntent {
-  const reasons: ConsultationCtaIntent["reasons"][number][] = [];
-  // A consultation is not only worth offering once a product is chosen. When
-  // there is useful direction but no best fit, the visit is precisely what
-  // resolves it — so guidance earns its own reason rather than borrowing the
-  // recommendation's.
-  if (status === "RECOMMENDATION_READY") reasons.push("recommendation-ready");
-  if (status === "GUIDANCE_READY") reasons.push("guidance-ready");
+  // 1. THEY ASKED. Nothing else has to be true, and nothing else can override
+  //    it. "Can someone come measure?" is answered by the booking path.
+  if (askedToSchedule) {
+    return { recommended: true, reasons: ["customer-asked-to-schedule"] };
+  }
 
+  // 2. A FINISHED RECOMMENDATION THAT GENUINELY NEEDS SOMEONE AT THE WINDOW.
+  //    Not every recommendation — naming a product is not permission to sell a
+  //    visit. The visit has to be doing real work: something physical has to be
+  //    confirmed, or the project is complex enough that a description will not
+  //    settle it.
+  if (status !== "RECOMMENDATION_READY") return { recommended: false, reasons: [] };
+
+  const reasons: ConsultationCtaIntent["reasons"][number][] = [];
   const verifications = new Set(assessment.verificationRequirements.map((v) => v.id));
-  // `verify-dimensions` is always present, so it says nothing about this
-  // project — anything beyond it is a real physical unknown.
+  // `verify-dimensions` is on every project, so it says nothing about this one.
   if ([...verifications].some((v) => v !== "verify-dimensions")) {
     reasons.push("requires-physical-verification");
   }
@@ -531,6 +539,10 @@ export function createAdvisor(deps: AdvisorDeps) {
     // the corrected facts — this is only so the reply can say so out loud.
     const corrected = application.retracted.length > 0;
 
+    // The only thing that turns a booking prompt on outside a finished
+    // recommendation. Read from the message, not inferred from the funnel.
+    const askedToSchedule = deps.isSchedulingIntent(validated.intent);
+
     // `unrankedConcerns` is a Phase B concept, not a Phase A fact — it exists
     // so an arbitrary array order is never read as a stated ranking. It is
     // separated out here so the engine receives a clean `ProjectFacts`.
@@ -665,16 +677,56 @@ export function createAdvisor(deps: AdvisorDeps) {
           nextQuestion: null,
           message: answered.message,
           canonicalResponseId: null,
-          consultationCta: {
-            recommended: answered.invitesConsultation,
-            reasons: answered.invitesConsultation ? ["guidance-ready"] : [],
-          },
+          // An answer earns the booking path when they asked to schedule, or
+          // when the question they asked WAS about the visit — "is there a
+          // minimum?", "how soon can you come out?". Product education never
+          // earns it.
+          consultationCta:
+            askedToSchedule || answered.invitesConsultation
+              ? { recommended: true, reasons: [askedToSchedule ? "customer-asked-to-schedule" : "answer-invites-consultation"] }
+              : { recommended: false, reasons: [] },
           guardrailInterventions: interventions,
           error: null,
         };
       }
-      // Nothing approved covers it. Fall through to the product path rather
-      // than improvising — the engine at least reasons from real knowledge.
+      // NOTHING APPROVED COVERS IT — AND THAT IS STILL AN ANSWER.
+      //
+      // This used to fall through to the product pipeline, which meant someone
+      // asking "do you have a showroom?" was answered with "what room is this
+      // for?". An unanswered business question is not a window project, and
+      // turning a gap in our knowledge into a qualification interview is worse
+      // than saying we do not know.
+      //
+      // The phrasing prompt is handed no approved material, which is the state
+      // it is already written for: it says plainly that it would rather have
+      // someone confirm than guess, and it may not invent the answer.
+      const unknown = await phraseSafely(
+        deps.prompts.answerSystemPrompt("", guardrails, false, history),
+        deps.prompts.phrasingUserMessage({
+          "recent conversation": history || undefined,
+          "their question": input.message,
+        }),
+        ANSWER_TOKENS,
+        MAX_ANSWER_CHARS,
+        [],
+        ANSWER_FALLBACK,
+        interventions
+      );
+      return {
+        status: "ANSWERED",
+        state: stateAfter(unknown),
+        assessment: summarise(assessment),
+        nextQuestion: null,
+        message: unknown,
+        canonicalResponseId: null,
+        // Not knowing something is not a reason to sell a visit — unless the
+        // thing they were asking about was the visit.
+        consultationCta: askedToSchedule
+          ? { recommended: true, reasons: ["customer-asked-to-schedule"] }
+          : { recommended: false, reasons: [] },
+        guardrailInterventions: interventions,
+        error: null,
+      };
     }
 
     // ── 3c. they want help and do not know where to start ──────────────────
@@ -740,7 +792,7 @@ export function createAdvisor(deps: AdvisorDeps) {
         },
         message: phrased,
         canonicalResponseId: null,
-        consultationCta: consultationIntent(assessment, status),
+        consultationCta: consultationIntent(assessment, status, askedToSchedule),
         guardrailInterventions: interventions,
         error: null,
       };
@@ -784,7 +836,7 @@ export function createAdvisor(deps: AdvisorDeps) {
       nextQuestion: null,
       message,
       canonicalResponseId: null,
-      consultationCta: consultationIntent(assessment, status),
+      consultationCta: consultationIntent(assessment, status, askedToSchedule),
       guardrailInterventions: interventions,
       error: null,
     };

@@ -25,6 +25,7 @@ import {
   isListField,
   validateUpdates,
   isInformational,
+  isSchedulingIntent,
 } from "@/lib/advisor/server/extraction";
 import {
   describeDirection,
@@ -169,6 +170,7 @@ export async function POST(request: Request) {
     validateGeneratedText,
     sanitizeForOutput,
     isInformational,
+    isSchedulingIntent,
     transcript: {
       validate: validateTranscript,
       append: appendExchange,

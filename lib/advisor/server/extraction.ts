@@ -233,15 +233,43 @@ export type UpdateOperation = "assert" | "retract";
  * Only `project` and `discovery` reach the product pipeline. The rest are
  * answered from approved knowledge and stop.
  */
-export type MessageIntent = "general" | "consultation" | "product" | "project" | "discovery";
+export type MessageIntent =
+  | "general"
+  | "consultation"
+  | "product"
+  | "project"
+  | "discovery"
+  /**
+   * They want to take the next step — a visit, a measure, a quote, getting
+   * started. Read semantically on the call that was already happening rather
+   * than matched against a list of words like "quote" and "appointment", which
+   * would miss "we're ready" and fire on "do you quote sizes in inches".
+   */
+  | "scheduling";
 
 export const MESSAGE_INTENTS: readonly MessageIntent[] = [
-  "general", "consultation", "product", "project", "discovery",
+  "general", "consultation", "product", "project", "discovery", "scheduling",
 ];
 
 /** Intents that should be answered outright rather than qualified. */
 export function isInformational(intent: MessageIntent): boolean {
-  return intent === "general" || intent === "consultation" || intent === "product";
+  return (
+    intent === "general" ||
+    intent === "consultation" ||
+    intent === "product" ||
+    intent === "scheduling"
+  );
+}
+
+/**
+ * Whether this message earns a booking prompt.
+ *
+ * THE CUSTOMER DECIDES THIS, NOT THE FUNNEL. A consultation link after an
+ * answer about opening hours is a sales reflex; after "can someone come
+ * measure?" it is the answer. Nothing else in the system may turn this on.
+ */
+export function isSchedulingIntent(intent: MessageIntent): boolean {
+  return intent === "scheduling";
 }
 
 export interface FactUpdate {

@@ -188,6 +188,7 @@ function makeAdvisor(provider) {
     describeVocabulary: extraction.describeVocabulary,
     isListField: extraction.isListField,
     isInformational: extraction.isInformational,
+    isSchedulingIntent: extraction.isSchedulingIntent,
     transcript: {
       validate: transcriptModule.validateTranscript,
       append: transcriptModule.appendExchange,
@@ -1213,12 +1214,23 @@ await test("51 prompt injection cannot reach RECOMMENDATION_READY by exhausting 
   t.ok(!/\$\s?\d/.test(r.message), "a price reached the response");
 });
 
-await test("52 CTA intent can exist under GUIDANCE_READY", async (t) => {
+await test("52 guidance alone does not earn a booking prompt", async (t) => {
+  // THIS ASSERTED THE OPPOSITE UNTIL PHASE 2, and the old rule is why a
+  // consultation button appeared under essentially every reply. Mid-conversation
+  // guidance is the advisor being useful, not the customer signalling they are
+  // ready — offering a visit there is a sales reflex.
   const r = await statusFor([{ priorities: ["child-safety"] }], "We have a toddler, cords worry us.");
   t.equal(r.status, "GUIDANCE_READY", "not the guidance path");
-  t.ok(r.consultationCta.recommended, "no consultation offered alongside useful guidance");
-  t.ok(r.consultationCta.reasons.includes("guidance-ready"), "guidance did not earn its own CTA reason");
-  t.ok(!r.consultationCta.reasons.includes("recommendation-ready"), "guidance borrowed the recommendation reason");
+  t.ok(!r.consultationCta.recommended, "guidance still pushes a consultation on its own");
+  t.equal(r.consultationCta.reasons.length, 0, "guidance invented a reason to sell a visit");
+
+  // The same conversation, once they ask to move forward, does earn it.
+  const asked = await statusFor(
+    [{ __intent: "scheduling", priorities: ["child-safety"] }],
+    "Can someone come out and measure?"
+  );
+  t.ok(asked.consultationCta.recommended, "an explicit request to schedule was ignored");
+  t.ok(asked.consultationCta.reasons.includes("customer-asked-to-schedule"), "the reason does not name the customer's request");
 });
 
 await test("53 established recommendation scenarios still report RECOMMENDATION_READY", async (t) => {
@@ -1257,7 +1269,8 @@ await test("55 view plus nighttime privacy has no best fit, and says so", async 
   t.equal(r.assessment.strongCandidates.length, 0, "a best fit appeared where Phase A found none");
   t.ok(r.assessment.tradeoffs.length > 0 || r.assessment.alternatives.length > 0, "nothing useful to guide on");
   t.equal(r.status, "GUIDANCE_READY", `expected guidance, got ${r.status}`);
-  t.ok(r.consultationCta.reasons.includes("guidance-ready"), "guidance did not earn a CTA reason");
+  // No CTA: useful guidance is not a next step. See test 52.
+  t.ok(!r.consultationCta.recommended, "unresolved guidance pushed a consultation");
 });
 
 // ── 56-63: canonical brand responses ───────────────────────────────────────
@@ -2205,6 +2218,290 @@ await test("100 nothing said earlier can become a verified fact", async (t) => {
 
   // No history, no block — a first turn is not told it has forgotten something.
   t.ok(!/THE CONVERSATION SO FAR/.test(prompts.answerSystemPrompt("x", [], false, "")), "an empty transcript still emitted a history block");
+});
+
+// ── 101-107: the booking prompt must be earned ──────────────────────────────
+//
+// It used to appear after effectively every exchange: `consultationIntent`
+// returned true for GUIDANCE_READY on its own, `requires-physical-verification`
+// fires on almost any project, and the client's footer CTA ignored the server
+// entirely. Someone asking the opening hours got a consultation button.
+
+/** One turn with a declared intent; returns the CTA decision the server made. */
+async function ctaFor(message, intent, extraction = {}) {
+  const provider = mockProvider({ extractions: [{ __intent: intent, ...extraction }] });
+  const r = await makeAdvisor(provider).runTurn({ message, state: {} });
+  return { cta: r.consultationCta, status: r.status, result: r };
+}
+
+await test("101 informational answers do not push a booking", async (t) => {
+  const cases = [
+    ["What's the difference between roller and cellular shades?", "product"],
+    ["Do cellular shades help with insulation?", "product"],
+    ["Do you sell shutters?", "product"],
+    ["Which gives me a better view?", "product"],
+    ["What are your hours?", "general"],
+    ["Do you offer financing?", "general"],
+  ];
+  for (const [message, intent] of cases) {
+    const { cta, status } = await ctaFor(message, intent);
+    t.equal(status, "ANSWERED", `"${message}" produced ${status}`);
+    t.ok(!cta.recommended, `"${message}" pushed a consultation`);
+    t.equal(cta.reasons.length, 0, `"${message}" invented a reason to sell a visit`);
+  }
+});
+
+await test("102 clarification, discovery and bare follow-ups do not push a booking", async (t) => {
+  // A turn that ends in a question of ours.
+  const asking = await ctaFor("Our bedroom is too bright in the morning.", "project", {
+    room: "bedroom", exposure: "east",
+  });
+  if (asking.status === "NEED_MORE_INFORMATION") {
+    t.ok(!asking.cta.recommended, "a clarification question was accompanied by a booking prompt");
+  }
+
+  const discovery = await ctaFor("I have no idea where to start.", "discovery");
+  t.equal(discovery.status, "ANSWERED", `discovery produced ${discovery.status}`);
+  t.ok(!discovery.cta.recommended, "early discovery pushed a consultation");
+
+  // A bare follow-up, mid-conversation.
+  const provider = mockProvider({
+    extractions: [{ __intent: "product" }, { __intent: "product" }],
+    phrasings: ["Cellular shades insulate better.", "Because the honeycomb traps air."],
+  });
+  const advisor = makeAdvisor(provider);
+  const first = await advisor.runTurn({ message: "Do cellular shades insulate better than roller?", state: {} });
+  const why = await advisor.runTurn({ message: "Why?", state: first.state });
+  t.ok(!why.cta?.recommended && !why.consultationCta.recommended, '"Why?" was answered with a booking prompt');
+});
+
+await test("103 asking to take the next step earns the booking path", async (t) => {
+  const cases = [
+    "Can someone come measure?",
+    "How do I schedule?",
+    "I'd like someone to come out.",
+    "Can I get a quote?",
+    "What's the next step?",
+    "We're ready to replace the shades.",
+    "I think I'm ready to have someone come out.",
+  ];
+  for (const message of cases) {
+    const { cta } = await ctaFor(message, "scheduling");
+    t.ok(cta.recommended, `"${message}" did not offer the booking path`);
+    t.ok(cta.reasons.includes("customer-asked-to-schedule"), `"${message}" offered it for the wrong reason`);
+  }
+});
+
+await test("104 a scheduling request outranks everything else", async (t) => {
+  // Even mid-project, with facts on the ledger and a question pending, asking
+  // to schedule is answered by the booking path rather than more questions.
+  const provider = mockProvider({
+    extractions: [
+      { __intent: "project", room: "living", exposure: "west", solarHeat: "severe" },
+      { __intent: "scheduling" },
+    ],
+  });
+  const advisor = makeAdvisor(provider);
+  const first = await advisor.runTurn({ message: "West-facing living room, brutal heat.", state: {} });
+  const ready = await advisor.runTurn({ message: "Can someone just come out and look?", state: first.state });
+  t.ok(ready.consultationCta.recommended, "an explicit request to schedule was not honoured");
+  t.equal(ready.consultationCta.reasons[0], "customer-asked-to-schedule", "the customer's request was not the reason");
+});
+
+await test("105 a recommendation offers a visit only when one is genuinely needed", async (t) => {
+  // Exterior mounting: someone has to see the wall. The visit does real work.
+  const needsEyes = await ctaFor("West sliders, brutal heat, we want exterior shades.", "project", {
+    room: "living", exposure: "west", solarHeat: "severe",
+    requestedProducts: ["exterior-solar"], priorities: ["energy-efficiency"],
+  });
+  t.equal(needsEyes.status, "RECOMMENDATION_READY", `expected a recommendation, got ${needsEyes.status}`);
+  t.ok(needsEyes.cta.recommended, "a recommendation needing physical verification offered no next step");
+  t.ok(
+    needsEyes.cta.reasons.some((r) => r !== "recommendation-ready"),
+    "the only reason given was that a recommendation exists"
+  );
+
+  // "We named a product" is never on its own a reason to sell a visit.
+  t.ok(!needsEyes.cta.reasons.includes("guidance-ready"), "guidance leaked back into the recommendation reasons");
+});
+
+await test("106 the client renders the server's decision, not its own", async (t) => {
+  const experience = read("app/ask-luxe/AdvisorExperience.tsx");
+  // The footer CTA used to ignore consultationCta entirely.
+  t.ok(/if \(!turn\?\.offerConsultation\) return null;/.test(experience), "the footer CTA still renders regardless of the server decision");
+  t.ok(/turn\?\.status === "ANSWERED" && turn\.offerConsultation/.test(experience), "an answer can show a CTA the server did not authorise");
+  t.ok(/turn\.status === "GUIDANCE_READY" && turn\.offerConsultation/.test(experience), "guidance can show a CTA the server did not authorise");
+});
+
+await test("107 one next step, not two", async (t) => {
+  // When a button is shown, the prose must not also pitch — "you can book a
+  // free consultation" above a button saying exactly that is two prompts.
+  const inviting = prompts.answerSystemPrompt("approved text", [], true, "");
+  t.ok(/ONE NEXT STEP, NOT TWO/.test(inviting), "nothing forbids duplicating the CTA in prose");
+  t.ok(/already on their screen/.test(inviting), "the prompt does not say the link is already shown");
+  t.ok(!/you may close with a short, low-key offer/.test(inviting), "the old prose pitch instruction survives");
+
+  const notInviting = prompts.answerSystemPrompt("approved text", [], false, "");
+  t.ok(/Do NOT close by offering a consultation/.test(notInviting), "a non-consultation answer may still pitch");
+});
+
+// ── 108-111: informational questions stay informational ─────────────────────
+
+await test("108 an unanswerable business question does not become qualification", async (t) => {
+  // THE DEFECT: this used to fall through to the product pipeline, so "do you
+  // have a showroom?" was answered with "what room is this for?".
+  const cases = [
+    "Do you have a showroom?",
+    "Do you service Montana?",
+    "Can I pick products up from your office?",
+    "Do you repair old blinds?",
+  ];
+  for (const message of cases) {
+    const { cta, status, result } = await ctaFor(message, "general");
+    t.equal(status, "ANSWERED", `"${message}" produced ${status} instead of an answer`);
+    t.equal(result.nextQuestion, null, `"${message}" was answered with a qualification question`);
+    t.equal(Object.keys(result.state.facts).length, 0, `"${message}" invented project facts`);
+    t.ok(!cta.recommended, `"${message}" turned a gap in our knowledge into a sales prompt`);
+  }
+});
+
+await test("109 not knowing is phrased from nothing, so nothing can be invented", async (t) => {
+  const provider = mockProvider({ extractions: [{ __intent: "general" }] });
+  await makeAdvisor(provider).runTurn({ message: "Do you have a showroom in Spokane?", state: {} });
+  const system = provider.calls.lastPhraseSystem;
+  t.ok(/nothing approved covers this question/.test(system), "the phrasing layer was not told it has no material");
+  t.ok(/rather have someone confirm it than guess/.test(system), "the prompt offers no honest way out");
+  t.ok(/Do not add a fact, a figure, a timescale, a product, a brand or a policy/.test(system), "the prompt permits invention");
+  // And it is not quietly handed the product analysis instead.
+  t.ok(!/best fit|Recommended direction|strongest energy/.test(system), "product reasoning leaked into an unknown answer");
+});
+
+await test("110 a known question still gets its approved answer", async (t) => {
+  const { status, result } = await ctaFor("What happens during an in-home consultation?", "consultation");
+  t.equal(status, "ANSWERED", "a known question stopped being answered");
+  t.equal(result.nextQuestion, null, "a known question was answered with a question");
+  t.ok(result.consultationCta.recommended, "a question about the visit did not surface the visit");
+  t.ok(result.consultationCta.reasons.includes("answer-invites-consultation"), "the reason does not name the topic");
+});
+
+await test("111 genuine project and recommendation work is untouched", async (t) => {
+  const project = await ctaFor("Our bedroom is too bright in the morning.", "project", {
+    room: "bedroom", exposure: "east", priorities: ["room-darkening"],
+  });
+  t.ok(project.status !== "ANSWERED", "a real project was answered instead of reasoned about");
+  t.ok(project.result.assessment.recognizedConditions.length > 0, "the engine did not run");
+  t.equal(project.result.state.facts.room, "bedroom", "project facts were not recorded");
+
+  const recommendation = await ctaFor("Nursery faces east, needs to be as dark as possible.", "project", {
+    room: "nursery", exposure: "east", roomDarkening: "maximum", priorities: ["room-darkening"],
+  });
+  t.equal(recommendation.status, "RECOMMENDATION_READY", `expected a recommendation, got ${recommendation.status}`);
+  t.ok(Boolean(recommendation.result.assessment.primaryRecommendation), "no canonical direction was published");
+});
+
+// ── 112-114: answer first, qualify only when it matters ─────────────────────
+
+await test("112 an answerable question is answered, not qualified", async (t) => {
+  // Scenarios A and B: the advisor already knows enough to explain these.
+  for (const message of [
+    "What's the difference between roller shades and cellular shades?",
+    "Do cellular shades help with insulation?",
+  ]) {
+    const { status, result } = await ctaFor(message, "product");
+    t.equal(status, "ANSWERED", `"${message}" produced ${status}`);
+    t.equal(result.nextQuestion, null, `"${message}" was met with a qualification question`);
+  }
+
+  // The extractor is told which of these is which, in meaning rather than
+  // keywords, and told to prefer answering when a message could be either.
+  const prompt = prompts.extractionSystemPrompt("field: a | b", "", "");
+  t.ok(/ASKING ABOUT PRODUCTS IS NOT THE SAME AS ASKING US TO CHOOSE/.test(prompt), "the distinction is not taught");
+  t.ok(/mentioning a room does not settle it/.test(prompt), "a room mention still forces qualification");
+  t.ok(/prefer "product"/.test(prompt), "ambiguity does not resolve toward answering");
+  t.ok(/Answering a question we can answer is always better/.test(prompt), "the principle is not stated");
+});
+
+await test("113 a follow-up answers from context rather than restarting", async (t) => {
+  // Scenario C: the products under comparison are in the transcript, not the
+  // message. Retrieval has to reach them.
+  const provider = mockProvider({
+    extractions: [{ __intent: "product" }, { __intent: "product" }],
+    phrasings: ["Cellular traps air; roller stays minimal.", "Roller keeps the cleaner sightline."],
+  });
+  const advisor = makeAdvisor(provider);
+  const first = await advisor.runTurn({ message: "What is the difference between roller and cellular shades?", state: {} });
+  const followUp = await advisor.runTurn({ message: "Which gives me the best view?", state: first.state });
+
+  t.equal(followUp.status, "ANSWERED", `the follow-up produced ${followUp.status}`);
+  t.equal(followUp.nextQuestion, null, "a follow-up restarted discovery");
+  const system = provider.calls.lastPhraseSystem;
+  t.ok(/roller/i.test(system) && /[Cc]ellular/.test(system), "the follow-up lost the products under comparison");
+});
+
+await test("114 qualification still happens when it genuinely decides something", async (t) => {
+  // Scenario E: no products named, the answer depends on their priorities.
+  const provider = mockProvider({
+    extractions: [{ __intent: "project", room: "living", exposure: "west", geometry: ["large-architectural-glass"] }],
+  });
+  const r = await makeAdvisor(provider).runTurn({
+    message: "What would you recommend for a huge west-facing window?",
+    state: {},
+  });
+  t.ok(r.status !== "ANSWERED", "a genuine recommendation request was treated as an FAQ");
+
+  // One question at a time, and only ones gating classified as must-ask.
+  if (r.nextQuestion) {
+    const facts = r.state.facts;
+    const assessment = engine.assess(facts, KNOWLEDGE);
+    const verificationIds = new Set(assessment.verificationRequirements.map((v) => v.id));
+    const classified = counterfactual.classifyQuestions({
+      facts, assessment, knowledge: KNOWLEDGE, assess: engine.assess,
+      questionRules: KNOWLEDGE.questions, unrankedConcerns: [], askedQuestionIds: [],
+      isVerificationClass: (id) => questionSelection.isVerificationClass(id, verificationIds),
+      isListField: extraction.isListField, allowedValues: extraction.allowedValues,
+    });
+    const mustAsk = classified.filter((q) => q.tier === "must-ask-now").map((q) => q.id);
+    t.ok(mustAsk.includes(r.nextQuestion.id), `asked ${r.nextQuestion.id}, which gating did not rank must-ask`);
+  }
+
+  // Scenario F. The engine has three strong candidates here and STILL asks one
+  // question — and that is correct, not eagerness. Solar preserves the view and
+  // reverses after dark, so whether they need privacy at night decides between
+  // a single shade and a layered direction. The counterfactual oracle ranks it
+  // must-ask precisely because the answer moves the outcome.
+  //
+  // What matters is that it is ONE question, chosen because it decides
+  // something — never a sweep of whatever the ledger happens to be missing.
+  const decided = await ctaFor("Heat is the concern but I don't want to lose the lake view.", "project", {
+    room: "living", exposure: "west", solarHeat: "severe", viewImportance: "critical",
+    priorities: ["view-preservation", "energy-efficiency"],
+  });
+  t.ok(decided.result.assessment.strongCandidates.length > 0, "no direction surfaced from sufficient facts");
+  t.ok(!decided.cta.recommended, "a mid-conversation question came with a booking prompt");
+
+  if (decided.result.nextQuestion) {
+    const facts = decided.result.state.facts;
+    const assessment = engine.assess(facts, KNOWLEDGE);
+    const verificationIds = new Set(assessment.verificationRequirements.map((v) => v.id));
+    const classified = counterfactual.classifyQuestions({
+      facts, assessment, knowledge: KNOWLEDGE, assess: engine.assess,
+      questionRules: KNOWLEDGE.questions, unrankedConcerns: [], askedQuestionIds: [],
+      isVerificationClass: (id) => questionSelection.isVerificationClass(id, verificationIds),
+      isListField: extraction.isListField, allowedValues: extraction.allowedValues,
+    });
+    const asked = classified.find((q) => q.id === decided.result.nextQuestion.id);
+    t.equal(asked?.tier, "must-ask-now", "asked a question the oracle did not rank must-ask");
+    t.ok((asked?.materialTo?.length ?? 0) > 0, "asked a question that changes nothing");
+
+    // Unknown fields are not a to-do list: plenty are missing and unasked.
+    const unknownCount = assessment.unknownDimensions.length;
+    t.ok(unknownCount > 1, "the fixture did not leave several fields unknown");
+    t.equal(
+      classified.filter((q) => q.tier === "must-ask-now").length <= 2,
+      true,
+      "the advisor queued a sweep of missing fields rather than the deciding one"
+    );
+  }
 });
 
 // ── report ──────────────────────────────────────────────────────────────────
