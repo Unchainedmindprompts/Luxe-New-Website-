@@ -145,8 +145,22 @@ export async function POST(request: Request) {
 
   const message = (body.message as string).trim();
 
+  /**
+   * Token usage per call, so the prompt-cache split can be checked rather than
+   * believed. Counts only — no prompt text, no message text, nothing that could
+   * identify a visitor, consistent with the logging rule at the top of this
+   * file. A `read` above zero on turn two is the whole proof.
+   */
+  const usage: string[] = [];
+
   const advisor = createAdvisor({
-    provider: createAnthropicProvider(),
+    provider: createAnthropicProvider({
+      onUsage: (u) =>
+        usage.push(
+          `${u.stage} in=${u.inputTokens} out=${u.outputTokens} ` +
+            `cache_write=${u.cacheCreationTokens} cache_read=${u.cacheReadTokens}`
+        ),
+    }),
     knowledge: LUXE_KNOWLEDGE,
     assess,
     validateUpdates,
@@ -203,7 +217,8 @@ export async function POST(request: Request) {
     const result = await advisor.runTurn({ message, state: priorState });
     console.log(
       `[advisor] status=${result.status} turn=${result.state.turnCount} ` +
-        `interventions=${result.guardrailInterventions.join("|") || "none"}`
+        `interventions=${result.guardrailInterventions.join("|") || "none"}` +
+        (usage.length ? ` usage=[${usage.join("; ")}]` : "")
     );
     return NextResponse.json(result, { status: 200 });
   } catch {

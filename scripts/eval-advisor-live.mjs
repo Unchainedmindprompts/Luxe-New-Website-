@@ -133,9 +133,21 @@ const describeLedger = (ledger) =>
     .filter(Boolean)
     .join("\n");
 
+/**
+ * Token usage for the turn being run, filled in by the provider adapter.
+ *
+ * The whole point of reporting it here: a `cache_control` marker that fails to
+ * cache produces a completely normal response, so "caching is enabled" is not a
+ * claim this harness is willing to make from configuration. `cache_read` above
+ * zero on turn two is the evidence, and it is printed per call.
+ */
+let turnUsage = [];
+
 const makeAdvisor = (trace) => advisorModule.createAdvisor({
   trace,
-  provider: providerModule.createAnthropicProvider(),
+  provider: providerModule.createAnthropicProvider({
+    onUsage: (u) => turnUsage.push(u),
+  }),
   knowledge: KNOWLEDGE,
   assess: engine.assess,
   validateUpdates: extraction.validateUpdates,
@@ -305,6 +317,7 @@ for (const conversation of selected) {
   for (const [index, turn] of conversation.turns.entries()) {
     const started = Date.now();
     let result;
+    turnUsage = [];
     const trace = traceModule.createTrace(() => Date.now());
     try {
       result = await makeAdvisor(trace).runTurn({ message: turn.say, state });
@@ -337,6 +350,19 @@ for (const conversation of selected) {
       console.log(
         "  BREAKDOWN    " +
           Object.entries(d.stages).map(([k, v]) => `${k} ${Math.round(v)}ms`).join("  ")
+      );
+    }
+    if (turnUsage.length) {
+      console.log(
+        "  TOKENS       " +
+          turnUsage
+            .map(
+              (u) =>
+                `${u.stage} in=${u.inputTokens} out=${u.outputTokens} ` +
+                `cache_write=${u.cacheCreationTokens} cache_read=${u.cacheReadTokens}` +
+                (u.cacheReadTokens > 0 ? " HIT" : u.cacheCreationTokens > 0 ? " miss(written)" : "")
+            )
+            .join("\n               ")
       );
     }
     console.log(`  FACTS        ${JSON.stringify(result.state.facts ?? {})}`);

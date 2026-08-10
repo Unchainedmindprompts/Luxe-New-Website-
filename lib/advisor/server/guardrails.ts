@@ -34,7 +34,18 @@ export interface GuardrailViolation {
 }
 
 export interface GuardrailContext {
-  /** Product labels the assessment actually surfaced, in any standing. */
+  /**
+   * Every product name that is REAL — Luxe's whole catalogue, plus the proper
+   * nouns its own approved material uses.
+   *
+   * NOT "what this turn is allowed to talk about". Relevance is the prompt's
+   * job and the engine's; this list answers a narrower, factual question: does
+   * this product exist? A recommendation that promotes an alternative over the
+   * chosen direction is a prompt failure the engine already makes unreachable.
+   * A recommendation that offers "CrystalWeave Luxe shades" is a claim about
+   * Luxe's catalogue that is simply false, and it used to pass — the field was
+   * declared here and never read.
+   */
   readonly allowedProductLabels: readonly string[];
   /** Brand names Luxe genuinely carries, supplied by the caller. */
   readonly allowedBrands: readonly string[];
@@ -198,6 +209,92 @@ const RULES: readonly Rule[] = [
 ];
 
 /**
+ * The nouns a product name attaches to. A capitalised word in front of one of
+ * these is being used as a product's NAME, which is the shape being policed.
+ */
+const PRODUCT_NOUN =
+  "(?:shades?|blinds?|shutters?|drapery|draperies|panels?|treatments?|systems?|collections?)";
+
+/**
+ * Words that are capitalised because a sentence started, not because they name
+ * anything. Without these, "These shades work well" reads as a product called
+ * "These".
+ */
+const SENTENCE_WORDS = new Set([
+  "the", "these", "those", "this", "that", "our", "your", "their", "both",
+  "all", "any", "some", "most", "many", "other", "another", "either", "neither",
+  "each", "every", "no", "two", "three", "several", "few", "custom", "if",
+  "for", "with", "and", "but", "so", "because", "when", "where", "what",
+  "which", "how", "why", "we", "you", "they", "it", "here", "there", "in",
+  "on", "at", "as", "than", "then", "yes", "absolutely", "good", "great",
+]);
+
+const tokenise = (text: string): readonly string[] =>
+  text.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+
+/**
+ * A product name that does not exist.
+ *
+ * The audit that prompted this could get "CrystalWeave Luxe shades" past every
+ * check on the page, because `allowedProductLabels` was declared and never
+ * read and the only name check was a fifteen-entry list of competitors. An
+ * invented name is a worse failure than an invented competitor: a homeowner can
+ * look up Hunter Douglas and find it real, but they will ring Luxe and ask for
+ * something nobody sells.
+ *
+ * WHAT IS POLICED IS A NAME, NOT A CATEGORY. "Cellular shades" is a category —
+ * it names a kind of thing, it appears in Luxe's catalogue, and the advisor is
+ * supposed to say it. "CrystalWeave shades" is a name — a specific product,
+ * capitalised as a proper noun, that Luxe would have to stock. So the check
+ * looks for the three shapes a fabricated name actually takes, and clears every
+ * one of them against the real catalogue:
+ *
+ *   FUSED CAPITALS — CrystalWeave, SunGuard, PowerView, SmartShade. English
+ *     words are not built this way; product names are.
+ *   TRADEMARK MARKERS — anything carrying (tm) or the symbols. Approved Luxe
+ *     copy does not use them.
+ *   A CAPITALISED NAME IN FRONT OF A PRODUCT NOUN — "Aurora shades",
+ *     "Serenity Collection blinds". Sentence-initial single words are exempt,
+ *     because "Cellular shades trap air" starts a sentence rather than naming a
+ *     brand.
+ *
+ * Deliberately shape-based rather than a list. A list of names Luxe does not
+ * sell cannot be written down: the whole point of an invented name is that
+ * nobody has heard it before.
+ */
+function inventedProductName(text: string, context: GuardrailContext): string | null {
+  const real = new Set<string>();
+  for (const label of [...context.allowedProductLabels, ...context.allowedBrands]) {
+    for (const word of tokenise(label)) real.add(word);
+  }
+  // Luxe's own name is not a product name, and it appears in almost every reply.
+  for (const word of ["luxe", "window", "works"]) real.add(word);
+
+  const known = (word: string): boolean =>
+    real.has(word.toLowerCase()) || SENTENCE_WORDS.has(word.toLowerCase());
+
+  const fused = text.match(/\b[A-Z][a-z]+[A-Z][A-Za-z]*\b/g) ?? [];
+  for (const word of fused) if (!known(word)) return word;
+
+  const trademark = /[®™]|\((?:tm|r)\)/i.exec(text);
+  if (trademark) return trademark[0];
+
+  const named = new RegExp(`((?:\\b[A-Z][a-z]+ ){1,3})(${PRODUCT_NOUN})\\b`, "g");
+  for (const match of text.matchAll(named)) {
+    const words = match[1].trim().split(/\s+/);
+    // "Cellular shades keep the heat out." opens a sentence; it does not name a
+    // product. Two capitalised words in a row is a different matter — English
+    // does not do that by accident mid-reply.
+    const start = match.index === 0 || /[.!?]\s+$|^["“'(]$/.test(text.slice(Math.max(0, match.index - 2), match.index));
+    if (words.length === 1 && start) continue;
+    const invented = words.find((word) => !known(word));
+    if (invented) return `${match[1].trim()} ${match[2]}`;
+  }
+
+  return null;
+}
+
+/**
  * Checks generated customer-facing text against every deterministic rule.
  * Returns every violation found, not just the first — a caller regenerating the
  * turn benefits from knowing all of them.
@@ -220,16 +317,15 @@ export function validateGeneratedText(
     }
   }
 
-  // Invented products: a brand Luxe does not carry, named as if it did.
+  // Invented products, in two flavours: a real brand Luxe does not carry, and
+  // a product name that is not real at all.
   const lower = text.toLowerCase();
   const allowed = context.allowedBrands.map((b) => b.toLowerCase());
-  for (const brand of OFF_CATALOGUE_BRANDS) {
-    if (allowed.some((a) => brand.includes(a) || a.includes(brand))) continue;
-    if (lower.includes(brand)) {
-      violations.push({ guardrailId: "no-invented-products", evidence: brand });
-      break;
-    }
-  }
+  const offCatalogue = OFF_CATALOGUE_BRANDS.find(
+    (brand) => !allowed.some((a) => brand.includes(a) || a.includes(brand)) && lower.includes(brand)
+  );
+  const invented = offCatalogue ?? inventedProductName(text, context);
+  if (invented) violations.push({ guardrailId: "no-invented-products", evidence: invented });
 
   return violations;
 }

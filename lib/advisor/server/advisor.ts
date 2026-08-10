@@ -45,6 +45,7 @@ import type {
   AssessmentSummary,
   ConsultationCtaIntent,
   ConversationState,
+  SystemPrompt,
 } from "./types";
 
 /** Hard ceiling on advisor turns in one conversation. Also an abuse control. */
@@ -162,29 +163,37 @@ export interface AdvisorDeps {
   ) => readonly { guardrailId: string; evidence: string }[];
   readonly sanitizeForOutput: (text: string, maxLength: number) => string;
   readonly prompts: {
-    extractionSystemPrompt: (vocabulary: string, established: string, transcript?: string) => string;
+    extractionSystemPrompt: (
+      vocabulary: string,
+      established: string,
+      transcript?: string
+    ) => SystemPrompt;
     extractionUserMessage: (transcript: string, message: string) => string;
     answerSystemPrompt: (
       approved: string,
       guardrails: readonly Guardrail[],
       invitesConsultation: boolean,
       transcript?: string
-    ) => string;
-    discoverySystemPrompt: (guardrails: readonly Guardrail[], transcript?: string) => string;
+    ) => SystemPrompt;
+    discoverySystemPrompt: (guardrails: readonly Guardrail[], transcript?: string) => SystemPrompt;
     /** `corrected` is true only when this turn actually retracted a fact. */
-    questionSystemPrompt: (guardrails: readonly Guardrail[], corrected?: boolean, transcript?: string) => string;
+    questionSystemPrompt: (
+      guardrails: readonly Guardrail[],
+      corrected?: boolean,
+      transcript?: string
+    ) => SystemPrompt;
     recommendationSystemPrompt: (
       assessment: AdvisorAssessment,
       guardrails: readonly Guardrail[],
       corrected?: boolean,
       transcript?: string
-    ) => string;
+    ) => SystemPrompt;
     guidanceSystemPrompt: (
       assessment: AdvisorAssessment,
       guardrails: readonly Guardrail[],
       corrected?: boolean,
       transcript?: string
-    ) => string;
+    ) => SystemPrompt;
     phrasingUserMessage: (parts: Record<string, string | undefined>) => string;
   };
   /** Brand names Luxe genuinely carries, for invented-product detection. */
@@ -437,16 +446,52 @@ export function createAdvisor(deps: AdvisorDeps) {
   };
 
   /**
+   * Every product name that is real, assembled once per request.
+   *
+   * Two sources, and the second is the one that makes this workable. Product
+   * LABELS give the categories — "cellular shades", "interior roller shades".
+   * The approved material gives the proper nouns Luxe genuinely uses and the
+   * label list has no room for: HomeKit, InvisibleTilt, Venetian. Those are not
+   * inventions; they are published on this site, and a check that flagged them
+   * would fire on Luxe's own approved copy.
+   *
+   * ONLY THE CAPITALISED WORDS ARE TAKEN, because only capitalised words are
+   * checked. Harvesting every word in seventy-four FAQs would make the
+   * vocabulary so wide that a fabricated name could hide inside it.
+   *
+   * The result is one rule, and it is the same rule the prompt states: a proper
+   * noun Luxe's own material uses is real, and one it does not is not.
+   */
+  const productCatalogue: readonly string[] = [
+    ...deps.knowledge.directions.map((d) => d.label),
+    ...deps.knowledge.crossCuttingOptions.map((o) => o.label),
+    ...deps.knowledge.unrepresentedSiteProducts.map((p) => p.slug.replace(/-/g, " ")),
+    ...[
+      ...deps.knowledge.answers.map((a) => `${a.question} ${a.answer}`),
+      ...deps.knowledge.directions.map((d) =>
+        [
+          ...d.strengths,
+          d.viewBehavior,
+          d.privacyBehavior,
+          d.roomDarkeningBehavior,
+          d.energyBehavior,
+          d.designCharacteristics,
+          d.siteCoverageNote,
+        ].join(" ")
+      ),
+    ].flatMap((text) => text.match(/\b[A-Z][A-Za-z]*\b/g) ?? []),
+  ];
+
+  /**
    * Runs one phrasing call, validates it, retries once on violation, and falls
    * back to deterministic text if the retry also violates. The violating text
    * is never returned and never logged.
    */
   async function phraseSafely(
-    system: string,
+    system: SystemPrompt,
     userMessage: string,
     maxTokens: number,
     maxChars: number,
-    allowedProductLabels: readonly string[],
     fallback: string,
     interventions: string[]
   ): Promise<string> {
@@ -467,7 +512,7 @@ export function createAdvisor(deps: AdvisorDeps) {
       const text = deps.sanitizeForOutput(raw, maxChars);
       if (!text) continue;
       const violations = deps.validateGeneratedText(text, {
-        allowedProductLabels,
+        allowedProductLabels: productCatalogue,
         allowedBrands: deps.allowedBrands,
       });
       if (!violations.length) return text;
@@ -525,9 +570,6 @@ export function createAdvisor(deps: AdvisorDeps) {
       }),
       ANSWER_TOKENS,
       MAX_ANSWER_CHARS,
-      // A comparison may name the products it compares; a business answer has
-      // none to name, so the invented-product check stays fully armed there.
-      named.map((d) => d.label),
       ANSWER_FALLBACK,
       interventions
     );
@@ -689,11 +731,6 @@ export function createAdvisor(deps: AdvisorDeps) {
     // ── 2. deterministic assessment ────────────────────────────────────────
     const assessment = await trace.mark("assessment", async () => deps.assess(facts, deps.knowledge));
     const guardrails = assessment.applicableGuardrails;
-    const allowedProductLabels = [
-      ...assessment.strongCandidates,
-      ...assessment.deprioritizedDirections,
-      ...assessment.excludedDirections,
-    ].map((d) => d.label);
 
     // ── 3. counterfactual gating, then selection ───────────────────────────
     //
@@ -873,7 +910,6 @@ export function createAdvisor(deps: AdvisorDeps) {
         }),
         ANSWER_TOKENS,
         MAX_ANSWER_CHARS,
-        [],
         DISCOVERY_FALLBACK,
         interventions
       );
@@ -909,7 +945,6 @@ export function createAdvisor(deps: AdvisorDeps) {
         }),
         QUESTION_TOKENS,
         MAX_QUESTION_CHARS,
-        allowedProductLabels,
         fallbackQuestion(question.canonical),
         interventions
       );
@@ -964,7 +999,6 @@ export function createAdvisor(deps: AdvisorDeps) {
       }),
       RECOMMENDATION_TOKENS,
       MAX_RECOMMENDATION_CHARS,
-      allowedProductLabels,
       fallback,
       interventions
     );

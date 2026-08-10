@@ -13,7 +13,7 @@
  * raw provider response reaches the client.
  */
 import Anthropic from "@anthropic-ai/sdk";
-import type { AdvisorProvider } from "./types";
+import type { AdvisorProvider, ProviderUsage, SystemPrompt } from "./types";
 
 /**
  * V1 runs one model for both jobs — extraction and phrasing — because a single
@@ -106,6 +106,68 @@ function toProviderError(error: unknown): ProviderError {
 }
 
 /**
+ * The smallest prefix Anthropic will cache, in tokens, for this model.
+ *
+ * Sonnet-class models require 1024; a `cache_control` marker on anything
+ * shorter is accepted and then silently ignored, which is the worst possible
+ * failure mode — the request succeeds, the config looks right, and nothing is
+ * cached. So the marker is applied only when the prefix is comfortably clear of
+ * the floor, and everything else is left alone rather than decorated with a
+ * marker that does nothing.
+ *
+ * The char figure is the gate actually used, because it needs no tokeniser at
+ * request time. Four characters per token is the conservative direction for
+ * English prose (measured on these prompts: 13,752 chars ≈ 3,438 tokens, so
+ * 4.0), and the 1.5× margin means a prompt has to shrink by a third before the
+ * gate is wrong in the direction that costs anything.
+ */
+const CACHE_MINIMUM_TOKENS = 1024;
+const CACHE_MINIMUM_CHARS = CACHE_MINIMUM_TOKENS * 4 * 1.5;
+
+/**
+ * Renders a system prompt as Anthropic content blocks, marking the stable half
+ * as cacheable when it is big enough to be worth caching.
+ *
+ * TWO BLOCKS, NOT ONE STRING. A prefix cache matches on an exact prefix of the
+ * rendered request, so the boundary has to be a real boundary — the stable text
+ * first, the turn's material after it, and nothing dynamic interleaved. That is
+ * exactly what `SystemPrompt` already expresses, which is why this adapter has
+ * no restructuring to do.
+ *
+ * The default five-minute TTL is deliberate and is not a shrug: it is the
+ * lifetime that matches the traffic. A conversation is a burst of turns seconds
+ * apart, so every turn after the first hits a warm cache; an hour-long TTL
+ * would cost 2× on the write to keep a prefix alive between visitors who may
+ * never arrive.
+ */
+function systemBlocks(system: SystemPrompt): Anthropic.TextBlockParam[] {
+  const cacheable = system.stable.length >= CACHE_MINIMUM_CHARS;
+  const blocks: Anthropic.TextBlockParam[] = [
+    {
+      type: "text",
+      text: system.stable,
+      ...(cacheable ? { cache_control: { type: "ephemeral" as const } } : {}),
+    },
+  ];
+  if (system.dynamic?.trim()) blocks.push({ type: "text", text: system.dynamic });
+  return blocks;
+}
+
+/** Reads the usage block defensively — every field is optional on the wire. */
+function readUsage(
+  stage: ProviderUsage["stage"],
+  usage: Anthropic.Usage | undefined
+): ProviderUsage {
+  return {
+    stage,
+    inputTokens: usage?.input_tokens ?? 0,
+    outputTokens: usage?.output_tokens ?? 0,
+    cacheCreationTokens: usage?.cache_creation_input_tokens ?? 0,
+    cacheReadTokens: usage?.cache_read_input_tokens ?? 0,
+  };
+}
+
+/**
  * Combines the caller's abort signal with a local timeout, so a hung request
  * cannot outlive the route regardless of what the SDK does.
  */
@@ -123,7 +185,19 @@ function withTimeout(timeoutMs: number, signal?: AbortSignal): { signal: AbortSi
   };
 }
 
-export function createAnthropicProvider(): AdvisorProvider {
+export interface AnthropicProviderOptions {
+  /**
+   * Called with the token usage of every completed call.
+   *
+   * The only way to know whether caching is actually working: a marker that
+   * fails to cache produces a perfectly normal response. `cacheReadTokens`
+   * above zero is a hit and the only acceptable evidence that the prefix split
+   * is doing its job.
+   */
+  readonly onUsage?: (usage: ProviderUsage) => void;
+}
+
+export function createAnthropicProvider(options: AnthropicProviderOptions = {}): AdvisorProvider {
   return {
     async extract({ system, userMessage, schema, signal }) {
       const timeout = withTimeout(EXTRACTION_TIMEOUT_MS, signal);
@@ -132,7 +206,7 @@ export function createAnthropicProvider(): AdvisorProvider {
           {
             model: ADVISOR_MODEL,
             max_tokens: EXTRACTION_MAX_TOKENS,
-            system,
+            system: systemBlocks(system),
             output_config: {
               effort: EFFORT,
               // Native structured output. The schema is closed
@@ -144,6 +218,7 @@ export function createAnthropicProvider(): AdvisorProvider {
           },
           { signal: timeout.signal }
         );
+        options.onUsage?.(readUsage("extraction", response.usage));
         const text = textOf(response.content);
         if (!text) throw new ProviderError("provider-unavailable", "empty extraction response");
         try {
@@ -167,12 +242,13 @@ export function createAnthropicProvider(): AdvisorProvider {
           {
             model: ADVISOR_MODEL,
             max_tokens: Math.min(maxTokens, PHRASING_MAX_TOKENS),
-            system,
+            system: systemBlocks(system),
             output_config: { effort: EFFORT },
             messages: [{ role: "user", content: userMessage }],
           },
           { signal: timeout.signal }
         );
+        options.onUsage?.(readUsage("phrasing", response.usage));
         return textOf(response.content);
       } catch (error) {
         throw toProviderError(error);

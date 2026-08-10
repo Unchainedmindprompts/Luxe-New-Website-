@@ -207,6 +207,57 @@ export type AdvisorErrorCode =
   | "provider-unavailable"
   | "provider-timeout";
 
+// ───────────────────────────── prompt shape ─────────────────────────────────
+
+/**
+ * A system prompt, split at the point where it stops being the same on every
+ * call.
+ *
+ * `stable` is byte-identical for every turn served by a given deployment: who
+ * the advisor is, what it may and may not assert, the extraction vocabulary,
+ * how Luxe sounds. `dynamic` is this turn — the ledger, the approved material
+ * for this question, the guardrails Phase A scoped to this project.
+ *
+ * THE SPLIT IS ARCHITECTURAL BEFORE IT IS AN OPTIMISATION. Writing a prompt in
+ * two pieces forces the question "is this a rule, or is it today's data?" to be
+ * answered once per line rather than left implicit, and it is what keeps the
+ * per-turn material from being scattered through four thousand tokens of
+ * instruction.
+ *
+ * It also happens to be exactly the shape a provider prefix cache needs, since
+ * a cache hit requires an identical *prefix* — which is why `dynamic` must be
+ * appended after `stable` and never interleaved with it. Whether a given
+ * provider actually caches it is that adapter's business; nothing above the
+ * port knows or cares.
+ */
+export interface SystemPrompt {
+  /** Identical on every call. Must be rendered first. */
+  readonly stable: string;
+  /** This turn's material. Rendered after `stable`, or omitted when empty. */
+  readonly dynamic?: string;
+}
+
+/** The two halves as one string, for logging, measurement and mocks. */
+export function renderSystemPrompt(prompt: SystemPrompt): string {
+  return prompt.dynamic?.trim() ? `${prompt.stable}\n\n${prompt.dynamic}` : prompt.stable;
+}
+
+/**
+ * What a call actually cost, in tokens. Reported by the adapter when the
+ * provider supplies it, so cache behaviour can be *measured* rather than
+ * assumed — a `cache_control` marker that silently fails to cache looks exactly
+ * like one that works.
+ */
+export interface ProviderUsage {
+  readonly stage: "extraction" | "phrasing";
+  readonly inputTokens: number;
+  readonly outputTokens: number;
+  /** Tokens written into the cache on this call. Non-zero means a cache MISS. */
+  readonly cacheCreationTokens: number;
+  /** Tokens served from the cache. Non-zero means a cache HIT. */
+  readonly cacheReadTokens: number;
+}
+
 // ───────────────────────────── provider port ────────────────────────────────
 
 /**
@@ -224,7 +275,7 @@ export interface AdvisorProvider {
    * result parsed, not that it is semantically valid.
    */
   extract(input: {
-    readonly system: string;
+    readonly system: SystemPrompt;
     readonly userMessage: string;
     readonly schema: Record<string, unknown>;
     readonly signal?: AbortSignal;
@@ -232,7 +283,7 @@ export interface AdvisorProvider {
 
   /** Ask the model for a short piece of customer-facing prose. */
   phrase(input: {
-    readonly system: string;
+    readonly system: SystemPrompt;
     readonly userMessage: string;
     readonly maxTokens: number;
     readonly signal?: AbortSignal;
