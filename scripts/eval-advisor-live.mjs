@@ -22,12 +22,37 @@
  * Nothing here is asserted in CI, because a live model is not a deterministic
  * fixture and a flaky gate is worse than no gate.
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, appendFileSync, writeFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+/**
+ * A BROKEN PIPE MUST NOT END THE RUN.
+ *
+ * A previous evaluation was piped into `head`, which closed the pipe partway
+ * through; Node raised EPIPE on stdout and the process died at turn 26 of 31
+ * with no error anyone noticed. The run *looked* complete. That is the worst
+ * possible failure for a measurement harness — it silently shortens the sample
+ * and every number computed from it is quietly wrong.
+ *
+ * Two defences. Console output is best-effort from here on, and every turn is
+ * also written to a record file the moment it completes, so the data survives
+ * whatever happens to the terminal.
+ */
+process.stdout.on("error", (error) => {
+  if (error?.code === "EPIPE") return;
+  throw error;
+});
+const say = (line = "") => {
+  try {
+    process.stdout.write(`${line}\n`);
+  } catch {
+    // Console is gone; the record file is the real output.
+  }
+};
 
 // Convenience: pick the key up from .env.local the way `next` would, so the
 // harness runs without exporting anything by hand. Never printed.
@@ -340,18 +365,56 @@ const CONVERSATIONS = [
   },
 ];
 
-const only = process.argv[2];
+const args = process.argv.slice(2);
+const flag = (name, fallback) => {
+  const hit = args.find((a) => a.startsWith(`--${name}=`));
+  return hit ? hit.slice(name.length + 3) : fallback;
+};
+const only = args.find((a) => !a.startsWith("--"));
+const repeat = Math.max(1, Number(flag("repeat", "1")) || 1);
+const quiet = args.includes("--quiet");
+/** Every turn, appended the moment it completes. See the EPIPE note above. */
+const recordPath = join(ROOT, flag("out", "advisor-eval.jsonl"));
+
 const selected = only
   ? CONVERSATIONS.filter((c) => c.name.toLowerCase().includes(only.toLowerCase()))
   : CONVERSATIONS;
 
-console.log(`Live advisor evaluation — model ${providerModule.ADVISOR_MODEL}`);
-console.log(`${selected.length} conversation(s), ${selected.reduce((n, c) => n + c.turns.length, 0)} turns. This makes billable calls.\n`);
+/**
+ * One line of JSON per turn, flushed immediately.
+ *
+ * Appended rather than buffered so a run that dies for any reason still leaves
+ * every completed turn on disk. Carries no prompt text and no system prompt —
+ * the homeowner message is the harness's own scripted input, and the reply is
+ * summarised by length rather than reproduced.
+ */
+function record(row) {
+  records.push(row);
+  try {
+    appendFileSync(recordPath, `${JSON.stringify(row)}\n`);
+  } catch {
+    // A failed write must not take the run down; the console still has it.
+  }
+}
 
+const plannedTurns = selected.reduce((n, c) => n + c.turns.length, 0) * repeat;
+writeFileSync(recordPath, "");
+const records = [];
+
+say(`Live advisor evaluation — model ${providerModule.ADVISOR_MODEL}`);
+say(
+  `${selected.length} conversation(s) × ${repeat} pass(es) = ${plannedTurns} planned turns. ` +
+    `This makes billable calls.`
+);
+say(`Recording every turn to ${recordPath}\n`);
+
+for (let pass = 1; pass <= repeat; pass++) {
 for (const conversation of selected) {
-  console.log("═".repeat(78));
-  console.log(`CONVERSATION  ${conversation.name}`);
-  console.log("═".repeat(78));
+  if (!quiet) {
+    say("═".repeat(78));
+    say(`CONVERSATION  ${conversation.name}${repeat > 1 ? `  [pass ${pass}]` : ""}`);
+    say("═".repeat(78));
+  }
 
   // State threaded exactly as the browser threads it: whatever came back last
   // turn goes back in unmodified.
@@ -365,76 +428,214 @@ for (const conversation of selected) {
     try {
       result = await makeAdvisor(trace).runTurn({ message: turn.say, state });
     } catch (error) {
-      console.log(`\n  TURN ${index + 1} THREW  ${error?.code ?? error?.name ?? error}`);
+      const code = error?.code ?? error?.name ?? String(error);
+      say(`\n  TURN ${index + 1} THREW  ${code}`);
+      // Recorded, not swallowed: a thrown turn is data about reliability, and
+      // a run that quietly drops it under-reports the failure rate.
+      record({
+        conversation: conversation.name, pass, turn: index + 1,
+        message: turn.say, threw: code,
+      });
       break;
     }
     const elapsed = Date.now() - started;
+
+    const stages = result.diagnostics?.stages ?? {};
+    record({
+      conversation: conversation.name,
+      pass,
+      turn: index + 1,
+      message: turn.say,
+      status: result.status,
+      route: result.diagnostics?.route ?? null,
+      deterministic: Boolean(result.diagnostics?.deterministic),
+      fellBack: Boolean(result.diagnostics?.fellBack),
+      askedQualification: Boolean(result.nextQuestion),
+      questionId: result.nextQuestion?.id ?? null,
+      ctaShown: result.consultationCta.recommended,
+      ctaReasons: result.consultationCta.reasons,
+      providerCalls: result.diagnostics?.providerCalls ?? 0,
+      extractionMs: Math.round(stages.extraction ?? 0),
+      phrasingMs: Math.round(stages.phrasing ?? 0),
+      phrasingRetryMs: Math.round(stages["phrasing-retry"] ?? 0),
+      retries: stages["phrasing-retry"] !== undefined ? 1 : 0,
+      totalMs: elapsed,
+      replyChars: result.message.length,
+      guardrailInterventions: result.guardrailInterventions,
+      error: result.error,
+      primary: result.assessment?.primaryRecommendation?.label ?? null,
+      factCount: Object.keys(result.state.facts ?? {}).length,
+      historyMessagesIn: transcriptModule.validateTranscript(state.transcript).length,
+      // Token telemetry, per model call. No prompt text, no reply text.
+      usage: turnUsage.map((u) => ({
+        stage: u.stage,
+        in: u.inputTokens,
+        out: u.outputTokens,
+        cacheWrite: u.cacheCreationTokens,
+        cacheRead: u.cacheReadTokens,
+      })),
+    });
 
     // What the model was given to work with, before this turn was recorded.
     const historyIn = transcriptModule.renderTranscript(
       transcriptModule.validateTranscript(state.transcript)
     );
-
-    console.log(`\n  ── turn ${index + 1} ${"─".repeat(60)}`);
-    if (historyIn) {
-      console.log("  HISTORY IN");
-      for (const line of historyIn.split("\n")) console.log(`    ${line}`);
-    } else {
-      console.log("  HISTORY IN   (none — first turn)");
-    }
-    console.log(`  SAID         ${turn.say}`);
     const d = result.diagnostics;
-    console.log(`  STATUS       ${result.status}   (${(elapsed / 1000).toFixed(1)}s)`);
-    console.log(
-      `  COST         ${d?.providerCalls ?? "?"} model call(s)   route=${d?.route ?? "?"}` +
-        (d?.deterministic ? "   DETERMINISTIC" : "") + (d?.fellBack ? "   fell-back" : "")
-    );
-    if (d) {
-      console.log(
-        "  BREAKDOWN    " +
-          Object.entries(d.stages).map(([k, v]) => `${k} ${Math.round(v)}ms`).join("  ")
+
+    if (quiet) {
+      say(
+        `  ${String(records.length).padStart(3)}  ${(elapsed / 1000).toFixed(1)}s  ` +
+          `${(d?.route ?? "?").padEnd(14)} ${d?.providerCalls ?? "?"} call(s)  ${turn.say.slice(0, 48)}`
       );
-    }
-    if (turnUsage.length) {
-      console.log(
-        "  TOKENS       " +
-          turnUsage
-            .map(
-              (u) =>
-                `${u.stage} in=${u.inputTokens} out=${u.outputTokens} ` +
-                `cache_write=${u.cacheCreationTokens} cache_read=${u.cacheReadTokens}` +
-                (u.cacheReadTokens > 0 ? " HIT" : u.cacheCreationTokens > 0 ? " miss(written)" : "")
-            )
-            .join("\n               ")
+    } else {
+      say(`\n  ── turn ${index + 1} ${"─".repeat(60)}`);
+      if (historyIn) {
+        say("  HISTORY IN");
+        for (const line of historyIn.split("\n")) say(`    ${line}`);
+      } else {
+        say("  HISTORY IN   (none — first turn)");
+      }
+      say(`  SAID         ${turn.say}`);
+      say(`  STATUS       ${result.status}   (${(elapsed / 1000).toFixed(1)}s)`);
+      say(
+        `  COST         ${d?.providerCalls ?? "?"} model call(s)   route=${d?.route ?? "?"}` +
+          (d?.deterministic ? "   DETERMINISTIC" : "") + (d?.fellBack ? "   fell-back" : "")
       );
+      if (d) {
+        say(
+          "  BREAKDOWN    " +
+            Object.entries(d.stages).map(([k, v]) => `${k} ${Math.round(v)}ms`).join("  ")
+        );
+      }
+      if (turnUsage.length) {
+        say(
+          "  TOKENS       " +
+            turnUsage
+              .map(
+                (u) =>
+                  `${u.stage} in=${u.inputTokens} out=${u.outputTokens} ` +
+                  `cache_write=${u.cacheCreationTokens} cache_read=${u.cacheReadTokens}` +
+                  (u.cacheReadTokens > 0 ? " HIT" : u.cacheCreationTokens > 0 ? " miss(written)" : "")
+              )
+              .join("\n               ")
+        );
+      }
+      say(`  FACTS        ${JSON.stringify(result.state.facts ?? {})}`);
+      if (result.assessment) {
+        say(`  PRIMARY      ${result.assessment.primaryRecommendation?.label ?? "(none)"}`);
+      }
+      say(
+        `  BOOKING CTA  ${result.consultationCta.recommended ? "SHOWN" : "not shown"}` +
+          (result.consultationCta.reasons.length ? `  (${result.consultationCta.reasons.join(", ")})` : "")
+      );
+      if (result.nextQuestion) say(`  ASKED        ${result.nextQuestion.id}`);
+      if (result.error) say(`  ERROR        ${result.error}`);
+      if (result.guardrailInterventions.length) {
+        say(`  INTERVENED   ${result.guardrailInterventions.join(", ")}`);
+      }
+      say(`  REPLY        ${result.message}`);
+      if (turn.watch) say(`  WATCH FOR    ${turn.watch}`);
     }
-    console.log(`  FACTS        ${JSON.stringify(result.state.facts ?? {})}`);
-    if (result.assessment) {
-      console.log(`  PRIMARY      ${result.assessment.primaryRecommendation?.label ?? "(none)"}`);
-    }
-    console.log(
-      `  BOOKING CTA  ${result.consultationCta.recommended ? "SHOWN" : "not shown"}` +
-        (result.consultationCta.reasons.length ? `  (${result.consultationCta.reasons.join(", ")})` : "")
-    );
-    if (result.nextQuestion) console.log(`  ASKED        ${result.nextQuestion.id}`);
-    if (result.error) console.log(`  ERROR        ${result.error}`);
-    if (result.guardrailInterventions.length) {
-      console.log(`  INTERVENED   ${result.guardrailInterventions.join(", ")}`);
-    }
-    console.log(`  REPLY        ${result.message}`);
-    if (turn.watch) console.log(`  WATCH FOR    ${turn.watch}`);
 
     state = result.state;
   }
 
-  const finalTranscript = transcriptModule.validateTranscript(state.transcript);
-  console.log(
-    `\n  transcript retained: ${finalTranscript.length} message(s), cap ${transcriptModule.MAX_TRANSCRIPT_MESSAGES}`
-  );
-  console.log("");
+  if (!quiet) {
+    const finalTranscript = transcriptModule.validateTranscript(state.transcript);
+    say(
+      `\n  transcript retained: ${finalTranscript.length} message(s), cap ${transcriptModule.MAX_TRANSCRIPT_MESSAGES}`
+    );
+    say("");
+  }
+}
 }
 
-console.log("═".repeat(78));
-console.log("Read the output above. Nothing here gates a build.");
-console.log("The question to ask of each reply: could it have been written without");
-console.log("the HISTORY IN block? If yes, the memory is not doing its job.");
+// ── summary ─────────────────────────────────────────────────────────────────
+//
+// Computed from the record file, not from the console. Every number below is
+// derived from turns that actually completed, and the planned-vs-ran line is
+// first because a short run is the failure this harness now guards against.
+
+say("═".repeat(78));
+say(`RAN  ${records.length} of ${plannedTurns} planned turns` +
+  (records.length === plannedTurns ? "  — complete" : "  ⚠ INCOMPLETE"));
+
+const done = records.filter((r) => !r.threw);
+const q = (values, p) => {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  return sorted[Math.min(sorted.length - 1, Math.floor((sorted.length - 1) * p))];
+};
+const ms = (v) => (v === null ? "  —  " : `${String(Math.round(v)).padStart(5)}`);
+
+say("\nLATENCY BY ROUTE (ms)");
+say("  route            n     min     p50     p75     p90     max   extract  phrase  retries");
+const byRoute = new Map();
+for (const r of done) {
+  if (!byRoute.has(r.route)) byRoute.set(r.route, []);
+  byRoute.get(r.route).push(r);
+}
+for (const [route, rows] of [...byRoute].sort((a, b) => b[1].length - a[1].length)) {
+  const total = rows.map((r) => r.totalMs);
+  const ex = rows.map((r) => r.extractionMs).filter(Boolean);
+  const ph = rows.map((r) => r.phrasingMs).filter(Boolean);
+  say(
+    `  ${String(route).padEnd(14)} ${String(rows.length).padStart(3)}  ` +
+      `${ms(q(total, 0))}  ${ms(q(total, 0.5))}  ${ms(q(total, 0.75))}  ` +
+      `${ms(q(total, 0.9))}  ${ms(q(total, 1))}   ${ms(q(ex, 0.5))}   ${ms(q(ph, 0.5))}  ` +
+      `${String(rows.reduce((n, r) => n + r.retries, 0)).padStart(4)}`
+  );
+}
+if (done.length < 30) {
+  say("  ⚠ small sample — p75/p90 above are indicative only, not percentiles worth quoting.");
+}
+
+const calls = done.flatMap((r) => r.usage ?? []);
+const hits = calls.filter((c) => c.cacheRead > 0).length;
+say("\nCACHE (a cost metric — not a latency metric)");
+say(`  model calls ${calls.length}   hits ${hits}   writes ${calls.filter((c) => c.cacheWrite > 0).length}`);
+say(`  input tokens billed at full rate  ${calls.reduce((n, c) => n + c.in, 0).toLocaleString()}`);
+say(`  input tokens served from cache    ${calls.reduce((n, c) => n + c.cacheRead, 0).toLocaleString()}`);
+say(`  output tokens (incl. thinking)    ${calls.reduce((n, c) => n + c.out, 0).toLocaleString()}`);
+
+const retried = done.filter((r) => r.retries > 0);
+say("\nRETRIES");
+say(`  phrasing calls ${calls.filter((c) => c.stage === "phrasing").length}   ` +
+  `turns needing a retry ${retried.length}/${done.length}` +
+  (done.length ? ` (${((retried.length / done.length) * 100).toFixed(1)}%)` : ""));
+const byGuardrail = new Map();
+for (const r of done) for (const g of r.guardrailInterventions) byGuardrail.set(g, (byGuardrail.get(g) ?? 0) + 1);
+for (const [g, n] of [...byGuardrail].sort((a, b) => b[1] - a[1])) say(`  ${String(n).padStart(3)}  ${g}`);
+if (retried.length) {
+  say(`  median retry cost ${q(retried.map((r) => r.phrasingRetryMs), 0.5)}ms`);
+}
+say(`  fell back to deterministic text: ${done.filter((r) => r.fellBack).length}`);
+
+say("\nBEHAVIOUR");
+say(`  asked a qualification question   ${done.filter((r) => r.askedQualification).length}/${done.length}`);
+say(`  offered the consultation         ${done.filter((r) => r.ctaShown).length}/${done.length}`);
+say(`  0-call turns                     ${done.filter((r) => r.providerCalls === 0).length}`);
+say(`  1-call turns                     ${done.filter((r) => r.providerCalls === 1).length}`);
+say(`  2-call turns                     ${done.filter((r) => r.providerCalls === 2).length}`);
+say(`  3-call turns (a retry)           ${done.filter((r) => r.providerCalls === 3).length}`);
+
+say("\nOUTPUT LENGTH vs PHRASING TIME");
+const withPhrase = done.filter((r) => r.phrasingMs > 0);
+const outTokens = (r) => (r.usage ?? []).filter((u) => u.stage === "phrasing").reduce((n, u) => n + u.out, 0);
+say(`  n ${withPhrase.length}   median reply ${q(withPhrase.map((r) => r.replyChars), 0.5)} chars   ` +
+  `median phrasing output ${q(withPhrase.map(outTokens), 0.5)} tokens`);
+if (withPhrase.length > 4) {
+  const xs = withPhrase.map(outTokens);
+  const ys = withPhrase.map((r) => r.phrasingMs);
+  const mean = (a) => a.reduce((n, v) => n + v, 0) / a.length;
+  const mx = mean(xs), my = mean(ys);
+  const cov = xs.reduce((n, x, i) => n + (x - mx) * (ys[i] - my), 0);
+  const sx = Math.sqrt(xs.reduce((n, x) => n + (x - mx) ** 2, 0));
+  const sy = Math.sqrt(ys.reduce((n, y) => n + (y - my) ** 2, 0));
+  say(`  Pearson r (output tokens vs phrasing ms) = ${(cov / (sx * sy)).toFixed(2)}`);
+}
+
+say("\n" + "═".repeat(78));
+say(`Full per-turn records: ${recordPath}`);
+say("Nothing here gates a build. The question to ask of each reply: could it have");
+say("been written without the HISTORY IN block? If yes, memory is not doing its job.");

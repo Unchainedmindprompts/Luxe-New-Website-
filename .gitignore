@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# advisor live-evaluation records (regenerated, never committed)
+advisor-eval*.jsonl
