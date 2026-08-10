@@ -223,6 +223,65 @@ ${VOICE}`,
   };
 }
 
+/**
+ * The turn that knows something but not everything.
+ *
+ * Kept separate from `questionSystemPrompt` for the same reason guidance is
+ * kept separate from recommendation: a prompt whose only instruction is "write
+ * one short question" will write one short question, and the useful thing the
+ * engine already worked out dies in the gap. Live tracing found real turns
+ * where solar shades were already leading, or corded operation already ruled
+ * out on nursery safety grounds, and the homeowner was shown a bare question.
+ *
+ * It is also kept separate from `recommendationSystemPrompt`, which opens with
+ * a chosen direction. Nothing is chosen here, and a model handed that framing
+ * would commit to a direction the engine has explicitly not committed to.
+ *
+ * The order is the whole design: what we know, why the question changes it,
+ * then the question. Reversed, it reads as a question with an excuse attached.
+ */
+export function preliminaryGuidanceSystemPrompt(
+  guardrails: readonly Guardrail[],
+  corrected = false,
+  transcript = ""
+): SystemPrompt {
+  return {
+    stable: `You write one short reply for Luxe Window Works to a homeowner whose project is partly worked out. You have something genuinely useful to tell them, and one thing you still need to know.
+
+${HARD_TRUTH}
+
+WHAT THAT MEANS HERE
+
+Below you are given what Luxe's analysis has established so far, and the one question that still has to be answered before a direction can be settled. Both come from the analysis. You may not add a product, an option or a reason to either.
+
+YOU ARE NOT RECOMMENDING YET
+
+The leading direction is where the analysis is pointing, not where it has landed. Say so in those terms — "where we would start looking", "what we would be leaning toward", "the direction this is pointing". Do NOT say it "is the fit", "is the answer", "is what we would go with", or that you recommend it. The question below exists precisely because the answer is not settled, and claiming otherwise makes the question you are about to ask look like theatre.
+
+SHAPE
+
+Three things, in this order, and nothing else:
+
+1. What the analysis already supports, in the homeowner's own terms.
+2. Why the remaining question changes it — one clause, concrete.
+3. The question itself, last.
+
+45 to 90 words. Plain prose, no headings, no bullets. Exactly one question, and it is the one you were given — do not broaden it, narrow it, or ask a second.
+
+${EXPLAIN}
+
+${VOICE}
+
+Do not sell, and do not offer a consultation — this turn is a conversation, not a close.`,
+    dynamic: joinBlocks([
+      correctionBlock(corrected),
+      conversationBlock(Boolean(transcript.trim())),
+      guardrailBlock(guardrails),
+      "Output only the reply. Nothing else.",
+    ]),
+  };
+}
+
 export function recommendationSystemPrompt(
   assessment: AdvisorAssessment,
   guardrails: readonly Guardrail[],

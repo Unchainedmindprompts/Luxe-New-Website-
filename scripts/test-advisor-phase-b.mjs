@@ -233,6 +233,7 @@ function makeAdvisor(provider) {
       answerSystemPrompt: prompts.answerSystemPrompt,
       discoverySystemPrompt: prompts.discoverySystemPrompt,
       questionSystemPrompt: prompts.questionSystemPrompt,
+      preliminaryGuidanceSystemPrompt: prompts.preliminaryGuidanceSystemPrompt,
       recommendationSystemPrompt: prompts.recommendationSystemPrompt,
       guidanceSystemPrompt: prompts.guidanceSystemPrompt,
       phrasingUserMessage: prompts.phrasingUserMessage,
@@ -3051,6 +3052,181 @@ await test("135 the split never puts homeowner text in the stable half", async (
   // visitors, so a leak there is worse than a leak anywhere else.
   const source = read("lib/advisor/server/prompts.ts");
   t.ok(/HOMEOWNER TEXT NEVER ENTERS EITHER HALF/.test(source), "the invariant is not written down");
+});
+
+// ── Phase 6: guidance survives a question that still gates the answer ───────
+
+/**
+ * One turn, one scripted extraction, nothing else. These cases are about what
+ * the engine hands the phrasing layer, so the mock's reply is irrelevant and
+ * the assertions are on the response contract and the prompt inputs.
+ */
+async function oneTurn(facts, message) {
+  const provider = mockProvider({ extractions: [facts] });
+  const result = await makeAdvisor(provider).runTurn({ message, state: {} });
+  return { result, provider };
+}
+
+await test("136 A — glare over a view keeps the solar-shade guidance and still asks", async (t) => {
+  // Phase 5 traced this exact shape: the engine had already put interior solar
+  // shades ahead and deprioritized three directions, and the homeowner was
+  // shown a bare question about nighttime privacy.
+  const { result, provider } = await oneTurn(
+    { priorities: ["glare-control", "view-preservation"], viewImportance: "high" },
+    "The glare is bad but I do not want to lose the view"
+  );
+
+  t.equal(result.status, "NEED_MORE_INFORMATION", `status was ${result.status}`);
+  t.ok(result.nextQuestion, "the gating question disappeared");
+  t.equal(result.nextQuestion?.id, "q-nighttime-privacy", `asked ${result.nextQuestion?.id}`);
+  t.ok(result.preliminaryGuidance, "the engine's guidance was discarded again");
+  t.equal(result.preliminaryGuidance?.leaning?.label, "Interior solar shades", "the wrong direction is leading");
+  t.equal(result.diagnostics?.route, "guided-question", `route was ${result.diagnostics?.route}`);
+
+  // The phrasing layer is actually given the guidance — the response field
+  // alone would be a claim the customer never sees.
+  t.ok(/Interior solar shades/.test(provider.calls.lastPhraseUser), "the guidance never reached the phrasing call");
+  t.ok(/question to ask/.test(provider.calls.lastPhraseUser), "the question never reached the phrasing call");
+  const system = provider.calls.lastPhraseSystem;
+  t.ok(/YOU ARE NOT RECOMMENDING YET/.test(system), "the preliminary prompt was not the one used");
+  t.ok(/Exactly one question/.test(system), "nothing holds the turn to a single question");
+});
+
+await test("137 B — a nursery keeps its safety guidance and still asks", async (t) => {
+  const { result, provider } = await oneTurn({ room: "nursery" }, "It is for the nursery");
+
+  t.equal(result.status, "NEED_MORE_INFORMATION", `status was ${result.status}`);
+  t.equal(result.nextQuestion?.id, "q-darkening-level", `asked ${result.nextQuestion?.id}`);
+  t.ok(result.preliminaryGuidance, "the child-safety guidance was discarded");
+  t.equal(result.preliminaryGuidance?.leaning, null, "a direction was claimed that the engine never chose");
+  t.ok(
+    result.preliminaryGuidance?.favour.some((o) => /cordless/i.test(o.label)),
+    "cordless operation was not carried"
+  );
+  t.ok(
+    result.preliminaryGuidance?.avoid.some((o) => /corded/i.test(o.label)),
+    "corded operation was not carried as something to avoid"
+  );
+  t.ok(/Cordless/i.test(provider.calls.lastPhraseUser), "the guidance never reached the phrasing call");
+});
+
+await test("138 C — a bright west bedroom invents no shortlist", async (t) => {
+  // THE CRITICAL NEGATIVE. Phase 5 reproduced this live: room=bedroom,
+  // exposure=west, solarHeat=moderate leaves all twelve directions eligible
+  // with nothing indicated either way. Asking is the honest reply, and any
+  // "cellular and roller are the two I'd consider" here would be invented.
+  const { result, provider } = await oneTurn(
+    { room: "bedroom", exposure: "west", solarHeat: "moderate" },
+    "What do you actually carry for a bright west bedroom?"
+  );
+
+  t.equal(result.status, "NEED_MORE_INFORMATION", `status was ${result.status}`);
+  t.equal(result.nextQuestion?.id, "q-darkening-level", `asked ${result.nextQuestion?.id}`);
+  t.equal(result.preliminaryGuidance, null, "guidance was manufactured where the engine had none");
+  t.equal(result.diagnostics?.route, "question", `route was ${result.diagnostics?.route}`);
+  t.ok(
+    !/what the analysis already supports/.test(provider.calls.lastPhraseUser),
+    "an empty guidance block was still sent to the phrasing layer"
+  );
+  t.ok(
+    !/YOU ARE NOT RECOMMENDING YET/.test(provider.calls.lastPhraseSystem),
+    "the guidance prompt was used on a turn with no guidance"
+  );
+  t.ok(/Output only the question/.test(provider.calls.lastPhraseSystem), "the plain question prompt was not used");
+});
+
+await test("139 the guidance predicate fires on narrowing, not on ignorance", async (t) => {
+  // Measured rather than asserted: the predicate is run against the real engine
+  // over fact shapes with and without narrowing.
+  const guided = [
+    ["glare over a view", { priorities: ["glare-control", "view-preservation"], viewImportance: "high" }],
+    ["nursery", { room: "nursery" }],
+  ];
+  const bare = [
+    ["bright west bedroom", { room: "bedroom", exposure: "west", solarHeat: "moderate" }],
+    ["bedroom, nothing else", { room: "bedroom" }],
+    ["nothing at all", {}],
+  ];
+  for (const [name, facts] of guided) {
+    const assessment = engine.assess(facts, KNOWLEDGE);
+    t.ok(advisorModule.preliminaryGuidance(assessment), `${name} produced no guidance despite narrowing`);
+  }
+  for (const [name, facts] of bare) {
+    const assessment = engine.assess(facts, KNOWLEDGE);
+    t.equal(advisorModule.preliminaryGuidance(assessment), null, `${name} produced invented guidance`);
+    // And the reason it produced none is that the engine genuinely said nothing.
+    t.equal(assessment.strongCandidates.length, 0, `${name} unexpectedly has a candidate`);
+    t.equal(assessment.crossCuttingOptions.length, 0, `${name} unexpectedly has an option`);
+  }
+});
+
+await test("140 D/E — recommendation and guidance turns are untouched", async (t) => {
+  // D — a finished recommendation still claims one, still renders a card.
+  const provider = mockProvider({
+    extractions: [{ geometry: ["large-architectural-glass"], windowUse: ["door-in-use"] }],
+  });
+  const done = await makeAdvisor(provider).runTurn({
+    message: "We have a really large patio door we use every day",
+    state: {},
+  });
+  t.equal(done.status, "RECOMMENDATION_READY", `status was ${done.status}`);
+  t.equal(done.preliminaryGuidance, null, "a finished recommendation also claimed preliminary guidance");
+  t.ok(done.assessment?.primaryRecommendation, "the canonical recommendation was lost");
+  t.ok(!done.nextQuestion, "a finished recommendation still asked a question");
+
+  // E — guidance with nothing left worth asking is still GUIDANCE_READY.
+  const guiding = mockProvider({ extractions: [{ room: "living", exposure: "west", solarHeat: "high" }] });
+  const guided = await makeAdvisor(guiding).runTurn({
+    message: "The living room faces west and gets very hot",
+    state: {},
+  });
+  t.ok(
+    ["GUIDANCE_READY", "RECOMMENDATION_READY"].includes(guided.status),
+    `an ungated turn became ${guided.status}`
+  );
+  t.equal(guided.preliminaryGuidance, null, "an ungated turn carried preliminary guidance");
+  t.ok(!guided.nextQuestion, "an ungated turn asked a question");
+});
+
+await test("141 preliminary guidance never becomes a recommendation or a pitch", async (t) => {
+  const { result } = await oneTurn(
+    { priorities: ["glare-control", "view-preservation"], viewImportance: "high" },
+    "Glare is the problem but the view matters"
+  );
+  // The boundary that makes this safe to ship: the status never claims a
+  // recommendation, so the card — gated on RECOMMENDATION_READY — cannot render.
+  t.ok(result.status !== "RECOMMENDATION_READY", "preliminary guidance was promoted to a recommendation");
+  // Phase 2's rule is untouched: naming a leaning direction earns nothing.
+  t.equal(result.consultationCta.recommended, false, "leaning toward a product created booking pressure");
+  t.equal(result.consultationCta.reasons.length, 0, `CTA reasons leaked: ${result.consultationCta.reasons}`);
+
+  // Asking to schedule still works, exactly as before.
+  const asked = mockProvider({
+    extractions: [{ __intent: "scheduling", priorities: ["glare-control", "view-preservation"], viewImportance: "high" }],
+  });
+  const booking = await makeAdvisor(asked).runTurn({
+    message: "Glare is the problem but the view matters, can someone come out?",
+    state: {},
+  });
+  t.ok(booking.consultationCta.recommended, "a scheduling request stopped earning the booking path");
+});
+
+await test("142 a phrasing failure still delivers the question", async (t) => {
+  // The one thing that must survive: a gated turn without its question is a
+  // dead end, so the deterministic fallback appends the canonical wording.
+  const provider = mockProvider({
+    extractions: [{ room: "nursery" }],
+    failPhrase: { code: "provider-timeout" },
+  });
+  const result = await makeAdvisor(provider).runTurn({ message: "It is for the nursery", state: {} });
+  t.equal(result.status, "NEED_MORE_INFORMATION", `status was ${result.status}`);
+  t.ok(result.preliminaryGuidance, "guidance was lost on the fallback path");
+  t.ok(
+    result.message.includes(result.nextQuestion.canonical),
+    "the fallback dropped the question the turn exists to ask"
+  );
+  t.ok(/cordless/i.test(result.message), "the fallback dropped the guidance");
+  t.ok(result.diagnostics?.fellBack, "the fallback was not recorded");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────

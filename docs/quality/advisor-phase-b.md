@@ -330,6 +330,81 @@ has no best fit under Luxe's rules — a solar shade keeps the view and reverses
 after dark, so nothing wins outright. That is `GUIDANCE_READY`, and test 55
 pins it.
 
+## Preliminary guidance — knowing something before knowing enough
+
+The engine frequently narrows a project before it can finish it. A homeowner
+describing glare over a view they want to keep has already put **interior solar
+shades** ahead; a nursery has already ruled out **corded operation** on safety
+grounds. Until Phase 6, all of that was computed, attached to the response, and
+then thrown away — the turn rendered a bare qualification question, which is
+what makes an advisor read as a questionnaire.
+
+Three layers were each dropping it independently, so fixing one would have
+changed nothing:
+
+1. `deriveStatus` returns `NEED_MORE_INFORMATION` whenever a must-ask-now
+   question exists, **even with strong candidates present**.
+2. The question route's phrasing call was handed only the question and why it
+   mattered, under a prompt that says "Output only the question."
+3. The client sets `direction` only for `RECOMMENDATION_READY`, so the
+   assessment it did receive was never rendered.
+
+### What qualifies
+
+`preliminaryGuidance(assessment)` reports three signals, and every one is the
+engine having named something specific:
+
+| signal | example |
+|---|---|
+| a leading direction | glare + view → interior solar shades |
+| an operating choice to favour | nursery → cordless |
+| an operating choice to avoid | nursery → corded |
+
+Anything else returns `null`. Tradeoffs and verification requirements are
+deliberately **not** signals — they attach to a direction, and without one they
+are a lecture. A large `eligibleDirections` count is **not** disqualifying on
+its own: the nursery case still has all twelve eligible and still has something
+worth saying.
+
+### What does not qualify
+
+`room: bedroom, exposure: west, solarHeat: moderate` — the exact case Phase 5
+reproduced live. Twelve of twelve directions eligible, no option indicated
+either way. The honest reply is the question by itself, and any "cellular and
+roller are the two I'd consider" here would be invented rather than surfaced.
+Pinned by test 138, with the predicate measured across five fact shapes in 139.
+
+### The state model
+
+| engine state | route | status | what the customer sees |
+|---|---|---|---|
+| nothing narrowed, question gates | `question` | NEED_MORE_INFORMATION | the question alone |
+| narrowed, question still gates | `guided-question` | NEED_MORE_INFORMATION | guidance, why it matters, then the question |
+| narrowed, nothing left to ask | `guidance` | GUIDANCE_READY | guidance |
+| candidate, nothing left to ask | `recommendation` | RECOMMENDATION_READY | the recommendation, with the card |
+
+### The boundary that keeps it honest
+
+**The status does not change.** A guided question is still
+`NEED_MORE_INFORMATION`, which is what keeps "we are leaning this way" distinct
+from "this is the answer" without adding a status to the contract:
+
+- the recommendation card is gated on `RECOMMENDATION_READY` and stays
+  unreachable;
+- `primaryRecommendation` is not what this turn returns — `preliminaryGuidance`
+  is a separate, differently-shaped field;
+- the prompt is told in as many words that it is **not** recommending, and to
+  say "where we would start looking" rather than "the fit";
+- the consultation CTA is untouched. Phase 2 owns it, `NEED_MORE_INFORMATION`
+  never earns it on its own, and naming a leaning direction is not a reason to
+  sell a visit.
+
+**The question is never softened.** The counterfactual gate is unchanged: if it
+rules a fact material, it is still asked, still recorded in `askedQuestionIds`,
+and still the last thing said. On a phrasing failure the deterministic fallback
+appends the canonical question verbatim, because a gated turn without its
+question is a dead end (test 142).
+
 ## Question selection
 
 Deterministic. The model phrases; it does not choose.

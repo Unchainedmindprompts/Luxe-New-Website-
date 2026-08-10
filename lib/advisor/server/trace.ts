@@ -34,6 +34,8 @@ export interface TurnTrace {
     | "unknown"
     | "discovery"
     | "question"
+    /** A question preceded by the guidance the engine already had. */
+    | "guided-question"
     | "guidance"
     | "recommendation"
     | "unavailable";

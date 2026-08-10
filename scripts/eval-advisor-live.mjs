@@ -216,6 +216,7 @@ const makeAdvisor = (trace) => advisorModule.createAdvisor({
     answerSystemPrompt: prompts.answerSystemPrompt,
     discoverySystemPrompt: prompts.discoverySystemPrompt,
     questionSystemPrompt: prompts.questionSystemPrompt,
+    preliminaryGuidanceSystemPrompt: prompts.preliminaryGuidanceSystemPrompt,
     recommendationSystemPrompt: prompts.recommendationSystemPrompt,
     guidanceSystemPrompt: prompts.guidanceSystemPrompt,
     phrasingUserMessage: prompts.phrasingUserMessage,
@@ -452,6 +453,15 @@ for (const conversation of selected) {
       fellBack: Boolean(result.diagnostics?.fellBack),
       askedQualification: Boolean(result.nextQuestion),
       questionId: result.nextQuestion?.id ?? null,
+      // Phase 6: what the engine could already say while still asking. Labels
+      // only — this is the same data the phrasing layer was handed.
+      preliminaryGuidance: result.preliminaryGuidance
+        ? {
+            leaning: result.preliminaryGuidance.leaning?.label ?? null,
+            favour: result.preliminaryGuidance.favour.map((o) => o.label),
+            avoid: result.preliminaryGuidance.avoid.map((o) => o.label),
+          }
+        : null,
       ctaShown: result.consultationCta.recommended,
       ctaReasons: result.consultationCta.reasons,
       providerCalls: result.diagnostics?.providerCalls ?? 0,
@@ -530,6 +540,14 @@ for (const conversation of selected) {
         `  BOOKING CTA  ${result.consultationCta.recommended ? "SHOWN" : "not shown"}` +
           (result.consultationCta.reasons.length ? `  (${result.consultationCta.reasons.join(", ")})` : "")
       );
+      if (result.preliminaryGuidance) {
+        const g = result.preliminaryGuidance;
+        say(
+          `  LEANING      ${g.leaning?.label ?? "(no direction yet)"}` +
+            (g.favour.length ? `   favour: ${g.favour.map((o) => o.label).join(", ")}` : "") +
+            (g.avoid.length ? `   avoid: ${g.avoid.map((o) => o.label).join(", ")}` : "")
+        );
+      }
       if (result.nextQuestion) say(`  ASKED        ${result.nextQuestion.id}`);
       if (result.error) say(`  ERROR        ${result.error}`);
       if (result.guardrailInterventions.length) {
@@ -625,6 +643,8 @@ say(`  fell back to deterministic text: ${done.filter((r) => r.fellBack).length}
 
 say("\nBEHAVIOUR");
 say(`  asked a qualification question   ${done.filter((r) => r.askedQualification).length}/${done.length}`);
+say(`  ...of those, carried guidance     ${done.filter((r) => r.preliminaryGuidance).length}`);
+say(`  ...bare question, nothing to add  ${done.filter((r) => r.askedQualification && !r.preliminaryGuidance).length}`);
 say(`  offered the consultation         ${done.filter((r) => r.ctaShown).length}/${done.length}`);
 say(`  0-call turns                     ${done.filter((r) => r.providerCalls === 0).length}`);
 say(`  1-call turns                     ${done.filter((r) => r.providerCalls === 1).length}`);

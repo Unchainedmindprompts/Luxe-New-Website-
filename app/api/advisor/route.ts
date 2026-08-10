@@ -51,6 +51,7 @@ import {
   extractionUserMessage,
   guidanceSystemPrompt,
   phrasingUserMessage,
+  preliminaryGuidanceSystemPrompt,
   questionSystemPrompt,
   recommendationSystemPrompt,
 } from "@/lib/advisor/server/prompts";
@@ -205,6 +206,7 @@ export async function POST(request: Request) {
       answerSystemPrompt,
       discoverySystemPrompt,
       questionSystemPrompt,
+      preliminaryGuidanceSystemPrompt,
       recommendationSystemPrompt,
       guidanceSystemPrompt,
       phrasingUserMessage,

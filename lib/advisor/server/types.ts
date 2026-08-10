@@ -159,10 +159,46 @@ export interface NextQuestion {
   readonly id: string;
   /** The canonical wording from the domain layer. Always populated. */
   readonly canonical: string;
-  /** The model's phrasing in Luxe's voice, or the canonical text if phrasing failed validation. */
+  /**
+   * The spoken turn, in Luxe's voice — or the canonical text if phrasing failed
+   * validation. Identical to `message`.
+   *
+   * On a turn carrying `preliminaryGuidance` this is the whole utterance, so it
+   * opens with what the engine could already say and closes with the question.
+   * The question is still the last thing said and still the only thing asked.
+   */
   readonly phrased: string;
   /** Directions whose standing could change once this is answered. */
   readonly materialTo: readonly DirectionId[];
+}
+
+/**
+ * What the engine could already say, on a turn where a question still gates the
+ * recommendation.
+ *
+ * NOT A RECOMMENDATION, AND DELIBERATELY NOT SHAPED LIKE ONE. There is no
+ * `primaryRecommendation` here and the status stays `NEED_MORE_INFORMATION`, so
+ * nothing downstream can mistake "we are leaning this way" for "this is the
+ * answer" — the recommendation card is gated on `RECOMMENDATION_READY` and
+ * remains unreachable from this turn.
+ *
+ * It exists because the engine frequently knows something useful before it
+ * knows enough. A homeowner describing glare over a view they want to keep has
+ * already narrowed the field to solar shades; a nursery has already ruled out
+ * corded operation. Discarding that and replying with a bare question is what
+ * makes an advisor read as a questionnaire.
+ *
+ * `null` when the engine has genuinely narrowed nothing. That case is real and
+ * common, and padding it with generic product talk would be inventing guidance
+ * rather than surfacing it.
+ */
+export interface PreliminaryGuidance {
+  /** The direction currently leading, if one is. Never "the recommendation". */
+  readonly leaning: { readonly id: DirectionId; readonly label: string } | null;
+  /** Operating choices the engine positively indicates — cordless, motorization. */
+  readonly favour: readonly { readonly id: string; readonly label: string }[];
+  /** Operating choices the engine steers away from, such as corded in a nursery. */
+  readonly avoid: readonly { readonly id: string; readonly label: string }[];
 }
 
 export interface AdvisorResponse {
@@ -172,6 +208,11 @@ export interface AdvisorResponse {
   readonly assessment: AssessmentSummary | null;
   /** Present when status is NEED_MORE_INFORMATION. */
   readonly nextQuestion: NextQuestion | null;
+  /**
+   * What could be said before the question, when anything could. See the type.
+   * Non-null only alongside `nextQuestion`, and never a recommendation.
+   */
+  readonly preliminaryGuidance: PreliminaryGuidance | null;
   /** Customer-facing prose, already guardrail-validated. */
   readonly message: string;
   /**

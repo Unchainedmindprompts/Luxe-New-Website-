@@ -221,6 +221,51 @@ test("5  NEED_MORE_INFORMATION shows one question and claims nothing more", (t) 
   );
 });
 
+test("5a preliminary guidance renders as conversation, not as a recommendation", (t) => {
+  // Phase 6: the server may now precede the gating question with what the
+  // engine already knows. The customer must read it as a leaning, not a
+  // verdict, and the page must not dress it up as one.
+  const spoken =
+    "Solar shades are where we would start looking, because they cut glare while " +
+    "keeping more of the view. Nighttime privacy is the part that changes it — " +
+    "how important is privacy after dark?";
+  const turn = contract.toAdvisorTurn(
+    serverTurn({
+      status: "NEED_MORE_INFORMATION",
+      message: spoken,
+      nextQuestion: {
+        id: "q-nighttime-privacy",
+        canonical: "Do you need privacy in that room after dark?",
+        phrased: spoken,
+        materialTo: ["interior-solar-shades"],
+      },
+      preliminaryGuidance: {
+        leaning: { id: "interior-solar-shades", label: "Interior solar shades" },
+        favour: [],
+        avoid: [],
+      },
+      consultationCta: { recommended: false, reasons: [] },
+    }),
+    {}
+  );
+
+  // The whole utterance is what the visitor sees — the page renders `message`.
+  t.equal(turn.message, spoken, "the guidance was truncated before rendering");
+  t.ok(/\{exchange\.text\}/.test(EXPERIENCE), "the page does not render the spoken message");
+
+  // NO CARD. `direction` is the field the panel reads, and it stays null on
+  // anything short of a finished recommendation.
+  t.equal(turn.direction, null, "a leaning direction was promoted to the recommendation card");
+  t.equal(turn.status, "NEED_MORE_INFORMATION", "status not carried");
+
+  // NO BOOKING PRESSURE. Phase 2's rule is server-owned and unchanged: naming a
+  // direction we are leaning toward does not earn the consultation.
+  t.equal(turn.offerConsultation, false, "leaning toward a product created booking pressure");
+
+  // And it is not the dead-end shape either, so no fallback form appears.
+  t.ok(turn.question !== null, "the gating question was lost");
+});
+
 test("6  GUIDANCE_READY renders without a best-fit claim", (t) => {
   const turn = contract.toAdvisorTurn(
     serverTurn({ status: "GUIDANCE_READY", assessment: { ...serverTurn().assessment, strongCandidates: [], primaryRecommendation: null } }),

@@ -45,6 +45,7 @@ import type {
   AssessmentSummary,
   ConsultationCtaIntent,
   ConversationState,
+  PreliminaryGuidance,
   SystemPrompt,
 } from "./types";
 
@@ -182,6 +183,12 @@ export interface AdvisorDeps {
       corrected?: boolean,
       transcript?: string
     ) => SystemPrompt;
+    /** Guidance first, then the one question that still gates the answer. */
+    preliminaryGuidanceSystemPrompt: (
+      guardrails: readonly Guardrail[],
+      corrected?: boolean,
+      transcript?: string
+    ) => SystemPrompt;
     recommendationSystemPrompt: (
       assessment: AdvisorAssessment,
       guardrails: readonly Guardrail[],
@@ -297,6 +304,77 @@ function consultationIntent(
   if (assessment.requestConflicts.length) reasons.push("request-conflict-needs-discussion");
 
   return { recommended: reasons.length > 0, reasons };
+}
+
+/**
+ * What the engine can already say, when a question still gates the answer.
+ *
+ * THE ENGINE DECIDES WHETHER THERE IS ANYTHING TO SAY. This reads the
+ * assessment and reports it; it never manufactures a shortlist to avoid asking
+ * a question. Three signals count, and all three are the engine having named
+ * something specific:
+ *
+ *   A LEADING DIRECTION — glare over a view the homeowner wants to keep already
+ *     puts solar shades ahead, whatever is still unknown about night privacy.
+ *   AN OPERATING CHOICE TO FAVOUR, or ONE TO AVOID — a nursery has ruled out
+ *     corded operation on safety grounds before anyone has said how dark the
+ *     room needs to be.
+ *
+ * Anything else returns null. "Bedroom, west-facing, moderate heat" leaves all
+ * twelve directions eligible with no option indicated either way, and the
+ * honest reply there is the question by itself — measured, not assumed, in
+ * test 139.
+ *
+ * Note what is deliberately NOT a signal. Tradeoffs and verification
+ * requirements attach to a direction; without one they are a lecture. And
+ * `eligibleDirections` being large is not disqualifying on its own — the
+ * nursery case has all twelve still eligible and still has something worth
+ * saying, because the engine named an operating choice.
+ */
+export function preliminaryGuidance(
+  assessment: AdvisorAssessment
+): PreliminaryGuidance | null {
+  const leading = assessment.strongCandidates[0];
+  const favour = assessment.crossCuttingOptions;
+  const avoid = assessment.deprioritizedOptions;
+  if (!leading && !favour.length && !avoid.length) return null;
+  return {
+    leaning: leading ? { id: leading.id, label: leading.label } : null,
+    favour: favour.map((o) => ({ id: o.id, label: o.label })),
+    avoid: avoid.map((o) => ({ id: o.id, label: o.label })),
+  };
+}
+
+/** The guidance as plain lines for the phrasing layer. Labels only, no ids. */
+function describeGuidance(guidance: PreliminaryGuidance): string {
+  return [
+    guidance.leaning ? `Leading direction so far: ${guidance.leaning.label}` : "",
+    guidance.favour.length ? `Worth favouring: ${guidance.favour.map((o) => o.label).join("; ")}` : "",
+    guidance.avoid.length ? `Worth steering away from: ${guidance.avoid.map((o) => o.label).join("; ")}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+/**
+ * Deterministic guidance-then-question text, for when the model's is unusable.
+ *
+ * The question must survive a phrasing failure intact — losing it would turn a
+ * gated turn into a dead end — so it is appended verbatim from Phase A.
+ */
+function fallbackPreliminary(guidance: PreliminaryGuidance, canonical: string): string {
+  const sentences: string[] = [];
+  if (guidance.leaning) {
+    sentences.push(`${sentenceCase(guidance.leaning.label)} is where we would start looking, though it is not settled yet.`);
+  }
+  if (guidance.favour.length) {
+    sentences.push(`We would favour ${lowerFirst(guidance.favour[0].label)}.`);
+  }
+  if (guidance.avoid.length) {
+    sentences.push(`We would steer away from ${lowerFirst(guidance.avoid[0].label)}.`);
+  }
+  sentences.push(canonical.trim());
+  return sentences.join(" ").replace(/\s+/g, " ").trim();
 }
 
 /**
@@ -660,6 +738,7 @@ ${lines.join("\n")}`;
         },
         assessment: summarise(deps.assess(priorFacts, deps.knowledge)),
         nextQuestion: null,
+        preliminaryGuidance: null,
         message: answer,
         canonicalResponseId: null,
         consultationCta: verified.invitesConsultation
@@ -716,6 +795,7 @@ ${lines.join("\n")}`;
           },
           assessment: summarise(deps.assess(priorFacts, deps.knowledge)),
           nextQuestion: null,
+        preliminaryGuidance: null,
           message: answer,
           canonicalResponseId: null,
           consultationCta: rescued[0].topic.invitesConsultation
@@ -852,6 +932,7 @@ ${lines.join("\n")}`;
         state: stateAfter(deps.sanitizeForOutput(brandAnswer.response, MAX_RECOMMENDATION_CHARS)),
         assessment: summarise(assessment),
         nextQuestion: null,
+        preliminaryGuidance: null,
         message: deps.sanitizeForOutput(brandAnswer.response, MAX_RECOMMENDATION_CHARS),
         canonicalResponseId: brandAnswer.id,
         consultationCta: { recommended: false, reasons: [] },
@@ -883,6 +964,7 @@ ${lines.join("\n")}`;
           state: stateAfter(answered.message),
           assessment: summarise(assessment),
           nextQuestion: null,
+        preliminaryGuidance: null,
           message: answered.message,
           canonicalResponseId: null,
           // An answer earns the booking path when they asked to schedule, or
@@ -922,6 +1004,7 @@ ${lines.join("\n")}`;
         state: stateAfter(unknown),
         assessment: summarise(assessment),
         nextQuestion: null,
+        preliminaryGuidance: null,
         message: unknown,
         canonicalResponseId: null,
         // Not knowing something is not a reason to sell a visit — unless the
@@ -955,6 +1038,7 @@ ${lines.join("\n")}`;
         state: stateAfter(message),
         assessment: summarise(assessment),
         nextQuestion: null,
+        preliminaryGuidance: null,
         message,
         canonicalResponseId: null,
         consultationCta: { recommended: false, reasons: [] },
@@ -967,26 +1051,42 @@ ${lines.join("\n")}`;
     const status = productStatus;
 
     if (status === "NEED_MORE_INFORMATION" && selection.next) {
-      trace.setRoute("question");
       const question = selection.next;
+
+      // THE QUESTION IS ASKED EITHER WAY. This decides only what precedes it.
+      // The counterfactual gate has already ruled that this fact materially
+      // changes the direction, and nothing here softens that — a turn with
+      // guidance still asks, still records the question, and still reports
+      // NEED_MORE_INFORMATION.
+      const guidance = preliminaryGuidance(assessment);
+      trace.setRoute(guidance ? "guided-question" : "question");
+
       const phrased = await phraseSafely(
-        deps.prompts.questionSystemPrompt(guardrails, corrected, history),
+        guidance
+          ? deps.prompts.preliminaryGuidanceSystemPrompt(guardrails, corrected, history)
+          : deps.prompts.questionSystemPrompt(guardrails, corrected, history),
         deps.prompts.phrasingUserMessage({
           "recent conversation": history || undefined,
           "their message": input.message,
+          "what the analysis already supports": guidance ? describeGuidance(guidance) : undefined,
           "question to ask": question.canonical,
           "why it matters": question.materialTo.length
             ? `It could change whether these fit: ${question.materialTo.join(", ")}.`
             : undefined,
         }),
-        QUESTION_TOKENS,
-        MAX_QUESTION_CHARS,
-        fallbackQuestion(question.canonical),
+        // A guidance turn says two things rather than one, so it gets the
+        // budget of an answer instead of the budget of a bare question. No
+        // existing limit moves.
+        guidance ? ANSWER_TOKENS : QUESTION_TOKENS,
+        guidance ? MAX_ANSWER_CHARS : MAX_QUESTION_CHARS,
+        guidance
+          ? fallbackPreliminary(guidance, question.canonical)
+          : fallbackQuestion(question.canonical),
         interventions
       );
 
       return {
-        // route: question
+        // route: question | guided-question
         status: "NEED_MORE_INFORMATION",
         state: {
           ...stateAfter(phrased),
@@ -999,8 +1099,13 @@ ${lines.join("\n")}`;
           phrased,
           materialTo: question.materialTo,
         },
+        preliminaryGuidance: guidance,
         message: phrased,
         canonicalResponseId: null,
+        // UNCHANGED, AND DELIBERATELY SO. Naming a direction we are leaning
+        // toward is not a reason to sell a visit; Phase 2's rule that the
+        // booking prompt has to be earned still owns this decision, and
+        // NEED_MORE_INFORMATION never earns it on its own.
         consultationCta: consultationIntent(assessment, status, askedToSchedule),
         guardrailInterventions: interventions,
         error: null,
@@ -1044,6 +1149,7 @@ ${lines.join("\n")}`;
       state: stateAfter(message),
       assessment: summarise(assessment),
       nextQuestion: null,
+      preliminaryGuidance: null,
       message,
       canonicalResponseId: null,
       consultationCta: consultationIntent(assessment, status, askedToSchedule),
@@ -1071,6 +1177,7 @@ export function unavailable(
     state,
     assessment: null,
     nextQuestion: null,
+    preliminaryGuidance: null,
     canonicalResponseId: null,
     message:
       "We could not work through that just now. Our team can go through it with you directly — would you like to schedule a consultation?",
