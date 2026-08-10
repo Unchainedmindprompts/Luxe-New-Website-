@@ -483,9 +483,38 @@ export function createAdvisor(deps: AdvisorDeps) {
   ];
 
   /**
-   * Runs one phrasing call, validates it, retries once on violation, and falls
-   * back to deterministic text if the retry also violates. The violating text
-   * is never returned and never logged.
+   * What to add to a retry so it is not a coin flip.
+   *
+   * The retry used to re-send the identical prompt and hope. Live evaluation
+   * showed exactly what that buys: a plain product comparison crossed two
+   * guardrails, was regenerated with no idea why, crossed two more, and the
+   * visitor was told "I'd rather have someone confirm that than guess" about a
+   * question the knowledge base answers in full — thirteen seconds and three
+   * model calls to reach a worse reply than the first attempt.
+   *
+   * This goes in the DYNAMIC half, which is the point of splitting the prompt:
+   * the retry keeps the same cached prefix and only the turn's material grows.
+   */
+  function retryGuidance(violated: readonly string[]): string {
+    if (!violated.length) return "";
+    const byId = new Map(deps.knowledge.guardrails.map((g) => [g.id, g] as const));
+    const lines = violated.map((id) => {
+      const guardrail = byId.get(id);
+      return guardrail
+        ? `- ${guardrail.prohibition} Instead: ${guardrail.permittedInstead}`
+        : `- ${id.replace(/-/g, " ")}.`;
+    });
+    return `YOUR LAST ATTEMPT WAS REJECTED AND DISCARDED
+
+It crossed the following. Write the reply again — same substance, same length, same usefulness — with that claim removed rather than the whole answer withdrawn. Losing one sentence is the fix; refusing to answer is not.
+
+${lines.join("\n")}`;
+  }
+
+  /**
+   * Runs one phrasing call, validates it, retries once with the reason it
+   * failed, and falls back to deterministic text if the retry also violates.
+   * The violating text is never returned and never logged.
    */
   async function phraseSafely(
     system: SystemPrompt,
@@ -495,12 +524,17 @@ export function createAdvisor(deps: AdvisorDeps) {
     fallback: string,
     interventions: string[]
   ): Promise<string> {
+    const violated: string[] = [];
     for (let attempt = 0; attempt < 2; attempt++) {
+      const guidance = retryGuidance(violated);
+      const prompt: SystemPrompt = guidance
+        ? { stable: system.stable, dynamic: [system.dynamic, guidance].filter(Boolean).join("\n\n") }
+        : system;
       let raw: string;
       try {
         trace.countProviderCall();
         raw = await trace.mark(attempt === 0 ? "phrasing" : "phrasing-retry", () =>
-          deps.provider.phrase({ system, userMessage, maxTokens, signal: deps.signal })
+          deps.provider.phrase({ system: prompt, userMessage, maxTokens, signal: deps.signal })
         );
       } catch (error) {
         if (providerFailureCode(error)) {
@@ -516,7 +550,9 @@ export function createAdvisor(deps: AdvisorDeps) {
         allowedBrands: deps.allowedBrands,
       });
       if (!violations.length) return text;
+      violated.length = 0;
       for (const v of violations) {
+        violated.push(v.guardrailId);
         if (!interventions.includes(v.guardrailId)) interventions.push(v.guardrailId);
       }
     }

@@ -2775,17 +2775,64 @@ await test("125 caching is claimed only where the prefix actually clears the flo
   t.ok(/cache_control/.test(source), "the stable half is never marked cacheable");
   t.ok(/cache_read_input_tokens/.test(source), "the adapter cannot tell a hit from a miss");
 
-  // The gate the adapter actually applies, mirrored here so the claim in the
-  // Phase 4 report is pinned rather than asserted.
-  const floor = 1024 * 4 * 1.5;
-  const extractionStable = prompts.extractionSystemPrompt(VOCABULARY, "").stable.length;
-  t.ok(extractionStable >= floor, `extraction prefix (${extractionStable}) is below the cache floor`);
-  for (const [name, build] of PHRASING_BUILDERS) {
-    t.ok(
-      build().stable.length < floor,
-      `${name} now clears the cache floor — caching it is worth re-measuring, not assuming`
+  // The ratio is measured, not guessed. `messages.count_tokens` on this model
+  // puts every prompt here between 2.91 and 3.03 chars per token; an earlier
+  // estimate of 4.0 would have excluded four of five phrasing prompts from
+  // caching on arithmetic nobody had checked.
+  t.ok(/MEASURED_CHARS_PER_TOKEN_CEILING = 3.05/.test(source), "the cache gate is not calibrated on a measured ratio");
+
+  // The gate the adapter actually applies, mirrored here so the Phase 4 report
+  // is pinned by test rather than asserted in prose.
+  const floor = 1024 * 3.05;
+  const measured = { extraction: 4443, recommendation: 1396, guidance: 1201, answer: 1190, question: 853, discovery: 1082 };
+  const stables = {
+    extraction: prompts.extractionSystemPrompt(VOCABULARY, "").stable,
+    ...Object.fromEntries(PHRASING_BUILDERS.map(([name, build]) => [name, build().stable])),
+  };
+  for (const [name, stable] of Object.entries(stables)) {
+    const cached = stable.length >= floor;
+    t.equal(
+      cached,
+      measured[name] >= 1024,
+      `${name} is ${cached ? "marked cacheable" : "not cached"} but measures ${measured[name]} tokens`
     );
+    // The char gate must never claim a prefix the real tokeniser would reject.
+    if (cached) t.ok(measured[name] >= 1024, `${name} is marked cacheable below the model's floor`);
   }
+});
+
+await test("125a a rejected reply is retried with the reason, on the same cached prefix", async (t) => {
+  // Live evaluation caught the failure this fixes: a plain product comparison
+  // crossed two guardrails, was regenerated from a byte-identical prompt with
+  // no idea why, crossed two more, and the visitor was told we would rather
+  // not guess — about a question the knowledge base answers in full.
+  const systems = [];
+  const provider = mockProvider({
+    extractions: [{ room: "living", priorities: ["aesthetics"] }],
+    phrasings: [
+      "Cellular shades run about $400 a window.",
+      "Cellular shades are the direction we would look at first.",
+    ],
+  });
+  const inner = provider.phrase.bind(provider);
+  provider.phrase = async (input) => {
+    systems.push(input.system);
+    return inner(input);
+  };
+  const result = await runToRecommendation(provider, "What would you put in the living room?");
+  t.equal(systems.length, 2, `expected one retry, saw ${systems.length} phrasing call(s)`);
+  t.ok(!/REJECTED/.test(renderSystemPrompt(systems[0])), "the first attempt was told it had already failed");
+  t.ok(/YOUR LAST ATTEMPT WAS REJECTED/.test(renderSystemPrompt(systems[1])), "the retry was not told why it is retrying");
+  t.ok(/pric/i.test(renderSystemPrompt(systems[1])), "the retry was not told which rule it crossed");
+
+  // The reason goes in the dynamic half, so the cached prefix is untouched.
+  t.equal(systems[0].stable, systems[1].stable, "the retry invalidated the cached prefix");
+  t.ok(/REJECTED/.test(systems[1].dynamic), "the retry note was not confined to the per-turn half");
+
+  // And the retry is told to lose the claim, not the answer.
+  t.ok(/refusing to answer is not/.test(systems[1].dynamic), "the retry may withdraw the whole reply");
+  t.ok(!/\$400/.test(result.message), "the violating text reached the homeowner");
+  t.ok(result.guardrailInterventions.includes("no-fabricated-pricing"), "the violation was not recorded");
 });
 
 await test("126 hard truth constraints are stated once, first, and everywhere", async (t) => {

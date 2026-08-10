@@ -116,13 +116,22 @@ function toProviderError(error: unknown): ProviderError {
  * marker that does nothing.
  *
  * The char figure is the gate actually used, because it needs no tokeniser at
- * request time. Four characters per token is the conservative direction for
- * English prose (measured on these prompts: 13,752 chars ≈ 3,438 tokens, so
- * 4.0), and the 1.5× margin means a prompt has to shrink by a third before the
- * gate is wrong in the direction that costs anything.
+ * request time. The ratio is MEASURED, not assumed: every prompt in this
+ * advisor was run through `messages.count_tokens` on this model and came back
+ * between 2.91 and 3.03 characters per token. An earlier guess of 4.0 was
+ * wrong by half and would have excluded four of the five phrasing prompts from
+ * caching on the strength of arithmetic nobody had checked.
+ *
+ * 3.05 is the ceiling used here — above every measured ratio, so a prompt that
+ * clears this gate is genuinely over the floor rather than probably over it,
+ * and tight enough that the shortest qualifying prompt (discovery, 1,082
+ * tokens) is not excluded by rounding. Being wrong in the other direction is
+ * cheap: a marker on too short a prefix is ignored and the request proceeds
+ * normally, so the gate is about not claiming a saving that is not happening.
  */
 const CACHE_MINIMUM_TOKENS = 1024;
-const CACHE_MINIMUM_CHARS = CACHE_MINIMUM_TOKENS * 4 * 1.5;
+const MEASURED_CHARS_PER_TOKEN_CEILING = 3.05;
+const CACHE_MINIMUM_CHARS = CACHE_MINIMUM_TOKENS * MEASURED_CHARS_PER_TOKEN_CEILING;
 
 /**
  * Renders a system prompt as Anthropic content blocks, marking the stable half
