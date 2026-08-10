@@ -241,7 +241,7 @@ function HomeownerSaid({ text }: { text: string }) {
  */
 function inlineLeadPlacement(turn: AdvisorTurn | null | undefined): LeadPlacement | null {
   if (!turn) return null;
-  if (turn.status === "RECOMMENDATION_READY") return "recommendation";
+  if (turn.status === "RECOMMENDATION_READY") return turn.offerConsultation ? "recommendation" : null;
   // A plain answer earns the callback option only where booking was already
   // judged relevant; otherwise the visitor asked a question and got a form.
   if (turn.status === "ANSWERED") return turn.offerConsultation ? "guidance" : null;
@@ -387,14 +387,22 @@ function RecommendationPanel({
         </div>
       )}
 
-      <div className="px-5 py-5 bg-warm-white">
-        <BookLink placement="recommendation" status={turn.status} turns={turns} variant="solid" />
-        <p className="text-warm-gray-500 text-xs mt-3 leading-relaxed">
-          Seeing the windows in the room is how we confirm fit, measure properly, and review fabrics
-          in your home&rsquo;s actual light.
-        </p>
-        {offerCallback && <ContactRequest placement="recommendation" turn={turn} turns={turns} />}
-      </div>
+      {/* ONE DECISION MODEL FOR EVERY CONSULTATION PROMPT.
+          This card used to show the CTA unconditionally while the footer and
+          the inline links obeyed `offerConsultation`, which made four surfaces
+          answering to two different rules. They all answer to the server now:
+          a recommendation that genuinely needs someone at the window offers
+          the visit, and one that does not simply stands as a recommendation. */}
+      {turn.offerConsultation && (
+        <div className="px-5 py-5 bg-warm-white">
+          <BookLink placement="recommendation" status={turn.status} turns={turns} variant="solid" />
+          <p className="text-warm-gray-500 text-xs mt-3 leading-relaxed">
+            Seeing the windows in the room is how we confirm fit, measure properly, and review
+            fabrics in your home&rsquo;s actual light.
+          </p>
+          {offerCallback && <ContactRequest placement="recommendation" turn={turn} turns={turns} />}
+        </div>
+      )}
     </section>
   );
 }

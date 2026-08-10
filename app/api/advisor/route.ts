@@ -16,6 +16,7 @@ import { NextResponse } from "next/server";
 import { BUSINESS } from "@/lib/constants";
 import { assess } from "@/lib/advisor/engine";
 import { LUXE_KNOWLEDGE } from "@/lib/advisor/knowledge";
+import { unknownAnswerText } from "@/lib/advisor/knowledge/answers";
 import { createAdvisor, unavailable, MAX_TURNS } from "@/lib/advisor/server/advisor";
 import {
   EXTRACTION_FIELDS,
@@ -31,6 +32,7 @@ import {
   describeDirection,
   selectAnswerTopics,
   selectNamedDirections,
+  selectVerifiedAnswer,
 } from "@/lib/advisor/server/answer-selection";
 import { applyUpdates, projectFacts, validateLedger } from "@/lib/advisor/server/ledger";
 import {
@@ -180,6 +182,8 @@ export async function POST(request: Request) {
     selectAnswerTopics,
     selectNamedDirections,
     describeDirection,
+    selectVerifiedAnswer,
+    unknownAnswer: unknownAnswerText({ phone: BUSINESS.phone, email: BUSINESS.email }),
     prompts: {
       extractionSystemPrompt,
       extractionUserMessage,

@@ -35,6 +35,7 @@ import type {
 import type { FactUpdate, MessageIntent, ValidatedUpdates } from "./extraction";
 import type { ScoredTopic } from "./answer-selection";
 import type { TranscriptMessage } from "./transcript";
+import type { Trace } from "./trace";
 import type { FactLedger, LedgerApplication } from "./ledger";
 import type { ClassifiedQuestion, QuestionTier } from "./counterfactual";
 import type { BrandResponseMatch } from "./brand-response";
@@ -105,6 +106,14 @@ export interface AdvisorDeps {
     directions: AdvisorKnowledge["directions"]
   ) => readonly ProductDirection[];
   readonly describeDirection: (direction: ProductDirection) => string;
+  /** An approved answer good enough to serve without any model call. */
+  readonly selectVerifiedAnswer: (
+    message: string,
+    topics: AdvisorKnowledge["answers"],
+    directions: AdvisorKnowledge["directions"]
+  ) => AdvisorKnowledge["answers"][number] | null;
+  /** Deterministic wording for "we do not have that verified". */
+  readonly unknownAnswer: string;
   /** Ledger operations. Provenance lives here and never reaches the engine. */
   readonly ledger: {
     validate: (raw: unknown) => FactLedger;
@@ -190,6 +199,8 @@ export interface AdvisorDeps {
     approvedBrands: readonly string[]
   ) => BrandResponseMatch | null;
   readonly signal?: AbortSignal;
+  /** Optional per-turn timing. Shape only, never content. */
+  readonly trace?: Trace;
 }
 
 /**
@@ -400,6 +411,32 @@ export interface AdvisorTurnInput {
 
 export function createAdvisor(deps: AdvisorDeps) {
   /**
+   * One advisor is built per request by the route, so a turn-scoped trace can
+   * live here and be shared by the closures below without threading it through
+   * every signature.
+   *
+   * The no-op is written inline rather than imported: every reasoning module in
+   * this directory keeps its imports type-only so the `.mjs` harnesses can load
+   * the whole path with no build step, and one runtime import would break that
+   * for all of them.
+   */
+  const trace: Trace = deps.trace ?? {
+    mark: async (_stage, work) => work(),
+    countProviderCall: () => undefined,
+    setRoute: () => undefined,
+    setDeterministic: () => undefined,
+    setFellBack: () => undefined,
+    done: () => ({
+      route: "unavailable",
+      stages: {},
+      providerCalls: 0,
+      deterministic: false,
+      fellBack: false,
+      totalMs: 0,
+    }),
+  };
+
+  /**
    * Runs one phrasing call, validates it, retries once on violation, and falls
    * back to deterministic text if the retry also violates. The violating text
    * is never returned and never logged.
@@ -416,9 +453,15 @@ export function createAdvisor(deps: AdvisorDeps) {
     for (let attempt = 0; attempt < 2; attempt++) {
       let raw: string;
       try {
-        raw = await deps.provider.phrase({ system, userMessage, maxTokens, signal: deps.signal });
+        trace.countProviderCall();
+        raw = await trace.mark(attempt === 0 ? "phrasing" : "phrasing-retry", () =>
+          deps.provider.phrase({ system, userMessage, maxTokens, signal: deps.signal })
+        );
       } catch (error) {
-        if (providerFailureCode(error)) return fallback;
+        if (providerFailureCode(error)) {
+          trace.setFellBack();
+          return fallback;
+        }
         throw error;
       }
       const text = deps.sanitizeForOutput(raw, maxChars);
@@ -432,6 +475,7 @@ export function createAdvisor(deps: AdvisorDeps) {
         if (!interventions.includes(v.guardrailId)) interventions.push(v.guardrailId);
       }
     }
+    trace.setFellBack();
     return fallback;
   }
 
@@ -451,9 +495,18 @@ export function createAdvisor(deps: AdvisorDeps) {
     history: string,
     retrievalText: string
   ): Promise<{ message: string; invitesConsultation: boolean } | null> {
-    // Matched against the recent exchange as well as the current message, so a
-    // follow-up that names nothing still resolves to what it is following up on.
-    const topics = deps.selectAnswerTopics(retrievalText, deps.knowledge.answers);
+    // APPROVED TOPICS COME FROM THE CURRENT MESSAGE ONLY.
+    //
+    // Widening topic retrieval to the recent exchange — as Phase 1 did — meant
+    // a new, unrelated question inherited the previous one's topic: asking
+    // "do you have a showroom?" straight after "what are your hours?" matched
+    // the hours answer again, and paid two model calls to talk its way out of
+    // it. Business questions are self-contained; nobody asks the opening hours
+    // as a follow-up.
+    const topics = deps.selectAnswerTopics(message, deps.knowledge.answers);
+    // PRODUCTS COME FROM THE CONVERSATION, because that is where a referential
+    // follow-up points. "Why?" and "what about insulation?" name nothing at
+    // all, and the products they are about were named a turn ago.
     const named = deps.selectNamedDirections(retrievalText, deps.knowledge.directions);
     if (!topics.length && !named.length) return null;
 
@@ -498,6 +551,48 @@ export function createAdvisor(deps: AdvisorDeps) {
       (id) => typeof id === "string"
     );
 
+    /**
+     * An approved answer, served without asking a model anything.
+     *
+     * Runs before extraction because extraction is the expensive half — 2.3 to
+     * 4.4 seconds measured — and a question the server can already answer word
+     * for word does not need a fact delta first. The gate is deliberately
+     * strict (see `selectVerifiedAnswer`); anything it declines takes the full
+     * path, so the cost of being wrong is latency rather than a bad answer.
+     */
+    const verified = deps.selectVerifiedAnswer(
+      input.message,
+      deps.knowledge.answers,
+      deps.knowledge.directions
+    );
+    if (verified) {
+      trace.setRoute("fast-answer");
+      trace.setDeterministic();
+      const priorFacts = deps.ledger.project(priorLedger);
+      const answer = deps.sanitizeForOutput(verified.answer, MAX_ANSWER_CHARS);
+      return {
+        status: "ANSWERED",
+        state: {
+          ledger: priorLedger as Record<string, unknown>,
+          facts: priorFacts,
+          turnCount: turnCount + 1,
+          askedQuestionIds,
+          unrankedConcerns: priorState.unrankedConcerns ?? [],
+          transcript: deps.transcript.append(priorTranscript, input.message, answer),
+        },
+        assessment: summarise(deps.assess(priorFacts, deps.knowledge)),
+        nextQuestion: null,
+        message: answer,
+        canonicalResponseId: null,
+        consultationCta: verified.invitesConsultation
+          ? { recommended: true, reasons: ["answer-invites-consultation"] }
+          : { recommended: false, reasons: [] },
+        guardrailInterventions: interventions,
+        error: null,
+        diagnostics: trace.done(),
+      };
+    }
+
     // ── 1. extraction — a delta, not a snapshot ───────────────────────────
     //
     // One call. The model lists only what THIS message supports, each update
@@ -507,7 +602,8 @@ export function createAdvisor(deps: AdvisorDeps) {
     // quietly asserting a room.
     let validated: ValidatedUpdates;
     try {
-      const raw = await deps.provider.extract({
+      trace.countProviderCall();
+      const raw = await trace.mark("extraction", () => deps.provider.extract({
         system: deps.prompts.extractionSystemPrompt(
           deps.describeVocabulary(deps.knowledge.priorities),
           deps.ledger.describe(priorLedger),
@@ -516,9 +612,42 @@ export function createAdvisor(deps: AdvisorDeps) {
         userMessage: deps.prompts.extractionUserMessage(history, input.message),
         schema: deps.buildDeltaSchema(),
         signal: deps.signal,
-      });
+      }));
       validated = deps.validateUpdates(raw, input.message);
     } catch (error) {
+      // VERIFIED KNOWLEDGE MUST NOT VANISH BECAUSE AN UNRELATED CALL FAILED.
+      // The fast path above already covers the clearest questions; this covers
+      // the rest — anything with an approved answer is still answerable when
+      // extraction times out, and telling someone "I'd rather have someone
+      // confirm that" while holding the answer would be absurd.
+      const rescued = deps.selectAnswerTopics(input.message, deps.knowledge.answers);
+      if (rescued.length) {
+        trace.setRoute("fast-answer");
+        trace.setDeterministic();
+        const priorFacts = deps.ledger.project(priorLedger);
+        const answer = deps.sanitizeForOutput(rescued[0].topic.answer, MAX_ANSWER_CHARS);
+        return {
+          status: "ANSWERED",
+          state: {
+            ledger: priorLedger as Record<string, unknown>,
+            facts: priorFacts,
+            turnCount: turnCount + 1,
+            askedQuestionIds,
+            unrankedConcerns: priorState.unrankedConcerns ?? [],
+            transcript: deps.transcript.append(priorTranscript, input.message, answer),
+          },
+          assessment: summarise(deps.assess(priorFacts, deps.knowledge)),
+          nextQuestion: null,
+          message: answer,
+          canonicalResponseId: null,
+          consultationCta: rescued[0].topic.invitesConsultation
+            ? { recommended: true, reasons: ["answer-invites-consultation"] }
+            : { recommended: false, reasons: [] },
+          guardrailInterventions: interventions,
+          error: null,
+          diagnostics: trace.done(),
+        };
+      }
       const code = providerFailureCode(error);
       return unavailable(code ?? "extraction-failed", priorState);
     }
@@ -558,7 +687,7 @@ export function createAdvisor(deps: AdvisorDeps) {
     ].filter((concern) => !rankedNow.has(concern));
 
     // ── 2. deterministic assessment ────────────────────────────────────────
-    const assessment = deps.assess(facts, deps.knowledge);
+    const assessment = await trace.mark("assessment", async () => deps.assess(facts, deps.knowledge));
     const guardrails = assessment.applicableGuardrails;
     const allowedProductLabels = [
       ...assessment.strongCandidates,
@@ -573,7 +702,7 @@ export function createAdvisor(deps: AdvisorDeps) {
     // the direction actually moves. A question every answer leaves unchanged
     // costs the homeowner a turn and buys nothing.
     const verificationIds = new Set(assessment.verificationRequirements.map((v) => v.id));
-    const classified = deps.classifyQuestions({
+    const classified = await trace.mark("counterfactual", async () => deps.classifyQuestions({
       facts,
       assessment,
       knowledge: deps.knowledge,
@@ -584,7 +713,7 @@ export function createAdvisor(deps: AdvisorDeps) {
       isVerificationClass: (id) => deps.isVerificationClass(id, verificationIds),
       isListField: deps.isListField,
       allowedValues: deps.allowedValues,
-    });
+    }));
     const tiers = new Map(classified.map((q) => [q.id, q.tier] as const));
 
     const selection = deps.selectNextQuestion({
@@ -638,11 +767,14 @@ export function createAdvisor(deps: AdvisorDeps) {
 
     // ── 4. phrasing, validated ─────────────────────────────────────────────
     if (brandAnswer) {
+      trace.setRoute("brand-answer");
+      trace.setDeterministic();
       return {
         // A brand question asked and answered. It was reporting a product
         // status — the same kind of dishonesty GUIDANCE_READY was added to
         // fix — and offering a consultation off the back of "do you carry X",
         // which is a sales reflex rather than a next step that follows.
+        // route: brand-answer
         status: "ANSWERED",
         state: stateAfter(deps.sanitizeForOutput(brandAnswer.response, MAX_RECOMMENDATION_CHARS)),
         assessment: summarise(assessment),
@@ -652,6 +784,7 @@ export function createAdvisor(deps: AdvisorDeps) {
         consultationCta: { recommended: false, reasons: [] },
         guardrailInterventions: interventions,
         error: null,
+        diagnostics: trace.done(),
       };
     }
 
@@ -670,7 +803,9 @@ export function createAdvisor(deps: AdvisorDeps) {
         deps.transcript.retrievalContext(priorTranscript, input.message)
       );
       if (answered) {
+        trace.setRoute("answer");
         return {
+        // route: answer
           status: "ANSWERED",
           state: stateAfter(answered.message),
           assessment: summarise(assessment),
@@ -687,6 +822,7 @@ export function createAdvisor(deps: AdvisorDeps) {
               : { recommended: false, reasons: [] },
           guardrailInterventions: interventions,
           error: null,
+          diagnostics: trace.done(),
         };
       }
       // NOTHING APPROVED COVERS IT — AND THAT IS STILL AN ANSWER.
@@ -700,19 +836,15 @@ export function createAdvisor(deps: AdvisorDeps) {
       // The phrasing prompt is handed no approved material, which is the state
       // it is already written for: it says plainly that it would rather have
       // someone confirm than guess, and it may not invent the answer.
-      const unknown = await phraseSafely(
-        deps.prompts.answerSystemPrompt("", guardrails, false, history),
-        deps.prompts.phrasingUserMessage({
-          "recent conversation": history || undefined,
-          "their question": input.message,
-        }),
-        ANSWER_TOKENS,
-        MAX_ANSWER_CHARS,
-        [],
-        ANSWER_FALLBACK,
-        interventions
-      );
+      // A MODEL IS NOT NEEDED TO SAY WE DO NOT KNOW. Phrasing this cost 2.7
+      // seconds to produce a sentence with no variable content in it — the
+      // server already knows the answer is "we have not got that verified".
+      // The wording is approved, so it is served rather than generated.
+      trace.setRoute("unknown");
+      trace.setDeterministic();
+      const unknown = deps.sanitizeForOutput(deps.unknownAnswer, MAX_ANSWER_CHARS);
       return {
+        // route: unknown
         status: "ANSWERED",
         state: stateAfter(unknown),
         assessment: summarise(assessment),
@@ -726,11 +858,13 @@ export function createAdvisor(deps: AdvisorDeps) {
           : { recommended: false, reasons: [] },
         guardrailInterventions: interventions,
         error: null,
+        diagnostics: trace.done(),
       };
     }
 
     // ── 3c. they want help and do not know where to start ──────────────────
     if (validated.intent === "discovery" && assessment.strongCandidates.length === 0) {
+      trace.setRoute("discovery");
       const message = await phraseSafely(
         deps.prompts.discoverySystemPrompt(guardrails, history),
         deps.prompts.phrasingUserMessage({
@@ -744,6 +878,7 @@ export function createAdvisor(deps: AdvisorDeps) {
         interventions
       );
       return {
+        // route: discovery
         status: "ANSWERED",
         state: stateAfter(message),
         assessment: summarise(assessment),
@@ -753,12 +888,14 @@ export function createAdvisor(deps: AdvisorDeps) {
         consultationCta: { recommended: false, reasons: [] },
         guardrailInterventions: interventions,
         error: null,
+        diagnostics: trace.done(),
       };
     }
 
     const status = productStatus;
 
     if (status === "NEED_MORE_INFORMATION" && selection.next) {
+      trace.setRoute("question");
       const question = selection.next;
       const phrased = await phraseSafely(
         deps.prompts.questionSystemPrompt(guardrails, corrected, history),
@@ -778,6 +915,7 @@ export function createAdvisor(deps: AdvisorDeps) {
       );
 
       return {
+        // route: question
         status: "NEED_MORE_INFORMATION",
         state: {
           ...stateAfter(phrased),
@@ -795,12 +933,14 @@ export function createAdvisor(deps: AdvisorDeps) {
         consultationCta: consultationIntent(assessment, status, askedToSchedule),
         guardrailInterventions: interventions,
         error: null,
+        diagnostics: trace.done(),
       };
     }
 
     // A turn with no strong candidate must not be handed the recommendation
     // prompt: it opens with "lead with the direction that fits", which is the
     // one claim this turn is not entitled to make.
+    trace.setRoute(status === "GUIDANCE_READY" ? "guidance" : "recommendation");
     const givingGuidance = status === "GUIDANCE_READY";
     const fallback = givingGuidance
       ? fallbackGuidance(assessment)
@@ -839,6 +979,7 @@ export function createAdvisor(deps: AdvisorDeps) {
       consultationCta: consultationIntent(assessment, status, askedToSchedule),
       guardrailInterventions: interventions,
       error: null,
+      diagnostics: trace.done(),
     };
   }
 

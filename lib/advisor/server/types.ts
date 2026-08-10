@@ -16,6 +16,7 @@
  * the domain layer already understands.
  */
 import type { TranscriptMessage } from "./transcript";
+import type { TurnTrace } from "./trace";
 import type {
   DirectionId,
   FactKey,
@@ -186,6 +187,12 @@ export interface AdvisorResponse {
    * measure how often the model tries to cross a line.
    */
   readonly guardrailInterventions: readonly string[];
+  /**
+   * Where this turn spent its time. Shape only — durations, counts, a route
+   * name. Never reaches the browser: the client contract is an allowlist and
+   * does not know this field exists.
+   */
+  readonly diagnostics?: TurnTrace;
   /** Populated only when status is ADVISOR_UNAVAILABLE. Never a provider message. */
   readonly error: AdvisorErrorCode | null;
 }

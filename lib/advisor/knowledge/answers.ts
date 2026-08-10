@@ -270,3 +270,19 @@ export function answerTopicsFromBusiness(input: {
     },
   ];
 }
+
+/**
+ * What Luxe says when it does not have something verified.
+ *
+ * NOT GENERATED. The server already knows the answer is "we have not got that
+ * confirmed", and paying a large model 2.7 seconds to phrase a sentence with no
+ * variable content in it was latency spent on nothing. Approved once, served
+ * verbatim.
+ *
+ * It offers a way to get the answer, which is not the same as a sales pitch:
+ * pointing someone at a phone number because we could not answer them is
+ * service, and turning "I don't know" into "book a consultation" would not be.
+ */
+export function unknownAnswerText(contact: { readonly phone: string; readonly email: string }): string {
+  return `That's not something I have verified on hand, and I'd rather not guess at it. Our team can confirm it for you — ${contact.phone} or ${contact.email}.`;
+}

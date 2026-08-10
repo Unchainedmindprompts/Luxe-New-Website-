@@ -56,7 +56,7 @@ const load = (p) => import(pathToFileURL(join(ROOT, p)).href);
 
 const [
   products, priorities, rules, guardrailKnowledge, brandKnowledge, answerKnowledge,
-  engine, extraction, ledgerModule, transcriptModule, counterfactual, questionSelection,
+  engine, extraction, ledgerModule, transcriptModule, traceModule, counterfactual, questionSelection,
   answerSelection, guardrails, prompts, advisorModule, providerModule, brandResponse,
   productData, areaData, homepageFaqs, constants,
 ] = await Promise.all([
@@ -70,6 +70,7 @@ const [
   load("lib/advisor/server/extraction.ts"),
   load("lib/advisor/server/ledger.ts"),
   load("lib/advisor/server/transcript.ts"),
+  load("lib/advisor/server/trace.ts"),
   load("lib/advisor/server/counterfactual.ts"),
   load("lib/advisor/server/question-selection.ts"),
   load("lib/advisor/server/answer-selection.ts"),
@@ -132,7 +133,8 @@ const describeLedger = (ledger) =>
     .filter(Boolean)
     .join("\n");
 
-const advisor = advisorModule.createAdvisor({
+const makeAdvisor = (trace) => advisorModule.createAdvisor({
+  trace,
   provider: providerModule.createAnthropicProvider(),
   knowledge: KNOWLEDGE,
   assess: engine.assess,
@@ -145,6 +147,8 @@ const advisor = advisorModule.createAdvisor({
   selectAnswerTopics: answerSelection.selectAnswerTopics,
   selectNamedDirections: answerSelection.selectNamedDirections,
   describeDirection: answerSelection.describeDirection,
+  selectVerifiedAnswer: answerSelection.selectVerifiedAnswer,
+  unknownAnswer: answerKnowledge.unknownAnswerText({ phone: constants.BUSINESS.phone, email: constants.BUSINESS.email }),
   transcript: {
     validate: transcriptModule.validateTranscript,
     append: transcriptModule.appendExchange,
@@ -256,6 +260,23 @@ const CONVERSATIONS = [
     ],
   },
   {
+    name: "phase 3 — latency by route",
+    turns: [
+      { say: "What are your hours?", watch: "verified answer: expect 0 model calls" },
+      { say: "Do you have a showroom?", watch: "unknown: expect extraction only" },
+      { say: "What's the difference between roller and cellular shades?", watch: "genuine reasoning: 2 calls" },
+      { say: "Which gives me the best view?", watch: "contextual follow-up" },
+      { say: "What about insulation?", watch: "contextual follow-up" },
+    ],
+  },
+  {
+    name: "phase 3 — project reasoning keeps its calls",
+    turns: [
+      { say: "I have huge west-facing windows and the heat is terrible, but I don't want to lose my lake view." },
+      { say: "What would you recommend?", watch: "real reasoning; slower is acceptable here" },
+    ],
+  },
+  {
     name: "changing rooms without losing the project",
     turns: [
       { say: "West-facing living room, brutal afternoon heat." },
@@ -284,8 +305,9 @@ for (const conversation of selected) {
   for (const [index, turn] of conversation.turns.entries()) {
     const started = Date.now();
     let result;
+    const trace = traceModule.createTrace(() => Date.now());
     try {
-      result = await advisor.runTurn({ message: turn.say, state });
+      result = await makeAdvisor(trace).runTurn({ message: turn.say, state });
     } catch (error) {
       console.log(`\n  TURN ${index + 1} THREW  ${error?.code ?? error?.name ?? error}`);
       break;
@@ -305,7 +327,18 @@ for (const conversation of selected) {
       console.log("  HISTORY IN   (none — first turn)");
     }
     console.log(`  SAID         ${turn.say}`);
+    const d = result.diagnostics;
     console.log(`  STATUS       ${result.status}   (${(elapsed / 1000).toFixed(1)}s)`);
+    console.log(
+      `  COST         ${d?.providerCalls ?? "?"} model call(s)   route=${d?.route ?? "?"}` +
+        (d?.deterministic ? "   DETERMINISTIC" : "") + (d?.fellBack ? "   fell-back" : "")
+    );
+    if (d) {
+      console.log(
+        "  BREAKDOWN    " +
+          Object.entries(d.stages).map(([k, v]) => `${k} ${Math.round(v)}ms`).join("  ")
+      );
+    }
     console.log(`  FACTS        ${JSON.stringify(result.state.facts ?? {})}`);
     if (result.assessment) {
       console.log(`  PRIMARY      ${result.assessment.primaryRecommendation?.label ?? "(none)"}`);

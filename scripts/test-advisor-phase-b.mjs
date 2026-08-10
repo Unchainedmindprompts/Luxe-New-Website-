@@ -25,7 +25,7 @@ const read = (p) => readFileSync(join(ROOT, p), "utf8");
 const [
   products, priorities, rules, guardrailKnowledge,
   engine, extraction, questionSelection, guardrails, prompts, advisorModule, limits, ledgerModule, counterfactual, brandKnowledge, brandResponse,
-  answerKnowledge, answerSelection, transcriptModule, productData, areaData, homepageFaqs, constants,
+  answerKnowledge, answerSelection, transcriptModule, traceModule, productData, areaData, homepageFaqs, constants,
 ] = await Promise.all([
   import("../lib/advisor/knowledge/products.ts"),
   import("../lib/advisor/knowledge/priorities.ts"),
@@ -45,6 +45,7 @@ const [
   import("../lib/advisor/knowledge/answers.ts"),
   import("../lib/advisor/server/answer-selection.ts"),
   import("../lib/advisor/server/transcript.ts"),
+  import("../lib/advisor/server/trace.ts"),
   import("../lib/product-data.ts"),
   import("../lib/area-data.ts"),
   import("../lib/homepage-faqs.ts"),
@@ -181,6 +182,9 @@ const LEDGER = {
 function makeAdvisor(provider) {
   return advisorModule.createAdvisor({
     provider,
+    // A real trace, so tests can assert on model-call counts and which route
+    // answered rather than inferring either from output.
+    trace: traceModule.createTrace(() => Date.now()),
     knowledge: KNOWLEDGE,
     assess: engine.assess,
     validateUpdates: extraction.validateUpdates,
@@ -198,6 +202,8 @@ function makeAdvisor(provider) {
     selectAnswerTopics: answerSelection.selectAnswerTopics,
     selectNamedDirections: answerSelection.selectNamedDirections,
     describeDirection: answerSelection.describeDirection,
+    selectVerifiedAnswer: answerSelection.selectVerifiedAnswer,
+    unknownAnswer: answerKnowledge.unknownAnswerText({ phone: constants.BUSINESS.phone, email: constants.BUSINESS.email }),
     ledger: LEDGER,
     classifyQuestions: counterfactual.classifyQuestions,
     isVerificationClass: questionSelection.isVerificationClass,
@@ -1871,12 +1877,14 @@ await test("83 the consultation question is answered, not turned into qualificat
   t.equal(result.status, "ANSWERED", `expected ANSWERED, got ${result.status}`);
   t.equal(result.nextQuestion, null, "a qualification question was asked instead of answering");
 
-  const system = approvedFor(provider);
-  t.ok(/look at the windows and how you actually use the space/.test(system), "the approved consultation answer was not retrieved");
-  t.ok(/no pressure and no obligation/.test(system), "the no-pressure positioning was not included");
-  // The answer prompt forbids the qualification reflex outright.
-  t.ok(/Do not ask what room it is for/.test(system), "nothing stops the answer becoming an interrogation");
-  t.ok(!/strongest energy direction|Recommended direction/.test(system), "product reasoning leaked into a consultation answer");
+  // Served from approved wording with no model call at all — see test 115.
+  t.ok(/look at the windows and how you actually use the space/.test(result.message), "the approved consultation answer was not served");
+  t.ok(/no pressure and no obligation/.test(result.message), "the no-pressure positioning was lost");
+  t.equal(provider.calls.extract + provider.calls.phrase, 0, "a model was asked about a question the server had answered");
+
+  // The answer prompt still forbids the qualification reflex on the slow path.
+  const prompt = prompts.answerSystemPrompt("approved", KNOWLEDGE.guardrails, false, "");
+  t.ok(/Do not ask what room it is for/.test(prompt), "nothing stops a slow-path answer becoming an interrogation");
 });
 
 await test("84 approved business answers are retrieved for the question asked", async (t) => {
@@ -1893,7 +1901,11 @@ await test("84 approved business answers are retrieved for the question asked", 
   for (const [message, intent, expected] of cases) {
     const { result, provider } = await ask(message, intent);
     t.equal(result.status, "ANSWERED", `"${message}" produced ${result.status}`);
-    t.ok(expected.test(approvedFor(provider)), `"${message}" did not retrieve its approved answer`);
+    // Either served verbatim on the fast path, or phrased from the approved
+    // material on the slow one. Both count; what must never happen is the
+    // approved answer not reaching the customer at all.
+    const reachedCustomer = expected.test(result.message) || expected.test(approvedFor(provider));
+    t.ok(reachedCustomer, `"${message}" did not retrieve its approved answer`);
   }
 });
 
@@ -2365,15 +2377,22 @@ await test("108 an unanswerable business question does not become qualification"
   }
 });
 
-await test("109 not knowing is phrased from nothing, so nothing can be invented", async (t) => {
+await test("109 not knowing costs no model call and invents nothing", async (t) => {
   const provider = mockProvider({ extractions: [{ __intent: "general" }] });
-  await makeAdvisor(provider).runTurn({ message: "Do you have a showroom in Spokane?", state: {} });
-  const system = provider.calls.lastPhraseSystem;
-  t.ok(/nothing approved covers this question/.test(system), "the phrasing layer was not told it has no material");
-  t.ok(/rather have someone confirm it than guess/.test(system), "the prompt offers no honest way out");
-  t.ok(/Do not add a fact, a figure, a timescale, a product, a brand or a policy/.test(system), "the prompt permits invention");
-  // And it is not quietly handed the product analysis instead.
-  t.ok(!/best fit|Recommended direction|strongest energy/.test(system), "product reasoning leaked into an unknown answer");
+  const r = await makeAdvisor(provider).runTurn({ message: "Do you have a showroom in Spokane?", state: {} });
+
+  // Extraction still runs — the intent is what routes this. Phrasing does not:
+  // the server already knows the answer is "we have not got that verified".
+  t.equal(provider.calls.phrase, 0, "a large model was asked to phrase 'I don't know'");
+  t.ok(r.diagnostics?.deterministic, "the unknown answer was not marked deterministic");
+
+  // Truthful, and carrying a way to actually get the answer.
+  t.ok(/verified/i.test(r.message), "the reply does not say the information is unverified");
+  t.ok(/rather not guess/i.test(r.message), "the reply does not decline to guess");
+  t.ok(/208-660-8643/.test(r.message), "the reply offers no way to get the answer");
+  // Not a sales pitch, and nothing invented.
+  t.ok(!/consultation|book|schedule/i.test(r.message), "not knowing was turned into a sales prompt");
+  t.ok(!/showroom/i.test(r.message), "the reply invented a claim about the thing asked about");
 });
 
 await test("110 a known question still gets its approved answer", async (t) => {
@@ -2502,6 +2521,168 @@ await test("114 qualification still happens when it genuinely decides something"
       "the advisor queued a sweep of missing fields rather than the deciding one"
     );
   }
+});
+
+// ── 115-122: latency architecture ───────────────────────────────────────────
+//
+// Measured before any of this was written: extraction 2.3–4.4s, phrasing
+// 2.7–4.8s, and the entire deterministic pipeline about one millisecond. All
+// of the wait is model calls, so these tests count model calls.
+
+/** Runs a turn and reports what it cost. */
+async function costOf(message, intent, extraction = {}, state = {}) {
+  const provider = mockProvider({ extractions: [{ __intent: intent, ...extraction }] });
+  const r = await makeAdvisor(provider).runTurn({ message, state });
+  return { r, calls: provider.calls.extract + provider.calls.phrase, provider };
+}
+
+await test("115 a verified answer costs no model call at all", async (t) => {
+  for (const [message, fragment] of [
+    ["What are your hours?", /Monday to Friday/],
+    ["What areas do you serve?", /Coeur d'Alene/],
+    ["Do you offer financing?", /don't offer financing/],
+    ["Is there a project minimum?", /no project minimum/],
+    ["How much do window treatments cost?", /don't publish generic price ranges/],
+  ]) {
+    const { r, calls } = await costOf(message, "general");
+    t.equal(calls, 0, `"${message}" made ${calls} model call(s) for an answer we already had`);
+    t.equal(r.status, "ANSWERED", `"${message}" produced ${r.status}`);
+    t.ok(fragment.test(r.message), `"${message}" did not serve its approved wording`);
+    t.equal(r.diagnostics?.route, "fast-answer", `"${message}" did not take the fast path`);
+    t.ok(r.diagnostics?.deterministic, `"${message}" was not marked deterministic`);
+  }
+});
+
+await test("116 the fast path declines anything it should not answer alone", async (t) => {
+  // A compound message would lose its project half, because the fast path
+  // skips extraction entirely.
+  const compound = await costOf("What are your hours? My living room is hot.", "general");
+  t.ok(compound.calls > 0, "a compound message was answered without reading the project half");
+
+  // A follow-up means nothing on its own.
+  for (const message of ["Why?", "What about at night?", "Which is better?"]) {
+    const { calls } = await costOf(message, "product");
+    t.ok(calls > 0, `"${message}" was fast-pathed despite needing conversational context`);
+  }
+
+  // A product question wants the products discussed, not a policy quoted.
+  const product = await costOf("What is the difference between roller and cellular shades?", "product");
+  t.ok(product.calls > 0, "a product comparison was answered from a business FAQ");
+});
+
+await test("116a a new question does not inherit the previous topic", async (t) => {
+  // Phase 1 widened retrieval to the recent exchange so "why?" could resolve.
+  // The cost, found by tracing: an unrelated question straight afterwards
+  // inherited the last topic — "do you have a showroom?" matched the hours
+  // answer and spent two model calls talking its way out of it.
+  const provider = mockProvider({
+    extractions: [{ __intent: "general" }, { __intent: "general" }],
+  });
+  const advisor = makeAdvisor(provider);
+  const hours = await advisor.runTurn({ message: "What are your hours?", state: {} });
+  const showroom = await advisor.runTurn({ message: "Do you have a showroom?", state: hours.state });
+
+  t.equal(showroom.diagnostics?.route, "unknown", `a new question resolved as ${showroom.diagnostics?.route}`);
+  t.ok(!/Monday to Friday/.test(showroom.message), "the previous answer was served for a different question");
+  t.equal(provider.calls.phrase, 0, "a model was paid to decline a topic it should never have been given");
+
+  // The follow-up case Phase 1 fixed still works: products come from context.
+  const chat = mockProvider({
+    extractions: [{ __intent: "product" }, { __intent: "product" }],
+    phrasings: ["Cellular traps air; roller stays minimal.", "Cellular, for insulation."],
+  });
+  const chatAdvisor = makeAdvisor(chat);
+  const first = await chatAdvisor.runTurn({ message: "Roller or cellular shades?", state: {} });
+  const followUp = await chatAdvisor.runTurn({ message: "What about insulation?", state: first.state });
+  t.equal(followUp.status, "ANSWERED", "a referential follow-up stopped resolving");
+  t.ok(/[Cc]ellular/.test(chat.calls.lastPhraseSystem), "the follow-up lost the products from context");
+});
+
+await test("117 an unknown answer costs extraction only", async (t) => {
+  const { r, calls, provider } = await costOf("Do you have a showroom?", "general");
+  t.equal(provider.calls.phrase, 0, "a model was asked to phrase 'I don't know'");
+  t.equal(calls, 1, `unknown cost ${calls} model calls; extraction alone is enough to route it`);
+  t.equal(r.diagnostics?.route, "unknown", "the unknown route was not taken");
+  t.equal(r.nextQuestion, null, "an unknown answer asked a qualification question");
+  t.ok(!r.consultationCta.recommended, "not knowing was turned into a sales prompt");
+});
+
+await test("118 verified knowledge survives an extraction failure", async (t) => {
+  // Phase 3 requirement: a question we can answer must not become "I'd rather
+  // have someone confirm that" because an unrelated model call broke.
+  const broken = mockProvider({
+    failExtract: Object.assign(new Error("down"), { code: "provider-unavailable" }),
+  });
+  const r = await makeAdvisor(broken).runTurn({
+    message: "What is your lead time after ordering, roughly?",
+    state: {},
+  });
+  t.equal(r.status, "ANSWERED", `extraction failure produced ${r.status} for an answerable question`);
+  t.ok(/four weeks/.test(r.message), "the known answer was lost when extraction failed");
+  t.ok(!/rather have someone confirm/i.test(r.message), "a known answer was replaced by a failure message");
+
+  // Something we genuinely cannot answer still fails safely.
+  const hopeless = mockProvider({
+    failExtract: Object.assign(new Error("down"), { code: "provider-unavailable" }),
+  });
+  const unanswerable = await makeAdvisor(hopeless).runTurn({ message: "My bedroom is too bright.", state: {} });
+  t.equal(unanswerable.status, "ADVISOR_UNAVAILABLE", "a genuine failure was dressed up as an answer");
+  t.equal(unanswerable.assessment, null, "a failed turn invented an assessment");
+});
+
+await test("119 a phrasing failure keeps the deterministic answer", async (t) => {
+  const provider = mockProvider({
+    extractions: [{ __intent: "project", room: "nursery", exposure: "east", roomDarkening: "maximum", priorities: ["room-darkening"] }],
+    failPhrase: Object.assign(new Error("timeout"), { code: "provider-timeout" }),
+  });
+  const r = await makeAdvisor(provider).runTurn({ message: "Nursery faces east, needs to be dark.", state: {} });
+
+  t.equal(r.status, "RECOMMENDATION_READY", "the deterministic recommendation was thrown away with the prose");
+  t.ok(Boolean(r.assessment.primaryRecommendation), "the canonical direction was lost");
+  t.ok(r.message.length > 40, "the fallback is not a presentable answer");
+  // Never an internal term, never a sales redirect.
+  for (const leak of [/RECOMMENDATION_READY/, /guardrail/i, /undefined/, /\bnull\b/]) {
+    t.ok(!leak.test(r.message), `an internal term reached the customer: ${leak}`);
+  }
+  t.ok(r.diagnostics?.fellBack, "the fallback was not recorded");
+});
+
+await test("120 a safety violation can never be talked past", async (t) => {
+  // Two attempts, both violating, then the deterministic fallback — never the
+  // violating text.
+  const provider = mockProvider({
+    extractions: [{ __intent: "project", room: "living", exposure: "west", solarHeat: "severe", priorities: ["energy-efficiency"] }],
+    phrasings: ["This will drop the room by 15 degrees, guaranteed.", "Guaranteed 15 degrees cooler."],
+  });
+  const r = await makeAdvisor(provider).runTurn({ message: "West living room, brutal heat.", state: {} });
+  t.ok(!/15 degrees/.test(r.message), "a guaranteed temperature claim reached the customer");
+  t.ok(r.guardrailInterventions.includes("no-guaranteed-temperature-reduction"), "the violation was not recorded");
+  t.equal(provider.calls.phrase, 2, "a safety violation was accepted without a regeneration attempt");
+  t.ok(r.diagnostics?.fellBack, "the fallback was not recorded");
+});
+
+await test("121 timeouts are set against measured behaviour", async (t) => {
+  const source = read("lib/advisor/server/provider.ts");
+  t.ok(/EXTRACTION_TIMEOUT_MS = 18_000/.test(source), "the extraction timeout has drifted");
+  t.ok(/PHRASING_TIMEOUT_MS = 12_000/.test(source), "the phrasing timeout has drifted");
+  t.ok(!/withTimeout\(signal\)/.test(source), "both calls still share one timeout");
+  // Phrasing may be shorter precisely because it always has a fallback.
+  t.ok(/deterministic fallback ready on every route/.test(source), "the reasoning for the split is undocumented");
+});
+
+await test("122 the trace records shape, never content", async (t) => {
+  const { r } = await costOf("What are your hours?", "general");
+  const serialised = JSON.stringify(r.diagnostics);
+  t.ok(serialised.length > 0, "no diagnostics were produced");
+  for (const leak of [/hours\?/, /Monday/, /bedroom/, /message/i]) {
+    t.ok(!leak.test(serialised), `the trace carried customer or answer content: ${leak}`);
+  }
+  t.ok(typeof r.diagnostics?.totalMs === "number", "the trace has no total duration");
+  t.ok(typeof r.diagnostics?.providerCalls === "number", "the trace does not count provider calls");
+
+  // And it never reaches the browser: the client contract is an allowlist.
+  const contractSrc = read("lib/advisor/client/contract.ts");
+  t.ok(!/diagnostics/.test(contractSrc), "the client contract exposes the trace");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────

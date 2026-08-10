@@ -126,3 +126,77 @@ export function describeDirection(direction: ProductDirection): string {
   ];
   return lines.filter(Boolean).join("\n");
 }
+
+/**
+ * Deliberately stricter than `selectAnswerTopics`, because this one skips the
+ * model entirely and a wrong answer here is served verbatim.
+ */
+const FAST_PATH_MIN_SCORE = 4;
+
+/**
+ * Long enough for any single question — the longest approved one is about
+ * fifty characters — and short enough to exclude a message doing two jobs.
+ */
+const FAST_PATH_MAX_CHARS = 100;
+
+/** How far ahead the winning answer must be before it is served unassisted. */
+const FAST_PATH_LEAD = 2;
+
+/**
+ * How many sentences a fast-path message may contain.
+ *
+ * "What are your hours? My living room is hot." is short enough to pass a
+ * length check and would lose the second half, because the fast path skips
+ * extraction. Counting sentences targets the actual risk — a message carrying
+ * more than one thing — rather than approximating it with a character budget.
+ */
+function sentenceCount(message: string): number {
+  return message.split(/[.?!]+/).filter((part) => part.trim().length > 0).length;
+}
+
+/**
+ * An approved answer good enough to serve without asking a model anything.
+ *
+ * MEASURED: extraction costs 2.3–4.4s and phrasing 2.7–4.8s, while the entire
+ * deterministic pipeline costs about a millisecond. "What are your hours?" was
+ * paying seven seconds and two model calls to reach a sentence the server
+ * already had written down.
+ *
+ * Every condition below exists to make serving that sentence verbatim safe:
+ *
+ *   ONE topic, so a compound question is not half-answered.
+ *   BUSINESS priority, so the text was written as customer-facing prose for
+ *     this exact question rather than lifted from a page about something else.
+ *   A HIGH score, well above the bar that merely makes a topic eligible.
+ *   NO product named, because naming a product means they want it discussed,
+ *     not a policy quoted at them.
+ *   SHORT, because a long message is usually carrying more than one thing.
+ *
+ * Anything else returns null and takes the full path. This never decides what
+ * is true — it decides only whether the model needs to be involved in saying
+ * something already approved.
+ */
+export function selectVerifiedAnswer(
+  message: string,
+  topics: readonly AnswerTopic[],
+  directions: readonly ProductDirection[]
+): AnswerTopic | null {
+  if (message.length > FAST_PATH_MAX_CHARS) return null;
+  if (sentenceCount(message) > 1) return null;
+  if (selectNamedDirections(message, directions).length > 0) return null;
+
+  const scored = selectAnswerTopics(message, topics);
+  if (!scored.length) return null;
+
+  const [best, runnerUp] = scored;
+  if (best.topic.priority !== "business") return null;
+  if (best.score < FAST_PATH_MIN_SCORE) return null;
+
+  // A published page FAQ often shares a word or two with a policy question, so
+  // "exactly one match" was too strict once seventy-four of them were in the
+  // pool. What matters is that the business answer clearly WINS: two topics
+  // scoring close together means the question genuinely touches both, and a
+  // compound question should be phrased rather than half-served.
+  if (runnerUp && best.score - runnerUp.score < FAST_PATH_LEAD) return null;
+  return best.topic;
+}

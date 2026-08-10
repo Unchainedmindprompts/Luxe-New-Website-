@@ -593,6 +593,37 @@ test("26 ANSWERED renders an answer and never a recommendation card", (t) => {
   t.equal(inviting.direction, null, "an inviting answer still claimed a direction");
 });
 
+test("27 every consultation prompt answers to the same server decision", (t) => {
+  // Four surfaces could show one: the recommendation card, the footer, the
+  // inline links and the callback form. They answered to two different rules —
+  // the card rendered unconditionally while the rest obeyed the server — which
+  // is how a customer could be shown a next step nobody had decided to offer.
+  const withCta = contract.toAdvisorTurn(serverTurn(), {});
+  t.equal(withCta.offerConsultation, true, "the fixture does not authorise a CTA");
+
+  const withoutCta = contract.toAdvisorTurn(
+    serverTurn({ consultationCta: { recommended: false, reasons: [] } }),
+    {}
+  );
+  t.equal(withoutCta.offerConsultation, false, "the server decision was not carried through");
+  t.equal(withoutCta.direction, "Exterior solar shades", "the recommendation itself was suppressed with its CTA");
+
+  // Every branch in the component is gated on the same field.
+  for (const gate of [
+    /turn\.offerConsultation && \(\s*<div className="px-5 py-5 bg-warm-white">/,
+    /turn\?\.status === "ANSWERED" && turn\.offerConsultation/,
+    /turn\?\.status === "GUIDANCE_READY" && turn\.offerConsultation/,
+    /if \(!turn\?\.offerConsultation\) return null;/,
+  ]) {
+    t.ok(gate.test(EXPERIENCE), `a consultation surface does not consult the server: ${gate}`);
+  }
+  // And the callback form follows the same rule on a recommendation.
+  t.ok(
+    /RECOMMENDATION_READY"\) return turn\.offerConsultation \? "recommendation" : null;/.test(EXPERIENCE),
+    "the callback form can appear where the CTA was not authorised"
+  );
+});
+
 function toCamel(event) {
   return event.replace(/_([a-z])/g, (_, c) => c.toUpperCase());
 }

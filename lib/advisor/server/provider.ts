@@ -41,7 +41,24 @@ const EXTRACTION_MAX_TOKENS = 2048;
 const PHRASING_MAX_TOKENS = 1024;
 
 /** Wall-clock ceiling per model call. */
-export const PROVIDER_TIMEOUT_MS = 25_000;
+/**
+ * Timeouts, set against measured behaviour rather than guessed.
+ *
+ * Both calls used to share a 25-second budget, which was chosen when nothing
+ * had been measured. Live tracing puts extraction at 2.3–4.4s and phrasing at
+ * 2.7–4.8s, so 25 seconds is not a safety margin — it is a promise to keep a
+ * customer staring at a spinner for half a minute before admitting failure.
+ *
+ * They differ because their failure costs differ. A failed phrasing call has a
+ * deterministic fallback ready on every route, so waiting longer buys almost
+ * nothing. A failed extraction has no such luxury on a project turn, so it
+ * keeps more headroom — roughly four times the slowest call observed.
+ */
+export const EXTRACTION_TIMEOUT_MS = 18_000;
+export const PHRASING_TIMEOUT_MS = 12_000;
+
+/** @deprecated Kept as the shared default; prefer the per-call values above. */
+export const PROVIDER_TIMEOUT_MS = EXTRACTION_TIMEOUT_MS;
 
 /** The error shape `advisor.ts` recognises structurally, by `code`. */
 export class ProviderError extends Error {
@@ -92,9 +109,9 @@ function toProviderError(error: unknown): ProviderError {
  * Combines the caller's abort signal with a local timeout, so a hung request
  * cannot outlive the route regardless of what the SDK does.
  */
-function withTimeout(signal?: AbortSignal): { signal: AbortSignal; dispose: () => void } {
+function withTimeout(timeoutMs: number, signal?: AbortSignal): { signal: AbortSignal; dispose: () => void } {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), PROVIDER_TIMEOUT_MS);
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
   const forward = () => controller.abort();
   signal?.addEventListener("abort", forward, { once: true });
   return {
@@ -109,7 +126,7 @@ function withTimeout(signal?: AbortSignal): { signal: AbortSignal; dispose: () =
 export function createAnthropicProvider(): AdvisorProvider {
   return {
     async extract({ system, userMessage, schema, signal }) {
-      const timeout = withTimeout(signal);
+      const timeout = withTimeout(EXTRACTION_TIMEOUT_MS, signal);
       try {
         const response = await getClient().messages.create(
           {
@@ -144,7 +161,7 @@ export function createAnthropicProvider(): AdvisorProvider {
     },
 
     async phrase({ system, userMessage, maxTokens, signal }) {
-      const timeout = withTimeout(signal);
+      const timeout = withTimeout(PHRASING_TIMEOUT_MS, signal);
       try {
         const response = await getClient().messages.create(
           {
