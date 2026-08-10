@@ -15,6 +15,7 @@
  * corrected. A client cannot inject business rules, only facts, and only facts
  * the domain layer already understands.
  */
+import type { TranscriptMessage } from "./transcript";
 import type {
   DirectionId,
   FactKey,
@@ -41,6 +42,16 @@ export interface ConversationState {
    * by a client is ignored.
    */
   readonly facts?: ProjectFacts;
+  /**
+   * The recent conversation, both sides, bounded and re-validated on arrival.
+   *
+   * SEPARATE FROM `ledger` ON PURPOSE, and not a second copy of it. The ledger
+   * is what is true of the project and is all the deterministic engine ever
+   * sees. This is what was said, and exists so the model can work out what
+   * "that one" or "why?" refers to. Facts still have to be quoted out of the
+   * customer's current message, so nothing said here can become one.
+   */
+  readonly transcript?: readonly TranscriptMessage[];
   /** How many advisor turns have already happened. Clamped server-side. */
   readonly turnCount?: number;
   /** Question ids already put to the homeowner, so they are not repeated. */

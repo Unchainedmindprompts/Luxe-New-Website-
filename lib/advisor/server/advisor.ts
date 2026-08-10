@@ -34,6 +34,7 @@ import type {
 } from "../types";
 import type { FactUpdate, MessageIntent, ValidatedUpdates } from "./extraction";
 import type { ScoredTopic } from "./answer-selection";
+import type { TranscriptMessage } from "./transcript";
 import type { FactLedger, LedgerApplication } from "./ledger";
 import type { ClassifiedQuestion, QuestionTier } from "./counterfactual";
 import type { BrandResponseMatch } from "./brand-response";
@@ -74,6 +75,21 @@ export interface AdvisorDeps {
     priorityDefinitions: AdvisorKnowledge["priorities"]
   ) => string;
   readonly isListField: (field: string) => boolean;
+  /** Short-term conversational memory. See `transcript.ts`. */
+  readonly transcript: {
+    validate: (raw: unknown) => readonly TranscriptMessage[];
+    append: (
+      transcript: readonly TranscriptMessage[],
+      customerMessage: string,
+      advisorMessage: string
+    ) => readonly TranscriptMessage[];
+    render: (transcript: readonly TranscriptMessage[]) => string;
+    /** What retrieval should match a follow-up against. See `transcript.ts`. */
+    retrievalContext: (
+      transcript: readonly TranscriptMessage[],
+      currentMessage: string
+    ) => string;
+  };
   /** True when a message should be answered rather than qualified. */
   readonly isInformational: (intent: MessageIntent) => boolean;
   /** Deterministic retrieval over approved answers. Empty means "we don't have that". */
@@ -135,24 +151,28 @@ export interface AdvisorDeps {
   ) => readonly { guardrailId: string; evidence: string }[];
   readonly sanitizeForOutput: (text: string, maxLength: number) => string;
   readonly prompts: {
-    extractionSystemPrompt: (vocabulary: string, established: string) => string;
+    extractionSystemPrompt: (vocabulary: string, established: string, transcript?: string) => string;
+    extractionUserMessage: (transcript: string, message: string) => string;
     answerSystemPrompt: (
       approved: string,
       guardrails: readonly Guardrail[],
-      invitesConsultation: boolean
+      invitesConsultation: boolean,
+      transcript?: string
     ) => string;
-    discoverySystemPrompt: (guardrails: readonly Guardrail[]) => string;
+    discoverySystemPrompt: (guardrails: readonly Guardrail[], transcript?: string) => string;
     /** `corrected` is true only when this turn actually retracted a fact. */
-    questionSystemPrompt: (guardrails: readonly Guardrail[], corrected?: boolean) => string;
+    questionSystemPrompt: (guardrails: readonly Guardrail[], corrected?: boolean, transcript?: string) => string;
     recommendationSystemPrompt: (
       assessment: AdvisorAssessment,
       guardrails: readonly Guardrail[],
-      corrected?: boolean
+      corrected?: boolean,
+      transcript?: string
     ) => string;
     guidanceSystemPrompt: (
       assessment: AdvisorAssessment,
       guardrails: readonly Guardrail[],
-      corrected?: boolean
+      corrected?: boolean,
+      transcript?: string
     ) => string;
     phrasingUserMessage: (parts: Record<string, string | undefined>) => string;
   };
@@ -419,10 +439,14 @@ export function createAdvisor(deps: AdvisorDeps) {
   async function answerDirectly(
     message: string,
     guardrails: readonly Guardrail[],
-    interventions: string[]
+    interventions: string[],
+    history: string,
+    retrievalText: string
   ): Promise<{ message: string; invitesConsultation: boolean } | null> {
-    const topics = deps.selectAnswerTopics(message, deps.knowledge.answers);
-    const named = deps.selectNamedDirections(message, deps.knowledge.directions);
+    // Matched against the recent exchange as well as the current message, so a
+    // follow-up that names nothing still resolves to what it is following up on.
+    const topics = deps.selectAnswerTopics(retrievalText, deps.knowledge.answers);
+    const named = deps.selectNamedDirections(retrievalText, deps.knowledge.directions);
     if (!topics.length && !named.length) return null;
 
     const approved = [
@@ -433,8 +457,11 @@ export function createAdvisor(deps: AdvisorDeps) {
     const invitesConsultation = topics.some((t) => t.topic.invitesConsultation === true);
 
     const message_ = await phraseSafely(
-      deps.prompts.answerSystemPrompt(approved, guardrails, invitesConsultation),
-      deps.prompts.phrasingUserMessage({ "their question": message }),
+      deps.prompts.answerSystemPrompt(approved, guardrails, invitesConsultation, history),
+      deps.prompts.phrasingUserMessage({
+        "recent conversation": history || undefined,
+        "their question": message,
+      }),
       ANSWER_TOKENS,
       MAX_ANSWER_CHARS,
       // A comparison may name the products it compares; a business answer has
@@ -454,6 +481,10 @@ export function createAdvisor(deps: AdvisorDeps) {
     // outside the Phase A vocabulary is dropped rather than corrected, so a
     // crafted payload can only assert facts the engine already understands.
     const priorLedger = deps.ledger.validate(priorState.ledger ?? {});
+    // Untrusted, like everything else the client sends back. Rendered once so
+    // every model call this turn sees exactly the same history.
+    const priorTranscript = deps.transcript.validate(priorState.transcript);
+    const history = deps.transcript.render(priorTranscript);
     const turnCount = Math.max(0, Math.min(MAX_TURNS, Math.trunc(priorState.turnCount ?? 0)));
     const askedQuestionIds = (priorState.askedQuestionIds ?? []).filter(
       (id) => typeof id === "string"
@@ -471,9 +502,10 @@ export function createAdvisor(deps: AdvisorDeps) {
       const raw = await deps.provider.extract({
         system: deps.prompts.extractionSystemPrompt(
           deps.describeVocabulary(deps.knowledge.priorities),
-          deps.ledger.describe(priorLedger)
+          deps.ledger.describe(priorLedger),
+          history
         ),
-        userMessage: input.message,
+        userMessage: deps.prompts.extractionUserMessage(history, input.message),
         schema: deps.buildDeltaSchema(),
         signal: deps.signal,
       });
@@ -576,13 +608,21 @@ export function createAdvisor(deps: AdvisorDeps) {
     const questionGates = !(selection.readyToRecommend || !selection.next);
     const productStatus = deriveStatus(assessment, questionGates, Boolean(selection.next));
 
-    const conversationState = {
+    /**
+     * The state to hand back, with this turn's exchange recorded.
+     *
+     * A function rather than a value because every return path below carries a
+     * different reply, and a transcript that silently missed one would produce
+     * exactly the bug this feature exists to fix — on the paths nobody tested.
+     */
+    const stateAfter = (advisorMessage: string): ConversationState => ({
       ledger: ledger as Record<string, unknown>,
       facts,
       turnCount: nextTurnCount,
       askedQuestionIds,
       unrankedConcerns: carriedConcerns,
-    };
+      transcript: deps.transcript.append(priorTranscript, input.message, advisorMessage),
+    });
 
     // ── 4. phrasing, validated ─────────────────────────────────────────────
     if (brandAnswer) {
@@ -592,13 +632,7 @@ export function createAdvisor(deps: AdvisorDeps) {
         // fix — and offering a consultation off the back of "do you carry X",
         // which is a sales reflex rather than a next step that follows.
         status: "ANSWERED",
-        state: {
-          ledger: ledger as Record<string, unknown>,
-          facts,
-          turnCount: nextTurnCount,
-          askedQuestionIds,
-          unrankedConcerns: carriedConcerns,
-        },
+        state: stateAfter(deps.sanitizeForOutput(brandAnswer.response, MAX_RECOMMENDATION_CHARS)),
         assessment: summarise(assessment),
         nextQuestion: null,
         message: deps.sanitizeForOutput(brandAnswer.response, MAX_RECOMMENDATION_CHARS),
@@ -616,11 +650,17 @@ export function createAdvisor(deps: AdvisorDeps) {
     // Routing that through window qualification is what produced replies about
     // glare to someone asking the opening hours.
     if (deps.isInformational(validated.intent)) {
-      const answered = await answerDirectly(input.message, guardrails, interventions);
+      const answered = await answerDirectly(
+        input.message,
+        guardrails,
+        interventions,
+        history,
+        deps.transcript.retrievalContext(priorTranscript, input.message)
+      );
       if (answered) {
         return {
           status: "ANSWERED",
-          state: conversationState,
+          state: stateAfter(answered.message),
           assessment: summarise(assessment),
           nextQuestion: null,
           message: answered.message,
@@ -640,9 +680,10 @@ export function createAdvisor(deps: AdvisorDeps) {
     // ── 3c. they want help and do not know where to start ──────────────────
     if (validated.intent === "discovery" && assessment.strongCandidates.length === 0) {
       const message = await phraseSafely(
-        deps.prompts.discoverySystemPrompt(guardrails),
+        deps.prompts.discoverySystemPrompt(guardrails, history),
         deps.prompts.phrasingUserMessage({
-          "what they said": "They are not sure what they want yet.",
+          "recent conversation": history || undefined,
+          "their message": input.message,
         }),
         ANSWER_TOKENS,
         MAX_ANSWER_CHARS,
@@ -652,7 +693,7 @@ export function createAdvisor(deps: AdvisorDeps) {
       );
       return {
         status: "ANSWERED",
-        state: conversationState,
+        state: stateAfter(message),
         assessment: summarise(assessment),
         nextQuestion: null,
         message,
@@ -668,8 +709,10 @@ export function createAdvisor(deps: AdvisorDeps) {
     if (status === "NEED_MORE_INFORMATION" && selection.next) {
       const question = selection.next;
       const phrased = await phraseSafely(
-        deps.prompts.questionSystemPrompt(guardrails, corrected),
+        deps.prompts.questionSystemPrompt(guardrails, corrected, history),
         deps.prompts.phrasingUserMessage({
+          "recent conversation": history || undefined,
+          "their message": input.message,
           "question to ask": question.canonical,
           "why it matters": question.materialTo.length
             ? `It could change whether these fit: ${question.materialTo.join(", ")}.`
@@ -685,11 +728,8 @@ export function createAdvisor(deps: AdvisorDeps) {
       return {
         status: "NEED_MORE_INFORMATION",
         state: {
-          ledger: ledger as Record<string, unknown>,
-          facts,
-          turnCount: nextTurnCount,
+          ...stateAfter(phrased),
           askedQuestionIds: [...askedQuestionIds, question.id],
-          unrankedConcerns: carriedConcerns,
         },
         assessment: summarise(assessment),
         nextQuestion: {
@@ -715,9 +755,11 @@ export function createAdvisor(deps: AdvisorDeps) {
       : fallbackRecommendation(assessment);
     const message = await phraseSafely(
       givingGuidance
-        ? deps.prompts.guidanceSystemPrompt(assessment, guardrails, corrected)
-        : deps.prompts.recommendationSystemPrompt(assessment, guardrails, corrected),
+        ? deps.prompts.guidanceSystemPrompt(assessment, guardrails, corrected, history)
+        : deps.prompts.recommendationSystemPrompt(assessment, guardrails, corrected, history),
       deps.prompts.phrasingUserMessage({
+        "recent conversation": history || undefined,
+        "their message": input.message,
         "best fit": assessment.strongCandidates
           .map((c) => `${c.label} — ${c.reasons.join(" ")}`)
           .join("\n") || "(no single direction stands out yet)",
@@ -737,13 +779,7 @@ export function createAdvisor(deps: AdvisorDeps) {
 
     return {
       status,
-      state: {
-        ledger: ledger as Record<string, unknown>,
-        facts,
-        turnCount: nextTurnCount,
-        askedQuestionIds,
-        unrankedConcerns: carriedConcerns,
-      },
+      state: stateAfter(message),
       assessment: summarise(assessment),
       nextQuestion: null,
       message,

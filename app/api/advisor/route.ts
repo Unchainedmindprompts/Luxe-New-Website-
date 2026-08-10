@@ -32,6 +32,12 @@ import {
   selectNamedDirections,
 } from "@/lib/advisor/server/answer-selection";
 import { applyUpdates, projectFacts, validateLedger } from "@/lib/advisor/server/ledger";
+import {
+  appendExchange,
+  renderTranscript,
+  retrievalContext,
+  validateTranscript,
+} from "@/lib/advisor/server/transcript";
 import type { ExtractionFieldName } from "@/lib/advisor/server/extraction";
 import type { FactLedger, FactRecord } from "@/lib/advisor/server/ledger";
 import { sanitizeForOutput, validateGeneratedText } from "@/lib/advisor/server/guardrails";
@@ -39,6 +45,7 @@ import {
   answerSystemPrompt,
   discoverySystemPrompt,
   extractionSystemPrompt,
+  extractionUserMessage,
   guidanceSystemPrompt,
   phrasingUserMessage,
   questionSystemPrompt,
@@ -162,11 +169,18 @@ export async function POST(request: Request) {
     validateGeneratedText,
     sanitizeForOutput,
     isInformational,
+    transcript: {
+      validate: validateTranscript,
+      append: appendExchange,
+      render: renderTranscript,
+      retrievalContext,
+    },
     selectAnswerTopics,
     selectNamedDirections,
     describeDirection,
     prompts: {
       extractionSystemPrompt,
+      extractionUserMessage,
       answerSystemPrompt,
       discoverySystemPrompt,
       questionSystemPrompt,
