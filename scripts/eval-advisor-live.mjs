@@ -471,6 +471,7 @@ for (const conversation of selected) {
         stage: u.stage,
         in: u.inputTokens,
         out: u.outputTokens,
+        thinking: u.thinkingTokens,
         cacheWrite: u.cacheCreationTokens,
         cacheRead: u.cacheReadTokens,
       })),
@@ -514,6 +515,7 @@ for (const conversation of selected) {
               .map(
                 (u) =>
                   `${u.stage} in=${u.inputTokens} out=${u.outputTokens} ` +
+                  `(thinking ${u.thinkingTokens}) ` +
                   `cache_write=${u.cacheCreationTokens} cache_read=${u.cacheReadTokens}` +
                   (u.cacheReadTokens > 0 ? " HIT" : u.cacheCreationTokens > 0 ? " miss(written)" : "")
               )
@@ -597,6 +599,16 @@ say(`  model calls ${calls.length}   hits ${hits}   writes ${calls.filter((c) =>
 say(`  input tokens billed at full rate  ${calls.reduce((n, c) => n + c.in, 0).toLocaleString()}`);
 say(`  input tokens served from cache    ${calls.reduce((n, c) => n + c.cacheRead, 0).toLocaleString()}`);
 say(`  output tokens (incl. thinking)    ${calls.reduce((n, c) => n + c.out, 0).toLocaleString()}`);
+say(`  of which internal reasoning       ${calls.reduce((n, c) => n + (c.thinking ?? 0), 0).toLocaleString()}`);
+
+// Latency tracks output tokens, not input tokens — measured at roughly a fixed
+// 2.2-2.5s floor per call plus 9-13ms per output token. Thinking is inside that
+// number, so this is the split that says which half is worth attacking.
+const thinky = done.flatMap((r) => (r.usage ?? []).map((u) => [u.thinking ?? 0, u.out]));
+if (thinky.length) {
+  const share = thinky.reduce((n, [t]) => n + t, 0) / Math.max(1, thinky.reduce((n, [, o]) => n + o, 0));
+  say(`  reasoning share of output         ${(share * 100).toFixed(0)}%`);
+}
 
 const retried = done.filter((r) => r.retries > 0);
 say("\nRETRIES");

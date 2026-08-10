@@ -173,6 +173,7 @@ function readUsage(
     outputTokens: usage?.output_tokens ?? 0,
     cacheCreationTokens: usage?.cache_creation_input_tokens ?? 0,
     cacheReadTokens: usage?.cache_read_input_tokens ?? 0,
+    thinkingTokens: usage?.output_tokens_details?.thinking_tokens ?? 0,
   };
 }
 

@@ -158,6 +158,7 @@ export async function POST(request: Request) {
       onUsage: (u) =>
         usage.push(
           `${u.stage} in=${u.inputTokens} out=${u.outputTokens} ` +
+            `thinking=${u.thinkingTokens} ` +
             `cache_write=${u.cacheCreationTokens} cache_read=${u.cacheReadTokens}`
         ),
     }),

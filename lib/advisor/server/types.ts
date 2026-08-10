@@ -256,6 +256,20 @@ export interface ProviderUsage {
   readonly cacheCreationTokens: number;
   /** Tokens served from the cache. Non-zero means a cache HIT. */
   readonly cacheReadTokens: number;
+  /**
+   * How many of `outputTokens` the model spent on internal reasoning.
+   *
+   * The measurement Phase 5 needed and did not have. Live tracing put a model
+   * call at roughly a fixed 2.2–2.5s floor plus 9–13ms per output token, which
+   * makes output tokens the one lever that moves wall clock — and `output_tokens`
+   * bundles thinking with the visible reply, so it could not be said which half
+   * to attack. One extraction call emitted 524 output tokens for a delta whose
+   * JSON is a fraction of that; without this field, whether the rest was
+   * reasoning is a guess.
+   *
+   * Zero when the provider does not report a breakdown.
+   */
+  readonly thinkingTokens: number;
 }
 
 // ───────────────────────────── provider port ────────────────────────────────
