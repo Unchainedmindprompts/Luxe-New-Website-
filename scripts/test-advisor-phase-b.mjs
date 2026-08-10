@@ -217,6 +217,7 @@ function makeAdvisor(provider) {
     },
     selectAnswerTopics: answerSelection.selectAnswerTopics,
     selectNamedDirections: answerSelection.selectNamedDirections,
+      selectProductEducation: answerSelection.selectProductEducation,
     describeDirection: answerSelection.describeDirection,
     selectVerifiedAnswer: answerSelection.selectVerifiedAnswer,
     unknownAnswer: answerKnowledge.unknownAnswerText({ phone: constants.BUSINESS.phone, email: constants.BUSINESS.email }),
@@ -234,6 +235,7 @@ function makeAdvisor(provider) {
       discoverySystemPrompt: prompts.discoverySystemPrompt,
       questionSystemPrompt: prompts.questionSystemPrompt,
       preliminaryGuidanceSystemPrompt: prompts.preliminaryGuidanceSystemPrompt,
+      productEducationSystemPrompt: prompts.productEducationSystemPrompt,
       recommendationSystemPrompt: prompts.recommendationSystemPrompt,
       guidanceSystemPrompt: prompts.guidanceSystemPrompt,
       phrasingUserMessage: prompts.phrasingUserMessage,
@@ -3227,6 +3229,206 @@ await test("142 a phrasing failure still delivers the question", async (t) => {
   );
   t.ok(/cordless/i.test(result.message), "the fallback dropped the guidance");
   t.ok(result.diagnostics?.fellBack, "the fallback was not recorded");
+});
+
+// ── Phase 7: a product question inside a project turn still gets answered ───
+
+/**
+ * Phase 7's whole surface is one branch inside the question route, so these
+ * run a single turn with a scripted extraction and assert on the response
+ * contract and on what the phrasing layer was handed.
+ */
+async function projectTurn(facts, message, state = {}) {
+  const provider = mockProvider({ extractions: [facts] });
+  const result = await makeAdvisor(provider).runTurn({ message, state });
+  return { result, provider };
+}
+
+await test("143 the original case is unchanged — no product named, no education", async (t) => {
+  // THE PHASE 5/6 NEGATIVE, CARRIED FORWARD. Measured against the corpus:
+  // this message names no product Luxe carries, so there is nothing verified
+  // to teach. Educating here would mean picking products on the homeowner's
+  // behalf, which is the shortlist Phase 6 already refused to invent.
+  const { result, provider } = await projectTurn(
+    { room: "bedroom", exposure: "west", solarHeat: "moderate" },
+    "What do you actually carry for a bright west bedroom?"
+  );
+  t.equal(result.status, "NEED_MORE_INFORMATION", `status was ${result.status}`);
+  t.equal(result.nextQuestion?.id, "q-darkening-level", `asked ${result.nextQuestion?.id}`);
+  t.equal(result.preliminaryGuidance, null, "guidance was invented");
+  t.equal(result.productEducation, null, "education was invented from a message naming no product");
+  t.equal(result.diagnostics?.route, "question", `route was ${result.diagnostics?.route}`);
+  t.equal(result.consultationCta.recommended, false, "a booking prompt appeared");
+  t.ok(/Output only the question/.test(provider.calls.lastPhraseSystem), "the plain question prompt was not used");
+
+  // And the corpus really does have nothing: no direction is named by name.
+  t.equal(
+    answerSelection.selectProductEducation("What do you actually carry for a bright west bedroom?", KNOWLEDGE.directions).length,
+    0,
+    "a product was matched where the customer named none"
+  );
+});
+
+await test("144 B — a named product is explained, and the question still follows", async (t) => {
+  const { result, provider } = await projectTurn(
+    { room: "bedroom", exposure: "west", requestedProducts: ["cellular"] },
+    "Would cellular shades work for my west-facing bedroom?"
+  );
+  t.equal(result.status, "NEED_MORE_INFORMATION", `status was ${result.status}`);
+  t.ok(result.nextQuestion, "the gating question was dropped to make room for education");
+  t.equal(result.diagnostics?.route, "educated-question", `route was ${result.diagnostics?.route}`);
+  t.ok(result.productEducation, "the product they asked about was not carried");
+  t.ok(
+    result.productEducation?.some((d) => /cellular/i.test(d.label)),
+    `education named ${JSON.stringify(result.productEducation)}`
+  );
+  // The verified prose actually reaches the model.
+  t.ok(/Cellular shades/.test(provider.calls.lastPhraseUser), "the product knowledge never reached the phrasing call");
+  t.ok(/question to ask/.test(provider.calls.lastPhraseUser), "the question never reached the phrasing call");
+  const system = provider.calls.lastPhraseSystem;
+  t.ok(/EXPLAINING IS NOT CHOOSING/.test(system), "the education prompt was not the one used");
+  t.ok(/not "what I'd recommend"/.test(system), "nothing stops education becoming a recommendation");
+});
+
+await test("145 C — a comparison is answered before the gating question", async (t) => {
+  const { result, provider } = await projectTurn(
+    { room: "bedroom", exposure: "west" },
+    "What's better here, roller or cellular?"
+  );
+  t.equal(result.diagnostics?.route, "educated-question", `route was ${result.diagnostics?.route}`);
+  t.equal(result.productEducation?.length, 2, `education named ${JSON.stringify(result.productEducation)}`);
+  t.ok(result.nextQuestion, "the comparison swallowed the question");
+  // Both products they named are described, so the comparison is possible.
+  t.ok(/Cellular shades/.test(provider.calls.lastPhraseUser), "cellular knowledge missing");
+  t.ok(/Interior roller shades/.test(provider.calls.lastPhraseUser), "roller knowledge missing");
+});
+
+await test("146 D/E — telling us a fact does not trigger a product lecture", async (t) => {
+  for (const [message, facts] of [
+    ["My bedroom faces west.", { room: "bedroom", exposure: "west" }],
+    ["Heat is the main issue.", { priorities: ["energy-efficiency"] }],
+    ["I already have cellular shades and want something else.", { room: "living" }],
+  ]) {
+    const { result } = await projectTurn(facts, message);
+    t.equal(result.productEducation, null, `"${message}" produced a lecture`);
+    t.ok(
+      result.diagnostics?.route !== "educated-question",
+      `"${message}" took the education route`
+    );
+  }
+  // The third is the interesting one: it NAMES cellular but is not asking.
+  t.equal(
+    answerSelection.selectProductEducation("I already have cellular shades and want something else.", KNOWLEDGE.directions).length,
+    0,
+    "a product mentioned in passing was treated as a question"
+  );
+  t.ok(
+    answerSelection.selectProductEducation("Would cellular shades work?", KNOWLEDGE.directions).length > 0,
+    "a genuine product question was not recognised"
+  );
+});
+
+await test("147 F/G — no product named means no education, whatever was asked", async (t) => {
+  // F: a concern is not a product. Nothing verified narrows "preserve the
+  // view" to a set of products without the engine saying so.
+  const view = await projectTurn({ priorities: ["view-preservation"] }, "What options preserve the view?");
+  t.equal(view.result.productEducation, null, "education was invented from a concern");
+
+  // G: asking for a recommendation must not be answered with generic education.
+  const rec = await projectTurn({ room: "bedroom" }, "What would you recommend?");
+  t.equal(rec.result.productEducation, null, "a recommendation request was converted into a lecture");
+  t.ok(
+    ["question", "guided-question"].includes(rec.result.diagnostics?.route),
+    `a recommendation request routed to ${rec.result.diagnostics?.route}`
+  );
+});
+
+await test("148 H — an invented product teaches nothing", async (t) => {
+  const { result } = await projectTurn({ room: "bedroom" }, "What about CrystalWeave shades?");
+  t.equal(result.productEducation, null, "an invented product produced education");
+  t.equal(
+    answerSelection.selectProductEducation("What about CrystalWeave shades?", KNOWLEDGE.directions).length,
+    0,
+    "an invented product matched the catalogue"
+  );
+  // And the grounding validator still rejects the name in generated text.
+  t.ok(
+    guardrails.validateGeneratedText("CrystalWeave shades are a good option.", GROUNDING)
+      .some((v) => v.guardrailId === "no-invented-products"),
+    "Phase 4 grounding regressed"
+  );
+});
+
+await test("149 route precedence — deterministic guidance outranks education", async (t) => {
+  // Phase 6 and Phase 7 are different mechanisms and must not compete. When
+  // the engine has genuinely narrowed, its guidance wins even if the customer
+  // also named a product.
+  const { result } = await projectTurn(
+    { priorities: ["glare-control", "view-preservation"], viewImportance: "high" },
+    "Would cellular shades work here?"
+  );
+  t.equal(result.diagnostics?.route, "guided-question", `route was ${result.diagnostics?.route}`);
+  t.ok(result.preliminaryGuidance, "deterministic guidance was lost");
+  t.equal(result.productEducation, null, "education overwrote deterministic guidance");
+
+  // A finished recommendation is still a recommendation.
+  const done = await projectTurn(
+    { geometry: ["large-architectural-glass"], windowUse: ["door-in-use"] },
+    "Would roller shades work for our big patio door?"
+  );
+  t.equal(done.result.status, "RECOMMENDATION_READY", `status was ${done.result.status}`);
+  t.equal(done.result.productEducation, null, "a recommendation turn carried education");
+});
+
+await test("150 education is not purchase intent, and never a recommendation", async (t) => {
+  const { result } = await projectTurn(
+    { room: "bedroom", requestedProducts: ["cellular"] },
+    "Would cellular shades work in a bedroom?"
+  );
+  t.ok(result.status !== "RECOMMENDATION_READY", "education was promoted to a recommendation");
+  t.equal(result.assessment?.primaryRecommendation, null, "a recommendation was claimed");
+  t.equal(result.consultationCta.recommended, false, "product education created booking pressure");
+  t.equal(result.consultationCta.reasons.length, 0, `CTA reasons leaked: ${result.consultationCta.reasons}`);
+
+  // Scheduling still earns it, on the same shape.
+  const asked = mockProvider({
+    extractions: [{ __intent: "scheduling", room: "bedroom", requestedProducts: ["cellular"] }],
+  });
+  const booking = await makeAdvisor(asked).runTurn({
+    message: "Would cellular shades work in a bedroom, and can someone come out?",
+    state: {},
+  });
+  t.ok(booking.consultationCta.recommended, "a scheduling request stopped earning the booking path");
+});
+
+await test("151 education survives a phrasing failure with its question intact", async (t) => {
+  const provider = mockProvider({
+    extractions: [{ room: "bedroom", requestedProducts: ["cellular"] }],
+    failPhrase: { code: "provider-timeout" },
+  });
+  const result = await makeAdvisor(provider).runTurn({
+    message: "Would cellular shades work for a bedroom?",
+    state: {},
+  });
+  t.ok(result.productEducation, "education was lost on the fallback path");
+  t.ok(
+    result.message.includes(result.nextQuestion.canonical),
+    "the fallback dropped the question the turn exists to ask"
+  );
+  t.ok(/Cellular shades/i.test(result.message), "the fallback named nothing the customer asked about");
+  // The deterministic text must not claim a fit either.
+  t.ok(!/\b(best|ideal|perfect|recommend)\b/i.test(result.message), "the fallback claimed a recommendation");
+});
+
+await test("152 the fast paths and unknown routing are untouched", async (t) => {
+  // Phase 7 lives inside the question route, so nothing before it should move.
+  const fast = await costOf("What are your hours?", "general");
+  t.equal(fast.r.diagnostics?.route, "fast-answer", `hours took ${fast.r.diagnostics?.route}`);
+  t.equal(fast.r.diagnostics?.providerCalls, 0, "the zero-call fast path regressed");
+
+  const unknown = await costOf("Do you have a showroom?", "general");
+  t.equal(unknown.r.diagnostics?.route, "unknown", `showroom took ${unknown.r.diagnostics?.route}`);
+  t.equal(unknown.r.productEducation, null, "an informational turn carried project education");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────

@@ -213,6 +213,21 @@ export interface AdvisorResponse {
    * Non-null only alongside `nextQuestion`, and never a recommendation.
    */
   readonly preliminaryGuidance: PreliminaryGuidance | null;
+  /**
+   * Products the homeowner asked about on a turn that still needs a fact.
+   *
+   * A DIFFERENT MECHANISM FROM `preliminaryGuidance`, AND KEPT SEPARATE ON
+   * PURPOSE. That field is the engine having narrowed the project. This one is
+   * the engine having narrowed nothing, while the customer asked a question
+   * about a product Luxe genuinely carries — "would cellular shades work for my
+   * west-facing bedroom?" deserves an answer about cellular shades before it
+   * deserves a question about darkening.
+   *
+   * Labels only, and only ones the customer named. Nothing here selects a
+   * product on the homeowner's behalf, so this can never become a shortlist the
+   * engine did not authorise.
+   */
+  readonly productEducation: readonly { readonly id: DirectionId; readonly label: string }[] | null;
   /** Customer-facing prose, already guardrail-validated. */
   readonly message: string;
   /**

@@ -113,6 +113,52 @@ export function selectNamedDirections(
   return named.slice(0, 3);
 }
 
+/**
+ * Is this message ASKING something, as opposed to telling us something?
+ *
+ * A grammatical test, deliberately, and not a list of question topics. "I
+ * already have cellular shades and want something else" names a product
+ * without asking about it, and explaining cellular shades back to that person
+ * is a lecture they did not request.
+ *
+ * Kept to a handful of openers plus the question mark, because the cost of
+ * being wrong is small in both directions: a false negative asks the
+ * qualification question, which was the old behaviour, and a false positive
+ * explains a product the customer just named.
+ */
+const ASKING_OPENERS =
+  /^(what|which|how|why|when|where|who|whose|do|does|did|is|are|was|were|can|could|would|will|should|any|tell me|talk me)\b/i;
+
+function isAsking(message: string): boolean {
+  const text = message.trim();
+  return text.includes("?") || ASKING_OPENERS.test(text);
+}
+
+/**
+ * Product directions the homeowner is asking about, on a turn that is otherwise
+ * about their project.
+ *
+ * THE CUSTOMER CHOOSES THE SUBJECT, WHICH IS THE WHOLE SAFETY ARGUMENT. Phase 7
+ * exists because "would cellular shades work for my west-facing bedroom?" was
+ * being answered with "how dark does the room need to be?" and nothing else —
+ * the question they actually asked went unanswered because the message also
+ * carried project facts.
+ *
+ * Returning only directions they named is what keeps this education rather than
+ * recommendation. It cannot invent a shortlist, because it never picks: given
+ * twelve eligible directions and no product named, it returns nothing and the
+ * turn asks its question exactly as before. Measured against the corpus in
+ * Phase 7 — "what do you actually carry for a bright west bedroom?" names no
+ * product and correctly yields nothing here.
+ */
+export function selectProductEducation(
+  message: string,
+  directions: readonly ProductDirection[]
+): readonly ProductDirection[] {
+  if (!isAsking(message)) return [];
+  return selectNamedDirections(message, directions);
+}
+
 /** Approved knowledge for one direction, as plain lines for the phrasing layer. */
 export function describeDirection(direction: ProductDirection): string {
   const lines = [

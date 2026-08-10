@@ -183,6 +183,7 @@ const makeAdvisor = (trace) => advisorModule.createAdvisor({
   isSchedulingIntent: extraction.isSchedulingIntent,
   selectAnswerTopics: answerSelection.selectAnswerTopics,
   selectNamedDirections: answerSelection.selectNamedDirections,
+    selectProductEducation: answerSelection.selectProductEducation,
   describeDirection: answerSelection.describeDirection,
   selectVerifiedAnswer: answerSelection.selectVerifiedAnswer,
   unknownAnswer: answerKnowledge.unknownAnswerText({ phone: constants.BUSINESS.phone, email: constants.BUSINESS.email }),
@@ -217,6 +218,7 @@ const makeAdvisor = (trace) => advisorModule.createAdvisor({
     discoverySystemPrompt: prompts.discoverySystemPrompt,
     questionSystemPrompt: prompts.questionSystemPrompt,
     preliminaryGuidanceSystemPrompt: prompts.preliminaryGuidanceSystemPrompt,
+    productEducationSystemPrompt: prompts.productEducationSystemPrompt,
     recommendationSystemPrompt: prompts.recommendationSystemPrompt,
     guidanceSystemPrompt: prompts.guidanceSystemPrompt,
     phrasingUserMessage: prompts.phrasingUserMessage,
@@ -462,6 +464,8 @@ for (const conversation of selected) {
             avoid: result.preliminaryGuidance.avoid.map((o) => o.label),
           }
         : null,
+      // Phase 7: products the customer asked about on a project turn.
+      productEducation: result.productEducation?.map((d) => d.label) ?? null,
       ctaShown: result.consultationCta.recommended,
       ctaReasons: result.consultationCta.reasons,
       providerCalls: result.diagnostics?.providerCalls ?? 0,
@@ -547,6 +551,9 @@ for (const conversation of selected) {
             (g.favour.length ? `   favour: ${g.favour.map((o) => o.label).join(", ")}` : "") +
             (g.avoid.length ? `   avoid: ${g.avoid.map((o) => o.label).join(", ")}` : "")
         );
+      }
+      if (result.productEducation) {
+        say(`  EXPLAINED    ${result.productEducation.map((d) => d.label).join(", ")}`);
       }
       if (result.nextQuestion) say(`  ASKED        ${result.nextQuestion.id}`);
       if (result.error) say(`  ERROR        ${result.error}`);
@@ -644,7 +651,8 @@ say(`  fell back to deterministic text: ${done.filter((r) => r.fellBack).length}
 say("\nBEHAVIOUR");
 say(`  asked a qualification question   ${done.filter((r) => r.askedQualification).length}/${done.length}`);
 say(`  ...of those, carried guidance     ${done.filter((r) => r.preliminaryGuidance).length}`);
-say(`  ...bare question, nothing to add  ${done.filter((r) => r.askedQualification && !r.preliminaryGuidance).length}`);
+say(`  ...of those, explained a product  ${done.filter((r) => r.productEducation).length}`);
+say(`  ...bare question, nothing to add  ${done.filter((r) => r.askedQualification && !r.preliminaryGuidance && !r.productEducation).length}`);
 say(`  offered the consultation         ${done.filter((r) => r.ctaShown).length}/${done.length}`);
 say(`  0-call turns                     ${done.filter((r) => r.providerCalls === 0).length}`);
 say(`  1-call turns                     ${done.filter((r) => r.providerCalls === 1).length}`);

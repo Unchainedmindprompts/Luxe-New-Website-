@@ -32,6 +32,7 @@ import {
   describeDirection,
   selectAnswerTopics,
   selectNamedDirections,
+  selectProductEducation,
   selectVerifiedAnswer,
 } from "@/lib/advisor/server/answer-selection";
 import { applyUpdates, projectFacts, validateLedger } from "@/lib/advisor/server/ledger";
@@ -52,6 +53,7 @@ import {
   guidanceSystemPrompt,
   phrasingUserMessage,
   preliminaryGuidanceSystemPrompt,
+  productEducationSystemPrompt,
   questionSystemPrompt,
   recommendationSystemPrompt,
 } from "@/lib/advisor/server/prompts";
@@ -197,6 +199,7 @@ export async function POST(request: Request) {
     },
     selectAnswerTopics,
     selectNamedDirections,
+    selectProductEducation,
     describeDirection,
     selectVerifiedAnswer,
     unknownAnswer: unknownAnswerText({ phone: BUSINESS.phone, email: BUSINESS.email }),
@@ -207,6 +210,7 @@ export async function POST(request: Request) {
       discoverySystemPrompt,
       questionSystemPrompt,
       preliminaryGuidanceSystemPrompt,
+      productEducationSystemPrompt,
       recommendationSystemPrompt,
       guidanceSystemPrompt,
       phrasingUserMessage,

@@ -36,6 +36,8 @@ export interface TurnTrace {
     | "question"
     /** A question preceded by the guidance the engine already had. */
     | "guided-question"
+    /** A question preceded by verified knowledge about a product they asked about. */
+    | "educated-question"
     | "guidance"
     | "recommendation"
     | "unavailable";

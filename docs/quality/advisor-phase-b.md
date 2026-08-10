@@ -383,6 +383,69 @@ Pinned by test 138, with the predicate measured across five fact shapes in 139.
 | narrowed, nothing left to ask | `guidance` | GUIDANCE_READY | guidance |
 | candidate, nothing left to ask | `recommendation` | RECOMMENDATION_READY | the recommendation, with the card |
 
+### Product education — a different mechanism, kept separate
+
+Phase 6 covers *the engine narrowed something*. Phase 7 covers the other half:
+**the engine narrowed nothing, and the homeowner asked about a product anyway.**
+
+> "Would cellular shades work for my west-facing bedroom?"
+
+That message carries project facts, so intent lands on `project`, so the answer
+route — which holds all the verified product knowledge — was never consulted.
+The reply was "how dark does the room need to be?" and nothing else. The thing
+they asked about went unmentioned, which reads as evasion.
+
+**Education is limited to products the customer named.** `selectProductEducation`
+runs `selectNamedDirections` over the current message, behind a grammatical
+"is this a question?" test. It cannot invent a shortlist because it never
+picks — the customer chose the subject. Given twelve eligible directions and no
+product named, it returns nothing and the turn asks its question exactly as
+before.
+
+**Explaining is not choosing.** The prompt says what a product *does*, never
+what the homeowner *should have*: no "best fit", no "ideal for your bedroom",
+no "what I'd recommend". The engine has not chosen, and neither may the model.
+
+#### What the corpus actually supports — measured
+
+| message | products named | education |
+|---|---|---|
+| "Would cellular shades work for my west-facing bedroom?" | Cellular shades | **yes** |
+| "What's better here, roller or cellular?" | Cellular, Interior roller | **yes** |
+| "Do shutters work in a bathroom?" | Shutters | **yes** |
+| "What do you actually carry for a bright west bedroom?" | — | no |
+| "What options preserve the view?" | — | no |
+| "What would you recommend?" | — | no |
+| "What about CrystalWeave shades?" | — | no |
+| "I already have cellular shades and want something else." | (named, not asked) | no |
+
+**The original bright-west-bedroom case gets no education, and that is the
+correct outcome, not a gap left unfilled.** Lexical retrieval does find
+something for it — a published *lakefront living-area* FAQ answering "what
+actually works?" with "a 3% or 5% openness solar shade is the right tool". That
+is a recommendation, about a different room type, for a **non-darkening**
+product, on a turn whose entire open question is how dark the bedroom needs to
+be. Serving it as education would be worse than asking. The same FAQ is also
+retrieved for the bare statement "My bedroom faces west." at the same score, so
+retrieval cannot distinguish a question from a project fact in the first place.
+
+There is no "what do you carry" answer in the corpus, and naming three of twelve
+categories would be the shortlist Phase 6 refused to invent. Pinned by test 143.
+
+### Route precedence
+
+| condition | route |
+|---|---|
+| nothing gates, candidate exists | `recommendation` |
+| nothing gates, no candidate | `guidance` |
+| gated, engine narrowed something | `guided-question` (Phase 6) |
+| gated, nothing narrowed, product asked about | `educated-question` (Phase 7) |
+| gated, neither | `question` |
+
+Deterministic guidance outranks education deliberately: a leaning the engine
+computed is worth more than an explanation of a product the customer named.
+Pinned by test 149.
+
 ### The boundary that keeps it honest
 
 **The status does not change.** A guided question is still

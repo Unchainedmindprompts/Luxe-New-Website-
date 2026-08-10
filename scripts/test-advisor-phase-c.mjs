@@ -266,6 +266,45 @@ test("5a preliminary guidance renders as conversation, not as a recommendation",
   t.ok(turn.question !== null, "the gating question was lost");
 });
 
+test("5b product education renders as an answer, not as a recommendation", (t) => {
+  // Phase 7: the customer asked about a product on a turn that still needs a
+  // fact. They get the answer and the question, and nothing that looks like a
+  // choice has been made for them.
+  const spoken =
+    "Cellular shades are built around trapped air, which is what makes them the " +
+    "insulating direction in our range — though they give up the outward view " +
+    "once they are down. Whether they are the call for that bedroom depends on " +
+    "how dark you need it. Comfortable, or as dark as possible?";
+  const turn = contract.toAdvisorTurn(
+    serverTurn({
+      status: "NEED_MORE_INFORMATION",
+      message: spoken,
+      nextQuestion: {
+        id: "q-darkening-level",
+        canonical: "How dark does that room need to get?",
+        phrased: spoken,
+        materialTo: [],
+      },
+      preliminaryGuidance: null,
+      productEducation: [{ id: "cellular-shades", label: "Cellular shades" }],
+      assessment: { ...serverTurn().assessment, strongCandidates: [], primaryRecommendation: null },
+      consultationCta: { recommended: false, reasons: [] },
+    }),
+    {}
+  );
+
+  t.equal(turn.message, spoken, "the education was truncated before rendering");
+  t.equal(turn.direction, null, "explaining a product put it on the recommendation card");
+  t.equal(turn.status, "NEED_MORE_INFORMATION", "status not carried");
+  t.equal(turn.offerConsultation, false, "product education created booking pressure");
+  t.ok(turn.question !== null, "the gating question was lost");
+
+  // The client contract is an allowlist: neither new server field is exposed,
+  // so nothing on the page can start rendering a product list from them.
+  t.ok(!/productEducation/.test(CONTRACT_SRC), "the client contract now reads product education");
+  t.ok(!/preliminaryGuidance/.test(CONTRACT_SRC), "the client contract now reads preliminary guidance");
+});
+
 test("6  GUIDANCE_READY renders without a best-fit claim", (t) => {
   const turn = contract.toAdvisorTurn(
     serverTurn({ status: "GUIDANCE_READY", assessment: { ...serverTurn().assessment, strongCandidates: [], primaryRecommendation: null } }),

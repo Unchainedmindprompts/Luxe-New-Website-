@@ -102,6 +102,14 @@ export interface AdvisorDeps {
     message: string,
     topics: AdvisorKnowledge["answers"]
   ) => readonly ScoredTopic[];
+  /**
+   * Product directions the visitor is ASKING about, on a project turn.
+   * Empty unless they named one, so it can never propose a shortlist.
+   */
+  readonly selectProductEducation: (
+    message: string,
+    directions: AdvisorKnowledge["directions"]
+  ) => readonly ProductDirection[];
   /** Product directions the visitor named, for comparison questions. */
   readonly selectNamedDirections: (
     message: string,
@@ -185,6 +193,12 @@ export interface AdvisorDeps {
     ) => SystemPrompt;
     /** Guidance first, then the one question that still gates the answer. */
     preliminaryGuidanceSystemPrompt: (
+      guardrails: readonly Guardrail[],
+      corrected?: boolean,
+      transcript?: string
+    ) => SystemPrompt;
+    /** Verified product knowledge first, then the question. Never a choice. */
+    productEducationSystemPrompt: (
       guardrails: readonly Guardrail[],
       corrected?: boolean,
       transcript?: string
@@ -373,6 +387,28 @@ function fallbackPreliminary(guidance: PreliminaryGuidance, canonical: string): 
   if (guidance.avoid.length) {
     sentences.push(`We would steer away from ${lowerFirst(guidance.avoid[0].label)}.`);
   }
+  sentences.push(canonical.trim());
+  return sentences.join(" ").replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Deterministic education-then-question text, for when the model's is unusable.
+ *
+ * Names only what the customer named and claims nothing about fit — the same
+ * boundary the prompt enforces, held here too, because a fallback is exactly
+ * when nothing is enforcing it upstream.
+ */
+function fallbackEducation(
+  directions: readonly ProductDirection[],
+  canonical: string
+): string {
+  const sentences = directions.slice(0, 2).map((direction) => {
+    const strength = trimReason(direction.strengths[0]);
+    return strength
+      ? `${sentenceCase(direction.label)}: ${lowerFirst(strength)}`
+      : `${sentenceCase(direction.label)} is one we carry.`;
+  });
+  sentences.push("Whether it is the right call for your room depends on one more thing.");
   sentences.push(canonical.trim());
   return sentences.join(" ").replace(/\s+/g, " ").trim();
 }
@@ -739,6 +775,7 @@ ${lines.join("\n")}`;
         assessment: summarise(deps.assess(priorFacts, deps.knowledge)),
         nextQuestion: null,
         preliminaryGuidance: null,
+        productEducation: null,
         message: answer,
         canonicalResponseId: null,
         consultationCta: verified.invitesConsultation
@@ -796,6 +833,7 @@ ${lines.join("\n")}`;
           assessment: summarise(deps.assess(priorFacts, deps.knowledge)),
           nextQuestion: null,
         preliminaryGuidance: null,
+        productEducation: null,
           message: answer,
           canonicalResponseId: null,
           consultationCta: rescued[0].topic.invitesConsultation
@@ -933,6 +971,7 @@ ${lines.join("\n")}`;
         assessment: summarise(assessment),
         nextQuestion: null,
         preliminaryGuidance: null,
+        productEducation: null,
         message: deps.sanitizeForOutput(brandAnswer.response, MAX_RECOMMENDATION_CHARS),
         canonicalResponseId: brandAnswer.id,
         consultationCta: { recommended: false, reasons: [] },
@@ -965,6 +1004,7 @@ ${lines.join("\n")}`;
           assessment: summarise(assessment),
           nextQuestion: null,
         preliminaryGuidance: null,
+        productEducation: null,
           message: answered.message,
           canonicalResponseId: null,
           // An answer earns the booking path when they asked to schedule, or
@@ -1005,6 +1045,7 @@ ${lines.join("\n")}`;
         assessment: summarise(assessment),
         nextQuestion: null,
         preliminaryGuidance: null,
+        productEducation: null,
         message: unknown,
         canonicalResponseId: null,
         // Not knowing something is not a reason to sell a visit — unless the
@@ -1039,6 +1080,7 @@ ${lines.join("\n")}`;
         assessment: summarise(assessment),
         nextQuestion: null,
         preliminaryGuidance: null,
+        productEducation: null,
         message,
         canonicalResponseId: null,
         consultationCta: { recommended: false, reasons: [] },
@@ -1053,35 +1095,57 @@ ${lines.join("\n")}`;
     if (status === "NEED_MORE_INFORMATION" && selection.next) {
       const question = selection.next;
 
-      // THE QUESTION IS ASKED EITHER WAY. This decides only what precedes it.
-      // The counterfactual gate has already ruled that this fact materially
-      // changes the direction, and nothing here softens that — a turn with
-      // guidance still asks, still records the question, and still reports
+      // THE QUESTION IS ASKED EITHER WAY. Everything below decides only what
+      // precedes it. The counterfactual gate has already ruled that this fact
+      // materially changes the direction, and nothing here softens that — every
+      // branch still asks, still records the question, and still reports
       // NEED_MORE_INFORMATION.
+      //
+      // Three branches, in precedence order, and they are three different
+      // situations rather than three flavours of one:
+      //
+      //   THE ENGINE NARROWED SOMETHING — Phase 6. Strongest, so it wins: a
+      //     deterministic leaning is worth more than an explanation.
+      //   THE ENGINE NARROWED NOTHING, BUT THEY ASKED ABOUT A PRODUCT — Phase 7.
+      //     Verified knowledge about the products THEY named. Never a shortlist,
+      //     because the selection is theirs.
+      //   NEITHER — the question by itself, which is honest and was always
+      //     right for a message that told us a fact and asked nothing.
       const guidance = preliminaryGuidance(assessment);
-      trace.setRoute(guidance ? "guided-question" : "question");
+      const educate = guidance
+        ? []
+        : deps.selectProductEducation(input.message, deps.knowledge.directions);
+      const educating = educate.length > 0;
+      trace.setRoute(guidance ? "guided-question" : educating ? "educated-question" : "question");
 
       const phrased = await phraseSafely(
         guidance
           ? deps.prompts.preliminaryGuidanceSystemPrompt(guardrails, corrected, history)
-          : deps.prompts.questionSystemPrompt(guardrails, corrected, history),
+          : educating
+            ? deps.prompts.productEducationSystemPrompt(guardrails, corrected, history)
+            : deps.prompts.questionSystemPrompt(guardrails, corrected, history),
         deps.prompts.phrasingUserMessage({
           "recent conversation": history || undefined,
           "their message": input.message,
           "what the analysis already supports": guidance ? describeGuidance(guidance) : undefined,
+          "what luxe knows about the products they asked about": educating
+            ? educate.map((d) => deps.describeDirection(d)).join("\n\n")
+            : undefined,
           "question to ask": question.canonical,
           "why it matters": question.materialTo.length
             ? `It could change whether these fit: ${question.materialTo.join(", ")}.`
             : undefined,
         }),
-        // A guidance turn says two things rather than one, so it gets the
-        // budget of an answer instead of the budget of a bare question. No
-        // existing limit moves.
-        guidance ? ANSWER_TOKENS : QUESTION_TOKENS,
-        guidance ? MAX_ANSWER_CHARS : MAX_QUESTION_CHARS,
+        // A turn that says two things rather than one gets the budget of an
+        // answer instead of the budget of a bare question. No existing limit
+        // moves.
+        guidance || educating ? ANSWER_TOKENS : QUESTION_TOKENS,
+        guidance || educating ? MAX_ANSWER_CHARS : MAX_QUESTION_CHARS,
         guidance
           ? fallbackPreliminary(guidance, question.canonical)
-          : fallbackQuestion(question.canonical),
+          : educating
+            ? fallbackEducation(educate, question.canonical)
+            : fallbackQuestion(question.canonical),
         interventions
       );
 
@@ -1100,6 +1164,7 @@ ${lines.join("\n")}`;
           materialTo: question.materialTo,
         },
         preliminaryGuidance: guidance,
+        productEducation: educating ? educate.map((d) => ({ id: d.id, label: d.label })) : null,
         message: phrased,
         canonicalResponseId: null,
         // UNCHANGED, AND DELIBERATELY SO. Naming a direction we are leaning
@@ -1150,6 +1215,7 @@ ${lines.join("\n")}`;
       assessment: summarise(assessment),
       nextQuestion: null,
       preliminaryGuidance: null,
+      productEducation: null,
       message,
       canonicalResponseId: null,
       consultationCta: consultationIntent(assessment, status, askedToSchedule),
@@ -1178,6 +1244,7 @@ export function unavailable(
     assessment: null,
     nextQuestion: null,
     preliminaryGuidance: null,
+    productEducation: null,
     canonicalResponseId: null,
     message:
       "We could not work through that just now. Our team can go through it with you directly — would you like to schedule a consultation?",
