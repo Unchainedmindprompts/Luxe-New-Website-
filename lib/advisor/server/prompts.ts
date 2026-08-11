@@ -151,6 +151,8 @@ Leave "area" as an empty string when the message does not name a space. That is 
 
 Two rooms of the same kind are one space unless they say otherwise. "The bedrooms" is one area. "The primary bedroom needs blackout but the guest room doesn't" is two, and the words primary and guest are what make it two — carry them.
 
+When they apply something to the WHOLE job — "throughout", "the whole house", "every room" — put those words in "area" exactly as they said them. That is a real distinction: "motorize the great room" is one space, and "motorize throughout" is the whole project. Do not shorten one into the other.
+
 FIELDS AND ALLOWED VALUES
 
 ${vocabulary}

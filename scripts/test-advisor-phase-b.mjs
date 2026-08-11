@@ -3909,6 +3909,15 @@ await test("168 E — two bedrooms can be told apart when the homeowner distingu
   // Undistinguished bedrooms stay one area — "the bedrooms" is one space.
   const plain = projectModule.areaKey("bedroom", "the bedrooms");
   t.equal(plain, "bedroom", `"the bedrooms" keyed as ${plain}`);
+
+  // A whole MESSAGE naming several spaces moves focus nowhere: scanning all of
+  // it for a qualifier once produced a living room wearing a bedroom's
+  // adjective. The scoped updates decide instead.
+  const many = projectModule.focusOn(projectModule.emptyProject(),
+    "Motorize the living room and primary bedroom, but leave the guest room manual.");
+  t.equal(many.areas.length, 0, `a multi-room message opened ${many.areas.map((a) => a.id).join(", ")}`);
+  const one = projectModule.focusOn(projectModule.emptyProject(), "Let's talk about the primary bedroom.");
+  t.equal(one.activeAreaId, "bedroom:primary", `one named space keyed as ${one.activeAreaId}`);
 });
 
 await test("169 F — a recommendation belongs to one area, and says so", async (t) => {
@@ -3944,24 +3953,152 @@ await test("170 G — an unscoped follow-up lands on the space being discussed",
   t.equal(areaOf(state, "bedroom")?.ledger.privacyNeed, undefined, "the follow-up landed on the bedroom instead");
 });
 
-await test("171 H — a whole-project fact is stored once, not per room", async (t) => {
+await test("171 A — motorization differs by room, and both answers survive", async (t) => {
+  // The correction this phase exists for. Motorization is not a preference
+  // someone holds about their house; it is decided window by window, and a
+  // shared field could only ever hold one of these two answers.
+  const { state } = await areaTurns([
+    {
+      message: "I want the great-room shades motorized, but keep the bedrooms manual to save money.",
+      extraction: { __updates: [
+        areaUpdate("room", "living", "the great room"),
+        areaUpdate("motorizationInterest", "requested", "the great room"),
+        areaUpdate("room", "bedroom", "the bedrooms"),
+        areaUpdate("motorizationInterest", "uninterested", "the bedrooms"),
+        areaUpdate("budgetSensitivity", "high", null),
+      ] },
+    },
+  ]);
+  t.equal(areaOf(state, "living")?.ledger.motorizationInterest?.value, "requested", "the great room lost its motorization");
+  t.equal(areaOf(state, "bedroom")?.ledger.motorizationInterest?.value, "uninterested", "the bedrooms took the great room's answer");
+
+  // Budget is genuinely household-level and stays shared — cost influencing one
+  // room's choice must not push the whole house to manual.
+  t.equal(state.project.shared.budgetSensitivity?.value, "high", "budget was not kept as a household fact");
+  t.equal(state.project.shared.motorizationInterest, undefined, "motorization is still being stored as shared");
+  t.equal(state.project.defaults.motorizationInterest, undefined, "an area-specific answer became a project default");
+});
+
+await test("172a B — a motorization preference does not follow the conversation", async (t) => {
+  const { state } = await areaTurns([
+    { message: "For the living room, I definitely want these motorized.", extraction: { __updates: [
+      areaUpdate("room", "living", "the living room"),
+      areaUpdate("motorizationInterest", "requested", "the living room"),
+    ] } },
+    { message: "Now the bedroom.", extraction: { __updates: [
+      areaUpdate("room", "bedroom", "the bedroom"),
+    ] } },
+  ]);
+  t.equal(state.facts.motorizationInterest, undefined, "the bedroom inherited the living room's motorization");
+  t.equal(areaOf(state, "living")?.ledger.motorizationInterest?.value, "requested", "the living room lost its own answer");
+});
+
+await test("172b C — an explicit whole-house instruction is a project default", async (t) => {
   const { state } = await areaTurns([
     { message: "The bedroom needs to be dark.", extraction: { __updates: [
       areaUpdate("room", "bedroom", "the bedroom"),
       areaUpdate("roomDarkening", "maximum", "the bedroom"),
     ] } },
-    { message: "We want motorized shades throughout the house.", extraction: { __updates: [
-      areaUpdate("motorizationInterest", "requested", null),
+    { message: "I'd like motorization throughout the entire house.", extraction: { __updates: [
+      areaUpdate("motorizationInterest", "requested", "throughout the entire house"),
     ] } },
     { message: "Now the living room.", extraction: { __updates: [
       areaUpdate("room", "living", "the living room"),
     ] } },
   ]);
-  t.equal(state.project.shared.motorizationInterest?.value, "requested", "a household fact was not stored as shared");
-  t.equal(areaOf(state, "bedroom")?.ledger.motorizationInterest, undefined, "a household fact was copied into an area");
-  // And it reaches the engine for every area without being restated.
-  t.equal(state.facts.motorizationInterest, "requested", "the living room did not inherit the household fact");
-  t.equal(state.facts.room, "living", "the conversation is not on the living room");
+  // Stored once, as a default — not copied into every room, not made shared.
+  t.equal(state.project.defaults.motorizationInterest?.value, "requested", "the whole-house instruction was not stored as a default");
+  t.equal(state.project.shared.motorizationInterest, undefined, "the whole-house instruction became a shared field");
+  t.equal(areaOf(state, "bedroom")?.ledger.motorizationInterest, undefined, "the default was copied into an area");
+
+  // And every area inherits it without the homeowner repeating themselves.
+  t.equal(state.facts.motorizationInterest, "requested", "a new area did not inherit the whole-house instruction");
+  t.equal(state.facts.room, "living", "the whole-house instruction moved the conversation");
+
+  // Widening the subject is not changing it.
+  t.equal(state.project.areas.length, 2, `a whole-house phrase created an area: ${state.project.areas.map((a) => a.id).join(", ")}`);
+});
+
+await test("172c the override rule — an area beats a project default", async (t) => {
+  const { state } = await areaTurns([
+    { message: "Motorize throughout the whole house.", extraction: { __updates: [
+      areaUpdate("motorizationInterest", "requested", "throughout the whole house"),
+    ] } },
+    { message: "Actually, keep the guest bedroom manual.", extraction: { __updates: [
+      areaUpdate("room", "bedroom", "the guest bedroom"),
+      areaUpdate("motorizationInterest", "uninterested", "the guest bedroom"),
+    ] } },
+    { message: "And the living room?", extraction: { __updates: [
+      areaUpdate("room", "living", "the living room"),
+    ] } },
+  ]);
+  // The guest bedroom keeps its own answer; the living room still inherits.
+  t.equal(
+    areaOf(state, "living") && state.facts.motorizationInterest,
+    "requested",
+    "the living room did not inherit the project default"
+  );
+  const guest = state.project.areas.find((a) => a.id === "bedroom:guest");
+  t.equal(guest?.ledger.motorizationInterest?.value, "uninterested", "the guest bedroom lost its override");
+  t.equal(state.project.defaults.motorizationInterest?.value, "requested", "the area override wiped the project default");
+});
+
+await test("172d D — three areas, three motorization answers", async (t) => {
+  const { state } = await areaTurns([
+    {
+      message: "Motorize the living room and primary bedroom, but leave the guest room manual.",
+      extraction: { __updates: [
+        areaUpdate("room", "living", "the living room"),
+        areaUpdate("motorizationInterest", "requested", "the living room"),
+        areaUpdate("room", "bedroom", "the primary bedroom"),
+        areaUpdate("motorizationInterest", "requested", "the primary bedroom"),
+        areaUpdate("room", "bedroom", "the guest room"),
+        areaUpdate("motorizationInterest", "uninterested", "the guest room"),
+      ] },
+    },
+  ]);
+  t.equal(state.project.areas.length, 3, `expected three areas, got ${state.project.areas.map((a) => a.id).join(", ")}`);
+  const by = (id) => state.project.areas.find((a) => a.id === id)?.ledger.motorizationInterest?.value;
+  t.equal(by("living"), "requested", "the living room lost its answer");
+  t.equal(by("bedroom:primary"), "requested", "the primary bedroom lost its answer");
+  t.equal(by("bedroom:guest"), "uninterested", "the guest room took another room's answer");
+});
+
+await test("172e nothing else was made shared for convenience", async (t) => {
+  // Household-level by nature, not by convenience. Everything else belongs to
+  // an opening, and the list is asserted rather than described.
+  t.equal(JSON.stringify(projectModule.SHARED_FIELDS), '["budgetSensitivity"]', "the shared field list changed");
+  for (const field of [
+    "motorizationInterest", "room", "exposure", "privacyNeed", "roomDarkening",
+    "viewImportance", "aesthetic", "solarHeat", "moistureExposure", "mountingSubstrate",
+    "geometry", "access", "openings", "requestedProducts", "requestedFeatures",
+    "operationFrequency", "exteriorConditions", "priorities",
+  ]) {
+    t.ok(!projectModule.isSharedField(field), `${field} is stored as household-wide`);
+  }
+
+  // A whole-project phrase is recognised; a room name never is.
+  for (const phrase of ["throughout", "the whole house", "every room", "all the windows"]) {
+    t.ok(projectModule.isWholeProjectPhrase(phrase), `"${phrase}" was not read as a whole-project instruction`);
+  }
+  for (const phrase of ["the living room", "the primary bedroom", "the guest room", ""]) {
+    t.ok(!projectModule.isWholeProjectPhrase(phrase), `"${phrase}" was read as a whole-project instruction`);
+  }
+});
+
+await test("172f an unscoped preference never becomes a project default", async (t) => {
+  // "I definitely want these motorized" while discussing one room applies to
+  // that room. Only the homeowner's own whole-project words widen it.
+  const { state } = await areaTurns([
+    { message: "Let's talk about the office.", extraction: { __updates: [
+      areaUpdate("room", "office", "the office"),
+    ] } },
+    { message: "I definitely want these motorized.", extraction: { __updates: [
+      areaUpdate("motorizationInterest", "requested", null),
+    ] } },
+  ]);
+  t.equal(state.project.defaults.motorizationInterest, undefined, "an unscoped preference became a project default");
+  t.equal(areaOf(state, "office")?.ledger.motorizationInterest?.value, "requested", "the preference did not land on the active area");
 });
 
 await test("172 an inferred room may not open or switch an area", async (t) => {

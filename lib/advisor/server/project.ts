@@ -26,19 +26,55 @@ import type { ExtractionFieldName, FactUpdate } from "./extraction";
 /**
  * Facts about the household rather than about a window.
  *
- * Kept deliberately short. Budget is the customer's, and an appetite for
- * motorization is a preference they hold before anyone names a room — asking
- * for either again per area would be the questionnaire behaviour this advisor
- * keeps being pulled back toward.
+ * ONE FIELD, AND IT HAS TO EARN ITS PLACE. Budget sensitivity is a property of
+ * the customer: it is the same fact standing in the great room as standing in
+ * the guest bedroom, and asking for it again per area would be the
+ * questionnaire behaviour this advisor keeps being pulled back toward.
  *
- * Everything else is a property of a particular opening. `aesthetic` is the
- * closest call and stays area-specific on purpose: "modern in the living room"
- * is the exact sentence that started this, and a homeowner who wants a cohesive
- * look will say so and have it recorded in each area they say it about.
+ * `motorizationInterest` WAS HERE AND WAS WRONG. It reads like a preference
+ * someone holds about their house, and in a real Luxe project it is a decision
+ * made window by window: motorized in the great room because the glass is large
+ * and gets adjusted daily, manual in the secondary bedrooms to hold the budget,
+ * motorized on anything out of reach. "I want the great-room shades motorized,
+ * but keep the bedrooms manual to save money" is an ordinary sentence, and a
+ * shared field cannot hold it — one of those two answers overwrites the other.
+ *
+ * Everything else is a property of a particular opening: room, exposure,
+ * privacy, darkening, view, glare, aesthetics, motorization, moisture,
+ * mounting, geometry, access, and the products and features requested for it.
+ * `aesthetic` is the closest call and stays area-specific on purpose — "modern
+ * in the living room" is the exact sentence that started this phase.
  */
-export const SHARED_FIELDS: readonly string[] = ["budgetSensitivity", "motorizationInterest"];
+export const SHARED_FIELDS: readonly string[] = ["budgetSensitivity"];
 
 export const isSharedField = (field: string): boolean => SHARED_FIELDS.includes(field);
+
+/**
+ * Whole-project instructions, which are a different thing from shared fields.
+ *
+ * A field is shared because of what it IS. A project default exists because of
+ * what the homeowner SAID: "I'd like motorization throughout the entire house"
+ * is an area-specific field being applied deliberately to every area, and
+ * refusing to represent that would make them repeat it room by room.
+ *
+ * Bounded on purpose, and it only ever reads the phrase the homeowner used for
+ * the space. A preference inferred while discussing one room can never become a
+ * project default, because a room's name is not on this list.
+ */
+const WHOLE_PROJECT = new RegExp(
+  "\\b(" +
+    [
+      "throughout", "whole house", "entire house", "whole home", "entire home",
+      "whole place", "everywhere", "every room", "all the rooms", "all rooms",
+      "house wide", "housewide", "the entire place", "all of the windows",
+      "every window", "all the windows",
+    ].join("|") +
+    ")\\b"
+);
+
+/** Did the homeowner apply this to the whole job rather than to one space? */
+export const isWholeProjectPhrase = (phrase: string): boolean =>
+  WHOLE_PROJECT.test(normalise(phrase));
 
 /**
  * One space the conversation has been about.
@@ -56,14 +92,27 @@ export interface ProjectArea {
 }
 
 export interface Project {
-  /** Facts that hold across the whole job. */
+  /** Facts that are household-level by nature. See `SHARED_FIELDS`. */
   readonly shared: FactLedger;
+  /**
+   * Area-specific facts the homeowner explicitly applied to the whole job.
+   *
+   * "Motorize everything" belongs here; "motorize the great room" does not.
+   * An area's own value always wins over a default — the more specific
+   * statement is the one the homeowner meant for that space.
+   */
+  readonly defaults: FactLedger;
   readonly areas: readonly ProjectArea[];
   /** Which space the conversation is about right now. */
   readonly activeAreaId: string | null;
 }
 
-export const emptyProject = (): Project => ({ shared: {}, areas: [], activeAreaId: null });
+export const emptyProject = (): Project => ({
+  shared: {},
+  defaults: {},
+  areas: [],
+  activeAreaId: null,
+});
 
 // ───────────────────────────── area identity ────────────────────────────────
 
@@ -188,6 +237,7 @@ export function applyScopedUpdates(
   const touched: string[] = [];
 
   let shared = project.shared;
+  let defaults = project.defaults;
   const areas = new Map(project.areas.map((area) => [area.id, area]));
   let activeAreaId = project.activeAreaId;
 
@@ -202,6 +252,18 @@ export function applyScopedUpdates(
       suppressed.push(...result.suppressed);
     }
     if (!areaUpdates.length) continue;
+
+    // "Motorize the whole house" is an area-specific field applied to every
+    // area on purpose. It becomes a project default rather than a space, so no
+    // area is invented for it and nothing has to be repeated room by room.
+    // Focus does not move: they did not change the subject, they widened it.
+    if (group.phrase && isWholeProjectPhrase(group.phrase)) {
+      const result = apply(defaults, areaUpdates, turn, isList);
+      defaults = result.ledger;
+      retracted.push(...result.retracted);
+      suppressed.push(...result.suppressed);
+      continue;
+    }
 
     // Which space these belong to: the room this group asserts, the words the
     // homeowner used, or the space already under discussion.
@@ -245,7 +307,7 @@ export function applyScopedUpdates(
   else if (!activeAreaId && areas.size) activeAreaId = [...areas.keys()][0];
 
   return {
-    project: { shared, areas: [...areas.values()], activeAreaId },
+    project: { shared, defaults, areas: [...areas.values()], activeAreaId },
     retracted,
     suppressed,
     touched,
@@ -272,7 +334,14 @@ export function facts(
   area: ProjectArea | null,
   project_: (ledger: FactLedger) => ProjectFacts
 ): ProjectFacts {
-  return { ...project_(project.shared), ...(area ? project_(area.ledger) : {}) } as ProjectFacts;
+  // Order is the override rule. Household facts, then anything the homeowner
+  // applied to the whole job, then this space's own — so "keep the bedrooms
+  // manual" beats "motorize throughout" in the bedroom and nowhere else.
+  return {
+    ...project_(project.shared),
+    ...project_(project.defaults),
+    ...(area ? project_(area.ledger) : {}),
+  } as ProjectFacts;
 }
 
 /** The facts of whichever space the conversation is on. */
@@ -289,15 +358,44 @@ export const activeFacts = (
  * homeowner named a space; that is enough.
  */
 export function focusOn(project: Project, phrase: string): Project {
-  const room = readRoomWord(phrase);
-  if (!room) return project;
-  const key = areaKey(room, phrase);
+  const named = readSingleArea(phrase);
+  if (!named) return project;
+  const { room, key } = named;
   const existing = areaById(project, key);
   if (existing) return { ...project, activeAreaId: key };
   return {
     ...project,
-    areas: [...project.areas, { id: key, room, label: phrase, ledger: {} }],
+    areas: [...project.areas, { id: key, room, label: named.label, ledger: {} }],
     activeAreaId: key,
+  };
+}
+
+/**
+ * The one space a whole message names, when it names exactly one.
+ *
+ * A WHOLE MESSAGE IS NOT AN AREA PHRASE. "Motorize the living room and primary
+ * bedroom, but leave the guest room manual" mentions three spaces, and scanning
+ * all of it for a qualifier produced `living:primary` — the living room wearing
+ * the bedroom's adjective. So a message naming more than one room moves focus
+ * nowhere and lets the scoped updates decide, and a qualifier is only taken from
+ * the two words immediately before the room word it belongs to.
+ */
+function readSingleArea(message: string): { room: string; key: string; label: string } | null {
+  const words = normalise(message).split(" ");
+  const hits = words
+    .map((word, index) => ({ room: ROOM_WORDS[word], index }))
+    .filter((hit): hit is { room: string; index: number } => Boolean(hit.room));
+  if (hits.length !== 1) return null;
+
+  const { room, index } = hits[0];
+  const qualifier = words
+    .slice(Math.max(0, index - 2), index)
+    .find((word) => QUALIFIERS.includes(word));
+  const label = qualifier ? `the ${qualifier} ${words[index]}` : `the ${words[index]}`;
+  return {
+    room,
+    key: qualifier && qualifier !== room ? `${room}:${qualifier}` : room,
+    label,
   };
 }
 
@@ -377,7 +475,29 @@ export function validateProject(
       ? source.activeAreaId
       : areas[0]?.id ?? null;
 
-  return { shared: validateLedger(source.shared), areas, activeAreaId };
+  const shared = validateLedger(source.shared);
+  const defaults = validateLedger((source as { defaults?: unknown }).defaults);
+  return normaliseScopes({ shared, defaults, areas, activeAreaId });
+}
+
+/**
+ * Moves anything sitting in the wrong scope back where it belongs.
+ *
+ * `motorizationInterest` was briefly a shared field, so state written by that
+ * build carries it there. It is not household-level — it is a per-window
+ * decision — but a homeowner who said it once should not have to say it again,
+ * so it lands as a project DEFAULT: applied everywhere, overridden by any area
+ * that has its own answer. That is the closest correct reading of what the old
+ * shape meant, and it loses nothing.
+ */
+function normaliseScopes(project: Project): Project {
+  const shared: Record<string, FactRecord | readonly FactRecord[]> = {};
+  const defaults: Record<string, FactRecord | readonly FactRecord[]> = { ...project.defaults };
+  for (const [field, record] of Object.entries(project.shared)) {
+    if (isSharedField(field)) shared[field] = record;
+    else if (!(field in defaults)) defaults[field] = record;
+  }
+  return { ...project, shared, defaults };
 }
 
 /** Splits a pre-Phase-7 flat ledger into the shape used from here on. */
@@ -392,13 +512,14 @@ export function migrateLegacyLedger(ledger: FactLedger): Project {
     else areaLedger[field] = record;
   }
 
-  if (!Object.keys(areaLedger).length) return { shared, areas: [], activeAreaId: null };
+  if (!Object.keys(areaLedger).length) return { shared, defaults: {}, areas: [], activeAreaId: null };
 
   const roomRecord = areaLedger.room as FactRecord | undefined;
   const room = roomRecord && !Array.isArray(roomRecord) ? roomRecord.value : null;
   const id = areaKey(room, null);
   return {
     shared,
+    defaults: {},
     areas: [{ id, room, label: null, ledger: areaLedger }],
     activeAreaId: id,
   };
@@ -419,6 +540,10 @@ export function describeProject(project: Project): string {
   const blocks: string[] = [];
   const shared = describeLedger(project.shared);
   if (shared) blocks.push(`WHOLE PROJECT\n${shared}`);
+  const defaults = describeLedger(project.defaults);
+  if (defaults) {
+    blocks.push(`ASKED FOR THROUGHOUT (unless a room says otherwise)\n${defaults}`);
+  }
   for (const area of project.areas) {
     const body = describeLedger(area.ledger);
     const heading = `${area.label ?? area.room ?? area.id}${

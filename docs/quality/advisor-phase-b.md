@@ -676,14 +676,56 @@ condition or type in the engine moves.
 
 ### Project-wide vs area-specific
 
-`SHARED_FIELDS` is two entries: `budgetSensitivity` and `motorizationInterest`.
-Budget is the customer's; an appetite for motorization is a preference they hold
-before anyone names a room. Asking for either again per area is the
-questionnaire behaviour this advisor keeps being pulled back toward.
+`SHARED_FIELDS` is **one entry**: `budgetSensitivity`. It is a property of the
+customer — the same fact standing in the great room as in the guest bedroom —
+and asking for it again per area is the questionnaire behaviour this advisor
+keeps being pulled back toward.
 
-Everything else is a property of a particular opening. `aesthetic` is the
-closest call and stays area-specific deliberately — "modern in the living room"
-is the exact sentence that started this.
+**`motorizationInterest` was briefly shared, and that was wrong.** It reads like
+a preference someone holds about their house; in a real Luxe project it is
+decided window by window — motorized in the great room because the glass is
+large and gets adjusted daily, manual in the secondary bedrooms to hold the
+budget, motorized on anything out of reach. *"I want the great-room shades
+motorized, but keep the bedrooms manual to save money"* is an ordinary sentence,
+and a shared field can only hold one of those two answers.
+
+Everything else is a property of a particular opening: room, exposure, privacy,
+darkening, view, glare, aesthetics, **motorization**, moisture, mounting,
+geometry, access, and the products and features requested for it.
+
+### Whole-project instructions are not shared fields
+
+A field is shared because of **what it is**. A project default exists because of
+**what the homeowner said**:
+
+| they said | where it goes |
+|---|---|
+| "motorize the great room" | that area's ledger |
+| "motorize throughout the entire house" | `project.defaults` |
+| "I definitely want these motorized" *(mid-conversation)* | the active area |
+
+`project.defaults` holds area-specific fields the homeowner deliberately applied
+everywhere. Stored **once** — not copied into each room, not promoted to shared —
+and inherited by every area including ones created later.
+
+Merge order is the override rule:
+
+```
+shared  →  defaults  →  the area's own
+```
+
+So *"keep the guest bedroom manual"* beats *"motorize throughout"* **in the
+guest bedroom and nowhere else**. An area's own statement is the more specific
+one and always wins.
+
+Recognition is bounded and only ever reads the phrase the homeowner used for the
+space — "throughout", "the whole house", "every room". **A preference stated
+while discussing one room can never become a project default**, because a room's
+name is not on that list (test 172f).
+
+Budget and configuration stay separate concepts: *"to save money"* may establish
+household budget sensitivity **and** one room's manual choice, without pushing
+the whole house to manual (test 171).
 
 ### Area identity — deliberately shallow
 
