@@ -3570,9 +3570,11 @@ await test("157 DEFECT 3 — internal classification never reaches the card", as
     "the bucket id still maps to customer-facing text"
   );
 
-  // Every label that DOES ship has to read as the homeowner's own concern, not
-  // as a category from our ontology.
-  const labels = [...src.matchAll(/^\s{2}"?[a-z-]+"?:\s+"([^"]+)",$/gm)].map((m) => m[1]);
+  // Every PRIORITY label that ships has to read as the homeowner's own concern,
+  // not as a category from our ontology. Scoped to that map: room labels are a
+  // different kind of thing and legitimately read "the bedroom".
+  const priorityMap = src.slice(src.indexOf("PRIORITY_LABELS"), src.indexOf("VERIFICATION_LABELS"));
+  const labels = [...priorityMap.matchAll(/^\s{2}"?[a-z-]+"?:\s+"([^"]+)",$/gm)].map((m) => m[1]);
   for (const label of labels) {
     t.ok(
       !/^(a|an|the)\s|\b(specific|general|other|misc|category|classification|requirement)\b/i.test(label),
@@ -3585,9 +3587,12 @@ await test("158 DEFECT 4B — the recommendation is handed the verified mechanis
   const { provider } = await previewConversation();
   const user = provider.calls.lastPhraseUser;
   t.ok(/what luxe knows about that direction/.test(user), "the verified behaviour prose was not supplied");
-  // The corpus credits the honeycomb with ENERGY and gives no light mechanism.
-  t.ok(/trapped air/i.test(user), "the energy mechanism is missing from the material");
   t.ok(/Room-darkening cellular is among Luxe's preferred directions/.test(user), "the darkening claim is missing");
+  // AND THE INSULATION MECHANISM IS WITHHELD. This project is about darkening
+  // and privacy; the trapped-air line belongs to energy and is what the model
+  // reached for when it claimed the honeycomb is why the room goes dark.
+  t.ok(!/trapped air/i.test(user), "the insulation mechanism was still handed over on a darkening project");
+  t.ok(!/honeycomb/i.test(user), "the honeycomb construction was still handed over on a darkening project");
 
   // And the prompt forbids re-pointing one mechanism at another property.
   const system = provider.calls.lastPhraseSystem;
@@ -3615,6 +3620,172 @@ await test("159 no regression to Phase 1-6 behaviour on this conversation", asyn
       .some((v) => v.guardrailId === "no-invented-products"),
     "invented-product grounding regressed"
   );
+});
+
+// ── second preview pass: discovery loop, area collapse, darkening mechanism ─
+
+/**
+ * THE SECOND REAL PREVIEW CONVERSATION, run end to end.
+ *
+ * Four turns, threaded as the browser threads them. The homeowner said
+ * "obviously" twice — which is what someone types when they are being made to
+ * restate what they already said.
+ */
+async function secondPreview(extractions, phrasings) {
+  const provider = mockProvider({ extractions, phrasings });
+  const advisor = makeAdvisor(provider);
+  const said = [
+    "I just purchased a new home and I need new blinds and shades and have no idea where to begin",
+    "Well since I don't have any shades obviously I need something.",
+    "Obviously I have no privacy. So thats an issue.",
+    "Well I want something that darkens the bedrooms. and some modern and contemportay for the living spaces",
+  ];
+  const turns = [];
+  let state = {};
+  for (const message of said) {
+    const result = await advisor.runTurn({ message, state });
+    turns.push(result);
+    state = result.state;
+  }
+  return { turns, provider };
+}
+
+const PREVIEW_EXTRACTIONS = [
+  { __intent: "discovery" },
+  { __intent: "discovery" },
+  { __intent: "project", priorities: ["privacy"] },
+  {
+    __intent: "project",
+    room: "bedroom",
+    roomDarkening: "maximum",
+    priorities: ["room-darkening"],
+  },
+];
+
+await test("160 DEFECT 1 — the open invitation is offered once, not every turn", async (t) => {
+  const { turns } = await secondPreview(PREVIEW_EXTRACTIONS);
+  t.equal(turns[0].diagnostics?.route, "discovery", `turn 1 took ${turns[0].diagnostics?.route}`);
+  t.ok(
+    turns[0].state.askedQuestionIds.includes("discovery-opening"),
+    "the opening was not recorded, so it can be repeated"
+  );
+  t.ok(
+    turns[1].diagnostics?.route !== "discovery",
+    "turn 2 asked another broad open question instead of something concrete"
+  );
+  t.ok(
+    turns[2].diagnostics?.route !== "discovery",
+    "turn 3 asked another broad open question instead of something concrete"
+  );
+  // And a concrete question is what replaces it.
+  if (turns[1].nextQuestion) {
+    t.ok(turns[1].nextQuestion.id.length > 0, "the replacement question has no id");
+  }
+});
+
+await test("161 DEFECT 1b — a repeat discovery message never re-opens the invitation", async (t) => {
+  const provider = mockProvider({ extractions: [{ __intent: "discovery" }] });
+  const advisor = makeAdvisor(provider);
+  const first = await advisor.runTurn({ message: "I have no idea where to begin", state: {} });
+  const second = await advisor.runTurn({
+    message: "I really do not know where to start",
+    state: first.state,
+  });
+  t.equal(first.diagnostics?.route, "discovery", `first was ${first.diagnostics?.route}`);
+  t.ok(second.diagnostics?.route !== "discovery", "the open question was asked twice");
+});
+
+await test("162 DEFECT 2 — two areas in one message cannot become one settled answer", async (t) => {
+  // The extractor sees both rooms; the ledger holds one. The collapse is now
+  // visible, and a turn that collapsed an area does not claim a recommendation.
+  const provider = mockProvider({
+    extractions: [
+      {
+        room: ["bedroom", "living"],
+        roomDarkening: "maximum",
+        priorities: ["room-darkening", "aesthetics"],
+      },
+    ],
+  });
+  const result = await makeAdvisor(provider).runTurn({
+    message:
+      "Well I want something that darkens the bedrooms. and some modern and contemportay for the living spaces",
+    state: {},
+  });
+  t.ok(
+    result.status !== "RECOMMENDATION_READY",
+    "a collapsed two-area message produced a finished whole-project recommendation"
+  );
+  t.equal(result.status, "GUIDANCE_READY", `status was ${result.status}`);
+  t.equal(result.assessment?.primaryRecommendation, null, "a single direction was still claimed");
+
+  // The ledger really did collapse — this is a limit being reported, not fixed.
+  const application = LEDGER.apply(
+    {},
+    [
+      { field: "room", value: "bedroom", basis: "stated", evidence: "bedrooms", operation: "assert" },
+      { field: "room", value: "living", basis: "stated", evidence: "living spaces", operation: "assert" },
+    ],
+    1,
+    (f) => extraction.isListField(f)
+  );
+  t.ok(application.collapsed.includes("room"), "the collapse was not reported");
+  t.equal(application.ledger.room.value, "living", "the ledger kept more than one room");
+
+  // One room named twice is not a collapse.
+  const same = LEDGER.apply(
+    {},
+    [
+      { field: "room", value: "bedroom", basis: "stated", evidence: "bedroom", operation: "assert" },
+      { field: "room", value: "bedroom", basis: "stated", evidence: "bedroom", operation: "assert" },
+    ],
+    1,
+    (f) => extraction.isListField(f)
+  );
+  t.equal(same.collapsed.length, 0, "repeating one value was reported as a collapse");
+});
+
+await test("163 DEFECT 3 — a darkening project is never handed the insulation mechanism", async (t) => {
+  // The corpus credits the honeycomb and its trapped air with ENERGY, and gives
+  // no mechanism at all for darkening. Withholding it is what stops the model
+  // borrowing it; an instruction not to borrow it is only a request.
+  const { turns, provider } = await secondPreview(PREVIEW_EXTRACTIONS);
+  const user = provider.calls.lastPhraseUser;
+  t.ok(turns[3].assessment?.primaryRecommendation, "the scenario no longer reaches a recommendation");
+  t.ok(/Darkening:/.test(user), "the darkening behaviour was not supplied");
+  t.ok(!/trapped air/i.test(user), "the insulation mechanism was supplied on a darkening project");
+  t.ok(!/honeycomb/i.test(user), "the honeycomb construction was supplied on a darkening project");
+  t.ok(!/Energy:/.test(user), "the energy behaviour line was supplied on a darkening project");
+
+  // And an energy project DOES get it — this is scoping, not censorship.
+  const energy = mockProvider({
+    extractions: [{ room: "living", priorities: ["energy-efficiency"], solarHeat: "high" }],
+  });
+  await runToRecommendation(energy, "The living room is freezing and the bills are awful");
+  t.ok(
+    /Energy:/.test(energy.calls.lastPhraseUser) || !/Darkening:/.test(energy.calls.lastPhraseUser),
+    "an energy project was not given its own mechanism"
+  );
+});
+
+await test("164 the four-turn preview conversation, end to end", async (t) => {
+  const { turns } = await secondPreview(PREVIEW_EXTRACTIONS);
+
+  // 1-2: no redundant discovery loop.
+  t.equal(turns.filter((r) => r.diagnostics?.route === "discovery").length, 1, "the discovery route ran more than once");
+
+  // 3: privacy is captured.
+  t.ok((turns[2].state.facts.priorities ?? []).includes("privacy"), "privacy was not captured");
+
+  // 4: the bedroom goal lands and the turn is honest about scope.
+  t.equal(turns[3].state.facts.room, "bedroom", "the room was lost");
+  t.equal(turns[3].state.facts.roomDarkening, "maximum", "the darkening goal was lost");
+
+  // 10-11: CTA rules and Phase 1-6 behaviour unchanged.
+  t.ok(!turns[0].consultationCta.recommended, "the opening turn pushed a booking");
+  t.ok(!turns[1].consultationCta.recommended, "an early turn pushed a booking");
+  t.ok((turns[3].state.transcript ?? []).length >= 8, "the transcript did not retain the conversation");
+  t.equal(turns[3].productEducation, null, "product education fired on a project turn");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────

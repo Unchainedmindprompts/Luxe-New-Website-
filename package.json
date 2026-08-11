@@ -25,7 +25,8 @@
     "audit:schema": "node scripts/audit-schema-ids.mjs",
     "prepare": "husky",
     "audit:rendered": "node scripts/audit-rendered-schema.mjs",
-    "postbuild": "node scripts/audit-rendered-schema.mjs"
+    "postbuild": "node scripts/audit-rendered-schema.mjs",
+    "test:advisor:render": "node --import tsx scripts/test-advisor-render.mjs"
   },
   "engines": {
     "node": ">=22.0.0"

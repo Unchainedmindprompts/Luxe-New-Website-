@@ -65,7 +65,6 @@ export default function AdvisorExperience() {
   const [inputError, setInputError] = useState<string | null>(null);
   const [homeownerTurns, setHomeownerTurns] = useState(0);
 
-  const liveRegion = useRef<HTMLDivElement>(null);
   const conversationEnd = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const nextId = useRef(0);
@@ -132,7 +131,6 @@ export default function AdvisorExperience() {
         ...prior,
         { id: nextId.current++, from: "luxe", text: spoken, turn },
       ]);
-      if (liveRegion.current) liveRegion.current.textContent = spoken;
       inputRef.current?.focus();
     },
     [homeownerTurns, pending, state]
@@ -143,29 +141,22 @@ export default function AdvisorExperience() {
       <Opening started={started} />
 
       <div className="max-w-2xl mx-auto px-4 pb-20">
+        {/* THE CONVERSATION IS THE LIVE REGION.
+            It used to mirror every reply into a separate `sr-only` div so a
+            screen reader would announce it — which put the entire reply in the
+            document a second time, hidden by a utility class, positioned
+            between the card and the composer. A real preview reported the
+            recommendation paragraph appearing again in exactly that position.
+            Announcing additions to the list itself says the same thing to
+            assistive technology with the text present exactly once. */}
         {started && (
-          <ol className="space-y-6" aria-label="Your conversation with Luxe Window Works">
-            {exchanges.map((exchange, index) => (
-              <li key={exchange.id}>
-                {exchange.from === "homeowner" ? (
-                  <HomeownerSaid text={exchange.text} />
-                ) : (
-                  <LuxeSaid
-                    exchange={exchange}
-                    turns={homeownerTurns}
-                    isLatest={index === exchanges.length - 1}
-                  />
-                )}
-              </li>
-            ))}
-          </ol>
+          <div aria-live="polite" aria-relevant="additions" aria-atomic="false">
+            <Conversation exchanges={exchanges} turns={homeownerTurns} />
+          </div>
         )}
 
         {pending && <Thinking />}
         <div ref={conversationEnd} />
-
-        {/* Announces each reply to screen readers without moving focus. */}
-        <div ref={liveRegion} aria-live="polite" className="sr-only" />
 
         <Composer
           ref={inputRef}
@@ -220,6 +211,42 @@ function Opening({ started }: { started: boolean }) {
 }
 
 /* ─────────────────────────── conversation ────────────────────────────────── */
+
+/**
+ * The conversation, as a pure function of what has been said.
+ *
+ * SPLIT OUT SO IT CAN BE RENDERED AND COUNTED. A real preview reported the
+ * recommendation paragraph appearing twice, and three rounds of source-reading
+ * said it could not. Source-reading was the wrong instrument: it can show that
+ * one JSX expression mentions the reply, and cannot show what the tree actually
+ * puts on the page. Everything below the state hook lives here, so a test can
+ * render an exchange and count the result rather than infer it.
+ */
+export function Conversation({
+  exchanges,
+  turns,
+}: {
+  exchanges: readonly Exchange[];
+  turns: number;
+}) {
+  return (
+    <ol className="space-y-6" aria-label="Your conversation with Luxe Window Works">
+      {exchanges.map((exchange, index) => (
+        <li key={exchange.id}>
+          {exchange.from === "homeowner" ? (
+            <HomeownerSaid text={exchange.text} />
+          ) : (
+            <LuxeSaid
+              exchange={exchange}
+              turns={turns}
+              isLatest={index === exchanges.length - 1}
+            />
+          )}
+        </li>
+      ))}
+    </ol>
+  );
+}
 
 function HomeownerSaid({ text }: { text: string }) {
   return (
@@ -346,7 +373,7 @@ function RecommendationPanel({
       {turn.direction && (
         <div className="px-5 py-4 border-b border-warm-gray-200">
           <p className="text-warm-gray-500 text-xs font-semibold uppercase tracking-widest mb-1">
-            Recommended direction
+            {turn.directionScope ? `Recommended for ${turn.directionScope}` : "Recommended direction"}
           </p>
           <p className="font-serif text-xl text-charcoal">{turn.direction}</p>
         </div>

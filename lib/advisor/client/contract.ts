@@ -37,6 +37,15 @@ export interface AdvisorTurn {
    * Never an id.
    */
   readonly direction: string | null;
+  /**
+   * Which room the direction is for, when one is established.
+   *
+   * The ledger holds a single room, so a recommendation is always about one
+   * space — but the card did not say so, and a homeowner who had just described
+   * bedrooms AND living spaces could not tell whether "Cellular shades" meant
+   * the bedrooms or the house.
+   */
+  readonly directionScope: string | null;
   /** One tradeoff worth stating, in plain language. */
   readonly tradeoff: string | null;
   /** Physical things Luxe confirms on site, in plain language. */
@@ -154,6 +163,12 @@ export function toAdvisorTurn(raw: unknown, priorState: OpaqueState): AdvisorTur
       ? asString(assessment?.primaryRecommendation?.label)
       : null;
 
+  // WHICH ROOM THIS IS ABOUT. A card headed "Cellular shades" with no scope
+  // reads as the answer for the house. The ledger holds one room, so the honest
+  // label is that room — and when none is established, the card says so rather
+  // than implying the whole home.
+  const directionScope = direction ? readRoom(body.state) : null;
+
   const confirmInHome = (assessment?.verificationRequirements ?? [])
     .map((item) => (typeof item?.id === "string" ? item.id : ""))
     .filter((id) => id && id !== ALWAYS_TRUE_VERIFICATION)
@@ -166,6 +181,7 @@ export function toAdvisorTurn(raw: unknown, priorState: OpaqueState): AdvisorTur
     message: asString(body.message) ?? "",
     question: asString(body.nextQuestion?.phrased),
     direction,
+    directionScope,
     tradeoff: asString(assessment?.tradeoffs?.[0]?.note),
     confirmInHome,
     whatMattersMost: readPriorities(body.state),
@@ -181,6 +197,31 @@ export function toAdvisorTurn(raw: unknown, priorState: OpaqueState): AdvisorTur
  * reads exactly one field. Anything without an approved English label is
  * skipped rather than shown as an id.
  */
+/** The room the established facts are about, in the homeowner's own words. */
+const ROOM_LABELS: Readonly<Record<string, string>> = {
+  bedroom: "the bedroom",
+  nursery: "the nursery",
+  living: "the living room",
+  kitchen: "the kitchen",
+  bathroom: "the bathroom",
+  office: "the office",
+  "dining-room": "the dining room",
+  "media-room": "the media room",
+  bonus: "the bonus room",
+  entry: "the entry",
+  hallway: "the hallway",
+  laundry: "the laundry",
+  garage: "the garage",
+  "sunroom-or-porch": "the sunroom",
+  basement: "the basement",
+  commercial: "the space",
+};
+
+function readRoom(state: unknown): string | null {
+  const room = (state as { facts?: { room?: unknown } } | null)?.facts?.room;
+  return typeof room === "string" ? ROOM_LABELS[room] ?? null : null;
+}
+
 function readPriorities(state: unknown): readonly string[] {
   const facts = (state as { facts?: { priorities?: unknown } } | null)?.facts;
   const priorities = Array.isArray(facts?.priorities) ? facts.priorities : [];

@@ -52,6 +52,20 @@ export interface LedgerApplication {
   readonly retracted: readonly FactUpdate[];
   /** Updates refused by precedence, with the reason. Diagnostics only. */
   readonly suppressed: readonly string[];
+  /**
+   * Scalar fields this turn tried to set to two different values at once.
+   *
+   * THE LEDGER HOLDS ONE PROJECT. `room` is a scalar, so "I want the bedrooms
+   * dark and something contemporary for the living spaces" cannot be stored:
+   * the second value overwrites the first and the collapse leaves no trace.
+   * A recommendation computed from what survives is then presented as if it
+   * were the answer for the whole home.
+   *
+   * This is the trace. It does not fix the model — one room is a real limit —
+   * but it makes the moment of collapse visible, so the turn can decline to
+   * claim a single settled direction it has not earned.
+   */
+  readonly collapsed: readonly string[];
 }
 
 /**
@@ -119,6 +133,9 @@ export function applyUpdates(
   const applied: FactUpdate[] = [];
   const retracted: FactUpdate[] = [];
   const suppressed: string[] = [];
+  /** Scalar values this turn asserted, so a second, different one is visible. */
+  const assertedScalars = new Map<string, string>();
+  const collapsed = new Set<string>();
 
   // Retractions run first so a turn that corrects and replaces in one breath —
   // "not the view when it's down, I meant when it's raised" — cannot have the
@@ -168,13 +185,21 @@ export function applyUpdates(
       continue;
     }
 
+    // Two different values for one scalar, in one message, is the homeowner
+    // describing two places. Recorded before precedence decides which survives.
+    const alreadyAsserted = assertedScalars.get(update.field);
+    if (alreadyAsserted !== undefined && alreadyAsserted !== update.value) {
+      collapsed.add(update.field);
+    }
+    assertedScalars.set(update.field, update.value);
+
     const before = current as FactRecord | undefined;
     const after = applyScalar(before, record, update.field, suppressed);
     if (after === record) applied.push(update);
     next[update.field] = after;
   }
 
-  return { ledger: next, applied, retracted, suppressed };
+  return { ledger: next, applied, retracted, suppressed, collapsed: [...collapsed] };
 }
 
 /**

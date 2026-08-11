@@ -52,6 +52,15 @@ import type {
 /** Hard ceiling on advisor turns in one conversation. Also an abuse control. */
 export const MAX_TURNS = 12;
 
+/**
+ * Recorded once the open "tell me about the space" invitation has been made.
+ *
+ * Not a Phase A question rule — it is the discovery route's own opening, and it
+ * lives in `askedQuestionIds` for exactly the reason that list exists: so the
+ * homeowner is not asked the same thing twice.
+ */
+export const DISCOVERY_OPENING_ID = "discovery-opening";
+
 /** Cap on any single generated string, before it is sanitised. */
 const MAX_QUESTION_CHARS = 400;
 const MAX_RECOMMENDATION_CHARS = 1400;
@@ -255,6 +264,59 @@ function providerFailureCode(error: unknown): "provider-unavailable" | "provider
 }
 
 /**
+ * The behaviour of a direction, limited to the properties actually in play.
+ *
+ * HANDING OVER THE WHOLE PRODUCT SHEET WAS THE DEFECT. The previous fix
+ * supplied every verified line about the recommended direction and told the
+ * prompt not to mix them. It mixed them: asked why cellular shades darken a
+ * bedroom, and holding a sheet that credits the honeycomb and its trapped air
+ * with INSULATION, the model wrote that "that same dense, layered construction
+ * is what gives the darkest room feel we offer". The corpus says no such
+ * thing — darkening comes from room-darkening fabric, and no mechanism is
+ * given for it at all.
+ *
+ * An instruction not to borrow a mechanism is a request. Not supplying the
+ * mechanism is a fact. So the energy line goes to a project about energy, the
+ * darkening line to a project about darkening, and a model asked why something
+ * darkens a room has nothing about air pockets in front of it to reach for.
+ *
+ * `strengths` is deliberately excluded: it is a mixed list — one entry is the
+ * trapped-air claim — and there is no per-property way to split it.
+ */
+function describeForProperties(
+  direction: ProductDirection,
+  priorities: readonly string[]
+): string {
+  const byPriority: Record<string, string | undefined> = {
+    "room-darkening": direction.roomDarkeningBehavior,
+    privacy: direction.privacyBehavior,
+    "energy-efficiency": direction.energyBehavior,
+    "view-preservation": direction.viewBehavior,
+    "glare-control": direction.viewBehavior,
+    "clear-glass-when-open": direction.viewBehavior,
+    aesthetics: direction.designCharacteristics,
+  };
+  const labels: Record<string, string> = {
+    "room-darkening": "Darkening",
+    privacy: "Privacy",
+    "energy-efficiency": "Energy",
+    "view-preservation": "View",
+    "glare-control": "View",
+    "clear-glass-when-open": "View",
+    aesthetics: "Character",
+  };
+
+  const lines = new Map<string, string>();
+  for (const priority of priorities) {
+    const behaviour = byPriority[priority];
+    if (behaviour) lines.set(labels[priority], `- ${labels[priority]}: ${behaviour}`);
+  }
+  // Nothing in play maps to a behaviour line — say what it is and no more,
+  // rather than falling back to the whole sheet.
+  return [`${direction.label}:`, ...lines.values()].join("\n");
+}
+
+/**
  * The verification items that belong to the direction actually on screen.
  *
  * "In play" includes DEPRIORITIZED directions, which is right for the engine
@@ -282,7 +344,14 @@ function verificationsFor(
   );
 }
 
-function summarise(assessment: AdvisorAssessment): AssessmentSummary {
+/**
+ * @param primaryEarned false when this turn is not entitled to name one
+ *   direction as the answer — currently only when the message described more
+ *   than one area and the ledger kept one of them. The field is documented as
+ *   "the one direction being recommended, or null when none has been earned",
+ *   and a collapsed turn has not earned one.
+ */
+function summarise(assessment: AdvisorAssessment, primaryEarned = true): AssessmentSummary {
   const rank = (list: AdvisorAssessment["strongCandidates"]) =>
     list.map((c) => ({ id: c.id, label: c.label, reasons: c.reasons }));
   // Chosen once, here, from the engine's own ordering — never by the model and
@@ -290,9 +359,10 @@ function summarise(assessment: AdvisorAssessment): AssessmentSummary {
   const primary = assessment.strongCandidates[0];
   return {
     recognizedConditions: assessment.recognizedConditions.map((c) => ({ id: c.id, label: c.label })),
-    primaryRecommendation: primary
-      ? { id: primary.id, label: primary.label, reasons: primary.reasons }
-      : null,
+    primaryRecommendation:
+      primary && primaryEarned
+        ? { id: primary.id, label: primary.label, reasons: primary.reasons }
+        : null,
     strongCandidates: rank(assessment.strongCandidates),
     alternatives: rank(assessment.deprioritizedDirections),
     excluded: rank(assessment.excludedDirections),
@@ -998,7 +1068,24 @@ ${lines.join("\n")}`;
     );
 
     const questionGates = !(selection.readyToRecommend || !selection.next);
-    const productStatus = deriveStatus(assessment, questionGates, Boolean(selection.next));
+    /**
+     * The homeowner described more than one place in one message, and the
+     * ledger holds one.
+     *
+     * "I want something that darkens the bedrooms, and some modern and
+     * contemporary for the living spaces" asserts `room` twice. One value
+     * survives, the engine reasons about that one, and the card then presents
+     * the result as though it settled the house. It did not — it settled
+     * whichever room won the overwrite, and nothing on screen says which.
+     *
+     * A single room is a real limit of this ledger and is not fixed here. What
+     * is fixed is the claim: a turn that collapsed an area cannot report a
+     * finished recommendation. It reports guidance, which is what it has.
+     */
+    const collapsedArea = application.collapsed.includes("room");
+    const productStatus = collapsedArea
+      ? "GUIDANCE_READY"
+      : deriveStatus(assessment, questionGates, Boolean(selection.next));
 
     /**
      * The state to hand back, with this turn's exchange recorded.
@@ -1120,7 +1207,24 @@ ${lines.join("\n")}`;
     }
 
     // ── 3c. they want help and do not know where to start ──────────────────
-    if (validated.intent === "discovery" && assessment.strongCandidates.length === 0) {
+    //
+    // ONCE. The discovery prompt asks one broad, open question — "tell me about
+    // the space", "what are you hoping to improve" — which is the right opening
+    // and a terrible second move. A real preview ran it three turns running: a
+    // homeowner who had already said they bought a new home, needed coverings,
+    // and had bare windows was asked what made them think about blinds, then
+    // what it was like living with them bare. They answered "obviously" twice,
+    // which is what someone types when they are being made to restate
+    // themselves.
+    //
+    // After the opening, a turn with nothing established goes to the question
+    // path instead, which asks something concrete and answerable.
+    const openedDiscovery = askedQuestionIds.includes(DISCOVERY_OPENING_ID);
+    if (
+      validated.intent === "discovery" &&
+      assessment.strongCandidates.length === 0 &&
+      !openedDiscovery
+    ) {
       trace.setRoute("discovery");
       const message = await phraseSafely(
         deps.prompts.discoverySystemPrompt(guardrails, history),
@@ -1136,7 +1240,10 @@ ${lines.join("\n")}`;
       return {
         // route: discovery
         status: "ANSWERED",
-        state: stateAfter(message),
+        state: {
+          ...stateAfter(message),
+          askedQuestionIds: [...askedQuestionIds, DISCOVERY_OPENING_ID],
+        },
         assessment: summarise(assessment),
         nextQuestion: null,
         preliminaryGuidance: null,
@@ -1274,7 +1381,7 @@ ${lines.join("\n")}`;
           const direction = primary
             ? deps.knowledge.directions.find((d) => d.id === primary.id)
             : undefined;
-          return direction ? deps.describeDirection(direction) : undefined;
+          return direction ? describeForProperties(direction, facts.priorities ?? []) : undefined;
         })(),
         alternatives: assessment.deprioritizedDirections
           .map((c) => `${c.label} — ${c.reasons.join(" ")}`)
@@ -1292,7 +1399,7 @@ ${lines.join("\n")}`;
     return {
       status,
       state: stateAfter(message),
-      assessment: summarise(assessment),
+      assessment: summarise(assessment, !collapsedArea),
       nextQuestion: null,
       preliminaryGuidance: null,
       productEducation: null,

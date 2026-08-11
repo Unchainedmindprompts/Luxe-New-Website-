@@ -562,6 +562,92 @@ re-pointed it at light. Two causes, both fixed:
   **for the property being discussed**, and where the material gives none, state
   the conclusion and stop.
 
+## Second preview pass — five more defects
+
+> "I just purchased a new home and I need new blinds and shades and have no idea
+> where to begin" → "Well since I don't have any shades obviously I need
+> something." → "Obviously I have no privacy. So thats an issue." → "Well I want
+> something that darkens the bedrooms. and some modern and contemportay for the
+> living spaces"
+
+The homeowner typed **"obviously" twice**. That is what someone writes when they
+are being made to restate what they already said.
+
+### The discovery loop
+
+The discovery route asks one broad, open question — "tell me about the space",
+"what are you hoping to improve". That is the right opening and a poor second
+move, and nothing stopped it running every turn while the engine still had
+nothing. It ran three turns in a row.
+
+It is now offered **once**, recorded in `askedQuestionIds` as
+`discovery-opening`. After that, a turn with nothing established takes the
+question path, which asks something concrete and answerable.
+
+### The ledger holds one room — stated plainly
+
+`room` is a **scalar** field. The architecture supports **one room, one fact
+set, one recommendation**. "Darkens the bedrooms, and modern for the living
+spaces" asserts `room` twice; the second overwrites the first, the engine
+reasons about whichever survived, and the card presented the result as though it
+settled the house.
+
+That limit is **not fixed here** — it is reported. `applyUpdates` now returns
+`collapsed`: scalar fields a single turn tried to set to two different values. A
+turn that collapsed an area **cannot report a finished recommendation**; it
+reports `GUIDANCE_READY`, and `primaryRecommendation` is null because none was
+earned. Pinned by test 162.
+
+### Recommendation scope
+
+The card heading now reads **"Recommended for the bedroom"** when a room is
+established, and falls back to "Recommended direction" when none is. A homeowner
+can no longer wonder whether a direction means one space or the whole home.
+
+### The darkening mechanism — why the first fix did not hold
+
+The previous pass supplied the recommended direction's **entire** verified
+behaviour sheet and instructed the prompt not to mix properties. It mixed them
+anyway, producing *"the honeycomb traps air in pockets, and that same dense,
+layered construction is what gives the darkest room feel we offer"*.
+
+**An instruction not to borrow a mechanism is a request. Not supplying the
+mechanism is a fact.** Evidence is now scoped to the properties actually in
+play:
+
+| priority | line supplied |
+|---|---|
+| room-darkening | `roomDarkeningBehavior` |
+| privacy | `privacyBehavior` |
+| energy-efficiency | `energyBehavior` |
+| view-preservation / glare-control | `viewBehavior` |
+| aesthetics | `designCharacteristics` |
+
+A darkening project never sees the trapped-air line. An energy project does.
+`strengths` is excluded entirely — it is a mixed list, and one of its entries is
+the trapped-air claim. Pinned by test 163, which also proves an energy project
+still gets its own mechanism.
+
+### The duplicated paragraph — found
+
+Three rounds of source-reading said the client rendered the reply once. All of
+those statements were true, and the paragraph still appeared twice.
+
+`scripts/test-advisor-render.mjs` now renders the **real component tree** with
+`react-dom/server` and counts a unique marker in the HTML. The conversation
+renders each reply exactly once, in every status, with and without the
+consultation block.
+
+What source-reading missed is that the conversation was never the only place the
+text lived. Every reply was also written into a **separate `sr-only` live
+region** — the whole paragraph, in the document a second time, hidden by a
+utility class, positioned between the conversation and the composer. That is
+exactly where the preview reported it appearing again.
+
+The mirror is gone. The conversation list is the live region
+(`aria-live="polite" aria-relevant="additions"`), which announces new replies to
+assistive technology with the text present **once**.
+
 ## Question selection
 
 Deterministic. The model phrases; it does not choose.
