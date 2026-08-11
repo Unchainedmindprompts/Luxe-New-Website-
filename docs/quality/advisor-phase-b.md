@@ -770,6 +770,87 @@ area set to that room. Junk, empty and malformed state all degrade to an empty
 project rather than throwing, and the area list is capped at 12 so a crafted
 payload cannot grow it without bound (test 173).
 
+## Recommendation continuity
+
+A homeowner whose bedroom already pointed at cellular shades added *"I'm very
+sensitive to light"* — and was told about cellular shades again, with the same
+card underneath it. The fact **reinforced** the direction; it did not discover
+one. Nothing remembered, because the assessment was recomputed every turn and
+thrown away.
+
+### What is remembered
+
+`ProjectArea.presented` — a **direction id and a turn number**, per area. Never
+prose, and recorded only when the customer is actually shown a recommendation,
+so it is a record of what they have seen rather than of what the engine
+computed.
+
+### The decision
+
+| current direction | already presented | change |
+|---|---|---|
+| — | — | `none` |
+| cellular | — | **`new`** |
+| cellular | cellular | **`unchanged`** |
+| shutters | cellular | **`changed`** |
+| — | cellular | **`withdrawn`** |
+
+Deterministic identity, per area. Never a prose comparison, never a search for a
+product name in the last thing the advisor said.
+
+### What each one does
+
+- **new / changed** → the card renders and the prompt presents the direction. A
+  change is explained before it is described, because a direction that moves
+  without explanation reads as the advisor having been wrong rather than having
+  listened.
+- **unchanged** → **no card**, and the prompt is told plainly not to introduce
+  the direction again. The turn says what the new fact *means* for the direction
+  they already have.
+- **withdrawn** → no card; the turn stops claiming a direction it no longer has.
+
+Memory is per area: the bedroom remembering its cellular recommendation says
+nothing about the living room, and returning to the bedroom with no new facts is
+`unchanged` rather than a fresh recommendation event (tests 176–180).
+
+## The prose may not assume a visit
+
+Phase 2 made the consultation something that has to be earned, and the CTA obeys
+it — but a live reply still closed with *"our team will look at the actual
+openings and trim during the consultation"* on a turn where the offer was
+correctly withheld. **No button appeared and the visit was assumed in words
+anyway**, which makes the rule cosmetic.
+
+The phrasing layer had no idea what the server decided. It does now:
+`consultationIntent(...)` is computed once and passed to every phrasing route
+that could volunteer a visit.
+
+- **authorised** → the link is on their screen; do not write a second invitation.
+- **not authorised** → *"Nobody has asked to schedule anything… no 'we'll check
+  that at the consultation'."* If something genuinely needs seeing, say it is
+  *"something we would want to confirm at the opening"* — a property of the
+  thing, not an event in the diary.
+
+There is deliberately **no second judgement** in the prompt. It states what the
+server decided; it does not ask the model to work it out again (test 182).
+
+## Superlatives are claims about a ranking
+
+The advisor said cellular is *"genuinely the strongest darkening option we
+offer."* The corpus says *"Room-darkening cellular is among Luxe's preferred
+directions when a customer wants a very dark room."* Those are not the same
+sentence — the second says Luxe compared its whole range and this came first,
+and nobody made that comparison.
+
+`no-unsupported-superlative` checks the claim against **the material this turn
+was given**. Word-level evidence: if the material says "strongest", "strongest"
+is earned; if it says nothing of the kind, no ranking has been established to
+report.
+
+**Not a blanket ban.** The corpus really does say *"the strongest energy
+direction in the Luxe range"*, so the same word is legitimate on an energy
+project and unavailable on a darkening one. The boundary is evidence (test 183).
+
 ## Question selection
 
 Deterministic. The model phrases; it does not choose.

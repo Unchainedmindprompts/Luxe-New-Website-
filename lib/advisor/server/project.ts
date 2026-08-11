@@ -89,6 +89,65 @@ export interface ProjectArea {
   readonly room: string | null;
   readonly label: string | null;
   readonly ledger: FactLedger;
+  /**
+   * The direction already shown to the homeowner for this space.
+   *
+   * A DETERMINISTIC ID AND A TURN NUMBER — never prose. The assessment was
+   * recomputed every turn and forgotten afterwards, so a homeowner who added a
+   * fact that merely REINFORCED the bedroom direction was told about cellular
+   * shades a second time, with the same card underneath it. The advisor had no
+   * way to know it had already said that, because nothing remembered.
+   *
+   * Recorded only when a recommendation is actually presented, so it is a
+   * record of what the customer has seen rather than of what the engine
+   * happened to compute.
+   */
+  readonly presented?: { readonly directionId: string; readonly turn: number } | null;
+}
+
+/**
+ * What this turn does to the recommendation the homeowner already has.
+ *
+ * Decided from deterministic identity — the engine's chosen direction against
+ * the one already presented for this space. Never from comparing prose, and
+ * never from looking for a product name in the last thing the advisor said.
+ */
+export type RecommendationChange =
+  /** Nothing to recommend, and nothing was ever presented. */
+  | "none"
+  /** First time this space has had a direction. Present it. */
+  | "new"
+  /** The same direction as last time. Do not announce it again. */
+  | "unchanged"
+  /** New information moved the direction. Say so, and show the new one. */
+  | "changed"
+  /** There was a direction and there is no longer one. Do not keep claiming it. */
+  | "withdrawn";
+
+export function recommendationChange(
+  current: string | null,
+  presented: string | null
+): RecommendationChange {
+  if (!current && !presented) return "none";
+  if (current && !presented) return "new";
+  if (!current) return "withdrawn";
+  return current === presented ? "unchanged" : "changed";
+}
+
+/** Records what the homeowner has now been shown, for this space only. */
+export function markPresented(
+  project: Project,
+  areaId: string | null,
+  directionId: string,
+  turn: number
+): Project {
+  if (!areaId) return project;
+  return {
+    ...project,
+    areas: project.areas.map((area) =>
+      area.id === areaId ? { ...area, presented: { directionId, turn } } : area
+    ),
+  };
 }
 
 export interface Project {
@@ -465,6 +524,7 @@ export function validateProject(
       room: typeof candidate.room === "string" ? candidate.room : null,
       label: typeof candidate.label === "string" ? candidate.label.slice(0, 60) : null,
       ledger: validateLedger(candidate.ledger),
+      presented: readPresented((candidate as { presented?: unknown }).presented),
     });
     // A crafted payload cannot grow the project without bound.
     if (areas.length >= 12) break;
@@ -498,6 +558,25 @@ function normaliseScopes(project: Project): Project {
     else if (!(field in defaults)) defaults[field] = record;
   }
   return { ...project, shared, defaults };
+}
+
+/**
+ * Re-validates the presented record from client state.
+ *
+ * Untrusted like everything else that arrives. A crafted direction id can only
+ * ever suppress a card the customer would otherwise see, never invent a
+ * recommendation — the direction itself always comes from the engine.
+ */
+function readPresented(raw: unknown): ProjectArea["presented"] {
+  if (!raw || typeof raw !== "object") return null;
+  const candidate = raw as { directionId?: unknown; turn?: unknown };
+  if (typeof candidate.directionId !== "string" || !candidate.directionId) return null;
+  return {
+    directionId: candidate.directionId.slice(0, 60),
+    turn: typeof candidate.turn === "number" && Number.isFinite(candidate.turn)
+      ? Math.max(0, Math.trunc(candidate.turn))
+      : 0,
+  };
 }
 
 /** Splits a pre-Phase-7 flat ledger into the shape used from here on. */

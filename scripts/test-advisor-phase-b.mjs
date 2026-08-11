@@ -24,7 +24,7 @@ const read = (p) => readFileSync(join(ROOT, p), "utf8");
 
 const [
   products, priorities, rules, guardrailKnowledge,
-  engine, extraction, questionSelection, guardrails, prompts, advisorModule, limits, ledgerModule, projectModule, counterfactual, brandKnowledge, brandResponse,
+  engine, extraction, questionSelection, guardrails, prompts, advisorModule, limits, ledgerModule, projectModule, contractModule, counterfactual, brandKnowledge, brandResponse,
   answerKnowledge, answerSelection, transcriptModule, traceModule, serverTypes, productData, areaData, homepageFaqs, constants,
 ] = await Promise.all([
   import("../lib/advisor/knowledge/products.ts"),
@@ -40,6 +40,7 @@ const [
   import("../lib/advisor/server/limits.ts"),
   import("../lib/advisor/server/ledger.ts"),
   import("../lib/advisor/server/project.ts"),
+  import("../lib/advisor/client/contract.ts"),
   import("../lib/advisor/server/counterfactual.ts"),
   import("../lib/advisor/knowledge/brand-responses.ts"),
   import("../lib/advisor/server/brand-response.ts"),
@@ -242,6 +243,8 @@ function makeAdvisor(provider) {
       activeFacts: (p) => projectModule.activeFacts(p, ledgerModule.projectFacts),
       describe: projectModule.describeProject,
       active: projectModule.activeArea,
+      change: projectModule.recommendationChange,
+      markPresented: projectModule.markPresented,
     },
     classifyQuestions: counterfactual.classifyQuestions,
     isVerificationClass: questionSelection.isVerificationClass,
@@ -4176,6 +4179,225 @@ await test("175 the extraction prompt teaches the area contract", async (t) => {
   t.ok(item.properties.area, "the schema has no area field");
   t.ok(item.required.includes("area"), "area is not required, so it will be omitted");
   t.ok(!JSON.stringify(schema).includes("oneOf"), "the schema reintroduced a union");
+});
+
+// ── recommendation continuity ───────────────────────────────────────────────
+
+const presentedIn = (state, room) =>
+  state.project.areas.find((a) => a.room === room)?.presented?.directionId ?? null;
+
+await test("176 the exact preview flow — a reinforcing fact does not re-announce", async (t) => {
+  const { turns, state } = await areaTurns([
+    {
+      message: "I just bought a new home and need window treatments throughout. I have no idea where to begin.",
+      extraction: { __updates: [], __intent: "discovery" },
+    },
+    {
+      message: "I want the bedrooms really dark, but in the living spaces I want something modern and I don't want to lose the view.",
+      extraction: { __updates: [
+        areaUpdate("room", "bedroom", "the bedrooms"),
+        areaUpdate("roomDarkening", "maximum", "the bedrooms"),
+        areaUpdate("priorities", "room-darkening", "the bedrooms"),
+        areaUpdate("room", "living", "the living spaces"),
+        areaUpdate("aesthetic", "modern-minimal", "the living spaces"),
+        areaUpdate("viewImportance", "high", "the living spaces"),
+      ] },
+    },
+    {
+      message: "Let's start with the bedrooms. I'm very sensitive to light.",
+      extraction: { __updates: [
+        areaUpdate("priorities", "lifestyle-requirement", "the bedrooms"),
+      ] },
+    },
+  ]);
+
+  // TURN 2 — the bedroom direction is NEW, and the card is earned.
+  t.equal(turns[1].status, "RECOMMENDATION_READY", `turn 2 was ${turns[1].status}`);
+  t.equal(turns[1].recommendationChange, "new", `turn 2 change was ${turns[1].recommendationChange}`);
+  t.equal(turns[1].assessment?.primaryRecommendation?.label, "Cellular shades", "the bedroom direction changed");
+  t.equal(presentedIn(turns[1].state, "bedroom"), "cellular", "the presented direction was not recorded");
+
+  // TURN 3 — the same direction. Not news, and no second card.
+  t.equal(turns[2].recommendationChange, "unchanged", `turn 3 change was ${turns[2].recommendationChange}`);
+  t.equal(state.project.activeAreaId, "bedroom", `active area is ${state.project.activeAreaId}`);
+  t.ok(
+    (areaOf(state, "bedroom")?.ledger.priorities ?? []).some((r) => r.value === "lifestyle-requirement"),
+    "the light-sensitivity fact was not retained"
+  );
+
+  // No consultation was requested at any point, so none may be assumed.
+  for (const turn of turns) {
+    t.ok(!turn.consultationCta.recommended, `a turn offered a consultation unprompted: ${turn.consultationCta.reasons}`);
+  }
+});
+
+await test("177 the card is gated on deterministic change, not on prose", async (t) => {
+  const card = (change) =>
+    contractModule.toAdvisorTurn(
+      {
+        status: "RECOMMENDATION_READY",
+        message: "text",
+        recommendationChange: change,
+        assessment: { primaryRecommendation: { id: "cellular", label: "Cellular shades" }, tradeoffs: [], verificationRequirements: [] },
+        consultationCta: { recommended: false },
+        state: { facts: { room: "bedroom" } },
+      },
+      {}
+    ).direction;
+  t.equal(card("new"), "Cellular shades", "a new recommendation did not render a card");
+  t.equal(card("changed"), "Cellular shades", "a changed recommendation did not render a card");
+  t.equal(card("unchanged"), null, "an unchanged recommendation rendered the card again");
+  t.equal(card("withdrawn"), null, "a withdrawn recommendation still rendered a card");
+  // A payload with no field at all still renders — old clients, new server.
+  t.equal(card(undefined), "Cellular shades", "a missing change field suppressed the card");
+});
+
+await test("178 the change decision is identity, in every direction", async (t) => {
+  const change = projectModule.recommendationChange;
+  t.equal(change(null, null), "none", "nothing at all was misread");
+  t.equal(change("cellular", null), "new", "a first direction was not new");
+  t.equal(change("cellular", "cellular"), "unchanged", "the same direction was re-announced");
+  t.equal(change("shutters", "cellular"), "changed", "a different direction was not a change");
+  t.equal(change(null, "cellular"), "withdrawn", "losing a direction was not withdrawn");
+});
+
+await test("179 a genuinely changed direction is presented again", async (t) => {
+  // Real engine movement, not a faked one: a bedroom wanting maximum darkening
+  // recommends cellular; adding a leading need to see out while the shade is
+  // down moves it. Whatever it moves TO, the change must be detected.
+  const { turns, state } = await areaTurns([
+    { message: "The bedroom needs to be as dark as possible.", extraction: { __updates: [
+      areaUpdate("room", "bedroom", "the bedroom"),
+      areaUpdate("roomDarkening", "maximum", "the bedroom"),
+      areaUpdate("priorities", "room-darkening", "the bedroom"),
+    ] } },
+    { message: "Actually, keeping the view matters more than the darkness.", extraction: { __updates: [
+      areaUpdate("viewImportance", "high", "the bedroom"),
+      areaUpdate("priorities", "view-preservation", "the bedroom"),
+      { field: "priorities", value: "room-darkening", basis: "stated", operation: "retract",
+        evidence: "keeping the view matters more than the darkness", area: "the bedroom" },
+    ] } },
+  ]);
+  t.equal(turns[0].recommendationChange, "new", `first turn was ${turns[0].recommendationChange}`);
+  const second = turns[1].recommendationChange;
+  t.ok(["changed", "unchanged", "withdrawn"].includes(second), `second turn was ${second}`);
+  if (second === "changed") {
+    t.ok(turns[1].assessment?.primaryRecommendation, "a changed turn carried no direction");
+    t.equal(
+      presentedIn(state, "bedroom"),
+      turns[1].assessment?.primaryRecommendation?.id,
+      "the new direction was not recorded as presented"
+    );
+  }
+});
+
+await test("180 recommendation memory is per area, and survives a switch", async (t) => {
+  const { turns, state } = await areaTurns([
+    { message: "The bedroom needs to be as dark as possible.", extraction: { __updates: [
+      areaUpdate("room", "bedroom", "the bedroom"),
+      areaUpdate("roomDarkening", "maximum", "the bedroom"),
+      areaUpdate("priorities", "room-darkening", "the bedroom"),
+    ] } },
+    { message: "What about the living room?", extraction: { __updates: [] } },
+    { message: "Let's go back to the bedroom.", extraction: { __updates: [] } },
+  ]);
+  t.equal(turns[0].recommendationChange, "new", `bedroom was ${turns[0].recommendationChange}`);
+  // The living room has never had one, so nothing is presented there.
+  t.equal(presentedIn(state, "living"), null, "the living room inherited the bedroom's recommendation");
+  t.equal(presentedIn(state, "bedroom"), "cellular", "the bedroom forgot what it had been shown");
+  // Returning with no new facts is not a fresh recommendation event.
+  t.equal(state.project.activeAreaId, "bedroom", `active area is ${state.project.activeAreaId}`);
+  t.equal(turns[2].recommendationChange, "unchanged", `returning was ${turns[2].recommendationChange}`);
+});
+
+await test("181 the prompt is told what continuity this turn has", async (t) => {
+  const assessment = engine.assess(
+    { room: "bedroom", roomDarkening: "maximum", priorities: ["room-darkening"] },
+    KNOWLEDGE
+  );
+  const unchanged = renderedPrompts.recommendationSystemPrompt(
+    assessment, assessment.applicableGuardrails, false, "", false, "unchanged"
+  );
+  t.ok(/THEY ALREADY HAVE THIS RECOMMENDATION/.test(unchanged), "an unchanged turn is not told so");
+  t.ok(/Do not introduce it again/.test(unchanged), "nothing stops the direction being re-announced");
+
+  const changed = renderedPrompts.recommendationSystemPrompt(
+    assessment, assessment.applicableGuardrails, false, "", false, "changed"
+  );
+  t.ok(/THIS CHANGES THE DIRECTION/.test(changed), "a changed turn is not told so");
+  t.ok(/say why/.test(changed), "a changed direction may go unexplained");
+
+  const fresh = renderedPrompts.recommendationSystemPrompt(
+    assessment, assessment.applicableGuardrails, false, "", false, "new"
+  );
+  t.ok(!/THEY ALREADY HAVE THIS RECOMMENDATION/.test(fresh), "a first recommendation was treated as a repeat");
+});
+
+await test("182 prose may not assume a consultation the server did not authorise", async (t) => {
+  const assessment = engine.assess({ room: "bedroom", roomDarkening: "maximum" }, KNOWLEDGE);
+  const g = assessment.applicableGuardrails;
+  const withheld = renderedPrompts.recommendationSystemPrompt(assessment, g, false, "", false, "new");
+  t.ok(/NO VISIT HAS BEEN AGREED/.test(withheld), "the prompt does not state that no visit is booked");
+  t.ok(/no "we'll check that at the consultation"/.test(withheld), "the exact assumed-visit phrasing is not named");
+  t.ok(/confirm at the opening/.test(withheld), "no honest alternative is offered");
+
+  const offered = renderedPrompts.recommendationSystemPrompt(assessment, g, false, "", true, "new");
+  t.ok(/A consultation link is on their screen/.test(offered), "an authorised turn is not told the link is there");
+  t.ok(!/NO VISIT HAS BEEN AGREED/.test(offered), "an authorised turn was told no visit exists");
+
+  // Every phrasing route that could volunteer a visit gets the boundary.
+  for (const [name, prompt] of [
+    ["guidance", renderedPrompts.guidanceSystemPrompt(assessment, g, false, "", false)],
+    ["preliminary", renderedPrompts.preliminaryGuidanceSystemPrompt(g)],
+    ["education", renderedPrompts.productEducationSystemPrompt(g)],
+  ]) {
+    t.ok(/NO VISIT HAS BEEN AGREED/.test(prompt), `${name} may still assume a consultation`);
+  }
+});
+
+await test("183 a superlative has to be in the material", async (t) => {
+  const darkening = "Cellular shades:\n- Darkening: Room-darkening cellular is among Luxe's preferred directions when a customer wants a very dark room.";
+  const energy = "Cellular shades:\n- Energy: The strongest energy direction in the Luxe range, from trapped air between shade and glass.";
+
+  // The live defect: "among our preferred directions" became "the strongest".
+  const upgraded = guardrails.validateGeneratedText(
+    "Room-darkening cellular is genuinely the strongest darkening option we offer.",
+    { ...GROUNDING, supportingMaterial: darkening }
+  );
+  t.ok(
+    upgraded.some((v) => v.guardrailId === "no-unsupported-superlative"),
+    "an unsupported ranking passed validation"
+  );
+
+  // The same word, where the corpus really does make the claim.
+  const supported = guardrails.validateGeneratedText(
+    "Cellular is the strongest energy direction we carry.",
+    { ...GROUNDING, supportingMaterial: energy }
+  );
+  t.equal(supported.length, 0, "a supported superlative was rejected");
+
+  // Not a blanket ban and not a blanket pass: the claim has to match.
+  const wrongWord = guardrails.validateGeneratedText(
+    "Cellular is the best option for darkening.",
+    { ...GROUNDING, supportingMaterial: energy }
+  );
+  t.ok(wrongWord.some((v) => v.guardrailId === "no-unsupported-superlative"), "a different superlative was let through");
+
+  // Ordinary, unranked language is untouched.
+  t.equal(
+    guardrails.validateGeneratedText(
+      "Room-darkening cellular is among the directions we would prefer here.",
+      { ...GROUNDING, supportingMaterial: darkening }
+    ).length,
+    0,
+    "unranked language was flagged"
+  );
+  // No material means no ranking has been established.
+  t.ok(
+    guardrails.validateGeneratedText("This is the darkest option we offer.", GROUNDING)
+      .some((v) => v.guardrailId === "no-unsupported-superlative"),
+    "a superlative passed with no material at all"
+  );
 });
 
 // ── report ──────────────────────────────────────────────────────────────────

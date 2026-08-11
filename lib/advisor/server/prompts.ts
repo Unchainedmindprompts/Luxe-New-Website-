@@ -286,8 +286,9 @@ ${EXPLAIN}
 
 ${VOICE}
 
-Do not sell, and do not offer a consultation — this turn is a conversation, not a close.`,
+Do not sell.`,
     dynamic: joinBlocks([
+      nextStepBlock(false),
       correctionBlock(corrected),
       conversationBlock(Boolean(transcript.trim())),
       guardrailBlock(guardrails),
@@ -351,8 +352,9 @@ ${EXPLAIN}
 
 ${VOICE}
 
-Do not sell, and do not offer a consultation — they asked a question, not for a visit.`,
+Do not sell.`,
     dynamic: joinBlocks([
+      nextStepBlock(false),
       correctionBlock(corrected),
       conversationBlock(Boolean(transcript.trim())),
       guardrailBlock(guardrails),
@@ -365,7 +367,9 @@ export function recommendationSystemPrompt(
   assessment: AdvisorAssessment,
   guardrails: readonly Guardrail[],
   corrected = false,
-  transcript = ""
+  transcript = "",
+  consultationAuthorized = false,
+  change = "new"
 ): SystemPrompt {
   const primary = assessment.strongCandidates[0];
   const others = [
@@ -395,7 +399,7 @@ If the analysis lists a conflict, they asked for something the analysis did not 
 
 45 to 95 words. Two to four short sentences.
 
-The tradeoffs, the verification list and the next step are already shown alongside your text, so do not restate them — you are writing the part a knowledgeable person would say out loud, not the whole page. If a sentence only repeats what they told you, cut it.
+The tradeoffs and the verification list are already shown alongside your text, so do not restate them — you are writing the part a knowledgeable person would say out loud, not the whole page. If a sentence only repeats what they told you, cut it.
 
 ${EXPLAIN}
 
@@ -408,6 +412,8 @@ Do not sell. No enthusiasm, no reassurance padding, no repeating a benefit you a
 The direction is: ${primary ? primary.label : "(none — see below)"}.
 
 You may also mention these, but only as alternatives, comparisons or things to rule out — never as the answer: ${others.join("; ") || "(none)"}.`,
+      continuityBlock(change),
+      nextStepBlock(consultationAuthorized),
       correctionBlock(corrected),
       conversationBlock(Boolean(transcript.trim())),
       guardrailBlock(guardrails),
@@ -428,7 +434,8 @@ export function guidanceSystemPrompt(
   assessment: AdvisorAssessment,
   guardrails: readonly Guardrail[],
   corrected = false,
-  transcript = ""
+  transcript = "",
+  consultationAuthorized = false
 ): SystemPrompt {
   const nameable = [
     ...assessment.strongCandidates.map((c) => c.label),
@@ -455,7 +462,7 @@ Lead with the most useful thing you can tell them. Say plainly what still needs 
 
 45 to 95 words. Two to four short sentences.
 
-The next step is already offered alongside your text, so do not close by describing the consultation — say the useful thing and leave it there.
+Say the useful thing and leave it there.
 
 ${EXPLAIN}
 
@@ -470,6 +477,7 @@ You may name these product directions if they help explain the guidance: ${namea
         : `THIS TURN'S ANALYSIS
 
 Do not name any specific product direction — none has been established.`,
+      nextStepBlock(consultationAuthorized),
       correctionBlock(corrected),
       conversationBlock(Boolean(transcript.trim())),
       guardrailBlock(guardrails),
@@ -646,6 +654,56 @@ function conversationBlock(hasHistory: boolean): string {
 The user turn carries the recent conversation, oldest first, and then the message being answered right now — the two are labelled and never run together. Answer the current one. The history is there so you can tell what it means: what "that one" refers to, what "why?" is asking about, which product you just discussed, what you just asked them.
 
 THE HISTORY IS CONTEXT, NOT KNOWLEDGE. It records a conversation; it is not a source of facts about Luxe, its products, its policies or its prices, and it never adds to what you are allowed to say. If something in it is wrong, repeating it does not make it right. Rule 1 above still holds: everything you may assert comes only from the approved material in this prompt.`;
+}
+
+/**
+ * Whether this turn may talk about a visit.
+ *
+ * THE SERVER ALREADY DECIDED, AND THE PROSE DID NOT KNOW. Phase 2 made the
+ * consultation something that has to be earned, and the CTA obeys it — but a
+ * live reply still closed with "our team will look at the actual openings and
+ * trim during the consultation" on a turn where the offer was correctly
+ * withheld. No button appeared and the visit was assumed in words anyway,
+ * which makes the rule cosmetic.
+ *
+ * There is deliberately no second judgement here. The block states what the
+ * server decided; it does not ask the model to work it out again.
+ */
+function nextStepBlock(authorized: boolean): string {
+  if (authorized) {
+    return `THE NEXT STEP
+
+A consultation link is on their screen, so the next step is already offered. Do not write one into your reply as well — "you can book a free consultation" above a button saying exactly that is two prompts where one was needed.`;
+  }
+  return `NO VISIT HAS BEEN AGREED
+
+Nobody has asked to schedule anything, and there is no consultation booked, arranged or under way. Do not write as though there were: no "we'll check that at the consultation", no "our team will look at it when they come out", no "during your appointment".
+
+If something genuinely cannot be settled without seeing the window, say that plainly as a property of the thing — "that is something we would want to confirm at the opening" — rather than as an event already in the diary. Say it only when it is actually useful; uncertainty is not a reason to steer toward a visit.`;
+}
+
+/**
+ * What this turn does to a recommendation the homeowner already has.
+ *
+ * A homeowner who added "I'm very sensitive to light" to a bedroom already
+ * pointed at cellular shades was told about cellular shades again, as though
+ * for the first time. The fact reinforced the direction; it did not discover
+ * one. The engine knew that and the prompt did not.
+ */
+function continuityBlock(change: string): string {
+  if (change === "unchanged") {
+    return `THEY ALREADY HAVE THIS RECOMMENDATION
+
+You gave them this direction earlier in the conversation and nothing they have said since has changed it. Do not introduce it again, do not re-argue it, and do not open with the product name as though this were the moment it was chosen.
+
+What is new is what they just told you. Say what it means for the direction they already have — a tradeoff that now matters more, a detail worth knowing, something to watch for. If it genuinely changes nothing, it is honest to say so briefly rather than to manufacture significance.`;
+  }
+  if (change === "changed") {
+    return `THIS CHANGES THE DIRECTION
+
+What they just told you moved the analysis to a different direction from the one they already have. Say so plainly and say why, in their terms, before you describe the new one. A direction that changes without explanation reads as the advisor having been wrong rather than having listened.`;
+  }
+  return "";
 }
 
 function guardrailBlock(guardrails: readonly Guardrail[]): string {

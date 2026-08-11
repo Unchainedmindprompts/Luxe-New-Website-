@@ -127,6 +127,7 @@ interface RawShape {
     verificationRequirements?: { id?: unknown }[];
   } | null;
   consultationCta?: { recommended?: unknown } | null;
+  recommendationChange?: unknown;
   state?: unknown;
 }
 
@@ -158,8 +159,15 @@ export function toAdvisorTurn(raw: unknown, priorState: OpaqueState): AdvisorTur
   // own winner out of the candidate list — that is precisely how the paragraph
   // and the panel beside it ended up naming different products. There is one
   // canonical direction, decided server-side, and this renders that or nothing.
+  // AND ONLY WHEN IT IS NEWS. A fact that reinforces the direction this space
+  // already has produced the same card a second turn running, which reads as
+  // the advisor rediscovering its own answer. `recommendationChange` is decided
+  // server-side from deterministic direction identity per area — never from
+  // comparing prose, and never from looking for a product name in the last
+  // thing that was said.
+  const change = typeof body.recommendationChange === "string" ? body.recommendationChange : "new";
   const direction =
-    status === "RECOMMENDATION_READY"
+    status === "RECOMMENDATION_READY" && (change === "new" || change === "changed")
       ? asString(assessment?.primaryRecommendation?.label)
       : null;
 

@@ -77,6 +77,7 @@ const serverPayload = (over = {}) => ({
     unknownDimensions: [],
   },
   consultationCta: { recommended: true, reasons: ["requires-physical-verification"] },
+  recommendationChange: "new",
   guardrailInterventions: [],
   error: null,
   state: { facts: { room: "bedroom", priorities: ["privacy", "room-darkening"] } },
@@ -182,7 +183,25 @@ test("6  a recommendation card says which room it is for", (t) => {
   t.ok(!/living/.test(scoped), "another area leaked onto the card");
 });
 
-test("7  the reply is never echoed into a second field the page could render", (t) => {
+test("7  an unchanged recommendation does not render the card a second time", (t) => {
+  // A live conversation showed the same bedroom card on two consecutive turns
+  // because a reinforcing fact was treated as a fresh recommendation. Asserted
+  // on the rendered HTML, per change value.
+  const shown = conversationHtml({ recommendationChange: "new" });
+  t.ok(/Recommended for the bedroom/.test(shown), "a new recommendation did not render its card");
+  t.ok(shown.includes("Cellular shades"), "the direction is missing from a new recommendation");
+
+  const again = conversationHtml({ recommendationChange: "unchanged" });
+  t.ok(!/Recommended for/.test(again), "the card rendered again for an unchanged recommendation");
+  t.ok(!again.includes("Cellular shades"), "the direction rendered again for an unchanged recommendation");
+  // The reply itself is still shown — only the card stands down.
+  t.equal(countOf(again, MARKER), 1, "the reply was suppressed along with the card");
+
+  const moved = conversationHtml({ recommendationChange: "changed" });
+  t.ok(/Recommended for the bedroom/.test(moved), "a changed recommendation did not render its card");
+});
+
+test("8  the reply is never echoed into a second field the page could render", (t) => {
   // `nextQuestion.phrased` is identical to `message` on a question turn by
   // design. If the page ever rendered both, the customer would read it twice —
   // so the rendered output is what is asserted, not the contract.
@@ -205,7 +224,7 @@ test("7  the reply is never echoed into a second field the page could render", (
   t.equal(countOf(html, MARKER), 1, "message and question were both rendered");
 });
 
-test("8  the reply exists in the document exactly once, with no hidden mirror", (t) => {
+test("9  the reply exists in the document exactly once, with no hidden mirror", (t) => {
   // The reply used to be copied into a separate `sr-only` live region, which
   // put the whole paragraph in the document a second time — hidden by a utility
   // class, positioned between the card and the composer, which is exactly where

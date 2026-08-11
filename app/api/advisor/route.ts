@@ -42,6 +42,8 @@ import {
   applyScopedUpdates,
   describeProject,
   focusOn,
+  markPresented,
+  recommendationChange,
   validateProject,
 } from "@/lib/advisor/server/project";
 import {
@@ -206,6 +208,8 @@ export async function POST(request: Request) {
       activeFacts: (p) => activeFacts(p, projectFacts),
       describe: describeProject,
       active: (p) => activeArea(p),
+      change: recommendationChange,
+      markPresented,
     },
     classifyQuestions,
     isVerificationClass,

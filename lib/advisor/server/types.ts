@@ -16,6 +16,7 @@
  * the domain layer already understands.
  */
 import type { TranscriptMessage } from "./transcript";
+import type { RecommendationChange } from "./project";
 import type { TurnTrace } from "./trace";
 import type {
   DirectionId,
@@ -224,6 +225,15 @@ export interface AdvisorResponse {
    * Non-null only alongside `nextQuestion`, and never a recommendation.
    */
   readonly preliminaryGuidance: PreliminaryGuidance | null;
+  /**
+   * What this turn does to the recommendation this space already has.
+   *
+   * Decided from deterministic direction identity, per area — see
+   * `RecommendationChange` in `project.ts`. The card renders on `new` and
+   * `changed` and stays off on `unchanged`, so a fact that merely reinforces
+   * the existing direction does not produce the same card twice.
+   */
+  readonly recommendationChange: RecommendationChange;
   /**
    * Products the homeowner asked about on a turn that still needs a fact.
    *

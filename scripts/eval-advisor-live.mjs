@@ -206,6 +206,25 @@ const makeAdvisor = (trace) => advisorModule.createAdvisor({
     project: ledgerModule.projectFacts,
     describe: describeLedger,
   },
+  project: {
+    validate: (raw, legacy) =>
+      projectModule.validateProject(raw, legacy, (value) =>
+        ledgerModule.validateLedger(
+          value,
+          (field) => extraction.EXTRACTION_FIELDS.includes(field),
+          (field, v) => extraction.allowedValues(field).includes(v),
+          (field) => extraction.isListField(field)
+        )
+      ),
+    focus: projectModule.focusOn,
+    apply: projectModule.applyScopedUpdates,
+    activeLedger: (p) => projectModule.activeArea(p)?.ledger ?? {},
+    activeFacts: (p) => projectModule.activeFacts(p, ledgerModule.projectFacts),
+    describe: projectModule.describeProject,
+    active: projectModule.activeArea,
+    change: projectModule.recommendationChange,
+    markPresented: projectModule.markPresented,
+  },
   classifyQuestions: counterfactual.classifyQuestions,
   isVerificationClass: questionSelection.isVerificationClass,
   allowedValues: extraction.allowedValues,

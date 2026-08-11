@@ -49,6 +49,20 @@ export interface GuardrailContext {
   readonly allowedProductLabels: readonly string[];
   /** Brand names Luxe genuinely carries, supplied by the caller. */
   readonly allowedBrands: readonly string[];
+  /**
+   * The verified material this turn was given to write from.
+   *
+   * Used for one thing: deciding whether a superlative is earned. The corpus
+   * says cellular is "among Luxe's preferred directions when a customer wants a
+   * very dark room", and a live reply upgraded that to "genuinely the strongest
+   * darkening option we offer" — a ranking nobody made. It also says, of a
+   * different property, "the strongest energy direction in the Luxe range",
+   * where the same word is exactly right.
+   *
+   * So the word is not banned; the claim has to appear in the material. Absent
+   * material, no superlative is supported.
+   */
+  readonly supportingMaterial?: string;
 }
 
 interface Rule {
@@ -295,6 +309,41 @@ function inventedProductName(text: string, context: GuardrailContext): string | 
 }
 
 /**
+ * Superlatives, which are claims about a ranking.
+ *
+ * "Among our preferred directions" and "the strongest option we offer" are not
+ * the same sentence. The second says Luxe compared its whole range and this
+ * came first; the corpus rarely says that, and a model reaching for emphasis
+ * says it easily.
+ */
+const SUPERLATIVES = [
+  "strongest", "best", "darkest", "quietest", "warmest", "coolest", "toughest",
+  "most effective", "most efficient", "most durable", "most popular",
+  "number one", "unbeatable", "unmatched", "second to none",
+];
+
+/**
+ * A superlative the material does not support.
+ *
+ * WORD-LEVEL EVIDENCE, DELIBERATELY. The material is what this turn was told;
+ * if it says "strongest", "strongest" is earned, and if it says nothing of the
+ * kind then no ranking has been established to report. That keeps the same word
+ * legitimate on an energy project — where the corpus really does say "the
+ * strongest energy direction in the Luxe range" — and unavailable on a
+ * darkening one, where it says only "among Luxe's preferred directions".
+ */
+function unsupportedSuperlative(text: string, material: string): string | null {
+  const lower = text.toLowerCase();
+  const source = material.toLowerCase();
+  for (const claim of SUPERLATIVES) {
+    if (!new RegExp(`\\b${claim}\\b`).test(lower)) continue;
+    if (new RegExp(`\\b${claim}\\b`).test(source)) continue;
+    return claim;
+  }
+  return null;
+}
+
+/**
  * Checks generated customer-facing text against every deterministic rule.
  * Returns every violation found, not just the first — a caller regenerating the
  * turn benefits from knowing all of them.
@@ -315,6 +364,12 @@ export function validateGeneratedText(
       violations.push({ guardrailId: rule.guardrailId, evidence: match[0].trim().slice(0, 80) });
       break;
     }
+  }
+
+  // A ranking the material does not make.
+  const superlative = unsupportedSuperlative(text, context.supportingMaterial ?? "");
+  if (superlative) {
+    violations.push({ guardrailId: "no-unsupported-superlative", evidence: superlative });
   }
 
   // Invented products, in two flavours: a real brand Luxe does not carry, and

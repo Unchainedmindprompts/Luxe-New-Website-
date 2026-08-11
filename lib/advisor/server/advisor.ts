@@ -37,7 +37,7 @@ import type { ScoredTopic } from "./answer-selection";
 import type { TranscriptMessage } from "./transcript";
 import type { Trace } from "./trace";
 import type { FactLedger, LedgerApplication } from "./ledger";
-import type { Project, ScopedApplication } from "./project";
+import type { Project, RecommendationChange, ScopedApplication } from "./project";
 import type { ClassifiedQuestion, QuestionTier } from "./counterfactual";
 import type { BrandResponseMatch } from "./brand-response";
 import type {
@@ -174,7 +174,21 @@ export interface AdvisorDeps {
     /** Every area, for the extraction prompt's established block. */
     describe: (project: Project) => string;
     /** Which space the conversation is on, for the reply and the card. */
-    active: (project: Project) => { id: string; room: string | null; label: string | null } | null;
+    active: (project: Project) => {
+      id: string;
+      room: string | null;
+      label: string | null;
+      presented?: { directionId: string; turn: number } | null;
+    } | null;
+    /** New, unchanged, changed or withdrawn — by direction id, never by prose. */
+    change: (current: string | null, presented: string | null) => RecommendationChange;
+    /** Records what this space has actually been shown. */
+    markPresented: (
+      project: Project,
+      areaId: string | null,
+      directionId: string,
+      turn: number
+    ) => Project;
   };
   /**
    * Counterfactual gating: given the current facts, which unresolved questions
@@ -208,7 +222,11 @@ export interface AdvisorDeps {
   };
   readonly validateGeneratedText: (
     text: string,
-    context: { allowedProductLabels: readonly string[]; allowedBrands: readonly string[] }
+    context: {
+      allowedProductLabels: readonly string[];
+      allowedBrands: readonly string[];
+      supportingMaterial?: string;
+    }
   ) => readonly { guardrailId: string; evidence: string }[];
   readonly sanitizeForOutput: (text: string, maxLength: number) => string;
   readonly prompts: {
@@ -247,13 +265,16 @@ export interface AdvisorDeps {
       assessment: AdvisorAssessment,
       guardrails: readonly Guardrail[],
       corrected?: boolean,
-      transcript?: string
+      transcript?: string,
+      consultationAuthorized?: boolean,
+      change?: RecommendationChange
     ) => SystemPrompt;
     guidanceSystemPrompt: (
       assessment: AdvisorAssessment,
       guardrails: readonly Guardrail[],
       corrected?: boolean,
-      transcript?: string
+      transcript?: string,
+      consultationAuthorized?: boolean
     ) => SystemPrompt;
     phrasingUserMessage: (parts: Record<string, string | undefined>) => string;
   };
@@ -795,7 +816,10 @@ ${lines.join("\n")}`;
     maxTokens: number,
     maxChars: number,
     fallback: string,
-    interventions: string[]
+    interventions: string[],
+    // What this turn was told. Only the superlative check reads it: a ranking
+    // the material does not make is a ranking nobody made.
+    supportingMaterial = ""
   ): Promise<string> {
     const violated: string[] = [];
     for (let attempt = 0; attempt < 2; attempt++) {
@@ -823,6 +847,7 @@ ${lines.join("\n")}`;
       const violations = deps.validateGeneratedText(text, {
         allowedProductLabels: productCatalogue,
         allowedBrands: deps.allowedBrands,
+        supportingMaterial,
       });
       if (!violations.length) return text;
       violated.length = 0;
@@ -941,6 +966,7 @@ ${lines.join("\n")}`;
         assessment: summarise(deps.assess(priorFacts, deps.knowledge)),
         nextQuestion: null,
         preliminaryGuidance: null,
+        recommendationChange: "none",
         productEducation: null,
         message: answer,
         canonicalResponseId: null,
@@ -999,6 +1025,7 @@ ${lines.join("\n")}`;
           assessment: summarise(deps.assess(priorFacts, deps.knowledge)),
           nextQuestion: null,
         preliminaryGuidance: null,
+        recommendationChange: "none",
         productEducation: null,
           message: answer,
           canonicalResponseId: null,
@@ -1139,8 +1166,8 @@ ${lines.join("\n")}`;
      * different reply, and a transcript that silently missed one would produce
      * exactly the bug this feature exists to fix — on the paths nobody tested.
      */
-    const stateAfter = (advisorMessage: string): ConversationState => ({
-      project: project as unknown as Record<string, unknown>,
+    const stateAfter = (advisorMessage: string, withProject: Project = project): ConversationState => ({
+      project: withProject as unknown as Record<string, unknown>,
       ledger: ledger as Record<string, unknown>,
       facts,
       turnCount: nextTurnCount,
@@ -1164,6 +1191,7 @@ ${lines.join("\n")}`;
         assessment: summarise(assessment),
         nextQuestion: null,
         preliminaryGuidance: null,
+        recommendationChange: "none",
         productEducation: null,
         message: deps.sanitizeForOutput(brandAnswer.response, MAX_RECOMMENDATION_CHARS),
         canonicalResponseId: brandAnswer.id,
@@ -1197,6 +1225,7 @@ ${lines.join("\n")}`;
           assessment: summarise(assessment),
           nextQuestion: null,
         preliminaryGuidance: null,
+        recommendationChange: "none",
         productEducation: null,
           message: answered.message,
           canonicalResponseId: null,
@@ -1238,6 +1267,7 @@ ${lines.join("\n")}`;
         assessment: summarise(assessment),
         nextQuestion: null,
         preliminaryGuidance: null,
+        recommendationChange: "none",
         productEducation: null,
         message: unknown,
         canonicalResponseId: null,
@@ -1293,6 +1323,7 @@ ${lines.join("\n")}`;
         assessment: summarise(assessment),
         nextQuestion: null,
         preliminaryGuidance: null,
+        recommendationChange: "none",
         productEducation: null,
         message,
         canonicalResponseId: null,
@@ -1378,6 +1409,9 @@ ${lines.join("\n")}`;
         },
         preliminaryGuidance: guidance,
         productEducation: educating ? educate.map((d) => ({ id: d.id, label: d.label })) : null,
+        // A gated turn is not recommending, so nothing about the space's
+        // presented direction changes.
+        recommendationChange: "none",
         message: phrased,
         canonicalResponseId: null,
         // UNCHANGED, AND DELIBERATELY SO. Naming a direction we are leaning
@@ -1396,13 +1430,54 @@ ${lines.join("\n")}`;
     // one claim this turn is not entitled to make.
     trace.setRoute(status === "GUIDANCE_READY" ? "guidance" : "recommendation");
     const givingGuidance = status === "GUIDANCE_READY";
+
+    // ── recommendation continuity ──────────────────────────────────────────
+    //
+    // DETERMINISTIC IDENTITY, PER AREA. A homeowner who added "I'm very
+    // sensitive to light" to a bedroom already pointed at cellular shades was
+    // told about cellular shades a second time, with the same card underneath.
+    // The fact reinforced the direction; it did not discover one. Nothing
+    // remembered what had already been said, because the assessment was
+    // recomputed each turn and thrown away.
+    //
+    // Compared by direction id against what this space was actually shown —
+    // never by looking for a product name in the last thing the advisor wrote.
+    // THE PROSE HAS TO KNOW WHAT THE SERVER DECIDED. A live reply said "our
+    // team will look at the actual openings and trim during the consultation"
+    // on a turn where the CTA was correctly withheld — the phrasing layer had
+    // no idea, so it assumed a visit was happening and effectively made the
+    // offer in words the Phase 2 rules never authorised.
+    const consultationAuthorized = consultationIntent(assessment, status, askedToSchedule).recommended;
+
+    const currentDirection =
+      status === "RECOMMENDATION_READY" ? assessment.strongCandidates[0]?.id ?? null : null;
+    const areaNow = deps.project.active(project);
+    const change = deps.project.change(currentDirection, areaNow?.presented?.directionId ?? null);
+    const presenting = change === "new" || change === "changed";
     const fallback = givingGuidance
       ? fallbackGuidance(assessment)
       : fallbackRecommendation(assessment);
+    // The verified prose this turn writes from, hoisted so the superlative check
+    // can be held to the same material the model was given and no other.
+    const directionMaterial = (() => {
+      const primary = assessment.strongCandidates[0];
+      const direction = primary
+        ? deps.knowledge.directions.find((d) => d.id === primary.id)
+        : undefined;
+      return direction ? describeForProperties(direction, facts.priorities ?? []) : "";
+    })();
+
     const message = await phraseSafely(
       givingGuidance
-        ? deps.prompts.guidanceSystemPrompt(assessment, guardrails, corrected, history)
-        : deps.prompts.recommendationSystemPrompt(assessment, guardrails, corrected, history),
+        ? deps.prompts.guidanceSystemPrompt(assessment, guardrails, corrected, history, consultationAuthorized)
+        : deps.prompts.recommendationSystemPrompt(
+            assessment,
+            guardrails,
+            corrected,
+            history,
+            consultationAuthorized,
+            change
+          ),
       deps.prompts.phrasingUserMessage({
         "recent conversation": history || undefined,
         "their message": input.message,
@@ -1422,13 +1497,7 @@ ${lines.join("\n")}`;
         // So the verified behaviour prose goes in. Where the material gives a
         // mechanism the model now has the right one; where it does not, the
         // prompt tells it to state the conclusion and stop.
-        "what luxe knows about that direction": (() => {
-          const primary = assessment.strongCandidates[0];
-          const direction = primary
-            ? deps.knowledge.directions.find((d) => d.id === primary.id)
-            : undefined;
-          return direction ? describeForProperties(direction, facts.priorities ?? []) : undefined;
-        })(),
+        "what luxe knows about that direction": directionMaterial || undefined,
         alternatives: assessment.deprioritizedDirections
           .map((c) => `${c.label} — ${c.reasons.join(" ")}`)
           .join("\n"),
@@ -1439,13 +1508,19 @@ ${lines.join("\n")}`;
       RECOMMENDATION_TOKENS,
       MAX_RECOMMENDATION_CHARS,
       fallback,
-      interventions
+      interventions,
+      directionMaterial
     );
 
     return {
       status,
-      state: stateAfter(message),
+      // Recorded only when the customer is actually shown it, so this is a
+      // record of what they have seen rather than of what the engine computed.
+      state: presenting && currentDirection
+        ? stateAfter(message, deps.project.markPresented(project, areaNow?.id ?? null, currentDirection, nextTurnCount))
+        : stateAfter(message),
       assessment: summarise(assessment),
+      recommendationChange: change,
       nextQuestion: null,
       preliminaryGuidance: null,
       productEducation: null,
@@ -1477,6 +1552,7 @@ export function unavailable(
     assessment: null,
     nextQuestion: null,
     preliminaryGuidance: null,
+    recommendationChange: "none",
     productEducation: null,
     canonicalResponseId: null,
     message:
