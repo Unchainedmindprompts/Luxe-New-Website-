@@ -32,9 +32,20 @@ import type {
  */
 export interface ConversationState {
   /**
+   * The project, as more than one space. See `project.ts`.
+   *
+   * Shared facts, an area per room the conversation has been about, and which
+   * area it is on now. This is the source of truth from Phase 7 onward.
+   */
+  readonly project?: Record<string, unknown>;
+  /**
    * What the advisor knows and why — value, basis, evidence and turn per fact.
    * Re-validated on arrival exactly like a model response, then projected into
    * plain `ProjectFacts` for the engine, which never sees provenance.
+   *
+   * NOW THE ACTIVE AREA'S LEDGER, echoed for callers that only want one space.
+   * It is still read on the way IN, so a conversation that was open in a
+   * browser before Phase 7 shipped is migrated rather than dropped.
    */
   readonly ledger?: Record<string, unknown>;
   /**

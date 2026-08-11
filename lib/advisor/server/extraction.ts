@@ -204,6 +204,8 @@ export function allowedValues(field: ExtractionFieldName): readonly string[] {
 const MAX_EVIDENCE_CHARS = 200;
 /** A runaway or adversarial response cannot flood the ledger. */
 const MAX_UPDATES = 24;
+/** A space is called something short. This is a label, not a description. */
+const MAX_AREA_CHARS = 60;
 
 export type UpdateBasis = "stated" | "inferred";
 
@@ -278,6 +280,20 @@ export interface FactUpdate {
   readonly basis: UpdateBasis;
   readonly evidence: string;
   readonly operation: UpdateOperation;
+  /**
+   * Which space this fact is about, in the homeowner's own words.
+   *
+   * Optional, and absent is the common case: most messages are about whatever
+   * the conversation is already on. It matters for the message that is not —
+   * "I want the bedrooms dark and something modern for the living spaces" — 
+   * where two facts about two rooms arrive together and the ledger used to keep
+   * whichever came last.
+   *
+   * THE MODEL REPORTS WORDS, NOT IDENTITY. It says "the bedrooms" or "the guest
+   * room"; the server decides which area that is. Identity derived from free
+   * text inside a model response is exactly the fragile thing to avoid.
+   */
+  readonly area?: string;
 }
 
 /**
@@ -304,8 +320,9 @@ export function buildDeltaSchema(): Record<string, unknown> {
             basis: { type: "string", enum: ["stated", "inferred"] },
             evidence: { type: "string" },
             operation: { type: "string", enum: ["assert", "retract"] },
+            area: { type: "string" },
           },
-          required: ["field", "value", "basis", "evidence", "operation"],
+          required: ["field", "value", "basis", "evidence", "operation", "area"],
           additionalProperties: false,
         },
       },
@@ -505,7 +522,7 @@ export function validateUpdates(raw: unknown, message: string): ValidatedUpdates
       rejected.push("update was not an object");
       continue;
     }
-    const { field, value, basis, evidence, operation } = item as Record<string, unknown>;
+    const { field, value, basis, evidence, operation, area } = item as Record<string, unknown>;
 
     if (typeof field !== "string" || !(EXTRACTION_FIELDS as readonly string[]).includes(field)) {
       rejected.push(`unknown field: ${typeof field === "string" ? field : typeof field}`);
@@ -555,6 +572,12 @@ export function validateUpdates(raw: unknown, message: string): ValidatedUpdates
       basis,
       evidence: evidence.trim().slice(0, MAX_EVIDENCE_CHARS),
       operation,
+      // The homeowner's words for the space, capped and never interpreted here.
+      // It is a grouping hint; `project.ts` decides what area it means, and an
+      // unrecognisable phrase simply groups with itself.
+      ...(typeof area === "string" && area.trim()
+        ? { area: area.trim().slice(0, MAX_AREA_CHARS) }
+        : {}),
     });
   }
 

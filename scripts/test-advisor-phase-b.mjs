@@ -24,7 +24,7 @@ const read = (p) => readFileSync(join(ROOT, p), "utf8");
 
 const [
   products, priorities, rules, guardrailKnowledge,
-  engine, extraction, questionSelection, guardrails, prompts, advisorModule, limits, ledgerModule, counterfactual, brandKnowledge, brandResponse,
+  engine, extraction, questionSelection, guardrails, prompts, advisorModule, limits, ledgerModule, projectModule, counterfactual, brandKnowledge, brandResponse,
   answerKnowledge, answerSelection, transcriptModule, traceModule, serverTypes, productData, areaData, homepageFaqs, constants,
 ] = await Promise.all([
   import("../lib/advisor/knowledge/products.ts"),
@@ -39,6 +39,7 @@ const [
   import("../lib/advisor/server/advisor.ts"),
   import("../lib/advisor/server/limits.ts"),
   import("../lib/advisor/server/ledger.ts"),
+  import("../lib/advisor/server/project.ts"),
   import("../lib/advisor/server/counterfactual.ts"),
   import("../lib/advisor/knowledge/brand-responses.ts"),
   import("../lib/advisor/server/brand-response.ts"),
@@ -164,6 +165,17 @@ function mockProvider({ extractions = [], phrasings = [], failExtract, failPhras
  */
 function toUpdates(facts, message) {
   const updates = [];
+  // `__updates` is the raw form, for scenarios that need per-area scoping —
+  // one message asserting a fact about the bedrooms AND one about the living
+  // spaces cannot be written as a flat fact object.
+  if (Array.isArray(facts?.__updates)) {
+    return facts.__updates.map((update) => ({
+      evidence: message,
+      basis: "stated",
+      operation: "assert",
+      ...update,
+    }));
+  }
   for (const [field, value] of Object.entries(facts ?? {})) {
     if (value === undefined || value === null) continue;
     const basis = (facts.__basis ?? {})[field] ?? "stated";
@@ -222,6 +234,15 @@ function makeAdvisor(provider) {
     selectVerifiedAnswer: answerSelection.selectVerifiedAnswer,
     unknownAnswer: answerKnowledge.unknownAnswerText({ phone: constants.BUSINESS.phone, email: constants.BUSINESS.email }),
     ledger: LEDGER,
+    project: {
+      validate: (raw, legacy) => projectModule.validateProject(raw, legacy, LEDGER.validate),
+      focus: projectModule.focusOn,
+      apply: projectModule.applyScopedUpdates,
+      activeLedger: (p) => projectModule.activeArea(p)?.ledger ?? {},
+      activeFacts: (p) => projectModule.activeFacts(p, ledgerModule.projectFacts),
+      describe: projectModule.describeProject,
+      active: projectModule.activeArea,
+    },
     classifyQuestions: counterfactual.classifyQuestions,
     isVerificationClass: questionSelection.isVerificationClass,
     allowedValues: extraction.allowedValues,
@@ -2172,10 +2193,19 @@ await test("97 structured facts and the transcript are both kept, and stay disti
     { message: "What about the guest room instead?", extraction: { room: "other" } },
   ]);
 
-  // The ledger still does its job — durable project memory.
-  t.equal(turns[1].state.facts.exposure, "west", "a durable fact was lost when the room changed");
-  t.equal(turns[1].state.facts.solarHeat, "severe", "a durable fact was lost when the room changed");
-  t.equal(turns[1].state.facts.room, "other", "the newer room did not replace the older one");
+  // DURABLE MEMORY IS NOW PER AREA, and this test used to assert the bug.
+  // "What about the guest room instead?" is a different space; carrying the
+  // bedroom's west exposure and severe heat into it was never durable memory,
+  // it was one room's facts leaking into another. The guest room starts clean
+  // and the bedroom keeps everything it was told.
+  t.equal(turns[1].state.facts.room, "other", "the conversation did not move to the new room");
+  t.equal(turns[1].state.facts.exposure, undefined, "the bedroom's exposure leaked into the guest room");
+  t.equal(turns[1].state.facts.solarHeat, undefined, "the bedroom's heat leaked into the guest room");
+
+  const bedroom = turns[1].state.project.areas.find((a) => a.room === "bedroom");
+  t.ok(bedroom, "the bedroom area was lost when the conversation moved on");
+  t.equal(bedroom?.ledger.exposure?.value, "west", "the bedroom lost its exposure");
+  t.equal(bedroom?.ledger.solarHeat?.value, "severe", "the bedroom lost its heat");
 
   // And the transcript is separate from it — not a second copy of the facts.
   const transcript = transcriptOf(state);
@@ -3695,15 +3725,19 @@ await test("161 DEFECT 1b — a repeat discovery message never re-opens the invi
   t.ok(second.diagnostics?.route !== "discovery", "the open question was asked twice");
 });
 
-await test("162 DEFECT 2 — two areas in one message cannot become one settled answer", async (t) => {
-  // The extractor sees both rooms; the ledger holds one. The collapse is now
-  // visible, and a turn that collapsed an area does not claim a recommendation.
+await test("162 two areas in one message are kept apart, not collapsed", async (t) => {
+  // The preview defect, now fixed at the state layer rather than guarded
+  // against. Both spaces are stored, neither overwrites the other, and the
+  // recommendation belongs to one named area.
   const provider = mockProvider({
     extractions: [
       {
-        room: ["bedroom", "living"],
-        roomDarkening: "maximum",
-        priorities: ["room-darkening", "aesthetics"],
+        __updates: [
+          { field: "room", value: "bedroom", basis: "stated", operation: "assert", area: "the bedrooms" },
+          { field: "roomDarkening", value: "maximum", basis: "stated", operation: "assert", area: "the bedrooms" },
+          { field: "room", value: "living", basis: "stated", operation: "assert", area: "the living spaces" },
+          { field: "aesthetic", value: "modern-minimal", basis: "stated", operation: "assert", area: "the living spaces" },
+        ],
       },
     ],
   });
@@ -3712,37 +3746,23 @@ await test("162 DEFECT 2 — two areas in one message cannot become one settled 
       "Well I want something that darkens the bedrooms. and some modern and contemportay for the living spaces",
     state: {},
   });
-  t.ok(
-    result.status !== "RECOMMENDATION_READY",
-    "a collapsed two-area message produced a finished whole-project recommendation"
-  );
-  t.equal(result.status, "GUIDANCE_READY", `status was ${result.status}`);
-  t.equal(result.assessment?.primaryRecommendation, null, "a single direction was still claimed");
 
-  // The ledger really did collapse — this is a limit being reported, not fixed.
-  const application = LEDGER.apply(
-    {},
-    [
-      { field: "room", value: "bedroom", basis: "stated", evidence: "bedrooms", operation: "assert" },
-      { field: "room", value: "living", basis: "stated", evidence: "living spaces", operation: "assert" },
-    ],
-    1,
-    (f) => extraction.isListField(f)
-  );
-  t.ok(application.collapsed.includes("room"), "the collapse was not reported");
-  t.equal(application.ledger.room.value, "living", "the ledger kept more than one room");
+  const areas = result.state.project.areas;
+  t.equal(areas.length, 2, `expected two areas, got ${areas.map((a) => a.id).join(", ")}`);
+  const bedroom = areas.find((a) => a.room === "bedroom");
+  const living = areas.find((a) => a.room === "living");
+  t.ok(bedroom, "the bedrooms were not stored");
+  t.ok(living, "the living spaces were not stored");
+  // NEITHER OVERWROTE THE OTHER — the whole point.
+  t.equal(bedroom?.ledger.roomDarkening?.value, "maximum", "the bedroom darkening goal was lost");
+  t.equal(living?.ledger.aesthetic?.[0]?.value, "modern-minimal", "the living-space look was lost");
+  t.equal(living?.ledger.roomDarkening, undefined, "the bedroom's darkening leaked into the living spaces");
 
-  // One room named twice is not a collapse.
-  const same = LEDGER.apply(
-    {},
-    [
-      { field: "room", value: "bedroom", basis: "stated", evidence: "bedroom", operation: "assert" },
-      { field: "room", value: "bedroom", basis: "stated", evidence: "bedroom", operation: "assert" },
-    ],
-    1,
-    (f) => extraction.isListField(f)
-  );
-  t.equal(same.collapsed.length, 0, "repeating one value was reported as a collapse");
+  // The conversation is on the first space named, and any recommendation
+  // belongs to it rather than to the house.
+  t.equal(result.state.project.activeAreaId, "bedroom", `active area was ${result.state.project.activeAreaId}`);
+  t.equal(result.state.facts.room, "bedroom", "the engine was given the wrong area");
+  t.equal(result.state.facts.aesthetic, undefined, "living-space facts reached the bedroom assessment");
 });
 
 await test("163 DEFECT 3 — a darkening project is never handed the insulation mechanism", async (t) => {
@@ -3786,6 +3806,239 @@ await test("164 the four-turn preview conversation, end to end", async (t) => {
   t.ok(!turns[1].consultationCta.recommended, "an early turn pushed a booking");
   t.ok((turns[3].state.transcript ?? []).length >= 8, "the transcript did not retain the conversation");
   t.equal(turns[3].productEducation, null, "product education fired on a project turn");
+});
+
+// ── Phase 7: a project has rooms ────────────────────────────────────────────
+
+const areaUpdate = (field, value, area, over = {}) => ({
+  field, value, basis: "stated", operation: "assert", ...(area ? { area } : {}), ...over,
+});
+
+async function areaTurns(steps) {
+  const provider = mockProvider({ extractions: steps.map((s) => s.extraction) });
+  const advisor = makeAdvisor(provider);
+  const turns = [];
+  let state = {};
+  for (const step of steps) {
+    const result = await advisor.runTurn({ message: step.message, state });
+    turns.push(result);
+    state = result.state;
+  }
+  return { turns, state, provider };
+}
+
+const areaOf = (state, room) => state.project.areas.find((a) => a.room === room);
+
+await test("165 B — bedroom then living room, each keeping its own facts", async (t) => {
+  const { turns, state } = await areaTurns([
+    {
+      message: "The bedroom needs to be really dark.",
+      extraction: { __updates: [
+        areaUpdate("room", "bedroom", "the bedroom"),
+        areaUpdate("roomDarkening", "maximum", "the bedroom"),
+      ] },
+    },
+    {
+      message: "Okay, what about the living room? I want to keep the view.",
+      extraction: { __updates: [
+        areaUpdate("room", "living", "the living room"),
+        areaUpdate("viewImportance", "high", "the living room"),
+      ] },
+    },
+  ]);
+  t.equal(state.project.areas.length, 2, "the two spaces were not kept apart");
+  t.equal(areaOf(state, "bedroom")?.ledger.roomDarkening?.value, "maximum", "the bedroom darkening was lost");
+  t.equal(areaOf(state, "living")?.ledger.viewImportance?.value, "high", "the living-room view was lost");
+  t.equal(areaOf(state, "living")?.ledger.roomDarkening, undefined, "darkening leaked into the living room");
+  t.equal(state.project.activeAreaId, "living", `active area is ${state.project.activeAreaId}`);
+  t.equal(turns[1].state.facts.roomDarkening, undefined, "the engine was given the bedroom's darkening");
+});
+
+await test("166 C — returning to a space recovers it from stored state", async (t) => {
+  const { state } = await areaTurns([
+    { message: "The bedroom needs to be really dark.", extraction: { __updates: [
+      areaUpdate("room", "bedroom", "the bedroom"),
+      areaUpdate("roomDarkening", "maximum", "the bedroom"),
+    ] } },
+    { message: "Okay, what about the living room?", extraction: { __updates: [] } },
+    { message: "What did we decide for the bedroom?", extraction: { __updates: [] } },
+  ]);
+  // Focus follows the words in the message, with no fact required to move it.
+  t.equal(state.project.activeAreaId, "bedroom", `active area is ${state.project.activeAreaId}`);
+  t.equal(state.facts.roomDarkening, "maximum", "the bedroom's own facts were not recovered");
+  t.ok(areaOf(state, "living"), "the living room was forgotten when the conversation returned");
+  // Recovered from stored facts, not from anything the advisor said.
+  t.equal(areaOf(state, "bedroom")?.ledger.roomDarkening?.basis, "stated", "the fact lost its provenance");
+});
+
+await test("167 D — conflicting facts by area stay independent", async (t) => {
+  const { state } = await areaTurns([
+    { message: "Privacy is really important in the bedroom.", extraction: { __updates: [
+      areaUpdate("room", "bedroom", "the bedroom"),
+      areaUpdate("privacyNeed", "nighttime", "the bedroom"),
+    ] } },
+    { message: "I don't care much about privacy in the living room.", extraction: { __updates: [
+      areaUpdate("room", "living", "the living room"),
+      areaUpdate("privacyNeed", "none", "the living room"),
+    ] } },
+  ]);
+  t.equal(areaOf(state, "bedroom")?.ledger.privacyNeed?.value, "nighttime", "the bedroom privacy need was overwritten");
+  t.equal(areaOf(state, "living")?.ledger.privacyNeed?.value, "none", "the living-room privacy need was lost");
+});
+
+await test("168 E — two bedrooms can be told apart when the homeowner distinguishes them", async (t) => {
+  const { state } = await areaTurns([
+    {
+      message: "The primary bedroom needs to get almost completely dark, but the guest bedroom doesn't.",
+      extraction: { __updates: [
+        areaUpdate("room", "bedroom", "the primary bedroom"),
+        areaUpdate("roomDarkening", "maximum", "the primary bedroom"),
+        areaUpdate("room", "bedroom", "the guest bedroom"),
+        areaUpdate("roomDarkening", "moderate", "the guest bedroom"),
+      ] },
+    },
+  ]);
+  t.equal(state.project.areas.length, 2, `expected two bedrooms, got ${state.project.areas.map((a) => a.id).join(", ")}`);
+  const primary = state.project.areas.find((a) => a.id === "bedroom:primary");
+  const guest = state.project.areas.find((a) => a.id === "bedroom:guest");
+  t.ok(primary, "the primary bedroom was not separated");
+  t.ok(guest, "the guest bedroom was not separated");
+  t.equal(primary?.ledger.roomDarkening?.value, "maximum", "the primary bedroom lost its blackout requirement");
+  t.equal(guest?.ledger.roomDarkening?.value, "moderate", "the guest bedroom took the primary bedroom's value");
+
+  // Undistinguished bedrooms stay one area — "the bedrooms" is one space.
+  const plain = projectModule.areaKey("bedroom", "the bedrooms");
+  t.equal(plain, "bedroom", `"the bedrooms" keyed as ${plain}`);
+});
+
+await test("169 F — a recommendation belongs to one area, and says so", async (t) => {
+  const { turns, state } = await areaTurns([
+    { message: "The bedroom needs to be as dark as possible.", extraction: { __updates: [
+      areaUpdate("room", "bedroom", "the bedroom"),
+      areaUpdate("roomDarkening", "maximum", "the bedroom"),
+      areaUpdate("priorities", "room-darkening", "the bedroom"),
+    ] } },
+    { message: "What about the living room?", extraction: { __updates: [] } },
+  ]);
+  t.equal(turns[0].status, "RECOMMENDATION_READY", `bedroom turn was ${turns[0].status}`);
+  t.equal(turns[0].assessment?.primaryRecommendation?.label, "Cellular shades", "the bedroom direction changed");
+
+  // Moving to the living room does not carry the recommendation with it.
+  t.ok(turns[1].status !== "RECOMMENDATION_READY", `the living room inherited ${turns[1].status}`);
+  t.equal(turns[1].assessment?.primaryRecommendation, null, "the bedroom recommendation followed the conversation");
+  t.equal(areaOf(state, "bedroom")?.ledger.roomDarkening?.value, "maximum", "the bedroom facts were lost");
+});
+
+await test("170 G — an unscoped follow-up lands on the space being discussed", async (t) => {
+  const { state } = await areaTurns([
+    { message: "The bedroom is dark enough already.", extraction: { __updates: [
+      areaUpdate("room", "bedroom", "the bedroom"),
+    ] } },
+    { message: "Let's talk about the living room.", extraction: { __updates: [] } },
+    // No area named: "what about at night?" belongs to the living room.
+    { message: "What about at night?", extraction: { __updates: [
+      areaUpdate("privacyNeed", "nighttime", null),
+    ] } },
+  ]);
+  t.equal(areaOf(state, "living")?.ledger.privacyNeed?.value, "nighttime", "the follow-up did not land on the active area");
+  t.equal(areaOf(state, "bedroom")?.ledger.privacyNeed, undefined, "the follow-up landed on the bedroom instead");
+});
+
+await test("171 H — a whole-project fact is stored once, not per room", async (t) => {
+  const { state } = await areaTurns([
+    { message: "The bedroom needs to be dark.", extraction: { __updates: [
+      areaUpdate("room", "bedroom", "the bedroom"),
+      areaUpdate("roomDarkening", "maximum", "the bedroom"),
+    ] } },
+    { message: "We want motorized shades throughout the house.", extraction: { __updates: [
+      areaUpdate("motorizationInterest", "requested", null),
+    ] } },
+    { message: "Now the living room.", extraction: { __updates: [
+      areaUpdate("room", "living", "the living room"),
+    ] } },
+  ]);
+  t.equal(state.project.shared.motorizationInterest?.value, "requested", "a household fact was not stored as shared");
+  t.equal(areaOf(state, "bedroom")?.ledger.motorizationInterest, undefined, "a household fact was copied into an area");
+  // And it reaches the engine for every area without being restated.
+  t.equal(state.facts.motorizationInterest, "requested", "the living room did not inherit the household fact");
+  t.equal(state.facts.room, "living", "the conversation is not on the living room");
+});
+
+await test("172 an inferred room may not open or switch an area", async (t) => {
+  // Precedence, one level up: inference may propose a fact and never
+  // restructure the project. "We spend most evenings downstairs" must not
+  // abandon the bedroom the homeowner actually stated.
+  const { state } = await areaTurns([
+    { message: "It is the bedroom.", extraction: { __updates: [areaUpdate("room", "bedroom", "the bedroom")] } },
+    { message: "We spend most evenings downstairs.", extraction: { __updates: [
+      { field: "room", value: "living", basis: "inferred", operation: "assert" },
+    ] } },
+  ]);
+  t.equal(state.project.areas.length, 1, `an inference opened an area: ${state.project.areas.map((a) => a.id).join(", ")}`);
+  t.equal(state.project.activeAreaId, "bedroom", "an inference moved the conversation");
+  t.equal(state.facts.room, "bedroom", "an inferred room replaced a stated one");
+});
+
+await test("173 migration — a pre-Phase-7 conversation is carried over, not dropped", async (t) => {
+  // A browser open when this shipped sends the old flat ledger.
+  const legacy = {
+    room: { value: "bedroom", basis: "stated", evidence: "the bedroom", turn: 1 },
+    roomDarkening: { value: "maximum", basis: "stated", evidence: "very dark", turn: 1 },
+    budgetSensitivity: { value: "high", basis: "stated", evidence: "budget", turn: 1 },
+  };
+  const migrated = projectModule.validateProject(undefined, legacy, LEDGER.validate);
+  t.equal(migrated.areas.length, 1, "the old conversation lost its room");
+  t.equal(migrated.activeAreaId, "bedroom", `active area is ${migrated.activeAreaId}`);
+  t.equal(migrated.areas[0].ledger.roomDarkening?.value, "maximum", "an established fact was dropped");
+  // Household facts land in shared, not in the room.
+  t.equal(migrated.shared.budgetSensitivity?.value, "high", "a household fact was not migrated to shared");
+  t.equal(migrated.areas[0].ledger.budgetSensitivity, undefined, "a household fact stayed in the room");
+
+  // Empty and junk both degrade to an empty project rather than throwing.
+  t.equal(projectModule.validateProject(undefined, {}, LEDGER.validate).areas.length, 0, "an empty ledger produced an area");
+  t.equal(projectModule.validateProject("not an object", {}, LEDGER.validate).areas.length, 0, "junk state was not rejected");
+  t.equal(projectModule.validateProject({ areas: "nope" }, {}, LEDGER.validate).areas.length, 0, "a malformed areas list was accepted");
+
+  // A crafted payload cannot grow the project without bound.
+  const flood = { shared: {}, areas: Array.from({ length: 40 }, (_, i) => ({ id: `a${i}`, ledger: {} })) };
+  t.ok(projectModule.validateProject(flood, {}, LEDGER.validate).areas.length <= 12, "the area list is unbounded");
+
+  // And a real turn accepts old state end to end.
+  const provider = mockProvider({ extractions: [{ __updates: [] }] });
+  const result = await makeAdvisor(provider).runTurn({ message: "Anything else I should know?", state: { ledger: legacy } });
+  t.equal(result.state.facts.roomDarkening, "maximum", "an old conversation lost its facts on the next turn");
+});
+
+await test("174 the project summary can answer for every area", async (t) => {
+  const { state } = await areaTurns([
+    { message: "The bedroom needs to be as dark as possible.", extraction: { __updates: [
+      areaUpdate("room", "bedroom", "the bedroom"),
+      areaUpdate("roomDarkening", "maximum", "the bedroom"),
+      areaUpdate("priorities", "room-darkening", "the bedroom"),
+    ] } },
+    { message: "What about the living room?", extraction: { __updates: [] } },
+  ]);
+  const summary = projectModule.summariseProject(state.project, { bedroom: "Cellular shades" });
+  t.equal(summary.length, 2, "the summary does not cover every area");
+  const bedroom = summary.find((a) => a.room === "bedroom");
+  t.equal(bedroom?.recommendation, "Cellular shades", "a settled area lost its recommendation");
+  t.ok(bedroom?.knownFields.includes("roomDarkening"), "the summary does not report what is known");
+  t.equal(summary.find((a) => a.room === "living")?.recommendation, null, "an unsettled area claimed a recommendation");
+  t.equal(summary.filter((a) => a.active).length, 1, "the summary does not mark exactly one active area");
+});
+
+await test("175 the extraction prompt teaches the area contract", async (t) => {
+  const prompt = renderedPrompts.extractionSystemPrompt(VOCABULARY, "");
+  t.ok(/WHICH SPACE/.test(prompt), "the prompt never explains the area field");
+  t.ok(/in THEIR words/.test(prompt), "the prompt does not ask for the homeowner's own phrase");
+  t.ok(/empty string/.test(prompt), "the prompt does not say what an unnamed space looks like");
+  t.ok(/primary and guest/.test(prompt), "the prompt does not explain distinguishing two rooms of one kind");
+  // The schema carries it, and still has no unions.
+  const schema = extraction.buildDeltaSchema();
+  const item = schema.properties.updates.items;
+  t.ok(item.properties.area, "the schema has no area field");
+  t.ok(item.required.includes("area"), "area is not required, so it will be omitted");
+  t.ok(!JSON.stringify(schema).includes("oneOf"), "the schema reintroduced a union");
 });
 
 // ── report ──────────────────────────────────────────────────────────────────

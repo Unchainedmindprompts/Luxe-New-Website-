@@ -161,6 +161,25 @@ test("6  a recommendation card says which room it is for", (t) => {
   const noRoom = conversationHtml({ state: { facts: { priorities: ["privacy"] } } });
   t.ok(/Recommended direction/.test(noRoom), "the unscoped heading is missing when no room is known");
   t.ok(!/Recommended for/.test(noRoom), "a room was named that was never established");
+
+  // Phase 7: the scope comes from the ACTIVE AREA, and uses the homeowner's own
+  // words when they gave any — "the primary bedroom" beats a vocabulary label
+  // they never said.
+  const scoped = conversationHtml({
+    state: {
+      facts: { room: "bedroom" },
+      project: {
+        shared: {},
+        activeAreaId: "bedroom:primary",
+        areas: [
+          { id: "bedroom:primary", room: "bedroom", label: "the primary bedroom", ledger: {} },
+          { id: "living", room: "living", label: "the living spaces", ledger: {} },
+        ],
+      },
+    },
+  });
+  t.ok(/Recommended for the primary bedroom/.test(scoped), "the card ignored the active area");
+  t.ok(!/living/.test(scoped), "another area leaked onto the card");
 });
 
 test("7  the reply is never echoed into a second field the page could render", (t) => {

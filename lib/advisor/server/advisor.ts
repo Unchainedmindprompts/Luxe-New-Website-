@@ -37,6 +37,7 @@ import type { ScoredTopic } from "./answer-selection";
 import type { TranscriptMessage } from "./transcript";
 import type { Trace } from "./trace";
 import type { FactLedger, LedgerApplication } from "./ledger";
+import type { Project, ScopedApplication } from "./project";
 import type { ClassifiedQuestion, QuestionTier } from "./counterfactual";
 import type { BrandResponseMatch } from "./brand-response";
 import type {
@@ -144,6 +145,36 @@ export interface AdvisorDeps {
     ) => LedgerApplication;
     project: (ledger: FactLedger) => ProjectFacts;
     describe: (ledger: FactLedger) => string;
+  };
+  /**
+   * The multi-area project. See `project.ts` — a homeowner has rooms, and the
+   * ledger had one. Everything here is injected for the same reason the ledger
+   * is: these stay pure functions the harness can drive with no build step.
+   */
+  readonly project: {
+    validate: (raw: unknown, legacyLedger: unknown) => Project;
+    /** Moves focus when a message names a space without stating a fact. */
+    focus: (project: Project, message: string) => Project;
+    apply: (
+      project: Project,
+      updates: readonly FactUpdate[],
+      turn: number,
+      isList: (field: string) => boolean,
+      applyLedger: (
+        ledger: FactLedger,
+        updates: readonly FactUpdate[],
+        turn: number,
+        isList: (field: string) => boolean
+      ) => LedgerApplication
+    ) => ScopedApplication;
+    /** The active area's own ledger, for the paths that still want one. */
+    activeLedger: (project: Project) => FactLedger;
+    /** Shared facts merged with the active area's. One coherent space. */
+    activeFacts: (project: Project) => ProjectFacts;
+    /** Every area, for the extraction prompt's established block. */
+    describe: (project: Project) => string;
+    /** Which space the conversation is on, for the reply and the card. */
+    active: (project: Project) => { id: string; room: string | null; label: string | null } | null;
   };
   /**
    * Counterfactual gating: given the current facts, which unresolved questions
@@ -863,7 +894,11 @@ ${lines.join("\n")}`;
     // The client's facts are re-validated exactly like the model's. Anything
     // outside the Phase A vocabulary is dropped rather than corrected, so a
     // crafted payload can only assert facts the engine already understands.
-    const priorLedger = deps.ledger.validate(priorState.ledger ?? {});
+    // The project, not a ledger. A pre-Phase-7 conversation still in a browser
+    // sends the old flat shape; `validateProject` migrates it rather than
+    // dropping everything the homeowner has said.
+    const priorProject = deps.project.validate(priorState.project, priorState.ledger ?? {});
+    const priorLedger = deps.project.activeLedger(priorProject);
     // Untrusted, like everything else the client sends back. Rendered once so
     // every model call this turn sees exactly the same history.
     const priorTranscript = deps.transcript.validate(priorState.transcript);
@@ -895,6 +930,7 @@ ${lines.join("\n")}`;
       return {
         status: "ANSWERED",
         state: {
+          project: priorProject as unknown as Record<string, unknown>,
           ledger: priorLedger as Record<string, unknown>,
           facts: priorFacts,
           turnCount: turnCount + 1,
@@ -930,7 +966,7 @@ ${lines.join("\n")}`;
       const raw = await trace.mark("extraction", () => deps.provider.extract({
         system: deps.prompts.extractionSystemPrompt(
           deps.describeVocabulary(deps.knowledge.priorities),
-          deps.ledger.describe(priorLedger),
+          deps.project.describe(priorProject),
           history
         ),
         userMessage: deps.prompts.extractionUserMessage(history, input.message),
@@ -980,14 +1016,21 @@ ${lines.join("\n")}`;
 
     // Precedence, not guesswork: a stated value always outranks an inferred
     // one, so a later guess cannot undo something the homeowner actually said.
-    const application = deps.ledger.apply(
-      priorLedger,
+    // SCOPED. Each update lands in the space it is about, so a living-room
+    // preference cannot overwrite what the bedroom was told.
+    const scoped = deps.project.apply(
+      // A message that names a space without stating a fact about it — "okay,
+      // what about the living room?" — still moves the conversation there.
+      deps.project.focus(priorProject, input.message),
       validated.accepted,
       turnCount + 1,
-      deps.isListField
+      deps.isListField,
+      deps.ledger.apply
     );
-    const ledger = application.ledger;
-    const projected = deps.ledger.project(ledger) as Record<string, unknown>;
+    const project = scoped.project;
+    const application = { retracted: scoped.retracted, suppressed: scoped.suppressed };
+    const ledger = deps.project.activeLedger(project);
+    const projected = deps.project.activeFacts(project) as Record<string, unknown>;
 
     // A retraction this turn is the difference between the advisor sounding
     // attentive and actually being it. The engine below already reasons from
@@ -1082,10 +1125,12 @@ ${lines.join("\n")}`;
      * is fixed is the claim: a turn that collapsed an area cannot report a
      * finished recommendation. It reports guidance, which is what it has.
      */
-    const collapsedArea = application.collapsed.includes("room");
-    const productStatus = collapsedArea
-      ? "GUIDANCE_READY"
-      : deriveStatus(assessment, questionGates, Boolean(selection.next));
+    // The previous pass dropped a two-area turn to GUIDANCE_READY because the
+    // ledger had silently kept one room and the card would have claimed the
+    // house. Areas make that unreachable: each room keeps its own facts, the
+    // engine assesses one of them, and the card names which. The guard is gone
+    // because the collapse it guarded against cannot happen.
+    const productStatus = deriveStatus(assessment, questionGates, Boolean(selection.next));
 
     /**
      * The state to hand back, with this turn's exchange recorded.
@@ -1095,6 +1140,7 @@ ${lines.join("\n")}`;
      * exactly the bug this feature exists to fix — on the paths nobody tested.
      */
     const stateAfter = (advisorMessage: string): ConversationState => ({
+      project: project as unknown as Record<string, unknown>,
       ledger: ledger as Record<string, unknown>,
       facts,
       turnCount: nextTurnCount,
@@ -1399,7 +1445,7 @@ ${lines.join("\n")}`;
     return {
       status,
       state: stateAfter(message),
-      assessment: summarise(assessment, !collapsedArea),
+      assessment: summarise(assessment),
       nextQuestion: null,
       preliminaryGuidance: null,
       productEducation: null,

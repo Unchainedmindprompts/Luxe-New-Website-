@@ -137,9 +137,19 @@ When a message could be either, prefer "product". Answering a question we can an
 
 PROJECT FACTS ("updates")
 
-Each update needs five things: the field, a value copied exactly from that field's allowed list, whether this asserts the value or retracts it, whether they stated it or you inferred it, and the words from this message that justify it.
+Each update needs six things: the field, a value copied exactly from that field's allowed list, whether this asserts the value or retracts it, whether they stated it or you inferred it, the words from this message that justify it, and which space it is about.
 
 Only a "project" or "discovery" message normally supports any updates. Someone asking what your hours are has not told you about a window — return an empty list.
+
+WHICH SPACE ("area")
+
+A house has rooms, and a homeowner moves between them in one breath: "I want the bedrooms dark and something modern for the living spaces" is two requirements about two places, and recording them as one project would mean one of them is lost.
+
+So every update says which space it is about, in THEIR words — "the bedrooms", "living spaces", "the primary bedroom", "my office". Copy the phrase they used. Do not tidy it, translate it, or invent a room they did not mention.
+
+Leave "area" as an empty string when the message does not name a space. That is the normal case: most messages continue whatever room is already being discussed, and an empty string means exactly that. "What about privacy in there?" names no space and should not be given one.
+
+Two rooms of the same kind are one space unless they say otherwise. "The bedrooms" is one area. "The primary bedroom needs blackout but the guest room doesn't" is two, and the words primary and guest are what make it two — carry them.
 
 FIELDS AND ALLOWED VALUES
 

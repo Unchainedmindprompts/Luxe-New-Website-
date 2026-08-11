@@ -81,7 +81,7 @@ const load = (p) => import(pathToFileURL(join(ROOT, p)).href);
 
 const [
   products, priorities, rules, guardrailKnowledge, brandKnowledge, answerKnowledge,
-  engine, extraction, ledgerModule, transcriptModule, traceModule, counterfactual, questionSelection,
+  engine, extraction, ledgerModule, projectModule, transcriptModule, traceModule, counterfactual, questionSelection,
   answerSelection, guardrails, prompts, advisorModule, providerModule, brandResponse,
   productData, areaData, homepageFaqs, constants,
 ] = await Promise.all([
@@ -94,6 +94,7 @@ const [
   load("lib/advisor/engine.ts"),
   load("lib/advisor/server/extraction.ts"),
   load("lib/advisor/server/ledger.ts"),
+  load("lib/advisor/server/project.ts"),
   load("lib/advisor/server/transcript.ts"),
   load("lib/advisor/server/trace.ts"),
   load("lib/advisor/server/counterfactual.ts"),

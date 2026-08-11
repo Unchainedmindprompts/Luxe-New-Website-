@@ -37,6 +37,14 @@ import {
 } from "@/lib/advisor/server/answer-selection";
 import { applyUpdates, projectFacts, validateLedger } from "@/lib/advisor/server/ledger";
 import {
+  activeArea,
+  activeFacts,
+  applyScopedUpdates,
+  describeProject,
+  focusOn,
+  validateProject,
+} from "@/lib/advisor/server/project";
+import {
   appendExchange,
   renderTranscript,
   retrievalContext,
@@ -182,6 +190,22 @@ export async function POST(request: Request) {
       apply: applyUpdates,
       project: projectFacts,
       describe: describeLedger,
+    },
+    project: {
+      validate: (raw, legacy) => validateProject(raw, legacy, (value) =>
+        validateLedger(
+          value,
+          (field) => (EXTRACTION_FIELDS as readonly string[]).includes(field),
+          (field, v) => allowedValues(field as ExtractionFieldName).includes(v),
+          (field) => isListField(field as ExtractionFieldName)
+        )
+      ),
+      focus: focusOn,
+      apply: applyScopedUpdates,
+      activeLedger: (p) => activeArea(p)?.ledger ?? {},
+      activeFacts: (p) => activeFacts(p, projectFacts),
+      describe: describeProject,
+      active: (p) => activeArea(p),
     },
     classifyQuestions,
     isVerificationClass,

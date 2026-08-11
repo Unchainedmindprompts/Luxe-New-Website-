@@ -217,7 +217,26 @@ const ROOM_LABELS: Readonly<Record<string, string>> = {
   commercial: "the space",
 };
 
+/**
+ * The space a recommendation is for.
+ *
+ * Read from the ACTIVE AREA rather than from a flat `room` fact — the project
+ * holds one area per space now, and the recommendation belongs to whichever one
+ * the conversation is on. The homeowner's own words win where they gave any:
+ * "the primary bedroom" is what they said, and echoing it back beats mapping it
+ * to a vocabulary label they never used.
+ */
 function readRoom(state: unknown): string | null {
+  const project = (state as { project?: { areas?: unknown; activeAreaId?: unknown } } | null)?.project;
+  if (project && Array.isArray(project.areas)) {
+    const active = project.areas.find(
+      (area) => (area as { id?: unknown })?.id === project.activeAreaId
+    ) as { room?: unknown; label?: unknown } | undefined;
+    if (typeof active?.label === "string" && active.label.trim()) {
+      return active.label.trim().slice(0, 40);
+    }
+    if (typeof active?.room === "string") return ROOM_LABELS[active.room] ?? null;
+  }
   const room = (state as { facts?: { room?: unknown } } | null)?.facts?.room;
   return typeof room === "string" ? ROOM_LABELS[room] ?? null : null;
 }

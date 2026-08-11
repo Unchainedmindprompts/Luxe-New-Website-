@@ -648,6 +648,86 @@ The mirror is gone. The conversation list is the live region
 (`aria-live="polite" aria-relevant="additions"`), which announces new replies to
 assistive technology with the text present **once**.
 
+## The project has rooms
+
+### The old model, and why it could only hold one
+
+`room` was a scalar fact sitting alongside `exposure` and `roomDarkening` in one
+flat ledger. "I want the bedrooms dark and something modern for the living
+spaces" wrote `room` twice and kept the second — and everything the first room
+had established stayed in the ledger and silently re-attached itself to whichever
+room won. One recommendation came out, and nothing said which space it was for.
+
+### The new shape
+
+```
+project
+├── shared          household facts: budget, motorization appetite
+├── areas[]
+│   ├── bedroom            room, label, its own ledger
+│   ├── bedroom:primary    a second bedroom, once distinguished
+│   └── living             room, label, its own ledger
+└── activeAreaId    which space the conversation is on
+```
+
+**Phase A never learns any of this.** It still receives one flat `ProjectFacts`
+for one coherent space — `shared` merged with the active area. No rule,
+condition or type in the engine moves.
+
+### Project-wide vs area-specific
+
+`SHARED_FIELDS` is two entries: `budgetSensitivity` and `motorizationInterest`.
+Budget is the customer's; an appetite for motorization is a preference they hold
+before anyone names a room. Asking for either again per area is the
+questionnaire behaviour this advisor keeps being pulled back toward.
+
+Everything else is a property of a particular opening. `aesthetic` is the
+closest call and stays area-specific deliberately — "modern in the living room"
+is the exact sentence that started this.
+
+### Area identity — deliberately shallow
+
+The key is the room vocabulary value, plus a qualifier only when the homeowner
+draws the distinction themselves: `bedroom`, or `bedroom:primary` once they say
+"the primary bedroom needs blackout but the guest room doesn't". **"The
+bedrooms" is one area** — undistinguished spaces stay together, which is what
+that phrase means and what keeps this from becoming a floor plan.
+
+`QUALIFIERS` is a bounded list and the only place wording affects identity.
+
+### Active area
+
+Extraction now tags every update with the space it is about, **in the
+homeowner's own words** — "the bedrooms", "the primary bedroom". The model
+reports words; the server decides identity. An empty string means "whatever we
+are already discussing", which is the common case and what makes "what about
+privacy in there?" work.
+
+Focus follows the first space a message names, and a message that names a space
+without stating a fact about it — "okay, what about the living room?" — still
+moves the conversation there.
+
+**Only a *stated* room may open or switch an area.** Inference may propose a
+fact and never restructure the project; without that rule, "we spend most
+evenings downstairs" quietly infers a living room and abandons the bedroom the
+homeowner actually stated (test 172).
+
+### Recommendation scope
+
+The card reads **"Recommended for the primary bedroom"** — from the active area,
+using the homeowner's own label where they gave one. The Phase-6 guard that
+dropped a two-area turn to `GUIDANCE_READY` is **gone**, because the collapse it
+guarded against can no longer happen: each room keeps its own facts, the engine
+assesses one of them, and the card names which.
+
+### Migration
+
+A browser open when this ships sends the old flat ledger. `validateProject`
+migrates it: household fields to `shared`, the rest to the room it names, active
+area set to that room. Junk, empty and malformed state all degrade to an empty
+project rather than throwing, and the area list is capped at 12 so a crafted
+payload cannot grow it without bound (test 173).
+
 ## Question selection
 
 Deterministic. The model phrases; it does not choose.
