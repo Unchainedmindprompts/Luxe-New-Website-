@@ -625,6 +625,24 @@ export interface UnresolvedQuestion {
 export interface VerificationRequirement {
   readonly id: string;
   readonly label: string;
+  /**
+   * The directions this requirement came in with, when it came in with any.
+   *
+   * Verification arrives from two places: a condition that demands it whatever
+   * is chosen — a wet room, an exterior mount — and the standing requirements
+   * of each direction still in play. Only the second kind is direction-specific,
+   * and until this field existed the two were indistinguishable downstream.
+   *
+   * That mattered because "in play" includes DEPRIORITIZED directions. A
+   * bedroom asking for maximum darkening recommends cellular shades and
+   * deprioritizes shutters — and shutters brought `verify-shutter-clearance`
+   * with them, so the customer read "clearance for shutter panels" under a
+   * cellular recommendation.
+   *
+   * Absent means the project needs it regardless of product. Present means it
+   * is only relevant while one of these directions is.
+   */
+  readonly forDirections?: readonly DirectionId[];
 }
 
 export interface EscalationTrigger {

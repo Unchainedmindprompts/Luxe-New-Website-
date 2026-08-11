@@ -305,6 +305,49 @@ test("5b product education renders as an answer, not as a recommendation", (t) =
   t.ok(!/preliminaryGuidance/.test(CONTRACT_SRC), "the client contract now reads preliminary guidance");
 });
 
+test("5c the reply is rendered exactly once, and the card carries no prose", (t) => {
+  // A real preview conversation reported the recommendation paragraph appearing
+  // twice — once above the card and again below the consultation block. These
+  // assertions pin the render contract that makes that impossible from the
+  // client side, using the real response shape.
+  const prose =
+    "Room-darkening cellular shades are the direction we would lead with for a " +
+    "light-sensitive bedroom.";
+  const turn = contract.toAdvisorTurn(
+    serverTurn({
+      status: "RECOMMENDATION_READY",
+      message: prose,
+      consultationCta: { recommended: true, reasons: ["requires-physical-verification"] },
+    }),
+    {}
+  );
+  t.equal(turn.message, prose, "the reply did not survive narrowing intact");
+
+  // EXACTLY ONE render of the spoken reply inside the assistant bubble. The
+  // homeowner's own line is a separate component and a separate `exchange`, so
+  // the count is scoped rather than taken across the file.
+  const src = renderable(EXPERIENCE);
+  const luxeSaid = src.slice(src.indexOf("function LuxeSaid"), src.indexOf("function RecommendationPanel"));
+  const renders = (luxeSaid.match(/\{exchange\.text\}/g) ?? []).length;
+  t.equal(renders, 1, `the spoken reply is rendered ${renders} times in one assistant turn`);
+
+  // The recommendation card renders structured fields only. If it ever started
+  // rendering the message, the customer would read the paragraph twice.
+  const panel = renderable(EXPERIENCE).slice(renderable(EXPERIENCE).indexOf("function RecommendationPanel"));
+  for (const field of ["turn.message", "exchange.text", "turn.question"]) {
+    t.ok(!panel.includes(field), `the recommendation card renders ${field}`);
+  }
+
+  // And the footer booking block stands down entirely on a recommendation, so
+  // nothing below the card repeats what is above it.
+  t.ok(
+    /status === "RECOMMENDATION_READY" \|\| status === "ADVISOR_UNAVAILABLE"\) return null/.test(
+      renderable(EXPERIENCE)
+    ),
+    "the closing booking block can render under a recommendation"
+  );
+});
+
 test("6  GUIDANCE_READY renders without a best-fit claim", (t) => {
   const turn = contract.toAdvisorTurn(
     serverTurn({ status: "GUIDANCE_READY", assessment: { ...serverTurn().assessment, strongCandidates: [], primaryRecommendation: null } }),

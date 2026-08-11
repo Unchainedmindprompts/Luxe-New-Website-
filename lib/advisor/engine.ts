@@ -260,6 +260,10 @@ export function assess(facts: ProjectFacts, knowledge: AdvisorKnowledge): Adviso
 
   // Verification comes from two directions: conditions that demand it whatever
   // is recommended, and the standing requirements of whatever is still in play.
+  // A condition-matched rule applies to the project whatever is chosen, so it
+  // carries no direction. A rule inherited from a direction records which one —
+  // see `VerificationRequirement.forDirections` for why that distinction is
+  // load-bearing rather than bookkeeping.
   const verificationById = new Map<string, VerificationRequirement>();
   for (const rule of knowledge.verifications) {
     if (matches(rule.when)) verificationById.set(rule.id, { id: rule.id, label: rule.label });
@@ -268,11 +272,17 @@ export function assess(facts: ProjectFacts, knowledge: AdvisorKnowledge): Adviso
     ...strongCandidates.map((c) => c.id),
     ...deprioritizedDirections.map((c) => c.id),
   ]);
+  const inheritedBy = new Map<string, DirectionId[]>();
   for (const id of inPlay) {
     for (const triggerId of directionsById.get(id)?.verificationTriggers ?? []) {
-      if (verificationById.has(triggerId)) continue;
+      // A rule the project already demands outright stays project-level.
+      if (verificationById.has(triggerId) && !inheritedBy.has(triggerId)) continue;
       const rule = knowledge.verifications.find((v) => v.id === triggerId);
-      if (rule) verificationById.set(rule.id, { id: rule.id, label: rule.label });
+      if (!rule) continue;
+      const owners = inheritedBy.get(triggerId) ?? [];
+      owners.push(id);
+      inheritedBy.set(triggerId, owners);
+      verificationById.set(rule.id, { id: rule.id, label: rule.label, forDirections: owners });
     }
   }
   const verificationRequirements = [...verificationById.values()].sort((a, b) =>

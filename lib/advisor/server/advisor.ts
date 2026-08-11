@@ -254,6 +254,34 @@ function providerFailureCode(error: unknown): "provider-unavailable" | "provider
   return code === "provider-unavailable" || code === "provider-timeout" ? code : null;
 }
 
+/**
+ * The verification items that belong to the direction actually on screen.
+ *
+ * "In play" includes DEPRIORITIZED directions, which is right for the engine
+ * and wrong for the customer. A bedroom wanting maximum darkening recommends
+ * cellular shades and deprioritizes shutters — and shutters bring
+ * `verify-shutter-clearance` with them, so a card headed "Cellular shades"
+ * listed "clearance for shutter panels" under "We'll confirm in your home".
+ *
+ * Project-level requirements always survive: a wet room needs checking whatever
+ * goes in it. Direction-specific ones survive only while their direction is the
+ * one being recommended.
+ *
+ * The engine is untouched. It still reports everything in play, because that is
+ * what a consultant needs to know before the visit; this is the narrower
+ * question of what to say to the homeowner about the direction being discussed.
+ */
+function verificationsFor(
+  assessment: AdvisorAssessment,
+  primaryId: string | undefined
+): AdvisorAssessment["verificationRequirements"] {
+  return assessment.verificationRequirements.filter(
+    (requirement) =>
+      !requirement.forDirections?.length ||
+      (primaryId !== undefined && requirement.forDirections.includes(primaryId as never))
+  );
+}
+
 function summarise(assessment: AdvisorAssessment): AssessmentSummary {
   const rank = (list: AdvisorAssessment["strongCandidates"]) =>
     list.map((c) => ({ id: c.id, label: c.label, reasons: c.reasons }));
@@ -271,7 +299,10 @@ function summarise(assessment: AdvisorAssessment): AssessmentSummary {
     recommendedOptions: assessment.crossCuttingOptions.map((o) => ({ id: o.id, label: o.label })),
     optionsToAvoid: assessment.deprioritizedOptions.map((o) => ({ id: o.id, label: o.label })),
     tradeoffs: assessment.tradeoffs.map((t) => ({ id: t.id, label: t.label, note: t.note })),
-    verificationRequirements: assessment.verificationRequirements.map((v) => ({ id: v.id, label: v.label })),
+    verificationRequirements: verificationsFor(assessment, primary?.id).map((v) => ({
+      id: v.id,
+      label: v.label,
+    })),
     escalation: {
       required: assessment.escalation.required,
       triggers: assessment.escalation.triggers.map((t) => ({ id: t.id, label: t.label })),
@@ -306,7 +337,13 @@ function consultationIntent(
   if (status !== "RECOMMENDATION_READY") return { recommended: false, reasons: [] };
 
   const reasons: ConsultationCtaIntent["reasons"][number][] = [];
-  const verifications = new Set(assessment.verificationRequirements.map((v) => v.id));
+  // SCOPED TO THE DIRECTION BEING RECOMMENDED, for the same reason the card is.
+  // A shutter-clearance requirement that arrived with a deprioritized direction
+  // was making a cellular recommendation claim it needed someone at the window,
+  // which is a booking prompt earned by a product nobody is proposing.
+  const verifications = new Set(
+    verificationsFor(assessment, assessment.strongCandidates[0]?.id).map((v) => v.id)
+  );
   // `verify-dimensions` is on every project, so it says nothing about this one.
   if ([...verifications].some((v) => v !== "verify-dimensions")) {
     reasons.push("requires-physical-verification");
@@ -506,6 +543,27 @@ function fallbackRecommendation(assessment: AdvisorAssessment): string {
     .replace(/\s+([.,])/g, "$1");
 }
 
+/**
+ * Does this reply say the same thing twice?
+ *
+ * The customer-facing contract is one short reply. A generation that repeats
+ * its own sentences is malformed output rather than a stylistic lapse, and the
+ * character ceiling is generous enough — 1,400 against a stated 45-95 word
+ * budget — to serve a doubled paragraph through intact.
+ *
+ * Detection only; nothing here edits the text. A repeat is treated exactly like
+ * an empty response: regenerate once, then fall back to deterministic prose.
+ * Editing a model's words to hide a defect would leave the defect invisible and
+ * unmeasurable, which is how it reached a preview in the first place.
+ */
+function repeatsItself(text: string): boolean {
+  const sentences = text
+    .split(/(?<=[.!?])\s+/)
+    .map((sentence) => sentence.trim().toLowerCase())
+    .filter((sentence) => sentence.length >= 40);
+  return new Set(sentences).size < sentences.length;
+}
+
 /** Deterministic question text, used when the model's phrasing is unusable. */
 function fallbackQuestion(canonical: string): string {
   return canonical.trim();
@@ -658,7 +716,9 @@ ${lines.join("\n")}`;
         throw error;
       }
       const text = deps.sanitizeForOutput(raw, maxChars);
-      if (!text) continue;
+      // Empty and self-repeating are the same kind of failure: output that
+      // cannot be shown to a customer. Both retry once, then fall back.
+      if (!text || repeatsItself(text)) continue;
       const violations = deps.validateGeneratedText(text, {
         allowedProductLabels: productCatalogue,
         allowedBrands: deps.allowedBrands,
@@ -1196,6 +1256,26 @@ ${lines.join("\n")}`;
         "best fit": assessment.strongCandidates
           .map((c) => `${c.label} — ${c.reasons.join(" ")}`)
           .join("\n") || "(no single direction stands out yet)",
+        // WHAT LUXE ACTUALLY KNOWS ABOUT IT, not only why it won.
+        //
+        // The promotion reasons state a conclusion — "among Luxe's preferred
+        // directions when a customer wants a very dark room" — and give no
+        // mechanism for it. Asked to explain, and handed no explanation, the
+        // model supplied one: it borrowed the honeycomb-and-trapped-air
+        // construction, which this corpus credits with INSULATION, and offered
+        // it as the reason cellular shades block light. Neither the phrasing
+        // nor the claim appears anywhere in Luxe's material.
+        //
+        // So the verified behaviour prose goes in. Where the material gives a
+        // mechanism the model now has the right one; where it does not, the
+        // prompt tells it to state the conclusion and stop.
+        "what luxe knows about that direction": (() => {
+          const primary = assessment.strongCandidates[0];
+          const direction = primary
+            ? deps.knowledge.directions.find((d) => d.id === primary.id)
+            : undefined;
+          return direction ? deps.describeDirection(direction) : undefined;
+        })(),
         alternatives: assessment.deprioritizedDirections
           .map((c) => `${c.label} — ${c.reasons.join(" ")}`)
           .join("\n"),

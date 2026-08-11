@@ -91,9 +91,11 @@ Say the useful thing once, in plain prose, and stop. No headings, bullets, or em
  */
 const EXPLAIN = `EXPLAIN, DO NOT JUST LABEL
 
-A product name is not a reason. "Cellular shades" tells them what we would fit. "Cellular shades are built as rows of sealed air pockets, and still air is what slows the heat coming through the glass" tells them why it is the answer — and that second sentence is the one a good consultant actually says out loud.
+A product name is not a reason. Naming what we would fit tells them what; the sentence a knowledgeable person says out loud tells them why — the mechanism that makes it the answer, in one clause, in plain words, once.
 
-So give the mechanism when the mechanism IS the reason: one clause, plain words, drawn from the material in front of you, once.
+THE MECHANISM HAS TO BE THE ONE THE MATERIAL GIVES, FOR THE THING BEING DISCUSSED. A product usually does several jobs, by several different means, and the material says which means does which job. Taking the explanation the material gives for one property and using it to explain a different one is invention, however reasonable it sounds — a construction detail credited with insulating a room is not thereby the reason it darkens one.
+
+If the material states a conclusion and gives no mechanism for it, state the conclusion and stop there. "It is among the directions Luxe prefers for this" is honest. Inventing the physics underneath it is not, and it is the failure this section exists to prevent.
 
 Your knowledge is still a tool belt. Take out the one thing this person needs and take it out properly — the whole belt on the table is a lecture, and a bare label is a shrug.`;
 

@@ -65,7 +65,20 @@ const PRIORITY_LABELS: Readonly<Record<string, string>> = {
   "moisture-resistance": "standing up to moisture",
   "clear-glass-when-open": "clear glass when open",
   "directional-light-control": "directional light control",
-  "lifestyle-requirement": "a specific lifestyle need",
+  // `lifestyle-requirement` is deliberately absent, and unmapped ids are
+  // dropped below rather than shown.
+  //
+  // It is a BUCKET, not a concern: Phase A defines it as "shift work, sleep
+  // sensitivity, media use, pets, or another constraint specific to the
+  // household". The specific constraint is never stored — only the bucket id
+  // is — so there is no truthful customer-facing rendering of it. It used to
+  // render as "a specific lifestyle need", which told a homeowner who had said
+  // "I'm sensitive to light" that what mattered most to them was a category
+  // name from our own ontology.
+  //
+  // Anything added here must name something the homeowner would recognise as
+  // their own concern. If the underlying fact cannot be said back to them
+  // truthfully, it does not belong on the card.
 };
 
 /** Verification ids are internal. Only these become customer-facing text. */

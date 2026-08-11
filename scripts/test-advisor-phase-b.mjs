@@ -3431,6 +3431,192 @@ await test("152 the fast paths and unknown routing are untouched", async (t) => 
   t.equal(unknown.r.productEducation, null, "an informational turn carried project education");
 });
 
+// ── preview cleanup: defects a real customer conversation exposed ──────────
+
+/**
+ * THE EXACT PREVIEW CONVERSATION, run end to end.
+ *
+ * Two turns, threaded exactly as the browser threads them. Every assertion
+ * below traces to something a real homeowner saw on screen.
+ */
+async function previewConversation(phrasings) {
+  const provider = mockProvider({
+    extractions: [
+      { room: "bedroom", __intent: "discovery" },
+      { roomDarkening: "maximum", priorities: ["room-darkening", "lifestyle-requirement"] },
+    ],
+    phrasings,
+  });
+  const advisor = makeAdvisor(provider);
+  const first = await advisor.runTurn({
+    message: "I purchased a new home and want options for my bedrooms",
+    state: {},
+  });
+  const second = await advisor.runTurn({
+    message:
+      "My main concern is that I'm sensitive to light and want something that does a good job of darkening the room",
+    state: first.state,
+  });
+  return { first, second, provider };
+}
+
+await test("153 the preview conversation reaches a cellular recommendation the engine earned", async (t) => {
+  const { first, second } = await previewConversation();
+
+  // 1-3: the conversation holds together and the facts land.
+  t.ok(["ANSWERED", "NEED_MORE_INFORMATION"].includes(first.status), `turn 1 was ${first.status}`);
+  t.equal(second.state.facts.room, "bedroom", "bedroom context was lost between turns");
+  t.equal(second.state.facts.roomDarkening, "maximum", "light sensitivity did not become a darkening need");
+  t.ok(
+    (second.state.facts.priorities ?? []).includes("room-darkening"),
+    "room darkening was not captured as a priority"
+  );
+
+  // 4: the recommendation is the engine's, and it is genuinely unblocked.
+  t.equal(second.status, "RECOMMENDATION_READY", `turn 2 was ${second.status}`);
+  t.equal(second.assessment?.primaryRecommendation?.label, "Cellular shades", "the direction changed");
+  t.ok(!second.nextQuestion, "a question still gated a turn reported as a recommendation");
+  t.equal(second.preliminaryGuidance, null, "a recommendation turn carried preliminary guidance");
+});
+
+await test("154 DEFECT 1 — a cellular card cannot inherit a shutter verification", async (t) => {
+  const { second } = await previewConversation();
+  const shown = second.assessment.verificationRequirements.map((v) => v.id);
+  t.ok(
+    !shown.includes("verify-shutter-clearance"),
+    `a shutter requirement reached a cellular recommendation: ${shown.join(", ")}`
+  );
+
+  // The engine still knows about it — this is a customer-facing selection, not
+  // a lobotomy. Shutters is deprioritized, so it is genuinely still in play.
+  const assessment = engine.assess(
+    { room: "bedroom", roomDarkening: "maximum", priorities: ["room-darkening"] },
+    KNOWLEDGE
+  );
+  t.ok(
+    assessment.deprioritizedDirections.some((d) => d.id === "shutters"),
+    "the scenario no longer reproduces — shutters is not deprioritized"
+  );
+  const raw = assessment.verificationRequirements.find((v) => v.id === "verify-shutter-clearance");
+  t.ok(raw, "the engine stopped reporting the requirement at all");
+  t.equal(JSON.stringify(raw?.forDirections), '["shutters"]', "the requirement is not attributed to its direction");
+
+  // Project-level requirements are never attributed, and never dropped.
+  const dimensions = assessment.verificationRequirements.find((v) => v.id === "verify-dimensions");
+  t.equal(dimensions?.forDirections, undefined, "a project-level requirement was tied to a direction");
+
+  // And when shutters IS the recommendation, the item belongs and survives.
+  const shutterProject = engine.assess({ requestedProducts: ["shutters"] }, KNOWLEDGE);
+  if (shutterProject.strongCandidates[0]?.id === "shutters") {
+    const relevant = shutterProject.verificationRequirements.filter(
+      (v) => !v.forDirections?.length || v.forDirections.includes("shutters")
+    );
+    t.ok(
+      relevant.some((v) => v.id === "verify-shutter-clearance"),
+      "a shutter recommendation lost its own verification item"
+    );
+  }
+});
+
+await test("155 DEFECT 1b — the booking prompt is not earned by an irrelevant requirement", async (t) => {
+  // The same wrongly-scoped data was inflating the CTA: a cellular
+  // recommendation claimed it "requires physical verification" on the strength
+  // of shutter clearance, which is a visit sold by a product nobody proposed.
+  const { second } = await previewConversation();
+  t.ok(
+    !second.consultationCta.reasons.includes("requires-physical-verification"),
+    `the CTA cited an irrelevant verification: ${second.consultationCta.reasons.join(", ")}`
+  );
+});
+
+await test("156 DEFECT 2 — a reply that repeats itself never reaches the customer", async (t) => {
+  const paragraph =
+    "Room-darkening cellular shades are the direction we would lead with for that bedroom.";
+  const { second } = await previewConversation([
+    `${paragraph} ${paragraph}`,
+    "Room-darkening cellular is the direction we would look at first here.",
+  ]);
+  const occurrences = second.message.split(paragraph).length - 1;
+  t.ok(occurrences <= 1, `the reply carried the same paragraph ${occurrences} times`);
+  t.ok(second.message.length > 0, "the turn was left with nothing to say");
+
+  // Twice in a row falls back rather than shipping the duplicate.
+  const { second: bothBad } = await previewConversation([
+    `${paragraph} ${paragraph}`,
+    `${paragraph} ${paragraph}`,
+  ]);
+  t.ok(
+    (bothBad.message.split(paragraph).length - 1) <= 1,
+    "a repeated reply survived the retry"
+  );
+  t.ok(bothBad.diagnostics?.fellBack, "the fallback was not recorded");
+});
+
+await test("157 DEFECT 3 — internal classification never reaches the card", async (t) => {
+  const { second } = await previewConversation();
+  // The fact is real and stays in state; it simply has no truthful rendering.
+  t.ok(
+    (second.state.facts.priorities ?? []).includes("lifestyle-requirement"),
+    "the scenario no longer reproduces — the bucket fact was not recorded"
+  );
+  // Comments are stripped: a note explaining WHY the placeholder was removed
+  // must not itself fail a check for the placeholder.
+  const src = read("lib/advisor/client/contract.ts")
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .replace(/^\s*\/\/.*$/gm, " ");
+  t.ok(!/"a specific lifestyle need"/.test(src), "the internal placeholder is still customer-facing");
+  t.ok(
+    !/"lifestyle-requirement":/.test(src),
+    "the bucket id still maps to customer-facing text"
+  );
+
+  // Every label that DOES ship has to read as the homeowner's own concern, not
+  // as a category from our ontology.
+  const labels = [...src.matchAll(/^\s{2}"?[a-z-]+"?:\s+"([^"]+)",$/gm)].map((m) => m[1]);
+  for (const label of labels) {
+    t.ok(
+      !/^(a|an|the)\s|\b(specific|general|other|misc|category|classification|requirement)\b/i.test(label),
+      `"${label}" reads as an internal category rather than a concern`
+    );
+  }
+});
+
+await test("158 DEFECT 4B — the recommendation is handed the verified mechanism", async (t) => {
+  const { provider } = await previewConversation();
+  const user = provider.calls.lastPhraseUser;
+  t.ok(/what luxe knows about that direction/.test(user), "the verified behaviour prose was not supplied");
+  // The corpus credits the honeycomb with ENERGY and gives no light mechanism.
+  t.ok(/trapped air/i.test(user), "the energy mechanism is missing from the material");
+  t.ok(/Room-darkening cellular is among Luxe's preferred directions/.test(user), "the darkening claim is missing");
+
+  // And the prompt forbids re-pointing one mechanism at another property.
+  const system = provider.calls.lastPhraseSystem;
+  t.ok(/THE MECHANISM HAS TO BE THE ONE THE MATERIAL GIVES/.test(system), "the grounding rule is absent");
+  t.ok(/state the conclusion and stop there/.test(system), "nothing permits stating a conclusion without a mechanism");
+  // The old worked example was itself the contamination source.
+  t.ok(
+    !/rows of sealed air pockets/.test(system),
+    "the prompt still supplies a product claim the model can mine as fact"
+  );
+});
+
+await test("159 no regression to Phase 1-6 behaviour on this conversation", async (t) => {
+  const { first, second } = await previewConversation();
+  // Phase 1: memory. Phase 2: no unearned CTA. Phase 6/7: no false guidance.
+  t.ok((second.state.transcript ?? []).length >= 4, "the transcript did not retain both turns");
+  t.equal(second.productEducation, null, "a recommendation turn carried product education");
+  t.ok(
+    !first.consultationCta.recommended,
+    "the opening discovery turn pushed a booking"
+  );
+  // Phase 4 grounding is untouched.
+  t.ok(
+    guardrails.validateGeneratedText("We would fit CrystalWeave shades.", GROUNDING)
+      .some((v) => v.guardrailId === "no-invented-products"),
+    "invented-product grounding regressed"
+  );
+});
+
 // ── report ──────────────────────────────────────────────────────────────────
 
 console.log("Luxe Window Advisor — Phase B deterministic tests");

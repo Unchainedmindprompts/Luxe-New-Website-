@@ -468,6 +468,100 @@ and still the last thing said. On a phrasing failure the deterministic fallback
 appends the canonical question verbatim, because a gated turn without its
 question is a dead end (test 142).
 
+## Four defects a real preview conversation exposed
+
+> "I purchased a new home and want options for my bedrooms"
+> "My main concern is that I'm sensitive to light and want something that does a
+> good job of darkening the room"
+
+The advisor recommended cellular shades — correctly, as it turns out — and the
+card around it was wrong in three ways. All four are reproduced deterministically
+by tests 153–159.
+
+### 1. A cellular card listed "clearance for shutter panels"
+
+Verification arrives from two places: a condition that demands it whatever is
+chosen, and the standing requirements of each direction **still in play**. "In
+play" includes **deprioritized** directions — and a bedroom wanting maximum
+darkening recommends cellular and deprioritizes shutters, which brought
+`verify-shutter-clearance` along with it.
+
+`VerificationRequirement` now carries `forDirections`. Absent means the project
+needs it whatever goes in; present means it arrived with those directions. The
+customer-facing projection keeps project-level items and direction-specific ones
+only while their direction is the one being recommended.
+
+**The engine is unchanged** — it still reports everything in play, which is what
+a consultant needs before the visit. This is the narrower question of what to
+say about the direction on screen.
+
+*Same data, second consequence:* the CTA read the unscoped list, so a cellular
+recommendation claimed it "requires physical verification" on the strength of
+shutter clearance — a visit sold by a product nobody proposed. Scoped once, used
+by both (155).
+
+### 2. The reply appeared twice
+
+Traced the whole render path. The client renders the spoken reply **exactly
+once**, in `LuxeSaid`; the recommendation card renders structured fields only and
+no prose; the footer booking block returns `null` under a recommendation. Test
+5c pins all three.
+
+What was **not** protected was the reply itself. `MAX_RECOMMENDATION_CHARS` is
+1,400 against a prompt budget of 45–95 words, so a generation that repeated its
+own paragraph was served through intact. A reply containing itself twice is now
+treated exactly like an empty one — regenerate once, then fall back to
+deterministic prose. **Detection only; nothing edits the model's words.**
+
+### 3. "A specific lifestyle need" reached the card
+
+`lifestyle-requirement` is a **bucket**, not a concern — Phase A defines it as
+"shift work, sleep sensitivity, media use, pets, or another constraint specific
+to the household". The specific constraint is never stored, only the bucket id,
+so there is no truthful way to say it back. A homeowner who said "I'm sensitive
+to light" was told that what mattered most to them was a category name from our
+own ontology.
+
+Removed from the label map; unmapped ids were already dropped. Test 157 also
+scans every surviving label and fails any that reads as a classification rather
+than a concern.
+
+### 4. The recommendation was earned; the explanation was invented
+
+**Confidence — legitimate, preserved.** With bedroom + maximum darkening the
+counterfactual oracle classifies **zero** questions as material:
+`readyToRecommend: true (no-material-questions-remain)`. Nothing further would
+change the direction, so "the direction we'd lead with" is exactly what the
+engine supports.
+
+**The explanation — not supported.** The advisor said the cell "is built as a
+sealed pocket that holds fabric tight across the front, and that tighter,
+layered construction is what cuts down the light". Checked against the corpus:
+
+| phrase | in corpus |
+|---|---|
+| "sealed pocket" | no |
+| "holds fabric tight" | no |
+| "cuts down the light" | no |
+| "layered construction" | no |
+
+What the corpus *does* say: room darkening comes from **room-darkening
+cellular** — a fabric choice — with perimeter light gaps noted and **no
+mechanism given**. The honeycomb and trapped air are credited to **energy**,
+explicitly and only.
+
+So the model took the mechanism the material attributes to insulation and
+re-pointed it at light. Two causes, both fixed:
+
+- The recommendation prompt was handed `label — reasons`, which state a
+  conclusion and give no mechanism. It now also receives the direction's
+  verified behaviour prose.
+- The `EXPLAIN` block's worked example *was itself a Luxe product claim about
+  cellular and heat* — the model mined the instruction for fact. The example is
+  gone, replaced by the rule: the mechanism must be the one the material gives
+  **for the property being discussed**, and where the material gives none, state
+  the conclusion and stop.
+
 ## Question selection
 
 Deterministic. The model phrases; it does not choose.
