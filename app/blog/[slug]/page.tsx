@@ -349,11 +349,15 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       //
       // normanusa.com is folded into NORMAN_BRAND's sameAs rather than given a
       // second @id, so one manufacturer stays one node.
-      // Full node, not a bare { "@id": ... }. Nothing else on the site renders
-      // NORMAN_BRAND — it lives in lib/brands.ts and is only imported here —
-      // so a reference-only mention pointed at an entity that existed in
-      // source but never in published JSON-LD. Spread it, exactly as ALTA_BRAND
-      // is spread below.
+      // Full node, not a bare { "@id": ... }. This post is the only place
+      // either brand is published — they live in lib/brands.ts and are
+      // imported nowhere else — so a reference-only mention would point at an
+      // entity that existed in source but never in JSON-LD. Spread it, exactly
+      // as ALTA_BRAND is spread below.
+      //
+      // Load-bearing since the woodlore-plus post started referencing Norman
+      // by @id instead of describing it again: this is the definition that
+      // reference resolves to.
       NORMAN_BRAND,
       ALTA_BRAND,
       // Avista and the DOE were dropped from mentions. Avista appears once, about
@@ -497,7 +501,19 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       },
     ],
     mentions: [
-      { "@type": "Organization", name: "Norman Window Fashions", sameAs: "https://normanusa.com", foundingDate: "1974" },
+      // Reference, not a second description. This was an anonymous
+      // Organization named "Norman Window Fashions" carrying its own sameAs
+      // and foundingDate — the same manufacturer NORMAN_BRAND already
+      // identifies, whose alternateName is that exact string and whose sameAs
+      // already contains normanusa.com. Two nodes for one company, and they
+      // had drifted: the founding year here disagreed with the glossary's.
+      // The foundingDate moved onto NORMAN_BRAND, which is typed Organization
+      // as well as Brand so it can legally hold it.
+      //
+      // The node itself is published on
+      // moving-into-a-new-home-window-coverings-north-idaho, so this @id
+      // resolves site-wide; the post-build sweep is what guarantees that.
+      { "@id": NORMAN_BRAND["@id"] },
       { "@type": "Organization", name: "Window Covering Manufacturers Association", sameAs: "https://wcmanet.com" },
       { "@type": "Organization", name: "California Air Resources Board", sameAs: "https://ww2.arb.ca.gov" },
       { "@type": "Organization", name: "U.S. Department of Energy", sameAs: "https://www.energy.gov" },
