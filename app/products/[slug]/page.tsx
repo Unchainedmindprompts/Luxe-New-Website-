@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
-import { cityNode } from "@/lib/cities";
+import { cityRef } from "@/lib/cities";
 import { productPages } from "@/lib/product-data";
 import type { ProductPageData, ProductVideo } from "@/lib/product-data";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
@@ -55,9 +55,10 @@ function ServiceSchema({ product, slug }: { product: ProductPageData; slug: stri
     // Falls and Boise, which are six hours away and will never convert. The
     // area pages have carried city-level data all along — the product pages,
     // which are the ones meant to win local searches, claimed the whole state.
-    // cityNode carries sameAs identifiers, so these resolve to real places
-    // rather than to strings that happen to look like town names.
-    areaServed: SERVICE_AREAS.map((area) => cityNode(area.name)),
+    // These are references to the canonical City entities defined on the area
+    // pages, so they resolve to real places rather than to strings that happen
+    // to look like town names.
+    areaServed: SERVICE_AREAS.map((area) => cityRef(area.name)),
     description: product.solution,
     speakable: {
       "@type": "SpeakableSpecification",

@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   },
 };
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
+import { cityRef } from "@/lib/cities";
 import { OWNER_STUB } from "@/lib/schema";
 import { productPages } from "@/lib/product-data";
 
@@ -74,6 +75,11 @@ const businessNode = {
     longitude: BUSINESS.geo.lng,
   },
   areaServed: [
+    // The region and the county stay as they are: neither has an area page, so
+    // neither has a canonical @id to point at. The five cities do — they are
+    // defined on their own /areas/{slug} pages and referenced here. Their
+    // county containment moved into lib/cities.ts so it travels with the
+    // entity instead of living only on this page.
     {
       "@type": "AdministrativeArea",
       name: "North Idaho",
@@ -86,56 +92,7 @@ const businessNode = {
       sameAs: "https://en.wikipedia.org/wiki/Kootenai_County,_Idaho",
       containedInPlace: { "@type": "State", name: "Idaho" },
     },
-    {
-      "@type": "City",
-      name: "Coeur d'Alene",
-      sameAs: "https://en.wikipedia.org/wiki/Coeur_d%27Alene,_Idaho",
-      containedInPlace: {
-        "@type": "AdministrativeArea",
-        name: "Kootenai County",
-        containedInPlace: { "@type": "State", name: "Idaho" },
-      },
-    },
-    {
-      "@type": "City",
-      name: "Post Falls",
-      sameAs: "https://en.wikipedia.org/wiki/Post_Falls,_Idaho",
-      containedInPlace: {
-        "@type": "AdministrativeArea",
-        name: "Kootenai County",
-        containedInPlace: { "@type": "State", name: "Idaho" },
-      },
-    },
-    {
-      "@type": "City",
-      name: "Hayden",
-      sameAs: "https://en.wikipedia.org/wiki/Hayden,_Idaho",
-      containedInPlace: {
-        "@type": "AdministrativeArea",
-        name: "Kootenai County",
-        containedInPlace: { "@type": "State", name: "Idaho" },
-      },
-    },
-    {
-      "@type": "City",
-      name: "Rathdrum",
-      sameAs: "https://en.wikipedia.org/wiki/Rathdrum,_Idaho",
-      containedInPlace: {
-        "@type": "AdministrativeArea",
-        name: "Kootenai County",
-        containedInPlace: { "@type": "State", name: "Idaho" },
-      },
-    },
-    {
-      "@type": "City",
-      name: "Sandpoint",
-      sameAs: "https://en.wikipedia.org/wiki/Sandpoint,_Idaho",
-      containedInPlace: {
-        "@type": "AdministrativeArea",
-        name: "Bonner County",
-        containedInPlace: { "@type": "State", name: "Idaho" },
-      },
-    },
+    ...SERVICE_AREAS.map((area) => cityRef(area.name)),
   ],
   openingHoursSpecification: [
     {

@@ -7,7 +7,7 @@ import rehypeRaw from "rehype-raw";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { NORMAN_BRAND, ALTA_BRAND } from "@/lib/brands";
-import { cityNode } from "@/lib/cities";
+import { cityRef } from "@/lib/cities";
 import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
 import { addInternalLinks } from "@/lib/internal-links";
 import type { BlogPost } from "@/lib/blog";
@@ -578,11 +578,11 @@ function ArticleSchema({ post }: { post: BlogPost }) {
       alternateName: "Northern Idaho",
       sameAs: "https://en.wikipedia.org/wiki/Idaho_Panhandle",
     },
-    cityNode("Coeur d'Alene"),
-    cityNode("Post Falls"),
-    cityNode("Hayden"),
-    cityNode("Rathdrum"),
-    cityNode("Sandpoint"),
+    cityRef("Coeur d'Alene"),
+    cityRef("Post Falls"),
+    cityRef("Hayden"),
+    cityRef("Rathdrum"),
+    cityRef("Sandpoint"),
   ];
 
   const pageUrl = `${BUSINESS.url}/blog/${post.slug}`;

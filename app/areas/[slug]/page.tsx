@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS, PRODUCTS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
+import { cityPlaceNode, cityRef } from "@/lib/cities";
 import type { AreaPageData } from "@/lib/area-data";
 
 interface Props {
@@ -74,12 +75,9 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
     serviceType: "Custom Window Treatments",
     description: `Custom window treatment consultation, design, and installation in ${areaName}, Idaho. Luxe Window Works offers cellular shades, plantation shutters, solar shades, roller shades, motorized window treatments, and free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities.`,
     provider: { "@id": `${BUSINESS.url}/#business` },
-    areaServed: {
-      "@type": "City",
-      name: areaName,
-      sameAs: area.wikipediaSameAs,
-      containedInPlace: { "@type": "State", name: "Idaho" },
-    },
+    // Reference, not a rebuild. The canonical City is defined on this same
+    // page (`placeSchema` below) — this points at it.
+    areaServed: cityRef(areaName),
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: `Window Treatment Services in ${areaName}`,
@@ -188,6 +186,16 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
         },
       ];
 
+  /**
+   * THE CANONICAL CITY, DEFINED HERE.
+   *
+   * `/areas/{slug}#place` is this page's own URL, so this is where the entity
+   * belongs — the hub and every other page now reference it rather than
+   * rebuilding it. Null only if a route ever exists without a registry entry,
+   * in which case nothing is emitted rather than a half-formed place.
+   */
+  const placeSchema = cityPlaceNode(areaName);
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -205,6 +213,7 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
           pages were shipping their Service entity only in the RSC payload, so
           the local service schema for every city was uncrawlable. */}
       <JsonLd data={webpageSchema} />
+      {placeSchema && <JsonLd data={{ "@context": "https://schema.org", ...placeSchema }} />}
       <JsonLd data={serviceSchema} />
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={faqSchema} />

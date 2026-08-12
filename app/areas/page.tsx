@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
+import { cityRef } from "@/lib/cities";
 
 export const metadata: Metadata = {
   title: "Service Areas | Luxe Window Works — Custom Window Treatments in North Idaho",
@@ -47,14 +48,10 @@ function AreasHubSchema() {
       itemListElement: areasList.map((area, i) => ({
         "@type": "ListItem",
         position: i + 1,
-        item: {
-          "@type": "Place",
-          "@id": `${BUSINESS.url}/areas/${area.slug}#place`,
-          name: area.name,
-          sameAs: area.wikipediaSameAs,
-          url: `${BUSINESS.url}/areas/${area.slug}`,
-          containedInPlace: { "@type": "State", name: "Idaho" },
-        },
+        // Reference only. Each city is defined on its own /areas/{slug} page,
+        // which is the URL its @id names — the hub lists them, it does not
+        // own them.
+        item: cityRef(area.name),
       })),
     },
   };
