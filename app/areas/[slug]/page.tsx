@@ -7,6 +7,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS, PRODUCTS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
 import { cityPlaceNode, cityRef } from "@/lib/cities";
+import { CUSTOM_WINDOW_TREATMENTS } from "@/lib/schema";
 import type { AreaPageData } from "@/lib/area-data";
 
 interface Props {
@@ -72,7 +73,10 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
     "@type": "Service",
     "@id": `${areaUrl}#service`,
     name: `Custom Window Treatments in ${areaName}, Idaho`,
-    serviceType: "Custom Window Treatments",
+    // Was a string literal here and nowhere else. The product Services now
+    // classify themselves with the same phrase, so it gets one owner rather
+    // than two copies free to drift apart.
+    serviceType: CUSTOM_WINDOW_TREATMENTS,
     description: `Custom window treatment consultation, design, and installation in ${areaName}, Idaho. Luxe Window Works offers cellular shades, plantation shutters, solar shades, roller shades, motorized window treatments, and free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities.`,
     provider: { "@id": `${BUSINESS.url}/#business` },
     // Reference, not a rebuild. The canonical City is defined on this same

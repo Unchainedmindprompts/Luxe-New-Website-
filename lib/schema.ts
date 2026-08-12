@@ -32,6 +32,20 @@ export const OWNER_STUB = {
 export type ProductSlug = (typeof PRODUCTS)[number]["slug"];
 
 /**
+ * The `serviceType` every Luxe service shares.
+ *
+ * The area pages have used this exact phrase since they were written; the
+ * product pages did not classify themselves at all. Both read it from here now
+ * so one taxonomy term has one owner — the same reason the glossary reads
+ * Norman's founding year off the brand rather than restating it.
+ *
+ * It says what the nine product Services and the five area Services have in
+ * common. The `name` on each is what distinguishes them: a category on the
+ * product pages, a city on the area pages.
+ */
+export const CUSTOM_WINDOW_TREATMENTS = "Custom Window Treatments";
+
+/**
  * A REFERENCE to the canonical product Service — `{ "@id": ... }` and nothing
  * else. The full definition lives on `app/products/[slug]/page.tsx` and stays
  * there; this only lets other pages point at it.
