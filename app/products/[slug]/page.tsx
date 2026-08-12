@@ -4,6 +4,7 @@ import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
 import { cityRef } from "@/lib/cities";
+import { CUSTOM_WINDOW_TREATMENTS } from "@/lib/schema";
 import { productPages } from "@/lib/product-data";
 import type { ProductPageData, ProductVideo } from "@/lib/product-data";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
@@ -48,7 +49,20 @@ function ServiceSchema({ product, slug }: { product: ProductPageData; slug: stri
     "@context": "https://schema.org",
     "@type": "Service",
     "@id": `${BUSINESS.url}/products/${slug}#service`,
-    name: `${product.name} Installation`,
+    // "{X} Installation" described a subcontractor who hangs what someone else
+    // sold. Luxe consults, guides the selection, measures, orders the
+    // custom-made goods and installs them — lib/constants.ts says so in as many
+    // words, and warns that installer-only phrasing "undersells the business".
+    // The area pages have always described it correctly; these nine were the
+    // ones claiming a fifth of the job.
+    //
+    // The @id is untouched. This entity is the same entity — it now says what
+    // it always meant.
+    name: `Custom ${product.name} Service`,
+    // Shared with the area Services, which have used this phrase all along.
+    // The name distinguishes the category; the serviceType says what all
+    // fourteen Luxe Services have in common.
+    serviceType: CUSTOM_WINDOW_TREATMENTS,
     provider: { "@id": `${BUSINESS.url}/#business` },
     // The five cities we actually serve, not the state. "Idaho" spans 480
     // miles; Search Console shows these pages drawing impressions from Idaho
@@ -59,7 +73,21 @@ function ServiceSchema({ product, slug }: { product: ProductPageData; slug: stri
     // pages, so they resolve to real places rather than to strings that happen
     // to look like town names.
     areaServed: SERVICE_AREAS.map((area) => cityRef(area.name)),
-    description: product.solution,
+    // The category-specific truth stays exactly as it was — `product.solution`
+    // is the honest, hard-won copy for each product and nothing generic should
+    // replace it. What it lacked was the shape of the engagement around it, so
+    // that goes in front of it rather than over it.
+    //
+    // Every step named here is already asserted elsewhere on the site: the
+    // free consultation in the page CTAs and the area-page Offer, product
+    // guidance in "Get Expert Recommendations", measurement and custom order
+    // throughout the product copy, and the guarantee in BUSINESS — read from
+    // the constant so it cannot drift from the one on the homepage. No price,
+    // lead time, brand, spec or availability is introduced.
+    description:
+      `${product.name} for North Idaho homes — consultation, product guidance, ` +
+      `measurement, custom order, and professional installation by ` +
+      `${BUSINESS.name}, backed by the ${BUSINESS.guarantee}. ${product.solution}`,
     speakable: {
       "@type": "SpeakableSpecification",
       cssSelector: ["h1", ".product-subheadline"],
