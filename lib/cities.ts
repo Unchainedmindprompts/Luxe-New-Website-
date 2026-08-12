@@ -130,3 +130,42 @@ export function cityRef(name: string) {
   const id = cityPlaceId(name);
   return id ? { "@id": id } : { "@type": "City", name };
 }
+
+/**
+ * The region the five cities sit in.
+ *
+ * It was rebuilt as an anonymous `AdministrativeArea` on every page that
+ * claimed it — 52 copies, identical every time, connected to nothing. Unlike
+ * the cities it has no `/areas/{slug}` route to name it, so its `@id` hangs off
+ * the hub that does represent it: `/areas` carries "North Idaho" as its
+ * eyebrow, says Luxe works "across North Idaho", and devotes a section to the
+ * broader region. The entity is real on that page before any schema says so.
+ *
+ * Two functions rather than one with a flag, exactly as with the cities above —
+ * a helper that sometimes emits `@type` would make every call site a possible
+ * duplicate-definition bug.
+ */
+export const NORTH_IDAHO_ID = `${BUSINESS.url}/areas#north-idaho`;
+
+/**
+ * The FULL canonical definition. Emitted exactly once, on `/areas`.
+ *
+ * Carries only what the anonymous copies already carried. No containment, no
+ * counties, no coordinates: North Idaho is a colloquial region rather than an
+ * administrative one with a boundary this repository knows, and inventing
+ * structure for it would be asserting geography nobody here has established.
+ */
+export function northIdahoNode() {
+  return {
+    "@type": "AdministrativeArea",
+    "@id": `${BUSINESS.url}/areas#north-idaho`,
+    name: "North Idaho",
+    alternateName: "Northern Idaho",
+    sameAs: "https://en.wikipedia.org/wiki/Idaho_Panhandle",
+  };
+}
+
+/** A REFERENCE ONLY — `{ "@id": ... }` and nothing else. */
+export function northIdahoRef() {
+  return { "@id": `${BUSINESS.url}/areas#north-idaho` };
+}
