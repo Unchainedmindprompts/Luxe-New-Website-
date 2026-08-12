@@ -12,12 +12,11 @@ export interface AreaPageData {
   slug: string;
   name: string;
   /**
-   * Wikipedia (or Wikidata) URL for entity resolution — used as sameAs on the
-   * area page's Service.areaServed City node so AI answer engines can
-   * disambiguate the city by name (there's a Sandpoint neighborhood in
-   * Seattle, for instance). Single source of truth for the per-page schema.
+   * Wikipedia identity for these cities lives in `lib/cities.ts`, alongside the
+   * canonical `@id` and county containment. It was duplicated here and there,
+   * agreeing by luck rather than by construction; the registry that mints the
+   * Place entity is the only place that needs to know.
    */
-  wikipediaSameAs: string;
   headline: string;
   subheadline: string;
   description: string;
@@ -45,7 +44,6 @@ export const areaPages: Record<string, AreaPageData> = {
   "coeur-d-alene": {
     slug: "coeur-d-alene",
     name: "Coeur d'Alene",
-    wikipediaSameAs: "https://en.wikipedia.org/wiki/Coeur_d%27Alene,_Idaho",
     headline: "Custom Window Treatments for Coeur d'Alene Homes",
     subheadline: "From lakefront estates to downtown bungalows — window coverings designed for the way Coeur d'Alene lives.",
     description: "Coeur d'Alene is one of the most beautiful places in the Pacific Northwest, and its homes reflect that — from historic downtown craftsman homes to modern lakefront properties with floor-to-ceiling glass. Each presents unique window treatment challenges. Lake-facing windows need solar protection without sacrificing the view. Older homes have windows that aren't perfectly square after decades of settling. Newer construction along the lake often features oversized windows that need custom-engineered solutions. With 24 years in the industry across the Pacific Northwest, we understand these local nuances intimately.",
@@ -98,7 +96,6 @@ export const areaPages: Record<string, AreaPageData> = {
   "post-falls": {
     slug: "post-falls",
     name: "Post Falls",
-    wikipediaSameAs: "https://en.wikipedia.org/wiki/Post_Falls,_Idaho",
     headline: "Window Treatments for Post Falls' Growing Community",
     subheadline: "New construction, growing families, and homes that need window coverings that work as hard as you do.",
     description: "Post Falls is one of the fastest-growing cities in Idaho, and it shows. New subdivisions are going up throughout the city, bringing modern architecture, open floor plans, and large windows that need thoughtful treatment. But Post Falls isn't just new construction — established neighborhoods have their own character and their own window treatment needs. As a Post Falls-based business ourselves, Luxe Window Works is your true local expert.",
@@ -151,7 +148,6 @@ export const areaPages: Record<string, AreaPageData> = {
   "hayden": {
     slug: "hayden",
     name: "Hayden",
-    wikipediaSameAs: "https://en.wikipedia.org/wiki/Hayden,_Idaho",
     headline: "Custom Window Coverings for Hayden Homes",
     subheadline: "From Hayden Lake properties to the family neighborhoods along Government Way — tailored solutions for every home.",
     description: "Hayden blends the appeal of lakeside living with the convenience of a growing suburban community. Hayden Lake properties present premium window treatment opportunities with lake views that need solar protection, while the residential neighborhoods throughout Hayden feature a mix of established homes and newer construction that each benefit from professional window treatment consultation.",
@@ -204,7 +200,6 @@ export const areaPages: Record<string, AreaPageData> = {
   "rathdrum": {
     slug: "rathdrum",
     name: "Rathdrum",
-    wikipediaSameAs: "https://en.wikipedia.org/wiki/Rathdrum,_Idaho",
     headline: "Window Treatments for Rathdrum's Expanding Neighborhoods",
     subheadline: "New homes, new families, and window coverings that match the energy of a growing community.",
     description: "Rathdrum has transformed from a quiet small town into one of Northern Idaho's most exciting growth areas. New subdivisions are bringing hundreds of families into modern, well-designed homes that need equally thoughtful window treatments. Rathdrum's blend of new construction, rural-adjacent properties, and small-town charm creates a unique set of window treatment needs that our 24 years in the trade are well-suited to handle.",
@@ -257,7 +252,6 @@ export const areaPages: Record<string, AreaPageData> = {
   "sandpoint": {
     slug: "sandpoint",
     name: "Sandpoint",
-    wikipediaSameAs: "https://en.wikipedia.org/wiki/Sandpoint,_Idaho",
     headline: "Luxury Window Treatments for Sandpoint's Lakeside Living",
     subheadline: "Premium window coverings for one of Idaho's most stunning communities — where every window is a frame for something beautiful.",
     description: "Sandpoint sits at the northern tip of Lake Pend Oreille, one of the largest and deepest lakes in the western United States. The homes here are as impressive as the setting — from historic downtown properties to luxury lakefront estates and mountain-view homes in the surrounding hills. Window treatments in Sandpoint aren't just functional — they're part of the home's relationship with its extraordinary surroundings.",

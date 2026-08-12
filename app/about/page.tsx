@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import { BUSINESS } from "@/lib/constants";
 import { OWNER_STUB } from "@/lib/schema";
+import { cityRef } from "@/lib/cities";
 
 export const metadata: Metadata = {
   title: "About Mark Abplanalp | 24 Years in Window Treatments",
@@ -54,11 +55,8 @@ const personSchema = {
     "@type": "Occupation",
     name: "Window Treatment Specialist",
     startDate: "2002",
-    occupationLocation: {
-      "@type": "City",
-      name: "Post Falls",
-      containedInPlace: { "@type": "State", name: "Idaho" },
-    },
+    // The same Post Falls the area page defines, referenced rather than rebuilt.
+    occupationLocation: cityRef("Post Falls"),
     skills:
       "Custom window treatment design, plantation shutter installation, motorized shade systems, cellular shades, solar shades, roller shades, fenestration consulting, UV mitigation, commercial window treatments, exterior solar shades",
   },
