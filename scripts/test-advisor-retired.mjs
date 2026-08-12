@@ -1,20 +1,27 @@
 #!/usr/bin/env node
 /**
- * Luxe Window Advisor — the customer-facing surface is withdrawn.
+ * Ask Luxe stays retired.
  *
- * This harness used to check how the advisor rendered. The advisor page has
- * been removed from the site pending a redesign, so there is nothing to render
- * and the honest thing for this file to test is that it STAYS removed.
+ * The conversational advisor was discontinued as a product decision after
+ * customer-experience testing. This file is what is left of it: not a test of
+ * the feature, but a test that the feature does not come back by accident.
  *
- * The full Phase C rendering suite is not lost — it lives on the redesign
- * branch (`feat/ask-luxe`, PR #197) along with the experience it tests, and
- * comes back with it.
+ * IT USED TO TEST THE OPPOSITE. An earlier version asserted that the reasoning
+ * layer was still on disk, because the surface had been withdrawn *pending a
+ * redesign* and deleting the engine would have thrown away work we expected to
+ * use again. There is no redesign now, the implementation is gone, and the
+ * check has been inverted: what was "the engine must still exist" is now "no
+ * implementation may reappear".
  *
- * WHY THIS EXISTS AT ALL. Every check below is something that reintroduced the
- * surface by accident once already or plausibly could: a CTA restored in a
- * copy edit, a page file recreated, an endpoint left answering because only the
- * page was deleted. Noindex is not access control, and neither is nobody
- * linking to it.
+ * THE WORK IS NOT LOST. It is preserved on `feat/ask-luxe` (PR #197, closed
+ * without merging) and in this repository's history. Nothing here is an
+ * argument for keeping dead code in the production tree.
+ *
+ * WHY IT EXISTS AT ALL. Every check below is something that reintroduced the
+ * surface by accident once already or plausibly could: a CTA restored in a copy
+ * edit, a page file recreated, an endpoint left answering because only the page
+ * was deleted. Noindex is not access control, and neither is nobody linking to
+ * it.
  *
  * Node built-ins only. Exit 1 on failure.
  */
@@ -59,9 +66,10 @@ test("2  every advisor URL redirects somewhere safe", (t) => {
     t.ok(Boolean(match), `${route} has no redirect`);
     if (!match) continue;
     t.equal(match[1], "/contact", `${route} does not redirect to the agreed destination`);
-    // Temporary on purpose: a 308 is cached by browsers indefinitely and
-    // would keep sending returning visitors to /contact after a redesign.
-    t.equal(match[2], "false", `${route} redirects permanently — a redesign could not undo it`);
+    // Temporary even though the decision is permanent: a 308 is cached by
+    // browsers indefinitely and cannot be withdrawn from this codebase, so it
+    // would commit the URL forever on the strength of today's plan.
+    t.equal(match[2], "false", `${route} redirects permanently — that cannot be undone later`);
   }
   // The destination has to be a real page.
   t.ok(exists("app/contact/page.tsx"), "the redirect destination does not exist");
@@ -93,20 +101,13 @@ test("3  no customer-facing page links into the advisor", (t) => {
   t.ok(/href="\/book"/.test(read("app/products/page.tsx")), "the products hub booking link was lost");
 });
 
-test("4  the advisor endpoint is off unless explicitly enabled", (t) => {
-  const route = read("app/api/advisor/route.ts");
-  t.ok(/ADVISOR_ENABLED === "true"/.test(route), "the endpoint has no kill switch");
-  t.ok(/status: 404/.test(route), "the disabled endpoint does not 404");
-  // Absence must mean disabled: production needs no configuration to be safe.
-  t.ok(!/ADVISOR_ENABLED !== "false"/.test(route), "the switch defaults to enabled");
-  t.ok(
-    /if \(!advisorEnabled\(\)\)/.test(route),
-    "the switch is not checked at the top of the handler"
-  );
-  // And it is checked before any provider work happens.
-  const guardAt = route.indexOf("advisorEnabled()");
-  const providerAt = route.indexOf("createAnthropicProvider()");
-  t.ok(guardAt > 0 && guardAt < providerAt, "the provider is constructed before the switch is checked");
+test("4  no advisor endpoint exists to be reached", (t) => {
+  // Previously a kill switch. The endpoint is deleted now, so the stronger
+  // statement is available: there is nothing to switch on.
+  t.ok(!exists("app/api/advisor"), "the advisor API route is back");
+  t.ok(!exists("app/api/advisor/route.ts"), "the advisor route file is back");
+  // The endpoints that remain are the ones the site actually uses.
+  t.ok(exists("app/api/consultation/route.ts"), "the consultation endpoint was lost");
 });
 
 test("5  the sitemap allowlist names no route that no longer exists", (t) => {
@@ -128,31 +129,40 @@ test("6  the privacy policy no longer describes a feature nobody can use", (t) =
   t.ok(/Two places on this site ask for information/.test(privacy.replace(/\s+/g, " ")), "the form count was not corrected");
 });
 
-test("7  the reasoning work is preserved, not deleted", (t) => {
-  // Removing the surface must not have taken the engine with it.
-  for (const kept of [
-    "lib/advisor/engine.ts",
-    "lib/advisor/types.ts",
-    "lib/advisor/knowledge/products.ts",
-    "lib/advisor/knowledge/rules.ts",
-    "lib/advisor/knowledge/brand-responses.ts",
-    "lib/advisor/server/advisor.ts",
-    "lib/advisor/server/extraction.ts",
-    "lib/advisor/server/ledger.ts",
+test("7  no advisor implementation remains in the production tree", (t) => {
+  // The inverse of what this test used to assert. Preserved on `feat/ask-luxe`
+  // and in history; not carried in production as dead weight.
+  for (const gone of [
+    "lib/advisor",
+    "app/api/advisor",
     "scripts/test-advisor-engine.mjs",
     "scripts/test-advisor-phase-b.mjs",
+    "scripts/test-advisor-schema-live.mjs",
+    "scripts/eval-advisor-live.mjs",
+    "scripts/advisor-scenarios.json",
+    "docs/quality/advisor-phase-b.md",
   ]) {
-    t.ok(exists(kept), `${kept} was deleted — this was a surface removal, not a teardown`);
+    t.ok(!exists(gone), `${gone} is back — the retired implementation returned`);
   }
-  // The approved Hunter Douglas wording in particular.
-  const brand = read("lib/advisor/knowledge/brand-responses.ts");
-  t.ok(/3G Capital/.test(brand), "the canonical brand response was altered");
+
+  // No package depends on the model provider any more, and no source imports it.
+  const pkg = read("package.json");
+  t.ok(!/@anthropic-ai\/sdk/.test(pkg), "the Anthropic SDK is a dependency again");
+  t.ok(!/"test:advisor"|"eval:advisor/.test(pkg), "an advisor script is wired up again");
+
+  // And the environment example no longer advertises a feature that is gone.
+  if (exists(".env.local.example")) {
+    const env = read(".env.local.example");
+    t.ok(!/ADVISOR_ENABLED/.test(env), "ADVISOR_ENABLED is documented again");
+    t.ok(!/ANTHROPIC_API_KEY/.test(env), "ANTHROPIC_API_KEY is documented again");
+  }
 });
 
 // ── report ─────────────────────────────────────────────────────────────────
 
-console.log("Luxe Window Advisor — customer-facing surface withdrawn");
+console.log("Ask Luxe — discontinued, and staying that way");
 console.log("  advisor pages on the site:   0");
+console.log("  advisor implementation:      0 files");
 console.log(`  advisor URLs redirected:     ${ADVISOR_ROUTES.length} → /contact (temporary)`);
 console.log(`  scenarios:                   ${results.length}`);
 console.log(`  passing:                     ${results.length - failures}/${results.length}\n`);
@@ -165,6 +175,6 @@ if (failures) {
   process.exit(1);
 }
 console.log(
-  "\nPASS — no advisor page is served, every advisor URL lands on /contact, no page links to " +
-    "one, the endpoint is off by default, and the reasoning layer is intact for the redesign."
+  "\nPASS — no advisor page is served, no advisor implementation remains, every advisor URL " +
+    "lands on /contact, and no page links to one."
 );
