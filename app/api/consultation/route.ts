@@ -26,9 +26,9 @@ interface ConsultationPayload {
   message?: string;
   needs?: string;
   contactMethod?: string;
-  // A short tag for the subject line. The advisor sends "Advisor callback
-  // request" here so a request to be contacted is never mistaken for a booked
-  // consultation in the inbox.
+  // A short tag for the subject line, so a request to be contacted is never
+  // mistaken for a booked consultation in the inbox. Optional: no current form
+  // sends it, and the subject falls back to the plain form without it.
   problem?: string;
   source?: string;
   // Honeypot — hidden field bots love to fill, humans never see.
@@ -72,8 +72,6 @@ export async function POST(req: Request) {
       ? "/book"
       : source === "contact"
       ? "/contact"
-      : source === "show-me-my-options" || source === "luxe-advisor"
-      ? "/show-me-my-options"
       : `/${source}`;
   const subject = problem
     ? `New Consultation Request — ${name} — ${problem}`

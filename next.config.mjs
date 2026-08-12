@@ -141,14 +141,19 @@ const nextConfig = {
         destination: '/blog',
         permanent: true,
       },
-      // ── advisor surface, temporarily withdrawn ──────────────────────
+      // ── Ask Luxe, discontinued ──────────────────────────────────────
       //
-      // The conversational advisor was removed from the customer-facing site
-      // pending a redesign. These are deliberately TEMPORARY (307): a 308 is
-      // cached by browsers indefinitely, and a visitor who hit the permanent
-      // form once would keep landing on /contact long after the page came
-      // back. Reversing a permanent redirect is not something we can do from
-      // this codebase.
+      // The conversational advisor was retired as a product decision after
+      // customer-experience testing. The implementation has been removed from
+      // this repository; it is preserved on `feat/ask-luxe` (PR #197, closed
+      // without merging) and in history. There is no redesign planned.
+      //
+      // These stay TEMPORARY (307) even though the decision is permanent. A
+      // 308 is cached by browsers indefinitely and cannot be withdrawn from
+      // this codebase, so it would commit a URL forever on the strength of
+      // today's plan. /show-me-my-options was a real published page with
+      // inbound links; keeping its redirect reversible costs nothing and keeps
+      // the option to point it somewhere better later.
       //
       // /contact rather than /book on purpose. On the homepage this page was
       // the softer of two CTAs, sitting beside "Book My Free In-Home
@@ -160,8 +165,8 @@ const nextConfig = {
         permanent: false,
       },
       {
-        // Never shipped on main, but claimed by the open redesign branch.
-        // Covered so the URL is safe whatever happens to that branch.
+        // Never shipped here. Covered anyway: the URL was live on a preview
+        // deployment and may have been shared or crawled from there.
         source: '/ask-luxe',
         destination: '/contact',
         permanent: false,
