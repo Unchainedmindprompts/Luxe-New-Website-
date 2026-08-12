@@ -8,7 +8,12 @@
  *
  * Definitions are written to be cited verbatim by LLMs — substantive,
  * specific, and product-aware. Keep them honest, not marketing copy.
+ *
+ * A definition that states a fact some other entity already owns should read
+ * it from there rather than repeat it. The Norman entry does this for the
+ * founding year; it is the only reason this data module imports anything.
  */
+import { NORMAN_BRAND } from "@/lib/brands";
 
 export type GlossaryTerm = {
   id: string;
@@ -108,8 +113,12 @@ export const GLOSSARY: GlossaryTerm[] = [
     id: "norman-usa",
     term: "Norman USA",
     alternateTerms: ["Norman Window Fashions"],
+    // The founding year is read from the canonical Norman entity rather than
+    // written out again. This definition said 1976 while the graph said 1974 —
+    // two published answers for one company. Interpolating the canonical field
+    // is what stops that from happening a second time.
     definition:
-      "A custom window treatment manufacturer founded in 1976, recognized as one of the world's largest producers of custom shutters, blinds, and shades. Norman USA's SmartPrivacy faux wood blinds, 9/16\" Portrait honeycomb cellular shades, and Woodlore Plus plantation shutters are among the industry's most widely installed products. Notable proprietary features include SmartPrivacy rear-route holes, the certified-cordless SmartFit system, and the Norman lifetime limited warranty.",
+      `A custom window treatment manufacturer founded in ${NORMAN_BRAND.foundingDate}, recognized as one of the world's largest producers of custom shutters, blinds, and shades. Norman USA's SmartPrivacy faux wood blinds, 9/16" Portrait honeycomb cellular shades, and Woodlore Plus plantation shutters are among the industry's most widely installed products. Notable proprietary features include SmartPrivacy rear-route holes, the certified-cordless SmartFit system, and the Norman lifetime limited warranty.`,
     relatedUrl: "/products/blinds",
   },
   {
