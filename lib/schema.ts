@@ -15,10 +15,36 @@
  * See .claude/skills/schema-audit/SKILL.md → "Accepted exceptions" for the
  * rationale and why this doesn't violate the define-once entity rule.
  */
-import { BUSINESS } from "@/lib/constants";
+import { BUSINESS, PRODUCTS } from "@/lib/constants";
 
 export const OWNER_STUB = {
   "@type": "Person",
   "@id": `${BUSINESS.url}/#owner`,
   name: BUSINESS.ownerFullName,
 } as const;
+
+/**
+ * The nine products that own a `/products/{slug}` route. Derived from the
+ * `PRODUCTS` const rather than restated, so a slug that isn't a real product
+ * fails `tsc` instead of minting a dangling `@id` nobody notices until the
+ * post-build sweep.
+ */
+export type ProductSlug = (typeof PRODUCTS)[number]["slug"];
+
+/**
+ * A REFERENCE to the canonical product Service — `{ "@id": ... }` and nothing
+ * else. The full definition lives on `app/products/[slug]/page.tsx` and stays
+ * there; this only lets other pages point at it.
+ *
+ * Same discipline as `cityRef` in `lib/cities.ts`, and for the same reason: the
+ * schema sweep classifies any object carrying `@type` beside `@id` as a
+ * *definition*, so a helper that emitted `@type`, `name` or `url` alongside the
+ * canonical id would turn every call site into a duplicate-definition bug.
+ *
+ * The `@id` is deliberately spelled out here as a template literal rather than
+ * assembled from a returned string, so the source sweep still recognises this
+ * line as a reference to the `<HOST>/products/${slug}#service` pattern def.
+ */
+export function productServiceRef(slug: ProductSlug) {
+  return { "@id": `${BUSINESS.url}/products/${slug}#service` };
+}

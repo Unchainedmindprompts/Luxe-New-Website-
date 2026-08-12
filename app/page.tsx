@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 import { cityRef } from "@/lib/cities";
-import { OWNER_STUB } from "@/lib/schema";
+import { OWNER_STUB, productServiceRef } from "@/lib/schema";
 import { productPages } from "@/lib/product-data";
 
 /**
@@ -138,6 +138,26 @@ const businessNode = {
     // No new entity is introduced — an existing one becomes referenceable.
     "@id": `${BASE}/#window-treatments`,
     name: "Window Treatments",
+    // WHERE A CATALOG ENTRY *IS* A PRODUCT SERVICE, IT SAYS SO BY @id.
+    //
+    // Eight of these leaves were anonymous Services that duplicated a Service
+    // already defined at /products/{slug}#service — the same entity articles
+    // point at through `Article.about` and the /products hub lists. They now
+    // reference it instead, so the homepage catalog and the product pages
+    // describe one set of offerings rather than two that merely look alike.
+    //
+    // The six that stay anonymous are not the same entity as any product page,
+    // and inventing an @id for them would claim a page that does not exist. The
+    // five blinds entries are SUBTYPES of /products/blinds#service, not that
+    // service — matching them would assert that "Wood Blinds" and "Faux Wood
+    // Blinds" are the same thing, which they are not. "Aluminum Shutters" is a
+    // separate specialty offering (The Window Outfitters), deliberately not the
+    // Norman plantation shutters the shutters page defines.
+    //
+    // /products/blinds#service is therefore not referenced from this catalog:
+    // its real counterpart here is the "Blinds" OfferCatalog node, and an
+    // OfferCatalog cannot carry a Service's identity. It stays connected
+    // through the /products hub and the blinds articles.
     itemListElement: [
       {
         "@type": "OfferCatalog",
@@ -154,19 +174,22 @@ const businessNode = {
         "@type": "OfferCatalog",
         name: "Shades",
         itemListElement: [
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Cellular Shades", url: `${BASE}/products/cellular-shades` } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Solar Shades", url: `${BASE}/products/solar-shades` } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Roller Shades", url: `${BASE}/products/roller-shades` } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Banded Shades", url: `${BASE}/products/banded-shades` } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Roman Shades", url: `${BASE}/products/roman-shades` } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Exterior Solar Shades", url: `${BASE}/products/exterior-solar-shades` } },
+          { "@type": "Offer", itemOffered: productServiceRef("cellular-shades") },
+          { "@type": "Offer", itemOffered: productServiceRef("solar-shades") },
+          { "@type": "Offer", itemOffered: productServiceRef("roller-shades") },
+          { "@type": "Offer", itemOffered: productServiceRef("banded-shades") },
+          { "@type": "Offer", itemOffered: productServiceRef("roman-shades") },
+          { "@type": "Offer", itemOffered: productServiceRef("exterior-solar-shades") },
         ],
       },
       {
         "@type": "OfferCatalog",
         name: "Shutters",
         itemListElement: [
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Norman Plantation Shutters", url: `${BASE}/products/shutters` } },
+          // The shutters page installs Norman exclusively for interior
+          // shutters, so "Norman Plantation Shutters" and the plantation
+          // shutter service it defines are the same offering under two names.
+          { "@type": "Offer", itemOffered: productServiceRef("shutters") },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Aluminum Shutters" } },
         ],
       },
@@ -174,7 +197,7 @@ const businessNode = {
         "@type": "OfferCatalog",
         name: "Motorization",
         itemListElement: [
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Motorized Shades & Blinds", url: `${BASE}/products/motorization` } },
+          { "@type": "Offer", itemOffered: productServiceRef("motorization") },
         ],
       },
     ],
