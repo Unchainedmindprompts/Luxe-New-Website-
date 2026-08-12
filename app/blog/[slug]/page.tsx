@@ -349,17 +349,14 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       //
       // normanusa.com is folded into NORMAN_BRAND's sameAs rather than given a
       // second @id, so one manufacturer stays one node.
-      // Full node, not a bare { "@id": ... }. This post is the only place
-      // either brand is published — they live in lib/brands.ts and are
-      // imported nowhere else — so a reference-only mention would point at an
-      // entity that existed in source but never in JSON-LD. Spread it, exactly
-      // as ALTA_BRAND is spread below.
       //
-      // Load-bearing since the woodlore-plus post started referencing Norman
-      // by @id instead of describing it again: this is the definition that
-      // reference resolves to.
-      NORMAN_BRAND,
-      ALTA_BRAND,
+      // References now, not full nodes. This post used to publish both brands,
+      // because nothing else did — which left an article about moving house
+      // load-bearing for two manufacturer identities it is not about. /about
+      // publishes all five now, so this can say what it actually means: the
+      // article mentions them.
+      { "@id": NORMAN_BRAND["@id"] },
+      { "@id": ALTA_BRAND["@id"] },
       // Avista and the DOE were dropped from mentions. Avista appears once, about
       // utility hookups, and does not define what the article is about; the body
       // link stays. The DOE stays in the graph where it belongs — as publisher of
