@@ -7,7 +7,7 @@ import rehypeRaw from "rehype-raw";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { NORMAN_BRAND, ALTA_BRAND } from "@/lib/brands";
-import { cityRef } from "@/lib/cities";
+import { cityRef, northIdahoRef } from "@/lib/cities";
 import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
 import { addInternalLinks } from "@/lib/internal-links";
 import type { BlogPost } from "@/lib/blog";
@@ -585,12 +585,10 @@ function deriveArticleAbout(post: BlogPost): object {
 function ArticleSchema({ post }: { post: BlogPost }) {
   const extensions = SLUG_ARTICLE_EXTENSIONS[post.slug];
   const baseMentions: object[] = [
-    {
-      "@type": "AdministrativeArea",
-      name: "North Idaho",
-      alternateName: "Northern Idaho",
-      sameAs: "https://en.wikipedia.org/wiki/Idaho_Panhandle",
-    },
+    // Was a full anonymous AdministrativeArea rebuilt on all 51 articles that
+    // reach this line. It is one region, defined on /areas, so every article
+    // now points at the same entity instead of describing its own.
+    northIdahoRef(),
     cityRef("Coeur d'Alene"),
     cityRef("Post Falls"),
     cityRef("Hayden"),

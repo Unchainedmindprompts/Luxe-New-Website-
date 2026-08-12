@@ -4,7 +4,7 @@ import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
-import { cityRef } from "@/lib/cities";
+import { cityRef, northIdahoNode } from "@/lib/cities";
 
 export const metadata: Metadata = {
   title: "Service Areas | Luxe Window Works — Custom Window Treatments in North Idaho",
@@ -74,6 +74,11 @@ function AreasHubSchema() {
   return (
     <>
       <JsonLd data={collectionPageSchema} />
+      {/* This hub is where North Idaho is defined — the region has no
+          /areas/{slug} route of its own, and this is the page that actually
+          represents it. Everywhere else references the @id. Same shape the
+          area detail pages use for their canonical City. */}
+      <JsonLd data={{ "@context": "https://schema.org", ...northIdahoNode() }} />
       <JsonLd data={breadcrumbSchema} />
     </>
   );
