@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BUSINESS } from "@/lib/constants";
 import { OWNER_STUB } from "@/lib/schema";
 import { cityRef } from "@/lib/cities";
+import { CARRIED_BRANDS } from "@/lib/brands";
 
 export const metadata: Metadata = {
   title: "About Mark Abplanalp | 24 Years in Window Treatments",
@@ -92,6 +93,23 @@ const webpageSchema = {
   isPartOf: { "@id": `${BUSINESS.url}/#website` },
   about: { "@id": `${BUSINESS.url}/#business` },
   mainEntity: { "@id": `${BUSINESS.url}/#owner` },
+  // THIS PAGE IS WHERE THE MANUFACTURERS ARE DEFINED.
+  //
+  // They had no home before: Norman and Alta were published inside one blog
+  // post's mentions — which worked, but made an arbitrary article load-bearing
+  // for two entities it is not about — and Lafayette, Corradi USA and The
+  // Window Outfitters had no identity at all, existing only as display strings
+  // in the footer and in the copy a few lines below. This page already names
+  // all five in visible prose, so `mentions` describes what the page does
+  // rather than being a hook chosen for convenience.
+  //
+  // `mentions` and not `#business.brand`: schema.org's `brand` is the brand
+  // "maintained by" an organization. Luxe maintains none of these; it carries
+  // their products. The distinction is the whole business truth here.
+  //
+  // Full nodes, spread — this is the one place they are published. Every other
+  // page reaches them by @id.
+  mentions: CARRIED_BRANDS,
   inLanguage: "en-US",
 };
 
