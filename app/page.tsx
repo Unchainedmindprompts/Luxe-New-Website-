@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 import { cityRef, northIdahoRef } from "@/lib/cities";
-import { OWNER_STUB, productServiceRef } from "@/lib/schema";
+import { OWNER_STUB, BUSINESS_STUB, productServiceRef } from "@/lib/schema";
 import { productPages } from "@/lib/product-data";
 
 /**
@@ -35,12 +35,18 @@ function StarIcon() {
 const BASE = "https://www.luxewindowworks.com";
 
 const businessNode = {
-  "@type": ["HomeAndConstructionBusiness", "LocalBusiness", "Organization"],
-  "@id": `${BASE}/#business`,
-  name: BUSINESS.name,
+  // Spread, not re-declared, so the article pages that emit BUSINESS_STUB as
+  // their publisher can never drift to a different @type for this same @id.
+  ...BUSINESS_STUB,
   legalName: "Luxe Window Works LLC",
+  // The 24 years belong to Mark, not to the company, and this node said
+  // otherwise: an Organization founded in 2025 (see foundingDate below)
+  // describing itself as having 24 years of consulting, designing and
+  // installing. Both facts are true of different entities, and the sentence
+  // now says which is which. The founding date is unchanged — inventing an
+  // earlier one to match a career would be the wrong repair.
   description:
-    "Premium custom window treatments in North Idaho — 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
+    `Premium custom window treatments in North Idaho, founded in 2025 by ${BUSINESS.ownerFullName} — 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.`,
   url: BASE,
   telephone: BUSINESS.phoneE164,
   email: BUSINESS.email,
@@ -209,8 +215,14 @@ const websiteNode = {
   "@id": `${BASE}/#website`,
   url: BASE,
   name: BUSINESS.name,
+  // "Direct online ordering of custom Norman shades" was left over from the
+  // retired shop. There is no checkout on this site and no way to order
+  // anything from it: a project is quoted after someone has been to the house
+  // and measured the windows. Describing a transaction the business cannot
+  // complete is the one claim in this graph most likely to send a homeowner —
+  // or an agent acting for one — looking for a buy button that does not exist.
   description:
-    "Custom window treatments in Northern Idaho — blinds, shades, shutters, and motorized systems. Direct online ordering of custom Norman shades.",
+    "Custom window treatments in Northern Idaho — blinds, shades, shutters, and motorized systems. Every project begins with a free in-home consultation: Luxe helps select the product, measures, prices the specific job, places the order, and installs it. There is no online checkout.",
   publisher: { "@id": `${BASE}/#business` },
   inLanguage: "en-US",
 };

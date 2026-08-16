@@ -24,6 +24,29 @@ export const OWNER_STUB = {
 } as const;
 
 /**
+ * BUSINESS_STUB — the same pattern for the business, and for the same reason.
+ *
+ * Articles referenced their publisher as a bare `{ "@id": ... }`. Correct, but
+ * a crawler that fetches one article and does not chase cross-document
+ * references learns only that a publisher exists, not who. Emitting this stub
+ * gives it type, identity and name without a second entity appearing anywhere.
+ *
+ * The `@type` array is the load-bearing part: the canonical business node on
+ * the homepage builds itself by SPREADING this, so the two can never disagree.
+ * A hand-written `@type: "Organization"` on the article pages would have been a
+ * different type for the same `@id`, which the rendered sweep reports as a
+ * conflict — correctly, because it would be two claims about one thing.
+ *
+ * The schema-audit skill lists this as the anticipated companion to
+ * OWNER_STUB; see "Accepted exceptions → Exception A".
+ */
+export const BUSINESS_STUB = {
+  "@type": ["HomeAndConstructionBusiness", "LocalBusiness", "Organization"],
+  "@id": `${BUSINESS.url}/#business`,
+  name: BUSINESS.name,
+} as const;
+
+/**
  * The nine products that own a `/products/{slug}` route. Derived from the
  * `PRODUCTS` const rather than restated, so a slug that isn't a real product
  * fails `tsc` instead of minting a dangling `@id` nobody notices until the

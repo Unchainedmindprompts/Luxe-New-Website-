@@ -7,6 +7,7 @@ import rehypeRaw from "rehype-raw";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { NORMAN_BRAND, ALTA_BRAND } from "@/lib/brands";
+import { OWNER_STUB, BUSINESS_STUB } from "@/lib/schema";
 import { cityRef, northIdahoRef } from "@/lib/cities";
 import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
 import { addInternalLinks } from "@/lib/internal-links";
@@ -182,8 +183,16 @@ function articleUrlTransform(url: string): string {
   return defaultUrlTransform(url);
 }
 
-/** Author reference — the full Person entity lives in the homepage @graph (#owner). */
-const markAuthorRef = { "@id": `${BUSINESS.url}/#owner` };
+/**
+ * Author — the canonical `#owner` Person, defined in full on /about.
+ *
+ * Was a bare `{ "@id": ... }`. Still the same entity and the same id; it now
+ * carries type and name as well, because a crawler that reads one article and
+ * does not chase cross-document references otherwise learns that the article
+ * has an author without learning who. OWNER_STUB is emitted rather than
+ * hand-written so no second Person node can appear.
+ */
+const markAuthorRef = OWNER_STUB;
 
 /** HowTo schema — 5-step installation process */
 const installationHowToSchema = {
@@ -657,7 +666,10 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     keywords: deriveKeywords(post),
     inLanguage: "en-US",
     author: markAuthorRef,
-    publisher: { "@id": `${BUSINESS.url}/#business` },
+    // Same treatment as the author, same reason, same guarantee against a
+    // second identity: the canonical business id, carrying its own type and
+    // name, from the const the homepage node is built from.
+    publisher: BUSINESS_STUB,
     // Resolves to the WebPage node above rather than a bare URL string.
     mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
     // ${BUSINESS.url}/blog is the Blog entity the /blog route already defines
