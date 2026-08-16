@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 import { cityRef, northIdahoRef } from "@/lib/cities";
-import { OWNER_STUB, productServiceRef } from "@/lib/schema";
+import { BUSINESS_STUB, OWNER_STUB, productServiceRef } from "@/lib/schema";
 import { productPages } from "@/lib/product-data";
 
 /**
@@ -35,9 +35,7 @@ function StarIcon() {
 const BASE = "https://www.luxewindowworks.com";
 
 const businessNode = {
-  "@type": ["HomeAndConstructionBusiness", "LocalBusiness", "Organization"],
-  "@id": `${BASE}/#business`,
-  name: BUSINESS.name,
+  ...BUSINESS_STUB,
   legalName: "Luxe Window Works LLC",
   description:
     "Premium custom window treatments in North Idaho — 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
@@ -210,7 +208,7 @@ const websiteNode = {
   url: BASE,
   name: BUSINESS.name,
   description:
-    "Custom window treatments in Northern Idaho — blinds, shades, shutters, and motorized systems. Direct online ordering of custom Norman shades.",
+    "Custom window treatments in Northern Idaho — blinds, shades, shutters, and motorized systems. Free in-home consultation.",
   publisher: { "@id": `${BASE}/#business` },
   inLanguage: "en-US",
 };
