@@ -185,6 +185,85 @@ for (const { file, label, entity } of MUST_EMIT) {
   }
 }
 
+// ── 4. Capability truth + article author/publisher inlining ───────────────
+// WebSite must not claim a public checkout Luxe does not have. Article
+// author/publisher must carry @type + name on the article page itself —
+// Google will not merge the homepage graph to fill those in.
+const homepageHtmlPath = join(APP_DIR, "index.html");
+if (existsSync(homepageHtmlPath)) {
+  for (const block of publicJsonLd(readFileSync(homepageHtmlPath, "utf-8"))) {
+    const nodes = block["@graph"] || [block];
+    for (const node of Array.isArray(nodes) ? nodes : [nodes]) {
+      if (!node || typeof node !== "object") continue;
+      const types = [].concat(node["@type"] || []);
+      if (!types.includes("WebSite")) continue;
+      const desc = String(node.description || "");
+      if (/online ordering|checkout|order online/i.test(desc)) {
+        failures.push(
+          `WebSite description claims a checkout Luxe does not have: ${JSON.stringify(desc)}`
+        );
+      }
+      if (!/in-home consultation/i.test(desc)) {
+        failures.push(
+          `WebSite description must name the live offer (free in-home consultation): ${JSON.stringify(desc)}`
+        );
+      }
+    }
+  }
+}
+
+function articleAuthorPublisherOk(node) {
+  const author = node.author;
+  const publisher = node.publisher;
+  if (!author || typeof author !== "object" || Array.isArray(author)) return "author missing";
+  const authorTypes = [].concat(author["@type"] || []);
+  if (!authorTypes.includes("Person")) return "author missing @type Person";
+  if (author.name !== "Mark Abplanalp") return `author name is ${JSON.stringify(author.name)}`;
+  if (author["@id"] !== `${SITE}/#owner`) return `author @id is ${JSON.stringify(author["@id"])}`;
+  if (!publisher || typeof publisher !== "object" || Array.isArray(publisher)) {
+    return "publisher missing";
+  }
+  const publisherTypes = [].concat(publisher["@type"] || []);
+  if (
+    !publisherTypes.includes("Organization") &&
+    !publisherTypes.includes("HomeAndConstructionBusiness")
+  ) {
+    return `publisher @type is ${JSON.stringify(publisher["@type"])}`;
+  }
+  if (publisher.name !== "Luxe Window Works") {
+    return `publisher name is ${JSON.stringify(publisher.name)}`;
+  }
+  if (publisher["@id"] !== `${SITE}/#business`) {
+    return `publisher @id is ${JSON.stringify(publisher["@id"])}`;
+  }
+  return null;
+}
+
+let articleChecked = 0;
+for (const f of files) {
+  if (!f.includes(`${join("app", "blog")}`) && !f.includes("/blog/")) continue;
+  if (f.endsWith(`${join("blog.html")}`) || f.endsWith("/blog.html")) continue;
+  const blocks = publicJsonLd(readFileSync(f, "utf-8"));
+  for (const block of blocks) {
+    const nodes = block["@graph"] || [block];
+    for (const node of Array.isArray(nodes) ? nodes : [nodes]) {
+      if (!node || typeof node !== "object") continue;
+      const types = [].concat(node["@type"] || []);
+      if (!types.includes("BlogPosting")) continue;
+      articleChecked += 1;
+      const err = articleAuthorPublisherOk(node);
+      if (err) {
+        failures.push(
+          `Article ${f.replace(APP_DIR, "")} author/publisher not inlined: ${err}`
+        );
+      }
+    }
+  }
+}
+if (articleChecked === 0) {
+  failures.push("No BlogPosting nodes found in rendered blog HTML to verify author/publisher inlining");
+}
+
 // ── Report ────────────────────────────────────────────────────────────────
 const totalBlocks = [...perFileBlockCount.values()].reduce((a, b) => a + b, 0);
 console.log(

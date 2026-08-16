@@ -24,6 +24,23 @@ export const OWNER_STUB = {
 } as const;
 
 /**
+ * BUSINESS_STUB — minimal Organization identity for pages that are not the
+ * homepage. Google reads one URL at a time and will not merge the homepage
+ * graph, so article `publisher` (and any similar single-page consumer) needs
+ * @type + name on the page itself. The canonical HomeAndConstructionBusiness
+ * node still lives on the homepage and is built by SPREADING this stub, so
+ * the literal @type/@id/name appears exactly ONCE in source (right here).
+ *
+ * Do not add NAP, offers, hours, or ratings here — that would re-declare the
+ * homepage business blob on every article.
+ */
+export const BUSINESS_STUB = {
+  "@type": ["HomeAndConstructionBusiness", "LocalBusiness", "Organization"],
+  "@id": `${BUSINESS.url}/#business`,
+  name: BUSINESS.name,
+} as const;
+
+/**
  * The nine products that own a `/products/{slug}` route. Derived from the
  * `PRODUCTS` const rather than restated, so a slug that isn't a real product
  * fails `tsc` instead of minting a dangling `@id` nobody notices until the

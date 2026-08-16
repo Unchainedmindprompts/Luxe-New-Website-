@@ -8,6 +8,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { NORMAN_BRAND, ALTA_BRAND } from "@/lib/brands";
 import { cityRef, northIdahoRef } from "@/lib/cities";
+import { BUSINESS_STUB, OWNER_STUB } from "@/lib/schema";
 import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
 import { addInternalLinks } from "@/lib/internal-links";
 import type { BlogPost } from "@/lib/blog";
@@ -181,9 +182,6 @@ function articleUrlTransform(url: string): string {
   if (/^tel:\+?[0-9][0-9\s().-]*$/i.test(url)) return url;
   return defaultUrlTransform(url);
 }
-
-/** Author reference — the full Person entity lives in the homepage @graph (#owner). */
-const markAuthorRef = { "@id": `${BUSINESS.url}/#owner` };
 
 /** HowTo schema — 5-step installation process */
 const installationHowToSchema = {
@@ -656,8 +654,10 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     articleSection: post.category,
     keywords: deriveKeywords(post),
     inLanguage: "en-US",
-    author: markAuthorRef,
-    publisher: { "@id": `${BUSINESS.url}/#business` },
+    // @type + name inline so Google does not have to merge the homepage graph.
+    // Canonical Person / business nodes stay on /about and /; the @ids still join.
+    author: OWNER_STUB,
+    publisher: BUSINESS_STUB,
     // Resolves to the WebPage node above rather than a bare URL string.
     mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
     // ${BUSINESS.url}/blog is the Blog entity the /blog route already defines

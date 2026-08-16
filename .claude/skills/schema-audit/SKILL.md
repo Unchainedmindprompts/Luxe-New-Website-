@@ -63,9 +63,8 @@ Cases where the rules apply differently than the naive reading would suggest. Ea
 - Run the sweep. It should PASS. If it FAILS, the pattern was implemented via a raw literal instead of via spread — fix the implementation, do not tune the sweep.
 
 **Current instances in this repo:**
-- `OWNER_STUB` — `lib/schema.ts`. Canonical Person node built via spread on `app/about/page.tsx`. Stub emitted directly in homepage `@graph` in `app/page.tsx`.
-
-**Related pattern to consider for `#business`:** the same NAP-stub + enrichment via spread approach could be applied to the `LocalBusiness` node (define a `BUSINESS_STUB` with `@type`, `@id`, `name`, and the minimal NAP fields; canonical `LocalBusiness` in `app/page.tsx` spreads it and enriches with `hasOfferCatalog`, `aggregateRating`, `openingHoursSpecification`, etc.). Not currently implemented but structurally equivalent to `OWNER_STUB`. Add if a similar single-page-consumer signal is needed for the business entity in contexts where the homepage isn't fetched.
+- `OWNER_STUB` — `lib/schema.ts`. Canonical Person node built via spread on `app/about/page.tsx`. Stub emitted directly in homepage `@graph` in `app/page.tsx` and as `BlogPosting.author` on article pages.
+- `BUSINESS_STUB` — `lib/schema.ts`. Canonical business node built via spread on `app/page.tsx`. Stub emitted as `BlogPosting.publisher` on article pages so a single-page reader sees `@type` + name without the full homepage blob.
 
 ## Extended checklist — red-team-derived rules (F-1 through F-13)
 
