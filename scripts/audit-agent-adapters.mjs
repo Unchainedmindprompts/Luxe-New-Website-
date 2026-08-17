@@ -87,6 +87,9 @@ for (const [label, src, needle] of [
   ["capabilities.ts", capabilitiesSrc, 'actionType: "request"'],
   ["capabilities.ts", capabilitiesSrc, 'outcome: "consultation-requested"'],
   ["capabilities.ts", capabilitiesSrc, "requiresHumanFollowUp: true"],
+  ["capabilities.ts", capabilitiesSrc, "requiresHumanConfirmation: true"],
+  ["capabilities.ts", capabilitiesSrc, "directBookingAvailable: false"],
+  ["capabilities.ts", capabilitiesSrc, "pricingPublic: false"],
   ["capabilities.ts", capabilitiesSrc, 'autonomousExecution: "not-ready"'],
   ["capabilities.ts", capabilitiesSrc, 'successMeans: "submission-acknowledged-by-endpoint"'],
   ["offerings.ts", offeringsSrc, "aluminum-shutters"],
@@ -151,6 +154,16 @@ if (agent) {
     if (cap.actionType !== "request") fail("agent.json capability is not a request");
     if (cap.outcome !== "consultation-requested") fail("agent.json outcome is not consultation-requested");
     if (cap.requiresHumanFollowUp !== true) fail("agent.json dropped requiresHumanFollowUp");
+    if (cap.requiresHumanConfirmation !== true) fail("agent.json dropped requiresHumanConfirmation");
+    if (cap.directBookingAvailable !== false) fail("agent.json does not say directBookingAvailable: false");
+    if (cap.pricingPublic !== false) fail("agent.json does not say pricingPublic: false");
+    if (cap.method !== "POST") fail("agent.json lost method POST");
+    if (!String(cap.endpoint || "").endsWith("/api/consultation")) fail("agent.json lost the consultation endpoint");
+    if (!cap.input?.required?.includes("phone")) fail("agent.json lost required phone");
+    if (cap.input?.required?.includes("email")) fail("agent.json made email required");
+    if (cap.success?.means !== "submission-acknowledged-by-endpoint") fail("agent.json success means drifted");
+    if (!cap.errors?.[400] || !cap.errors?.[405]) fail("agent.json lost error semantics");
+    if (JSON.stringify(cap).toLowerCase().includes("calendly")) fail("Calendly appeared on the agent capability");
     const surface = cap.executionSurfaces?.[0];
     if (!surface) fail("agent.json missing execution surface");
     else {
@@ -176,6 +189,16 @@ if (agent) {
   }
   if (!card.not_offered?.includes("online checkout")) {
     fail("agent.json does not list online checkout as not offered");
+  }
+  if (JSON.stringify(card).includes("Hayden Lake")) fail("agent.json lists Hayden Lake");
+  for (const name of ["Hunter Douglas", "Vignette", "Graber", "Bali"]) {
+    if (JSON.stringify(card).includes(name)) fail(`agent.json names ${name}`);
+  }
+  if (!card.manufacturers?.every((m) => m.available_online === false)) {
+    fail("agent.json is missing available_online: false on a manufacturer");
+  }
+  if (!card.manufacturers?.some((m) => m.name === "Norman" && m.available_online === false)) {
+    fail("Norman is missing available_online: false");
   }
 
   const roller = card.offerings?.find((o) => o.id === "roller-shades");
@@ -204,6 +227,9 @@ if (capabilities) {
     if (cap.actionType !== "request") fail("capabilities.json actionType is not request");
     if (cap.outcome !== "consultation-requested") fail("capabilities.json outcome drifted");
     if (cap.requiresHumanFollowUp !== true) fail("capabilities.json requiresHumanFollowUp drifted");
+    if (cap.requiresHumanConfirmation !== true) fail("capabilities.json requiresHumanConfirmation drifted");
+    if (cap.directBookingAvailable !== false) fail("capabilities.json directBookingAvailable drifted");
+    if (cap.pricingPublic !== false) fail("capabilities.json pricingPublic drifted");
     if (cap.executionSurfaces?.[0]?.autonomousExecution !== "not-ready") {
       fail("capabilities.json autonomousExecution drifted");
     }

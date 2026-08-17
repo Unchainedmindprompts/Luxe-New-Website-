@@ -124,6 +124,30 @@ export interface Capability {
   readonly requiresHumanFollowUp: true;
 
   /**
+   * The person — or an agent acting only after that person approves — must
+   * confirm before this request is sent. Unattended submission is not this
+   * capability. Literal `true`: it cannot describe itself as silent.
+   *
+   * Different from `requiresHumanFollowUp`. Confirmation is the customer's
+   * (or their agent's) approval to ask. Follow-up is Luxe arranging a visit
+   * afterwards. Both are true; neither is a booking.
+   */
+  readonly requiresHumanConfirmation: true;
+
+  /**
+   * Established false. There is no agent-callable scheduler, no availability
+   * API, and no reservation. `/book` embeds Calendly for humans; that widget
+   * is not this capability and must not appear on it.
+   */
+  readonly directBookingAvailable: false;
+
+  /**
+   * Established false. Prices are quoted after an in-home measure. Nothing
+   * here is a public price list an agent could honestly repeat.
+   */
+  readonly pricingPublic: false;
+
+  /**
    * The fields the current surface accepts, exactly as the route treats them.
    *
    * `_hp` is excluded on purpose. It is anti-spam plumbing belonging to the
@@ -166,6 +190,9 @@ export const CAPABILITIES: Record<CapabilityId, Capability> = {
     actionType: "request",
     outcome: "consultation-requested",
     requiresHumanFollowUp: true,
+    requiresHumanConfirmation: true,
+    directBookingAvailable: false,
+    pricingPublic: false,
     input: {
       identifiesCustomerBy: ["name", "firstName", "lastName"],
       required: ["phone"],

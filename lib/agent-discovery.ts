@@ -107,22 +107,22 @@ export function capabilitiesDocument() {
         actionType: capability.actionType,
         outcome: capability.outcome,
         requiresHumanFollowUp: capability.requiresHumanFollowUp,
+        requiresHumanConfirmation: capability.requiresHumanConfirmation,
+        directBookingAvailable: capability.directBookingAvailable,
+        pricingPublic: capability.pricingPublic,
         input: capability.input,
         executionSurfaces: capability.executionSurfaces,
         humanSurfaces: [
           {
             path: "/book",
             url: `${BUSINESS.url}/book`,
-            role: "human-scheduling-and-request",
-            note:
-              "People can pick a time in the Calendly embed, or submit the " +
-              "fallback form. The form is a request. The embed is a " +
-              "third-party scheduler, not an API this site exposes to agents.",
+            role: "human-request-form",
+            note: "The on-page form posts this same consultation request.",
           },
           {
             path: "/contact",
             url: `${BUSINESS.url}/contact`,
-            role: "human-request",
+            role: "human-request-form",
             note: "The contact form posts the same consultation request.",
           },
         ],
@@ -187,10 +187,41 @@ export function agentCard() {
         id: capability.id,
         name: "Request an in-home consultation",
         description: CONSULTATION.summary,
+        whatItIs:
+          "A request that Luxe follow up to arrange a free in-home consultation.",
+        whatItIsNot: [
+          "a booking",
+          "a reservation",
+          "a confirmed appointment",
+          "online checkout",
+          "a price quote",
+        ],
         actionType: capability.actionType,
         outcome: capability.outcome,
         requiresHumanFollowUp: capability.requiresHumanFollowUp,
-        url: `${BUSINESS.url}/book`,
+        requiresHumanConfirmation: capability.requiresHumanConfirmation,
+        directBookingAvailable: capability.directBookingAvailable,
+        pricingPublic: capability.pricingPublic,
+        endpoint: `${BUSINESS.url}/api/consultation`,
+        method: "POST",
+        input: capability.input,
+        success: {
+          http: 200,
+          body: { ok: true },
+          means: "submission-acknowledged-by-endpoint",
+          isNot: [
+            "email-delivered",
+            "received-by-luxe",
+            "appointment-scheduled",
+            "booking-confirmed",
+          ],
+        },
+        errors: {
+          400: "Invalid or incomplete request. Phone is required, plus a name (name, or firstName / lastName).",
+          405: "GET is not allowed. Use POST.",
+          500: "The request could not be sent. Retry or call.",
+          502: "The mail provider rejected the send. A reference id is returned.",
+        },
         type: "request",
         cost: "free",
         executionSurfaces: capability.executionSurfaces,
@@ -209,6 +240,8 @@ export function agentCard() {
       "@id": brand["@id"],
       name: brand.name,
       url: brand.url,
+      available_online: false,
+      available_in_home: true,
     })),
     not_offered: [
       "online checkout",
@@ -221,8 +254,7 @@ export function agentCard() {
       url: `${BUSINESS.url}/book`,
       description:
         "Request a free in-home consultation. Submitting the form does not " +
-        "schedule a visit — Luxe follows up to arrange one. People who want " +
-        "to pick a time themselves can use the Calendly embed on the same page.",
+        "schedule a visit — Luxe follows up to arrange one.",
     },
     discovery: discoveryIndex().documents,
   };
@@ -308,6 +340,9 @@ export function openApiDocument() {
     "x-action-type": capability.actionType,
     "x-outcome": capability.outcome,
     "x-requires-human-follow-up": capability.requiresHumanFollowUp,
+    "x-requires-human-confirmation": capability.requiresHumanConfirmation,
+    "x-direct-booking-available": capability.directBookingAvailable,
+    "x-pricing-public": capability.pricingPublic,
     "x-autonomous-execution": "not-ready",
     "x-success-means": "submission-acknowledged-by-endpoint",
     servers: [{ url: BUSINESS.url }],
@@ -401,9 +436,14 @@ Luxe Window Works is a custom window treatment business in Post Falls, Idaho, se
 - **Request an in-home consultation** — ${CONSULTATION.summary}
 - actionType: ${CONSULTATION.actionType} (not a booking)
 - outcome: ${CONSULTATION.outcome}
+- requiresHumanConfirmation: true — submit only after the person approves
 - requiresHumanFollowUp: true
-- autonomousExecution: not-ready — do not POST /api/consultation from unattended agents
-- **Human surfaces:** ${BUSINESS.url}/book (Calendly embed + request form), ${BUSINESS.url}/contact
+- directBookingAvailable: false
+- pricingPublic: false
+- endpoint: POST ${BUSINESS.url}/api/consultation
+- required: phone, plus a name (name or firstName/lastName)
+- autonomousExecution: not-ready — do not POST unattended
+- **Human surfaces:** ${BUSINESS.url}/book, ${BUSINESS.url}/contact
 - **Not offered:** online checkout, autonomous reservation, Ask Luxe conversational advisor, A2A/MCP execution
 
 ## Discovery documents
