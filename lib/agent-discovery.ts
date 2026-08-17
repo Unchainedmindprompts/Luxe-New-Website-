@@ -399,10 +399,10 @@ Luxe Window Works is a custom window treatment business in Post Falls, Idaho, se
 ## What an agent can actually initiate
 
 - **Request an in-home consultation** — ${CONSULTATION.summary}
-- **actionType:** ${CONSULTATION.actionType} (not a booking)
-- **outcome:** ${CONSULTATION.outcome}
-- **requiresHumanFollowUp:** true
-- **autonomousExecution:** not-ready — do not POST /api/consultation from unattended agents
+- actionType: ${CONSULTATION.actionType} (not a booking)
+- outcome: ${CONSULTATION.outcome}
+- requiresHumanFollowUp: true
+- autonomousExecution: not-ready — do not POST /api/consultation from unattended agents
 - **Human surfaces:** ${BUSINESS.url}/book (Calendly embed + request form), ${BUSINESS.url}/contact
 - **Not offered:** online checkout, autonomous reservation, Ask Luxe conversational advisor, A2A/MCP execution
 

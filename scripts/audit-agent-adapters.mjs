@@ -164,13 +164,15 @@ if (agent) {
   if (card.primary_cta?.label !== "Request a Free Consultation") {
     fail(`agent.json primary CTA is ${JSON.stringify(card.primary_cta?.label)}, not a request`);
   }
-  const forbidden = ["Book a Free Consultation", "Direct online ordering", "Ask Luxe"];
   const blob = JSON.stringify(card);
-  for (const phrase of forbidden) {
+  for (const phrase of ["Book a Free Consultation", "Direct online ordering"]) {
     if (blob.includes(phrase)) fail(`agent.json contains forbidden phrase: ${phrase}`);
   }
   if (!card.not_offered?.includes("Ask Luxe / conversational advisor")) {
     fail("agent.json does not list Ask Luxe as not offered");
+  }
+  if (card.capabilities?.some((cap) => /ask luxe/i.test(JSON.stringify(cap)))) {
+    fail("agent.json lists Ask Luxe as a capability");
   }
   if (!card.not_offered?.includes("online checkout")) {
     fail("agent.json does not list online checkout as not offered");
