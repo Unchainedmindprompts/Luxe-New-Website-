@@ -160,8 +160,18 @@ export interface Capability {
      * answers 400 — `firstName` alone is sufficient.
      */
     readonly identifiesCustomerBy: readonly string[];
-    /** Non-empty or the route answers 400. Phone is the only hard field. */
+    /**
+     * Field keys the route rejects as empty. Phone is the only key that must
+     * arrive under its own name. A name is also required — see `nameRequired`.
+     */
     readonly required: readonly string[];
+    /**
+     * Literal `true`. The route answers 400 when it cannot derive a name.
+     * The key is not always `name`: `firstName` or `lastName` also work.
+     * Kept separate from `required` so an adapter cannot list `name` as a
+     * mandatory JSON key and then fail a valid `firstName`-only POST.
+     */
+    readonly nameRequired: true;
     /**
      * Accepted, never required — including `email`, which the notification
      * renders as "(not provided)" when it is absent. `message` and `needs` are
@@ -196,6 +206,7 @@ export const CAPABILITIES: Record<CapabilityId, Capability> = {
     input: {
       identifiesCustomerBy: ["name", "firstName", "lastName"],
       required: ["phone"],
+      nameRequired: true,
       optional: [
         "email",
         "address",

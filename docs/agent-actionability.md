@@ -14,7 +14,7 @@ It is not a booking, not a reservation, not checkout, and not a price. `directBo
 
 ## Action
 
-Today's surface is `POST /api/consultation`. Required: a phone number, plus a name (`name`, or `firstName` / `lastName`). Email is optional. `_hp` is honeypot plumbing, not a customer field.
+Today's surface is `POST /api/consultation`. Required: a phone number (`input.required`) plus a name (`input.nameRequired: true`, accepted as `name` or `firstName` / `lastName`). Email is optional. `_hp` is honeypot plumbing, not a customer field.
 
 `/book` and `/contact` are human forms that post the same request. `/book` also embeds a human scheduler. That widget is not this capability and does not appear on `agent.json`.
 

@@ -204,7 +204,11 @@ export function agentCard() {
         pricingPublic: capability.pricingPublic,
         endpoint: `${BUSINESS.url}/api/consultation`,
         method: "POST",
-        input: capability.input,
+        input: {
+          ...capability.input,
+          requiredSummary:
+            "phone, plus a name (`name`, or `firstName` / `lastName`). Email is optional.",
+        },
         success: {
           http: 200,
           body: { ok: true },
@@ -348,6 +352,18 @@ export function openApiDocument() {
     servers: [{ url: BUSINESS.url }],
     paths: {
       "/api/consultation": {
+        get: {
+          operationId: "consultationRequestNotGet",
+          summary: "GET is not allowed",
+          description:
+            "This is a request surface. GET returns 405 and points at /agent.json. Use POST.",
+          responses: {
+            "405": {
+              description:
+                "Method not allowed. Allow: POST. Body: method POST, actionType request, discovery /agent.json.",
+            },
+          },
+        },
         post: {
           operationId: "requestInHomeConsultation",
           summary: "Submit a consultation request",
@@ -358,7 +374,12 @@ export function openApiDocument() {
               "application/json": {
                 schema: {
                   type: "object",
+                  description:
+                    "Phone is required. A name is also required: send `name`, or `firstName` and/or `lastName`. Email is optional.",
                   required: [...capability.input.required],
+                  anyOf: capability.input.identifiesCustomerBy.map((field) => ({
+                    required: [field],
+                  })),
                   properties,
                   additionalProperties: false,
                 },
@@ -382,7 +403,11 @@ export function openApiDocument() {
               },
             },
             "400": {
-              description: "Invalid or incomplete request.",
+              description:
+                "Invalid or incomplete request. Phone is required, plus a name.",
+            },
+            "405": {
+              description: "GET is not allowed. Use POST.",
             },
             "500": {
               description: "The request could not be sent. Retry or call.",
@@ -441,7 +466,9 @@ Luxe Window Works is a custom window treatment business in Post Falls, Idaho, se
 - directBookingAvailable: false
 - pricingPublic: false
 - endpoint: POST ${BUSINESS.url}/api/consultation
-- required: phone, plus a name (name or firstName/lastName)
+- required: ${CONSULTATION.input.required.join(", ")}
+- nameRequired: true — send name, or firstName / lastName
+- email: optional
 - autonomousExecution: not-ready — do not POST unattended
 - **Human surfaces:** ${BUSINESS.url}/book, ${BUSINESS.url}/contact
 - **Not offered:** online checkout, autonomous reservation, Ask Luxe conversational advisor, A2A/MCP execution

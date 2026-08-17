@@ -90,6 +90,7 @@ for (const [label, src, needle] of [
   ["capabilities.ts", capabilitiesSrc, "requiresHumanConfirmation: true"],
   ["capabilities.ts", capabilitiesSrc, "directBookingAvailable: false"],
   ["capabilities.ts", capabilitiesSrc, "pricingPublic: false"],
+  ["capabilities.ts", capabilitiesSrc, "nameRequired: true"],
   ["capabilities.ts", capabilitiesSrc, 'autonomousExecution: "not-ready"'],
   ["capabilities.ts", capabilitiesSrc, 'successMeans: "submission-acknowledged-by-endpoint"'],
   ["offerings.ts", offeringsSrc, "aluminum-shutters"],
@@ -161,6 +162,10 @@ if (agent) {
     if (!String(cap.endpoint || "").endsWith("/api/consultation")) fail("agent.json lost the consultation endpoint");
     if (!cap.input?.required?.includes("phone")) fail("agent.json lost required phone");
     if (cap.input?.required?.includes("email")) fail("agent.json made email required");
+    if (cap.input?.nameRequired !== true) fail("agent.json lost nameRequired");
+    if (!/phone/.test(cap.input?.requiredSummary ?? "") || !/name/.test(cap.input?.requiredSummary ?? "")) {
+      fail("agent.json lost requiredSummary");
+    }
     if (cap.success?.means !== "submission-acknowledged-by-endpoint") fail("agent.json success means drifted");
     if (!cap.errors?.[400] || !cap.errors?.[405]) fail("agent.json lost error semantics");
     if (JSON.stringify(cap).toLowerCase().includes("calendly")) fail("Calendly appeared on the agent capability");
@@ -235,6 +240,7 @@ if (capabilities) {
     }
     if (!cap.input?.required?.includes("phone")) fail("capabilities.json lost required phone");
     if (cap.input?.required?.includes("email")) fail("capabilities.json made email required");
+    if (cap.input?.nameRequired !== true) fail("capabilities.json lost nameRequired");
   }
 }
 
@@ -265,10 +271,17 @@ if (openapi) {
   if (spec["x-autonomous-execution"] !== "not-ready") fail("OpenAPI claims autonomous execution is ready");
   if (spec["x-outcome"] !== "consultation-requested") fail("OpenAPI outcome drifted");
   if (spec["x-requires-human-follow-up"] !== true) fail("OpenAPI dropped human follow-up");
+  if (spec["x-requires-human-confirmation"] !== true) fail("OpenAPI dropped human confirmation");
+  if (spec["x-direct-booking-available"] !== false) fail("OpenAPI dropped directBookingAvailable false");
   if (!spec.paths?.["/api/consultation"]?.post) fail("OpenAPI lost POST /api/consultation");
-  const required = spec.paths["/api/consultation"].post.requestBody.content["application/json"].schema.required;
+  if (!spec.paths?.["/api/consultation"]?.get) fail("OpenAPI lost GET 405 documentation");
+  const schema = spec.paths["/api/consultation"].post.requestBody.content["application/json"].schema;
+  const required = schema.required;
   if (!required?.includes("phone")) fail("OpenAPI lost required phone");
   if (required?.includes("email")) fail("OpenAPI made email required");
+  if (!Array.isArray(schema.anyOf) || schema.anyOf.length < 1) {
+    fail("OpenAPI lost name anyOf (name / firstName / lastName)");
+  }
   const desc = JSON.stringify(spec);
   if (/reserv(e|ation)|booking confirmed|appointment confirmed/i.test(desc)) {
     fail("OpenAPI describes a booking or reservation");
@@ -290,6 +303,7 @@ if (llms) {
     fail("llms.txt mentions Ask Luxe as something other than not-offered");
   }
   if (!/actionType:\s*request/.test(text)) fail("llms.txt lost actionType: request");
+  if (!/nameRequired:\s*true/.test(text)) fail("llms.txt lost nameRequired: true");
   if (!/autonomousExecution:\s*not-ready/.test(text)) fail("llms.txt lost autonomousExecution: not-ready");
   if (!/manufacturer relationship unestablished/.test(text)) {
     fail("llms.txt no longer shows unestablished manufacturer relationships");

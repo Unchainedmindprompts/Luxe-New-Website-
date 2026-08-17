@@ -55,6 +55,7 @@ test("1  registry refuses booking and keeps confirmation / no-direct-book", (t) 
   t.ok(capabilitiesSrc.includes("requiresHumanFollowUp: true"), "requiresHumanFollowUp missing");
   t.ok(capabilitiesSrc.includes("directBookingAvailable: false"), "directBookingAvailable missing");
   t.ok(capabilitiesSrc.includes("pricingPublic: false"), "pricingPublic missing");
+  t.ok(capabilitiesSrc.includes("nameRequired: true"), "nameRequired missing");
   t.ok(capabilitiesSrc.includes('autonomousExecution: "not-ready"'), "autonomousExecution not-ready missing");
   t.ok(!/actionType:\s*"booking"/.test(capabilitiesSrc), "registry admits booking");
 });
@@ -112,7 +113,9 @@ test("6  built agent.json is the action card an external agent needs", (t) => {
   t.ok(String(cap.endpoint).endsWith("/api/consultation"), "endpoint");
   t.ok(cap.input?.required?.includes("phone"), "required phone");
   t.ok(!cap.input?.required?.includes("email"), "email must stay optional");
+  t.equal(cap.input?.nameRequired, true, "nameRequired");
   t.ok(cap.input?.identifiesCustomerBy?.includes("name"), "name identity");
+  t.ok(/phone/.test(cap.input?.requiredSummary ?? "") && /name/.test(cap.input?.requiredSummary ?? ""), "requiredSummary");
   t.equal(cap.success?.means, "submission-acknowledged-by-endpoint", "success means");
   t.ok(cap.errors?.[400], "400 semantics");
   t.ok(cap.errors?.[405], "405 semantics");
