@@ -124,6 +124,30 @@ export interface Capability {
   readonly requiresHumanFollowUp: true;
 
   /**
+   * The person — or an agent acting only after that person approves — must
+   * confirm before this request is sent. Unattended submission is not this
+   * capability. Literal `true`: it cannot describe itself as silent.
+   *
+   * Different from `requiresHumanFollowUp`. Confirmation is the customer's
+   * (or their agent's) approval to ask. Follow-up is Luxe arranging a visit
+   * afterwards. Both are true; neither is a booking.
+   */
+  readonly requiresHumanConfirmation: true;
+
+  /**
+   * Established false. There is no agent-callable scheduler, no availability
+   * API, and no reservation. `/book` embeds Calendly for humans; that widget
+   * is not this capability and must not appear on it.
+   */
+  readonly directBookingAvailable: false;
+
+  /**
+   * Established false. Prices are quoted after an in-home measure. Nothing
+   * here is a public price list an agent could honestly repeat.
+   */
+  readonly pricingPublic: false;
+
+  /**
    * The fields the current surface accepts, exactly as the route treats them.
    *
    * `_hp` is excluded on purpose. It is anti-spam plumbing belonging to the
@@ -136,8 +160,18 @@ export interface Capability {
      * answers 400 — `firstName` alone is sufficient.
      */
     readonly identifiesCustomerBy: readonly string[];
-    /** Non-empty or the route answers 400. Phone is the only hard field. */
+    /**
+     * Field keys the route rejects as empty. Phone is the only key that must
+     * arrive under its own name. A name is also required — see `nameRequired`.
+     */
     readonly required: readonly string[];
+    /**
+     * Literal `true`. The route answers 400 when it cannot derive a name.
+     * The key is not always `name`: `firstName` or `lastName` also work.
+     * Kept separate from `required` so an adapter cannot list `name` as a
+     * mandatory JSON key and then fail a valid `firstName`-only POST.
+     */
+    readonly nameRequired: true;
     /**
      * Accepted, never required — including `email`, which the notification
      * renders as "(not provided)" when it is absent. `message` and `needs` are
@@ -166,9 +200,13 @@ export const CAPABILITIES: Record<CapabilityId, Capability> = {
     actionType: "request",
     outcome: "consultation-requested",
     requiresHumanFollowUp: true,
+    requiresHumanConfirmation: true,
+    directBookingAvailable: false,
+    pricingPublic: false,
     input: {
       identifiesCustomerBy: ["name", "firstName", "lastName"],
       required: ["phone"],
+      nameRequired: true,
       optional: [
         "email",
         "address",

@@ -39,5 +39,6 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: 'CCBot', allow: '/', disallow: DISALLOW },
     ],
     sitemap: 'https://www.luxewindowworks.com/sitemap.xml',
+    host: 'https://www.luxewindowworks.com',
   }
 }

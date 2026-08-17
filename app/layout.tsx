@@ -73,6 +73,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  other: {
+    "llms": "/llms.txt",
+  },
 };
 
 export default function RootLayout({
@@ -83,6 +86,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfairDisplay.variable}`}>
       <head>
+        <link rel="describedby" href="/agent.json" type="application/json" />
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM information" />
+        <link rel="describedby" href="/.well-known/discovery.json" type="application/json" />
         <Script id="facebook-pixel" strategy="lazyOnload">
           {`!function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

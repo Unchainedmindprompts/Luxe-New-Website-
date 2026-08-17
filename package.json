@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "validate:source": "node scripts/validate-source-assets.mjs",
-    "check": "npm run typecheck && npm run lint && npm run validate:source",
+    "check": "npm run typecheck && npm run lint && npm run validate:source && npm run test:actionability && npm run test:consultation && npm run test:advisor-retired",
     "validate:legacy": "node scripts/validate-legacy-urls.mjs",
     "verify:legacy": "npm run build && npm run validate:legacy",
     "validate:routes": "node scripts/validate-routes.mjs",
@@ -20,8 +20,11 @@
     "audit:schema": "node scripts/audit-schema-ids.mjs",
     "prepare": "husky",
     "audit:rendered": "node scripts/audit-rendered-schema.mjs",
-    "postbuild": "node scripts/audit-rendered-schema.mjs",
-    "test:advisor-retired": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-retired.mjs"
+    "audit:adapters": "node scripts/audit-agent-adapters.mjs",
+    "postbuild": "node scripts/audit-rendered-schema.mjs && node scripts/audit-agent-adapters.mjs",
+    "test:advisor-retired": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-retired.mjs",
+    "test:actionability": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-actionability.mjs",
+    "test:consultation": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --import ./scripts/lib/test-loaders.mjs scripts/test-consultation-request.mjs"
   },
   "engines": {
     "node": ">=22.0.0"

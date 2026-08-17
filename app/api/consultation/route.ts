@@ -111,6 +111,23 @@ function logFailure(
   );
 }
 
+/**
+ * GET is not a capability. Agents that fetch the URL from agent.json should
+ * learn that POST is the only method, and that this is a request.
+ * POST behavior below is unchanged.
+ */
+export function GET() {
+  return NextResponse.json(
+    {
+      error: "Method not allowed. This endpoint accepts POST only.",
+      method: "POST",
+      actionType: "request",
+      discovery: "/agent.json",
+    },
+    { status: 405, headers: { Allow: "POST" } }
+  );
+}
+
 export async function POST(req: Request) {
   // One id per request, echoed on delivery failures so a customer saying "it
   // told me it failed" can be matched to a log line without either of us

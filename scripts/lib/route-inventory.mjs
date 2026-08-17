@@ -43,6 +43,14 @@ export const GENERATED_ROUTES = new Set([
   "/robots.txt",
   "/sitemap.xml",
   "/manifest.webmanifest",
+  "/agent.json",
+  "/llms.txt",
+  "/offerings.json",
+  "/capabilities.json",
+  "/openapi.json",
+  "/discovery.json",
+  "/.well-known/agent.json",
+  "/.well-known/discovery.json",
 ]);
 
 /** Route-handler paths — real endpoints, but never pages. */
