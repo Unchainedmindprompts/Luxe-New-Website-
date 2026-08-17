@@ -20,7 +20,8 @@
     "audit:schema": "node scripts/audit-schema-ids.mjs",
     "prepare": "husky",
     "audit:rendered": "node scripts/audit-rendered-schema.mjs",
-    "postbuild": "node scripts/audit-rendered-schema.mjs",
+    "audit:adapters": "node scripts/audit-agent-adapters.mjs",
+    "postbuild": "node scripts/audit-rendered-schema.mjs && node scripts/audit-agent-adapters.mjs",
     "test:advisor-retired": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-retired.mjs"
   },
   "engines": {

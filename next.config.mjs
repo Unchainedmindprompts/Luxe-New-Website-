@@ -45,6 +45,16 @@ const nextConfig = {
     ],
   },
 
+  async rewrites() {
+    // Well-known aliases for the same discovery documents. A /.well-known
+    // app directory would be a dot-folder ESLint cannot lint; a rewrite
+    // keeps one implementation and two URLs.
+    return [
+      { source: "/.well-known/agent.json", destination: "/agent.json" },
+      { source: "/.well-known/discovery.json", destination: "/discovery.json" },
+    ];
+  },
+
   async headers() {
     return [
       {

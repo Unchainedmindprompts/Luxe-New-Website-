@@ -110,6 +110,16 @@ test("4  no advisor endpoint exists to be reached", (t) => {
   t.ok(exists("app/api/consultation/route.ts"), "the consultation endpoint was lost");
 });
 
+test("4b  discovery adapters do not revive Ask Luxe", (t) => {
+  t.ok(exists("lib/agent-discovery.ts"), "the discovery adapter is missing");
+  const discovery = read("lib/agent-discovery.ts");
+  t.ok(
+    discovery.includes("Ask Luxe / conversational advisor"),
+    "the adapter no longer lists Ask Luxe as not-offered"
+  );
+  t.ok(!/app\/ask-luxe|app\/api\/advisor/.test(discovery), "the adapter points at a retired advisor route");
+});
+
 test("5  the sitemap allowlist names no route that no longer exists", (t) => {
   const allowlist = read("config/verify-allowlist.mjs");
   for (const route of ADVISOR_ROUTES) {
