@@ -282,6 +282,13 @@ if (openapi) {
   if (!Array.isArray(schema.anyOf) || schema.anyOf.length < 1) {
     fail("OpenAPI lost name anyOf (name / firstName / lastName)");
   }
+  if (schema.additionalProperties === false) {
+    fail("OpenAPI additionalProperties: false — the route ignores unknown keys");
+  }
+  const ok200 = spec.paths["/api/consultation"].post.responses?.["200"]?.description ?? "";
+  if (/honeypot|_hp/i.test(ok200)) {
+    fail("OpenAPI 200 description leaks honeypot / _hp");
+  }
   const desc = JSON.stringify(spec);
   if (/reserv(e|ation)|booking confirmed|appointment confirmed/i.test(desc)) {
     fail("OpenAPI describes a booking or reservation");

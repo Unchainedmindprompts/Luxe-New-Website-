@@ -36,6 +36,11 @@ export const DISCOVERY_VERSION = "1.0.0";
 
 const CONSULTATION = CAPABILITIES["request-in-home-consultation"];
 
+/** Agent duty before POST. The endpoint does not check this. */
+const CONFIRMATION_DUTY_NOTE =
+  "Agent duty: get the person's approval before POSTing contact info. " +
+  "The endpoint does not verify consent.";
+
 const BRAND_BY_ID = Object.fromEntries(
   CARRIED_BRANDS.map((brand) => [brand["@id"], brand])
 ) as Record<(typeof CARRIED_BRANDS)[number]["@id"], (typeof CARRIED_BRANDS)[number]>;
@@ -200,6 +205,7 @@ export function agentCard() {
         outcome: capability.outcome,
         requiresHumanFollowUp: capability.requiresHumanFollowUp,
         requiresHumanConfirmation: capability.requiresHumanConfirmation,
+        requiresHumanConfirmationNote: CONFIRMATION_DUTY_NOTE,
         directBookingAvailable: capability.directBookingAvailable,
         pricingPublic: capability.pricingPublic,
         endpoint: `${BUSINESS.url}/api/consultation`,
@@ -339,12 +345,14 @@ export function openApiDocument() {
         "Documents the existing consultation request surface. This is a " +
         "REQUEST, not a booking. A 2xx means the endpoint acknowledged the " +
         "submission. It does not mean a visit is scheduled. Autonomous " +
-        "execution is not-ready: do not call this from unattended agents.",
+        "execution is not-ready: do not call this from unattended agents. " +
+        CONFIRMATION_DUTY_NOTE,
     },
     "x-action-type": capability.actionType,
     "x-outcome": capability.outcome,
     "x-requires-human-follow-up": capability.requiresHumanFollowUp,
     "x-requires-human-confirmation": capability.requiresHumanConfirmation,
+    "x-requires-human-confirmation-note": CONFIRMATION_DUTY_NOTE,
     "x-direct-booking-available": capability.directBookingAvailable,
     "x-pricing-public": capability.pricingPublic,
     "x-autonomous-execution": "not-ready",
@@ -381,7 +389,6 @@ export function openApiDocument() {
                     required: [field],
                   })),
                   properties,
-                  additionalProperties: false,
                 },
               },
             },
@@ -389,9 +396,8 @@ export function openApiDocument() {
           responses: {
             "200": {
               description:
-                "Submission acknowledged by the endpoint. May also be the " +
-                "honeypot path. Does not mean Luxe received an email or " +
-                "that an appointment exists.",
+                "Request accepted for processing. Submission acknowledged " +
+                "by the endpoint. It is not an appointment.",
               content: {
                 "application/json": {
                   schema: {
@@ -462,6 +468,7 @@ Luxe Window Works is a custom window treatment business in Post Falls, Idaho, se
 - actionType: ${CONSULTATION.actionType} (not a booking)
 - outcome: ${CONSULTATION.outcome}
 - requiresHumanConfirmation: true — submit only after the person approves
+- the endpoint does not verify consent
 - requiresHumanFollowUp: true
 - directBookingAvailable: false
 - pricingPublic: false

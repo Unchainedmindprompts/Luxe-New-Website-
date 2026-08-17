@@ -10,7 +10,7 @@ Internal truth is the source. Adapters publish it. JSON-LD is not the action sur
 
 A request that Luxe follow up to arrange a free in-home consultation.
 
-It is not a booking, not a reservation, not checkout, and not a price. `directBookingAvailable` is false. `pricingPublic` is false. `requiresHumanConfirmation` is true: an agent submits only after the person approves. `requiresHumanFollowUp` is true: after a 2xx, Luxe still has to call and arrange a visit.
+It is not a booking, not a reservation, not checkout, and not a price. `directBookingAvailable` is false. `pricingPublic` is false. `requiresHumanConfirmation` is true: an agent submits only after the person approves. The endpoint does not verify consent. `requiresHumanFollowUp` is true: after a 2xx, Luxe still has to call and arrange a visit.
 
 ## Action
 
@@ -22,7 +22,7 @@ Today's surface is `POST /api/consultation`. Required: a phone number (`input.re
 
 | Layer | Meaning |
 |---|---|
-| `requiresHumanConfirmation: true` | The person must approve sending the request |
+| `requiresHumanConfirmation: true` | Agent duty before POST. The endpoint does not verify consent |
 | `autonomousExecution: "not-ready"` | Do not POST unattended |
 | `successMeans: "submission-acknowledged-by-endpoint"` | A 2xx is not delivery, receipt, or an appointment |
 | `requiresHumanFollowUp: true` | Luxe still has to arrange the visit |
