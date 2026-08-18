@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Script from "next/script";
 import { BUSINESS } from "@/lib/constants";
+import { CalendlyScheduleTracker } from "./CalendlyScheduleTracker";
 
 export default function BookPage() {
   const [form, setForm] = useState({
@@ -142,6 +143,7 @@ export default function BookPage() {
           src="https://assets.calendly.com/assets/external/widget.js"
           strategy="lazyOnload"
         />
+        <CalendlyScheduleTracker />
       </div>
 
       {/* Divider into the fallback path */}
