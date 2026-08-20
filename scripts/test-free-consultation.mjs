@@ -71,6 +71,22 @@ test("1  landing files and raster images exist", (t) => {
       t.ok(statSync(join(ROOT, img)).size > 20_000, `${img} is too small to be a real photo`);
     }
   }
+
+  const heroWebp = "public/images/free-consultation-hero.webp";
+  t.ok(exists(heroWebp), `missing ${heroWebp}`);
+  if (exists(heroWebp)) {
+    const buf = readFileSync(join(ROOT, heroWebp));
+    t.equal(buf.length, 50500, `${heroWebp} byte size changed`);
+    t.equal(
+      createHash("sha256").update(buf).digest("hex"),
+      "10ff73a29e12068b49bca381d7023bf8e1212406c76720a4acfa515427f42090",
+      `${heroWebp} hash changed — do not recode`
+    );
+  }
+
+  const page = read(PAGE);
+  t.ok(page.includes("/images/free-consultation-hero.webp"), "hero src is not the new webp");
+  t.ok(!page.includes("/images/free-consultation-hero.jpg"), "hero src still points at the old jpg");
 });
 
 test("2  every CTA is a relative next/link to /book", (t) => {

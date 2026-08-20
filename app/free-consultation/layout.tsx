@@ -17,9 +17,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://www.luxewindowworks.com/images/free-consultation-hero.jpg",
-        width: 1536,
-        height: 1024,
+        url: "https://www.luxewindowworks.com/images/free-consultation-hero.webp",
+        width: 1429,
+        height: 855,
         alt: "Living room with layered honeycomb shades",
       },
     ],
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: "Free In-Home Consultation | Luxe Window Works",
     description:
       "Custom window treatments, brought to your home. No showroom trip. No guesswork.",
-    images: ["https://www.luxewindowworks.com/images/free-consultation-hero.jpg"],
+    images: ["https://www.luxewindowworks.com/images/free-consultation-hero.webp"],
   },
   robots: {
     index: false,

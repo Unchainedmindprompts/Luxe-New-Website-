@@ -117,7 +117,7 @@ export default function FreeConsultationPage() {
         <div className="flex flex-col lg:flex-row lg:min-h-[calc(100svh-5rem)]">
           <div className="relative order-1 lg:order-2 w-full lg:w-[56%] h-[42vh] sm:h-[48vh] lg:h-auto lg:min-h-[calc(100svh-5rem)]">
             <Image
-              src="/images/free-consultation-hero.jpg"
+              src="/images/free-consultation-hero.webp"
               alt="Living room with layered honeycomb shades"
               fill
               priority
