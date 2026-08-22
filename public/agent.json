@@ -24,15 +24,15 @@
   "capabilities": [
     {
       "name": "Request an in-home consultation",
-      "description": "Structured consultation-request contract. Agent submission is currently disabled — read the discovery document. It does not book, reserve, or price a visit. Humans can still use /contact or /book.",
+      "description": "Structured consultation-request contract. Agent submission delivers a request for human follow-up. It does not book, reserve, or price a visit. Humans can still use /contact or /book.",
       "url": "https://www.luxewindowworks.com/api/capabilities/request-in-home-consultation",
       "execution_url": "https://www.luxewindowworks.com/api/consultation",
       "type": "request",
       "direct_booking": false,
       "pricing_available": false,
       "requires_human_follow_up": true,
-      "submission_enabled": false,
-      "readiness": "not-ready",
+      "submission_enabled": true,
+      "readiness": "request-submission-ready",
       "cost": "free"
     },
     {
@@ -116,6 +116,6 @@
     "label": "Request a Free Consultation",
     "url": "https://www.luxewindowworks.com/api/capabilities/request-in-home-consultation",
     "human_url": "https://www.luxewindowworks.com/contact",
-    "description": "Discovery document for the consultation-request contract. Agent submission is currently disabled. Humans: /contact or /book. A request is not a booking."
+    "description": "Discovery document for the consultation-request contract. A successful agent submission is a request for human follow-up, not a booking. Humans: /contact or /book."
   }
 }

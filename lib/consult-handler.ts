@@ -1,27 +1,58 @@
 /**
  * Consultation POST processing — human forms and agent-intended requests.
  *
- * Production uses `processProductionConsultation`, which cannot enable agent
- * execution while the capability is not-ready. Contract tests may pass
- * `testAllowAgentExecution: true` to prove the policy that will run after a
- * later PR flips readiness. That override is omitted from the production
- * function's type and must never be passed from the route.
+ * Production uses `processProductionConsultation`, which wires Redis-backed
+ * rate limiting and idempotency when KV_REST_API_URL + KV_REST_API_TOKEN are
+ * present. Contract tests inject fakes via `processConsultation`.
+ *
+ * Request-processing order for agent-intended traffic:
+ *   1. Parse / sanitize
+ *   2. Detect agent intent, including partial markers
+ *   3. Honeypot
+ *   4. Confirm capability + required infrastructure
+ *   5. Hourly + daily rate limits
+ *   6. Validate contract version + required agent fields
+ *   7. Geography / category / intent
+ *   8. Claim idempotency atomically for requests eligible to send
+ *   9. Send email with Resend idempotency
+ *  10. Persist public completed outcome
+ *  11. Return typed response
  */
 
-import { createHash } from "node:crypto";
 import { BUSINESS } from "./constants";
 import {
-  CONSULT_IDEMPOTENCY_NAMESPACE,
   CONSULT_IDEMPOTENCY_TTL_SECONDS,
+  CONSULT_INFRA_UNAVAILABLE_HTTP_STATUS,
+  CONSULT_IDEMPOTENCY_HTTP_STATUS,
   CONSULT_NOT_READY_HTTP_STATUS,
+  CONSULT_RATE_LIMITED_HTTP_STATUS,
   isConsultAgentSubmissionEnabled,
 } from "./capabilities";
+import { hashedClientIpFromRequest } from "./consult-ip";
+import {
+  consultEmailIdempotencyKey,
+  consultRequestFingerprint,
+  createRedisIdempotencyStore,
+  idempotencyStorageKey,
+  memoryIdempotencyStore,
+  type DurableIdempotencyStore,
+} from "./consult-idempotency";
+import {
+  createUpstashAgentRateLimiter,
+  memoryAgentRateLimiter,
+  type AgentRateLimiter,
+} from "./consult-rate-limit";
+import { getConsultRedis } from "./consult-redis";
 import {
   agentResponse,
   capabilityNotReadyResponse,
   decideAgentRequest,
+  idempotencyConflictResponse,
+  infrastructureUnavailableResponse,
   isAgentIntendedRequest,
   opaqueAgentHoneypot,
+  rateLimitedResponse,
+  requestInProgressResponse,
   type AgentResponseBody,
   type ConsultEmailPayload,
 } from "./consult-validation";
@@ -88,67 +119,51 @@ export interface ConsultationEmail {
   subject: string;
   text: string;
   replyTo?: string;
-}
-
-export interface ConsultIdempotencyRecord extends AgentResponseBody {
-  emailed: boolean;
-}
-
-export interface ConsultIdempotencyStore {
-  get(namespacedKey: string): Promise<ConsultIdempotencyRecord | null>;
-  set(
-    namespacedKey: string,
-    value: ConsultIdempotencyRecord,
-    ttlSeconds: number
-  ): Promise<void>;
+  idempotencyKey?: string;
 }
 
 export interface ProcessConsultationDeps {
   sendEmail: (message: ConsultationEmail) => Promise<{ error?: { name: string } }>;
   createId?: () => string;
   now?: () => Date;
-  idempotencyStore?: ConsultIdempotencyStore;
+  idempotencyStore?: DurableIdempotencyStore;
+  rateLimiter?: AgentRateLimiter;
+  /**
+   * Already-hashed client identity for tests. Production derives this from
+   * the request via the official Vercel IP helper and then hashes it.
+   */
+  clientIpHash?: string;
+  request?: Request;
   logFailure?: (
     ref: string,
     failureClass: string,
     detail: Record<string, unknown>,
     meta: FailureMeta
   ) => void;
+  logInfraUnavailable?: (requestId: string, stage: string) => void;
   /**
-   * TEST-ONLY. Lets local contract tests exercise the future enabled policy.
-   * Production must omit this. It cannot be set by an environment variable.
+   * TEST-ONLY. Lets local contract tests exercise the enabled policy even
+   * when the production readiness literal is still not-ready. Production
+   * must omit this. It cannot be set by an environment variable.
    */
   testAllowAgentExecution?: true;
 }
 
 export type ProductionConsultationDeps = Omit<
   ProcessConsultationDeps,
-  "testAllowAgentExecution" | "idempotencyStore"
+  | "testAllowAgentExecution"
+  | "idempotencyStore"
+  | "rateLimiter"
+  | "clientIpHash"
 >;
 
 export interface ConsultationResult {
   status: number;
   body: AgentResponseBody | Record<string, unknown>;
+  headers?: Record<string, string>;
 }
 
-export function idempotencyStorageKey(rawKey: string): string {
-  const digest = createHash("sha256")
-    .update(`${CONSULT_IDEMPOTENCY_NAMESPACE}:${rawKey}`)
-    .digest("hex");
-  return `${CONSULT_IDEMPOTENCY_NAMESPACE}:${digest}`;
-}
-
-export function memoryIdempotencyStore(): ConsultIdempotencyStore {
-  const map = new Map<string, ConsultIdempotencyRecord>();
-  return {
-    async get(key) {
-      return map.get(key) ?? null;
-    },
-    async set(key, value) {
-      map.set(key, value);
-    },
-  };
-}
+export { idempotencyStorageKey, memoryIdempotencyStore, memoryAgentRateLimiter };
 
 function defaultLogFailure(
   ref: string,
@@ -165,6 +180,13 @@ function defaultLogFailure(
       ...detail,
       ...meta,
     })
+  );
+}
+
+function defaultLogInfra(requestId: string, stage: string) {
+  console.error(
+    "[CONSULTATION_INFRA_UNAVAILABLE]",
+    JSON.stringify({ request_id: requestId, stage })
   );
 }
 
@@ -225,39 +247,11 @@ function humanEmailSubject(name: string, problem: string): string {
     : `New Consultation Request — ${name}`;
 }
 
-export async function processConsultation(
-  parsed: unknown,
-  deps: ProcessConsultationDeps
-): Promise<ConsultationResult> {
-  const createId = deps.createId ?? (() => crypto.randomUUID());
-  const now = deps.now ?? (() => new Date());
-  const logFailure = deps.logFailure ?? defaultLogFailure;
-  const ref = createId();
-
-  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
-    return { status: 400, body: { error: "Invalid request body" } };
-  }
-  const body = parsed as Record<string, unknown>;
-
-  const agentIntended = isAgentIntendedRequest(body);
-  const agentExecutionEnabled =
-    deps.testAllowAgentExecution === true || isConsultAgentSubmissionEnabled();
-
-  if (agentIntended && !agentExecutionEnabled) {
-    return {
-      status: CONSULT_NOT_READY_HTTP_STATUS,
-      body: capabilityNotReadyResponse(ref),
-    };
-  }
-
-  const hp = body._hp;
-  if (typeof hp === "string" && hp.trim() !== "") {
-    if (agentIntended) {
-      return { status: 200, body: opaqueAgentHoneypot(ref) };
-    }
-    return { status: 200, body: { ok: true } };
-  }
-
+function extractFields(body: Record<string, unknown>): {
+  values: Partial<Record<FieldName, string>>;
+  notStrings: FieldName[];
+  tooLong: FieldName[];
+} {
   const values: Partial<Record<FieldName, string>> = {};
   const notStrings: FieldName[] = [];
   const tooLong: FieldName[] = [];
@@ -274,6 +268,67 @@ export async function processConsultation(
       continue;
     }
     values[field] = clean(field, value);
+  }
+
+  return { values, notStrings, tooLong };
+}
+
+function resolveClientIpHash(deps: ProcessConsultationDeps): string | null {
+  if (deps.clientIpHash) return deps.clientIpHash;
+  if (deps.request) return hashedClientIpFromRequest(deps.request);
+  return null;
+}
+
+function productInterestIds(raw: unknown): string[] {
+  if (Array.isArray(raw)) {
+    return raw.filter((item): item is string => typeof item === "string");
+  }
+  if (typeof raw === "string" && raw.trim()) {
+    return raw.split(",").map((part) => part.trim()).filter(Boolean);
+  }
+  return [];
+}
+
+function publicAgentBody(body: AgentResponseBody): AgentResponseBody {
+  return {
+    request_id: body.request_id,
+    status: body.status,
+    next_step: body.next_step,
+    contract_version: body.contract_version,
+    ...(body.reason_code ? { reason_code: body.reason_code } : {}),
+    ...(body.response_expectation
+      ? { response_expectation: body.response_expectation }
+      : {}),
+    ...(body.clarification_needed
+      ? { clarification_needed: body.clarification_needed }
+      : {}),
+  };
+}
+
+export async function processConsultation(
+  parsed: unknown,
+  deps: ProcessConsultationDeps
+): Promise<ConsultationResult> {
+  const createId = deps.createId ?? (() => crypto.randomUUID());
+  const now = deps.now ?? (() => new Date());
+  const logFailure = deps.logFailure ?? defaultLogFailure;
+  const logInfra = deps.logInfraUnavailable ?? defaultLogInfra;
+  const ref = createId();
+
+  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+    return { status: 400, body: { error: "Invalid request body" } };
+  }
+  const body = parsed as Record<string, unknown>;
+
+  const { values, notStrings, tooLong } = extractFields(body);
+  const agentIntended = isAgentIntendedRequest(body);
+
+  const hp = body._hp;
+  if (typeof hp === "string" && hp.trim() !== "") {
+    if (agentIntended) {
+      return { status: 200, body: opaqueAgentHoneypot(ref) };
+    }
+    return { status: 200, body: { ok: true } };
   }
 
   if (!agentIntended) {
@@ -295,6 +350,49 @@ export async function processConsultation(
     return processHuman(values, body, ref, now(), deps, logFailure);
   }
 
+  const agentExecutionEnabled =
+    deps.testAllowAgentExecution === true || isConsultAgentSubmissionEnabled();
+
+  if (!agentExecutionEnabled) {
+    return {
+      status: CONSULT_NOT_READY_HTTP_STATUS,
+      body: capabilityNotReadyResponse(ref),
+    };
+  }
+
+  if (!deps.rateLimiter || !deps.idempotencyStore) {
+    logInfra(ref, "controls-unavailable");
+    return {
+      status: CONSULT_INFRA_UNAVAILABLE_HTTP_STATUS,
+      body: infrastructureUnavailableResponse(ref),
+    };
+  }
+
+  const clientIpHash = resolveClientIpHash(deps);
+  if (!clientIpHash) {
+    logInfra(ref, "client-identity");
+    return {
+      status: CONSULT_INFRA_UNAVAILABLE_HTTP_STATUS,
+      body: infrastructureUnavailableResponse(ref),
+    };
+  }
+
+  const limited = await deps.rateLimiter.consume(clientIpHash);
+  if (limited.kind === "unavailable") {
+    logInfra(ref, limited.stage);
+    return {
+      status: CONSULT_INFRA_UNAVAILABLE_HTTP_STATUS,
+      body: infrastructureUnavailableResponse(ref),
+    };
+  }
+  if (limited.kind === "limited") {
+    return {
+      status: CONSULT_RATE_LIMITED_HTTP_STATUS,
+      headers: { "Retry-After": String(limited.retryAfterSeconds) },
+      body: rateLimitedResponse(ref),
+    };
+  }
+
   if (notStrings.length > 0 || tooLong.length > 0) {
     const clarification = [...notStrings, ...tooLong];
     return {
@@ -312,7 +410,7 @@ export async function processConsultation(
   const name =
     values.name ||
     [values.firstName, values.lastName].filter(Boolean).join(" ").trim();
-  const decision = decideAgentRequest({
+  const decisionInput = {
     name,
     phone: values.phone ?? "",
     email: values.email ?? "",
@@ -331,62 +429,84 @@ export async function processConsultation(
     timing: values.timing ?? "",
     windowCount: values.windowCount ?? "",
     accessNotes: values.accessNotes ?? "",
-  });
+  };
+  const decision = decideAgentRequest(decisionInput);
 
-  const idempotencyKey = values.idempotencyKey ?? "";
-  if (deps.idempotencyStore && idempotencyKey) {
-    const stored = await deps.idempotencyStore.get(
-      idempotencyStorageKey(idempotencyKey)
-    );
-    if (stored) {
-      return {
-        status: 200,
-        body: {
-          request_id: stored.request_id,
-          status: stored.status,
-          reason_code: stored.reason_code,
-          next_step: stored.next_step,
-          response_expectation: stored.response_expectation,
-          clarification_needed: stored.clarification_needed,
-          contract_version: stored.contract_version,
-        },
-      };
-    }
+  if (!decision.shouldEmail) {
+    return { status: 200, body: agentResponse(ref, decision) };
   }
 
-  if (decision.shouldEmail) {
-    const message = buildEmail(decision.email, ref, now());
-    try {
-      const result = await deps.sendEmail(message);
-      if (result.error) {
-        logFailure(
-          ref,
-          "resend-error",
-          { providerErrorName: result.error.name },
-          failureMeta(decision.email)
-        );
-        return {
-          status: 502,
-          body: agentResponse(ref, {
-            status: "handoff_required",
-            next_step:
-              "The request could not be delivered. Call Luxe or retry with the same idempotency key.",
-            response_expectation:
-              "A person at Luxe will contact the customer. This is not an appointment.",
-          }),
-        };
-      }
-    } catch (err) {
-      const missingKey =
-        err instanceof Error && err.message.includes("RESEND_API_KEY");
+  const idempotencyKey = values.idempotencyKey ?? "";
+  if (!idempotencyKey) {
+    return { status: 200, body: agentResponse(ref, decision) };
+  }
+
+  const fingerprint = consultRequestFingerprint({
+    name: decisionInput.name,
+    phone: decisionInput.phone,
+    email: decisionInput.email,
+    address: decisionInput.address,
+    city: decisionInput.city,
+    postalCode: decisionInput.postalCode,
+    message: decisionInput.message,
+    preferredContactMethod: decisionInput.preferredContactMethod,
+    intent: decisionInput.intent,
+    contractVersion: decisionInput.contractVersion,
+    productInterests: productInterestIds(body.productInterests),
+    propertyType: decisionInput.propertyType,
+    projectGoals: decisionInput.projectGoals,
+    timing: decisionInput.timing,
+    windowCount: decisionInput.windowCount,
+    accessNotes: decisionInput.accessNotes,
+  });
+  const storageKey = idempotencyStorageKey(idempotencyKey);
+  const at = now();
+  const claim = await deps.idempotencyStore.claim({
+    storageKey,
+    fingerprint,
+    requestId: ref,
+    nowMs: at.getTime(),
+    ttlSeconds: CONSULT_IDEMPOTENCY_TTL_SECONDS,
+  });
+
+  if (claim.kind === "unavailable") {
+    logInfra(ref, claim.stage);
+    return {
+      status: CONSULT_INFRA_UNAVAILABLE_HTTP_STATUS,
+      body: infrastructureUnavailableResponse(ref),
+    };
+  }
+  if (claim.kind === "replay") {
+    return { status: 200, body: publicAgentBody(claim.publicResponse) };
+  }
+  if (claim.kind === "conflict") {
+    return {
+      status: CONSULT_IDEMPOTENCY_HTTP_STATUS,
+      body: idempotencyConflictResponse(ref),
+    };
+  }
+  if (claim.kind === "in_progress") {
+    return {
+      status: CONSULT_IDEMPOTENCY_HTTP_STATUS,
+      body: requestInProgressResponse(ref),
+    };
+  }
+
+  const message = buildEmail(decision.email, ref, at);
+  message.idempotencyKey = consultEmailIdempotencyKey(idempotencyKey);
+
+  try {
+    const result = await deps.sendEmail(message);
+    if (result.error) {
+      await deps.idempotencyStore.release(storageKey);
       logFailure(
         ref,
-        missingKey ? "config-missing-api-key" : "exception",
-        { errorName: err instanceof Error ? err.name : typeof err },
+        "resend-error",
+        { providerErrorName: result.error.name },
         failureMeta(decision.email)
       );
       return {
-        status: 500,
+        status: 502,
         body: agentResponse(ref, {
           status: "handoff_required",
           next_step:
@@ -396,26 +516,62 @@ export async function processConsultation(
         }),
       };
     }
+  } catch (err) {
+    await deps.idempotencyStore.release(storageKey);
+    const missingKey =
+      err instanceof Error && err.message.includes("RESEND_API_KEY");
+    logFailure(
+      ref,
+      missingKey ? "config-missing-api-key" : "exception",
+      { errorName: err instanceof Error ? err.name : typeof err },
+      failureMeta(decision.email)
+    );
+    return {
+      status: 500,
+      body: agentResponse(ref, {
+        status: "handoff_required",
+        next_step:
+          "The request could not be delivered. Call Luxe or retry with the same idempotency key.",
+        response_expectation:
+          "A person at Luxe will contact the customer. This is not an appointment.",
+      }),
+    };
   }
 
-  const response = agentResponse(ref, decision);
-  if (deps.idempotencyStore && idempotencyKey) {
-    await deps.idempotencyStore.set(
-      idempotencyStorageKey(idempotencyKey),
-      { ...response, emailed: decision.shouldEmail },
-      CONSULT_IDEMPOTENCY_TTL_SECONDS
-    );
+  const response = publicAgentBody(agentResponse(ref, decision));
+  const persisted = await deps.idempotencyStore.complete(
+    storageKey,
+    response,
+    at.getTime(),
+    CONSULT_IDEMPOTENCY_TTL_SECONDS
+  );
+  if (persisted === "unavailable") {
+    logInfra(ref, "persist-completed");
   }
 
   return { status: 200, body: response };
 }
 
-/** Production adapter. Cannot receive the test execution override or a store. */
+/**
+ * Production adapter. Constructs Redis-backed controls when the Marketplace
+ * variables are present. Cannot receive the test execution override or
+ * injected stores. Missing Redis is fail-closed for agent-intended traffic
+ * once readiness is enabled; humans never require Redis.
+ */
 export function processProductionConsultation(
   parsed: unknown,
   deps: ProductionConsultationDeps
 ): Promise<ConsultationResult> {
-  return processConsultation(parsed, deps);
+  const redis = getConsultRedis();
+  return processConsultation(parsed, {
+    ...deps,
+    ...(redis
+      ? {
+          rateLimiter: createUpstashAgentRateLimiter(redis),
+          idempotencyStore: createRedisIdempotencyStore(redis),
+        }
+      : {}),
+  });
 }
 
 function failureMeta(payload: ConsultEmailPayload): FailureMeta {

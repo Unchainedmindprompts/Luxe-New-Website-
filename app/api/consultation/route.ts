@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { processProductionConsultation } from "@/lib/consult-handler";
 
+type ResendSendOptions = NonNullable<Parameters<Resend["emails"]["send"]>[1]>;
+
 export const runtime = "nodejs";
 
 // Lazy-init Resend so a missing key doesn't crash the build.
@@ -16,20 +18,12 @@ function getResend(): Resend {
 }
 
 /**
- * Operational metadata only — never field values.
+ * Operational metadata only — never field values or raw IPs.
  *
- * These logs used to carry the whole payload: name, phone, email, address. That
- * put customer PII into Vercel's log retention, which is the wrong place for
- * it. A delivery failure now returns a non-2xx and a reference id.
- *
- * ACCEPTED TEMPORARY LIMITATION. Durable persistence of the lead itself is
- * deliberately not being built here. Agent-mode idempotency, when a store is
- * injected in tests, records only request_id + outcome — never PII.
- *
- * Production has no durable rate limiter and no durable idempotency store.
- * Agent-intended requests are therefore rejected with capability_not_ready
- * and never email Mark. This route uses processProductionConsultation so the
- * test-only execution override cannot be passed here.
+ * Production wires Redis-backed rate limiting and idempotency through
+ * processProductionConsultation. That adapter cannot receive the test-only
+ * execution override. Agent-intended requests never fall through to the
+ * human-form path.
  */
 function logFailure(
   ref: string,
@@ -48,6 +42,13 @@ function logFailure(
   );
 }
 
+function logInfraUnavailable(requestId: string, stage: string) {
+  console.error(
+    "[CONSULTATION_INFRA_UNAVAILABLE]",
+    JSON.stringify({ request_id: requestId, stage })
+  );
+}
+
 export async function POST(req: Request) {
   let parsed: unknown;
   try {
@@ -57,19 +58,30 @@ export async function POST(req: Request) {
   }
 
   const result = await processProductionConsultation(parsed, {
+    request: req,
     sendEmail: async (message) => {
       const resend = getResend();
-      const result = await resend.emails.send({
-        from: message.from,
-        to: message.to,
-        subject: message.subject,
-        text: message.text,
-        ...(message.replyTo ? { replyTo: message.replyTo } : {}),
-      });
-      return { error: result.error ? { name: result.error.name } : undefined };
+      const options: ResendSendOptions | undefined = message.idempotencyKey
+        ? { idempotencyKey: message.idempotencyKey }
+        : undefined;
+      const sent = await resend.emails.send(
+        {
+          from: message.from,
+          to: message.to,
+          subject: message.subject,
+          text: message.text,
+          ...(message.replyTo ? { replyTo: message.replyTo } : {}),
+        },
+        options
+      );
+      return { error: sent.error ? { name: sent.error.name } : undefined };
     },
     logFailure,
+    logInfraUnavailable,
   });
 
-  return NextResponse.json(result.body, { status: result.status });
+  return NextResponse.json(result.body, {
+    status: result.status,
+    ...(result.headers ? { headers: result.headers } : {}),
+  });
 }

@@ -27,12 +27,12 @@
  * category. The repository has no drapery product page and no Service `@id`.
  * That absence is recorded here rather than filled in.
  *
- * READINESS. `autonomousExecution` stays the literal `"not-ready"`. There is
- * no durable rate limiter and no durable idempotency store in this repository
- * (no Upstash, no Redis, no other provider — and this phase does not add one).
- * The decision policy can still be proven in tests, but production agent
- * submission is disabled until readiness is deliberately changed after those
- * controls exist. No environment variable can flip this.
+ * READINESS. Flipping `CONSULT_READINESS` / `CONSULT_AUTONOMOUS_EXECUTION` to
+ * `"request-submission-ready"` is a deliberate claim that durable rate limiting,
+ * durable idempotency, Resend duplicate protection, and fail-closed behavior
+ * are wired in the production adapter and that real Upstash Preview connectivity
+ * was verified without POSTing `/api/consultation`. No environment variable
+ * can flip this. Human confirmation remains mandatory.
  */
 
 import type { OfferingId } from "./offerings";
@@ -71,9 +71,8 @@ export interface ExecutionSurface {
 
   /**
    * A literal, not a boolean. Flipping this is a claim that the transport is
-   * fit for unattended traffic. It is not: there is no durable rate limiter
-   * and no durable idempotency store. See `requestSubmission` on the agent
-   * contract.
+   * fit for unattended traffic: durable rate limiting, durable idempotency,
+   * Resend duplicate protection, and fail-closed infrastructure checks.
    */
   readonly autonomousExecution: typeof CONSULT_AUTONOMOUS_EXECUTION;
 }
@@ -139,6 +138,10 @@ export const CONSULT_REASON_CODES = [
   "clarification_required",
   "unsupported_contract_version",
   "capability_not_ready",
+  "rate_limited",
+  "infrastructure_unavailable",
+  "idempotency_conflict",
+  "request_in_progress",
 ] as const;
 export type ConsultReasonCode = (typeof CONSULT_REASON_CODES)[number];
 
@@ -201,13 +204,26 @@ export const CONSULT_NEARBY_POSTAL_PREFIXES = ["838", "990", "992"] as const;
 export const CONSULT_DISTANT_POSTAL_PREFIXES = ["837"] as const;
 
 export const CONSULT_IDEMPOTENCY_NAMESPACE = "consult:v1" as const;
-export const CONSULT_IDEMPOTENCY_TTL_SECONDS = 7 * 24 * 60 * 60;
+/** Redis + Resend windows are 24h. Repo previously reserved 7d for a store that did not exist. */
+export const CONSULT_IDEMPOTENCY_TTL_SECONDS = 24 * 60 * 60;
 
-export const CONSULT_READINESS = "not-ready" as const;
-export const CONSULT_AUTONOMOUS_EXECUTION = "not-ready" as const;
-export const CONSULT_READINESS_BLOCKERS = [
-  "durable-idempotency-unavailable",
-  "durable-rate-limit-unavailable",
+export const CONSULT_READINESS_READY = "request-submission-ready" as const;
+export const CONSULT_READINESS_NOT_READY = "not-ready" as const;
+
+/**
+ * Deliberate production claim. Flipped after Vercel Preview build
+ * dpl_FZoq5Cv2viWHy8EZtcbsF7Fgq5dK printed REDIS_VERIFY=passed
+ * environment=preview against the real rate-limit and idempotency adapters.
+ * No env var can change this. Human confirmation remains mandatory.
+ */
+export const CONSULT_READINESS = CONSULT_READINESS_READY;
+export const CONSULT_AUTONOMOUS_EXECUTION = CONSULT_READINESS;
+export const CONSULT_READINESS_BLOCKERS = [] as const;
+
+export const CONSULT_DO_NOT_RETRY_AUTOMATICALLY = [
+  "capability_not_ready",
+  "rate_limited",
+  "infrastructure_unavailable",
 ] as const;
 
 /**
@@ -235,19 +251,30 @@ export const CONSULT_AGENT_EXCLUSIVE_FIELDS = [
 ] as const;
 
 export const CONSULT_NOT_READY_HTTP_STATUS = 503 as const;
+export const CONSULT_RATE_LIMITED_HTTP_STATUS = 429 as const;
+export const CONSULT_IDEMPOTENCY_HTTP_STATUS = 409 as const;
+export const CONSULT_INFRA_UNAVAILABLE_HTTP_STATUS = 503 as const;
 export const CONSULT_NOT_READY_NEXT_STEP =
   "Agent submission is not currently available. Do not retry automatically. A person must contact Luxe through the normal human channels.";
 export const CONSULT_NOT_READY_EXPECTATION =
   "No consultation request was submitted or delivered.";
+export const CONSULT_RATE_LIMITED_NEXT_STEP =
+  "This request was rate limited. Do not retry automatically. A person can contact Luxe through the normal human channels.";
+export const CONSULT_INFRA_UNAVAILABLE_NEXT_STEP =
+  "The request could not be processed because a required control is unavailable. Do not retry automatically. A person can contact Luxe through the normal human channels.";
+export const CONSULT_IDEMPOTENCY_CONFLICT_NEXT_STEP =
+  "This idempotency key was already used with a different request. Do not retry automatically.";
+export const CONSULT_REQUEST_IN_PROGRESS_NEXT_STEP =
+  "This request is already being processed. Do not retry automatically.";
 
 /**
  * Production gate. Derived only from this contract — no env override.
- * False while readiness / autonomousExecution are the literal `"not-ready"`.
+ * True only while readiness / autonomousExecution are `"request-submission-ready"`.
  */
 export function isConsultAgentSubmissionEnabled(): boolean {
   return (
-    CONSULT_READINESS !== "not-ready" &&
-    CONSULT_AUTONOMOUS_EXECUTION !== "not-ready"
+    CONSULT_READINESS === CONSULT_READINESS_READY &&
+    CONSULT_AUTONOMOUS_EXECUTION === CONSULT_READINESS_READY
   );
 }
 
@@ -362,7 +389,7 @@ export interface ConsultationDiscoveryDocument {
     readonly note: string;
   };
   readonly submissionEnabled: boolean;
-  readonly doNotRetryAutomaticallyWhen: "capability_not_ready";
+  readonly doNotRetryAutomaticallyWhen: readonly (typeof CONSULT_DO_NOT_RETRY_AUTOMATICALLY)[number][];
   readonly requiredFields: readonly string[];
   readonly optionalFields: readonly string[];
   readonly conditionallyRequired: readonly {
@@ -397,34 +424,39 @@ export interface ConsultationDiscoveryDocument {
   readonly successMeans: "request-delivered-for-human-follow-up-not-an-appointment";
   readonly idempotency: {
     readonly required: true;
-    readonly durableStoreAvailable: false;
+    readonly durableStoreAvailable: boolean;
     readonly note: string;
   };
   readonly rateLimit: {
-    readonly durableLimiterAvailable: false;
+    readonly durableLimiterAvailable: boolean;
     readonly agentsShareHumanEndpoint: true;
     readonly note: string;
   };
   readonly readiness: typeof CONSULT_READINESS;
-  readonly readinessBlockers: readonly (typeof CONSULT_READINESS_BLOCKERS)[number][];
+  readonly readinessBlockers: readonly string[];
 }
 
 export function consultationDiscoveryDocument(): ConsultationDiscoveryDocument {
+  const enabled = isConsultAgentSubmissionEnabled();
   return {
     id: CONSULT_CAPABILITY_ID,
     name: "Request an in-home consultation",
-    description:
-      "Structured consultation-request contract. Agent submission is currently " +
-      "disabled. The endpoint is documented but unavailable for unattended " +
-      "execution. Humans can still use /contact or /book. A successful request, " +
-      "when submission is later enabled, is delivery and acknowledgement — not " +
-      "an appointment, a quote, a price, or project acceptance.",
+    description: enabled
+      ? "Structured consultation-request contract. Agent submission delivers a " +
+        "request for human follow-up. It does not book, reserve, or price a visit. " +
+        "Humans can still use /contact or /book. A successful request is delivery " +
+        "and acknowledgement — not an appointment, a quote, a price, or project acceptance."
+      : "Structured consultation-request contract. Agent submission is currently " +
+        "disabled. The endpoint is documented but unavailable for unattended " +
+        "execution. Humans can still use /contact or /book. A successful request, " +
+        "when submission is later enabled, is delivery and acknowledgement — not " +
+        "an appointment, a quote, a price, or project acceptance.",
     contractVersion: CONSULT_CONTRACT_VERSION,
     discoveryUrl: CONSULT_DISCOVERY_PATH,
     execution: {
       url: CONSULT_EXECUTION_PATH,
       method: "POST",
-      availableForUnattendedAgentExecution: isConsultAgentSubmissionEnabled(),
+      availableForUnattendedAgentExecution: enabled,
     },
     agentMode: {
       source: CONSULT_AGENT_SOURCE,
@@ -436,8 +468,8 @@ export function consultationDiscoveryDocument(): ConsultationDiscoveryDocument {
         "treated as agent-intended and is never processed as a human form. " +
         "User-Agent headers are ignored.",
     },
-    submissionEnabled: isConsultAgentSubmissionEnabled(),
-    doNotRetryAutomaticallyWhen: "capability_not_ready",
+    submissionEnabled: enabled,
+    doNotRetryAutomaticallyWhen: [...CONSULT_DO_NOT_RETRY_AUTOMATICALLY],
     requiredFields: CONSULT_REQUIRED_AGENT_FIELDS,
     optionalFields: CONSULT_OPTIONAL_AGENT_FIELDS,
     conditionallyRequired: [
@@ -484,20 +516,26 @@ export function consultationDiscoveryDocument(): ConsultationDiscoveryDocument {
     successMeans: "request-delivered-for-human-follow-up-not-an-appointment",
     idempotency: {
       required: true,
-      durableStoreAvailable: false,
-      note:
-        "Agent requests must include idempotencyKey. A durable store is not " +
-        "configured. Agent submission stays disabled until one exists and is verified.",
+      durableStoreAvailable: enabled,
+      note: enabled
+        ? "Agent requests must include idempotencyKey. Replays of the same key and " +
+          "same request return the original public result. A different payload with " +
+          "the same key is rejected. Thresholds and storage internals are not published."
+        : "Agent requests must include idempotencyKey. The production adapter is wired " +
+          "for a durable store, but agent submission stays disabled until Preview Redis " +
+          "connectivity is verified. Storage internals are not published.",
     },
     rateLimit: {
-      durableLimiterAvailable: false,
+      durableLimiterAvailable: enabled,
       agentsShareHumanEndpoint: true,
-      note:
-        "No durable rate limiter is configured. Agent submission stays disabled " +
-        "until one exists and is verified. No thresholds are published.",
+      note: enabled
+        ? "Agent-intended requests are rate limited. Thresholds are not published. " +
+          "Do not retry automatically when rate limited or when infrastructure is unavailable."
+        : "The production adapter is wired for a durable limiter, but agent submission " +
+          "stays disabled until Preview Redis connectivity is verified. No thresholds are published.",
     },
     readiness: CONSULT_READINESS,
-    readinessBlockers: [...CONSULT_READINESS_BLOCKERS],
+    readinessBlockers: enabled ? [] : [...CONSULT_READINESS_BLOCKERS],
   };
 }
 

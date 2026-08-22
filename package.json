@@ -23,7 +23,8 @@
     "audit:schema": "node scripts/audit-schema-ids.mjs",
     "prepare": "husky",
     "audit:rendered": "node scripts/audit-rendered-schema.mjs",
-    "postbuild": "node scripts/audit-rendered-schema.mjs",
+    "verify:consult-redis-preview": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./scripts/register-ts-ext.mjs scripts/verify-consult-redis-preview.mjs",
+    "postbuild": "node scripts/audit-rendered-schema.mjs && npm run verify:consult-redis-preview",
     "test:advisor-retired": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-retired.mjs"
   },
   "engines": {
@@ -33,7 +34,10 @@
     "@fontsource/inter": "^5.2.8",
     "@fontsource/playfair-display": "^5.2.8",
     "@stripe/stripe-js": "^9.7.0",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.2",
     "@vercel/analytics": "^1.5.0",
+    "@vercel/functions": "^3.9.5",
     "graphql": "^16.13.2",
     "next": "^16.2.4",
     "react": "^19.2.5",

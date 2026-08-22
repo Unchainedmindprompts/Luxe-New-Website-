@@ -28,8 +28,12 @@ import {
   CONSULT_ELIGIBLE_MARKETS,
   CONSULT_INTENTS,
   CONSULT_NEARBY_POSTAL_PREFIXES,
+  CONSULT_IDEMPOTENCY_CONFLICT_NEXT_STEP,
+  CONSULT_INFRA_UNAVAILABLE_NEXT_STEP,
   CONSULT_NOT_READY_EXPECTATION,
   CONSULT_NOT_READY_NEXT_STEP,
+  CONSULT_RATE_LIMITED_NEXT_STEP,
+  CONSULT_REQUEST_IN_PROGRESS_NEXT_STEP,
   CONSULT_OFFERING_CATEGORY_IDS,
   type ConsultCategoryId,
   type ConsultIntentId,
@@ -113,6 +117,44 @@ export function capabilityNotReadyResponse(requestId: string): AgentResponseBody
     response_expectation: CONSULT_NOT_READY_EXPECTATION,
     contract_version: CONSULT_CONTRACT_VERSION,
   };
+}
+
+export function infrastructureUnavailableResponse(requestId: string): AgentResponseBody {
+  return {
+    request_id: requestId,
+    status: "handoff_required",
+    reason_code: "infrastructure_unavailable",
+    next_step: CONSULT_INFRA_UNAVAILABLE_NEXT_STEP,
+    response_expectation: CONSULT_NOT_READY_EXPECTATION,
+    contract_version: CONSULT_CONTRACT_VERSION,
+  };
+}
+
+export function rateLimitedResponse(requestId: string): AgentResponseBody {
+  return agentResponse(requestId, {
+    status: "rejected",
+    reason_code: "rate_limited",
+    next_step: CONSULT_RATE_LIMITED_NEXT_STEP,
+    response_expectation: CONSULT_NOT_READY_EXPECTATION,
+  });
+}
+
+export function idempotencyConflictResponse(requestId: string): AgentResponseBody {
+  return agentResponse(requestId, {
+    status: "rejected",
+    reason_code: "idempotency_conflict",
+    next_step: CONSULT_IDEMPOTENCY_CONFLICT_NEXT_STEP,
+    response_expectation: CONSULT_NOT_READY_EXPECTATION,
+  });
+}
+
+export function requestInProgressResponse(requestId: string): AgentResponseBody {
+  return agentResponse(requestId, {
+    status: "rejected",
+    reason_code: "request_in_progress",
+    next_step: CONSULT_REQUEST_IN_PROGRESS_NEXT_STEP,
+    response_expectation: CONSULT_NOT_READY_EXPECTATION,
+  });
 }
 
 export function normalizeCityKey(raw: string): string {
@@ -322,6 +364,7 @@ function nextStepFor(status: ConsultStatus, reason?: ConsultReasonCode): string 
       return "Luxe will review this request and follow up if it can proceed.";
     case "handoff_required":
       if (reason === "capability_not_ready") return CONSULT_NOT_READY_NEXT_STEP;
+      if (reason === "infrastructure_unavailable") return CONSULT_INFRA_UNAVAILABLE_NEXT_STEP;
       return "A person at Luxe needs to continue this conversation and will follow up.";
     case "rejected":
       if (reason === "out_of_area") {
@@ -336,6 +379,9 @@ function nextStepFor(status: ConsultStatus, reason?: ConsultReasonCode): string 
       if (reason === "unsupported_contract_version") {
         return "Use contractVersion 1.0 as published on the discovery document.";
       }
+      if (reason === "rate_limited") return CONSULT_RATE_LIMITED_NEXT_STEP;
+      if (reason === "idempotency_conflict") return CONSULT_IDEMPOTENCY_CONFLICT_NEXT_STEP;
+      if (reason === "request_in_progress") return CONSULT_REQUEST_IN_PROGRESS_NEXT_STEP;
       return "This request cannot be accepted as submitted.";
   }
 }
@@ -348,8 +394,16 @@ function expectationFor(status: ConsultStatus, reason?: ConsultReasonCode): stri
       return "Human review first, then follow-up if the request can proceed. No time is reserved.";
     case "handoff_required":
       if (reason === "capability_not_ready") return CONSULT_NOT_READY_EXPECTATION;
+      if (reason === "infrastructure_unavailable") return CONSULT_NOT_READY_EXPECTATION;
       return "A person at Luxe will contact the customer. This is not an appointment.";
     case "rejected":
+      if (
+        reason === "rate_limited" ||
+        reason === "idempotency_conflict" ||
+        reason === "request_in_progress"
+      ) {
+        return CONSULT_NOT_READY_EXPECTATION;
+      }
       return "No consultation will be scheduled from this request.";
   }
 }
