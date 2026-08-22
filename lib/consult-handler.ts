@@ -1,9 +1,11 @@
 /**
- * Consultation POST processing — human forms and explicit agent mode.
+ * Consultation POST processing — human forms and agent-intended requests.
  *
- * The Next route is a thin adapter over this function so contract tests can
- * run locally with mocked mail and an in-memory idempotency map. Production
- * does not configure a durable store; readiness stays not-ready.
+ * Production uses `processProductionConsultation`, which cannot enable agent
+ * execution while the capability is not-ready. Contract tests may pass
+ * `testAllowAgentExecution: true` to prove the policy that will run after a
+ * later PR flips readiness. That override is omitted from the production
+ * function's type and must never be passed from the route.
  */
 
 import { createHash } from "node:crypto";
@@ -11,11 +13,14 @@ import { BUSINESS } from "./constants";
 import {
   CONSULT_IDEMPOTENCY_NAMESPACE,
   CONSULT_IDEMPOTENCY_TTL_SECONDS,
+  CONSULT_NOT_READY_HTTP_STATUS,
+  isConsultAgentSubmissionEnabled,
 } from "./capabilities";
 import {
   agentResponse,
+  capabilityNotReadyResponse,
   decideAgentRequest,
-  isExplicitAgentRequest,
+  isAgentIntendedRequest,
   opaqueAgentHoneypot,
   type AgentResponseBody,
   type ConsultEmailPayload,
@@ -109,7 +114,17 @@ export interface ProcessConsultationDeps {
     detail: Record<string, unknown>,
     meta: FailureMeta
   ) => void;
+  /**
+   * TEST-ONLY. Lets local contract tests exercise the future enabled policy.
+   * Production must omit this. It cannot be set by an environment variable.
+   */
+  testAllowAgentExecution?: true;
 }
+
+export type ProductionConsultationDeps = Omit<
+  ProcessConsultationDeps,
+  "testAllowAgentExecution" | "idempotencyStore"
+>;
 
 export interface ConsultationResult {
   status: number;
@@ -224,9 +239,20 @@ export async function processConsultation(
   }
   const body = parsed as Record<string, unknown>;
 
+  const agentIntended = isAgentIntendedRequest(body);
+  const agentExecutionEnabled =
+    deps.testAllowAgentExecution === true || isConsultAgentSubmissionEnabled();
+
+  if (agentIntended && !agentExecutionEnabled) {
+    return {
+      status: CONSULT_NOT_READY_HTTP_STATUS,
+      body: capabilityNotReadyResponse(ref),
+    };
+  }
+
   const hp = body._hp;
   if (typeof hp === "string" && hp.trim() !== "") {
-    if (isExplicitAgentRequest(body)) {
+    if (agentIntended) {
       return { status: 200, body: opaqueAgentHoneypot(ref) };
     }
     return { status: 200, body: { ok: true } };
@@ -250,9 +276,7 @@ export async function processConsultation(
     values[field] = clean(field, value);
   }
 
-  const agentMode = isExplicitAgentRequest(body);
-
-  if (!agentMode) {
+  if (!agentIntended) {
     if (notStrings.length > 0) {
       return {
         status: 400,
@@ -384,6 +408,14 @@ export async function processConsultation(
   }
 
   return { status: 200, body: response };
+}
+
+/** Production adapter. Cannot receive the test execution override or a store. */
+export function processProductionConsultation(
+  parsed: unknown,
+  deps: ProductionConsultationDeps
+): Promise<ConsultationResult> {
+  return processConsultation(parsed, deps);
 }
 
 function failureMeta(payload: ConsultEmailPayload): FailureMeta {

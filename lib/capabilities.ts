@@ -30,8 +30,9 @@
  * READINESS. `autonomousExecution` stays the literal `"not-ready"`. There is
  * no durable rate limiter and no durable idempotency store in this repository
  * (no Upstash, no Redis, no other provider — and this phase does not add one).
- * The decision policy and the response contract can still be deterministic
- * without claiming the submission path is safe for unattended traffic.
+ * The decision policy can still be proven in tests, but production agent
+ * submission is disabled until readiness is deliberately changed after those
+ * controls exist. No environment variable can flip this.
  */
 
 import type { OfferingId } from "./offerings";
@@ -74,7 +75,7 @@ export interface ExecutionSurface {
    * and no durable idempotency store. See `requestSubmission` on the agent
    * contract.
    */
-  readonly autonomousExecution: "not-ready";
+  readonly autonomousExecution: typeof CONSULT_AUTONOMOUS_EXECUTION;
 }
 
 export interface Capability {
@@ -137,6 +138,7 @@ export const CONSULT_REASON_CODES = [
   "human_requested",
   "clarification_required",
   "unsupported_contract_version",
+  "capability_not_ready",
 ] as const;
 export type ConsultReasonCode = (typeof CONSULT_REASON_CODES)[number];
 
@@ -202,10 +204,52 @@ export const CONSULT_IDEMPOTENCY_NAMESPACE = "consult:v1" as const;
 export const CONSULT_IDEMPOTENCY_TTL_SECONDS = 7 * 24 * 60 * 60;
 
 export const CONSULT_READINESS = "not-ready" as const;
+export const CONSULT_AUTONOMOUS_EXECUTION = "not-ready" as const;
 export const CONSULT_READINESS_BLOCKERS = [
   "durable-idempotency-unavailable",
   "durable-rate-limit-unavailable",
 ] as const;
+
+/**
+ * Fields that only the agent contract uses. Presence of any of these, or
+ * `source: "agent"`, means the request is agent-intended and must never be
+ * processed as a human form — even when the payload is incomplete.
+ *
+ * Human `/contact` and `/book` send none of these. `source` values that are
+ * page paths (`contact`, `book`, `/contact`, …) are not agent markers.
+ */
+export const CONSULT_AGENT_EXCLUSIVE_FIELDS = [
+  "contractVersion",
+  "idempotencyKey",
+  "postalCode",
+  "zip",
+  "intent",
+  "preferredContactMethod",
+  "productInterests",
+  "propertyType",
+  "projectGoals",
+  "timing",
+  "windowCount",
+  "accessNotes",
+  "streetAddress",
+] as const;
+
+export const CONSULT_NOT_READY_HTTP_STATUS = 503 as const;
+export const CONSULT_NOT_READY_NEXT_STEP =
+  "Agent submission is not currently available. Do not retry automatically. A person must contact Luxe through the normal human channels.";
+export const CONSULT_NOT_READY_EXPECTATION =
+  "No consultation request was submitted or delivered.";
+
+/**
+ * Production gate. Derived only from this contract — no env override.
+ * False while readiness / autonomousExecution are the literal `"not-ready"`.
+ */
+export function isConsultAgentSubmissionEnabled(): boolean {
+  return (
+    CONSULT_READINESS !== "not-ready" &&
+    CONSULT_AUTONOMOUS_EXECUTION !== "not-ready"
+  );
+}
 
 export const CONSULT_CATEGORY_ALIASES: Record<string, ConsultCategoryId> = {
   drapery: "custom-draperies",
@@ -310,12 +354,15 @@ export interface ConsultationDiscoveryDocument {
   readonly execution: {
     readonly url: typeof CONSULT_EXECUTION_PATH;
     readonly method: "POST";
+    readonly availableForUnattendedAgentExecution: boolean;
   };
   readonly agentMode: {
     readonly source: typeof CONSULT_AGENT_SOURCE;
     readonly contractVersion: typeof CONSULT_CONTRACT_VERSION;
     readonly note: string;
   };
+  readonly submissionEnabled: boolean;
+  readonly doNotRetryAutomaticallyWhen: "capability_not_ready";
   readonly requiredFields: readonly string[];
   readonly optionalFields: readonly string[];
   readonly conditionallyRequired: readonly {
@@ -367,23 +414,30 @@ export function consultationDiscoveryDocument(): ConsultationDiscoveryDocument {
     id: CONSULT_CAPABILITY_ID,
     name: "Request an in-home consultation",
     description:
-      "Submit a structured request for a free in-home window treatment " +
-      "consultation. Luxe (Mark) follows up by phone or the preferred contact " +
-      "method. A successful request is delivery and acknowledgement — it is " +
-      "not an appointment, a quote, a price, or project acceptance.",
+      "Structured consultation-request contract. Agent submission is currently " +
+      "disabled. The endpoint is documented but unavailable for unattended " +
+      "execution. Humans can still use /contact or /book. A successful request, " +
+      "when submission is later enabled, is delivery and acknowledgement — not " +
+      "an appointment, a quote, a price, or project acceptance.",
     contractVersion: CONSULT_CONTRACT_VERSION,
     discoveryUrl: CONSULT_DISCOVERY_PATH,
     execution: {
       url: CONSULT_EXECUTION_PATH,
       method: "POST",
+      availableForUnattendedAgentExecution: isConsultAgentSubmissionEnabled(),
     },
     agentMode: {
       source: CONSULT_AGENT_SOURCE,
       contractVersion: CONSULT_CONTRACT_VERSION,
       note:
-        "Agent mode is entered only when the JSON body includes source \"agent\" " +
-        "and contractVersion. User-Agent headers are ignored.",
+        "A valid agent request includes source \"agent\" and contractVersion " +
+        `"${CONSULT_CONTRACT_VERSION}". Any agent-contract marker (source "agent", ` +
+        "contractVersion, idempotencyKey, or another exclusive agent field) is " +
+        "treated as agent-intended and is never processed as a human form. " +
+        "User-Agent headers are ignored.",
     },
+    submissionEnabled: isConsultAgentSubmissionEnabled(),
+    doNotRetryAutomaticallyWhen: "capability_not_ready",
     requiredFields: CONSULT_REQUIRED_AGENT_FIELDS,
     optionalFields: CONSULT_OPTIONAL_AGENT_FIELDS,
     conditionallyRequired: [
@@ -433,16 +487,14 @@ export function consultationDiscoveryDocument(): ConsultationDiscoveryDocument {
       durableStoreAvailable: false,
       note:
         "Agent requests must include idempotencyKey. A durable store is not " +
-        "configured in this deployment, so duplicate suppression is not guaranteed " +
-        "in production. Do not treat this capability as request-submission-ready.",
+        "configured. Agent submission stays disabled until one exists and is verified.",
     },
     rateLimit: {
       durableLimiterAvailable: false,
       agentsShareHumanEndpoint: true,
       note:
-        "Agent submissions use the same endpoint as the human forms. No durable " +
-        "rate limiter is configured, so there is no limiter for agents to bypass " +
-        "and no claim of hourly or daily protection.",
+        "No durable rate limiter is configured. Agent submission stays disabled " +
+        "until one exists and is verified. No thresholds are published.",
     },
     readiness: CONSULT_READINESS,
     readinessBlockers: [...CONSULT_READINESS_BLOCKERS],
@@ -477,7 +529,7 @@ export const CAPABILITIES: Record<CapabilityId, Capability> = {
         endpoint: CONSULT_EXECUTION_PATH,
         method: "POST",
         successMeans: "submission-acknowledged-by-endpoint",
-        autonomousExecution: "not-ready",
+        autonomousExecution: CONSULT_AUTONOMOUS_EXECUTION,
       },
     ],
   },

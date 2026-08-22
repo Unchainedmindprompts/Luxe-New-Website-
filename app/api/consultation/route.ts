@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
-import { processConsultation } from "@/lib/consult-handler";
+import { processProductionConsultation } from "@/lib/consult-handler";
 
 export const runtime = "nodejs";
 
@@ -27,8 +27,9 @@ function getResend(): Resend {
  * injected in tests, records only request_id + outcome — never PII.
  *
  * Production has no durable rate limiter and no durable idempotency store.
- * Agent traffic shares this endpoint and does not receive a bypass, because
- * there is no limiter to bypass. Readiness stays not-ready.
+ * Agent-intended requests are therefore rejected with capability_not_ready
+ * and never email Mark. This route uses processProductionConsultation so the
+ * test-only execution override cannot be passed here.
  */
 function logFailure(
   ref: string,
@@ -55,7 +56,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const result = await processConsultation(parsed, {
+  const result = await processProductionConsultation(parsed, {
     sendEmail: async (message) => {
       const resend = getResend();
       const result = await resend.emails.send({
@@ -68,8 +69,6 @@ export async function POST(req: Request) {
       return { error: result.error ? { name: result.error.name } : undefined };
     },
     logFailure,
-    // No durable store is configured. Do not invent an in-process cache that
-    // would look like idempotency on a serverless host.
   });
 
   return NextResponse.json(result.body, { status: result.status });

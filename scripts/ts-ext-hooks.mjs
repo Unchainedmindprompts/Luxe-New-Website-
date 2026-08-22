@@ -2,8 +2,14 @@ import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 /**
- * Lets Node --experimental-strip-types load the same extensionless relative
- * imports Next/tsc resolve. Test-only; not used in the app.
+ * Test-only resolve hook for `npm run test:consult-contract`.
+ *
+ * Node's strip-types loader does not resolve extensionless `./foo` the way
+ * Next/tsc `bundler` resolution does. This hook only rewrites relative
+ * specifiers to an existing sibling `.ts` file. It is loaded via
+ * `--import ./scripts/register-ts-ext.mjs` on that test script alone.
+ * Next.js never imports these files. It does not execute arbitrary paths
+ * and does not replace `tsc --noEmit`.
  */
 export async function resolve(specifier, context, nextResolve) {
   if (

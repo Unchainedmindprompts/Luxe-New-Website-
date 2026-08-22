@@ -18,6 +18,7 @@
  */
 
 import {
+  CONSULT_AGENT_EXCLUSIVE_FIELDS,
   CONSULT_AGENT_SOURCE,
   CONSULT_CATEGORY_ALIASES,
   CONSULT_CONTRACT_VERSION,
@@ -27,6 +28,8 @@ import {
   CONSULT_ELIGIBLE_MARKETS,
   CONSULT_INTENTS,
   CONSULT_NEARBY_POSTAL_PREFIXES,
+  CONSULT_NOT_READY_EXPECTATION,
+  CONSULT_NOT_READY_NEXT_STEP,
   CONSULT_OFFERING_CATEGORY_IDS,
   type ConsultCategoryId,
   type ConsultIntentId,
@@ -73,12 +76,43 @@ export interface AgentDecision {
   email: ConsultEmailPayload;
 }
 
+function fieldWasSent(value: unknown): boolean {
+  return value !== undefined && value !== null;
+}
+
+/**
+ * A complete, valid agent request. Both markers are required to execute the
+ * contract once submission is enabled.
+ */
 export function isExplicitAgentRequest(body: Record<string, unknown>): boolean {
   return (
     body.source === CONSULT_AGENT_SOURCE &&
     typeof body.contractVersion === "string" &&
     body.contractVersion.trim() !== ""
   );
+}
+
+/**
+ * Any sign this was meant for the agent contract. Incomplete or malformed
+ * agent requests must never fall through to the human-form path.
+ *
+ * `source` counts only when it is exactly `"agent"`. Page paths such as
+ * `"contact"`, `"book"`, or `"/contact"` are human.
+ */
+export function isAgentIntendedRequest(body: Record<string, unknown>): boolean {
+  if (body.source === CONSULT_AGENT_SOURCE) return true;
+  return CONSULT_AGENT_EXCLUSIVE_FIELDS.some((field) => fieldWasSent(body[field]));
+}
+
+export function capabilityNotReadyResponse(requestId: string): AgentResponseBody {
+  return {
+    request_id: requestId,
+    status: "handoff_required",
+    reason_code: "capability_not_ready",
+    next_step: CONSULT_NOT_READY_NEXT_STEP,
+    response_expectation: CONSULT_NOT_READY_EXPECTATION,
+    contract_version: CONSULT_CONTRACT_VERSION,
+  };
 }
 
 export function normalizeCityKey(raw: string): string {
@@ -287,6 +321,7 @@ function nextStepFor(status: ConsultStatus, reason?: ConsultReasonCode): string 
       }
       return "Luxe will review this request and follow up if it can proceed.";
     case "handoff_required":
+      if (reason === "capability_not_ready") return CONSULT_NOT_READY_NEXT_STEP;
       return "A person at Luxe needs to continue this conversation and will follow up.";
     case "rejected":
       if (reason === "out_of_area") {
@@ -305,13 +340,14 @@ function nextStepFor(status: ConsultStatus, reason?: ConsultReasonCode): string 
   }
 }
 
-function expectationFor(status: ConsultStatus): string {
+function expectationFor(status: ConsultStatus, reason?: ConsultReasonCode): string {
   switch (status) {
     case "accepted":
       return "Human follow-up by phone or the preferred contact method. No time is reserved.";
     case "soft_accepted":
       return "Human review first, then follow-up if the request can proceed. No time is reserved.";
     case "handoff_required":
+      if (reason === "capability_not_ready") return CONSULT_NOT_READY_EXPECTATION;
       return "A person at Luxe will contact the customer. This is not an appointment.";
     case "rejected":
       return "No consultation will be scheduled from this request.";
@@ -328,7 +364,7 @@ function decide(
     status,
     reason_code: reason,
     next_step: nextStepFor(status, reason),
-    response_expectation: expectationFor(status),
+    response_expectation: expectationFor(status, reason),
     clarification_needed: clarification,
     shouldEmail: status !== "rejected",
     email,
@@ -496,6 +532,6 @@ export function opaqueAgentHoneypot(requestId: string): AgentResponseBody {
     status: "accepted",
     reason_code: "in_service_area",
     next_step: nextStepFor("accepted", "in_service_area"),
-    response_expectation: expectationFor("accepted"),
+    response_expectation: expectationFor("accepted", "in_service_area"),
   });
 }

@@ -12,11 +12,16 @@ import {
   consultationDiscoveryDocument,
   CONSULT_CONTRACT_VERSION,
   CONSULT_DRAPERY_CATEGORY_ID,
+  CONSULT_NOT_READY_EXPECTATION,
+  CONSULT_NOT_READY_HTTP_STATUS,
+  CONSULT_NOT_READY_NEXT_STEP,
   consultCategoriesPublic,
+  isConsultAgentSubmissionEnabled,
 } from "../lib/capabilities.ts";
 import {
   memoryIdempotencyStore,
   processConsultation,
+  processProductionConsultation,
 } from "../lib/consult-handler.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -89,6 +94,21 @@ async function runAgent(body, extras = {}) {
     idempotencyStore: extras.idempotencyStore === null ? undefined : store,
     createId: extras.createId ?? (() => ids[i++] ?? `req-${i}`),
     now: () => new Date("2026-08-22T18:00:00.000Z"),
+    logFailure: () => {},
+    // Local proof of the enabled policy. Production never passes this.
+    testAllowAgentExecution: extras.testAllowAgentExecution === false ? undefined : true,
+  });
+  return { result, mail, store };
+}
+
+async function runProductionGate(body, extras = {}) {
+  const mail = extras.mail ?? mailSpy();
+  const store = extras.store ?? memoryIdempotencyStore();
+  const ids = extras.ids ?? ["prod-1", "prod-2"];
+  let i = 0;
+  const result = await processProductionConsultation(body, {
+    sendEmail: mail.sendEmail,
+    createId: extras.createId ?? (() => ids[i++] ?? `prod-${i}`),
     logFailure: () => {},
   });
   return { result, mail, store };
@@ -267,12 +287,14 @@ await test("16  duplicate idempotency key → same request_id, no second email",
     idempotencyStore: store,
     createId,
     logFailure: () => {},
+    testAllowAgentExecution: true,
   });
   const second = await processConsultation(body, {
     sendEmail: mail.sendEmail,
     idempotencyStore: store,
     createId,
     logFailure: () => {},
+    testAllowAgentExecution: true,
   });
   t.equal(first.body.status, "accepted", "first accepted");
   t.equal(second.body.request_id, first.body.request_id, "same request_id");
@@ -363,6 +385,10 @@ await test("discovery  no booking/pricing claims; drapery honest; readiness bloc
   t.equal(doc.pricingAvailable, false, "no pricing claim");
   t.equal(doc.checkoutAvailable, false, "no checkout claim");
   t.equal(doc.readiness, "not-ready", "not request-submission-ready");
+  t.equal(doc.submissionEnabled, false, "submissionEnabled false");
+  t.equal(isConsultAgentSubmissionEnabled(), false, "gate derived from contract");
+  t.equal(doc.execution.availableForUnattendedAgentExecution, false, "endpoint documented but unavailable");
+  t.equal(doc.doNotRetryAutomaticallyWhen, "capability_not_ready", "do not retry");
   t.ok(
     doc.readinessBlockers.includes("durable-idempotency-unavailable"),
     "idempotency blocker named"
@@ -370,6 +396,10 @@ await test("discovery  no booking/pricing claims; drapery honest; readiness bloc
   t.ok(
     doc.readinessBlockers.includes("durable-rate-limit-unavailable"),
     "rate-limit blocker named"
+  );
+  t.ok(
+    doc.response.reasonCodes.includes("capability_not_ready"),
+    "not-ready reason published"
   );
   t.ok(!doc.directBookingAvailable && !/calendly/i.test(JSON.stringify(doc)), "no Calendly");
   const drapery = doc.supportedProductCategories.find((c) => c.id === "custom-draperies");
@@ -398,11 +428,165 @@ await test("agent.json points at discovery and does not teach booking", (t) => {
   );
   t.equal(consult.direct_booking, false, "agent.json direct_booking false");
   t.equal(consult.requires_human_follow_up, true, "agent.json follow-up");
+  t.equal(consult.submission_enabled, false, "agent.json does not imply submission is live");
+  t.equal(consult.readiness, "not-ready", "agent.json readiness");
   t.ok(consult.url !== "https://www.luxewindowworks.com/book", "no longer /book");
   t.ok(
-    agent.primary_cta.description.toLowerCase().includes("not a booking"),
-    "primary CTA does not claim booking"
+    /disabled/.test(consult.description.toLowerCase()) &&
+      /disabled/.test(agent.primary_cta.description.toLowerCase()),
+    "copy says submission is disabled"
   );
+});
+
+function assertNotHumanFallback(t, result, mail, label) {
+  t.ok(result.body.ok !== true, `${label}: must not return human { ok: true }`);
+  t.ok(result.body.status !== undefined, `${label}: agent contract status`);
+  t.ok(result.body.request_id, `${label}: request_id`);
+  t.equal(mail.sent.length, 0, `${label}: no email`);
+}
+
+await test("19  source agent without contractVersion → no email; never human fallback", async (t) => {
+  const prod = await runProductionGate({
+    source: "agent",
+    name: "Alex Rivera",
+    phone: "208-555-0148",
+  });
+  t.equal(prod.result.status, CONSULT_NOT_READY_HTTP_STATUS, "production http");
+  t.equal(prod.result.body.reason_code, "capability_not_ready", "production reason");
+  assertNotHumanFallback(t, prod.result, prod.mail, "production partial source");
+
+  const enabled = await runAgent({
+    source: "agent",
+    name: "Alex Rivera",
+    phone: "208-555-0148",
+  });
+  t.equal(enabled.result.body.reason_code, "unsupported_contract_version", "enabled still agent path");
+  assertNotHumanFallback(t, enabled.result, enabled.mail, "enabled partial source");
+});
+
+await test("20  contractVersion without source agent → no email; never human fallback", async (t) => {
+  const prod = await runProductionGate({
+    contractVersion: "1.0",
+    name: "Alex Rivera",
+    phone: "208-555-0148",
+    source: "contact",
+  });
+  t.equal(prod.result.body.reason_code, "capability_not_ready", "production reason");
+  assertNotHumanFallback(t, prod.result, prod.mail, "production version marker");
+
+  const enabled = await runAgent({
+    contractVersion: "1.0",
+    name: "Alex Rivera",
+    phone: "208-555-0148",
+    source: "contact",
+  });
+  t.ok(enabled.result.body.ok !== true, "enabled is not human success");
+  t.equal(enabled.result.body.status, "rejected", "enabled stays on agent path");
+  t.equal(enabled.mail.sent.length, 0, "enabled sends no email");
+});
+
+await test("21  idempotencyKey alone → no email; never human fallback", async (t) => {
+  const prod = await runProductionGate({
+    idempotencyKey: "only-a-key",
+    name: "Alex Rivera",
+    phone: "208-555-0148",
+    source: "book",
+  });
+  t.equal(prod.result.body.reason_code, "capability_not_ready", "production reason");
+  assertNotHumanFallback(t, prod.result, prod.mail, "production key marker");
+
+  const enabled = await runAgent({
+    idempotencyKey: "only-a-key",
+    name: "Alex Rivera",
+    phone: "208-555-0148",
+    source: "book",
+  });
+  t.equal(enabled.result.body.reason_code, "unsupported_contract_version", "enabled agent path");
+  assertNotHumanFallback(t, enabled.result, enabled.mail, "enabled key marker");
+});
+
+await test("22  valid markers while not-ready → capability_not_ready; no email; no store", async (t) => {
+  const store = memoryIdempotencyStore();
+  const mail = mailSpy();
+  const body = agentBase({ idempotencyKey: "must-not-store" });
+  const { result } = await runProductionGate(body, { mail, store });
+  t.equal(result.status, CONSULT_NOT_READY_HTTP_STATUS, "http 503");
+  t.equal(result.body.status, "handoff_required", "existing status");
+  t.equal(result.body.reason_code, "capability_not_ready", "reason");
+  t.equal(result.body.next_step, CONSULT_NOT_READY_NEXT_STEP, "next_step");
+  t.equal(result.body.response_expectation, CONSULT_NOT_READY_EXPECTATION, "expectation");
+  t.equal(result.body.contract_version, "1.0", "contract version");
+  t.ok(result.body.request_id, "request_id");
+  t.ok(result.body.ok !== true, "not human ok");
+  t.equal(mail.sent.length, 0, "no email");
+  t.equal(await store.get("consult:v1:placeholder"), null, "store unused");
+  // Production helper has no store param; prove handler also skips writes when disabled.
+  const disabled = await processConsultation(body, {
+    sendEmail: mail.sendEmail,
+    idempotencyStore: store,
+    createId: () => "gate-id",
+    logFailure: () => {},
+  });
+  t.equal(disabled.body.reason_code, "capability_not_ready", "handler gate without override");
+  t.equal(mail.sent.length, 0, "still no email");
+  t.ok(!(await store.get("consult:v1:anything")), "no idempotency mutation");
+});
+
+await test("23  genuine human payloads without agent markers stay unchanged", async (t) => {
+  const mail = mailSpy();
+  const contact = await processProductionConsultation(
+    {
+      name: "Jamie Lee",
+      phone: "208-555-0199",
+      email: "jamie@example.com",
+      needs: "Need shades for the living room.",
+      contactMethod: "Phone call",
+      source: "contact",
+      _hp: "",
+    },
+    { sendEmail: mail.sendEmail, logFailure: () => {} }
+  );
+  t.equal(contact.status, 200, "contact http");
+  t.equal(contact.body.ok, true, "contact { ok: true }");
+  t.ok(contact.body.reason_code === undefined, "not the disabled agent contract");
+
+  const book = await processProductionConsultation(
+    {
+      firstName: "Sam",
+      lastName: "Cole",
+      email: "sam@example.com",
+      phone: "208-555-0112",
+      address: "123 Main St, Post Falls, ID",
+      message: "West windows get brutal sun.",
+      source: "book",
+    },
+    { sendEmail: mail.sendEmail, logFailure: () => {} }
+  );
+  t.equal(book.body.ok, true, "book { ok: true }");
+  t.equal(mail.sent.length, 2, "both human forms still email");
+});
+
+await test("24  page-path source values are not source:agent", async (t) => {
+  const mail = mailSpy();
+  for (const source of ["/contact", "/book", "/free-consultation", "contact", "book"]) {
+    const result = await processProductionConsultation(
+      { name: "Path Human", phone: "208-555-0101", source },
+      { sendEmail: mail.sendEmail, logFailure: () => {} }
+    );
+    t.equal(result.body.ok, true, `${source} is a human form`);
+    t.ok(result.body.reason_code !== "capability_not_ready", `${source} is not gated`);
+  }
+  t.equal(mail.sent.length, 5, "page-path sources still email as humans");
+});
+
+await test("25  production route cannot pass the test override", (t) => {
+  const route = readFileSync(join(ROOT, "app/api/consultation/route.ts"), "utf8");
+  t.ok(
+    route.includes("processProductionConsultation"),
+    "route uses the production adapter"
+  );
+  t.ok(!route.includes("testAllowAgentExecution"), "route never names the test override");
+  t.ok(!route.includes("processConsultation("), "route does not call the testable entry");
 });
 
 console.log("Consultation request contract");
@@ -417,6 +601,6 @@ if (failures) {
   process.exit(1);
 }
 console.log(
-  "\nPASS — agent decisions match the published contract, human forms stay compatible, " +
-    "and discovery does not claim booking, pricing, or request-submission readiness."
+  "\nPASS — agent policy is proven locally, production agent submission stays disabled, " +
+    "partial markers cannot become human forms, and discovery says not-ready."
 );
