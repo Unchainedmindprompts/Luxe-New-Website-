@@ -5,6 +5,7 @@
  * Local only. Mail and idempotency are mocked. Does not POST to production
  * or preview /api/consultation.
  */
+import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -951,6 +952,55 @@ await test("36  production adapter source wires Redis and Resend idempotency", (
   t.ok(rl.includes("timeout: 0"), "disables fail-open timeout");
   t.ok(rl.includes("analytics: false"), "analytics disabled");
   t.ok(rl.includes('reason === "timeout"'), "timeout success treated as unavailable");
+});
+
+await test("37  preview Redis verify skips locally and fails closed in preview without vars", (t) => {
+  const script = readFileSync(join(ROOT, "scripts/verify-consult-redis-preview.mjs"), "utf8");
+  const pkg = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8"));
+  t.ok(script.includes('environment !== "preview"'), "preview gated");
+  t.ok(script.includes("createUpstashAgentRateLimiter"), "real rate-limit adapter");
+  t.ok(script.includes("createRedisIdempotencyStore"), "real idempotency adapter");
+  t.ok(script.includes("getConsultRedis"), "real redis client");
+  t.ok(script.includes("consult:verify:preview:v1"), "isolated preview namespace");
+  t.ok(!/from ["']resend["']|emails\.send/i.test(script), "no Resend import");
+  t.ok(!/fetch\(|http\.request/.test(script), "no HTTP client");
+  t.ok(
+    pkg.scripts.postbuild.includes("verify:consult-redis-preview"),
+    "postbuild runs preview verify"
+  );
+
+  const skipEnv = { ...process.env };
+  delete skipEnv.VERCEL_ENV;
+  const skipped = spawnSync("npm", ["run", "verify:consult-redis-preview"], {
+    cwd: ROOT,
+    encoding: "utf8",
+    env: skipEnv,
+  });
+  t.equal(skipped.status, 0, "local skip exit 0");
+  t.ok(
+    /REDIS_VERIFY=skipped environment=local/.test(`${skipped.stdout}\n${skipped.stderr}`),
+    "local skip marker"
+  );
+
+  const previewEnv = { ...process.env, VERCEL_ENV: "preview" };
+  delete previewEnv.KV_REST_API_URL;
+  delete previewEnv.KV_REST_API_TOKEN;
+  delete previewEnv.UPSTASH_REDIS_REST_URL;
+  delete previewEnv.UPSTASH_REDIS_REST_TOKEN;
+  const blocked = spawnSync("npm", ["run", "verify:consult-redis-preview"], {
+    cwd: ROOT,
+    encoding: "utf8",
+    env: previewEnv,
+  });
+  t.equal(blocked.status, 1, "preview without vars fails the deploy");
+  t.ok(
+    /REDIS_VERIFY=failed environment=preview/.test(`${blocked.stdout}\n${blocked.stderr}`),
+    "preview fail marker"
+  );
+  t.ok(
+    /missing_env_names=KV_REST_API_URL,KV_REST_API_TOKEN/.test(`${blocked.stdout}\n${blocked.stderr}`),
+    "names only, no values"
+  );
 });
 
 console.log("Consultation request contract");
