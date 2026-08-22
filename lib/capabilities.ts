@@ -211,17 +211,14 @@ export const CONSULT_READINESS_READY = "request-submission-ready" as const;
 export const CONSULT_READINESS_NOT_READY = "not-ready" as const;
 
 /**
- * Deliberate production claim. Stays not-ready until real Upstash Preview
- * connectivity, adapter wiring, fail-closed behavior, and the contract suite
- * are all proven. No env var can change this.
+ * Deliberate production claim. Flipped after Vercel Preview build
+ * dpl_FZoq5Cv2viWHy8EZtcbsF7Fgq5dK printed REDIS_VERIFY=passed
+ * environment=preview against the real rate-limit and idempotency adapters.
+ * No env var can change this. Human confirmation remains mandatory.
  */
-export const CONSULT_READINESS = CONSULT_READINESS_NOT_READY;
+export const CONSULT_READINESS = CONSULT_READINESS_READY;
 export const CONSULT_AUTONOMOUS_EXECUTION = CONSULT_READINESS;
-export const CONSULT_READINESS_BLOCKERS = [
-  "durable-idempotency-unavailable",
-  "durable-rate-limit-unavailable",
-  "preview-redis-connectivity-unverified",
-] as const;
+export const CONSULT_READINESS_BLOCKERS = [] as const;
 
 export const CONSULT_DO_NOT_RETRY_AUTOMATICALLY = [
   "capability_not_ready",
@@ -272,12 +269,12 @@ export const CONSULT_REQUEST_IN_PROGRESS_NEXT_STEP =
 
 /**
  * Production gate. Derived only from this contract — no env override.
- * False while readiness / autonomousExecution are the literal `"not-ready"`.
+ * True only while readiness / autonomousExecution are `"request-submission-ready"`.
  */
 export function isConsultAgentSubmissionEnabled(): boolean {
   return (
-    CONSULT_READINESS !== "not-ready" &&
-    CONSULT_AUTONOMOUS_EXECUTION !== "not-ready"
+    CONSULT_READINESS === CONSULT_READINESS_READY &&
+    CONSULT_AUTONOMOUS_EXECUTION === CONSULT_READINESS_READY
   );
 }
 

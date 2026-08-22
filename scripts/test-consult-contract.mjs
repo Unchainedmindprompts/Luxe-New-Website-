@@ -131,6 +131,7 @@ async function runProductionGate(body, extras = {}) {
     sendEmail: mail.sendEmail,
     createId: extras.createId ?? (() => ids[i++] ?? `prod-${i}`),
     logFailure: () => {},
+    logInfraUnavailable: () => {},
   });
   return { result, mail, store };
 }
