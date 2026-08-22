@@ -12,17 +12,33 @@ import {
   consultationDiscoveryDocument,
   CONSULT_CONTRACT_VERSION,
   CONSULT_DRAPERY_CATEGORY_ID,
+  CONSULT_IDEMPOTENCY_TTL_SECONDS,
   CONSULT_NOT_READY_EXPECTATION,
   CONSULT_NOT_READY_HTTP_STATUS,
   CONSULT_NOT_READY_NEXT_STEP,
+  CONSULT_READINESS,
   consultCategoriesPublic,
   isConsultAgentSubmissionEnabled,
 } from "../lib/capabilities.ts";
 import {
+  memoryAgentRateLimiter,
   memoryIdempotencyStore,
   processConsultation,
   processProductionConsultation,
 } from "../lib/consult-handler.ts";
+import {
+  consultEmailIdempotencyKey,
+  idempotencyStorageKey,
+} from "../lib/consult-idempotency.ts";
+import {
+  hashClientIp,
+  hashNormalizedClientIp,
+  normalizeClientIp,
+} from "../lib/consult-ip.ts";
+import {
+  timeoutSuccessRateLimiter,
+  unavailableRateLimiter,
+} from "../lib/consult-rate-limit.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -87,14 +103,18 @@ function mailSpy() {
 async function runAgent(body, extras = {}) {
   const mail = extras.mail ?? mailSpy();
   const store = extras.store ?? memoryIdempotencyStore();
+  const limiter = extras.rateLimiter ?? memoryAgentRateLimiter();
   const ids = extras.ids ?? ["req-1", "req-2", "req-3"];
   let i = 0;
   const result = await processConsultation(body, {
     sendEmail: mail.sendEmail,
     idempotencyStore: extras.idempotencyStore === null ? undefined : store,
+    rateLimiter: extras.rateLimiter === null ? undefined : limiter,
+    clientIpHash: extras.clientIpHash ?? "hash-test-default",
     createId: extras.createId ?? (() => ids[i++] ?? `req-${i}`),
-    now: () => new Date("2026-08-22T18:00:00.000Z"),
+    now: extras.now ?? (() => new Date("2026-08-22T18:00:00.000Z")),
     logFailure: () => {},
+    logInfraUnavailable: extras.logInfra ?? (() => {}),
     // Local proof of the enabled policy. Production never passes this.
     testAllowAgentExecution: extras.testAllowAgentExecution === false ? undefined : true,
   });
@@ -278,29 +298,30 @@ await test("15  unsupported contract version → rejected", async (t) => {
 
 await test("16  duplicate idempotency key → same request_id, no second email", async (t) => {
   const store = memoryIdempotencyStore();
+  const limiter = memoryAgentRateLimiter();
   const mail = mailSpy();
   let n = 0;
   const createId = () => `id-${++n}`;
   const body = agentBase({ idempotencyKey: "same-key-once" });
-  const first = await processConsultation(body, {
+  const deps = {
     sendEmail: mail.sendEmail,
     idempotencyStore: store,
+    rateLimiter: limiter,
+    clientIpHash: "hash-same-key",
     createId,
     logFailure: () => {},
     testAllowAgentExecution: true,
-  });
-  const second = await processConsultation(body, {
-    sendEmail: mail.sendEmail,
-    idempotencyStore: store,
-    createId,
-    logFailure: () => {},
-    testAllowAgentExecution: true,
-  });
+  };
+  const first = await processConsultation(body, deps);
+  const second = await processConsultation(body, deps);
   t.equal(first.body.status, "accepted", "first accepted");
   t.equal(second.body.request_id, first.body.request_id, "same request_id");
   t.equal(second.body.status, first.body.status, "same status");
   t.equal(mail.sent.length, 1, "no duplicate email");
   t.ok(!("emailed" in second.body), "store flag is not part of the public contract");
+  t.ok(!("fingerprint" in second.body), "fingerprint is not public");
+  t.ok(!("state" in second.body), "internal state is not public");
+  t.equal(mail.sent[0]?.idempotencyKey, consultEmailIdempotencyKey("same-key-once"), "Resend key");
 });
 
 await test("17  honeypot → opaque safe response, no email", async (t) => {
@@ -384,22 +405,65 @@ await test("discovery  no booking/pricing claims; drapery honest; readiness bloc
   t.equal(doc.directBookingAvailable, false, "no booking claim");
   t.equal(doc.pricingAvailable, false, "no pricing claim");
   t.equal(doc.checkoutAvailable, false, "no checkout claim");
-  t.equal(doc.readiness, "not-ready", "not request-submission-ready");
-  t.equal(doc.submissionEnabled, false, "submissionEnabled false");
-  t.equal(isConsultAgentSubmissionEnabled(), false, "gate derived from contract");
-  t.equal(doc.execution.availableForUnattendedAgentExecution, false, "endpoint documented but unavailable");
-  t.equal(doc.doNotRetryAutomaticallyWhen, "capability_not_ready", "do not retry");
-  t.ok(
-    doc.readinessBlockers.includes("durable-idempotency-unavailable"),
-    "idempotency blocker named"
+  t.equal(doc.readiness, CONSULT_READINESS, "readiness matches contract literal");
+  t.equal(doc.submissionEnabled, isConsultAgentSubmissionEnabled(), "submissionEnabled derived");
+  t.equal(
+    doc.execution.availableForUnattendedAgentExecution,
+    isConsultAgentSubmissionEnabled(),
+    "execution availability derived"
   );
   t.ok(
-    doc.readinessBlockers.includes("durable-rate-limit-unavailable"),
-    "rate-limit blocker named"
+    doc.doNotRetryAutomaticallyWhen.includes("capability_not_ready"),
+    "do not retry when not ready"
   );
+  t.ok(
+    doc.doNotRetryAutomaticallyWhen.includes("rate_limited"),
+    "do not retry when rate limited"
+  );
+  t.ok(
+    doc.doNotRetryAutomaticallyWhen.includes("infrastructure_unavailable"),
+    "do not retry when infra unavailable"
+  );
+  t.equal(
+    doc.idempotency.durableStoreAvailable,
+    isConsultAgentSubmissionEnabled(),
+    "idempotency availability matches gate"
+  );
+  t.equal(
+    doc.rateLimit.durableLimiterAvailable,
+    isConsultAgentSubmissionEnabled(),
+    "rate-limit availability matches gate"
+  );
+  if (!isConsultAgentSubmissionEnabled()) {
+    t.ok(
+      doc.readinessBlockers.includes("durable-idempotency-unavailable"),
+      "idempotency blocker named"
+    );
+    t.ok(
+      doc.readinessBlockers.includes("durable-rate-limit-unavailable"),
+      "rate-limit blocker named"
+    );
+    t.ok(
+      doc.readinessBlockers.includes("preview-redis-connectivity-unverified"),
+      "preview redis blocker named"
+    );
+  } else {
+    t.equal(doc.readinessBlockers.length, 0, "no readiness blockers after flip");
+    t.equal(doc.readiness, "request-submission-ready", "ready literal");
+  }
   t.ok(
     doc.response.reasonCodes.includes("capability_not_ready"),
     "not-ready reason published"
+  );
+  t.ok(doc.response.reasonCodes.includes("rate_limited"), "rate_limited published");
+  t.ok(
+    doc.response.reasonCodes.includes("infrastructure_unavailable"),
+    "infrastructure_unavailable published"
+  );
+  t.ok(!/\b5\b.*hour|hour.*\b5\b|20.*day|day.*20/i.test(JSON.stringify(doc.rateLimit)), "no thresholds");
+  t.ok(
+    !/KV_REST|REDIS_URL|fingerprint|idempotencyStorageKey/i.test(JSON.stringify(doc)),
+    "no internal redis/idempotency fields"
   );
   t.ok(!doc.directBookingAvailable && !/calendly/i.test(JSON.stringify(doc)), "no Calendly");
   const drapery = doc.supportedProductCategories.find((c) => c.id === "custom-draperies");
@@ -428,14 +492,25 @@ await test("agent.json points at discovery and does not teach booking", (t) => {
   );
   t.equal(consult.direct_booking, false, "agent.json direct_booking false");
   t.equal(consult.requires_human_follow_up, true, "agent.json follow-up");
-  t.equal(consult.submission_enabled, false, "agent.json does not imply submission is live");
-  t.equal(consult.readiness, "not-ready", "agent.json readiness");
-  t.ok(consult.url !== "https://www.luxewindowworks.com/book", "no longer /book");
-  t.ok(
-    /disabled/.test(consult.description.toLowerCase()) &&
-      /disabled/.test(agent.primary_cta.description.toLowerCase()),
-    "copy says submission is disabled"
+  t.equal(
+    consult.submission_enabled,
+    isConsultAgentSubmissionEnabled(),
+    "agent.json submission matches contract"
   );
+  t.equal(consult.readiness, CONSULT_READINESS, "agent.json readiness");
+  t.ok(consult.url !== "https://www.luxewindowworks.com/book", "no longer /book");
+  if (!isConsultAgentSubmissionEnabled()) {
+    t.ok(
+      /disabled/.test(consult.description.toLowerCase()) &&
+        /disabled/.test(agent.primary_cta.description.toLowerCase()),
+      "copy says submission is disabled"
+    );
+  } else {
+    t.ok(
+      !/booked|reserved|appointment confirmed/i.test(consult.description),
+      "enabled copy still does not teach booking"
+    );
+  }
 });
 
 function assertNotHumanFallback(t, result, mail, label) {
@@ -445,6 +520,12 @@ function assertNotHumanFallback(t, result, mail, label) {
   t.equal(mail.sent.length, 0, `${label}: no email`);
 }
 
+function productionAgentGateReason() {
+  return isConsultAgentSubmissionEnabled()
+    ? "infrastructure_unavailable"
+    : "capability_not_ready";
+}
+
 await test("19  source agent without contractVersion → no email; never human fallback", async (t) => {
   const prod = await runProductionGate({
     source: "agent",
@@ -452,7 +533,7 @@ await test("19  source agent without contractVersion → no email; never human f
     phone: "208-555-0148",
   });
   t.equal(prod.result.status, CONSULT_NOT_READY_HTTP_STATUS, "production http");
-  t.equal(prod.result.body.reason_code, "capability_not_ready", "production reason");
+  t.equal(prod.result.body.reason_code, productionAgentGateReason(), "production reason");
   assertNotHumanFallback(t, prod.result, prod.mail, "production partial source");
 
   const enabled = await runAgent({
@@ -471,7 +552,7 @@ await test("20  contractVersion without source agent → no email; never human f
     phone: "208-555-0148",
     source: "contact",
   });
-  t.equal(prod.result.body.reason_code, "capability_not_ready", "production reason");
+  t.equal(prod.result.body.reason_code, productionAgentGateReason(), "production reason");
   assertNotHumanFallback(t, prod.result, prod.mail, "production version marker");
 
   const enabled = await runAgent({
@@ -492,7 +573,7 @@ await test("21  idempotencyKey alone → no email; never human fallback", async 
     phone: "208-555-0148",
     source: "book",
   });
-  t.equal(prod.result.body.reason_code, "capability_not_ready", "production reason");
+  t.equal(prod.result.body.reason_code, productionAgentGateReason(), "production reason");
   assertNotHumanFallback(t, prod.result, prod.mail, "production key marker");
 
   const enabled = await runAgent({
@@ -505,31 +586,41 @@ await test("21  idempotencyKey alone → no email; never human fallback", async 
   assertNotHumanFallback(t, enabled.result, enabled.mail, "enabled key marker");
 });
 
-await test("22  valid markers while not-ready → capability_not_ready; no email; no store", async (t) => {
+await test("22  production agent gate → 503; no email; no store", async (t) => {
   const store = memoryIdempotencyStore();
   const mail = mailSpy();
   const body = agentBase({ idempotencyKey: "must-not-store" });
   const { result } = await runProductionGate(body, { mail, store });
   t.equal(result.status, CONSULT_NOT_READY_HTTP_STATUS, "http 503");
   t.equal(result.body.status, "handoff_required", "existing status");
-  t.equal(result.body.reason_code, "capability_not_ready", "reason");
-  t.equal(result.body.next_step, CONSULT_NOT_READY_NEXT_STEP, "next_step");
-  t.equal(result.body.response_expectation, CONSULT_NOT_READY_EXPECTATION, "expectation");
+  t.equal(result.body.reason_code, productionAgentGateReason(), "reason");
   t.equal(result.body.contract_version, "1.0", "contract version");
   t.ok(result.body.request_id, "request_id");
   t.ok(result.body.ok !== true, "not human ok");
   t.equal(mail.sent.length, 0, "no email");
-  t.equal(await store.get("consult:v1:placeholder"), null, "store unused");
-  // Production helper has no store param; prove handler also skips writes when disabled.
-  const disabled = await processConsultation(body, {
-    sendEmail: mail.sendEmail,
-    idempotencyStore: store,
-    createId: () => "gate-id",
-    logFailure: () => {},
-  });
-  t.equal(disabled.body.reason_code, "capability_not_ready", "handler gate without override");
-  t.equal(mail.sent.length, 0, "still no email");
-  t.ok(!(await store.get("consult:v1:anything")), "no idempotency mutation");
+  t.equal(
+    await store.inspect(idempotencyStorageKey("must-not-store")),
+    null,
+    "injected store unused by production adapter"
+  );
+  if (!isConsultAgentSubmissionEnabled()) {
+    t.equal(result.body.next_step, CONSULT_NOT_READY_NEXT_STEP, "next_step");
+    t.equal(result.body.response_expectation, CONSULT_NOT_READY_EXPECTATION, "expectation");
+    const disabled = await processConsultation(body, {
+      sendEmail: mail.sendEmail,
+      idempotencyStore: store,
+      rateLimiter: memoryAgentRateLimiter(),
+      clientIpHash: "hash-disabled",
+      createId: () => "gate-id",
+      logFailure: () => {},
+    });
+    t.equal(disabled.body.reason_code, "capability_not_ready", "handler gate without override");
+    t.equal(mail.sent.length, 0, "still no email");
+    t.ok(
+      !(await store.inspect(idempotencyStorageKey("must-not-store"))),
+      "no idempotency mutation"
+    );
+  }
 });
 
 await test("23  genuine human payloads without agent markers stay unchanged", async (t) => {
@@ -587,6 +678,279 @@ await test("25  production route cannot pass the test override", (t) => {
   );
   t.ok(!route.includes("testAllowAgentExecution"), "route never names the test override");
   t.ok(!route.includes("processConsultation("), "route does not call the testable entry");
+  t.ok(route.includes("idempotencyKey"), "route passes Resend idempotency");
+  t.ok(route.includes("request: req"), "route supplies the request for client identity");
+});
+
+await test("26  first valid agent → one mocked email with stable Resend key", async (t) => {
+  const mail = mailSpy();
+  const { result } = await runAgent(agentBase({ idempotencyKey: "first-valid-key" }), { mail });
+  t.equal(result.status, 200, "http");
+  t.equal(result.body.status, "accepted", "accepted");
+  t.equal(mail.sent.length, 1, "one email");
+  t.equal(
+    mail.sent[0].idempotencyKey,
+    consultEmailIdempotencyKey("first-valid-key"),
+    "stable Resend idempotency key"
+  );
+  t.ok(!mail.sent[0].idempotencyKey.includes("first-valid-key"), "raw agent key is not the Resend key");
+});
+
+await test("27  same key + changed payload → idempotency_conflict, no email", async (t) => {
+  const store = memoryIdempotencyStore();
+  const limiter = memoryAgentRateLimiter();
+  const mail = mailSpy();
+  const first = await runAgent(agentBase({ idempotencyKey: "conflict-key", city: "Post Falls" }), {
+    store,
+    rateLimiter: limiter,
+    mail,
+    clientIpHash: "hash-conflict",
+  });
+  const second = await runAgent(
+    agentBase({ idempotencyKey: "conflict-key", city: "Hayden", postalCode: "83835" }),
+    { store, rateLimiter: limiter, mail, clientIpHash: "hash-conflict" }
+  );
+  t.equal(first.result.body.status, "accepted", "first accepted");
+  t.equal(second.result.status, 409, "conflict http");
+  t.equal(second.result.body.reason_code, "idempotency_conflict", "conflict reason");
+  t.equal(mail.sent.length, 1, "no second email");
+  t.ok(!("emailed" in second.result.body), "no internal flag leak");
+});
+
+await test("28  concurrent duplicate → request_in_progress, no second email", async (t) => {
+  const store = memoryIdempotencyStore();
+  const limiter = memoryAgentRateLimiter();
+  const sent = [];
+  let releaseSend;
+  let sendStartedResolve;
+  const sendStarted = new Promise((resolve) => {
+    sendStartedResolve = resolve;
+  });
+  const sendEmail = async (message) => {
+    sent.push(message);
+    sendStartedResolve();
+    await new Promise((resolve) => {
+      releaseSend = resolve;
+    });
+    return {};
+  };
+  const body = agentBase({ idempotencyKey: "concurrent-key" });
+  const deps = {
+    sendEmail,
+    idempotencyStore: store,
+    rateLimiter: limiter,
+    clientIpHash: "hash-concurrent",
+    logFailure: () => {},
+    testAllowAgentExecution: true,
+  };
+  const firstP = processConsultation(body, { ...deps, createId: () => "first-id" });
+  await sendStarted;
+  const second = await processConsultation(body, { ...deps, createId: () => "second-id" });
+  t.equal(second.status, 409, "in-progress http");
+  t.equal(second.body.reason_code, "request_in_progress", "in-progress reason");
+  t.equal(sent.length, 1, "no second email while processing");
+  releaseSend();
+  const first = await firstP;
+  t.equal(first.status, 200, "first completed");
+  t.equal(first.body.request_id, "first-id", "first request_id");
+  t.equal(sent.length, 1, "still one email");
+});
+
+await test("29  Redis-style claim is atomic and expires", async (t) => {
+  let nowMs = 1_700_000_000_000;
+  const store = memoryIdempotencyStore({ now: () => nowMs });
+  const key = idempotencyStorageKey("expire-key");
+  const first = await store.claim({
+    storageKey: key,
+    fingerprint: "fp-a",
+    requestId: "r1",
+    nowMs,
+    ttlSeconds: CONSULT_IDEMPOTENCY_TTL_SECONDS,
+  });
+  const second = await store.claim({
+    storageKey: key,
+    fingerprint: "fp-a",
+    requestId: "r2",
+    nowMs,
+    ttlSeconds: CONSULT_IDEMPOTENCY_TTL_SECONDS,
+  });
+  t.equal(first.kind, "claimed", "first claim wins");
+  t.equal(second.kind, "in_progress", "second claim rejected");
+  t.equal(CONSULT_IDEMPOTENCY_TTL_SECONDS, 24 * 60 * 60, "24h ttl");
+  nowMs += CONSULT_IDEMPOTENCY_TTL_SECONDS * 1000 + 1;
+  t.equal(await store.inspect(key), null, "record expires");
+  const after = await store.claim({
+    storageKey: key,
+    fingerprint: "fp-a",
+    requestId: "r3",
+    nowMs,
+    ttlSeconds: CONSULT_IDEMPOTENCY_TTL_SECONDS,
+  });
+  t.equal(after.kind, "claimed", "expired key can be claimed again");
+});
+
+await test("30  6th hourly → rate_limited; 21st daily → rate_limited", async (t) => {
+  const hourlyLimiter = memoryAgentRateLimiter({ hourlyLimit: 5, dailyLimit: 100 });
+  const mail = mailSpy();
+  let last;
+  for (let i = 0; i < 6; i++) {
+    last = await runAgent(agentBase({ idempotencyKey: `hour-${i}` }), {
+      rateLimiter: hourlyLimiter,
+      mail,
+      clientIpHash: "hash-hour",
+    });
+  }
+  t.equal(last.result.status, 429, "6th hourly http");
+  t.equal(last.result.body.reason_code, "rate_limited", "6th hourly reason");
+  t.ok(last.result.headers?.["Retry-After"], "Retry-After present");
+  t.ok(/do not retry automatically/i.test(last.result.body.next_step), "explicitly forbids automatic retry");
+  t.ok(!/please retry|try again soon|retry later/i.test(last.result.body.next_step), "no retry encouragement");
+  t.equal(mail.sent.length, 5, "limited attempt does not email");
+
+  const dailyLimiter = memoryAgentRateLimiter({ hourlyLimit: 100, dailyLimit: 20 });
+  const dailyMail = mailSpy();
+  let dailyLast;
+  for (let i = 0; i < 21; i++) {
+    dailyLast = await runAgent(agentBase({ idempotencyKey: `day-${i}` }), {
+      rateLimiter: dailyLimiter,
+      mail: dailyMail,
+      clientIpHash: "hash-day",
+    });
+  }
+  t.equal(dailyLast.result.status, 429, "21st daily http");
+  t.equal(dailyLast.result.body.reason_code, "rate_limited", "21st daily reason");
+  t.equal(dailyMail.sent.length, 20, "daily limit stops email");
+});
+
+await test("31  different hashed IDs do not share limits", async (t) => {
+  const limiter = memoryAgentRateLimiter({ hourlyLimit: 1, dailyLimit: 1 });
+  const a = await runAgent(agentBase({ idempotencyKey: "id-a" }), {
+    rateLimiter: limiter,
+    clientIpHash: "hash-a",
+  });
+  const b = await runAgent(agentBase({ idempotencyKey: "id-b" }), {
+    rateLimiter: limiter,
+    clientIpHash: "hash-b",
+  });
+  t.equal(a.result.status, 200, "first identity allowed");
+  t.equal(b.result.status, 200, "second identity allowed");
+});
+
+await test("32  IPv6 same /64 share limit; different /64 distinct; IPv4 normalized", async (t) => {
+  const a = "2001:db8:abcd:1234:1111:2222:3333:4444";
+  const b = "2001:db8:abcd:1234:aaaa:bbbb:cccc:dddd";
+  const c = "2001:db8:abcd:1235::1";
+  t.equal(normalizeClientIp(a), normalizeClientIp(b), "same /64");
+  t.ok(normalizeClientIp(a) !== normalizeClientIp(c), "different /64");
+  t.equal(hashClientIp(a), hashClientIp(b), "same hash for /64");
+  t.ok(hashClientIp(a) !== hashClientIp(c), "distinct hash for other /64");
+  t.equal(normalizeClientIp("192.168.001.010"), "192.168.1.10", "IPv4 leading zeros");
+  t.equal(normalizeClientIp("::ffff:192.168.1.10"), "192.168.1.10", "IPv4-mapped IPv6");
+  t.equal(hashClientIp("192.168.1.10"), hashNormalizedClientIp("192.168.1.10"), "hash matches");
+
+  const limiter = memoryAgentRateLimiter({ hourlyLimit: 1, dailyLimit: 1 });
+  const first = await runAgent(agentBase({ idempotencyKey: "v6-a" }), {
+    rateLimiter: limiter,
+    clientIpHash: hashClientIp(a),
+  });
+  const same = await runAgent(agentBase({ idempotencyKey: "v6-b" }), {
+    rateLimiter: limiter,
+    clientIpHash: hashClientIp(b),
+  });
+  const other = await runAgent(agentBase({ idempotencyKey: "v6-c" }), {
+    rateLimiter: limiter,
+    clientIpHash: hashClientIp(c),
+  });
+  t.equal(first.result.status, 200, "first /64 allowed");
+  t.equal(same.result.status, 429, "same /64 limited");
+  t.equal(other.result.status, 200, "other /64 allowed");
+});
+
+await test("33  raw IP never appears in Redis keys or logs", async (t) => {
+  const ip = "203.0.113.77";
+  const hashed = hashClientIp(ip);
+  const storage = idempotencyStorageKey("agent-key-for-ip");
+  t.ok(hashed && !hashed.includes(ip), "hash hides IPv4");
+  t.ok(!storage.includes(ip), "idempotency key hides IP");
+  t.ok(!storage.includes("agent-key-for-ip"), "raw agent key is hashed");
+  const v6 = "2001:db8:abcd:1234:1111:2222:3333:4444";
+  t.ok(!hashClientIp(v6).includes("2001"), "hash is digest, not hextets");
+  const stages = [];
+  await runAgent(agentBase(), {
+    rateLimiter: null,
+    clientIpHash: hashed,
+    logInfra: (requestId, stage) => stages.push({ requestId, stage }),
+  });
+  t.ok(
+    stages.every((entry) => !JSON.stringify(entry).includes(ip)),
+    "infra logs have no raw IP"
+  );
+});
+
+await test("34  missing Redis / timeout / connection failure → fail closed, no email", async (t) => {
+  const missing = await runAgent(agentBase({ idempotencyKey: "no-redis" }), {
+    rateLimiter: null,
+    idempotencyStore: null,
+  });
+  t.equal(missing.result.status, 503, "missing controls http");
+  t.equal(missing.result.body.reason_code, "infrastructure_unavailable", "missing controls reason");
+  t.equal(missing.mail.sent.length, 0, "no email without controls");
+  t.ok(missing.result.body.ok !== true, "not human fallback");
+
+  const timeout = await runAgent(agentBase({ idempotencyKey: "timeout-rl" }), {
+    rateLimiter: timeoutSuccessRateLimiter(),
+  });
+  t.equal(timeout.result.status, 503, "timeout http");
+  t.equal(timeout.result.body.reason_code, "infrastructure_unavailable", "timeout is unavailable");
+  t.equal(timeout.mail.sent.length, 0, "timeout does not email");
+
+  const down = await runAgent(agentBase({ idempotencyKey: "rl-down" }), {
+    rateLimiter: unavailableRateLimiter("rate-limit-error"),
+  });
+  t.equal(down.result.status, 503, "connection failure http");
+  t.equal(down.mail.sent.length, 0, "connection failure does not email");
+
+  const noIp = await processConsultation(agentBase({ idempotencyKey: "no-ip" }), {
+    sendEmail: async () => ({}),
+    idempotencyStore: memoryIdempotencyStore(),
+    rateLimiter: memoryAgentRateLimiter(),
+    logFailure: () => {},
+    logInfraUnavailable: () => {},
+    testAllowAgentExecution: true,
+  });
+  t.equal(noIp.status, 503, "missing client identity fail-closed");
+  t.equal(noIp.body.reason_code, "infrastructure_unavailable", "missing identity reason");
+});
+
+await test("35  rejected validation does not create a long-lived idempotency record", async (t) => {
+  const store = memoryIdempotencyStore();
+  const { result } = await runAgent(agentBase({ phone: "", idempotencyKey: "invalid-no-store" }), {
+    store,
+  });
+  t.equal(result.body.reason_code, "incomplete_request", "rejected");
+  t.equal(
+    await store.inspect(idempotencyStorageKey("invalid-no-store")),
+    null,
+    "no record for invalid payload"
+  );
+});
+
+await test("36  production adapter source wires Redis and Resend idempotency", (t) => {
+  const handler = readFileSync(join(ROOT, "lib/consult-handler.ts"), "utf8");
+  const route = readFileSync(join(ROOT, "app/api/consultation/route.ts"), "utf8");
+  t.ok(handler.includes("createUpstashAgentRateLimiter"), "production rate limiter");
+  t.ok(handler.includes("createRedisIdempotencyStore"), "production idempotency store");
+  t.ok(handler.includes("getConsultRedis"), "lazy redis");
+  t.ok(handler.includes("timeout: 0") === false, "timeout 0 lives in rate-limit module");
+  t.ok(route.includes("idempotencyKey"), "Resend typed idempotency");
+  t.ok(route.includes("hashedClientIpFromRequest") === false, "route does not hash IP itself");
+  const redis = readFileSync(join(ROOT, "lib/consult-redis.ts"), "utf8");
+  t.ok(redis.includes("KV_REST_API_URL"), "uses marketplace URL name");
+  t.ok(redis.includes("KV_REST_API_TOKEN"), "uses marketplace token name");
+  const rl = readFileSync(join(ROOT, "lib/consult-rate-limit.ts"), "utf8");
+  t.ok(rl.includes("timeout: 0"), "disables fail-open timeout");
+  t.ok(rl.includes("analytics: false"), "analytics disabled");
+  t.ok(rl.includes('reason === "timeout"'), "timeout success treated as unavailable");
 });
 
 console.log("Consultation request contract");
@@ -601,6 +965,8 @@ if (failures) {
   process.exit(1);
 }
 console.log(
-  "\nPASS — agent policy is proven locally, production agent submission stays disabled, " +
-    "partial markers cannot become human forms, and discovery says not-ready."
+  isConsultAgentSubmissionEnabled()
+    ? "\nPASS — protected agent consultation policy is proven locally; humans and Calendly stay unchanged; no consultation POST was made."
+    : "\nPASS — agent policy is proven locally, production agent submission stays disabled, " +
+        "partial markers cannot become human forms, and discovery says not-ready."
 );
