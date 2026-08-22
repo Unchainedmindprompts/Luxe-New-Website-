@@ -1,37 +1,51 @@
 /**
  * What a person or an agent can actually initiate with Luxe.
  *
- * INTERNAL BUSINESS TRUTH, like `lib/offerings.ts`. This module emits nothing:
- * no JSON-LD `potentialAction`, no MCP tool, no agent card, no OpenAPI. Those
- * are adapters over this contract and each needs its own decision. What is
- * settled here is what the business genuinely does, described narrowly enough
- * that an adapter written later cannot honestly turn it into something else.
+ * INTERNAL BUSINESS TRUTH, like `lib/offerings.ts`. This module is the source
+ * of the consultation-request contract. Public discovery is derived from it;
+ * the POST route executes it. There is no second catalogue of intents,
+ * geography, or readiness.
  *
  * THE CAPABILITY IS NOT THE ENDPOINT. "Luxe accepts requests for an in-home
  * consultation" is a fact about the business and stays true if the form, the
  * mail provider or the route ever change. `POST /api/consultation` is today's
  * execution surface for it — one way to perform the capability, with its own
- * outcome and its own readiness. They are modelled separately so replacing the
- * transport does not read as replacing the business capability.
+ * outcome and its own readiness.
  *
- * REQUEST, NEVER BOOKING. This is the single most important thing in the file.
- * The endpoint sends an email. It touches no calendar, checks no availability,
- * returns no time, reserves nothing, and persists nothing. A homeowner who
- * submits it has asked Luxe to get in touch; they do not have an appointment.
- * An adapter that renders this as a confirmed booking sends someone home to
- * wait for a visit nobody scheduled — which is worse than having no capability
- * at all. The types below refuse to express that outcome: there is no
- * `startTime`, no `reservationStatus`, no `confirmed`, and `actionType` admits
- * one value.
+ * REQUEST, NEVER BOOKING. The endpoint sends an email. It touches no calendar,
+ * checks no availability, returns no time, reserves nothing, and creates no
+ * appointment. A successful submission means Luxe was asked to follow up.
  *
- * FIELD NAMES ARE DUPLICATED FROM THE ROUTE, deliberately. `ConsultationPayload`
- * is local to `app/api/consultation/route.ts` and exporting it would mean
- * editing the endpoint, which this phase does not do. The duplication is
- * recorded here rather than hidden: if the route's accepted fields change, this
- * contract has to be re-read against it.
+ * TWO GEOGRAPHY CONCERNS, KEPT APART.
+ *   1. Canonical website markets (`SERVICE_AREAS` in lib/constants.ts) — five
+ *      city pages, Place entities, nav, SEO. Untouched by this contract.
+ *   2. Operational consultation eligibility — the larger set of markets Mark
+ *      will accept a request from. Agents validate against (2). They must not
+ *      invent pages or schema for it.
+ *
+ * DRAPERY. Custom draperies are a real offering and a valid consultation
+ * category. The repository has no drapery product page and no Service `@id`.
+ * That absence is recorded here rather than filled in.
+ *
+ * READINESS. `autonomousExecution` stays the literal `"not-ready"`. There is
+ * no durable rate limiter and no durable idempotency store in this repository
+ * (no Upstash, no Redis, no other provider — and this phase does not add one).
+ * The decision policy can still be proven in tests, but production agent
+ * submission is disabled until readiness is deliberately changed after those
+ * controls exist. No environment variable can flip this.
  */
 
+import type { OfferingId } from "./offerings";
+import { BUSINESS, PRODUCTS } from "./constants";
+
 export type CapabilityId = "request-in-home-consultation";
+
+export const CONSULT_CONTRACT_VERSION = "1.0" as const;
+export const CONSULT_CAPABILITY_ID = "request-in-home-consultation" as const;
+export const CONSULT_DISCOVERY_PATH =
+  "/api/capabilities/request-in-home-consultation" as const;
+export const CONSULT_EXECUTION_PATH = "/api/consultation" as const;
+export const CONSULT_AGENT_SOURCE = "agent" as const;
 
 /**
  * One way to perform a capability.
@@ -41,122 +55,452 @@ export type CapabilityId = "request-in-home-consultation";
  * this particular endpoint is fit for unattended machine traffic.
  */
 export interface ExecutionSurface {
-  readonly endpoint: string;
+  readonly endpoint: typeof CONSULT_EXECUTION_PATH;
   readonly method: "POST";
 
   /**
-   * WHAT A 2xx ACTUALLY MEANS — and it is narrower than "Luxe received it".
+   * WHAT A 2xx ACTUALLY MEANS.
    *
-   * The route returns `{ ok: true }` on two different paths. One sends the
-   * email. The other is the honeypot: when the hidden `_hp` field arrives
-   * non-empty the request is discarded silently and still answered `{ ok: true }`,
-   * so bots do not learn to retry. A caller cannot tell the two apart. On top of
-   * that, a 200 means the mail provider accepted the message, not that it
-   * reached the inbox.
-   *
-   * So the honest ceiling is: the endpoint took the submission. Anything
-   * stronger — delivered, received by Luxe, actioned — is a claim this
-   * transport cannot support.
+   * Human forms still receive `{ ok: true }` when the endpoint took the
+   * submission. That includes the honeypot path, which answers the same way
+   * and sends no email. Agent mode uses the status/reason contract instead;
+   * `accepted` there still means the request was delivered for human follow-up,
+   * not that a visit exists.
    */
   readonly successMeans: "submission-acknowledged-by-endpoint";
 
   /**
-   * A literal, not a boolean, and this is deliberate.
-   *
-   * `machineExecutionReady: false` would flip to `true` with a one-character
-   * edit by anyone who thought it looked stale. Typed as the literal
-   * `"not-ready"`, the value cannot be changed without widening the type — a
-   * conscious act, in a diff, with the reasons below in front of the person
-   * doing it. Same discipline as `exclusive?: true` in lib/offerings.ts, which
-   * has no `false` because the false was never established.
-   *
-   * It sits on the surface rather than the capability because it is not the
-   * business that is unready. Luxe takes consultation requests every day. It is
-   * THIS ENDPOINT that is not built for unattended traffic:
-   *
-   *   - no rate limiting of any kind; each accepted POST sends an email
-   *   - the honeypot is the only bot control, and an honest agent omits `_hp`
-   *     and passes straight through, so it filters nothing that matters here
-   *   - honeypot success is indistinguishable from real success
-   *   - failures `console.error` the full payload — name, phone, email, address
-   *   - no authentication and no origin check
-   *   - the FROM domain is still unverified (`onboarding@resend.dev`), so a
-   *     flood risks the Resend account that carries every genuine lead
-   *   - nothing is persisted, so a provider outage loses the request
-   *
-   * None of that blocks describing the capability. All of it blocks exposing it
-   * for autonomous execution.
+   * A literal, not a boolean. Flipping this is a claim that the transport is
+   * fit for unattended traffic. It is not: there is no durable rate limiter
+   * and no durable idempotency store. See `requestSubmission` on the agent
+   * contract.
    */
-  readonly autonomousExecution: "not-ready";
+  readonly autonomousExecution: typeof CONSULT_AUTONOMOUS_EXECUTION;
 }
 
 export interface Capability {
-  /** Plain-language statement of what the business does. */
   readonly summary: string;
-
-  /**
-   * The only value this type admits. A request asks; it does not schedule,
-   * reserve, hold or confirm. Widening this is not a config change — it is a
-   * claim that the business does something else.
-   */
   readonly actionType: "request";
-
-  /**
-   * The business state a successful submission reaches, and the last one this
-   * contract models. The homeowner has asked. Luxe has not yet replied, no time
-   * exists, and no appointment exists.
-   *
-   *   consultation-requested  ← this contract stops here
-   *         ↓  Luxe follows up
-   *      scheduling happens elsewhere (today: /book, a Calendly embed)
-   *         ↓
-   *      an appointment may exist
-   */
   readonly outcome: "consultation-requested";
-
-  /**
-   * Named for the step that actually has to happen, rather than "confirmation",
-   * which leaves open whose and of what. Nobody confirms the request. Luxe
-   * contacts the homeowner and the two of them arrange a visit; until that
-   * conversation happens there is nothing on any calendar. Literal `true`: this
-   * capability can never describe itself as self-completing.
-   */
   readonly requiresHumanFollowUp: true;
-
   /**
-   * The fields the current surface accepts, exactly as the route treats them.
-   *
-   * `_hp` is excluded on purpose. It is anti-spam plumbing belonging to the
-   * transport, not something a customer or an agent supplies on their behalf.
+   * Fields the human forms already send. Agent mode adds more; those live on
+   * the agent contract so a browser form cannot suddenly be asked for a
+   * postal code or an idempotency key.
    */
   readonly input: {
-    /**
-     * The route derives one name from `name`, or from `firstName` and
-     * `lastName` joined. At least one of these must arrive non-empty or it
-     * answers 400 — `firstName` alone is sufficient.
-     */
     readonly identifiesCustomerBy: readonly string[];
-    /** Non-empty or the route answers 400. Phone is the only hard field. */
     readonly required: readonly string[];
-    /**
-     * Accepted, never required — including `email`, which the notification
-     * renders as "(not provided)" when it is absent. `message` and `needs` are
-     * two names for the same field.
-     */
     readonly optional: readonly string[];
   };
-
   readonly executionSurfaces: readonly ExecutionSurface[];
 }
 
+export const CONSULT_INTENTS = [
+  { id: "new_window_treatments", label: "New window treatments" },
+  { id: "motorization_consultation", label: "Motorization consultation" },
+  { id: "exterior_solar_consultation", label: "Exterior solar consultation" },
+  { id: "commercial_project", label: "Commercial project" },
+  { id: "single_window_project", label: "Single-window project" },
+  {
+    id: "third_party_repair_or_service",
+    label: "Third-party product repair/service",
+  },
+  { id: "price_only", label: "Price-only request" },
+  {
+    id: "existing_customer_or_warranty",
+    label: "Existing-customer or warranty support",
+  },
+  { id: "speak_to_human", label: "Speak to a human" },
+  { id: "other", label: "Other/needs clarification" },
+] as const;
+
+export type ConsultIntentId = (typeof CONSULT_INTENTS)[number]["id"];
+
+export const CONSULT_STATUSES = [
+  "accepted",
+  "soft_accepted",
+  "rejected",
+  "handoff_required",
+] as const;
+export type ConsultStatus = (typeof CONSULT_STATUSES)[number];
+
+export const CONSULT_REASON_CODES = [
+  "in_service_area",
+  "edge_geography",
+  "out_of_area",
+  "incomplete_request",
+  "unsupported_category",
+  "third_party_service",
+  "commercial_review",
+  "wants_price_now",
+  "existing_customer_or_warranty",
+  "human_requested",
+  "clarification_required",
+  "unsupported_contract_version",
+  "capability_not_ready",
+] as const;
+export type ConsultReasonCode = (typeof CONSULT_REASON_CODES)[number];
+
 /**
- * Keyed by id so duplicates are impossible, matching `OFFERINGS`.
+ * Offering ids the consult surface accepts, plus nothing else.
  *
- * One capability. `validate-service-area` is NOT folded in: the route never
- * compares `city` against the canonical service areas, it accepts any string,
- * and pretending otherwise would have this contract claim a check that does not
- * run. No geography is referenced here for the same reason.
+ * Type-only check against `OfferingId` so adding a product/offering fails
+ * `tsc` here until the consult list is updated — the same compile-time
+ * discipline as `OFFERINGS` itself. Drapery is not in this list on purpose:
+ * it is not an `OfferingId` and must not be forced into that registry.
  */
+export const CONSULT_OFFERING_CATEGORY_IDS = [
+  "blinds",
+  "cellular-shades",
+  "solar-shades",
+  "exterior-solar-shades",
+  "roller-shades",
+  "banded-shades",
+  "roman-shades",
+  "shutters",
+  "motorization",
+  "aluminum-shutters",
+] as const satisfies readonly OfferingId[];
+
+type ConsultOfferingCategoryId = (typeof CONSULT_OFFERING_CATEGORY_IDS)[number];
+type _AllOfferingsCovered = OfferingId extends ConsultOfferingCategoryId
+  ? true
+  : never;
+const _allOfferingsCovered: _AllOfferingsCovered = true;
+void _allOfferingsCovered;
+
+export const CONSULT_DRAPERY_CATEGORY_ID = "custom-draperies" as const;
+export type ConsultCategoryId =
+  | ConsultOfferingCategoryId
+  | typeof CONSULT_DRAPERY_CATEGORY_ID;
+
+/**
+ * Operational markets Mark will accept a consultation request from.
+ * Not website SERVICE_AREAS. Do not generate pages or Place entities from this.
+ */
+export const CONSULT_ELIGIBLE_MARKETS = [
+  { city: "Post Falls", state: "ID", aliases: ["post falls"] },
+  {
+    city: "Coeur d'Alene",
+    state: "ID",
+    aliases: ["coeur d alene", "coeur dalene", "cda"],
+  },
+  { city: "Hayden", state: "ID", aliases: ["hayden"] },
+  { city: "Rathdrum", state: "ID", aliases: ["rathdrum"] },
+  { city: "Sandpoint", state: "ID", aliases: ["sandpoint"] },
+  { city: "Athol", state: "ID", aliases: ["athol"] },
+  { city: "Liberty Lake", state: "WA", aliases: ["liberty lake"] },
+  { city: "Spokane Valley", state: "WA", aliases: ["spokane valley"] },
+  { city: "Spokane", state: "WA", aliases: ["spokane"] },
+] as const;
+
+export const CONSULT_DISTANT_CITIES = ["boise"] as const;
+
+export const CONSULT_NEARBY_POSTAL_PREFIXES = ["838", "990", "992"] as const;
+export const CONSULT_DISTANT_POSTAL_PREFIXES = ["837"] as const;
+
+export const CONSULT_IDEMPOTENCY_NAMESPACE = "consult:v1" as const;
+export const CONSULT_IDEMPOTENCY_TTL_SECONDS = 7 * 24 * 60 * 60;
+
+export const CONSULT_READINESS = "not-ready" as const;
+export const CONSULT_AUTONOMOUS_EXECUTION = "not-ready" as const;
+export const CONSULT_READINESS_BLOCKERS = [
+  "durable-idempotency-unavailable",
+  "durable-rate-limit-unavailable",
+] as const;
+
+/**
+ * Fields that only the agent contract uses. Presence of any of these, or
+ * `source: "agent"`, means the request is agent-intended and must never be
+ * processed as a human form — even when the payload is incomplete.
+ *
+ * Human `/contact` and `/book` send none of these. `source` values that are
+ * page paths (`contact`, `book`, `/contact`, …) are not agent markers.
+ */
+export const CONSULT_AGENT_EXCLUSIVE_FIELDS = [
+  "contractVersion",
+  "idempotencyKey",
+  "postalCode",
+  "zip",
+  "intent",
+  "preferredContactMethod",
+  "productInterests",
+  "propertyType",
+  "projectGoals",
+  "timing",
+  "windowCount",
+  "accessNotes",
+  "streetAddress",
+] as const;
+
+export const CONSULT_NOT_READY_HTTP_STATUS = 503 as const;
+export const CONSULT_NOT_READY_NEXT_STEP =
+  "Agent submission is not currently available. Do not retry automatically. A person must contact Luxe through the normal human channels.";
+export const CONSULT_NOT_READY_EXPECTATION =
+  "No consultation request was submitted or delivered.";
+
+/**
+ * Production gate. Derived only from this contract — no env override.
+ * False while readiness / autonomousExecution are the literal `"not-ready"`.
+ */
+export function isConsultAgentSubmissionEnabled(): boolean {
+  return (
+    CONSULT_READINESS !== "not-ready" &&
+    CONSULT_AUTONOMOUS_EXECUTION !== "not-ready"
+  );
+}
+
+export const CONSULT_CATEGORY_ALIASES: Record<string, ConsultCategoryId> = {
+  drapery: "custom-draperies",
+  draperies: "custom-draperies",
+  drapes: "custom-draperies",
+  "custom drapery": "custom-draperies",
+  "custom draperies": "custom-draperies",
+  "custom drapes": "custom-draperies",
+  "custom-drapery": "custom-draperies",
+  "custom-drapes": "custom-draperies",
+  "plantation shutters": "shutters",
+  "plantation-shutters": "shutters",
+  honeycomb: "cellular-shades",
+  "honeycomb shades": "cellular-shades",
+  "cellular shades": "cellular-shades",
+  "solar shades": "solar-shades",
+  "exterior solar": "exterior-solar-shades",
+  "exterior solar shades": "exterior-solar-shades",
+  "exterior screens": "exterior-solar-shades",
+  "roller shades": "roller-shades",
+  "banded shades": "banded-shades",
+  "roman shades": "roman-shades",
+  "aluminum shutters": "aluminum-shutters",
+  motorized: "motorization",
+  motors: "motorization",
+};
+
+export interface ConsultCategoryPublic {
+  readonly id: ConsultCategoryId;
+  readonly offered: true;
+  readonly canonicalProductPage: string | null;
+  readonly canonicalServiceId: string | null;
+}
+
+export function consultCategoriesPublic(): readonly ConsultCategoryPublic[] {
+  const fromPages: ConsultCategoryPublic[] = PRODUCTS.map((product) => ({
+    id: product.slug,
+    offered: true as const,
+    canonicalProductPage: `/products/${product.slug}`,
+    // Same URL shape as `productServiceRef` in lib/schema.ts. Built here so
+    // this module does not import the schema graph — and so drapery / aluminum
+    // shutters never receive a fabricated Service `@id`.
+    canonicalServiceId: `${BUSINESS.url}/products/${product.slug}#service`,
+  }));
+
+  return [
+    ...fromPages,
+    {
+      id: "aluminum-shutters",
+      offered: true,
+      canonicalProductPage: null,
+      canonicalServiceId: null,
+    },
+    {
+      id: CONSULT_DRAPERY_CATEGORY_ID,
+      offered: true,
+      canonicalProductPage: null,
+      canonicalServiceId: null,
+    },
+  ];
+}
+
+export const CONSULT_REQUIRED_AGENT_FIELDS = [
+  "name",
+  "phone",
+  "city",
+  "postalCode",
+  "preferredContactMethod",
+  "intent",
+  "source",
+  "contractVersion",
+  "idempotencyKey",
+] as const;
+
+export const CONSULT_OPTIONAL_AGENT_FIELDS = [
+  "address",
+  "productInterests",
+  "propertyType",
+  "projectGoals",
+  "timing",
+  "windowCount",
+  "accessNotes",
+  "message",
+  "email",
+] as const;
+
+export const CONSULT_NEVER_REQUIRED_FIELDS = [
+  "measurements",
+  "photos",
+  "productExpertise",
+  "finalProductSelection",
+  "budget",
+  "payment",
+] as const;
+
+export interface ConsultationDiscoveryDocument {
+  readonly id: typeof CONSULT_CAPABILITY_ID;
+  readonly name: string;
+  readonly description: string;
+  readonly contractVersion: typeof CONSULT_CONTRACT_VERSION;
+  readonly discoveryUrl: typeof CONSULT_DISCOVERY_PATH;
+  readonly execution: {
+    readonly url: typeof CONSULT_EXECUTION_PATH;
+    readonly method: "POST";
+    readonly availableForUnattendedAgentExecution: boolean;
+  };
+  readonly agentMode: {
+    readonly source: typeof CONSULT_AGENT_SOURCE;
+    readonly contractVersion: typeof CONSULT_CONTRACT_VERSION;
+    readonly note: string;
+  };
+  readonly submissionEnabled: boolean;
+  readonly doNotRetryAutomaticallyWhen: "capability_not_ready";
+  readonly requiredFields: readonly string[];
+  readonly optionalFields: readonly string[];
+  readonly conditionallyRequired: readonly {
+    readonly field: string;
+    readonly when: string;
+  }[];
+  readonly neverRequired: readonly string[];
+  readonly allowedIntents: readonly {
+    readonly id: ConsultIntentId;
+    readonly label: string;
+  }[];
+  readonly supportedProductCategories: readonly ConsultCategoryPublic[];
+  readonly geography: {
+    readonly websiteCanonicalMarketsUnchanged: true;
+    readonly eligibleMarkets: readonly {
+      readonly city: string;
+      readonly state: string;
+    }[];
+    readonly nearbyPostalPrefixes: readonly string[];
+    readonly distantPostalExample: "837xx";
+    readonly policy: string;
+  };
+  readonly response: {
+    readonly statuses: readonly ConsultStatus[];
+    readonly reasonCodes: readonly ConsultReasonCode[];
+    readonly everyResponseIncludes: readonly string[];
+  };
+  readonly requiresHumanFollowUp: true;
+  readonly directBookingAvailable: false;
+  readonly pricingAvailable: false;
+  readonly checkoutAvailable: false;
+  readonly successMeans: "request-delivered-for-human-follow-up-not-an-appointment";
+  readonly idempotency: {
+    readonly required: true;
+    readonly durableStoreAvailable: false;
+    readonly note: string;
+  };
+  readonly rateLimit: {
+    readonly durableLimiterAvailable: false;
+    readonly agentsShareHumanEndpoint: true;
+    readonly note: string;
+  };
+  readonly readiness: typeof CONSULT_READINESS;
+  readonly readinessBlockers: readonly (typeof CONSULT_READINESS_BLOCKERS)[number][];
+}
+
+export function consultationDiscoveryDocument(): ConsultationDiscoveryDocument {
+  return {
+    id: CONSULT_CAPABILITY_ID,
+    name: "Request an in-home consultation",
+    description:
+      "Structured consultation-request contract. Agent submission is currently " +
+      "disabled. The endpoint is documented but unavailable for unattended " +
+      "execution. Humans can still use /contact or /book. A successful request, " +
+      "when submission is later enabled, is delivery and acknowledgement — not " +
+      "an appointment, a quote, a price, or project acceptance.",
+    contractVersion: CONSULT_CONTRACT_VERSION,
+    discoveryUrl: CONSULT_DISCOVERY_PATH,
+    execution: {
+      url: CONSULT_EXECUTION_PATH,
+      method: "POST",
+      availableForUnattendedAgentExecution: isConsultAgentSubmissionEnabled(),
+    },
+    agentMode: {
+      source: CONSULT_AGENT_SOURCE,
+      contractVersion: CONSULT_CONTRACT_VERSION,
+      note:
+        "A valid agent request includes source \"agent\" and contractVersion " +
+        `"${CONSULT_CONTRACT_VERSION}". Any agent-contract marker (source "agent", ` +
+        "contractVersion, idempotencyKey, or another exclusive agent field) is " +
+        "treated as agent-intended and is never processed as a human form. " +
+        "User-Agent headers are ignored.",
+    },
+    submissionEnabled: isConsultAgentSubmissionEnabled(),
+    doNotRetryAutomaticallyWhen: "capability_not_ready",
+    requiredFields: CONSULT_REQUIRED_AGENT_FIELDS,
+    optionalFields: CONSULT_OPTIONAL_AGENT_FIELDS,
+    conditionallyRequired: [
+      {
+        field: "email",
+        when: "preferredContactMethod is email",
+      },
+    ],
+    neverRequired: CONSULT_NEVER_REQUIRED_FIELDS,
+    allowedIntents: CONSULT_INTENTS.map((intent) => ({
+      id: intent.id,
+      label: intent.label,
+    })),
+    supportedProductCategories: consultCategoriesPublic(),
+    geography: {
+      websiteCanonicalMarketsUnchanged: true,
+      eligibleMarkets: CONSULT_ELIGIBLE_MARKETS.map((market) => ({
+        city: market.city,
+        state: market.state,
+      })),
+      nearbyPostalPrefixes: CONSULT_NEARBY_POSTAL_PREFIXES,
+      distantPostalExample: "837xx",
+      policy:
+        "Exact approved market → accepted. Unrecognized city with a North Idaho / " +
+        "greater Spokane postal pattern (838xx, 990xx, 992xx) → soft_accepted " +
+        "edge_geography. Clearly distant (Boise / 837xx, other state, unrelated " +
+        "postal) → rejected out_of_area. Missing or unusable location → rejected " +
+        "incomplete_request. Canonical website service-area pages stay the original five.",
+    },
+    response: {
+      statuses: CONSULT_STATUSES,
+      reasonCodes: CONSULT_REASON_CODES,
+      everyResponseIncludes: [
+        "request_id",
+        "status",
+        "next_step",
+        "contract_version",
+      ],
+    },
+    requiresHumanFollowUp: true,
+    directBookingAvailable: false,
+    pricingAvailable: false,
+    checkoutAvailable: false,
+    successMeans: "request-delivered-for-human-follow-up-not-an-appointment",
+    idempotency: {
+      required: true,
+      durableStoreAvailable: false,
+      note:
+        "Agent requests must include idempotencyKey. A durable store is not " +
+        "configured. Agent submission stays disabled until one exists and is verified.",
+    },
+    rateLimit: {
+      durableLimiterAvailable: false,
+      agentsShareHumanEndpoint: true,
+      note:
+        "No durable rate limiter is configured. Agent submission stays disabled " +
+        "until one exists and is verified. No thresholds are published.",
+    },
+    readiness: CONSULT_READINESS,
+    readinessBlockers: [...CONSULT_READINESS_BLOCKERS],
+  };
+}
+
 export const CAPABILITIES: Record<CapabilityId, Capability> = {
   "request-in-home-consultation": {
     summary:
@@ -182,10 +526,10 @@ export const CAPABILITIES: Record<CapabilityId, Capability> = {
     },
     executionSurfaces: [
       {
-        endpoint: "/api/consultation",
+        endpoint: CONSULT_EXECUTION_PATH,
         method: "POST",
         successMeans: "submission-acknowledged-by-endpoint",
-        autonomousExecution: "not-ready",
+        autonomousExecution: CONSULT_AUTONOMOUS_EXECUTION,
       },
     ],
   },

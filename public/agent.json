@@ -23,10 +23,16 @@
   },
   "capabilities": [
     {
-      "name": "Free In-Home Consultation",
-      "description": "No-pressure in-home consultation and measurement for custom window treatments. We listen to your needs and recommend the right solution for your budget.",
-      "url": "https://www.luxewindowworks.com/book",
-      "type": "service",
+      "name": "Request an in-home consultation",
+      "description": "Structured consultation-request contract. Agent submission is currently disabled — read the discovery document. It does not book, reserve, or price a visit. Humans can still use /contact or /book.",
+      "url": "https://www.luxewindowworks.com/api/capabilities/request-in-home-consultation",
+      "execution_url": "https://www.luxewindowworks.com/api/consultation",
+      "type": "request",
+      "direct_booking": false,
+      "pricing_available": false,
+      "requires_human_follow_up": true,
+      "submission_enabled": false,
+      "readiness": "not-ready",
       "cost": "free"
     },
     {
@@ -107,8 +113,9 @@
     }
   ],
   "primary_cta": {
-    "label": "Book a Free Consultation",
-    "url": "https://www.luxewindowworks.com/book",
-    "description": "Free in-home consultation and measurement — no pressure, no obligation"
+    "label": "Request a Free Consultation",
+    "url": "https://www.luxewindowworks.com/api/capabilities/request-in-home-consultation",
+    "human_url": "https://www.luxewindowworks.com/contact",
+    "description": "Discovery document for the consultation-request contract. Agent submission is currently disabled. Humans: /contact or /book. A request is not a booking."
   }
 }
