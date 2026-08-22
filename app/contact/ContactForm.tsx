@@ -20,6 +20,7 @@ export default function ContactForm() {
       needs: (formData.get("needs") as string) || "",
       contactMethod: (formData.get("contactMethod") as string) || "",
       source: "contact",
+      _hp: (formData.get("_hp") as string) || "",
     };
 
     setError("");
