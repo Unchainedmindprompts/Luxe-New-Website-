@@ -113,7 +113,7 @@ export interface ProcessConsultationDeps {
 
 export interface ConsultationResult {
   status: number;
-  body: Record<string, unknown>;
+  body: AgentResponseBody | Record<string, unknown>;
 }
 
 export function idempotencyStorageKey(rawKey: string): string {
@@ -315,8 +315,18 @@ export async function processConsultation(
       idempotencyStorageKey(idempotencyKey)
     );
     if (stored) {
-      const { emailed: _emailed, ...outcome } = stored;
-      return { status: 200, body: outcome };
+      return {
+        status: 200,
+        body: {
+          request_id: stored.request_id,
+          status: stored.status,
+          reason_code: stored.reason_code,
+          next_step: stored.next_step,
+          response_expectation: stored.response_expectation,
+          clarification_needed: stored.clarification_needed,
+          contract_version: stored.contract_version,
+        },
+      };
     }
   }
 
