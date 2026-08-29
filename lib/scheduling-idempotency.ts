@@ -20,6 +20,16 @@ export const SCHEDULING_IDEMPOTENCY_RECORD_VERSION = 1 as const;
 
 export type SchedulingIdempotencyState = "processing" | "completed";
 
+export interface StoredCalendlyCreation {
+  readonly inviteeUri: string;
+  readonly eventUri: string;
+  readonly cancelUrl: string;
+  readonly rescheduleUrl: string;
+  readonly startTime: string;
+  readonly timezone: string;
+  readonly durationMinutes: number;
+}
+
 export interface CanonicalSchedulingFingerprintInput {
   readonly startTime: string;
   readonly customerName: string;
@@ -38,6 +48,7 @@ export interface StoredSchedulingIdempotencyRecord {
   readonly state: SchedulingIdempotencyState;
   readonly publicResponse: SchedulingPublicResponse | null;
   readonly expiresAtMs: number;
+  readonly createdInvitee?: StoredCalendlyCreation | null;
 }
 
 export type SchedulingIdempotencyClaimResult =
@@ -45,6 +56,7 @@ export type SchedulingIdempotencyClaimResult =
   | { kind: "replay"; publicResponse: SchedulingPublicResponse }
   | { kind: "conflict" }
   | { kind: "in_progress" }
+  | { kind: "needs_reconciliation"; record: StoredSchedulingIdempotencyRecord }
   | { kind: "unavailable"; stage: string };
 
 export interface SchedulingIdempotencyStore {
@@ -60,6 +72,16 @@ export interface SchedulingIdempotencyStore {
     publicResponse: SchedulingPublicResponse,
     nowMs: number,
     ttlSeconds: number
+  ): Promise<"ok" | "unavailable">;
+  rememberCreatedInvitee(
+    storageKey: string,
+    input: {
+      requestId: string;
+      fingerprint: string;
+      created: StoredCalendlyCreation;
+      nowMs: number;
+      ttlSeconds: number;
+    }
   ): Promise<"ok" | "unavailable">;
   release(storageKey: string): Promise<"ok" | "unavailable">;
   inspect(storageKey: string): Promise<StoredSchedulingIdempotencyRecord | null>;
@@ -93,6 +115,26 @@ export function schedulingIdempotencyStorageKey(rawKey: string): string {
   return `${SCHEDULING_IDEMPOTENCY_NAMESPACE}:${digest}`;
 }
 
+function isCreatedInvitee(value: unknown): value is StoredCalendlyCreation {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const rec = value as StoredCalendlyCreation;
+  return (
+    typeof rec.inviteeUri === "string" &&
+    rec.inviteeUri.length > 0 &&
+    typeof rec.eventUri === "string" &&
+    rec.eventUri.length > 0 &&
+    typeof rec.cancelUrl === "string" &&
+    rec.cancelUrl.length > 0 &&
+    typeof rec.rescheduleUrl === "string" &&
+    rec.rescheduleUrl.length > 0 &&
+    typeof rec.startTime === "string" &&
+    rec.startTime.length > 0 &&
+    typeof rec.timezone === "string" &&
+    rec.timezone.length > 0 &&
+    typeof rec.durationMinutes === "number"
+  );
+}
+
 function isStoredRecord(value: unknown): value is StoredSchedulingIdempotencyRecord {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const rec = value as StoredSchedulingIdempotencyRecord;
@@ -106,7 +148,8 @@ function isStoredRecord(value: unknown): value is StoredSchedulingIdempotencyRec
     typeof rec.expiresAtMs === "number" &&
     (rec.publicResponse === null ||
       (typeof rec.publicResponse === "object" &&
-        typeof rec.publicResponse.request_id === "string"))
+        typeof rec.publicResponse.request_id === "string")) &&
+    (rec.createdInvitee == null || isCreatedInvitee(rec.createdInvitee))
   );
 }
 
@@ -116,7 +159,12 @@ function decideExisting(
   nowMs: number
 ): SchedulingIdempotencyClaimResult | null {
   if (record.expiresAtMs <= nowMs) return null;
-  if (record.state === "processing") return { kind: "in_progress" };
+  if (record.state === "processing") {
+    if (record.createdInvitee) {
+      return { kind: "needs_reconciliation", record };
+    }
+    return { kind: "in_progress" };
+  }
   if (record.fingerprint !== fingerprint) return { kind: "conflict" };
   if (!record.publicResponse) {
     return { kind: "unavailable", stage: "idempotency-incomplete-record" };
@@ -157,6 +205,25 @@ export function memorySchedulingIdempotencyStore(options?: {
         state: "completed",
         publicResponse: publicSchedulingBody(publicResponse),
         expiresAtMs: nowMs + Math.min(remaining, ttlSeconds * 1000),
+      });
+      return "ok";
+    },
+    async rememberCreatedInvitee(storageKey, input) {
+      const existing = map.get(storageKey);
+      if (existing && existing.fingerprint !== input.fingerprint) {
+        return "unavailable";
+      }
+      const expiresAtMs = existing
+        ? existing.expiresAtMs
+        : input.nowMs + input.ttlSeconds * 1000;
+      map.set(storageKey, {
+        v: SCHEDULING_IDEMPOTENCY_RECORD_VERSION,
+        request_id: existing?.request_id ?? input.requestId,
+        fingerprint: existing?.fingerprint ?? input.fingerprint,
+        state: "processing",
+        publicResponse: existing?.publicResponse ?? null,
+        createdInvitee: input.created,
+        expiresAtMs,
       });
       return "ok";
     },
@@ -231,6 +298,39 @@ export function createRedisSchedulingIdempotencyStore(
           publicResponse: publicSchedulingBody(publicResponse),
         };
         await redis.set(storageKey, completed, { ex });
+        return "ok";
+      } catch {
+        return "unavailable";
+      }
+    },
+    async rememberCreatedInvitee(storageKey, input) {
+      try {
+        const existingRaw = await redis.get<unknown>(storageKey);
+        const existing = isStoredRecord(existingRaw) ? existingRaw : null;
+        if (existing && existing.fingerprint !== input.fingerprint) {
+          return "unavailable";
+        }
+        const ttl = existing ? await redis.ttl(storageKey) : input.ttlSeconds;
+        const ex =
+          typeof ttl === "number" && ttl > 0
+            ? ttl
+            : Math.max(
+                1,
+                existing
+                  ? Math.ceil((existing.expiresAtMs - input.nowMs) / 1000) ||
+                      input.ttlSeconds
+                  : input.ttlSeconds
+              );
+        const pending: StoredSchedulingIdempotencyRecord = {
+          v: SCHEDULING_IDEMPOTENCY_RECORD_VERSION,
+          request_id: existing?.request_id ?? input.requestId,
+          fingerprint: existing?.fingerprint ?? input.fingerprint,
+          state: "processing",
+          publicResponse: existing?.publicResponse ?? null,
+          createdInvitee: input.created,
+          expiresAtMs: existing?.expiresAtMs ?? input.nowMs + input.ttlSeconds * 1000,
+        };
+        await redis.set(storageKey, pending, { ex });
         return "ok";
       } catch {
         return "unavailable";

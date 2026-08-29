@@ -103,13 +103,18 @@ export interface CreateInviteeInput {
 }
 
 export interface CalendlyClient {
-  resolveConsultationEventType(): Promise<CalendlyEventType>;
+  getEventType(eventTypeUri: string): Promise<CalendlyEventType>;
+  getInvitee(inviteeUri: string): Promise<CalendlyInviteeResult>;
   listAvailableTimes(
     eventTypeUri: string,
     startTime: string,
     endTime: string
   ): Promise<CalendlyAvailableTime[]>;
   createInvitee(input: CreateInviteeInput): Promise<CalendlyInviteeResult>;
+}
+
+export interface CalendlyClientOptions {
+  readonly fetchImpl?: typeof fetch;
 }
 
 function eventTypeUuid(uri: string): string | null {
@@ -179,12 +184,13 @@ export function parseRetryAfterSeconds(header: string | null, nowMs = Date.now()
 async function calendlyFetch(
   token: string,
   path: string,
-  init?: RequestInit
+  init: RequestInit | undefined,
+  fetchImpl: typeof fetch
 ): Promise<unknown> {
   const url = path.startsWith("http") ? path : `${CALENDLY_API_BASE}${path}`;
   let response: Response;
   try {
-    response = await fetch(url, {
+    response = await fetchImpl(url, {
       ...init,
       headers: {
         Authorization: `Bearer ${token}`,
@@ -302,89 +308,47 @@ function parseInvitee(value: unknown): CalendlyInviteeResult | null {
   };
 }
 
-async function listAllEventTypes(
+export function createCalendlyClient(
   token: string,
-  queryName: "user" | "organization",
-  queryValue: string
-): Promise<CalendlyEventType[]> {
-  const found: CalendlyEventType[] = [];
-  let path: string | null =
-    `/event_types?${queryName}=${encodeURIComponent(queryValue)}&count=100`;
+  options?: CalendlyClientOptions
+): CalendlyClient {
+  const fetchImpl = options?.fetchImpl ?? fetch;
 
-  while (path) {
-    const payload = asRecord(await calendlyFetch(token, path));
-    const collection = payload && Array.isArray(payload.collection) ? payload.collection : [];
-    for (const item of collection) {
-      const parsed = parseEventType(item);
-      if (parsed) found.push(parsed);
-    }
-    const pagination = payload ? asRecord(payload.pagination) : null;
-    const next =
-      pagination && typeof pagination.next_page === "string" ? pagination.next_page : null;
-    path = next;
-  }
-  return found;
-}
-
-export function createCalendlyClient(token: string): CalendlyClient {
   return {
-    async resolveConsultationEventType() {
-      const configured = calendlyEventTypeUriFromEnv();
-      if (configured) {
-        const uuid = eventTypeUuid(configured);
-        if (!uuid) {
-          throw new CalendlyApiError(
-            "configuration_failure",
-            0,
-            "Calendly event type URI is invalid."
-          );
-        }
-        const payload = asRecord(await calendlyFetch(token, `/event_types/${uuid}`));
-        const parsed = payload ? parseEventType(payload.resource) : null;
-        if (!parsed) {
-          throw new CalendlyApiError(
-            "configuration_failure",
-            0,
-            "Calendly event type could not be loaded."
-          );
-        }
-        return parsed;
-      }
-
-      const me = asRecord(await calendlyFetch(token, "/users/me"));
-      const user = me ? asRecord(me.resource) : null;
-      const userUri = user && typeof user.uri === "string" ? user.uri : "";
-      const orgUri =
-        user && typeof user.current_organization === "string"
-          ? user.current_organization
-          : "";
-      if (!userUri) {
+    async getEventType(eventTypeUri) {
+      const uuid = eventTypeUuid(eventTypeUri);
+      if (!uuid) {
         throw new CalendlyApiError(
           "configuration_failure",
           0,
-          "Calendly user could not be resolved."
+          "Calendly event type URI is invalid."
         );
       }
-
-      const fromUser = await listAllEventTypes(token, "user", userUri);
-      const match =
-        fromUser.find((et) => et.active !== false && isLuxeConsultationEventType(et)) ??
-        fromUser.find((et) => isLuxeConsultationEventType(et));
-      if (match) return match;
-
-      if (orgUri) {
-        const fromOrg = await listAllEventTypes(token, "organization", orgUri);
-        const orgMatch =
-          fromOrg.find((et) => et.active !== false && isLuxeConsultationEventType(et)) ??
-          fromOrg.find((et) => isLuxeConsultationEventType(et));
-        if (orgMatch) return orgMatch;
-      }
-
-      throw new CalendlyApiError(
-        "configuration_failure",
-        0,
-        "Calendly consultation event type could not be resolved."
+      const payload = asRecord(
+        await calendlyFetch(token, `/event_types/${uuid}`, undefined, fetchImpl)
       );
+      const parsed = payload ? parseEventType(payload.resource) : null;
+      if (!parsed) {
+        throw new CalendlyApiError(
+          "configuration_failure",
+          0,
+          "Calendly event type could not be loaded."
+        );
+      }
+      return parsed;
+    },
+
+    async getInvitee(inviteeUri) {
+      const payload = asRecord(await calendlyFetch(token, inviteeUri, undefined, fetchImpl));
+      const parsed = payload ? parseInvitee(payload.resource) : null;
+      if (!parsed) {
+        throw new CalendlyApiError(
+          "calendly_failure",
+          0,
+          "Calendly invitee could not be loaded."
+        );
+      }
+      return parsed;
     },
 
     async listAvailableTimes(eventTypeUri, startTime, endTime) {
@@ -392,7 +356,7 @@ export function createCalendlyClient(token: string): CalendlyClient {
         `/event_type_available_times?event_type=${encodeURIComponent(eventTypeUri)}` +
         `&start_time=${encodeURIComponent(startTime)}` +
         `&end_time=${encodeURIComponent(endTime)}`;
-      const payload = asRecord(await calendlyFetch(token, path));
+      const payload = asRecord(await calendlyFetch(token, path, undefined, fetchImpl));
       const collection = payload && Array.isArray(payload.collection) ? payload.collection : [];
       const slots: CalendlyAvailableTime[] = [];
       for (const item of collection) {
@@ -434,10 +398,15 @@ export function createCalendlyClient(token: string): CalendlyClient {
         }));
       }
       const payload = asRecord(
-        await calendlyFetch(token, "/invitees", {
-          method: "POST",
-          body: JSON.stringify(body),
-        })
+        await calendlyFetch(
+          token,
+          "/invitees",
+          {
+            method: "POST",
+            body: JSON.stringify(body),
+          },
+          fetchImpl
+        )
       );
       const parsed = payload ? parseInvitee(payload.resource) : null;
       if (!parsed) {
@@ -454,6 +423,7 @@ export function createCalendlyClient(token: string): CalendlyClient {
 
 export function createCalendlyClientFromEnv(): CalendlyClient | null {
   const token = calendlyApiKey();
-  if (!token) return null;
+  const eventTypeUri = calendlyEventTypeUriFromEnv();
+  if (!token || !eventTypeUri) return null;
   return createCalendlyClient(token);
 }

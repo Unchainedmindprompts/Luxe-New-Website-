@@ -1,10 +1,9 @@
 /**
  * Server-only Calendly credentials.
  *
- * `CALENDLY_API_KEY` is the existing Personal Access Token name already
- * documented in `.env.local.example`. `CALENDLY_EVENT_TYPE_URI` is optional:
- * when it is absent, the client resolves the Luxe consultation event type
- * from `GET /event_types` by matching slug `2hr` / the public scheduling URL.
+ * Both `CALENDLY_API_KEY` (Personal Access Token) and
+ * `CALENDLY_EVENT_TYPE_URI` are required before the scheduling capability
+ * may call Calendly. There is no event-type list or slug rediscovery.
  *
  * Never log, return, or put these values in a client bundle.
  */
@@ -27,9 +26,12 @@ export function calendlyEventTypeUriFromEnv(): string | undefined {
 }
 
 export function calendlyCredentialsPresent(): boolean {
-  return Boolean(calendlyApiKey());
+  return Boolean(calendlyApiKey() && calendlyEventTypeUriFromEnv());
 }
 
 export function calendlyMissingEnvNames(): readonly string[] {
-  return calendlyApiKey() ? [] : [CALENDLY_API_KEY_ENV];
+  const missing: string[] = [];
+  if (!calendlyApiKey()) missing.push(CALENDLY_API_KEY_ENV);
+  if (!calendlyEventTypeUriFromEnv()) missing.push(CALENDLY_EVENT_TYPE_URI_ENV);
+  return missing;
 }

@@ -15,7 +15,9 @@ import {
   type CalendlyAvailableTime,
   type CalendlyClient,
   type CalendlyEventType,
+  type CalendlyInviteeResult,
 } from "./calendly-client";
+import { calendlyEventTypeUriFromEnv } from "./calendly-config";
 import {
   SCHEDULING_AUTH_HTTP_STATUS,
   SCHEDULING_CALENDLY_HTTP_STATUS,
@@ -36,11 +38,20 @@ import {
   type SchedulingAvailabilityCache,
 } from "./scheduling-availability-cache";
 import {
+  SCHEDULING_EVENT_TYPE_CACHE_TTL_SECONDS,
+  createRedisSchedulingEventTypeCache,
+  eventTypeFromCaches,
+  metadataFromEventType,
+  questionsFromEventType,
+  type SchedulingEventTypeCache,
+} from "./scheduling-event-type-cache";
+import {
   createRedisSchedulingIdempotencyStore,
   memorySchedulingIdempotencyStore,
   schedulingIdempotencyStorageKey,
   schedulingRequestFingerprint,
   type SchedulingIdempotencyStore,
+  type StoredSchedulingIdempotencyRecord,
 } from "./scheduling-idempotency";
 import {
   createUpstashSchedulingAvailabilityRateLimiter,
@@ -87,8 +98,10 @@ export interface SchedulingResult {
 
 export interface SchedulingHandlerDeps {
   calendly?: CalendlyClient | null;
+  eventTypeUri?: string;
   rateLimiter?: AgentRateLimiter;
   availabilityCache?: SchedulingAvailabilityCache;
+  eventTypeCache?: SchedulingEventTypeCache;
   idempotencyStore?: SchedulingIdempotencyStore;
   createId?: () => string;
   now?: () => Date;
@@ -287,6 +300,75 @@ async function consumeLimit(
   return null;
 }
 
+const BOOKED_NEXT_STEP =
+  "The consultation is booked. Give the customer the Calendly cancel_url and reschedule_url. This is a consultation, not an installation.";
+
+const RECONCILE_NEXT_STEP =
+  "Calendly may already have this appointment. Do not create another booking. Do not pick another time. This request must be reconciled before another create is allowed.";
+
+function configuredEventTypeUri(deps: SchedulingHandlerDeps): string | undefined {
+  const fromDeps = typeof deps.eventTypeUri === "string" ? deps.eventTypeUri.trim() : "";
+  if (fromDeps) return fromDeps;
+  return calendlyEventTypeUriFromEnv();
+}
+
+async function loadConfiguredEventType(
+  eventTypeUri: string,
+  calendly: CalendlyClient,
+  cache?: SchedulingEventTypeCache
+): Promise<CalendlyEventType> {
+  if (cache) {
+    const [metadata, questions] = await Promise.all([
+      cache.getMetadata(eventTypeUri),
+      cache.getQuestions(eventTypeUri),
+    ]);
+    if (metadata && questions) {
+      return eventTypeFromCaches(metadata, questions);
+    }
+  }
+  const loaded = await calendly.getEventType(eventTypeUri);
+  if (cache) {
+    await Promise.all([
+      cache.setMetadata(
+        eventTypeUri,
+        metadataFromEventType(loaded),
+        SCHEDULING_EVENT_TYPE_CACHE_TTL_SECONDS
+      ),
+      cache.setQuestions(
+        eventTypeUri,
+        questionsFromEventType(loaded),
+        SCHEDULING_EVENT_TYPE_CACHE_TTL_SECONDS
+      ),
+    ]);
+  }
+  return loaded;
+}
+
+function bookedPublicResponse(
+  requestId: string,
+  input: {
+    startTime: string;
+    timezone: string;
+    durationMinutes: number;
+    invitee: Pick<
+      CalendlyInviteeResult,
+      "uri" | "event" | "cancel_url" | "reschedule_url"
+    >;
+  }
+) {
+  return schedulingResponse(requestId, {
+    status: "booked",
+    start_time: input.startTime,
+    timezone: input.timezone,
+    duration_minutes: input.durationMinutes,
+    event_uri: input.invitee.event,
+    invitee_uri: input.invitee.uri,
+    cancel_url: input.invitee.cancel_url,
+    reschedule_url: input.invitee.reschedule_url,
+    next_step: BOOKED_NEXT_STEP,
+  });
+}
+
 function eventTypePublic(eventType: CalendlyEventType) {
   return {
     name: eventType.name,
@@ -306,7 +388,8 @@ export async function processAvailability(
   const log = deps.log ?? defaultLog;
   const requestId = createId();
 
-  if (!deps.calendly) {
+  const eventTypeUri = configuredEventTypeUri(deps);
+  if (!deps.calendly || !eventTypeUri) {
     log("CONFIG_FAILURE", { request_id: requestId, surface: "availability" });
     return {
       status: SCHEDULING_NOT_READY_HTTP_STATUS,
@@ -361,9 +444,13 @@ export async function processAvailability(
   }
 
   try {
-    const eventType = await deps.calendly.resolveConsultationEventType();
+    const eventType = await loadConfiguredEventType(
+      eventTypeUri,
+      deps.calendly,
+      deps.eventTypeCache
+    );
     const slots = toPublicSlots(
-      await deps.calendly.listAvailableTimes(eventType.uri, window.start, window.end)
+      await deps.calendly.listAvailableTimes(eventTypeUri, window.start, window.end)
     );
     const eventPublic = eventTypePublic(eventType);
     await deps.availabilityCache?.set(
@@ -438,7 +525,8 @@ export async function processBooking(
   }
   const body = parsed as Record<string, unknown>;
 
-  if (!deps.calendly) {
+  const eventTypeUri = configuredEventTypeUri(deps);
+  if (!deps.calendly || !eventTypeUri) {
     log("CONFIG_FAILURE", { request_id: requestId, surface: "booking" });
     return {
       status: SCHEDULING_NOT_READY_HTTP_STATUS,
@@ -532,10 +620,15 @@ export async function processBooking(
       ),
     };
   }
+  const idempotencyStore = deps.idempotencyStore;
 
   let eventType: CalendlyEventType;
   try {
-    eventType = await deps.calendly.resolveConsultationEventType();
+    eventType = await loadConfiguredEventType(
+      eventTypeUri,
+      deps.calendly,
+      deps.eventTypeCache
+    );
   } catch (err) {
     const mapped = mapCalendlyError(requestId, err);
     log("CALENDLY_ERROR", {
@@ -585,7 +678,7 @@ export async function processBooking(
   });
   const storageKey = schedulingIdempotencyStorageKey(idempotency.value);
   const at = now();
-  const claim = await deps.idempotencyStore.claim({
+  const claim = await idempotencyStore.claim({
     storageKey,
     fingerprint,
     requestId,
@@ -627,15 +720,36 @@ export async function processBooking(
       ),
     };
   }
+  if (claim.kind === "needs_reconciliation") {
+    return reconcileCreatedBooking({
+      requestId,
+      record: claim.record,
+      storageKey,
+      nowMs: at.getTime(),
+      calendly: deps.calendly,
+      store: idempotencyStore,
+      log,
+    });
+  }
 
   const persist = async (response: SchedulingPublicResponse, status: number) => {
     const publicBody = publicSchedulingBody(response);
-    await deps.idempotencyStore?.complete(
+    const saved = await idempotencyStore.complete(
       storageKey,
       publicBody,
       at.getTime(),
       SCHEDULING_IDEMPOTENCY_TTL_SECONDS
     );
+    if (saved !== "ok") {
+      return {
+        status: SCHEDULING_IDEMPOTENCY_HTTP_STATUS,
+        body: errorBody(
+          requestId,
+          "request_in_progress",
+          "This request is already being processed. Do not retry automatically."
+        ),
+      };
+    }
     return { status, body: publicBody };
   };
 
@@ -678,7 +792,7 @@ export async function processBooking(
       );
     }
   } catch (err) {
-    await deps.idempotencyStore.release(storageKey);
+    await idempotencyStore.release(storageKey);
     const mapped = mapCalendlyError(requestId, err);
     log("CALENDLY_ERROR", {
       request_id: requestId,
@@ -691,7 +805,7 @@ export async function processBooking(
 
   try {
     const invitee = await deps.calendly.createInvitee({
-      eventType: eventType.uri,
+      eventType: eventTypeUri,
       startTime: windowStart,
       name: name.value,
       email: email.value,
@@ -699,27 +813,53 @@ export async function processBooking(
       location: location.ok && !("omit" in location) ? location.location : undefined,
       questionsAndAnswers: answers.answers,
     });
+    const remembered = await idempotencyStore.rememberCreatedInvitee(storageKey, {
+      requestId,
+      fingerprint,
+      created: {
+        inviteeUri: invitee.uri,
+        eventUri: invitee.event,
+        cancelUrl: invitee.cancel_url,
+        rescheduleUrl: invitee.reschedule_url,
+        startTime: windowStart,
+        timezone: timezone.value,
+        durationMinutes: eventType.duration ?? 120,
+      },
+      nowMs: at.getTime(),
+      ttlSeconds: SCHEDULING_IDEMPOTENCY_TTL_SECONDS,
+    });
+    const booked = bookedPublicResponse(requestId, {
+      startTime: windowStart,
+      timezone: timezone.value,
+      durationMinutes: eventType.duration ?? 120,
+      invitee,
+    });
     log("BOOKED", {
       request_id: requestId,
       slotStillAvailable: true,
       hasCancelUrl: Boolean(invitee.cancel_url),
       hasRescheduleUrl: Boolean(invitee.reschedule_url),
+      persistAttached: remembered === "ok",
     });
-    return persist(
-      schedulingResponse(requestId, {
-        status: "booked",
-        start_time: windowStart,
-        timezone: timezone.value,
-        duration_minutes: eventType.duration ?? 120,
-        event_uri: invitee.event,
-        invitee_uri: invitee.uri,
-        cancel_url: invitee.cancel_url,
-        reschedule_url: invitee.reschedule_url,
-        next_step:
-          "The consultation is booked. Give the customer the Calendly cancel_url and reschedule_url. This is a consultation, not an installation.",
-      }),
-      200
+    if (remembered !== "ok") {
+      return {
+        status: SCHEDULING_IDEMPOTENCY_HTTP_STATUS,
+        body: errorBody(requestId, "reconciliation_required", RECONCILE_NEXT_STEP),
+      };
+    }
+    const saved = await idempotencyStore.complete(
+      storageKey,
+      publicSchedulingBody(booked),
+      at.getTime(),
+      SCHEDULING_IDEMPOTENCY_TTL_SECONDS
     );
+    if (saved !== "ok") {
+      return {
+        status: SCHEDULING_IDEMPOTENCY_HTTP_STATUS,
+        body: errorBody(requestId, "reconciliation_required", RECONCILE_NEXT_STEP),
+      };
+    }
+    return { status: 200, body: publicSchedulingBody(booked) };
   } catch (err) {
     if (err instanceof CalendlyApiError && (err.kind === "not_found" || err.kind === "invalid_argument")) {
       log("SLOT_UNAVAILABLE", {
@@ -750,7 +890,7 @@ export async function processBooking(
         SCHEDULING_UNAVAILABLE_HTTP_STATUS
       );
     }
-    await deps.idempotencyStore.release(storageKey);
+    await idempotencyStore.release(storageKey);
     const mapped = mapCalendlyError(requestId, err);
     log("CALENDLY_ERROR", {
       request_id: requestId,
@@ -762,18 +902,78 @@ export async function processBooking(
   }
 }
 
+async function reconcileCreatedBooking(input: {
+  requestId: string;
+  record: StoredSchedulingIdempotencyRecord;
+  storageKey: string;
+  nowMs: number;
+  calendly: CalendlyClient;
+  store: SchedulingIdempotencyStore;
+  log: SchedulingHandlerDeps["log"];
+}): Promise<SchedulingResult> {
+  const created = input.record.createdInvitee;
+  if (!created) {
+    return {
+      status: SCHEDULING_IDEMPOTENCY_HTTP_STATUS,
+      body: errorBody(
+        input.requestId,
+        "request_in_progress",
+        "This request is already being processed. Do not retry automatically."
+      ),
+    };
+  }
+  try {
+    const invitee = await input.calendly.getInvitee(created.inviteeUri);
+    const booked = bookedPublicResponse(input.record.request_id, {
+      startTime: created.startTime,
+      timezone: created.timezone,
+      durationMinutes: created.durationMinutes,
+      invitee,
+    });
+    const saved = await input.store.complete(
+      input.storageKey,
+      publicSchedulingBody(booked),
+      input.nowMs,
+      SCHEDULING_IDEMPOTENCY_TTL_SECONDS
+    );
+    if (saved !== "ok") {
+      input.log?.("RECONCILE_PERSIST_FAILURE", { request_id: input.requestId });
+      return {
+        status: SCHEDULING_IDEMPOTENCY_HTTP_STATUS,
+        body: errorBody(input.requestId, "reconciliation_required", RECONCILE_NEXT_STEP),
+      };
+    }
+    input.log?.("RECONCILED", { request_id: input.requestId });
+    return { status: 200, body: publicSchedulingBody(booked) };
+  } catch (err) {
+    const mapped = mapCalendlyError(input.requestId, err);
+    input.log?.("RECONCILE_READ_FAILURE", {
+      request_id: input.requestId,
+      error: mapped.body.error,
+      httpStatus: mapped.status,
+    });
+    return {
+      status: SCHEDULING_IDEMPOTENCY_HTTP_STATUS,
+      body: errorBody(input.requestId, "reconciliation_required", RECONCILE_NEXT_STEP),
+    };
+  }
+}
+
 export function processProductionAvailability(
   search: URLSearchParams,
   deps: ProductionSchedulingDeps
 ): Promise<SchedulingResult> {
   const redis = getConsultRedis();
+  const eventTypeUri = calendlyEventTypeUriFromEnv();
   return processAvailability(search, {
     ...deps,
-    calendly: createCalendlyClientFromEnv(),
+    eventTypeUri,
+    calendly: eventTypeUri ? createCalendlyClientFromEnv() : null,
     ...(redis
       ? {
           rateLimiter: createUpstashSchedulingAvailabilityRateLimiter(redis),
           availabilityCache: createRedisSchedulingAvailabilityCache(redis),
+          eventTypeCache: createRedisSchedulingEventTypeCache(redis),
         }
       : {}),
   });
@@ -784,13 +984,16 @@ export function processProductionBooking(
   deps: ProductionSchedulingDeps
 ): Promise<SchedulingResult> {
   const redis = getConsultRedis();
+  const eventTypeUri = calendlyEventTypeUriFromEnv();
   return processBooking(parsed, {
     ...deps,
-    calendly: createCalendlyClientFromEnv(),
+    eventTypeUri,
+    calendly: eventTypeUri ? createCalendlyClientFromEnv() : null,
     ...(redis
       ? {
           rateLimiter: createUpstashSchedulingBookingRateLimiter(redis),
           idempotencyStore: createRedisSchedulingIdempotencyStore(redis),
+          eventTypeCache: createRedisSchedulingEventTypeCache(redis),
         }
       : {}),
   });

@@ -14,7 +14,12 @@ import {
   SCHEDULING_DISCOVERY_PATH,
 } from "../lib/capabilities.ts";
 import { memorySchedulingAvailabilityCache } from "../lib/scheduling-availability-cache.ts";
-import { CalendlyApiError } from "../lib/calendly-client.ts";
+import { memorySchedulingEventTypeCache } from "../lib/scheduling-event-type-cache.ts";
+import {
+  CalendlyApiError,
+  createCalendlyClient,
+  createCalendlyClientFromEnv,
+} from "../lib/calendly-client.ts";
 import {
   PRODUCTION_DISCOVERY_ORIGIN,
   discoveryOriginFromRequest,
@@ -105,16 +110,18 @@ function luxeEventType(overrides = {}) {
 
 function mockCalendly(options = {}) {
   const calls = {
-    resolve: 0,
+    getEventType: 0,
     available: 0,
     create: 0,
+    getInvitee: 0,
     availableWindows: [],
     createBodies: [],
+    getInviteeUris: [],
   };
   const slots = options.slots ?? [SLOT, OTHER_SLOT];
   const createError = options.createError;
   const availableError = options.availableError;
-  const resolveError = options.resolveError;
+  const getEventTypeError = options.getEventTypeError ?? options.resolveError;
   const eventType = options.eventType ?? luxeEventType();
   const invitee = options.invitee ?? {
     uri: "https://api.calendly.com/scheduled_events/EVT1/invitees/INV1",
@@ -128,10 +135,16 @@ function mockCalendly(options = {}) {
   return {
     calls,
     client: {
-      async resolveConsultationEventType() {
-        calls.resolve += 1;
-        if (resolveError) throw resolveError;
+      async getEventType() {
+        calls.getEventType += 1;
+        if (getEventTypeError) throw getEventTypeError;
         return eventType;
+      },
+      async getInvitee(uri) {
+        calls.getInvitee += 1;
+        calls.getInviteeUris.push(uri);
+        if (options.getInviteeError) throw options.getInviteeError;
+        return options.getInviteeResult ?? invitee;
       },
       async listAvailableTimes(_uri, start, end) {
         calls.available += 1;
@@ -187,8 +200,10 @@ async function runAvailability(search, extras = {}) {
   const logs = extras.logs ?? captureLogs();
   const result = await processAvailability(search, {
     calendly: extras.calendly === null ? null : calendly.client ?? extras.calendly,
+    eventTypeUri: extras.eventTypeUri === null ? undefined : extras.eventTypeUri ?? EVENT_TYPE_URI,
     rateLimiter: extras.rateLimiter ?? memorySchedulingRateLimiter(),
     availabilityCache: extras.availabilityCache,
+    eventTypeCache: extras.eventTypeCache,
     clientIpHash: extras.clientIpHash ?? "hash-sched-default",
     createId: extras.createId ?? (() => "avail-1"),
     now: extras.now ?? (() => new Date("2026-08-29T18:00:00.000Z")),
@@ -205,8 +220,10 @@ async function runBooking(body, extras = {}) {
   let i = 0;
   const result = await processBooking(body, {
     calendly: extras.calendly === null ? null : calendly.client ?? extras.calendly,
+    eventTypeUri: extras.eventTypeUri === null ? undefined : extras.eventTypeUri ?? EVENT_TYPE_URI,
     rateLimiter: extras.rateLimiter ?? memorySchedulingRateLimiter(),
     idempotencyStore: extras.idempotencyStore === null ? undefined : store,
+    eventTypeCache: extras.eventTypeCache,
     clientIpHash: extras.clientIpHash ?? "hash-sched-default",
     createId: extras.createId ?? (() => ids[i++] ?? `book-${i}`),
     now: extras.now ?? (() => new Date("2026-08-29T18:00:00.000Z")),
@@ -224,9 +241,18 @@ function logsAreSafe(t, entries, label) {
   t.ok(!/Bearer |CALENDLY_API_KEY=/.test(blob), `${label}: leaked token`);
 }
 
+function restoreCalendlyEnv(previousKey, previousUri) {
+  if (previousKey === undefined) delete process.env.CALENDLY_API_KEY;
+  else process.env.CALENDLY_API_KEY = previousKey;
+  if (previousUri === undefined) delete process.env.CALENDLY_EVENT_TYPE_URI;
+  else process.env.CALENDLY_EVENT_TYPE_URI = previousUri;
+}
+
 await test("1  discovery is not ready when Calendly is unconfigured", (t) => {
-  const previous = process.env.CALENDLY_API_KEY;
+  const previousKey = process.env.CALENDLY_API_KEY;
+  const previousUri = process.env.CALENDLY_EVENT_TYPE_URI;
   delete process.env.CALENDLY_API_KEY;
+  delete process.env.CALENDLY_EVENT_TYPE_URI;
   t.equal(isSchedulingConfigured(), false, "configured flag");
   const doc = schedulingDiscoveryDocument();
   t.equal(doc.id, SCHEDULING_CAPABILITY_ID, "capability id");
@@ -239,6 +265,15 @@ await test("1  discovery is not ready when Calendly is unconfigured", (t) => {
   t.equal(doc.directBookingAvailable, false, "must not advertise ready booking");
   t.equal(doc.readiness, SCHEDULING_READINESS_NOT_READY, "not-ready");
   t.ok(doc.readinessBlockers.includes("CALENDLY_API_KEY"), "names the missing key");
+  t.ok(doc.readinessBlockers.includes("CALENDLY_EVENT_TYPE_URI"), "names the missing URI");
+  process.env.CALENDLY_API_KEY = "test-token-not-real";
+  t.equal(isSchedulingConfigured(), false, "token alone is not configured");
+  const tokenOnly = schedulingDiscoveryDocument();
+  t.equal(tokenOnly.configured, false, "token-only discovery stays disabled");
+  t.ok(
+    tokenOnly.readinessBlockers.includes("CALENDLY_EVENT_TYPE_URI"),
+    "URI still required when token is present"
+  );
   t.equal(doc.customQuestions.loaded, false, "does not invent questions");
   t.ok(/configuration is missing/i.test(doc.customQuestions.note), "says configuration is missing");
   t.equal(doc.consultationRequestFallback.id, CONSULT_CAPABILITY_ID, "keeps request fallback");
@@ -252,13 +287,14 @@ await test("1  discovery is not ready when Calendly is unconfigured", (t) => {
   t.ok(/retry_after/.test(doc.rateLimit.note), "documents retry_after");
   t.ok(/must not wait and retry automatically/i.test(doc.rateLimit.note), "forbids wait-and-retry");
   t.ok(!/please retry|try again soon|retry later/i.test(doc.rateLimit.note), "no retry encouragement");
-  if (previous === undefined) delete process.env.CALENDLY_API_KEY;
-  else process.env.CALENDLY_API_KEY = previous;
+  restoreCalendlyEnv(previousKey, previousUri);
 });
 
-await test("2  discovery advertises scheduling when a token is present", (t) => {
-  const previous = process.env.CALENDLY_API_KEY;
+await test("2  discovery advertises scheduling when token and event-type URI are present", (t) => {
+  const previousKey = process.env.CALENDLY_API_KEY;
+  const previousUri = process.env.CALENDLY_EVENT_TYPE_URI;
   process.env.CALENDLY_API_KEY = "test-token-not-real";
+  process.env.CALENDLY_EVENT_TYPE_URI = EVENT_TYPE_URI;
   t.equal(isSchedulingConfigured(), true, "configured flag");
   const doc = schedulingDiscoveryDocument();
   t.equal(doc.configured, true, "configured");
@@ -270,12 +306,11 @@ await test("2  discovery advertises scheduling when a token is present", (t) => 
   t.ok(/consultation, not/i.test(doc.description), "consultation not installation");
   t.ok(/fallback/i.test(doc.consultationRequestFallback.note), "fallback remains");
   t.ok(doc.customQuestions.note.includes("/book"), "does not copy /book fields blindly");
-  t.equal(doc.readinessBlockers.length, 0, "no blockers when token present");
+  t.equal(doc.readinessBlockers.length, 0, "no blockers when token and URI are present");
   t.ok(doc.doNotRetryAutomaticallyWhen.includes("rate_limited"), "rate_limited stays do-not-retry");
   t.ok(/do not poll/i.test(doc.availability.note), "availability says do not poll");
   t.ok(/never wait and retry HTTP 429/i.test(doc.agentMode.note), "agent mode forbids 429 retry");
-  if (previous === undefined) delete process.env.CALENDLY_API_KEY;
-  else process.env.CALENDLY_API_KEY = previous;
+  restoreCalendlyEnv(previousKey, previousUri);
 });
 
 await test("3a  default availability window stays under Calendly 31-day max", async (t) => {
@@ -497,7 +532,7 @@ await test("14c  identical availability reads hit cache, not Calendly twice", as
   t.equal(second.result.status, 200, "second http");
   t.equal(first.result.body.slots.length, second.result.body.slots.length, "same slots");
   t.equal(calendly.calls.available, 1, "one Calendly available-times call");
-  t.equal(calendly.calls.resolve, 1, "cache hit does not resolve event type again");
+  t.equal(calendly.calls.getEventType, 1, "cache hit does not reload event type again");
 });
 
 await test("14d  Calendly 429 is rate_limited and is not retried", async (t) => {
@@ -712,6 +747,245 @@ await test("20  served capability documents are host-aware", (t) => {
     productionLlms.includes(`${PRODUCTION_DISCOVERY_ORIGIN}${SCHEDULING_DISCOVERY_PATH}`),
     "llms production schedule"
   );
+});
+
+function classifyCalendlyCall(method, url) {
+  const parsed = new URL(url);
+  const path = parsed.pathname.replace(/\/+$/, "") || "/";
+  const search = parsed.search;
+  if (path.endsWith("/event_type_available_times")) return "event_type_available_times";
+  if (path === "/event_types" || /[?&](user|organization)=/.test(search)) {
+    return "event_type_list";
+  }
+  if (path === "/users/me") return "users_me";
+  if (/^\/event_types\/[^/]+$/.test(path)) return "event_type_get";
+  if (method === "POST" && path === "/invitees") return "invitees_create";
+  if (method === "GET" && /\/invitees\/[^/]+$/.test(path)) return "invitee_get";
+  return "other";
+}
+
+function countByKind(calls) {
+  const counts = {
+    event_type_available_times: 0,
+    event_type_list: 0,
+    users_me: 0,
+    event_type_get: 0,
+    invitees_create: 0,
+    invitee_get: 0,
+    other: 0,
+    rediscovery: 0,
+  };
+  for (const call of calls) {
+    const kind = classifyCalendlyCall(call.method, call.url);
+    counts[kind] += 1;
+    if (kind === "event_type_list" || kind === "users_me") counts.rediscovery += 1;
+  }
+  return counts;
+}
+
+function recordingFetch(handlers) {
+  const calls = [];
+  const fetchImpl = async (url, init = {}) => {
+    const href = String(url);
+    const method = String(init.method ?? "GET").toUpperCase();
+    calls.push({ method, url: href });
+    const parsed = new URL(href);
+    const path = parsed.pathname.replace(/\/+$/, "") || "/";
+    const kind = classifyCalendlyCall(method, href);
+    const handler = handlers[kind] ?? handlers.default;
+    if (!handler) {
+      return new Response(JSON.stringify({ message: "unhandled" }), { status: 404 });
+    }
+    const result = handler({ method, url: href, path, search: parsed.search, init });
+    if (result instanceof Response) return result;
+    return new Response(JSON.stringify(result.body ?? result), {
+      status: result.status ?? 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+  return { fetchImpl, calls };
+}
+
+function persistFailsThenSucceeds(inner) {
+  let failComplete = true;
+  return {
+    claim: (input) => inner.claim(input),
+    inspect: (key) => inner.inspect(key),
+    release: (key) => inner.release(key),
+    rememberCreatedInvitee: (key, input) => inner.rememberCreatedInvitee(key, input),
+    async complete(key, publicResponse, nowMs, ttlSeconds) {
+      if (failComplete) {
+        failComplete = false;
+        return "unavailable";
+      }
+      return inner.complete(key, publicResponse, nowMs, ttlSeconds);
+    },
+  };
+}
+
+const WINDOW = {
+  start_time: "2026-09-08T00:00:00Z",
+  end_time: "2026-09-09T00:00:00Z",
+};
+
+function officialEventTypeResource() {
+  return {
+    resource: {
+      uri: EVENT_TYPE_URI,
+      name: "Free In-Home Consultation",
+      active: true,
+      slug: "2hr",
+      scheduling_url: "https://calendly.com/mark-luxewindowworks/2hr",
+      duration: 120,
+      custom_questions: [
+        { name: "Phone number", type: "phone_number", required: true, enabled: true, position: 0 },
+      ],
+      locations: [{ kind: "custom", location: "Client's home - Northern Idaho" }],
+    },
+  };
+}
+
+await test("21  cold cache availability is one available-times call and zero list/rediscovery", async (t) => {
+  const previousKey = process.env.CALENDLY_API_KEY;
+  const previousUri = process.env.CALENDLY_EVENT_TYPE_URI;
+  delete process.env.CALENDLY_API_KEY;
+  delete process.env.CALENDLY_EVENT_TYPE_URI;
+  const { fetchImpl, calls } = recordingFetch({
+    event_type_get: () => officialEventTypeResource(),
+    event_type_available_times: () => ({
+      collection: [{ status: "available", start_time: SLOT }],
+    }),
+  });
+  const client = createCalendlyClient("test-token-not-real", { fetchImpl });
+  const { result } = await runAvailability(new URLSearchParams(WINDOW), {
+    calendly: { client, calls: {} },
+    eventTypeUri: EVENT_TYPE_URI,
+    eventTypeCache: memorySchedulingEventTypeCache(),
+    availabilityCache: memorySchedulingAvailabilityCache(),
+  });
+  t.equal(result.status, 200, "http");
+  t.equal(result.body.slots[0].start_time, SLOT, "slot from available-times");
+  const counts = countByKind(calls);
+  t.equal(counts.event_type_available_times, 1, "exactly one event_type_available_times");
+  t.equal(counts.event_type_list, 0, "no GET /event_types list");
+  t.equal(counts.users_me, 0, "no users/me rediscovery");
+  t.equal(counts.rediscovery, 0, "zero event-type list/rediscovery calls");
+  t.equal(counts.invitees_create, 0, "availability must not create");
+  restoreCalendlyEnv(previousKey, previousUri);
+});
+
+await test("22  warm cache availability makes zero additional available-times calls", async (t) => {
+  const { fetchImpl, calls } = recordingFetch({
+    event_type_get: () => officialEventTypeResource(),
+    event_type_available_times: () => ({
+      collection: [{ status: "available", start_time: SLOT }],
+    }),
+  });
+  const client = createCalendlyClient("test-token-not-real", { fetchImpl });
+  const availabilityCache = memorySchedulingAvailabilityCache();
+  const eventTypeCache = memorySchedulingEventTypeCache();
+  const first = await runAvailability(new URLSearchParams(WINDOW), {
+    calendly: { client, calls: {} },
+    eventTypeUri: EVENT_TYPE_URI,
+    eventTypeCache,
+    availabilityCache,
+  });
+  const afterFirst = countByKind(calls).event_type_available_times;
+  const second = await runAvailability(new URLSearchParams(WINDOW), {
+    calendly: { client, calls: {} },
+    eventTypeUri: EVENT_TYPE_URI,
+    eventTypeCache,
+    availabilityCache,
+  });
+  t.equal(first.result.status, 200, "first http");
+  t.equal(second.result.status, 200, "second http");
+  t.equal(afterFirst, 1, "cold window used one available-times call");
+  t.equal(countByKind(calls).event_type_available_times, 1, "warm window added zero available-times calls");
+  t.equal(countByKind(calls).rediscovery, 0, "still no list/rediscovery");
+});
+
+await test("23  missing CALENDLY_EVENT_TYPE_URI is disabled and makes zero Calendly HTTP calls", async (t) => {
+  const previousKey = process.env.CALENDLY_API_KEY;
+  const previousUri = process.env.CALENDLY_EVENT_TYPE_URI;
+  process.env.CALENDLY_API_KEY = "test-token-not-real";
+  delete process.env.CALENDLY_EVENT_TYPE_URI;
+  t.equal(createCalendlyClientFromEnv(), null, "env client is not constructed");
+  const { fetchImpl, calls } = recordingFetch({
+    default: () => ({ status: 500, body: { message: "should not be called" } }),
+  });
+  const client = createCalendlyClient("test-token-not-real", { fetchImpl });
+  const avail = await runAvailability(new URLSearchParams(WINDOW), {
+    calendly: { client, calls: {} },
+    eventTypeUri: null,
+  });
+  const book = await runBooking(bookingBase(), {
+    calendly: { client, calls: {} },
+    eventTypeUri: null,
+  });
+  t.equal(avail.result.status, 503, "availability disabled");
+  t.equal(avail.result.body.error, "configuration_failure", "availability error");
+  t.equal(book.result.status, 503, "booking disabled");
+  t.equal(book.result.body.error, "configuration_failure", "booking error");
+  t.equal(calls.length, 0, "zero Calendly HTTP calls");
+  restoreCalendlyEnv(previousKey, previousUri);
+});
+
+await test("24  post-create persist failure blocks replay create and later returns the original result", async (t) => {
+  const inviteeUri = "https://api.calendly.com/scheduled_events/EVT1/invitees/INV1";
+  const eventUri = "https://api.calendly.com/scheduled_events/EVT1";
+  const { fetchImpl, calls } = recordingFetch({
+    event_type_get: () => officialEventTypeResource(),
+    event_type_available_times: () => ({
+      collection: [{ status: "available", start_time: SLOT }],
+    }),
+    invitees_create: () => ({
+      status: 201,
+      body: {
+        resource: {
+          uri: inviteeUri,
+          event: eventUri,
+          cancel_url: "https://calendly.com/cancellations/CANCEL1",
+          reschedule_url: "https://calendly.com/reschedulings/RESCHEDULE1",
+          timezone: "America/Los_Angeles",
+          status: "active",
+        },
+      },
+    }),
+    invitee_get: () => ({
+      resource: {
+        uri: inviteeUri,
+        event: eventUri,
+        cancel_url: "https://calendly.com/cancellations/CANCEL1",
+        reschedule_url: "https://calendly.com/reschedulings/RESCHEDULE1",
+        timezone: "America/Los_Angeles",
+        status: "active",
+      },
+    }),
+  });
+  const client = createCalendlyClient("test-token-not-real", { fetchImpl });
+  const store = persistFailsThenSucceeds(memorySchedulingIdempotencyStore());
+  const body = bookingBase({ idempotencyKey: "persist-window" });
+  const first = await runBooking(body, {
+    calendly: { client, calls: {} },
+    store,
+    ids: ["persist-a", "persist-b"],
+  });
+  t.equal(first.result.status, 409, "first persist failure is not booked");
+  t.equal(first.result.body.error, "reconciliation_required", "explicit reconciliation state");
+  t.equal(countByKind(calls).invitees_create, 1, "one POST /invitees after create");
+  const second = await runBooking(body, {
+    calendly: { client, calls: {} },
+    store,
+    ids: ["persist-c"],
+  });
+  t.equal(second.result.status, 200, "replay persist succeeds");
+  t.equal(second.result.body.status, "booked", "original public result");
+  t.equal(second.result.body.invitee_uri, inviteeUri, "same invitee");
+  t.equal(second.result.body.event_uri, eventUri, "same event");
+  t.equal(second.result.body.cancel_url, "https://calendly.com/cancellations/CANCEL1", "same cancel");
+  t.equal(countByKind(calls).invitees_create, 1, "replay must not POST /invitees again");
+  t.ok(countByKind(calls).invitee_get >= 1, "replay used an official invitee read");
+  t.equal(countByKind(calls).rediscovery, 0, "no event-type list during booking");
 });
 
 await test("17  stored idempotency record has no customer PII", async (t) => {

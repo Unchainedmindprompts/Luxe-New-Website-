@@ -6,10 +6,11 @@
  * availability and booking routes execute it. There is no second catalogue
  * of readiness or required fields.
  *
- * DIRECT SCHEDULING IS AVAILABLE when Calendly credentials are present.
- * Discovery must not claim the capability is ready if `CALENDLY_API_KEY` is
- * missing. Event-type questions are loaded from the official event type, never
- * invented from the human /book fallback form.
+ * DIRECT SCHEDULING IS AVAILABLE when both `CALENDLY_API_KEY` and
+ * `CALENDLY_EVENT_TYPE_URI` are present. Discovery must not claim the
+ * capability is ready if either is missing. There is no event-type list or
+ * slug rediscovery. Event-type questions are loaded from the configured
+ * official event type, never invented from the human /book fallback form.
  *
  * CUSTOMER CONFIRMATION IS MANDATORY. A booking is created only after the
  * customer explicitly confirms the chosen start time. A Calendly booking
@@ -55,6 +56,7 @@ export const SCHEDULING_ERROR_CODES = [
   "missing_confirmation",
   "idempotency_conflict",
   "request_in_progress",
+  "reconciliation_required",
   "infrastructure_unavailable",
 ] as const;
 export type SchedulingErrorCode = (typeof SCHEDULING_ERROR_CODES)[number];
@@ -66,6 +68,8 @@ export const SCHEDULING_DO_NOT_RETRY_AUTOMATICALLY = [
   "calendly_authentication_failure",
   "missing_confirmation",
   "idempotency_conflict",
+  "request_in_progress",
+  "reconciliation_required",
 ] as const;
 
 export const SCHEDULING_REQUIRED_BOOKING_FIELDS = [
