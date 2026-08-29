@@ -67,6 +67,7 @@ const LIMITS = {
 } as const;
 
 const MAX_WINDOW_MS = 31 * 24 * 60 * 60 * 1000;
+const DEFAULT_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
 
 export interface SchedulingResult {
   status: number;
@@ -156,7 +157,7 @@ function mapCalendlyError(
           err.kind === "not_found" ? "unavailable_slot" : "invalid_information",
           err.kind === "not_found"
             ? "That time is not available. Retrieve fresh times. Do not pick another time automatically."
-            : "The booking information was not accepted."
+            : "Calendly rejected this request. Use a UTC window of at most 31 days and a valid start time."
         ),
       };
     }
@@ -190,11 +191,15 @@ function parseWindow(
   endRaw: string | null,
   now: Date
 ): { ok: true; start: string; end: string } | { ok: false; reason: string } {
-  const start = startRaw ? normalizeUtcInstant(startRaw) : now.toISOString().replace(/\.\d{3}Z$/, "Z");
+  const defaultStart = new Date(now.getTime() + 60 * 1000)
+    .toISOString()
+    .replace(/\.\d{3}Z$/, "Z");
+  const start = startRaw ? normalizeUtcInstant(startRaw) : defaultStart;
+  if (!start) return { ok: false, reason: "invalid window" };
   const end = endRaw
     ? normalizeUtcInstant(endRaw)
-    : new Date(now.getTime() + MAX_WINDOW_MS).toISOString().replace(/\.\d{3}Z$/, "Z");
-  if (!start || !end) return { ok: false, reason: "invalid window" };
+    : new Date(Date.parse(start) + DEFAULT_WINDOW_MS).toISOString().replace(/\.\d{3}Z$/, "Z");
+  if (!end) return { ok: false, reason: "invalid window" };
   const startMs = Date.parse(start);
   const endMs = Date.parse(end);
   if (endMs <= startMs) return { ok: false, reason: "invalid window" };

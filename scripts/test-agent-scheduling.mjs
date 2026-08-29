@@ -260,6 +260,16 @@ await test("2  discovery advertises scheduling when a token is present", (t) => 
   else process.env.CALENDLY_API_KEY = previous;
 });
 
+await test("3a  default availability window stays under Calendly 31-day max", async (t) => {
+  const { result, calendly } = await runAvailability(new URLSearchParams());
+  t.equal(result.status, 200, "http");
+  const start = Date.parse(result.body.window.start_time);
+  const end = Date.parse(result.body.window.end_time);
+  t.ok(end > start, "end after start");
+  t.ok(end - start <= 30 * 24 * 60 * 60 * 1000 + 1000, "default window is 30 days");
+  t.equal(calendly.calls.create, 0, "default availability must not book");
+});
+
 await test("3  availability returns only mocked Calendly slots", async (t) => {
   const { result, calendly } = await runAvailability(
     new URLSearchParams({
