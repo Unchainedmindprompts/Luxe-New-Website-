@@ -13,6 +13,7 @@ import {
   SCHEDULING_CAPABILITY_ID,
   SCHEDULING_DISCOVERY_PATH,
 } from "../lib/capabilities.ts";
+import { memorySchedulingAvailabilityCache } from "../lib/scheduling-availability-cache.ts";
 import { CalendlyApiError } from "../lib/calendly-client.ts";
 import {
   PRODUCTION_DISCOVERY_ORIGIN,
@@ -25,6 +26,7 @@ import {
   publicSchedulingDiscoveryDocument,
 } from "../lib/discovery-public.ts";
 import {
+  SCHEDULING_RATE_LIMITED_NEXT_STEP,
   SCHEDULING_READINESS_CONFIGURED,
   SCHEDULING_READINESS_NOT_READY,
   isSchedulingConfigured,
@@ -186,6 +188,7 @@ async function runAvailability(search, extras = {}) {
   const result = await processAvailability(search, {
     calendly: extras.calendly === null ? null : calendly.client ?? extras.calendly,
     rateLimiter: extras.rateLimiter ?? memorySchedulingRateLimiter(),
+    availabilityCache: extras.availabilityCache,
     clientIpHash: extras.clientIpHash ?? "hash-sched-default",
     createId: extras.createId ?? (() => "avail-1"),
     now: extras.now ?? (() => new Date("2026-08-29T18:00:00.000Z")),
@@ -243,6 +246,12 @@ await test("1  discovery is not ready when Calendly is unconfigured", (t) => {
   t.equal(doc.requiresHumanConfirmation, true, "confirmation required");
   t.equal(doc.pricingAvailable, false, "no pricing");
   t.ok(!/\b5\b.*hour|20.*day/i.test(JSON.stringify(doc.rateLimit)), "no thresholds");
+  t.ok(doc.doNotRetryAutomaticallyWhen.includes("rate_limited"), "rate_limited is do-not-retry");
+  t.equal(doc.rateLimit.retryAfterField, "retry_after", "retry_after field");
+  t.equal(doc.rateLimit.automaticRetryForbidden, true, "auto-retry forbidden");
+  t.ok(/retry_after/.test(doc.rateLimit.note), "documents retry_after");
+  t.ok(/must not wait and retry automatically/i.test(doc.rateLimit.note), "forbids wait-and-retry");
+  t.ok(!/please retry|try again soon|retry later/i.test(doc.rateLimit.note), "no retry encouragement");
   if (previous === undefined) delete process.env.CALENDLY_API_KEY;
   else process.env.CALENDLY_API_KEY = previous;
 });
@@ -262,6 +271,9 @@ await test("2  discovery advertises scheduling when a token is present", (t) => 
   t.ok(/fallback/i.test(doc.consultationRequestFallback.note), "fallback remains");
   t.ok(doc.customQuestions.note.includes("/book"), "does not copy /book fields blindly");
   t.equal(doc.readinessBlockers.length, 0, "no blockers when token present");
+  t.ok(doc.doNotRetryAutomaticallyWhen.includes("rate_limited"), "rate_limited stays do-not-retry");
+  t.ok(/do not poll/i.test(doc.availability.note), "availability says do not poll");
+  t.ok(/never wait and retry HTTP 429/i.test(doc.agentMode.note), "agent mode forbids 429 retry");
   if (previous === undefined) delete process.env.CALENDLY_API_KEY;
   else process.env.CALENDLY_API_KEY = previous;
 });
@@ -274,6 +286,7 @@ await test("3a  default availability window stays under Calendly 31-day max", as
   t.ok(end > start, "end after start");
   t.ok(end - start <= 30 * 24 * 60 * 60 * 1000 + 1000, "default window is 30 days");
   t.equal(calendly.calls.create, 0, "default availability must not book");
+  t.equal(calendly.calls.available, 1, "one inbound request makes one Calendly available-times call");
 });
 
 await test("3  availability returns only mocked Calendly slots", async (t) => {
@@ -291,6 +304,7 @@ await test("3  availability returns only mocked Calendly slots", async (t) => {
   t.equal(result.body.event_type.questions.length, 2, "questions from event type");
   t.equal(result.body.event_type.location.kinds[0], "custom", "location kind from event type");
   t.equal(calendly.calls.create, 0, "availability must not book");
+  t.equal(calendly.calls.available, 1, "one Calendly available-times call");
   t.ok(!JSON.stringify(result.body).includes("firstName"), "does not copy /book form fields");
 });
 
@@ -430,16 +444,78 @@ await test("13  Calendly authentication failure does not leak token material", a
   logsAreSafe(t, logs.entries, "auth failure");
 });
 
-await test("14  rate limiting fails closed and does not book", async (t) => {
+await test("14  repeated availability returns 429 and does not retry Calendly", async (t) => {
   const limiter = memorySchedulingRateLimiter({ hourlyLimit: 1, dailyLimit: 1 });
   const calendly = mockCalendly();
   const first = await runAvailability(new URLSearchParams(), { calendly, rateLimiter: limiter });
-  const second = await runBooking(bookingBase(), { calendly, rateLimiter: limiter });
+  const second = await runAvailability(new URLSearchParams(), { calendly, rateLimiter: limiter });
   t.equal(first.result.status, 200, "first allowed");
   t.equal(second.result.status, 429, "second limited");
   t.equal(second.result.body.error, "rate_limited", "error");
-  t.ok(second.result.headers?.["Retry-After"], "retry-after");
-  t.equal(calendly.calls.create, 0, "limited request must not book");
+  t.equal(typeof second.result.body.retry_after, "number", "retry_after is numeric");
+  t.ok(second.result.body.retry_after >= 1, "retry_after seconds");
+  t.equal(second.result.headers?.["Retry-After"], String(second.result.body.retry_after), "header");
+  t.equal(second.result.body.next_step, SCHEDULING_RATE_LIMITED_NEXT_STEP, "do not auto-retry");
+  t.ok(!/please retry|try again soon|retry later/i.test(second.result.body.next_step), "no retry encouragement");
+  t.equal(calendly.calls.available, 1, "handler does not call Calendly after 429");
+  t.equal(calendly.calls.create, 0, "availability never books");
+});
+
+await test("14b  availability 429 does not consume the booking budget", async (t) => {
+  const availabilityLimiter = memorySchedulingRateLimiter({ hourlyLimit: 1, dailyLimit: 1 });
+  const bookingLimiter = memorySchedulingRateLimiter({ hourlyLimit: 5, dailyLimit: 20 });
+  const calendly = mockCalendly();
+  const first = await runAvailability(new URLSearchParams(), {
+    calendly,
+    rateLimiter: availabilityLimiter,
+  });
+  const limited = await runAvailability(new URLSearchParams(), {
+    calendly,
+    rateLimiter: availabilityLimiter,
+  });
+  const booked = await runBooking(bookingBase(), { calendly, rateLimiter: bookingLimiter });
+  t.equal(first.result.status, 200, "availability allowed once");
+  t.equal(limited.result.status, 429, "availability then limited");
+  t.equal(booked.result.status, 200, "booking still accepted");
+  t.equal(booked.result.body.status, "booked", "mocked booking completed");
+  t.equal(booked.result.body.error, undefined, "booking is not rate_limited");
+  t.equal(calendly.calls.create, 1, "booking limiter allowed Calendly invitee create");
+});
+
+await test("14c  identical availability reads hit cache, not Calendly twice", async (t) => {
+  const cache = memorySchedulingAvailabilityCache();
+  const calendly = mockCalendly();
+  const first = await runAvailability(new URLSearchParams(), {
+    calendly,
+    availabilityCache: cache,
+  });
+  const second = await runAvailability(new URLSearchParams(), {
+    calendly,
+    availabilityCache: cache,
+  });
+  t.equal(first.result.status, 200, "first http");
+  t.equal(second.result.status, 200, "second http");
+  t.equal(first.result.body.slots.length, second.result.body.slots.length, "same slots");
+  t.equal(calendly.calls.available, 1, "one Calendly available-times call");
+  t.equal(calendly.calls.resolve, 1, "cache hit does not resolve event type again");
+});
+
+await test("14d  Calendly 429 is rate_limited and is not retried", async (t) => {
+  const calendly = mockCalendly({
+    availableError: new CalendlyApiError(
+      "rate_limited",
+      429,
+      "Calendly rate limited this request.",
+      37
+    ),
+  });
+  const { result } = await runAvailability(new URLSearchParams(), { calendly });
+  t.equal(result.status, 429, "http");
+  t.equal(result.body.error, "rate_limited", "error");
+  t.equal(result.body.retry_after, 37, "retry_after from Calendly");
+  t.equal(result.headers?.["Retry-After"], "37", "header");
+  t.equal(result.body.next_step, SCHEDULING_RATE_LIMITED_NEXT_STEP, "do not auto-retry");
+  t.equal(calendly.calls.available, 1, "one attempt, no sleep-and-retry");
 });
 
 await test("15  required Calendly questions are enforced and /book fields are not invented", async (t) => {

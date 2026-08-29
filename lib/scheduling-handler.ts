@@ -25,9 +25,16 @@ import {
   SCHEDULING_INVALID_HTTP_STATUS,
   SCHEDULING_NOT_READY_HTTP_STATUS,
   SCHEDULING_RATE_LIMITED_HTTP_STATUS,
+  SCHEDULING_RATE_LIMITED_NEXT_STEP,
   SCHEDULING_UNAVAILABLE_HTTP_STATUS,
   type SchedulingErrorCode,
 } from "./scheduling";
+import {
+  SCHEDULING_AVAILABILITY_CACHE_TTL_SECONDS,
+  availabilityCacheKey,
+  createRedisSchedulingAvailabilityCache,
+  type SchedulingAvailabilityCache,
+} from "./scheduling-availability-cache";
 import {
   createRedisSchedulingIdempotencyStore,
   memorySchedulingIdempotencyStore,
@@ -35,7 +42,10 @@ import {
   schedulingRequestFingerprint,
   type SchedulingIdempotencyStore,
 } from "./scheduling-idempotency";
-import { createUpstashSchedulingRateLimiter } from "./scheduling-rate-limit";
+import {
+  createUpstashSchedulingAvailabilityRateLimiter,
+  createUpstashSchedulingBookingRateLimiter,
+} from "./scheduling-rate-limit";
 import {
   EMAIL_SHAPE,
   buildCalendlyLocation,
@@ -78,6 +88,7 @@ export interface SchedulingResult {
 export interface SchedulingHandlerDeps {
   calendly?: CalendlyClient | null;
   rateLimiter?: AgentRateLimiter;
+  availabilityCache?: SchedulingAvailabilityCache;
   idempotencyStore?: SchedulingIdempotencyStore;
   createId?: () => string;
   now?: () => Date;
@@ -127,8 +138,21 @@ function errorBody(
 function mapCalendlyError(
   requestId: string,
   err: unknown
-): { status: number; body: SchedulingPublicResponse } {
+): { status: number; body: SchedulingPublicResponse; headers?: Record<string, string> } {
   if (err instanceof CalendlyApiError) {
+    if (err.kind === "rate_limited") {
+      const retryAfter = err.retryAfterSeconds ?? 60;
+      return {
+        status: SCHEDULING_RATE_LIMITED_HTTP_STATUS,
+        headers: { "Retry-After": String(retryAfter) },
+        body: errorBody(
+          requestId,
+          "rate_limited",
+          SCHEDULING_RATE_LIMITED_NEXT_STEP,
+          { retry_after: retryAfter }
+        ),
+      };
+    }
     if (err.kind === "authentication_failure") {
       return {
         status: SCHEDULING_AUTH_HTTP_STATUS,
@@ -248,13 +272,15 @@ async function consumeLimit(
     };
   }
   if (limited.kind === "limited") {
+    const retryAfter = limited.retryAfterSeconds;
     return {
       status: SCHEDULING_RATE_LIMITED_HTTP_STATUS,
-      headers: { "Retry-After": String(limited.retryAfterSeconds) },
+      headers: { "Retry-After": String(retryAfter) },
       body: errorBody(
         requestId,
         "rate_limited",
-        "This request was rate limited. Do not retry automatically."
+        SCHEDULING_RATE_LIMITED_NEXT_STEP,
+        { retry_after: retryAfter }
       ),
     };
   }
@@ -313,10 +339,42 @@ export async function processAvailability(
     };
   }
 
+  const cacheKey = availabilityCacheKey(window.start, window.end);
+  if (deps.availabilityCache) {
+    const cached = await deps.availabilityCache.get(cacheKey);
+    if (cached) {
+      log("AVAILABILITY_CACHE_HIT", { request_id: requestId });
+      return {
+        status: 200,
+        body: {
+          request_id: requestId,
+          contract_version: SCHEDULING_CONTRACT_VERSION,
+          provider: cached.provider,
+          window: cached.window,
+          event_type: cached.event_type,
+          slots: cached.slots,
+          next_step:
+            "Present only these times. Require the customer to confirm one start_time, then POST /api/scheduling/book. Do not poll availability.",
+        },
+      };
+    }
+  }
+
   try {
     const eventType = await deps.calendly.resolveConsultationEventType();
     const slots = toPublicSlots(
       await deps.calendly.listAvailableTimes(eventType.uri, window.start, window.end)
+    );
+    const eventPublic = eventTypePublic(eventType);
+    await deps.availabilityCache?.set(
+      cacheKey,
+      {
+        window: { start_time: window.start, end_time: window.end },
+        event_type: eventPublic,
+        slots,
+        provider: "calendly",
+      },
+      SCHEDULING_AVAILABILITY_CACHE_TTL_SECONDS
     );
     return {
       status: 200,
@@ -325,10 +383,10 @@ export async function processAvailability(
         contract_version: SCHEDULING_CONTRACT_VERSION,
         provider: "calendly",
         window: { start_time: window.start, end_time: window.end },
-        event_type: eventTypePublic(eventType),
+        event_type: eventPublic,
         slots,
         next_step:
-          "Present only these times. Require the customer to confirm one start_time, then POST /api/scheduling/book.",
+          "Present only these times. Require the customer to confirm one start_time, then POST /api/scheduling/book. Do not poll availability.",
       },
     };
   } catch (err) {
@@ -341,6 +399,7 @@ export async function processAvailability(
     });
     return {
       status: mapped.status,
+      ...(mapped.headers ? { headers: mapped.headers } : {}),
       body: { ...mapped.body, slots: [] },
     };
   }
@@ -713,7 +772,8 @@ export function processProductionAvailability(
     calendly: createCalendlyClientFromEnv(),
     ...(redis
       ? {
-          rateLimiter: createUpstashSchedulingRateLimiter(redis),
+          rateLimiter: createUpstashSchedulingAvailabilityRateLimiter(redis),
+          availabilityCache: createRedisSchedulingAvailabilityCache(redis),
         }
       : {}),
   });
@@ -729,7 +789,7 @@ export function processProductionBooking(
     calendly: createCalendlyClientFromEnv(),
     ...(redis
       ? {
-          rateLimiter: createUpstashSchedulingRateLimiter(redis),
+          rateLimiter: createUpstashSchedulingBookingRateLimiter(redis),
           idempotencyStore: createRedisSchedulingIdempotencyStore(redis),
         }
       : {}),

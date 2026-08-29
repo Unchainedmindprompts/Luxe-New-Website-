@@ -91,6 +91,9 @@ export const SCHEDULING_NEVER_REQUIRED_FIELDS = [
   "finalProductSelection",
 ] as const;
 
+export const SCHEDULING_RATE_LIMITED_NEXT_STEP =
+  "This request was rate limited. retry_after is the number of seconds until a new request would be allowed. Do not wait and retry automatically. Stop and return control to the customer." as const;
+
 export const SCHEDULING_NOT_READY_HTTP_STATUS = 503 as const;
 export const SCHEDULING_RATE_LIMITED_HTTP_STATUS = 429 as const;
 export const SCHEDULING_IDEMPOTENCY_HTTP_STATUS = 409 as const;
@@ -181,6 +184,9 @@ export interface SchedulingDiscoveryDocument {
     readonly note: string;
   };
   readonly rateLimit: {
+    readonly retryAfterField: "retry_after";
+    readonly automaticRetryForbidden: true;
+    readonly availabilityAndBookingHaveSeparateBudgets: true;
     readonly note: string;
   };
   readonly readiness: typeof SCHEDULING_READINESS_CONFIGURED | typeof SCHEDULING_READINESS_NOT_READY;
@@ -227,10 +233,11 @@ export function schedulingDiscoveryDocument(): SchedulingDiscoveryDocument {
       source: SCHEDULING_AGENT_SOURCE,
       contractVersion: SCHEDULING_CONTRACT_VERSION,
       note:
-        "Retrieve available times first. Present only those times. Require the " +
-        "customer to confirm the chosen start time, then POST the booking with " +
-        "customerConfirmed true. Never invent or auto-select a time. Never " +
-        "bypass Calendly availability, buffers, conflicts, required questions, " +
+        "Retrieve available times once per customer request. Present only those " +
+        "times. Require the customer to confirm the chosen start time, then POST " +
+        "the booking with customerConfirmed true. Never invent or auto-select a " +
+        "time. Never poll availability. Never wait and retry HTTP 429 automatically. " +
+        "Never bypass Calendly availability, buffers, conflicts, required questions, " +
         "or location rules.",
     },
     configured,
@@ -267,7 +274,11 @@ export function schedulingDiscoveryDocument(): SchedulingDiscoveryDocument {
       source: "calendly",
       maxWindowDays: 31,
       startTimesAreUtcWithTrailingZ: true,
-      note: "Only Calendly-valid slots are returned. Start times are UTC with a trailing Z. Maximum 31 days per request.",
+      note:
+        "Only Calendly-valid slots are returned. Start times are UTC with a trailing Z. " +
+        "Maximum 31 days per request. One inbound availability request makes at most one " +
+        "Calendly available-times call. Identical windows may be served from a short " +
+        "server cache. Do not poll this endpoint.",
     },
     cancellationAndRescheduling: {
       handledBy: "calendly",
@@ -298,7 +309,15 @@ export function schedulingDiscoveryDocument(): SchedulingDiscoveryDocument {
       note: "Booking requests must include idempotencyKey. Replays of the same key and same request return the original public result. A different payload with the same key is rejected. Thresholds and storage internals are not published.",
     },
     rateLimit: {
-      note: "Availability and booking requests are rate limited. Thresholds are not published. Do not retry automatically when rate limited or when infrastructure is unavailable.",
+      retryAfterField: "retry_after",
+      automaticRetryForbidden: true,
+      availabilityAndBookingHaveSeparateBudgets: true,
+      note:
+        "Availability and booking use separate rate-limit budgets. Thresholds are not " +
+        "published. HTTP 429 responses include retry_after in seconds. rate_limited is " +
+        "listed in doNotRetryAutomaticallyWhen. The calling agent must not wait and " +
+        "retry automatically. Stop and return control to the customer. Do not retry " +
+        "automatically when infrastructure is unavailable.",
     },
     readiness: configured ? SCHEDULING_READINESS_CONFIGURED : SCHEDULING_READINESS_NOT_READY,
     readinessBlockers: configured ? [] : [...calendlyMissingEnvNames()],

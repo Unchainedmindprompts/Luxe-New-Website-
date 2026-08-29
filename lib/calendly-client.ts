@@ -22,17 +22,25 @@ export type CalendlyFailureKind =
   | "calendly_failure"
   | "configuration_failure"
   | "not_found"
-  | "invalid_argument";
+  | "invalid_argument"
+  | "rate_limited";
 
 export class CalendlyApiError extends Error {
   readonly kind: CalendlyFailureKind;
   readonly httpStatus: number;
+  readonly retryAfterSeconds?: number;
 
-  constructor(kind: CalendlyFailureKind, httpStatus: number, message: string) {
+  constructor(
+    kind: CalendlyFailureKind,
+    httpStatus: number,
+    message: string,
+    retryAfterSeconds?: number
+  ) {
     super(message);
     this.name = "CalendlyApiError";
     this.kind = kind;
     this.httpStatus = httpStatus;
+    this.retryAfterSeconds = retryAfterSeconds;
   }
 }
 
@@ -153,9 +161,19 @@ export function enabledCustomQuestions(
 
 function classifyHttpStatus(status: number): CalendlyFailureKind {
   if (status === 401) return "authentication_failure";
+  if (status === 429) return "rate_limited";
   if (status === 404) return "not_found";
   if (status === 400) return "invalid_argument";
   return "calendly_failure";
+}
+
+export function parseRetryAfterSeconds(header: string | null, nowMs = Date.now()): number {
+  if (!header) return 60;
+  const trimmed = header.trim();
+  if (/^\d+$/.test(trimmed)) return Math.max(1, Number(trimmed));
+  const when = Date.parse(trimmed);
+  if (!Number.isNaN(when)) return Math.max(1, Math.ceil((when - nowMs) / 1000));
+  return 60;
 }
 
 async function calendlyFetch(
@@ -183,6 +201,15 @@ async function calendlyFetch(
       "authentication_failure",
       401,
       "Calendly authentication failed."
+    );
+  }
+
+  if (response.status === 429) {
+    throw new CalendlyApiError(
+      "rate_limited",
+      429,
+      "Calendly rate limited this request.",
+      parseRetryAfterSeconds(response.headers.get("retry-after"))
     );
   }
 

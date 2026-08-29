@@ -1,6 +1,7 @@
 /**
- * Durable scheduling rate limits. Distinct prefixes from consult-request
- * so the two surfaces cannot collide. Thresholds stay internal.
+ * Durable scheduling rate limits. Availability and booking use distinct
+ * prefixes so availability reads cannot consume the booking allowance.
+ * Both stay distinct from consult-request. Thresholds stay internal.
  *
  * Official @upstash/ratelimit fail-open timeout is disabled (`timeout: 0`).
  */
@@ -13,8 +14,11 @@ export const SCHEDULING_AGENT_HOURLY_LIMIT = 5;
 export const SCHEDULING_AGENT_DAILY_LIMIT = 20;
 export const SCHEDULING_AGENT_HOURLY_WINDOW = "1 h" as const;
 export const SCHEDULING_AGENT_DAILY_WINDOW = "1 d" as const;
-export const SCHEDULING_RL_HOUR_PREFIX = "sched:rl:v1:hour" as const;
-export const SCHEDULING_RL_DAY_PREFIX = "sched:rl:v1:day" as const;
+
+export const SCHEDULING_AVAIL_RL_HOUR_PREFIX = "sched:avail:rl:v1:hour" as const;
+export const SCHEDULING_AVAIL_RL_DAY_PREFIX = "sched:avail:rl:v1:day" as const;
+export const SCHEDULING_BOOK_RL_HOUR_PREFIX = "sched:book:rl:v1:hour" as const;
+export const SCHEDULING_BOOK_RL_DAY_PREFIX = "sched:book:rl:v1:day" as const;
 
 function retryAfterSeconds(resetAtMs: number, nowMs: number): number {
   return Math.max(1, Math.ceil((resetAtMs - nowMs) / 1000));
@@ -81,14 +85,18 @@ export function memorySchedulingRateLimiter(options?: {
   };
 }
 
-export function createUpstashSchedulingRateLimiter(redis: Redis): AgentRateLimiter {
+function createUpstashSurfaceLimiter(
+  redis: Redis,
+  hourPrefix: string,
+  dayPrefix: string
+): AgentRateLimiter {
   const hourly = new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(
       SCHEDULING_AGENT_HOURLY_LIMIT,
       SCHEDULING_AGENT_HOURLY_WINDOW
     ),
-    prefix: SCHEDULING_RL_HOUR_PREFIX,
+    prefix: hourPrefix,
     analytics: false,
     timeout: 0,
     ephemeralCache: false,
@@ -100,7 +108,7 @@ export function createUpstashSchedulingRateLimiter(redis: Redis): AgentRateLimit
       SCHEDULING_AGENT_DAILY_LIMIT,
       SCHEDULING_AGENT_DAILY_WINDOW
     ),
-    prefix: SCHEDULING_RL_DAY_PREFIX,
+    prefix: dayPrefix,
     analytics: false,
     timeout: 0,
     ephemeralCache: false,
@@ -123,4 +131,24 @@ export function createUpstashSchedulingRateLimiter(redis: Redis): AgentRateLimit
       }
     },
   };
+}
+
+export function createUpstashSchedulingAvailabilityRateLimiter(
+  redis: Redis
+): AgentRateLimiter {
+  return createUpstashSurfaceLimiter(
+    redis,
+    SCHEDULING_AVAIL_RL_HOUR_PREFIX,
+    SCHEDULING_AVAIL_RL_DAY_PREFIX
+  );
+}
+
+export function createUpstashSchedulingBookingRateLimiter(
+  redis: Redis
+): AgentRateLimiter {
+  return createUpstashSurfaceLimiter(
+    redis,
+    SCHEDULING_BOOK_RL_HOUR_PREFIX,
+    SCHEDULING_BOOK_RL_DAY_PREFIX
+  );
 }

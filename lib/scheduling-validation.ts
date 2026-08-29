@@ -49,6 +49,7 @@ export interface SchedulingPublicResponse {
   reschedule_url?: string;
   alternatives?: PublicAvailableSlot[];
   clarification_needed?: string[];
+  retry_after?: number;
 }
 
 export function schedulingResponse(
@@ -84,6 +85,7 @@ export function publicSchedulingBody(
     ...(body.clarification_needed?.length
       ? { clarification_needed: body.clarification_needed }
       : {}),
+    ...(typeof body.retry_after === "number" ? { retry_after: body.retry_after } : {}),
   };
 }
 
