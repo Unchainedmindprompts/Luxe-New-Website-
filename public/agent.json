@@ -23,8 +23,21 @@
   },
   "capabilities": [
     {
+      "name": "Schedule an in-home consultation",
+      "description": "Direct Calendly scheduling for a free in-home consultation. Read the discovery document for current readiness. The customer must explicitly confirm the appointment time. This schedules a consultation, not product installation. Consultation-request remains the fallback. Humans: /book.",
+      "url": "https://www.luxewindowworks.com/api/capabilities/schedule-in-home-consultation",
+      "availability_url": "https://www.luxewindowworks.com/api/scheduling/available-times",
+      "execution_url": "https://www.luxewindowworks.com/api/scheduling/book",
+      "type": "schedule",
+      "direct_booking": true,
+      "requires_human_confirmation": true,
+      "pricing_available": false,
+      "readiness": "configuration-dependent",
+      "cost": "free"
+    },
+    {
       "name": "Request an in-home consultation",
-      "description": "Structured consultation-request contract. Agent submission delivers a request for human follow-up. It does not book, reserve, or price a visit. Humans can still use /contact or /book.",
+      "description": "Structured consultation-request contract. Agent submission delivers a request for human follow-up. It does not book, reserve, or price a visit. Direct scheduling is available through the sibling scheduling capability when that discovery document reports the Calendly integration is configured. This request path remains the fallback. Humans can still use /contact or /book.",
       "url": "https://www.luxewindowworks.com/api/capabilities/request-in-home-consultation",
       "execution_url": "https://www.luxewindowworks.com/api/consultation",
       "type": "request",
@@ -113,9 +126,10 @@
     }
   ],
   "primary_cta": {
-    "label": "Request a Free Consultation",
-    "url": "https://www.luxewindowworks.com/api/capabilities/request-in-home-consultation",
-    "human_url": "https://www.luxewindowworks.com/contact",
-    "description": "Discovery document for the consultation-request contract. A successful agent submission is a request for human follow-up, not a booking. Humans: /contact or /book."
+    "label": "Schedule a Free In-Home Consultation",
+    "url": "https://www.luxewindowworks.com/api/capabilities/schedule-in-home-consultation",
+    "human_url": "https://www.luxewindowworks.com/book",
+    "fallback_url": "https://www.luxewindowworks.com/api/capabilities/request-in-home-consultation",
+    "description": "Discovery document for direct Calendly scheduling. Readiness is configuration-dependent and is published by that document. The customer must confirm the time. A successful Calendly booking is a booked consultation. Consultation-request remains the fallback. Humans: /book."
   }
 }
