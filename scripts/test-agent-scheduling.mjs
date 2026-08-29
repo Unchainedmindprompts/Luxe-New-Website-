@@ -4,9 +4,7 @@
  *
  * Local only. Calendly is mocked. Does not POST a real appointment.
  */
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { agentDiscoveryDocument } from "../lib/agent-document.ts";
 import {
   CONSULT_CAPABILITY_ID,
   CONSULT_DISCOVERY_PATH,
@@ -16,6 +14,16 @@ import {
   SCHEDULING_DISCOVERY_PATH,
 } from "../lib/capabilities.ts";
 import { CalendlyApiError } from "../lib/calendly-client.ts";
+import {
+  PRODUCTION_DISCOVERY_ORIGIN,
+  discoveryOriginFromRequest,
+  resolveDiscoveryOrigin,
+} from "../lib/discovery-origin.ts";
+import {
+  llmsTextForOrigin,
+  publicConsultationDiscoveryDocument,
+  publicSchedulingDiscoveryDocument,
+} from "../lib/discovery-public.ts";
 import {
   SCHEDULING_READINESS_CONFIGURED,
   SCHEDULING_READINESS_NOT_READY,
@@ -29,8 +37,6 @@ import {
   schedulingIdempotencyStorageKey,
 } from "../lib/scheduling-handler.ts";
 import { memorySchedulingRateLimiter } from "../lib/scheduling-rate-limit.ts";
-
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const results = [];
 let failures = 0;
@@ -450,7 +456,7 @@ await test("15  required Calendly questions are enforced and /book fields are no
 });
 
 await test("16  agent.json and consult discovery stay consistent", (t) => {
-  const agent = JSON.parse(readFileSync(join(ROOT, "public/agent.json"), "utf8"));
+  const agent = agentDiscoveryDocument(PRODUCTION_DISCOVERY_ORIGIN);
   const schedule = agent.capabilities.find((item) =>
     String(item.url).endsWith(SCHEDULING_DISCOVERY_PATH)
   );
@@ -461,6 +467,175 @@ await test("16  agent.json and consult discovery stay consistent", (t) => {
   t.ok(agent.primary_cta.url.endsWith(SCHEDULING_DISCOVERY_PATH), "primary CTA points at scheduling");
   t.ok(agent.primary_cta.fallback_url.endsWith(CONSULT_DISCOVERY_PATH), "fallback remains");
   t.ok(/configuration-dependent/.test(agent.primary_cta.description), "CTA does not claim live ready");
+});
+
+const PREVIEW_HOST =
+  "luxe-new-website-git-cursor-age-5466cb-mark-abplanalps-projects.vercel.app";
+const PREVIEW_ORIGIN = `https://${PREVIEW_HOST}`;
+
+await test("18  Preview discovery origin publishes Preview URLs, not production", (t) => {
+  t.equal(
+    resolveDiscoveryOrigin({
+      host: PREVIEW_HOST,
+      forwardedProto: "https",
+      vercelEnv: "preview",
+    }),
+    PREVIEW_ORIGIN,
+    "preview host"
+  );
+  t.equal(
+    resolveDiscoveryOrigin({
+      host: "www.luxewindowworks.com",
+      forwardedProto: "https",
+      vercelEnv: "production",
+    }),
+    PRODUCTION_DISCOVERY_ORIGIN,
+    "production env"
+  );
+  t.equal(
+    resolveDiscoveryOrigin({
+      host: PREVIEW_HOST,
+      forwardedProto: "https",
+      vercelEnv: "production",
+    }),
+    PRODUCTION_DISCOVERY_ORIGIN,
+    "production env wins over preview host"
+  );
+  t.equal(
+    resolveDiscoveryOrigin({
+      forwardedHost: PREVIEW_HOST,
+      forwardedProto: "https",
+      vercelEnv: "preview",
+    }),
+    PREVIEW_ORIGIN,
+    "forwarded host"
+  );
+
+  const previewRequest = new Request(`https://${PREVIEW_HOST}/agent.json`, {
+    headers: {
+      host: PREVIEW_HOST,
+      "x-forwarded-host": PREVIEW_HOST,
+      "x-forwarded-proto": "https",
+    },
+  });
+  const previousEnv = process.env.VERCEL_ENV;
+  process.env.VERCEL_ENV = "preview";
+  t.equal(discoveryOriginFromRequest(previewRequest), PREVIEW_ORIGIN, "request helper");
+  if (previousEnv === undefined) delete process.env.VERCEL_ENV;
+  else process.env.VERCEL_ENV = previousEnv;
+
+  const agent = agentDiscoveryDocument(PREVIEW_ORIGIN);
+  const schedule = agent.capabilities.find((item) => item.type === "schedule");
+  t.equal(schedule.url, `${PREVIEW_ORIGIN}${SCHEDULING_DISCOVERY_PATH}`, "capability url");
+  t.equal(
+    schedule.availability_url,
+    `${PREVIEW_ORIGIN}${SCHEDULING_AVAILABILITY_PATH}`,
+    "availability url"
+  );
+  t.equal(schedule.execution_url, `${PREVIEW_ORIGIN}${SCHEDULING_BOOKING_PATH}`, "booking url");
+  t.equal(
+    agent.primary_cta.url,
+    `${PREVIEW_ORIGIN}${SCHEDULING_DISCOVERY_PATH}`,
+    "primary CTA"
+  );
+  t.equal(
+    agent.primary_cta.fallback_url,
+    `${PREVIEW_ORIGIN}${CONSULT_DISCOVERY_PATH}`,
+    "fallback CTA"
+  );
+  t.ok(!String(schedule.url).includes("www.luxewindowworks.com"), "no production capability url");
+  t.equal(
+    agent.primary_cta.human_url,
+    `${PRODUCTION_DISCOVERY_ORIGIN}/book`,
+    "human /book stays production"
+  );
+  t.equal(agent.url, PRODUCTION_DISCOVERY_ORIGIN, "business url stays production");
+});
+
+await test("19  production discovery origin publishes www.luxewindowworks.com", (t) => {
+  const agent = agentDiscoveryDocument(PRODUCTION_DISCOVERY_ORIGIN);
+  const schedule = agent.capabilities.find((item) => item.type === "schedule");
+  t.equal(
+    schedule.url,
+    `${PRODUCTION_DISCOVERY_ORIGIN}${SCHEDULING_DISCOVERY_PATH}`,
+    "capability url"
+  );
+  t.equal(
+    schedule.availability_url,
+    `${PRODUCTION_DISCOVERY_ORIGIN}${SCHEDULING_AVAILABILITY_PATH}`,
+    "availability url"
+  );
+  t.equal(
+    schedule.execution_url,
+    `${PRODUCTION_DISCOVERY_ORIGIN}${SCHEDULING_BOOKING_PATH}`,
+    "booking url"
+  );
+
+  const scheduleDoc = publicSchedulingDiscoveryDocument(PRODUCTION_DISCOVERY_ORIGIN);
+  t.equal(
+    scheduleDoc.execution.availability.url,
+    `${PRODUCTION_DISCOVERY_ORIGIN}${SCHEDULING_AVAILABILITY_PATH}`,
+    "served availability"
+  );
+  t.equal(
+    scheduleDoc.execution.booking.url,
+    `${PRODUCTION_DISCOVERY_ORIGIN}${SCHEDULING_BOOKING_PATH}`,
+    "served booking"
+  );
+});
+
+await test("20  served capability documents are host-aware", (t) => {
+  const previewSchedule = publicSchedulingDiscoveryDocument(PREVIEW_ORIGIN);
+  t.equal(
+    previewSchedule.discoveryUrl,
+    `${PREVIEW_ORIGIN}${SCHEDULING_DISCOVERY_PATH}`,
+    "preview discovery"
+  );
+  t.equal(
+    previewSchedule.execution.availability.url,
+    `${PREVIEW_ORIGIN}${SCHEDULING_AVAILABILITY_PATH}`,
+    "preview availability"
+  );
+  t.equal(
+    previewSchedule.execution.booking.url,
+    `${PREVIEW_ORIGIN}${SCHEDULING_BOOKING_PATH}`,
+    "preview booking"
+  );
+  t.equal(
+    previewSchedule.consultationRequestFallback.discoveryUrl,
+    `${PREVIEW_ORIGIN}${CONSULT_DISCOVERY_PATH}`,
+    "preview fallback"
+  );
+
+  const previewConsult = publicConsultationDiscoveryDocument(PREVIEW_ORIGIN);
+  t.equal(
+    previewConsult.relatedScheduling.discoveryUrl,
+    `${PREVIEW_ORIGIN}${SCHEDULING_DISCOVERY_PATH}`,
+    "consult related discovery"
+  );
+  t.equal(
+    previewConsult.relatedScheduling.availabilityUrl,
+    `${PREVIEW_ORIGIN}${SCHEDULING_AVAILABILITY_PATH}`,
+    "consult related availability"
+  );
+
+  const llms = llmsTextForOrigin(PREVIEW_ORIGIN);
+  t.ok(llms.includes(`${PREVIEW_ORIGIN}${SCHEDULING_DISCOVERY_PATH}`), "llms preview schedule");
+  t.ok(llms.includes(`${PREVIEW_ORIGIN}/agent.json`), "llms preview agent.json");
+  t.ok(
+    llms.includes(`${PRODUCTION_DISCOVERY_ORIGIN}/book`),
+    "llms human /book stays production"
+  );
+  t.ok(
+    !llms.includes(`${PRODUCTION_DISCOVERY_ORIGIN}${SCHEDULING_DISCOVERY_PATH}`),
+    "llms must not keep production schedule url on preview"
+  );
+
+  const productionLlms = llmsTextForOrigin(PRODUCTION_DISCOVERY_ORIGIN);
+  t.ok(
+    productionLlms.includes(`${PRODUCTION_DISCOVERY_ORIGIN}${SCHEDULING_DISCOVERY_PATH}`),
+    "llms production schedule"
+  );
 });
 
 await test("17  stored idempotency record has no customer PII", async (t) => {

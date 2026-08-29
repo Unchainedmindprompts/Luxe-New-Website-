@@ -9,6 +9,7 @@ import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { agentDiscoveryDocument } from "../lib/agent-document.ts";
 import {
   consultationDiscoveryDocument,
   CONSULT_CONTRACT_VERSION,
@@ -21,6 +22,8 @@ import {
   consultCategoriesPublic,
   isConsultAgentSubmissionEnabled,
 } from "../lib/capabilities.ts";
+import { PRODUCTION_DISCOVERY_ORIGIN } from "../lib/discovery-origin.ts";
+import { publicConsultationDiscoveryDocument } from "../lib/discovery-public.ts";
 import {
   memoryAgentRateLimiter,
   memoryIdempotencyStore,
@@ -500,7 +503,7 @@ await test("discovery  no booking/pricing claims; drapery honest; readiness bloc
 });
 
 await test("agent.json points at discovery and does not teach booking", (t) => {
-  const agent = JSON.parse(readFileSync(join(ROOT, "public/agent.json"), "utf8"));
+  const agent = agentDiscoveryDocument(PRODUCTION_DISCOVERY_ORIGIN);
   const consult = agent.capabilities.find((item) =>
     String(item.url).endsWith("/api/capabilities/request-in-home-consultation")
   );
@@ -536,6 +539,34 @@ await test("agent.json points at discovery and does not teach booking", (t) => {
       "enabled request copy still does not teach that a request is a booking"
     );
   }
+});
+
+await test("served consult discovery scheduling URLs follow the request host", (t) => {
+  const previewOrigin =
+    "https://luxe-new-website-git-cursor-age-5466cb-mark-abplanalps-projects.vercel.app";
+  const preview = publicConsultationDiscoveryDocument(previewOrigin);
+  t.equal(
+    preview.relatedScheduling.discoveryUrl,
+    `${previewOrigin}/api/capabilities/schedule-in-home-consultation`,
+    "preview sibling discovery"
+  );
+  t.equal(
+    preview.relatedScheduling.availabilityUrl,
+    `${previewOrigin}/api/scheduling/available-times`,
+    "preview sibling availability"
+  );
+  t.equal(
+    preview.execution.url,
+    `${previewOrigin}/api/consultation`,
+    "preview execution"
+  );
+
+  const production = publicConsultationDiscoveryDocument(PRODUCTION_DISCOVERY_ORIGIN);
+  t.equal(
+    production.relatedScheduling.discoveryUrl,
+    `${PRODUCTION_DISCOVERY_ORIGIN}/api/capabilities/schedule-in-home-consultation`,
+    "production sibling discovery"
+  );
 });
 
 function assertNotHumanFallback(t, result, mail, label) {

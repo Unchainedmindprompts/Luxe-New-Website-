@@ -1,4 +1,5 @@
-# Luxe Window Works — Custom Window Treatments in Northern Idaho
+/** Source text for /llms.txt. Discovery-chain URLs are rewritten at request time. */
+export const LLMS_TEMPLATE = `# Luxe Window Works — Custom Window Treatments in Northern Idaho
 
 > Northern Idaho's trusted source for custom blinds, shades, shutters, and motorized window treatments. Local service, lifetime installation guarantee.
 
@@ -118,3 +119,4 @@ Luxe Window Works is a custom window treatment specialist based in Post Falls, I
 - Specialization in smart home motorization and energy efficiency
 - Commercial experience including Apple retail locations (Apple Visitor Center Cupertino, Apple Union Square San Francisco)
 - Serving Northern Idaho homeowners since launching in Post Falls, March 2025
+`;
