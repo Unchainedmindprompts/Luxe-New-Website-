@@ -1,8 +1,12 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { usePathname } from "next/navigation";
+import { CONVERSION_EVENTS, trackConversionEvent } from "@/lib/conversion-events";
+import { readOriginatingPath } from "@/lib/originating-path";
 
 export default function ContactForm() {
+  const pathname = usePathname() ?? "/contact";
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string>("");
@@ -20,6 +24,7 @@ export default function ContactForm() {
       needs: (formData.get("needs") as string) || "",
       contactMethod: (formData.get("contactMethod") as string) || "",
       source: "contact",
+      originatingPath: readOriginatingPath(pathname),
       _hp: (formData.get("_hp") as string) || "",
     };
 
@@ -40,6 +45,10 @@ export default function ContactForm() {
       if (typeof window !== "undefined" && typeof (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq === "function") {
         (window as unknown as { fbq: (...args: unknown[]) => void }).fbq("track", "Lead");
       }
+      trackConversionEvent(CONVERSION_EVENTS.ContactFormSubmit, {
+        page_path: pathname,
+        originating_path: readOriginatingPath(pathname),
+      });
 
       setSubmitted(true);
     } catch {

@@ -2,6 +2,10 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { ConsultationExpect } from "@/components/ConsultationExpect";
+import { RelatedDecisionArticles } from "@/components/RelatedDecisionArticles";
+import { TrackedCta, phoneEvent, productEvent } from "@/components/TrackedCta";
+import { PRODUCT_DECISION_ARTICLES } from "@/lib/article-pathways";
 import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
 import { cityRef } from "@/lib/cities";
 import { CUSTOM_WINDOW_TREATMENTS } from "@/lib/schema";
@@ -223,18 +227,20 @@ export default async function ProductPage({ params }: Props) {
             {product.subheadline}
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            <a
+            <TrackedCta
               href="/book"
+              event={productEvent()}
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
               Get Expert Recommendations
-            </a>
-            <a
+            </TrackedCta>
+            <TrackedCta
               href={BUSINESS.phoneHref}
+              event={phoneEvent()}
               className="inline-flex items-center justify-center gap-2 border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-white font-semibold px-8 py-4 rounded-full text-lg transition-all"
             >
               Call us: {BUSINESS.phone}
-            </a>
+            </TrackedCta>
           </div>
         </div>
       </section>
@@ -439,6 +445,12 @@ export default async function ProductPage({ params }: Props) {
         </section>
       )}
 
+      <RelatedDecisionArticles
+        articles={PRODUCT_DECISION_ARTICLES[slug] ?? []}
+      />
+
+      <ConsultationExpect />
+
       {/* FAQ */}
       <section className="py-16 md:py-20 bg-cream/50">
         <div className="container-luxe max-w-3xl">
@@ -474,18 +486,20 @@ export default async function ProductPage({ params }: Props) {
             or call us directly to schedule a free in-home visit.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
+            <TrackedCta
               href="/book"
+              event={productEvent()}
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
               Start the Consultation
-            </a>
-            <a
+            </TrackedCta>
+            <TrackedCta
               href={BUSINESS.phoneHref}
+              event={phoneEvent()}
               className="inline-flex items-center justify-center gap-2 border-2 border-warm-gray-600 text-white hover:border-white font-semibold px-8 py-4 rounded-full text-lg transition-all"
             >
               Call {BUSINESS.phone}
-            </a>
+            </TrackedCta>
           </div>
         </div>
       </section>

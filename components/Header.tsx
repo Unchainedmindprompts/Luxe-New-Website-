@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { TrackedCta, consultEvent, contactEvent, phoneEvent } from "@/components/TrackedCta";
 import { BUSINESS, NAV_LINKS } from "@/lib/constants";
 
 export default function Header() {
@@ -57,6 +58,15 @@ export default function Header() {
               onMouseEnter={() => link.children && setOpenDropdown(link.label)}
               onMouseLeave={() => setOpenDropdown(null)}
             >
+              {link.href === "/contact" ? (
+              <TrackedCta
+                href={link.href}
+                event={contactEvent()}
+                className="text-sm text-white/85 hover:text-white transition-colors font-medium"
+              >
+                {link.label}
+              </TrackedCta>
+              ) : (
               <Link
                 href={link.href}
                 className="text-sm text-white/85 hover:text-white transition-colors font-medium"
@@ -68,6 +78,7 @@ export default function Header() {
                   </svg>
                 )}
               </Link>
+              )}
               {link.children && openDropdown === link.label && (
                 <div className="absolute top-full left-0 pt-2 w-56">
                   {/* Panel follows the bar. A white dropdown falling out of a
@@ -87,21 +98,23 @@ export default function Header() {
               )}
             </div>
           ))}
-          <Link
+          <TrackedCta
             href="/book"
+            event={consultEvent()}
             className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors"
           >
             Book a Consultation
-          </Link>
-          <a
+          </TrackedCta>
+          <TrackedCta
             href={BUSINESS.phoneHref}
+            event={phoneEvent()}
             className="inline-flex items-center gap-2 text-white/85 hover:text-white text-sm font-medium transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
             {BUSINESS.phone}
-          </a>
+          </TrackedCta>
         </nav>
 
         {/* Mobile menu */}
@@ -130,6 +143,16 @@ export default function Header() {
           <nav className="container-luxe py-4 space-y-1">
             {NAV_LINKS.map((link) => (
               <div key={link.label}>
+                {link.href === "/contact" ? (
+                <TrackedCta
+                  href={link.href}
+                  event={contactEvent()}
+                  className="block py-3 text-white/85 font-medium"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.label}
+                </TrackedCta>
+                ) : (
                 <Link
                   href={link.href}
                   className="block py-3 text-white/85 font-medium"
@@ -140,6 +163,7 @@ export default function Header() {
                 >
                   {link.label}
                 </Link>
+                )}
                 {link.children && openDropdown === link.label && (
                   <div className="pl-4 pb-2 space-y-1">
                     {link.children.map((child) => (
@@ -156,22 +180,24 @@ export default function Header() {
                 )}
               </div>
             ))}
-            <Link
+            <TrackedCta
               href="/book"
+              event={consultEvent()}
               className="flex items-center justify-center bg-gold text-white font-semibold py-3 rounded-full mt-4"
               onClick={() => setMobileOpen(false)}
             >
               Book a Free Consultation
-            </Link>
-            <a
+            </TrackedCta>
+            <TrackedCta
               href={BUSINESS.phoneHref}
+              event={phoneEvent()}
               className="flex items-center justify-center gap-2 border border-white/25 text-white font-medium py-3 rounded-full mt-2"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
               Call Us: {BUSINESS.phone}
-            </a>
+            </TrackedCta>
           </nav>
         </div>
       )}

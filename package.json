@@ -25,7 +25,8 @@
     "audit:rendered": "node scripts/audit-rendered-schema.mjs",
     "verify:consult-redis-preview": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./scripts/register-ts-ext.mjs scripts/verify-consult-redis-preview.mjs",
     "postbuild": "node scripts/audit-rendered-schema.mjs && npm run verify:consult-redis-preview",
-    "test:advisor-retired": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-retired.mjs"
+    "test:advisor-retired": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-retired.mjs",
+    "test:commercial-pathways": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./scripts/register-ts-ext.mjs scripts/test-commercial-pathways.mjs"
   },
   "engines": {
     "node": ">=22.0.0"

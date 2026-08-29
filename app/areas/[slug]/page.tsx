@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { ConsultationExpect } from "@/components/ConsultationExpect";
+import { TrackedCta, consultEvent, phoneEvent } from "@/components/TrackedCta";
 import { BUSINESS, PRODUCTS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
 import { cityPlaceNode, cityRef } from "@/lib/cities";
@@ -271,18 +273,20 @@ export default async function AreaPage({ params }: Props) {
             {area.subheadline}
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            <a
+            <TrackedCta
               href="/book"
+              event={consultEvent()}
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
               Start Your Consultation
-            </a>
-            <a
+            </TrackedCta>
+            <TrackedCta
               href={BUSINESS.phoneHref}
+              event={phoneEvent()}
               className="inline-flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white hover:text-charcoal font-semibold px-8 py-4 rounded-full text-lg transition-all"
             >
               Call Us: {BUSINESS.phone}
-            </a>
+            </TrackedCta>
           </div>
         </div>
       </section>
@@ -458,6 +462,8 @@ export default async function AreaPage({ params }: Props) {
         </div>
       </section>
 
+      <ConsultationExpect city={area.name} />
+
       {/* CTA */}
       <section className="py-20 md:py-28 bg-charcoal text-white">
         <div className="container-luxe text-center max-w-3xl mx-auto">
@@ -465,18 +471,20 @@ export default async function AreaPage({ params }: Props) {
             {area.localCTA}
           </h2>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
+            <TrackedCta
               href="/book"
+              event={consultEvent()}
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
               Start Your Free Consultation
-            </a>
-            <a
+            </TrackedCta>
+            <TrackedCta
               href={BUSINESS.phoneHref}
+              event={phoneEvent()}
               className="inline-flex items-center justify-center gap-2 border-2 border-warm-gray-600 text-white hover:border-white font-semibold px-8 py-4 rounded-full text-lg transition-all"
             >
               Call {BUSINESS.phone}
-            </a>
+            </TrackedCta>
           </div>
           <div className="mt-8 flex items-center justify-center gap-6 text-sm text-warm-gray-400">
             <span className="flex items-center gap-2">
