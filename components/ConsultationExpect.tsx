@@ -1,5 +1,6 @@
 import { BUSINESS } from "@/lib/constants";
-import { TrackedCta, consultEvent, phoneEvent } from "./TrackedCta";
+import { CONVERSION_EVENTS } from "@/lib/conversion-events";
+import { TrackedCta } from "./TrackedCta";
 
 /**
  * Shared "what happens next" block for commercial pages. A request is not
@@ -31,14 +32,14 @@ export function ConsultationExpect({
         <div className="mt-8 flex flex-col sm:flex-row gap-4">
           <TrackedCta
             href="/book"
-            event={consultEvent()}
+            event={CONVERSION_EVENTS.ConsultCtaClick}
             className="inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-base transition-all hover:shadow-lg"
           >
             Request a free in-home consultation
           </TrackedCta>
           <TrackedCta
             href={BUSINESS.phoneHref}
-            event={phoneEvent()}
+            event={CONVERSION_EVENTS.PhoneClick}
             className="inline-flex items-center justify-center border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-white font-semibold px-8 py-4 rounded-full text-base transition-all"
           >
             Call {BUSINESS.phone}

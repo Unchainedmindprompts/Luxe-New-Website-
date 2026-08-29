@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ArticlePathway as ArticlePathwayData } from "@/lib/article-pathways";
-import { TrackedCta, consultEvent, productEvent } from "./TrackedCta";
+import { CONVERSION_EVENTS } from "@/lib/conversion-events";
+import { TrackedCta } from "./TrackedCta";
 
 export function ArticlePathway({
   pathway,
@@ -24,14 +25,14 @@ export function ArticlePathway({
       <div className="mt-6 flex flex-col sm:flex-row sm:flex-wrap gap-3">
         <TrackedCta
           href={pathway.productHref}
-          event={productEvent()}
+          event={CONVERSION_EVENTS.ProductCtaClick}
           className="inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-white font-semibold px-6 py-3 rounded-full text-sm transition-colors"
         >
           {pathway.productLabel}
         </TrackedCta>
         <TrackedCta
           href={pathway.bookHref}
-          event={consultEvent()}
+          event={CONVERSION_EVENTS.ConsultCtaClick}
           className="inline-flex items-center justify-center border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-white font-semibold px-6 py-3 rounded-full text-sm transition-colors"
         >
           {pathway.bookLabel}

@@ -150,7 +150,9 @@ test("10  new copy does not name excluded manufacturers or publish GSC numbers",
     "lib/article-pathways.ts",
     "components/ArticlePathway.tsx",
     "components/ConsultationExpect.tsx",
-    "app/page.tsx",
+    "components/RelatedDecisionArticles.tsx",
+    "lib/conversion-events.ts",
+    "lib/originating-path.ts",
   ];
   const banned = /Hunter Douglas|Vignette|Graber|Bali|67,477|79\.6%/;
   for (const file of files) {

@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { TrackedCta, consultEvent, contactEvent, phoneEvent } from "@/components/TrackedCta";
+import { TrackedCta } from "@/components/TrackedCta";
+import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS, NAV_LINKS } from "@/lib/constants";
 
 export default function Header() {
@@ -61,7 +62,7 @@ export default function Header() {
               {link.href === "/contact" ? (
               <TrackedCta
                 href={link.href}
-                event={contactEvent()}
+                event={CONVERSION_EVENTS.ContactCtaClick}
                 className="text-sm text-white/85 hover:text-white transition-colors font-medium"
               >
                 {link.label}
@@ -100,14 +101,14 @@ export default function Header() {
           ))}
           <TrackedCta
             href="/book"
-            event={consultEvent()}
+            event={CONVERSION_EVENTS.ConsultCtaClick}
             className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors"
           >
             Book a Consultation
           </TrackedCta>
           <TrackedCta
             href={BUSINESS.phoneHref}
-            event={phoneEvent()}
+            event={CONVERSION_EVENTS.PhoneClick}
             className="inline-flex items-center gap-2 text-white/85 hover:text-white text-sm font-medium transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -146,7 +147,7 @@ export default function Header() {
                 {link.href === "/contact" ? (
                 <TrackedCta
                   href={link.href}
-                  event={contactEvent()}
+                  event={CONVERSION_EVENTS.ContactCtaClick}
                   className="block py-3 text-white/85 font-medium"
                   onClick={() => setMobileOpen(false)}
                 >
@@ -182,7 +183,7 @@ export default function Header() {
             ))}
             <TrackedCta
               href="/book"
-              event={consultEvent()}
+              event={CONVERSION_EVENTS.ConsultCtaClick}
               className="flex items-center justify-center bg-gold text-white font-semibold py-3 rounded-full mt-4"
               onClick={() => setMobileOpen(false)}
             >
@@ -190,7 +191,7 @@ export default function Header() {
             </TrackedCta>
             <TrackedCta
               href={BUSINESS.phoneHref}
-              event={phoneEvent()}
+              event={CONVERSION_EVENTS.PhoneClick}
               className="flex items-center justify-center gap-2 border border-white/25 text-white font-medium py-3 rounded-full mt-2"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

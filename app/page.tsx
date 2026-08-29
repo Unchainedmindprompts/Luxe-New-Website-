@@ -9,7 +9,8 @@ export const metadata: Metadata = {
     canonical: "https://www.luxewindowworks.com",
   },
 };
-import { TrackedCta, consultEvent, phoneEvent } from "@/components/TrackedCta";
+import { TrackedCta } from "@/components/TrackedCta";
+import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 import { cityRef, northIdahoRef } from "@/lib/cities";
 import { BUSINESS_STUB, OWNER_STUB, productServiceRef } from "@/lib/schema";
@@ -457,7 +458,7 @@ export default function HomePage() {
           <div className="mt-7 flex flex-col items-center gap-3.5">
             <TrackedCta
               href="/book"
-              event={consultEvent()}
+              event={CONVERSION_EVENTS.ConsultCtaClick}
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-base transition-all hover:shadow-lg"
             >
               Book My Free In-Home Consultation
@@ -487,7 +488,7 @@ export default function HomePage() {
               Or call / text{" "}
               <TrackedCta
                 href={BUSINESS.phoneHref}
-                event={phoneEvent()}
+                event={CONVERSION_EVENTS.PhoneClick}
                 className="hover:text-gold transition-colors"
               >
                 {BUSINESS.phone}
@@ -811,7 +812,7 @@ export default function HomePage() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <TrackedCta
               href="/book"
-              event={consultEvent()}
+              event={CONVERSION_EVENTS.ConsultCtaClick}
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
               Schedule Your Free Consultation

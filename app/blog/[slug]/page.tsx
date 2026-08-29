@@ -5,7 +5,8 @@ import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { ArticlePathway } from "@/components/ArticlePathway";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { TrackedCta, consultEvent, phoneEvent } from "@/components/TrackedCta";
+import { TrackedCta } from "@/components/TrackedCta";
+import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { ARTICLE_PATHWAYS } from "@/lib/article-pathways";
 import { BUSINESS } from "@/lib/constants";
 import { NORMAN_BRAND, ALTA_BRAND } from "@/lib/brands";
@@ -938,14 +939,14 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <TrackedCta
                 href="/book"
-                event={consultEvent()}
+                event={CONVERSION_EVENTS.ConsultCtaClick}
                 className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-6 py-3 rounded-full transition-all"
               >
                 Start a Consultation
               </TrackedCta>
               <TrackedCta
                 href={BUSINESS.phoneHref}
-                event={phoneEvent()}
+                event={CONVERSION_EVENTS.PhoneClick}
                 className="text-charcoal font-semibold hover:text-gold transition-colors"
               >
                 Call {BUSINESS.phone}

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
-import { TrackedCta, phoneEvent } from "@/components/TrackedCta";
+import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS, trackConversionEvent } from "@/lib/conversion-events";
 import { readOriginatingPath } from "@/lib/originating-path";
 import { BUSINESS } from "@/lib/constants";
@@ -200,7 +200,7 @@ export default function BookPage() {
                 Prefer to reach out directly?{" "}
                 <TrackedCta
                   href="tel:+12086608643"
-                  event={phoneEvent()}
+                  event={CONVERSION_EVENTS.PhoneClick}
                   className="text-gold font-medium hover:text-gold-dark"
                 >
                   Call 208-660-8643
@@ -384,7 +384,7 @@ export default function BookPage() {
                 </svg>
                 <TrackedCta
                   href="tel:+12086608643"
-                  event={phoneEvent()}
+                  event={CONVERSION_EVENTS.PhoneClick}
                   className="hover:text-white transition-colors"
                 >
                   208-660-8643

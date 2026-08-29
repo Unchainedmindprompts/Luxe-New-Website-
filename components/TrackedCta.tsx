@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  CONVERSION_EVENTS,
   trackConversionEvent,
   type ConversionEventName,
 } from "@/lib/conversion-events";
@@ -67,20 +66,4 @@ export function TrackedCta({
       {children}
     </Link>
   );
-}
-
-export function consultEvent(): ConversionEventName {
-  return CONVERSION_EVENTS.ConsultCtaClick;
-}
-
-export function phoneEvent(): ConversionEventName {
-  return CONVERSION_EVENTS.PhoneClick;
-}
-
-export function contactEvent(): ConversionEventName {
-  return CONVERSION_EVENTS.ContactCtaClick;
-}
-
-export function productEvent(): ConversionEventName {
-  return CONVERSION_EVENTS.ProductCtaClick;
 }

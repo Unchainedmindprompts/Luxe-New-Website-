@@ -5,7 +5,8 @@ import Image from "next/image";
 import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { ConsultationExpect } from "@/components/ConsultationExpect";
-import { TrackedCta, consultEvent, phoneEvent } from "@/components/TrackedCta";
+import { TrackedCta } from "@/components/TrackedCta";
+import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS, PRODUCTS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
 import { cityPlaceNode, cityRef } from "@/lib/cities";
@@ -275,14 +276,14 @@ export default async function AreaPage({ params }: Props) {
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <TrackedCta
               href="/book"
-              event={consultEvent()}
+              event={CONVERSION_EVENTS.ConsultCtaClick}
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
               Start Your Consultation
             </TrackedCta>
             <TrackedCta
               href={BUSINESS.phoneHref}
-              event={phoneEvent()}
+              event={CONVERSION_EVENTS.PhoneClick}
               className="inline-flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white hover:text-charcoal font-semibold px-8 py-4 rounded-full text-lg transition-all"
             >
               Call Us: {BUSINESS.phone}
@@ -473,14 +474,14 @@ export default async function AreaPage({ params }: Props) {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <TrackedCta
               href="/book"
-              event={consultEvent()}
+              event={CONVERSION_EVENTS.ConsultCtaClick}
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
               Start Your Free Consultation
             </TrackedCta>
             <TrackedCta
               href={BUSINESS.phoneHref}
-              event={phoneEvent()}
+              event={CONVERSION_EVENTS.PhoneClick}
               className="inline-flex items-center justify-center gap-2 border-2 border-warm-gray-600 text-white hover:border-white font-semibold px-8 py-4 rounded-full text-lg transition-all"
             >
               Call {BUSINESS.phone}
