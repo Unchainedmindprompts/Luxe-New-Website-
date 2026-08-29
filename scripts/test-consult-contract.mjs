@@ -521,9 +521,21 @@ await test("agent.json points at discovery and does not teach booking", (t) => {
   );
   t.equal(consult.readiness, CONSULT_READINESS, "agent.json readiness");
   t.ok(consult.url !== "https://www.luxewindowworks.com/book", "no longer /book");
-  t.equal(schedule.direct_booking, true, "scheduling capability advertises direct booking");
+  t.equal(
+    schedule.direct_booking,
+    Boolean(schedule.submission_enabled) && schedule.readiness !== "not-ready",
+    "scheduling direct_booking only when that document is ready"
+  );
   t.equal(schedule.requires_human_confirmation, true, "customer confirmation required");
-  t.equal(schedule.readiness, "configuration-dependent", "static file does not claim ready");
+  t.equal(typeof schedule.submission_enabled, "boolean", "scheduling publishes submission_enabled");
+  t.ok(
+    schedule.readiness === "not-ready" || schedule.readiness === "calendly-credentials-present",
+    "scheduling readiness uses the same values as detailed discovery"
+  );
+  if (schedule.readiness === "not-ready") {
+    t.equal(schedule.direct_booking, false, "not-ready cannot claim direct booking");
+    t.equal(schedule.submission_enabled, false, "not-ready submission stays off");
+  }
   t.ok(
     /fallback/i.test(consult.description) && /fallback/i.test(schedule.description),
     "both capabilities keep the request path as fallback"

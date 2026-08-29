@@ -2,9 +2,11 @@
  * Machine-readable /agent.json, derived from the capability registry.
  *
  * This is not a second catalogue. Scheduling and consultation-request URLs
- * come from lib/capabilities.ts. Only those agent-facing URLs are host-aware.
- * Business identity, product pages, and the human /book page stay on
- * https://www.luxewindowworks.com.
+ * come from lib/capabilities.ts. Scheduling readiness flags come from
+ * schedulingDiscoveryDocument() so /agent.json cannot claim live booking
+ * when the detailed discovery document is not-ready. Only those
+ * agent-facing URLs are host-aware. Business identity, product pages, and
+ * the human /book page stay on https://www.luxewindowworks.com.
  */
 
 import {
@@ -20,6 +22,10 @@ import {
   PRODUCTION_DISCOVERY_ORIGIN,
   absoluteDiscoveryUrl,
 } from "./discovery-origin";
+import {
+  SCHEDULING_READINESS_NOT_READY,
+  schedulingDiscoveryDocument,
+} from "./scheduling";
 
 function discoveryUrl(origin: string, path: string): string {
   return absoluteDiscoveryUrl(origin, path);
@@ -27,6 +33,12 @@ function discoveryUrl(origin: string, path: string): string {
 
 export function agentDiscoveryDocument(origin: string) {
   const enabled = isConsultAgentSubmissionEnabled();
+  const scheduling = schedulingDiscoveryDocument();
+  const schedulingReady =
+    scheduling.configured &&
+    scheduling.submissionEnabled &&
+    scheduling.directBookingAvailable &&
+    scheduling.readiness !== SCHEDULING_READINESS_NOT_READY;
   return {
     schema_version: "1.0",
     name: "Luxe Window Works",
@@ -54,16 +66,18 @@ export function agentDiscoveryDocument(origin: string) {
     capabilities: [
       {
         name: "Schedule an in-home consultation",
-        description:
-          "Direct Calendly scheduling for a free in-home consultation. Read the discovery document for current readiness. The customer must explicitly confirm the appointment time. This schedules a consultation, not product installation. Consultation-request remains the fallback. Humans: /book.",
+        description: schedulingReady
+          ? "Direct Calendly scheduling for a free in-home consultation. The customer must explicitly confirm the appointment time. This schedules a consultation, not product installation. Consultation-request remains the fallback. Humans: /book."
+          : "Direct Calendly scheduling for a free in-home consultation exists, but it is not configured in this environment. Do not claim a time is booked. Read the discovery document. Use the consultation-request fallback. Humans: /book.",
         url: discoveryUrl(origin, SCHEDULING_DISCOVERY_PATH),
         availability_url: discoveryUrl(origin, SCHEDULING_AVAILABILITY_PATH),
         execution_url: discoveryUrl(origin, SCHEDULING_BOOKING_PATH),
         type: "schedule",
-        direct_booking: true,
+        direct_booking: schedulingReady,
+        submission_enabled: schedulingReady,
         requires_human_confirmation: true,
         pricing_available: false,
-        readiness: "configuration-dependent",
+        readiness: scheduling.readiness,
         cost: "free",
       },
       {
@@ -179,8 +193,9 @@ export function agentDiscoveryDocument(origin: string) {
       url: discoveryUrl(origin, SCHEDULING_DISCOVERY_PATH),
       human_url: `${PRODUCTION_DISCOVERY_ORIGIN}/book`,
       fallback_url: discoveryUrl(origin, CONSULT_DISCOVERY_PATH),
-      description:
-        "Discovery document for direct Calendly scheduling. Readiness is configuration-dependent and is published by that document. The customer must confirm the time. A successful Calendly booking is a booked consultation. Consultation-request remains the fallback. Humans: /book.",
+      description: schedulingReady
+        ? "Discovery document for direct Calendly scheduling. The customer must confirm the time. A successful Calendly booking is a booked consultation. Consultation-request remains the fallback. Humans: /book."
+        : "Scheduling exists but is not ready in this environment. Do not claim a time is booked. Read the discovery document. Use the consultation-request fallback. Humans: /book.",
     },
   };
 }

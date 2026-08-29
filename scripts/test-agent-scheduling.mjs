@@ -566,23 +566,82 @@ await test("15  required Calendly questions are enforced and /book fields are no
   t.equal(calendly.calls.create, 0, "must not book");
 });
 
-await test("16  agent.json and consult discovery stay consistent", (t) => {
-  const agent = agentDiscoveryDocument(PRODUCTION_DISCOVERY_ORIGIN);
-  const schedule = agent.capabilities.find((item) =>
-    String(item.url).endsWith(SCHEDULING_DISCOVERY_PATH)
-  );
-  t.ok(schedule, "agent.json lists scheduling");
-  t.equal(schedule.direct_booking, true, "business fact: scheduling exists");
-  t.equal(schedule.readiness, "configuration-dependent", "static file is not a ready claim");
-  t.equal(schedule.requires_human_confirmation, true, "confirmation");
-  t.ok(agent.primary_cta.url.endsWith(SCHEDULING_DISCOVERY_PATH), "primary CTA points at scheduling");
-  t.ok(agent.primary_cta.fallback_url.endsWith(CONSULT_DISCOVERY_PATH), "fallback remains");
-  t.ok(/configuration-dependent/.test(agent.primary_cta.description), "CTA does not claim live ready");
-});
-
 const PREVIEW_HOST =
   "luxe-new-website-git-cursor-age-5466cb-mark-abplanalps-projects.vercel.app";
 const PREVIEW_ORIGIN = `https://${PREVIEW_HOST}`;
+
+function findScheduleCapability(agent) {
+  return agent.capabilities.find((item) => String(item.url).endsWith(SCHEDULING_DISCOVERY_PATH));
+}
+
+function assertAgentScheduleMatchesDetailed(t, origin, label) {
+  const agent = agentDiscoveryDocument(origin);
+  const detailed = schedulingDiscoveryDocument();
+  const schedule = findScheduleCapability(agent);
+  t.ok(schedule, `${label}: scheduling capability listed`);
+  t.equal(schedule.direct_booking, detailed.directBookingAvailable, `${label}: direct_booking matches detailed`);
+  t.equal(schedule.submission_enabled, detailed.submissionEnabled, `${label}: submission_enabled matches detailed`);
+  t.equal(schedule.readiness, detailed.readiness, `${label}: readiness matches detailed`);
+  t.equal(
+    schedule.direct_booking,
+    detailed.configured && detailed.directBookingAvailable && detailed.submissionEnabled,
+    `${label}: direct_booking only when detailed discovery is ready`
+  );
+  t.equal(schedule.requires_human_confirmation, true, `${label}: confirmation`);
+  t.ok(!/configuration-dependent/.test(JSON.stringify(schedule)), `${label}: no stale configuration-dependent claim`);
+  if (!detailed.configured) {
+    t.equal(schedule.direct_booking, false, `${label}: unconfigured direct_booking`);
+    t.equal(schedule.submission_enabled, false, `${label}: unconfigured submission_enabled`);
+    t.equal(schedule.readiness, SCHEDULING_READINESS_NOT_READY, `${label}: unconfigured readiness`);
+    t.ok(/not configured|not ready/i.test(schedule.description), `${label}: unconfigured copy`);
+    t.ok(/do not claim a time is booked/i.test(agent.primary_cta.description), `${label}: CTA does not claim live booking`);
+  } else {
+    t.equal(schedule.direct_booking, true, `${label}: configured direct_booking`);
+    t.equal(schedule.submission_enabled, true, `${label}: configured submission_enabled`);
+    t.equal(schedule.readiness, SCHEDULING_READINESS_CONFIGURED, `${label}: configured readiness`);
+    t.ok(!/not configured/i.test(schedule.description), `${label}: configured copy`);
+  }
+}
+
+await test("16  agent.json scheduling flags match detailed discovery", (t) => {
+  const previousKey = process.env.CALENDLY_API_KEY;
+  const previousUri = process.env.CALENDLY_EVENT_TYPE_URI;
+  delete process.env.CALENDLY_API_KEY;
+  delete process.env.CALENDLY_EVENT_TYPE_URI;
+  assertAgentScheduleMatchesDetailed(t, PRODUCTION_DISCOVERY_ORIGIN, "default unconfigured");
+  const agent = agentDiscoveryDocument(PRODUCTION_DISCOVERY_ORIGIN);
+  t.ok(agent.primary_cta.url.endsWith(SCHEDULING_DISCOVERY_PATH), "primary CTA points at scheduling");
+  t.ok(agent.primary_cta.fallback_url.endsWith(CONSULT_DISCOVERY_PATH), "fallback remains");
+  restoreCalendlyEnv(previousKey, previousUri);
+});
+
+await test("16a  unconfigured agent.json may list scheduling but cannot claim live booking", (t) => {
+  const previousKey = process.env.CALENDLY_API_KEY;
+  const previousUri = process.env.CALENDLY_EVENT_TYPE_URI;
+  delete process.env.CALENDLY_API_KEY;
+  delete process.env.CALENDLY_EVENT_TYPE_URI;
+  assertAgentScheduleMatchesDetailed(t, PRODUCTION_DISCOVERY_ORIGIN, "no credentials");
+  process.env.CALENDLY_API_KEY = "test-token-not-real";
+  delete process.env.CALENDLY_EVENT_TYPE_URI;
+  assertAgentScheduleMatchesDetailed(t, PREVIEW_ORIGIN, "token without URI on Preview origin");
+  const preview = agentDiscoveryDocument(PREVIEW_ORIGIN);
+  const schedule = findScheduleCapability(preview);
+  t.ok(String(schedule.url).startsWith(PREVIEW_ORIGIN), "Preview host-aware URL");
+  t.equal(schedule.direct_booking, false, "Preview unconfigured still false");
+  restoreCalendlyEnv(previousKey, previousUri);
+});
+
+await test("16b  configured agent.json claims direct booking only when detailed discovery is ready", (t) => {
+  const previousKey = process.env.CALENDLY_API_KEY;
+  const previousUri = process.env.CALENDLY_EVENT_TYPE_URI;
+  process.env.CALENDLY_API_KEY = "test-token-not-real";
+  process.env.CALENDLY_EVENT_TYPE_URI = EVENT_TYPE_URI;
+  t.equal(isSchedulingConfigured(), true, "detailed configured");
+  t.equal(schedulingDiscoveryDocument().directBookingAvailable, true, "detailed ready");
+  assertAgentScheduleMatchesDetailed(t, PRODUCTION_DISCOVERY_ORIGIN, "www configured");
+  assertAgentScheduleMatchesDetailed(t, PREVIEW_ORIGIN, "Preview configured");
+  restoreCalendlyEnv(previousKey, previousUri);
+});
 
 await test("18  Preview discovery origin publishes Preview URLs, not production", (t) => {
   t.equal(
