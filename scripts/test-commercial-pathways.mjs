@@ -7,7 +7,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ARTICLE_PATHWAYS, PRODUCT_DECISION_ARTICLES } from "../lib/article-pathways.ts";
-import { CONVERSION_EVENTS, isCustomConversionEvent } from "../lib/conversion-events.ts";
+import { CONVERSION_EVENTS, isCustomConversionEvent, shouldSendMetaCustomEvents } from "../lib/conversion-events.ts";
 import { sanitizeOriginatingPath } from "../lib/originating-path.ts";
 import { productPages } from "../lib/product-data.ts";
 import { areaPages } from "../lib/area-data.ts";
@@ -72,10 +72,15 @@ test("3  SmartDrape points at motorization; Costco article stays unpublished", (
   );
 });
 
-test("4  restringing pathway is bottom-only", (t) => {
+test("4  restringing pathway is bottom-only; pathway articles hide the generic CTA", (t) => {
   const restring = ARTICLE_PATHWAYS["how-to-restring-blinds-like-a-pro-step-by-step-guide"];
   t.equal(restring.placement, "bottom-only", "restringing placement");
   t.ok(/replacement/i.test(restring.heading), "restringing heading");
+  const blog = read("app/blog/[slug]/page.tsx");
+  t.ok(
+    blog.includes("const showGenericConsultCta = !pathway"),
+    "generic consult CTA still shows on pathway articles"
+  );
 });
 
 test("5  decision-article slugs exist", (t) => {
@@ -110,6 +115,8 @@ test("7  originating-path sanitizer keeps a path and rejects unsafe values", (t)
   t.equal(sanitizeOriginatingPath("https://evil.example/path"), "", "protocol rejected");
   t.equal(sanitizeOriginatingPath("//evil.example"), "", "protocol-relative rejected");
   t.equal(sanitizeOriginatingPath("not-a-path"), "", "relative rejected");
+  t.equal(sanitizeOriginatingPath("/path?phone=208-660-8643"), "/path", "phone query stripped");
+  t.equal(sanitizeOriginatingPath("/path?name=Jane+Doe"), "/path", "name query stripped");
 });
 
 test("8  commercial titles and descriptions are unique", (t) => {
@@ -145,7 +152,37 @@ test("9  no new articles, no Ask Luxe, no scheduling contract edits", (t) => {
   t.ok(calendly.includes("Schedule"), "Calendly Schedule tracker still present");
 });
 
-test("10  new copy does not name excluded manufacturers or publish GSC numbers", (t) => {
+test("10  Meta custom events stay off Preview hosts", (t) => {
+  t.equal(shouldSendMetaCustomEvents("luxewindowworks.com", "production"), true, "production host");
+  t.equal(shouldSendMetaCustomEvents("www.luxewindowworks.com", "production"), true, "www production");
+  t.equal(
+    shouldSendMetaCustomEvents("luxe-new-website-git-cursor-com-6d3dc1-mark-abplanalps-projects.vercel.app", "preview"),
+    false,
+    "preview env"
+  );
+  t.equal(shouldSendMetaCustomEvents("localhost", "development"), false, "local");
+  t.equal(
+    shouldSendMetaCustomEvents("example.vercel.app", "production"),
+    false,
+    "vercel.app host is never treated as production"
+  );
+});
+
+test("11  consultation block is context-aware and area pages do not double the buttons", (t) => {
+  const expectSource = read("components/ConsultationExpect.tsx");
+  t.ok(expectSource.includes("productName"), "productName prop missing");
+  t.ok(expectSource.includes("showCtas"), "showCtas prop missing");
+  t.ok(
+    read("app/products/[slug]/page.tsx").includes("productName={product.name}"),
+    "product pages do not pass the product name"
+  );
+  t.ok(
+    read("app/areas/[slug]/page.tsx").includes("showCtas={false}"),
+    "area pages still render a second consult button pair"
+  );
+});
+
+test("12  new copy does not name excluded manufacturers or publish GSC numbers", (t) => {
   const files = [
     "lib/article-pathways.ts",
     "components/ArticlePathway.tsx",

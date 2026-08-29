@@ -29,9 +29,34 @@ export function isCustomConversionEvent(name: string): boolean {
 }
 
 /**
+ * Preview and local hosts share the production Meta Pixel ID when that env
+ * var is set for all environments. Custom events must not land in the
+ * production pixel. Vercel Analytics already separates Preview from
+ * Production in the dashboard, so `va.track` can still run.
+ */
+export function shouldSendMetaCustomEvents(
+  hostname?: string,
+  vercelEnv?: string
+): boolean {
+  const env = vercelEnv ?? process.env.NEXT_PUBLIC_VERCEL_ENV ?? "";
+  if (env === "preview" || env === "development") return false;
+  const host =
+    hostname ??
+    (typeof window !== "undefined" ? window.location.hostname : "");
+  if (
+    host.endsWith(".vercel.app") ||
+    host === "localhost" ||
+    host === "127.0.0.1"
+  ) {
+    return false;
+  }
+  return true;
+}
+
+/**
  * Fires a custom event on already-installed analytics. No-ops when neither
  * the Meta Pixel nor Vercel Analytics is present. Never sends `Lead` or
- * `Schedule`.
+ * `Schedule`. CTA clicks are not bookings.
  */
 export function trackConversionEvent(
   name: ConversionEventName,
@@ -50,9 +75,11 @@ export function trackConversionEvent(
 
   if (typeof window === "undefined") return;
 
-  const fbq = (window as Window & { fbq?: (...args: unknown[]) => void }).fbq;
-  if (typeof fbq === "function") {
-    fbq("trackCustom", name, payload);
+  if (shouldSendMetaCustomEvents()) {
+    const fbq = (window as Window & { fbq?: (...args: unknown[]) => void }).fbq;
+    if (typeof fbq === "function") {
+      fbq("trackCustom", name, payload);
+    }
   }
 
   const va = (

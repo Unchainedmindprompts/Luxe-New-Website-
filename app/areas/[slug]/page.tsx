@@ -463,7 +463,7 @@ export default async function AreaPage({ params }: Props) {
         </div>
       </section>
 
-      <ConsultationExpect city={area.name} />
+      <ConsultationExpect city={area.name} showCtas={false} />
 
       {/* CTA */}
       <section className="py-20 md:py-28 bg-charcoal text-white">

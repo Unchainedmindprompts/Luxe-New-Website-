@@ -780,7 +780,7 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await getPost(slug);
   if (!post) notFound();
   const pathway = ARTICLE_PATHWAYS[slug];
-  const showGenericConsultCta = pathway?.placement !== "bottom-only";
+  const showGenericConsultCta = !pathway;
 
   return (
     <>

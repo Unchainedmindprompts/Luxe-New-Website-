@@ -450,7 +450,7 @@ export default async function ProductPage({ params }: Props) {
         articles={PRODUCT_DECISION_ARTICLES[slug] ?? []}
       />
 
-      <ConsultationExpect />
+      <ConsultationExpect productName={product.name} />
 
       {/* FAQ */}
       <section className="py-16 md:py-20 bg-cream/50">

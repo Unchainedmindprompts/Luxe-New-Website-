@@ -18,7 +18,7 @@ export function RelatedDecisionArticles({
             <Link
               key={article.slug}
               href={`/blog/${article.slug}`}
-              className="flex items-center gap-3 bg-white rounded-xl p-5 border border-warm-gray-200/60 hover:border-gold/30 hover:shadow-md transition-all group"
+              className="flex items-center gap-3 bg-white rounded-xl p-5 border border-warm-gray-200/60 hover:border-gold/30 hover:shadow-md transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
             >
               <span className="text-charcoal font-medium group-hover:text-gold transition-colors">
                 {article.title}

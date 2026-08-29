@@ -43,11 +43,15 @@ export function TrackedCta({
     onClick?.();
   };
 
+  const focusClass =
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2";
+  const mergedClass = className ? `${className} ${focusClass}` : focusClass;
+
   if (isExternal) {
     return (
       <a
         href={href}
-        className={className}
+        className={mergedClass}
         aria-label={ariaLabel}
         onClick={handleClick}
       >
@@ -59,7 +63,7 @@ export function TrackedCta({
   return (
     <Link
       href={href}
-      className={className}
+      className={mergedClass}
       aria-label={ariaLabel}
       onClick={handleClick}
     >

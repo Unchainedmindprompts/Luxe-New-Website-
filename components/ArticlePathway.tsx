@@ -43,7 +43,7 @@ export function ArticlePathway({
           Also see{" "}
           <Link
             href={pathway.areaHref}
-            className="text-gold hover:underline font-medium"
+            className="text-gold hover:underline font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 rounded-sm"
           >
             {pathway.areaLabel}
           </Link>
