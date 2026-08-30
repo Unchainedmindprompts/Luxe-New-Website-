@@ -451,7 +451,7 @@ export default function HomePage() {
           <p className="text-lg md:text-xl text-charcoal leading-relaxed max-w-2xl mx-auto">
             You don&apos;t need to know what to buy. We bring samples to
             your home in Coeur d&apos;Alene, Post Falls, and the rest of
-            North Idaho, measures every window, and installs it with a
+            North Idaho, measure every window, and install it with a
             lifetime installation guarantee. The in-home consultation is free.
           </p>
 
