@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { TrackedCta } from "@/components/TrackedCta";
+import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS } from "@/lib/constants";
 import ContactForm from "./ContactForm";
 
@@ -92,9 +94,13 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="font-medium text-charcoal">Phone</p>
-                    <a href={BUSINESS.phoneHref} className="text-warm-gray-600 hover:text-gold transition-colors text-lg">
+                    <TrackedCta
+                      href={BUSINESS.phoneHref}
+                      event={CONVERSION_EVENTS.PhoneClick}
+                      className="text-warm-gray-600 hover:text-gold transition-colors text-lg"
+                    >
                       {BUSINESS.phone}
-                    </a>
+                    </TrackedCta>
                     <p className="text-sm text-warm-gray-500 mt-1">Call or text anytime</p>
                   </div>
                 </div>

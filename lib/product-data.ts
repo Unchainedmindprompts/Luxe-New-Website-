@@ -107,8 +107,8 @@ export const productPages: Record<string, ProductPageData> = {
         answer: "Real wood blinds offer unmatched natural grain and warmth, and they're the premium choice for dry living rooms, bedrooms, and home offices. Faux wood mimics the wood look at a lower price while resisting moisture and handling abuse better — the smarter pick for bathrooms, kitchens, rentals, and high-traffic rooms. The deciding factors are usually the room's moisture level, the window's sun exposure, and your budget. We help you weigh all three for each window rather than defaulting to one material everywhere.",
       },
     ],
-    metaTitle: "Custom Blinds in North Idaho | Wood, Faux & Composite",
-    metaDescription: "Custom wood, faux wood & composite blinds for North Idaho homes. Norman, Alta, and Lafayette. Free in-home consultation in Coeur d'Alene, Post Falls, Hayden.",
+    metaTitle: "Custom Blinds in Post Falls & Coeur d'Alene | Wood, Faux & Composite",
+    metaDescription: "Custom wood, faux wood, and composite blinds measured and installed for North Idaho homes. Mark brings samples to you. Free in-home consultation in Post Falls, Coeur d'Alene, and Hayden.",
   },
   "cellular-shades": {
     slug: "cellular-shades",
@@ -161,8 +161,8 @@ export const productPages: Record<string, ProductPageData> = {
         answer: "Yes, in two ways. Lighter colors reflect more heat back into the room during winter, which can slightly reduce their insulating benefit. Darker colors absorb more solar heat in summer, which can be an advantage or drawback depending on the window's orientation. More practically: lighter fabrics show dust more readily. For Northern Idaho homes with intense sun exposure, a mid-tone fabric in the color family that works with your interior is usually the best balance of performance and maintenance.",
       },
     ],
-    metaTitle: "Cellular Shades, North Idaho | Energy-Efficient Honeycomb",
-    metaDescription: "Custom cellular honeycomb shades for North Idaho homes — the most energy-efficient window covering. Free in-home consultation in Coeur d'Alene, Post Falls.",
+    metaTitle: "Cellular Shades in Coeur d'Alene & Post Falls | Energy-Efficient Honeycomb",
+    metaDescription: "Custom cellular honeycomb shades for North Idaho homes. Insulation at the glass, measured and installed by Mark. Free in-home consultation in Coeur d'Alene and Post Falls.",
   },
   "solar-shades": {
     slug: "solar-shades",
@@ -269,8 +269,8 @@ export const productPages: Record<string, ProductPageData> = {
         answer: "Light dusting with a soft brush or vacuum brush attachment handles most routine maintenance. For spot cleaning, blot — don't scrub — with a lightly dampened cloth and mild soap. Never soak the fabric or submerge it in water, which can damage the finish and corrode the roller hardware. The specialty textured fabrics we carry are all treated for durability, but professional cleaning is worth considering for heavily soiled shades rather than risking damage with DIY methods.",
       },
     ],
-    metaTitle: "Roller Shades, North Idaho | Modern Custom Window Shades",
-    metaDescription: "Custom roller shades for North Idaho homes. Clean, modern coverings in premium fabrics — Norman, Alta, Lafayette. Free in-home consultation in Coeur d'Alene.",
+    metaTitle: "Custom Roller Shades in North Idaho | Measured and Installed",
+    metaDescription: "Custom roller shades for Coeur d'Alene, Post Falls, and North Idaho homes. Precise measurement, premium fabrics, and professional installation. Free in-home consultation.",
   },
   "banded-shades": {
     slug: "banded-shades",
@@ -439,8 +439,8 @@ export const productPages: Record<string, ProductPageData> = {
         answer: "Yes — Norman backs both the hardwood Normandy line and the Woodlore/Woodlore Plus composite lines with a limited lifetime warranty covering defects in materials and workmanship. As a long-term Norman partner, we're your local point of contact for any warranty question or service need: you call us, not a manufacturer's 800 number.",
       },
     ],
-    metaTitle: "Plantation Shutters in North Idaho | Norman Dealer",
-    metaDescription: "Norman plantation shutters in North Idaho — Norman dealer since 2009. Normandy hardwood, Woodlore Plus, InvisibleTilt. Free in-home consultation.",
+    metaTitle: "Custom Shutters in North Idaho | Norman Plantation Shutters",
+    metaDescription: "Custom plantation shutters measured and installed in Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Norman dealer since 2009. Free in-home consultation.",
   },
   "exterior-solar-shades": {
     slug: "exterior-solar-shades",
@@ -580,7 +580,7 @@ export const productPages: Record<string, ProductPageData> = {
         answer: "The most common issues — dead batteries or a dropped wireless connection — are easy to fix. True motor failure is rare in quality brands, but if it does happen, virtually every motor we install can still be operated manually as a backup, so you're never stuck with a shade you can't move. We handle warranty claims and service on every installation, so you're not left troubleshooting alone. The motors we use typically outlast the shade fabric itself, which is why we treat motorization as a long-term system investment, not just an add-on.",
       },
     ],
-    metaTitle: "Motorized Shades, North Idaho | Voice & App Control",
-    metaDescription: "Smart motorized shades & blinds for North Idaho homes. Voice, app, and scheduled control. Free in-home consultation in Coeur d'Alene, Post Falls, Hayden.",
+    metaTitle: "Motorized Shades in Coeur d'Alene | Voice, App & In-Home Setup",
+    metaDescription: "Motorized shades, blinds, and drapery installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Mark programs the system in your home. Free in-home consultation.",
   },
 };

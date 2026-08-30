@@ -1,10 +1,13 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import { ArticlePathway } from "@/components/ArticlePathway";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { TrackedCta } from "@/components/TrackedCta";
+import { CONVERSION_EVENTS } from "@/lib/conversion-events";
+import { ARTICLE_PATHWAYS } from "@/lib/article-pathways";
 import { BUSINESS } from "@/lib/constants";
 import { NORMAN_BRAND, ALTA_BRAND } from "@/lib/brands";
 import { cityRef, northIdahoRef } from "@/lib/cities";
@@ -776,6 +779,8 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
+  const pathway = ARTICLE_PATHWAYS[slug];
+  const showGenericConsultCta = !pathway;
 
   return (
     <>
@@ -859,6 +864,9 @@ export default async function BlogPostPage({ params }: Props) {
               <ReactMarkdown rehypePlugins={[rehypeRaw]} urlTransform={articleUrlTransform}>
                 {addInternalLinks(post.content, { title: post.title })}
               </ReactMarkdown>
+              {pathway?.placement === "after-content" ? (
+                <ArticlePathway pathway={pathway} />
+              ) : null}
             </div>
           </div>
         </section>
@@ -910,7 +918,15 @@ export default async function BlogPostPage({ params }: Props) {
           </section>
         )}
 
-        {/* CTA */}
+        {pathway?.placement === "bottom-only" ? (
+          <section className="py-16 bg-cream">
+            <div className="container-luxe max-w-3xl">
+              <ArticlePathway pathway={pathway} />
+            </div>
+          </section>
+        ) : null}
+
+        {showGenericConsultCta ? (
         <section className="py-16 bg-cream">
           <div className="container-luxe text-center max-w-2xl mx-auto">
             <h2 className="font-serif text-2xl text-charcoal mb-4">
@@ -921,21 +937,24 @@ export default async function BlogPostPage({ params }: Props) {
               Get personalized advice for your specific situation.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
+              <TrackedCta
                 href="/book"
+                event={CONVERSION_EVENTS.ConsultCtaClick}
                 className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-6 py-3 rounded-full transition-all"
               >
                 Start a Consultation
-              </Link>
-              <a
+              </TrackedCta>
+              <TrackedCta
                 href={BUSINESS.phoneHref}
+                event={CONVERSION_EVENTS.PhoneClick}
                 className="text-charcoal font-semibold hover:text-gold transition-colors"
               >
                 Call {BUSINESS.phone}
-              </a>
+              </TrackedCta>
             </div>
           </div>
         </section>
+        ) : null}
       </article>
     </>
   );

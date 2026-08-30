@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 export const metadata: Metadata = {
+  title: "Custom Window Treatments in Coeur d'Alene & Post Falls | Luxe Window Works",
+  description:
+    "Independent in-home consultations for custom blinds, shades, shutters, and motorization. We bring samples to your home across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.",
   alternates: {
     canonical: "https://www.luxewindowworks.com",
   },
 };
+import { TrackedCta } from "@/components/TrackedCta";
+import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 import { cityRef, northIdahoRef } from "@/lib/cities";
 import { BUSINESS_STUB, OWNER_STUB, productServiceRef } from "@/lib/schema";
@@ -444,18 +449,20 @@ export default function HomePage() {
         {/* Everything else, off the photo and centred. */}
         <div className="container-luxe py-9 md:py-12 text-center">
           <p className="text-lg md:text-xl text-charcoal leading-relaxed max-w-2xl mx-auto">
-            You don&apos;t need to know what to buy. We bring the options to
-            your home, measure everything, and install it with a lifetime
-            guarantee.
+            You don&apos;t need to know what to buy. We bring samples to
+            your home in Coeur d&apos;Alene, Post Falls, and the rest of
+            North Idaho, measure every window, and install it with a
+            lifetime installation guarantee. The in-home consultation is free.
           </p>
 
           <div className="mt-7 flex flex-col items-center gap-3.5">
-            <Link
+            <TrackedCta
               href="/book"
+              event={CONVERSION_EVENTS.ConsultCtaClick}
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-base transition-all hover:shadow-lg"
             >
               Book My Free In-Home Consultation
-            </Link>
+            </TrackedCta>
           </div>
 
           <div className="mt-7 space-y-1.5">
@@ -479,9 +486,13 @@ export default function HomePage() {
             </p>
             <p className="text-sm text-warm-gray-500">
               Or call / text{" "}
-              <a href={BUSINESS.phoneHref} className="hover:text-gold transition-colors">
+              <TrackedCta
+                href={BUSINESS.phoneHref}
+                event={CONVERSION_EVENTS.PhoneClick}
+                className="hover:text-gold transition-colors"
+              >
                 {BUSINESS.phone}
-              </a>{" "}
+              </TrackedCta>{" "}
               &mdash; usually same-day
             </p>
           </div>
@@ -735,7 +746,7 @@ export default function HomePage() {
               With 24 years consulting, designing, and installing window treatments, Luxe Window Works helps North Idaho homeowners avoid the most common window treatment mistakes: poor measurements, wrong product choices, bad light gaps, harsh glare, and treatments that do not fit the way the room actually lives.
             </p>
             <p>
-              We are not here to push one product. We help you choose what works — for your windows, your home, your budget, and the way you use each room.
+              We are not here to push one product. We help you choose what works — for your windows, your home, your budget, and the way you use each room. During the free in-home visit Mark brings samples, walks each window, and explains the next step. Requesting a consultation is not a booked appointment.
             </p>
           </div>
         </div>
@@ -799,12 +810,13 @@ export default function HomePage() {
             Tell us what you are trying to solve — privacy, heat, glare, blackout, style, or motorization — and we will help you choose the right treatment for each window.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
+            <TrackedCta
               href="/book"
+              event={CONVERSION_EVENTS.ConsultCtaClick}
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
               Schedule Your Free Consultation
-            </Link>
+            </TrackedCta>
           </div>
         </div>
       </section>

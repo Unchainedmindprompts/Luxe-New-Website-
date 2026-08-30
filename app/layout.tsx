@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
 import { ConditionalLayout } from "./ConditionalLayout";
 import { MetaPixel } from "@/components/MetaPixel";
+import { LandingPathCapture } from "@/components/LandingPathCapture";
 import { Analytics } from "@vercel/analytics/next";
 import { BUSINESS } from "@/lib/constants";
 
@@ -97,6 +99,9 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       </head>
       <body className="font-sans antialiased bg-warm-white text-charcoal">
         <MetaPixel />
+        <Suspense fallback={null}>
+          <LandingPathCapture />
+        </Suspense>
         <ConditionalLayout>{children}</ConditionalLayout>
         <Analytics />
       </body>

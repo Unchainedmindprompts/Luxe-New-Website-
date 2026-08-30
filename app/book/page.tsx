@@ -2,11 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Script from "next/script";
+import { TrackedCta } from "@/components/TrackedCta";
+import { CONVERSION_EVENTS, trackConversionEvent } from "@/lib/conversion-events";
+import { readOriginatingPath } from "@/lib/originating-path";
 import { BUSINESS } from "@/lib/constants";
 import { CalendlyScheduleTracker } from "./CalendlyScheduleTracker";
 
 export default function BookPage() {
+  const pathname = usePathname() ?? "/book";
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -47,10 +52,15 @@ export default function BookPage() {
           address: form.address,
           message: form.message,
           source: "book",
+          originatingPath: readOriginatingPath(pathname),
         }),
       });
 
       if (!res.ok) throw new Error("Submit failed");
+      trackConversionEvent(CONVERSION_EVENTS.ContactFormSubmit, {
+        page_path: pathname,
+        originating_path: readOriginatingPath(pathname),
+      });
       setSubmitted(true);
     } catch {
       setErrors({ form: "Something went wrong. Please call us at 208-660-8643 or email mark@luxewindowworks.com." });
@@ -188,12 +198,13 @@ export default function BookPage() {
               </p>
               <p className="text-sm text-warm-gray-500 mb-8">
                 Prefer to reach out directly?{" "}
-                <a
+                <TrackedCta
                   href="tel:+12086608643"
+                  event={CONVERSION_EVENTS.PhoneClick}
                   className="text-gold font-medium hover:text-gold-dark"
                 >
                   Call 208-660-8643
-                </a>{" "}
+                </TrackedCta>{" "}
                 or{" "}
                 <a
                   href="mailto:mark@luxewindowworks.com"
@@ -371,12 +382,13 @@ export default function BookPage() {
                     d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                   />
                 </svg>
-                <a
+                <TrackedCta
                   href="tel:+12086608643"
+                  event={CONVERSION_EVENTS.PhoneClick}
                   className="hover:text-white transition-colors"
                 >
                   208-660-8643
-                </a>
+                </TrackedCta>
               </div>
               <div className="flex items-center gap-2 text-warm-gray-300">
                 <svg

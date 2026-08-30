@@ -20,6 +20,7 @@
  */
 
 import { BUSINESS } from "./constants";
+import { sanitizeOriginatingPath } from "./originating-path";
 import {
   CONSULT_IDEMPOTENCY_TTL_SECONDS,
   CONSULT_INFRA_UNAVAILABLE_HTTP_STATUS,
@@ -72,6 +73,7 @@ const LIMITS = {
   preferredContactMethod: 50,
   problem: 100,
   source: 50,
+  originatingPath: 200,
   contractVersion: 16,
   idempotencyKey: 128,
   postalCode: 16,
@@ -612,6 +614,7 @@ async function processHuman(
   const contactMethod = values.contactMethod ?? "";
   const problem = values.problem ?? "";
   const source = values.source || "unknown";
+  const originatingPath = sanitizeOriginatingPath(values.originatingPath);
 
   if (!name || !phone) {
     return {
@@ -653,6 +656,7 @@ async function processHuman(
     message || "(no message)",
     ``,
     `— Source: ${sourcePath}`,
+    originatingPath ? `— Originating page: ${originatingPath}` : null,
     `— Reference: ${ref}`,
     `— Timestamp: ${at.toISOString()}`,
   ]
