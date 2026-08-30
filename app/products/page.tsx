@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS, PRODUCTS, SERVICE_AREAS } from "@/lib/constants";
+import { productPages } from "@/lib/product-data";
+
+/**
+ * Same source as the homepage product cards: each category photo comes from
+ * productPages.image, with the motorization YouTube thumbnail as fallback.
+ */
+function getProductCardImage(slug: string): string {
+  const p = productPages[slug];
+  if (p?.image) return p.image;
+  if (p?.video) return `https://img.youtube.com/vi/${p.video.youtubeId}/maxresdefault.jpg`;
+  return "/images/hero-modern-living.webp";
+}
 
 /**
  * The products hub.
@@ -122,30 +135,41 @@ export default function ProductsHubPage() {
               <Link
                 key={product.slug}
                 href={`/products/${product.slug}`}
-                className="group block bg-white rounded-2xl border border-warm-gray-200/60 p-8 hover:shadow-lg hover:border-gold/30 transition-all"
+                className="group flex flex-col bg-white rounded-2xl border border-warm-gray-200/60 overflow-hidden hover:shadow-lg hover:border-gold/30 transition-all"
               >
-                <h2 className="font-serif text-2xl text-charcoal group-hover:text-gold transition-colors mb-3">
-                  {product.name}
-                </h2>
-                <p className="text-warm-gray-600 leading-relaxed mb-6">
-                  {product.shortDescription}
-                </p>
-                <span className="inline-flex items-center gap-2 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
-                  See {product.name.toLowerCase()} details
-                  <svg
-                    className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </span>
+                <div className="relative aspect-[4/3] overflow-hidden bg-warm-gray-100">
+                  <Image
+                    src={getProductCardImage(product.slug)}
+                    alt={`${product.name} — installed by Luxe Window Works`}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(min-width: 768px) 45vw, 90vw"
+                  />
+                </div>
+                <div className="p-6 sm:p-8 flex flex-col flex-1">
+                  <h2 className="font-serif text-2xl text-charcoal group-hover:text-gold transition-colors mb-3">
+                    {product.name}
+                  </h2>
+                  <p className="text-warm-gray-600 leading-relaxed mb-6">
+                    {product.shortDescription}
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-sm font-medium text-charcoal group-hover:text-gold transition-colors mt-auto">
+                    See {product.name.toLowerCase()} details
+                    <svg
+                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </span>
+                </div>
               </Link>
             ))}
           </div>
