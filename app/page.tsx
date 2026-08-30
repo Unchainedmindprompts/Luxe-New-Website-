@@ -4,7 +4,7 @@ import Image from "next/image";
 export const metadata: Metadata = {
   title: "Custom Window Treatments in Coeur d'Alene & Post Falls | Luxe Window Works",
   description:
-    "Independent in-home consultations for custom blinds, shades, shutters, and motorization. Mark brings samples to your home across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.",
+    "Independent in-home consultations for custom blinds, shades, shutters, and motorization. We bring samples to your home across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.",
   alternates: {
     canonical: "https://www.luxewindowworks.com",
   },
@@ -449,7 +449,7 @@ export default function HomePage() {
         {/* Everything else, off the photo and centred. */}
         <div className="container-luxe py-9 md:py-12 text-center">
           <p className="text-lg md:text-xl text-charcoal leading-relaxed max-w-2xl mx-auto">
-            You don&apos;t need to know what to buy. Mark brings samples to
+            You don&apos;t need to know what to buy. We bring samples to
             your home in Coeur d&apos;Alene, Post Falls, and the rest of
             North Idaho, measures every window, and installs it with a
             lifetime installation guarantee. The in-home consultation is free.
