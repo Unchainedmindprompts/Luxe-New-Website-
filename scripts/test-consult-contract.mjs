@@ -9,6 +9,7 @@ import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { agentDiscoveryDocument } from "../lib/agent-document.ts";
 import {
   consultationDiscoveryDocument,
   CONSULT_CONTRACT_VERSION,
@@ -21,6 +22,8 @@ import {
   consultCategoriesPublic,
   isConsultAgentSubmissionEnabled,
 } from "../lib/capabilities.ts";
+import { PRODUCTION_DISCOVERY_ORIGIN } from "../lib/discovery-origin.ts";
+import { publicConsultationDiscoveryDocument } from "../lib/discovery-public.ts";
 import {
   memoryAgentRateLimiter,
   memoryIdempotencyStore,
@@ -404,7 +407,17 @@ await test("discovery  no booking/pricing claims; drapery honest; readiness bloc
   t.equal(doc.execution.method, "POST", "method");
   t.equal(doc.discoveryUrl, "/api/capabilities/request-in-home-consultation", "discovery url");
   t.equal(doc.requiresHumanFollowUp, true, "human follow-up required");
-  t.equal(doc.directBookingAvailable, false, "no booking claim");
+  t.equal(doc.directBookingAvailable, false, "this request path still does not book");
+  t.equal(doc.relatedScheduling?.id, "schedule-in-home-consultation", "points at sibling scheduling");
+  t.equal(
+    doc.relatedScheduling?.discoveryUrl,
+    "/api/capabilities/schedule-in-home-consultation",
+    "sibling discovery url"
+  );
+  t.ok(
+    /fallback/i.test(doc.relatedScheduling?.note ?? ""),
+    "sibling note keeps this path as fallback"
+  );
   t.equal(doc.pricingAvailable, false, "no pricing claim");
   t.equal(doc.checkoutAvailable, false, "no checkout claim");
   t.equal(doc.readiness, CONSULT_READINESS, "readiness matches contract literal");
@@ -467,7 +480,11 @@ await test("discovery  no booking/pricing claims; drapery honest; readiness bloc
     !/KV_REST|REDIS_URL|fingerprint|idempotencyStorageKey/i.test(JSON.stringify(doc)),
     "no internal redis/idempotency fields"
   );
-  t.ok(!doc.directBookingAvailable && !/calendly/i.test(JSON.stringify(doc)), "no Calendly");
+  t.ok(!doc.directBookingAvailable, "request capability still does not claim to book");
+  t.ok(
+    /schedule-in-home-consultation/.test(JSON.stringify(doc.relatedScheduling)),
+    "request discovery points at scheduling sibling"
+  );
   const drapery = doc.supportedProductCategories.find((c) => c.id === "custom-draperies");
   t.ok(drapery?.offered, "drapery offered");
   t.equal(drapery?.canonicalServiceId, null, "drapery has no Service @id");
@@ -486,13 +503,16 @@ await test("discovery  no booking/pricing claims; drapery honest; readiness bloc
 });
 
 await test("agent.json points at discovery and does not teach booking", (t) => {
-  const agent = JSON.parse(readFileSync(join(ROOT, "public/agent.json"), "utf8"));
-  const consult = agent.capabilities[0];
-  t.ok(
-    consult.url.endsWith("/api/capabilities/request-in-home-consultation"),
-    "points at discovery"
+  const agent = agentDiscoveryDocument(PRODUCTION_DISCOVERY_ORIGIN);
+  const consult = agent.capabilities.find((item) =>
+    String(item.url).endsWith("/api/capabilities/request-in-home-consultation")
   );
-  t.equal(consult.direct_booking, false, "agent.json direct_booking false");
+  const schedule = agent.capabilities.find((item) =>
+    String(item.url).endsWith("/api/capabilities/schedule-in-home-consultation")
+  );
+  t.ok(consult, "consult capability still listed");
+  t.ok(schedule, "scheduling capability listed");
+  t.equal(consult.direct_booking, false, "request capability still does not book");
   t.equal(consult.requires_human_follow_up, true, "agent.json follow-up");
   t.equal(
     consult.submission_enabled,
@@ -501,18 +521,64 @@ await test("agent.json points at discovery and does not teach booking", (t) => {
   );
   t.equal(consult.readiness, CONSULT_READINESS, "agent.json readiness");
   t.ok(consult.url !== "https://www.luxewindowworks.com/book", "no longer /book");
+  t.equal(
+    schedule.direct_booking,
+    Boolean(schedule.submission_enabled) && schedule.readiness !== "not-ready",
+    "scheduling direct_booking only when that document is ready"
+  );
+  t.equal(schedule.requires_human_confirmation, true, "customer confirmation required");
+  t.equal(typeof schedule.submission_enabled, "boolean", "scheduling publishes submission_enabled");
+  t.ok(
+    schedule.readiness === "not-ready" || schedule.readiness === "calendly-credentials-present",
+    "scheduling readiness uses the same values as detailed discovery"
+  );
+  if (schedule.readiness === "not-ready") {
+    t.equal(schedule.direct_booking, false, "not-ready cannot claim direct booking");
+    t.equal(schedule.submission_enabled, false, "not-ready submission stays off");
+  }
+  t.ok(
+    /fallback/i.test(consult.description) && /fallback/i.test(schedule.description),
+    "both capabilities keep the request path as fallback"
+  );
   if (!isConsultAgentSubmissionEnabled()) {
     t.ok(
-      /disabled/.test(consult.description.toLowerCase()) &&
-        /disabled/.test(agent.primary_cta.description.toLowerCase()),
+      /disabled/.test(consult.description.toLowerCase()),
       "copy says submission is disabled"
     );
   } else {
     t.ok(
       !/booked|reserved|appointment confirmed/i.test(consult.description),
-      "enabled copy still does not teach booking"
+      "enabled request copy still does not teach that a request is a booking"
     );
   }
+});
+
+await test("served consult discovery scheduling URLs follow the request host", (t) => {
+  const previewOrigin =
+    "https://luxe-new-website-git-cursor-age-5466cb-mark-abplanalps-projects.vercel.app";
+  const preview = publicConsultationDiscoveryDocument(previewOrigin);
+  t.equal(
+    preview.relatedScheduling.discoveryUrl,
+    `${previewOrigin}/api/capabilities/schedule-in-home-consultation`,
+    "preview sibling discovery"
+  );
+  t.equal(
+    preview.relatedScheduling.availabilityUrl,
+    `${previewOrigin}/api/scheduling/available-times`,
+    "preview sibling availability"
+  );
+  t.equal(
+    preview.execution.url,
+    `${previewOrigin}/api/consultation`,
+    "preview execution"
+  );
+
+  const production = publicConsultationDiscoveryDocument(PRODUCTION_DISCOVERY_ORIGIN);
+  t.equal(
+    production.relatedScheduling.discoveryUrl,
+    `${PRODUCTION_DISCOVERY_ORIGIN}/api/capabilities/schedule-in-home-consultation`,
+    "production sibling discovery"
+  );
 });
 
 function assertNotHumanFallback(t, result, mail, label) {

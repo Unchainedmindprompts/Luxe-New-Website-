@@ -12,9 +12,16 @@
  * execution surface for it — one way to perform the capability, with its own
  * outcome and its own readiness.
  *
- * REQUEST, NEVER BOOKING. The endpoint sends an email. It touches no calendar,
- * checks no availability, returns no time, reserves nothing, and creates no
- * appointment. A successful submission means Luxe was asked to follow up.
+ * TWO CONSULTATION PATHS. Direct Calendly scheduling lives on the sibling
+ * capability `schedule-in-home-consultation`. This module still owns the
+ * consultation-request contract. A successful request is still not a booked
+ * appointment. A Calendly booking after explicit customer confirmation IS a
+ * booked consultation. Keep this request path as the fallback.
+ *
+ * REQUEST PATH, NOT A BOOKING. `POST /api/consultation` sends an email. It
+ * touches no calendar, checks no availability, returns no time, reserves
+ * nothing, and creates no appointment. A successful submission means Luxe was
+ * asked to follow up.
  *
  * TWO GEOGRAPHY CONCERNS, KEPT APART.
  *   1. Canonical website markets (`SERVICE_AREAS` in lib/constants.ts) — five
@@ -38,7 +45,9 @@
 import type { OfferingId } from "./offerings";
 import { BUSINESS, PRODUCTS } from "./constants";
 
-export type CapabilityId = "request-in-home-consultation";
+export type CapabilityId =
+  | "request-in-home-consultation"
+  | "schedule-in-home-consultation";
 
 export const CONSULT_CONTRACT_VERSION = "1.0" as const;
 export const CONSULT_CAPABILITY_ID = "request-in-home-consultation" as const;
@@ -46,6 +55,17 @@ export const CONSULT_DISCOVERY_PATH =
   "/api/capabilities/request-in-home-consultation" as const;
 export const CONSULT_EXECUTION_PATH = "/api/consultation" as const;
 export const CONSULT_AGENT_SOURCE = "agent" as const;
+
+export const SCHEDULING_CONTRACT_VERSION = "1.0" as const;
+export const SCHEDULING_CAPABILITY_ID = "schedule-in-home-consultation" as const;
+export const SCHEDULING_DISCOVERY_PATH =
+  "/api/capabilities/schedule-in-home-consultation" as const;
+export const SCHEDULING_AVAILABILITY_PATH =
+  "/api/scheduling/available-times" as const;
+export const SCHEDULING_BOOKING_PATH = "/api/scheduling/book" as const;
+export const SCHEDULING_AGENT_SOURCE = "agent" as const;
+export const SCHEDULING_PROVIDER = "calendly" as const;
+export const SCHEDULING_EVENT_SLUG = "2hr" as const;
 
 /**
  * One way to perform a capability.
@@ -55,8 +75,8 @@ export const CONSULT_AGENT_SOURCE = "agent" as const;
  * this particular endpoint is fit for unattended machine traffic.
  */
 export interface ExecutionSurface {
-  readonly endpoint: typeof CONSULT_EXECUTION_PATH;
-  readonly method: "POST";
+  readonly endpoint: string;
+  readonly method: "GET" | "POST";
 
   /**
    * WHAT A 2xx ACTUALLY MEANS.
@@ -67,21 +87,22 @@ export interface ExecutionSurface {
    * `accepted` there still means the request was delivered for human follow-up,
    * not that a visit exists.
    */
-  readonly successMeans: "submission-acknowledged-by-endpoint";
+  readonly successMeans: string;
 
   /**
    * A literal, not a boolean. Flipping this is a claim that the transport is
    * fit for unattended traffic: durable rate limiting, durable idempotency,
-   * Resend duplicate protection, and fail-closed infrastructure checks.
+   * and fail-closed infrastructure checks.
    */
-  readonly autonomousExecution: typeof CONSULT_AUTONOMOUS_EXECUTION;
+  readonly autonomousExecution: string;
 }
 
 export interface Capability {
   readonly summary: string;
-  readonly actionType: "request";
-  readonly outcome: "consultation-requested";
-  readonly requiresHumanFollowUp: true;
+  readonly actionType: "request" | "schedule";
+  readonly outcome: "consultation-requested" | "consultation-scheduled";
+  readonly requiresHumanFollowUp: boolean;
+  readonly requiresHumanConfirmation?: true;
   /**
    * Fields the human forms already send. Agent mode adds more; those live on
    * the agent contract so a browser form cannot suddenly be asked for a
@@ -419,6 +440,13 @@ export interface ConsultationDiscoveryDocument {
   };
   readonly requiresHumanFollowUp: true;
   readonly directBookingAvailable: false;
+  readonly relatedScheduling: {
+    readonly id: typeof SCHEDULING_CAPABILITY_ID;
+    readonly discoveryUrl: typeof SCHEDULING_DISCOVERY_PATH;
+    readonly availabilityUrl: typeof SCHEDULING_AVAILABILITY_PATH;
+    readonly bookingUrl: typeof SCHEDULING_BOOKING_PATH;
+    readonly note: string;
+  };
   readonly pricingAvailable: false;
   readonly checkoutAvailable: false;
   readonly successMeans: "request-delivered-for-human-follow-up-not-an-appointment";
@@ -444,13 +472,18 @@ export function consultationDiscoveryDocument(): ConsultationDiscoveryDocument {
     description: enabled
       ? "Structured consultation-request contract. Agent submission delivers a " +
         "request for human follow-up. It does not book, reserve, or price a visit. " +
-        "Humans can still use /contact or /book. A successful request is delivery " +
-        "and acknowledgement — not an appointment, a quote, a price, or project acceptance."
+        "Direct online scheduling is available through the sibling scheduling " +
+        "capability when that discovery document reports the Calendly integration " +
+        "is configured. This request path remains the fallback. Humans can still " +
+        "use /contact or /book. A successful request is delivery and acknowledgement " +
+        "— not an appointment, a quote, a price, or project acceptance."
       : "Structured consultation-request contract. Agent submission is currently " +
         "disabled. The endpoint is documented but unavailable for unattended " +
-        "execution. Humans can still use /contact or /book. A successful request, " +
-        "when submission is later enabled, is delivery and acknowledgement — not " +
-        "an appointment, a quote, a price, or project acceptance.",
+        "execution. Direct online scheduling is available through the sibling " +
+        "scheduling capability when that discovery document reports the Calendly " +
+        "integration is configured. Humans can still use /contact or /book. A " +
+        "successful request, when submission is later enabled, is delivery and " +
+        "acknowledgement — not an appointment, a quote, a price, or project acceptance.",
     contractVersion: CONSULT_CONTRACT_VERSION,
     discoveryUrl: CONSULT_DISCOVERY_PATH,
     execution: {
@@ -511,6 +544,18 @@ export function consultationDiscoveryDocument(): ConsultationDiscoveryDocument {
     },
     requiresHumanFollowUp: true,
     directBookingAvailable: false,
+    relatedScheduling: {
+      id: SCHEDULING_CAPABILITY_ID,
+      discoveryUrl: SCHEDULING_DISCOVERY_PATH,
+      availabilityUrl: SCHEDULING_AVAILABILITY_PATH,
+      bookingUrl: SCHEDULING_BOOKING_PATH,
+      note:
+        "Direct online scheduling for an in-home consultation is available when " +
+        "the sibling scheduling capability reports the Calendly integration is " +
+        "configured. The customer must explicitly confirm the appointment time. " +
+        "This request path remains the fallback. A submitted request is still " +
+        "not a booked appointment.",
+    },
     pricingAvailable: false,
     checkoutAvailable: false,
     successMeans: "request-delivered-for-human-follow-up-not-an-appointment",
@@ -544,7 +589,7 @@ export const CAPABILITIES: Record<CapabilityId, Capability> = {
     summary:
       "Luxe Window Works accepts requests for a free in-home window treatment " +
       "consultation. Luxe follows up to arrange a visit; submitting a request " +
-      "does not schedule one.",
+      "does not schedule one. Direct Calendly scheduling is a sibling capability.",
     actionType: "request",
     outcome: "consultation-requested",
     requiresHumanFollowUp: true,
@@ -568,6 +613,43 @@ export const CAPABILITIES: Record<CapabilityId, Capability> = {
         method: "POST",
         successMeans: "submission-acknowledged-by-endpoint",
         autonomousExecution: CONSULT_AUTONOMOUS_EXECUTION,
+      },
+    ],
+  },
+  "schedule-in-home-consultation": {
+    summary:
+      "Luxe Window Works offers direct online scheduling for a free in-home " +
+      "consultation through Calendly. The customer must explicitly select and " +
+      "confirm the appointment time. This schedules a consultation, not product " +
+      "installation. The consultation-request path remains the fallback.",
+    actionType: "schedule",
+    outcome: "consultation-scheduled",
+    requiresHumanFollowUp: false,
+    requiresHumanConfirmation: true,
+    input: {
+      identifiesCustomerBy: ["customerName"],
+      required: [
+        "startTime",
+        "customerName",
+        "customerEmail",
+        "customerTimezone",
+        "customerConfirmed",
+        "idempotencyKey",
+      ],
+      optional: ["questionsAndAnswers", "location"],
+    },
+    executionSurfaces: [
+      {
+        endpoint: SCHEDULING_AVAILABILITY_PATH,
+        method: "GET",
+        successMeans: "calendly-valid-slots-only",
+        autonomousExecution: "configuration-dependent",
+      },
+      {
+        endpoint: SCHEDULING_BOOKING_PATH,
+        method: "POST",
+        successMeans: "calendly-booking-after-explicit-customer-confirmation",
+        autonomousExecution: "configuration-dependent",
       },
     ],
   },
