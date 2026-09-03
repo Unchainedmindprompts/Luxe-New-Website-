@@ -583,4 +583,68 @@ export const productPages: Record<string, ProductPageData> = {
     metaTitle: "Motorized Shades in Coeur d'Alene | Voice, App & In-Home Setup",
     metaDescription: "Motorized shades, blinds, and drapery installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Mark programs the system in your home. Free in-home consultation.",
   },
+  "custom-drapery": {
+    slug: "custom-drapery",
+    name: "Drapes and Drapery",
+    // Existing install photo already used on the designer-window-treatments
+    // article: floor-to-ceiling drapes being hung in a North Idaho living room.
+    // Not a dedicated drapery gallery — Mark still needs product-specific
+    // photos if he wants more than this one on-brand asset.
+    image: "/images/designer-window-treatments-hero.png",
+    headline: "Custom Drapes and Drapery for North Idaho Homes",
+    subheadline: "Custom drapes and drapery, specified in your home rather than guessed at in a showroom. Mark brings materials to Post Falls, Coeur d'Alene, Hayden, Rathdrum, and nearby North Idaho communities so you can see them in your actual light — then measures and installs the work.",
+    problem: "Choosing custom drapes from a photo or a showroom wall leaves the real decision untested. The same material looks different in morning light than it does in late afternoon, and it looks different again on a north-facing window than on glass that takes western sun. Luxe has no public showroom. Samples have to come to the house, because that is where the drapes will live.",
+    solution: "Luxe Window Works provides custom drapes and custom drapery for North Idaho homes through an independent in-home process: consultation, viewing materials in your actual light, professional measuring, careful installation, and the Lifetime Installation Guarantee. The consultation is free. Requesting one is not a confirmed booking — Luxe follows up to arrange a visit, or you can choose a time on the booking page. The work is a premium experience at every price point — consult, measure, and install done by Luxe, not a franchise catalog. People searching for custom curtains are looking at the same kind of soft treatment; what Luxe installs is custom drapes and drapery, measured to the opening and installed in the home.",
+    expertInsight: "After 24 years consulting, designing, and installing window treatments, the part I will not skip on custom drapes is seeing the material in the room. I bring samples into the house and we look at them on the actual glass, in the actual light. Then I measure. Then I install. If something about the way it was mounted stops holding while you own the home, I come back and fix it. That is the whole job — not a catalog guess and a box on the porch.",
+    features: [
+      "Free in-home consultation — no public showroom",
+      "Materials viewed in your actual light, on your windows",
+      "Professional measuring of each opening",
+      "Careful, professional installation",
+      "Lifetime Installation Guarantee for installation-related issues while you own the home",
+      "Independent consult, measure, and install",
+      "Custom drapes and drapery for Post Falls, Coeur d'Alene, Hayden, Rathdrum, and nearby North Idaho communities",
+      "A consultation request is a request for follow-up, not a booked appointment",
+    ],
+    idealFor: [
+      "Homes in Post Falls, Coeur d'Alene, Hayden, Rathdrum, Sandpoint, and nearby North Idaho communities",
+      "Homeowners who want to see drapery materials in their own light before ordering",
+      "Windows where a ready-made panel would not fit the opening",
+      "Rooms that need a soft treatment alongside a shade — a pairing already used on Roman and solar shade work",
+      "Anyone who wants professional measuring and installation backed by the Lifetime Installation Guarantee",
+    ],
+    localContext: "Custom drapes and custom drapery for North Idaho homes are specified in the house, not on a showroom wall. In Post Falls, Coeur d'Alene, Hayden, Rathdrum, Sandpoint, and the nearby communities Luxe already serves, Mark brings materials to the window, measures the opening, and installs the finished work. The Lifetime Installation Guarantee covers installation-related issues for as long as you own the home.",
+    faqs: [
+      {
+        question: "What happens during a custom drapes consultation?",
+        answer: "Mark comes to your home in Post Falls, Coeur d'Alene, Hayden, Rathdrum, or a nearby North Idaho community. He looks at the windows, brings materials so you can see them in your actual light, and explains what will actually work in each room. There is no showroom visit. If you move forward, he measures the openings and later installs the custom drapery. The consultation is free.",
+      },
+      {
+        question: "Is requesting a custom drapery consultation a booked appointment?",
+        answer: "No. A consultation request is not a confirmed booking. Luxe follows up to arrange a visit. You can also choose a time on the booking page. Submitting a request means you asked Luxe to follow up — it does not reserve a time on its own.",
+      },
+      {
+        question: "Do you have a showroom for custom drapes?",
+        answer: "No. Luxe does not have a public showroom. Mark brings samples to your home so you can see them on your windows, in your light. The business address is 2972 N Pavo Ln, Post Falls, ID 83854, and consultations are done at the house.",
+      },
+      {
+        question: "What does the Lifetime Installation Guarantee cover for custom drapery?",
+        answer: "For as long as you own the home: if something about the way the drapes were mounted stops holding — a bracket, a headrail, or the installation itself — Luxe comes back and fixes it at no charge. That is the installation guarantee used across every Luxe product, including custom drapes.",
+      },
+      {
+        question: "Which North Idaho communities do you serve for custom drapes?",
+        answer: "Custom drapes and drapery are measured and installed across Post Falls, Coeur d'Alene, Hayden, Rathdrum, Sandpoint, and nearby North Idaho communities. The same in-home consultation, measuring, and installation process applies throughout that service area. Call 208-660-8643 if you want to confirm a nearby community.",
+      },
+      {
+        question: "How long do custom drapes take from order to installation?",
+        answer: "Shutters and custom drapery can take up to eight weeks from order to installation, depending on the manufacturer. You get that time frame before you order, and if it changes on the manufacturer's end, you hear it from us instead of finding out when nothing shows up.",
+      },
+      {
+        question: "Do you install custom curtains, or custom drapes and drapery?",
+        answer: "Luxe's offering is custom drapes and custom drapery — measured to the opening and professionally installed. People often search for custom curtains when they mean the same kind of soft window treatment. If that is what you are looking for, the in-home consultation is the right next step.",
+      },
+    ],
+    metaTitle: "Custom Drapes & Drapery in North Idaho | Luxe Window Works",
+    metaDescription: "Custom drapes and drapery for North Idaho homes. Free in-home consultation — see materials in your light, then professional measuring and installation in Post Falls, Coeur d'Alene, Hayden, and Rathdrum.",
+  },
 };

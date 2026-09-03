@@ -13,16 +13,15 @@
  *
  * SmartDrape destination: `/products/motorization`. The offering registry in
  * `lib/offerings.ts` has no SmartDrape, patio-door, or vertical-sheer page.
- * Custom draperies is a consult category without a product route. The
- * motorization page is the existing canonical Service whose copy already
- * covers motorized shades, blinds, and drapery — the commercial next step
- * for a Norman SmartDrape patio-door conversation.
+ * Custom drapery now has `/products/custom-drapery`. SmartDrape stays on
+ * motorization — that page's copy already covers motorized shades, blinds,
+ * and drapery, and SmartDrape is a patio-door shade, not this drapery page.
  */
 
 export interface ArticlePathway {
   heading: string;
   body: string;
-  productHref: "/products/blinds" | "/products/motorization" | "/products/roller-shades";
+  productHref: "/products/blinds" | "/products/motorization" | "/products/roller-shades" | "/products/custom-drapery";
   productLabel: string;
   bookHref: "/book";
   bookLabel: string;
@@ -87,6 +86,17 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
     areaLabel: "Custom window treatments in Coeur d'Alene",
     placement: "after-content",
   },
+  "how-drapes-make-ceilings-taller-in-coeur-dalene-homes": {
+    heading: "Planning custom drapes for a North Idaho home?",
+    body: "Mark brings materials to your windows, looks at the light in the room, and measures the openings. The consultation is free, and requesting one is not a booked appointment.",
+    productHref: "/products/custom-drapery",
+    productLabel: "See custom drapes and drapery",
+    bookHref: "/book",
+    bookLabel: "Request a free in-home consultation",
+    areaHref: "/areas/coeur-d-alene",
+    areaLabel: "Custom window treatments in Coeur d'Alene",
+    placement: "after-content",
+  },
   "how-to-restring-blinds-like-a-pro-step-by-step-guide": {
     heading: "When replacement makes more sense",
     body: "Restringing can save a good set of blinds. If the slats are warped, the lift is failing, or the material was wrong for the room, Mark can look at the windows and tell you honestly whether repair or replacement is the better spend. The consultation is free.",
@@ -142,6 +152,12 @@ export const PRODUCT_DECISION_ARTICLES: Record<
     {
       title: "Cellular Shades for Energy Savings in Coeur d'Alene and Post Falls",
       slug: "cellular-shades-for-energy-savings-in-coeur-dalene-post-falls",
+    },
+  ],
+  "custom-drapery": [
+    {
+      title: "How CDA Homeowners Use Drapes to Get Taller Ceilings, Wider Rooms, and Lower Energy Bills",
+      slug: "how-drapes-make-ceilings-taller-in-coeur-dalene-homes",
     },
   ],
 };
