@@ -4,7 +4,7 @@ import Image from "next/image";
 export const metadata: Metadata = {
   title: "Custom Window Treatments in Coeur d'Alene & Post Falls | Luxe Window Works",
   description:
-    "Independent in-home consultations for custom blinds, shades, shutters, and motorization. We bring samples to your home across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.",
+    "Independent in-home consultations for custom blinds, shades, shutters, drapes, and motorization. We bring samples to your home across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.",
   alternates: {
     canonical: "https://www.luxewindowworks.com",
   },
@@ -203,6 +203,13 @@ const businessNode = {
           { "@type": "Offer", itemOffered: productServiceRef("motorization") },
         ],
       },
+      {
+        "@type": "OfferCatalog",
+        name: "Custom Drapes",
+        itemListElement: [
+          { "@type": "Offer", itemOffered: productServiceRef("custom-drapery") },
+        ],
+      },
     ],
   },
 };
@@ -298,6 +305,8 @@ const HOMEPAGE_PRODUCT_COPY: Record<string, string> = {
     "A long-term upgrade with strong light control, architectural character, and lasting value.",
   "motorization":
     "Control hard-to-reach or everyday shades by remote, wall switch, app, or smart home system.",
+  "custom-drapery":
+    "Custom drapes and drapery specified in your home — materials in your actual light, then professional measuring and installation.",
 };
 
 function SunIcon() {

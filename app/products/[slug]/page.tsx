@@ -66,7 +66,7 @@ function ServiceSchema({ product, slug }: { product: ProductPageData; slug: stri
     name: `Custom ${product.name} Service`,
     // Shared with the area Services, which have used this phrase all along.
     // The name distinguishes the category; the serviceType says what all
-    // fourteen Luxe Services have in common.
+    // Luxe Services have in common.
     serviceType: CUSTOM_WINDOW_TREATMENTS,
     provider: { "@id": `${BUSINESS.url}/#business` },
     // The five cities we actually serve, not the state. "Idaho" spans 480
