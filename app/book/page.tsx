@@ -5,19 +5,28 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { TrackedCta } from "@/components/TrackedCta";
+import { PricePositioning } from "@/components/PricePositioning";
 import { CONVERSION_EVENTS, trackConversionEvent } from "@/lib/conversion-events";
 import { readOriginatingPath } from "@/lib/originating-path";
 import { BUSINESS } from "@/lib/constants";
 import { CalendlyScheduleTracker } from "./CalendlyScheduleTracker";
 
+const CONTACT_METHODS = ["Phone call", "Text message", "Email"] as const;
+
+function locationFields(raw: string): { city?: string; zip?: string } {
+  const trimmed = raw.trim();
+  if (/^\d{5}(?:-\d{4})?$/.test(trimmed)) return { zip: trimmed };
+  return { city: trimmed };
+}
+
 export default function BookPage() {
   const pathname = usePathname() ?? "/book";
   const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     phone: "",
     email: "",
-    address: "",
+    cityOrZip: "",
+    contactMethod: "Phone call",
     message: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -26,11 +35,20 @@ export default function BookPage() {
 
   function validate() {
     const e: Record<string, string> = {};
-    if (!form.firstName.trim()) e.firstName = "Required";
-    if (!form.lastName.trim()) e.lastName = "Required";
-    if (!form.phone.trim()) e.phone = "Required";
-    if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email))
+    if (!form.name.trim()) e.name = "Required";
+    const phone = form.phone.trim();
+    const email = form.email.trim();
+    if (!phone && !email) {
+      e.phone = "Add a phone number or an email";
+      e.email = "Add a phone number or an email";
+    }
+    if (email && !/\S+@\S+\.\S+/.test(email)) {
       e.email = "Valid email required";
+    }
+    if (!form.cityOrZip.trim()) e.cityOrZip = "City or ZIP is required";
+    if (form.contactMethod === "Email" && !email) {
+      e.email = "Email is required if you prefer email";
+    }
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -41,15 +59,17 @@ export default function BookPage() {
     setSubmitting(true);
 
     try {
+      const location = locationFields(form.cityOrZip);
       const res = await fetch("/api/consultation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          firstName: form.firstName,
-          lastName: form.lastName,
+          name: form.name,
           email: form.email,
           phone: form.phone,
-          address: form.address,
+          city: location.city ?? "",
+          zip: location.zip ?? "",
+          contactMethod: form.contactMethod,
           message: form.message,
           source: "book",
           originatingPath: readOriginatingPath(pathname),
@@ -63,14 +83,16 @@ export default function BookPage() {
       });
       setSubmitted(true);
     } catch {
-      setErrors({ form: "Something went wrong. Please call us at 208-660-8643 or email mark@luxewindowworks.com." });
+      setErrors({
+        form: "Something went wrong. Please call us at 208-660-8643 or email mark@luxewindowworks.com.",
+      });
     } finally {
       setSubmitting(false);
     }
   }
 
   function field(
-    id: keyof typeof form,
+    id: "name" | "phone" | "email" | "cityOrZip",
     label: string,
     type = "text",
     placeholder = ""
@@ -89,6 +111,15 @@ export default function BookPage() {
           value={form[id]}
           onChange={(e) => setForm((f) => ({ ...f, [id]: e.target.value }))}
           placeholder={placeholder}
+          autoComplete={
+            id === "name"
+              ? "name"
+              : id === "phone"
+                ? "tel"
+                : id === "email"
+                  ? "email"
+                  : "postal-code"
+          }
           className={`w-full bg-white border rounded-lg px-4 py-3 text-sm text-charcoal placeholder:text-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition-colors ${
             errors[id] ? "border-red-400" : "border-warm-gray-200"
           }`}
@@ -112,67 +143,93 @@ export default function BookPage() {
             Book Your Free In-Home Consultation
           </h1>
           <p className="text-warm-gray-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            We come to your home to see your windows, understand your goals,
-            and recommend the right solution. No pressure, no guesswork —
-            just honest advice from a team with 24 years of hands-on
-            experience.
+            Two ways to start: book a time now, or leave your name and we&apos;ll
+            call you back. Requesting a callback is not a booked appointment.
           </p>
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href="#book-appointment"
+              className="inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-white font-semibold px-6 py-3 rounded-full text-sm transition-colors"
+            >
+              Book a time now
+            </a>
+            <a
+              href="#request-callback"
+              className="inline-flex items-center justify-center border border-white/30 hover:border-white text-white font-semibold px-6 py-3 rounded-full text-sm transition-colors"
+            >
+              Have us call you
+            </a>
+          </div>
         </div>
       </div>
 
-      {/* Scheduler — the primary path. Self-booking converts better than
-          "we'll call you back" because it closes in one sitting instead of
-          depending on a callback landing while the visitor is still warm. The
-          form below stays as a fallback for anyone who would rather be called,
-          and the phone number stays prominent for anyone who would rather
-          talk — three doors, not one. */}
-      <div className="max-w-4xl mx-auto px-4 pt-12">
-        <div className="text-center mb-6">
-          <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">
-            Pick a time that works for you
-          </h2>
-          <p className="mt-2 text-warm-gray-600">
-            Choose a slot below and it&apos;s booked — no waiting on a callback.
-          </p>
-        </div>
-        {/* Height is generous on purpose. At 700px the widget's own content
-            overflowed and produced a scrollbar *inside* the frame — the time
-            list was cut off mid-morning and the event header was clipped off
-            the top. People do not reliably scroll inside an embedded box,
-            especially on a phone, so that was losing bookings. Mobile needs
-            more than desktop because Calendly stacks the calendar above the
-            time list rather than beside it. */}
-        <div
-          className="calendly-inline-widget rounded-2xl overflow-hidden border border-warm-gray-200 bg-white h-[1180px] sm:h-[1020px] lg:h-[980px]"
-          data-url={`${BUSINESS.calendlyUrl}?hide_gdpr_banner=1&background_color=fdfcfa&primary_color=c9a96e&text_color=2e2e2e`}
-          style={{ minWidth: "320px" }}
-        />
-        {/* lazyOnload keeps a third-party script off the critical path — this
-            page's LCP should not wait on Calendly. */}
-        <Script
-          src="https://assets.calendly.com/assets/external/widget.js"
-          strategy="lazyOnload"
-        />
-        <CalendlyScheduleTracker />
+      <div className="max-w-4xl mx-auto px-4 pt-10">
+        <PricePositioning variant="book" />
       </div>
 
-      {/* Divider into the fallback path */}
-      <div className="max-w-4xl mx-auto px-4 pt-14">
+      {/* Path A — Calendly booked appointment. Embed URL and widget behavior
+          stay exactly as production: calendly.com/mark-luxewindowworks/2hr. */}
+      <div id="book-appointment" className="max-w-4xl mx-auto px-4 pt-12 scroll-mt-24">
+        <div className="rounded-2xl border-2 border-gold/40 bg-white p-5 sm:p-7 shadow-sm">
+          <p className="inline-flex items-center rounded-full bg-gold/10 text-gold text-xs font-semibold uppercase tracking-widest px-3 py-1">
+            Path A &middot; Booked appointment
+          </p>
+          <div className="text-center mt-5 mb-6">
+            <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">
+              Pick a time that works for you
+            </h2>
+            <p className="mt-2 text-warm-gray-600">
+              Choose a slot below and it&apos;s booked — no waiting on a callback.
+            </p>
+          </div>
+          {/* Height is generous on purpose. At 700px the widget's own content
+              overflowed and produced a scrollbar *inside* the frame — the time
+              list was cut off mid-morning and the event header was clipped off
+              the top. People do not reliably scroll inside an embedded box,
+              especially on a phone, so that was losing bookings. Mobile needs
+              more than desktop because Calendly stacks the calendar above the
+              time list rather than beside it. */}
+          <div
+            className="calendly-inline-widget rounded-2xl overflow-hidden border border-warm-gray-200 bg-white h-[1180px] sm:h-[1020px] lg:h-[980px]"
+            data-url={`${BUSINESS.calendlyUrl}?hide_gdpr_banner=1&background_color=fdfcfa&primary_color=c9a96e&text_color=2e2e2e`}
+            style={{ minWidth: "320px" }}
+          />
+          {/* lazyOnload keeps a third-party script off the critical path — this
+              page's LCP should not wait on Calendly. */}
+          <Script
+            src="https://assets.calendly.com/assets/external/widget.js"
+            strategy="lazyOnload"
+          />
+          <CalendlyScheduleTracker />
+        </div>
+      </div>
+
+      {/* Path B — callback request. Not a booking. */}
+      <div id="request-callback" className="max-w-4xl mx-auto px-4 pt-14 scroll-mt-24">
         <div className="flex items-center gap-4">
           <div className="h-px bg-warm-gray-200 flex-1" />
           <p className="text-sm text-warm-gray-500 whitespace-nowrap">
-            Or have us call you instead
+            Or a different path
           </p>
           <div className="h-px bg-warm-gray-200 flex-1" />
         </div>
       </div>
 
-      {/* Content */}
       <div className="max-w-6xl mx-auto px-4 py-14 grid grid-cols-1 lg:grid-cols-5 gap-12">
-        {/* Form */}
         <div className="lg:col-span-3">
+          <p className="inline-flex items-center rounded-full bg-charcoal text-white text-xs font-semibold uppercase tracking-widest px-3 py-1 mb-4">
+            Path B &middot; Callback request — not a booking
+          </p>
+          <h2 className="font-serif text-2xl sm:text-3xl text-charcoal mb-2">
+            Have us call you instead
+          </h2>
+          <p className="text-warm-gray-600 leading-relaxed mb-6">
+            Leave your name and how to reach you. We&apos;ll follow up later to
+            arrange the visit. This does not reserve a time, and we don&apos;t
+            need your full home address yet.
+          </p>
           {submitted ? (
-            <div className="bg-white rounded-2xl border border-warm-gray-200 p-10 text-center shadow-sm">
+            <div className="bg-cream rounded-2xl border border-warm-gray-200 p-10 text-center shadow-sm">
               <div className="w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-5">
                 <svg
                   className="w-8 h-8 text-gold"
@@ -189,21 +246,29 @@ export default function BookPage() {
                 </svg>
               </div>
               <h2 className="font-serif text-2xl font-bold text-charcoal mb-3">
-                You&apos;re All Set!
+                Request received
               </h2>
-              <p className="text-warm-gray-600 leading-relaxed mb-6">
-                Your request has been received. We&apos;ll be in touch within
-                <strong> 24 hours</strong> to schedule your free in-home
+              <p className="text-warm-gray-600 leading-relaxed mb-3">
+                This is not a booked appointment. We&apos;ll be in touch within
+                <strong> 24 hours</strong> to find a time for your free in-home
                 consultation.
               </p>
               <p className="text-sm text-warm-gray-500 mb-8">
                 Prefer to reach out directly?{" "}
                 <TrackedCta
-                  href="tel:+12086608643"
+                  href={BUSINESS.phoneHref}
                   event={CONVERSION_EVENTS.PhoneClick}
                   className="text-gold font-medium hover:text-gold-dark"
                 >
-                  Call 208-660-8643
+                  Call {BUSINESS.phone}
+                </TrackedCta>
+                {" · "}
+                <TrackedCta
+                  href={BUSINESS.smsHref}
+                  event={CONVERSION_EVENTS.TextClick}
+                  className="text-gold font-medium hover:text-gold-dark"
+                >
+                  Text {BUSINESS.phone}
                 </TrackedCta>{" "}
                 or{" "}
                 <a
@@ -236,44 +301,63 @@ export default function BookPage() {
           ) : (
             <form
               onSubmit={handleSubmit}
-              className="bg-white rounded-2xl border border-warm-gray-200 p-8 shadow-sm space-y-5"
+              className="bg-cream rounded-2xl border border-warm-gray-200 p-8 shadow-sm space-y-5"
             >
-              <h2 className="font-serif text-xl font-semibold text-charcoal">
-                Your Information
-              </h2>
+              <h3 className="font-serif text-xl font-semibold text-charcoal">
+                How should we reach you?
+              </h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {field("firstName", "First Name")}
-                {field("lastName", "Last Name")}
-              </div>
-
-              {field("phone", "Phone Number", "tel", "e.g. 208-555-0100")}
-              {field("email", "Email Address", "email", "you@example.com")}
+              {field("name", "Name")}
+              {field("phone", "Phone", "tel", "e.g. 208-555-0100")}
+              {field("email", "Email", "email", "you@example.com")}
               {field(
-                "address",
-                "Home Address",
+                "cityOrZip",
+                "City or ZIP",
                 "text",
-                "123 Main St, Post Falls, ID"
+                "Post Falls or 83854"
               )}
+
+              <div>
+                <p className="block text-sm font-medium text-charcoal mb-2.5">
+                  Preferred contact
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {CONTACT_METHODS.map((method) => (
+                    <label key={method} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="contactMethod"
+                        value={method}
+                        checked={form.contactMethod === method}
+                        onChange={() =>
+                          setForm((f) => ({ ...f, contactMethod: method }))
+                        }
+                        className="w-4 h-4 text-gold border-warm-gray-300 focus:ring-gold"
+                      />
+                      <span className="text-sm text-warm-gray-600">{method}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
               <div>
                 <label
                   htmlFor="message"
                   className="block text-sm font-medium text-charcoal mb-1.5"
                 >
-                  Tell us about your project{" "}
+                  Project notes{" "}
                   <span className="text-warm-gray-400 font-normal">
                     (optional)
                   </span>
                 </label>
                 <textarea
                   id="message"
-                  rows={4}
+                  rows={3}
                   value={form.message}
                   onChange={(e) =>
                     setForm((f) => ({ ...f, message: e.target.value }))
                   }
-                  placeholder="Which rooms? Any specific goals — privacy, energy efficiency, a particular style? Anything that might be tricky?"
+                  placeholder="Anything useful — rooms, glare, privacy — or leave this blank."
                   className="w-full bg-white border border-warm-gray-200 rounded-lg px-4 py-3 text-sm text-charcoal placeholder:text-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition-colors resize-none"
                 />
               </div>
@@ -285,45 +369,46 @@ export default function BookPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-gold hover:bg-gold-dark disabled:bg-warm-gray-200 disabled:text-warm-gray-400 text-white font-semibold py-4 rounded-xl text-base transition-colors"
+                className="w-full bg-charcoal hover:bg-charcoal/90 disabled:bg-warm-gray-200 disabled:text-warm-gray-400 text-white font-semibold py-4 rounded-xl text-base transition-colors"
               >
-                {submitting ? "Sending…" : "Request My Free Consultation"}
+                {submitting ? "Sending…" : "Request a callback"}
               </button>
 
-              <p className="text-center text-xs text-warm-gray-400">
-                We&apos;ll be in touch within 24 hours.
+              <p className="text-center text-xs text-warm-gray-500">
+                We&apos;ll be in touch within 24 hours. Submitting this form is
+                not a booked appointment. Full address comes later, when we
+                arrange the visit.
               </p>
             </form>
           )}
         </div>
 
-        {/* Sidebar */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-2xl border border-warm-gray-200 p-7 shadow-sm">
             <h3 className="font-serif text-lg font-semibold text-charcoal mb-5">
-              What Happens Next
+              What happens after a callback request
             </h3>
             <div className="space-y-5">
               {[
                 {
                   num: "1",
-                  title: "We call you",
-                  body: "Within 24 hours, we reach out to introduce ourselves and find a time that works.",
+                  title: "We reach out",
+                  body: "Within 24 hours we call, text, or email — this is follow-up, not a reserved visit.",
                 },
                 {
                   num: "2",
-                  title: "Free in-home visit",
-                  body: "We come to your home, measure your windows, and assess the light, layout, and your goals.",
+                  title: "We arrange the visit",
+                  body: "That's when we collect your full home address and find a time that works.",
                 },
                 {
                   num: "3",
-                  title: "Honest recommendation",
-                  body: "We walk you through exactly what we'd recommend and why — no upsell, no pressure.",
+                  title: "Free in-home consultation",
+                  body: "We come to your home, measure your windows, and walk through what actually fits.",
                 },
                 {
                   num: "4",
-                  title: "Expert installation",
-                  body: "When you're ready, we handle everything. Every install is backed by our lifetime guarantee.",
+                  title: "One price, quoted once",
+                  body: "When you're ready, we install it. Every install is backed by our lifetime guarantee.",
                 },
               ].map((step) => (
                 <div key={step.num} className="flex gap-4">
@@ -357,9 +442,11 @@ export default function BookPage() {
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               ))}
-              <span className="text-white font-semibold text-sm ml-1">5.0</span>
+              <span className="text-white font-semibold text-sm ml-1">
+                {BUSINESS.google.rating.toFixed(1)}
+              </span>
               <span className="text-warm-gray-400 text-sm ml-1">
-                &middot; 14 Google reviews
+                &middot; {BUSINESS.google.reviewCount} Google reviews
               </span>
             </div>
             <p className="text-warm-gray-300 text-sm italic leading-relaxed mt-3 mb-4">
@@ -383,11 +470,19 @@ export default function BookPage() {
                   />
                 </svg>
                 <TrackedCta
-                  href="tel:+12086608643"
+                  href={BUSINESS.phoneHref}
                   event={CONVERSION_EVENTS.PhoneClick}
                   className="hover:text-white transition-colors"
                 >
-                  208-660-8643
+                  Call {BUSINESS.phone}
+                </TrackedCta>
+                <span className="text-warm-gray-500">·</span>
+                <TrackedCta
+                  href={BUSINESS.smsHref}
+                  event={CONVERSION_EVENTS.TextClick}
+                  className="hover:text-white transition-colors"
+                >
+                  Text
                 </TrackedCta>
               </div>
               <div className="flex items-center gap-2 text-warm-gray-300">

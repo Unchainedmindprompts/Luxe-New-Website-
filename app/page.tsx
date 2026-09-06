@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   },
 };
 import { TrackedCta } from "@/components/TrackedCta";
+import { PricePositioning } from "@/components/PricePositioning";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 import { cityRef, northIdahoRef } from "@/lib/cities";
@@ -485,15 +486,23 @@ export default function HomePage() {
               {SERVICE_AREAS.map((a) => a.name).join(" · ")}
             </p>
             <p className="text-sm text-warm-gray-500">
-              Or call / text{" "}
+              Or{" "}
               <TrackedCta
                 href={BUSINESS.phoneHref}
                 event={CONVERSION_EVENTS.PhoneClick}
                 className="hover:text-gold transition-colors"
               >
-                {BUSINESS.phone}
+                call
+              </TrackedCta>
+              {" / "}
+              <TrackedCta
+                href={BUSINESS.smsHref}
+                event={CONVERSION_EVENTS.TextClick}
+                className="hover:text-gold transition-colors"
+              >
+                text
               </TrackedCta>{" "}
-              &mdash; usually same-day
+              {BUSINESS.phone} &mdash; usually same-day
             </p>
           </div>
         </div>
@@ -543,6 +552,8 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+
+      <PricePositioning />
 
       {/* 3. A Simpler Way to Buy — process explainer */}
       <section className="py-20 md:py-28 bg-warm-white">
