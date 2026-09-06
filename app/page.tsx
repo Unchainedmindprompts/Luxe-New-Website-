@@ -392,109 +392,44 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageGraph) }}
       />
 
-      {/* 1. Hero — Hunter Douglas layout.
-          Their format, deliberately: the image sits in a contained band with
-          page background either side rather than bleeding to the viewport
-          edge; it carries exactly one line of type, low, white, all caps, wide
-          tracking, centred; and every other piece of copy waits until you are
-          off the photograph. Nothing overlaps the image but the headline.
-
-          This replaces a left-aligned block that sat on a bare wall inside the
-          previous photo. That only worked because that image had roughly a
-          third of its width empty. This one is furnished edge to edge, so
-          there is no negative space to sit in — which is exactly the situation
-          HD's layout is built for. */}
+      {/* Keep the offer and contact options in the opening screen. */}
       <section className="bg-warm-white pt-16 md:pt-20">
-        {/* Full bleed — edge to edge at every width.
-            Worth knowing what this changes versus the contained version, since
-            Hunter Douglas uses contained: a capped band fills the screen on a
-            laptop (viewport under the cap) but shows margins on a large
-            monitor (viewport over it). That is why their hero looks full bleed
-            on a 15" and banded on a 24". This does not do that — it is edge to
-            edge everywhere.
-            max-h keeps the 2:1 ratio from eating the whole screen on a big
-            display; object-cover absorbs the difference. */}
-        <div className="w-full">
-          <div className="relative w-full overflow-hidden aspect-[4/5] sm:aspect-[16/10] lg:aspect-[2/1] lg:max-h-[74vh]">
-            <Image
-              src="/images/hero-lake-room.webp"
+        <div className="grid lg:grid-cols-2">
+          <div className="relative h-[240px] sm:h-[320px] lg:h-auto lg:min-h-[540px] overflow-hidden">
+            <Image src="/images/hero-lake-room.webp"
               alt="North Idaho lakefront dining room with cellular shades lowered over floor-to-ceiling windows looking onto a mountain lake"
-              fill
-              /* Anchored right on phones: the figure sits at roughly 85–97% of
-                 the source width, so a centred crop clips her mid-body. Right
-                 also keeps the lake and the mountains in frame. */
-              className="object-cover object-right sm:object-center"
-              priority
-              sizes="100vw"
-              quality={90}
-            />
-            {/* Bottom-anchored only, clearing by 45% up so the lake, the
-                mountains and the shades are never touched. */}
-            <div className="absolute inset-0 bg-gradient-to-t from-charcoal/75 via-charcoal/30 via-20% to-transparent to-45%" />
-
-            <div className="absolute inset-x-0 bottom-0 px-5 pb-6 sm:pb-8 lg:pb-10 text-center">
-              {/* The min() cap stays even though the container is now full
-                  width. It costs nothing here and it is the guard that keeps
-                  the headline from outrunning its box if this ever goes back
-                  to a capped band — which is exactly how "IDAHO" ended up
-                  stranded on its own row. Tracking eases off on phones for the
-                  same reason at the other end of the range. */}
-              <h1 className="text-white font-semibold uppercase text-[9.5px] sm:text-base md:text-xl lg:text-2xl xl:text-[min(1.9vw,48px)] tracking-[0.1em] sm:tracking-[0.24em] leading-snug [text-shadow:0_2px_10px_rgb(0_0_0_/_45%)]">
-                Custom Window Treatments &middot; North Idaho
-              </h1>
-            </div>
+              fill className="object-cover object-right" priority
+              sizes="(min-width: 1024px) 50vw, 100vw" quality={90} />
           </div>
-        </div>
-
-        {/* Everything else, off the photo and centred. */}
-        <div className="container-luxe py-9 md:py-12 text-center">
-          <p className="text-lg md:text-xl text-charcoal leading-relaxed max-w-2xl mx-auto">
-            You don&apos;t need to know what to buy. We bring samples to
-            your home in Coeur d&apos;Alene, Post Falls, and the rest of
-            North Idaho, measure every window, and install it with a
-            lifetime installation guarantee. The in-home consultation is free.
-          </p>
-
-          <div className="mt-7 flex flex-col items-center gap-3.5">
-            <TrackedCta
-              href="/book"
-              event={CONVERSION_EVENTS.ConsultCtaClick}
-              className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-base transition-all hover:shadow-lg"
-            >
+          <div className="px-6 py-8 sm:px-10 lg:px-12 lg:py-14 flex flex-col justify-center">
+            <p className="text-sm font-semibold text-warm-gray-600 mb-3">Premium Experience at Every Price Point</p>
+            <h1 className="font-serif text-3xl sm:text-4xl xl:text-5xl text-charcoal leading-tight">
+              Custom Window Treatments &middot; North Idaho
+            </h1>
+            <p className="mt-4 text-lg text-warm-gray-600 leading-relaxed">
+              You don&apos;t need to know what to buy. We bring samples to your home,
+              help you choose for your style and budget, and measure and install everything.
+              The in-home consultation is free.
+            </p>
+            <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick}
+              className="mt-6 inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-charcoal font-semibold px-6 py-4 rounded-full text-base transition-colors">
               Book My Free In-Home Consultation
             </TrackedCta>
-          </div>
-
-          <div className="mt-7 space-y-1.5">
-            <div className="flex items-center justify-center gap-3">
-              <span className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <StarIcon key={i} />
-                ))}
-              </span>
-              <span className="text-sm text-charcoal font-medium">
-                {BUSINESS.google.rating.toFixed(1)}
-                {" on Google "}&middot;{" 24 years consulting & installing"}
-              </span>
+            <div className="mt-3 flex flex-wrap gap-3">
+              <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick}
+                className="flex-1 text-center border border-charcoal rounded-full px-4 py-3 font-medium hover:bg-cream">
+                Call {BUSINESS.phone}
+              </TrackedCta>
+              <TrackedCta href={`sms:${BUSINESS.phoneE164}`} event={CONVERSION_EVENTS.TextClick}
+                className="flex-1 text-center border border-charcoal rounded-full px-4 py-3 font-medium hover:bg-cream">
+                Text Us
+              </TrackedCta>
             </div>
-            {/* Built from SERVICE_AREAS rather than typed out. The hard-coded
-                version was missing Sandpoint even though the constant has had
-                all five all along — deriving it means the hero cannot fall out
-                of step with the areas we actually publish pages for. */}
-            <p className="text-sm text-warm-gray-600">
-              {SERVICE_AREAS.map((a) => a.name).join(" · ")}
+            <p className="mt-5 text-sm font-medium text-charcoal">
+              {BUSINESS.google.rating.toFixed(1)} on Google &middot; {BUSINESS.google.reviewCount} reviews
+              <br />24 years consulting &amp; installing &middot; Lifetime Installation Guarantee
             </p>
-            <p className="text-sm text-warm-gray-500">
-              Or call / text{" "}
-              <TrackedCta
-                href={BUSINESS.phoneHref}
-                event={CONVERSION_EVENTS.PhoneClick}
-                className="hover:text-gold transition-colors"
-              >
-                {BUSINESS.phone}
-              </TrackedCta>{" "}
-              &mdash; usually same-day
-            </p>
+            <p className="mt-2 text-sm text-warm-gray-600">{SERVICE_AREAS.map((a) => a.name).join(" · ")}</p>
           </div>
         </div>
       </section>
@@ -541,6 +476,13 @@ export default function HomePage() {
           <p className="mt-5 text-sm text-warm-gray-500 font-medium tracking-wide">
             — Brad G.
           </p>
+          <p className="mt-6 text-warm-gray-600 leading-relaxed">
+            Our experience in window treatments began in 2002. We have served North Idaho since 2025,
+            bringing 24 years of hands-on knowledge to every consultation and installation.
+          </p>
+          <Link href="/about" className="inline-block mt-4 font-medium text-charcoal underline underline-offset-4">
+            Meet the experience behind Luxe
+          </Link>
         </div>
       </section>
 
@@ -746,7 +688,7 @@ export default function HomePage() {
               With 24 years consulting, designing, and installing window treatments, Luxe Window Works helps North Idaho homeowners avoid the most common window treatment mistakes: poor measurements, wrong product choices, bad light gaps, harsh glare, and treatments that do not fit the way the room actually lives.
             </p>
             <p>
-              We are not here to push one product. We help you choose what works — for your windows, your home, your budget, and the way you use each room. During the free in-home visit Mark brings samples, walks each window, and explains the next step. Requesting a consultation is not a booked appointment.
+              We are not here to push one product. We help you choose what works — for your windows, your home, your budget, and the way you use each room. During the free in-home visit we bring samples, walk each window, and explain the next step. Book a time online, or request a callback to discuss your project first.
             </p>
           </div>
         </div>
