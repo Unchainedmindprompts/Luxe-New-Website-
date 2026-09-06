@@ -101,7 +101,7 @@ export default function ContactPage() {
                     >
                       {BUSINESS.phone}
                     </TrackedCta>
-                    <p className="text-sm text-warm-gray-500 mt-1">Call or text anytime</p>
+                    <TrackedCta href={`sms:${BUSINESS.phoneE164}`} event={CONVERSION_EVENTS.TextClick} className="block mt-2 underline underline-offset-4 text-charcoal py-2">Text Us</TrackedCta>
                   </div>
                 </div>
 
