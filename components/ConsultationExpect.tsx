@@ -38,7 +38,7 @@ export function ConsultationExpect({
           time on the booking page.
         </p>
         {showCtas ? (
-          <div className="mt-8 flex flex-col sm:flex-row gap-4">
+          <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-4">
             <TrackedCta
               href="/book"
               event={CONVERSION_EVENTS.ConsultCtaClick}
@@ -52,6 +52,10 @@ export function ConsultationExpect({
               className="inline-flex items-center justify-center border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-white font-semibold px-8 py-4 rounded-full text-base transition-all"
             >
               Call {BUSINESS.phone}
+            </TrackedCta>
+            <TrackedCta href={`sms:${BUSINESS.phoneE164}`} event={CONVERSION_EVENTS.TextClick}
+              className="inline-flex items-center justify-center border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-white font-semibold px-8 py-4 rounded-full text-base transition-all">
+              Text Us
             </TrackedCta>
           </div>
         ) : null}
