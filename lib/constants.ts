@@ -5,6 +5,7 @@ export const BUSINESS = {
   phone: "208-660-8643",
   phoneE164: "+12086608643",
   phoneHref: "tel:+12086608643",
+  smsHref: "sms:+12086608643",
   email: "mark@luxewindowworks.com",
   address: {
     street: "2972 N Pavo Ln",
@@ -182,6 +183,17 @@ interface NavLink {
   href: string;
   children?: { label: string; href: string }[];
 }
+
+/**
+ * Pricing / value language already published on /about. Homepage and /book
+ * reuse this so the conversion pages cannot drift from the verified About copy.
+ * Do not add dollar amounts, payment plans, or invented discounts here.
+ */
+export const PRICE_POSITIONING = {
+  brandLine: "Premium Experience at Every Price Point.",
+  headline: "One price, quoted once.",
+  body: "We don't inflate a list price so we can advertise 40% off it later. You get one number for what the product costs, and it's the same number any other customer would get for the same job. It's also among the most competitive in North Idaho, and we'll look at a competing bid if you have one.",
+} as const;
 
 export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },

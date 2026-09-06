@@ -609,27 +609,33 @@ async function processHuman(
   const phone = values.phone ?? "";
   const email = values.email ?? "";
   const address = values.address ?? "";
-  const city = values.city ?? "";
+  const cityRaw = values.city ?? "";
+  const zipFromCity = /^\d{5}(?:-\d{4})?$/.test(cityRaw) ? cityRaw : "";
+  const city = zipFromCity ? "" : cityRaw;
+  const postalCode = zipFromCity;
   const message = values.message || values.needs || "";
   const contactMethod = values.contactMethod ?? "";
   const problem = values.problem ?? "";
   const source = values.source || "unknown";
   const originatingPath = sanitizeOriginatingPath(values.originatingPath);
+  const replyToUsable = email !== "" && EMAIL_SHAPE.test(email);
 
-  if (!name || !phone) {
+  // Human callback / contact forms need a name and at least one way to reply.
+  // Full street address is not required on the first ask — Path B on /book
+  // collects city or ZIP instead and gathers the address when arranging the visit.
+  if (!name || (!phone && !replyToUsable)) {
     return {
       status: 400,
-      body: { error: "Missing required fields: name and phone." },
+      body: { error: "Missing required fields: name and a phone or email." },
     };
   }
-
-  const replyToUsable = email !== "" && EMAIL_SHAPE.test(email);
   const logMeta: FailureMeta = {
     source,
     present: {
       email: email !== "",
       address: address !== "",
       city: city !== "",
+      postalCode: postalCode !== "",
       message: message !== "",
       contactMethod: contactMethod !== "",
       problem: problem !== "",
@@ -646,10 +652,11 @@ async function processHuman(
     problem ? `PROBLEM:  ${problem}` : null,
     problem ? `` : null,
     `Name:     ${name}`,
-    `Phone:    ${phone}`,
+    `Phone:    ${phone || "(not provided)"}`,
     `Email:    ${email || "(not provided)"}`,
     address ? `Address:  ${address}` : null,
     city ? `City:     ${city}` : null,
+    postalCode ? `ZIP:      ${postalCode}` : null,
     contactMethod ? `Prefers:  ${contactMethod}` : null,
     ``,
     `Message:`,

@@ -9,6 +9,7 @@
 export const CONVERSION_EVENTS = {
   ConsultCtaClick: "ConsultCtaClick",
   PhoneClick: "PhoneClick",
+  TextClick: "TextClick",
   ContactCtaClick: "ContactCtaClick",
   ProductCtaClick: "ProductCtaClick",
   ContactFormSubmit: "ContactFormSubmit",

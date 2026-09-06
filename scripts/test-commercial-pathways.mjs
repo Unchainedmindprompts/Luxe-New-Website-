@@ -95,6 +95,7 @@ test("6  conversion events are custom and never Lead or Schedule", (t) => {
   const names = Object.values(CONVERSION_EVENTS);
   t.ok(names.includes("ConsultCtaClick"), "ConsultCtaClick");
   t.ok(names.includes("PhoneClick"), "PhoneClick");
+  t.ok(names.includes("TextClick"), "TextClick");
   t.ok(names.includes("ContactCtaClick"), "ContactCtaClick");
   t.ok(names.includes("ProductCtaClick"), "ProductCtaClick");
   t.ok(names.includes("ContactFormSubmit"), "ContactFormSubmit");
