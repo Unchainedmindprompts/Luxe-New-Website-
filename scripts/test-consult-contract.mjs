@@ -396,8 +396,7 @@ await test("18  existing human-form payloads stay compatible", async (t) => {
     {
       name: "Alex Rivera",
       email: "alex@example.com",
-      city: "Hayden",
-      zip: "83835",
+      city: "83835",
       contactMethod: "Email",
       source: "book",
     },
@@ -407,7 +406,7 @@ await test("18  existing human-form payloads stay compatible", async (t) => {
   t.equal(emailOnly.body.ok, true, "email-only Path B still { ok: true }");
   t.ok(
     String(mail.sent.at(-1)?.text ?? "").includes("ZIP:      83835"),
-    "human email includes ZIP when no street address is sent"
+    "a ZIP typed in city is labeled ZIP in the email to Mark"
   );
 
   const form = readFileSync(join(ROOT, "app/contact/ContactForm.tsx"), "utf8");
@@ -420,6 +419,10 @@ await test("18  existing human-form payloads stay compatible", async (t) => {
   );
   t.ok(!bookPage.includes("14 Google reviews"), "/book no longer hardcodes 14 reviews");
   t.ok(!bookPage.includes("Home Address"), "/book callback does not ask for a street address");
+  t.ok(
+    !/zip:\s*location|postalCode:\s*|zip:\s*form/.test(bookPage),
+    "/book does not post agent-exclusive zip or postalCode fields"
+  );
 });
 
 await test("discovery  no booking/pricing claims; drapery honest; readiness blocked", (t) => {

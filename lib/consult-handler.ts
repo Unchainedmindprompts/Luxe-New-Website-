@@ -609,8 +609,10 @@ async function processHuman(
   const phone = values.phone ?? "";
   const email = values.email ?? "";
   const address = values.address ?? "";
-  const city = values.city ?? "";
-  const postalCode = values.postalCode || values.zip || "";
+  const cityRaw = values.city ?? "";
+  const zipFromCity = /^\d{5}(?:-\d{4})?$/.test(cityRaw) ? cityRaw : "";
+  const city = zipFromCity ? "" : cityRaw;
+  const postalCode = zipFromCity;
   const message = values.message || values.needs || "";
   const contactMethod = values.contactMethod ?? "";
   const problem = values.problem ?? "";

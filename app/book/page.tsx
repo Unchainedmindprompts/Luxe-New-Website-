@@ -13,12 +13,6 @@ import { CalendlyScheduleTracker } from "./CalendlyScheduleTracker";
 
 const CONTACT_METHODS = ["Phone call", "Text message", "Email"] as const;
 
-function locationFields(raw: string): { city?: string; zip?: string } {
-  const trimmed = raw.trim();
-  if (/^\d{5}(?:-\d{4})?$/.test(trimmed)) return { zip: trimmed };
-  return { city: trimmed };
-}
-
 export default function BookPage() {
   const pathname = usePathname() ?? "/book";
   const [form, setForm] = useState({
@@ -59,7 +53,6 @@ export default function BookPage() {
     setSubmitting(true);
 
     try {
-      const location = locationFields(form.cityOrZip);
       const res = await fetch("/api/consultation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,8 +60,9 @@ export default function BookPage() {
           name: form.name,
           email: form.email,
           phone: form.phone,
-          city: location.city ?? "",
-          zip: location.zip ?? "",
+          // City or ZIP goes in the human `city` field. Do not send `zip` or
+          // `postalCode` — those are agent-exclusive and would 503 the request.
+          city: form.cityOrZip.trim(),
           contactMethod: form.contactMethod,
           message: form.message,
           source: "book",
