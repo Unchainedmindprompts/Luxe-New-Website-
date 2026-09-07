@@ -393,39 +393,33 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageGraph) }}
       />
 
-      {/* Full-width room image and a contained consultation card. */}
-      <section className="relative bg-warm-white pt-16 md:pt-20">
-        <div className="relative isolate">
-          <div className="absolute inset-x-0 top-0 h-[420px] lg:h-full -z-10">
-            <Image src="/images/hero-lake-room-empty.webp"
-              alt="Unoccupied North Idaho lakefront dining room with cellular shades lowered over floor-to-ceiling windows overlooking a mountain lake"
-              fill className="object-cover object-center" priority sizes="100vw" quality={90} />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/25 to-black/10" />
+      {/* Actual client installation, with an unobstructed view of the shades. */}
+      <section className="bg-warm-white pt-16 md:pt-20">
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 py-8 md:py-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-warm-gray-600 mb-3">Custom Window Treatments · North Idaho</p>
+          <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] leading-[1.12] text-charcoal max-w-2xl">A beautiful home.<br />Finished your way.</h1>
+            <p className="mt-4 lg:mt-0 max-w-md text-base leading-relaxed text-warm-gray-600">We bring the showroom to you. Find the right blinds, shades, and shutters for your home and budget — with expert measuring and installation.</p>
           </div>
-          <div className="max-w-[1200px] mx-auto px-5 sm:px-8 py-10 lg:py-12 grid lg:grid-cols-[1fr_400px] gap-8 lg:gap-16 items-start">
-            <div className="text-white pt-4 lg:pt-12 min-h-[300px] lg:min-h-0 max-w-[580px]">
-              <p className="text-sm font-medium tracking-wide mb-4">Premium Experience at Every Price Point</p>
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[52px] leading-[1.12]">
-                Custom Window Treatments for North Idaho Homes
-              </h1>
-              <p className="mt-5 text-base sm:text-lg leading-relaxed max-w-lg">
-                We bring the showroom to you. Explore beautiful blinds, shades,
-                and shutters in your own home, with expert measuring and installation.
-              </p>
-              <p className="mt-6 text-sm font-medium">24 years of experience &middot; Free in-home consultation</p>
-              <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-                <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="underline underline-offset-4 py-2">Call {BUSINESS.phone}</TrackedCta>
-                <TrackedCta href={`sms:${BUSINESS.phoneE164}`} event={CONVERSION_EVENTS.TextClick} className="underline underline-offset-4 py-2">Text Us</TrackedCta>
-              </div>
+          <a href="#hero-consultation" className="lg:hidden inline-flex mt-5 bg-gold text-charcoal rounded-full px-6 py-3 text-sm font-semibold">Request a Free Consultation</a>
+        </div>
+        <div className="relative max-w-[1600px] mx-auto lg:grid lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_400px]">
+          <figure className="relative min-w-0">
+            <div className="relative aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[620px]">
+              <Image src="/images/luxe-completed-installation.webp" alt="Actual Luxe Window Works installation: custom shades filtering daylight in a living room with timber beams and a stone fireplace" fill className="object-cover object-[35%_center]" priority sizes="(min-width:1600px) 1200px, (min-width:1024px) 70vw, 100vw" quality={90} />
             </div>
-            <div className="bg-white rounded-lg shadow-xl p-6 sm:p-8 text-charcoal w-full max-w-[440px] lg:max-w-none mx-auto">
-              <h2 className="font-serif text-2xl leading-tight">Your Free In-Home Consultation</h2>
-              <p className="mt-2 mb-5 text-sm leading-relaxed text-warm-gray-600">Tell us a little about your project. We&apos;ll get in touch to arrange a convenient time.</p>
-              <ContactForm compact />
-              <div className="mt-5 pt-4 border-t border-warm-gray-200 text-center">
-                <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick} className="text-sm underline underline-offset-4">Prefer to choose a time online?</TrackedCta>
-              </div>
+            <figcaption className="absolute bottom-5 left-5 bg-charcoal/90 text-white px-4 py-2 text-xs tracking-wide rounded-sm">An actual Luxe Window Works installation</figcaption>
+          </figure>
+          <div id="hero-consultation" className="scroll-mt-24 bg-white p-6 sm:p-8 text-charcoal border-t-4 border-gold lg:border-t-0 lg:border-l-4">
+            <p className="text-xs uppercase tracking-[0.14em] text-warm-gray-600 mb-2">Let's bring your vision home</p>
+            <h2 className="font-serif text-[28px] leading-tight">Your Free In-Home Consultation</h2>
+            <p className="mt-3 mb-5 text-sm leading-relaxed text-warm-gray-600">See samples in your space. Get expert guidance and a quote tailored to your project.</p>
+            <ContactForm compact />
+            <div className="mt-5 pt-4 border-t border-warm-gray-200 flex flex-wrap justify-between gap-3 text-sm">
+              <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="underline underline-offset-4">Call {BUSINESS.phone}</TrackedCta>
+              <TrackedCta href={`sms:${BUSINESS.phoneE164}`} event={CONVERSION_EVENTS.TextClick} className="underline underline-offset-4">Text Us</TrackedCta>
             </div>
+            <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick} className="block mt-4 text-center text-xs underline underline-offset-4">Prefer to choose a time online?</TrackedCta>
           </div>
         </div>
       </section>
