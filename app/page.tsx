@@ -397,7 +397,7 @@ export default function HomePage() {
       <section className="relative bg-warm-white pt-16 md:pt-20">
         <div className="relative isolate">
           <div className="absolute inset-x-0 top-0 h-[420px] lg:h-full -z-10">
-            <Image src="/images/hero-lake-room.webp"
+            <Image src="/images/hero-lake-room-empty.webp"
               alt="Unoccupied North Idaho lakefront dining room with cellular shades lowered over floor-to-ceiling windows overlooking a mountain lake"
               fill className="object-cover object-center" priority sizes="100vw" quality={90} />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/25 to-black/10" />
