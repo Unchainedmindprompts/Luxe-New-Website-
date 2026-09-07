@@ -2,10 +2,10 @@
 
 import { useState, FormEvent } from "react";
 import { usePathname } from "next/navigation";
-import { CONVERSION_EVENTS, trackConversionEvent } from "@/lib/conversion-events";
+import { CONVERSION_EVENTS, trackConversionEvent, shouldSendMetaCustomEvents } from "@/lib/conversion-events";
 import { readOriginatingPath } from "@/lib/originating-path";
 
-export default function ContactForm() {
+export default function ContactForm({ compact = false }: { compact?: boolean }) {
   const pathname = usePathname() ?? "/contact";
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -42,7 +42,7 @@ export default function ContactForm() {
 
       // Only fire Facebook Pixel Lead event on ACTUAL successful send —
       // not on button click, which would inflate the metric.
-      if (typeof window !== "undefined" && typeof (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq === "function") {
+      if (shouldSendMetaCustomEvents() && typeof window !== "undefined" && typeof (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq === "function") {
         (window as unknown as { fbq: (...args: unknown[]) => void }).fbq("track", "Lead");
       }
       trackConversionEvent(CONVERSION_EVENTS.ContactFormSubmit, {
@@ -70,14 +70,14 @@ export default function ContactForm() {
           Thank You!
         </h3>
         <p className="text-warm-gray-600">
-          We&apos;ll be in touch soon to schedule your free consultation.
+          We&apos;ll be in touch within 24 hours to discuss your project and arrange your free consultation. Your appointment is confirmed once we agree on a time.
         </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className={compact ? "space-y-4" : "space-y-5"}>
       {/* Name */}
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-charcoal mb-1.5">
@@ -87,6 +87,7 @@ export default function ContactForm() {
           type="text"
           id="name"
           name="name"
+          autoComplete="name"
           required
           className="w-full border border-warm-gray-200 rounded-xl px-4 py-3 text-sm text-charcoal placeholder:text-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold bg-warm-white"
           placeholder="Your name"
@@ -103,6 +104,7 @@ export default function ContactForm() {
             type="tel"
             id="phone"
             name="phone"
+            autoComplete="tel"
             required
             className="w-full border border-warm-gray-200 rounded-xl px-4 py-3 text-sm text-charcoal placeholder:text-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold bg-warm-white"
             placeholder="(208) 555-0123"
@@ -110,12 +112,13 @@ export default function ContactForm() {
         </div>
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-charcoal mb-1.5">
-            Email
+            Email (optional)
           </label>
           <input
             type="email"
             id="email"
             name="email"
+            autoComplete="email"
             className="w-full border border-warm-gray-200 rounded-xl px-4 py-3 text-sm text-charcoal placeholder:text-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold bg-warm-white"
             placeholder="you@email.com"
           />
@@ -125,13 +128,13 @@ export default function ContactForm() {
       {/* What do you need help with */}
       <div>
         <label htmlFor="needs" className="block text-sm font-medium text-charcoal mb-1.5">
-          What do you need help with? <span className="text-gold">*</span>
+          What do you need help with? {compact ? <span className="text-warm-gray-500">(optional)</span> : <span className="text-gold">*</span>}
         </label>
         <textarea
           id="needs"
           name="needs"
-          required
-          rows={4}
+          required={!compact}
+          rows={compact ? 2 : 4}
           className="w-full border border-warm-gray-200 rounded-xl px-4 py-3 text-sm text-charcoal placeholder:text-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold bg-warm-white resize-none"
           placeholder="Tell us about your project — which rooms, what problems you're trying to solve, or any specific products you're interested in."
         />
@@ -169,20 +172,19 @@ export default function ContactForm() {
       />
 
       {error && (
-        <p className="text-red-500 text-sm text-center">{error}</p>
+        <p role="alert" className="text-red-500 text-sm text-center">{error}</p>
       )}
 
       <button
         type="submit"
         disabled={submitting}
-        className="w-full bg-gold hover:bg-gold-dark disabled:bg-warm-gray-200 disabled:text-warm-gray-400 text-white font-semibold py-3.5 rounded-full transition-colors text-sm"
+        className="w-full bg-gold hover:bg-gold-dark disabled:bg-warm-gray-200 disabled:text-warm-gray-400 text-charcoal font-semibold py-3.5 rounded-full transition-colors text-sm"
       >
         {submitting ? "Sending…" : "Request Free Consultation"}
       </button>
 
       <p className="text-xs text-warm-gray-400 text-center">
-        No obligation. We&apos;ll reach out to discuss your needs and schedule
-        a convenient time for your free in-home consultation.
+        No obligation. We&apos;ll respond within 24 hours. Your details are used to respond to your inquiry.
       </p>
     </form>
   );
