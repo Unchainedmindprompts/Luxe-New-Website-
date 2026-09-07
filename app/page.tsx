@@ -398,8 +398,8 @@ export default function HomePage() {
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 py-8 md:py-10">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-warm-gray-600 mb-3">Custom Window Treatments · North Idaho</p>
           <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] leading-[1.12] text-charcoal max-w-2xl">A beautiful home.<br />Finished your way.</h1>
-            <p className="mt-4 lg:mt-0 max-w-md text-base font-semibold leading-relaxed text-charcoal">We bring the showroom to you. Find the right blinds, shades, and shutters for your home and budget — with expert measuring and installation.</p>
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] leading-[1.12] text-charcoal max-w-2xl">Custom Window Treatments.<br />Made Simple.</h1>
+            <p className="mt-4 lg:mt-0 max-w-md text-base font-semibold leading-relaxed text-charcoal">We bring the showroom to you. Find the right blinds, shades, and shutters for your home and budget—with expert guidance, measuring, and installation.</p>
           </div>
           <a href="#hero-consultation" className="lg:hidden inline-flex mt-5 bg-gold text-charcoal rounded-full px-6 py-3 text-sm font-semibold">Request a Free Consultation</a>
         </div>
