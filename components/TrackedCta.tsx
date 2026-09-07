@@ -35,6 +35,7 @@ export function TrackedCta({
   const pathname = usePathname() ?? "/";
   const isExternal =
     href.startsWith("tel:") ||
+    href.startsWith("sms:") ||
     href.startsWith("mailto:") ||
     href.startsWith("http");
 

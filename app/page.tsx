@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import ContactForm from "./contact/ContactForm";
 export const metadata: Metadata = {
   title: "Custom Window Treatments in Coeur d'Alene & Post Falls | Luxe Window Works",
   description:
@@ -392,109 +393,33 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageGraph) }}
       />
 
-      {/* 1. Hero — Hunter Douglas layout.
-          Their format, deliberately: the image sits in a contained band with
-          page background either side rather than bleeding to the viewport
-          edge; it carries exactly one line of type, low, white, all caps, wide
-          tracking, centred; and every other piece of copy waits until you are
-          off the photograph. Nothing overlaps the image but the headline.
-
-          This replaces a left-aligned block that sat on a bare wall inside the
-          previous photo. That only worked because that image had roughly a
-          third of its width empty. This one is furnished edge to edge, so
-          there is no negative space to sit in — which is exactly the situation
-          HD's layout is built for. */}
+      {/* Actual client installation, with an unobstructed view of the shades. */}
       <section className="bg-warm-white pt-16 md:pt-20">
-        {/* Full bleed — edge to edge at every width.
-            Worth knowing what this changes versus the contained version, since
-            Hunter Douglas uses contained: a capped band fills the screen on a
-            laptop (viewport under the cap) but shows margins on a large
-            monitor (viewport over it). That is why their hero looks full bleed
-            on a 15" and banded on a 24". This does not do that — it is edge to
-            edge everywhere.
-            max-h keeps the 2:1 ratio from eating the whole screen on a big
-            display; object-cover absorbs the difference. */}
-        <div className="w-full">
-          <div className="relative w-full overflow-hidden aspect-[4/5] sm:aspect-[16/10] lg:aspect-[2/1] lg:max-h-[74vh]">
-            <Image
-              src="/images/hero-lake-room.webp"
-              alt="North Idaho lakefront dining room with cellular shades lowered over floor-to-ceiling windows looking onto a mountain lake"
-              fill
-              /* Anchored right on phones: the figure sits at roughly 85–97% of
-                 the source width, so a centred crop clips her mid-body. Right
-                 also keeps the lake and the mountains in frame. */
-              className="object-cover object-right sm:object-center"
-              priority
-              sizes="100vw"
-              quality={90}
-            />
-            {/* Bottom-anchored only, clearing by 45% up so the lake, the
-                mountains and the shades are never touched. */}
-            <div className="absolute inset-0 bg-gradient-to-t from-charcoal/75 via-charcoal/30 via-20% to-transparent to-45%" />
-
-            <div className="absolute inset-x-0 bottom-0 px-5 pb-6 sm:pb-8 lg:pb-10 text-center">
-              {/* The min() cap stays even though the container is now full
-                  width. It costs nothing here and it is the guard that keeps
-                  the headline from outrunning its box if this ever goes back
-                  to a capped band — which is exactly how "IDAHO" ended up
-                  stranded on its own row. Tracking eases off on phones for the
-                  same reason at the other end of the range. */}
-              <h1 className="text-white font-semibold uppercase text-[9.5px] sm:text-base md:text-xl lg:text-2xl xl:text-[min(1.9vw,48px)] tracking-[0.1em] sm:tracking-[0.24em] leading-snug [text-shadow:0_2px_10px_rgb(0_0_0_/_45%)]">
-                Custom Window Treatments &middot; North Idaho
-              </h1>
-            </div>
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 py-8 md:py-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-warm-gray-600 mb-3">Custom Window Treatments · North Idaho</p>
+          <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] leading-[1.12] text-charcoal max-w-2xl">Custom Window Treatments.<br />Made Simple.</h1>
+            <p className="mt-4 lg:mt-0 max-w-md text-base font-semibold leading-relaxed text-charcoal">We bring the showroom to you. Find the right blinds, shades, and shutters for your home and budget—with expert guidance, measuring, and installation.</p>
           </div>
+          <a href="#hero-consultation" className="lg:hidden inline-flex mt-5 bg-gold text-charcoal rounded-full px-6 py-3 text-sm font-semibold">Request a Free Consultation</a>
         </div>
-
-        {/* Everything else, off the photo and centred. */}
-        <div className="container-luxe py-9 md:py-12 text-center">
-          <p className="text-lg md:text-xl text-charcoal leading-relaxed max-w-2xl mx-auto">
-            You don&apos;t need to know what to buy. We bring samples to
-            your home in Coeur d&apos;Alene, Post Falls, and the rest of
-            North Idaho, measure every window, and install it with a
-            lifetime installation guarantee. The in-home consultation is free.
-          </p>
-
-          <div className="mt-7 flex flex-col items-center gap-3.5">
-            <TrackedCta
-              href="/book"
-              event={CONVERSION_EVENTS.ConsultCtaClick}
-              className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-base transition-all hover:shadow-lg"
-            >
-              Book My Free In-Home Consultation
-            </TrackedCta>
-          </div>
-
-          <div className="mt-7 space-y-1.5">
-            <div className="flex items-center justify-center gap-3">
-              <span className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <StarIcon key={i} />
-                ))}
-              </span>
-              <span className="text-sm text-charcoal font-medium">
-                {BUSINESS.google.rating.toFixed(1)}
-                {" on Google "}&middot;{" 24 years consulting & installing"}
-              </span>
+        <div className="relative max-w-[1600px] mx-auto lg:grid lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_400px]">
+          <figure className="relative min-w-0">
+            <div className="relative aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[620px]">
+              <Image src="/images/luxe-completed-installation.webp" alt="Actual Luxe Window Works installation: custom shades filtering daylight in a living room with timber beams and a stone fireplace" fill className="object-cover object-[35%_center]" priority sizes="(min-width:1600px) 1200px, (min-width:1024px) 70vw, 100vw" quality={90} />
             </div>
-            {/* Built from SERVICE_AREAS rather than typed out. The hard-coded
-                version was missing Sandpoint even though the constant has had
-                all five all along — deriving it means the hero cannot fall out
-                of step with the areas we actually publish pages for. */}
-            <p className="text-sm text-warm-gray-600">
-              {SERVICE_AREAS.map((a) => a.name).join(" · ")}
-            </p>
-            <p className="text-sm text-warm-gray-500">
-              Or call / text{" "}
-              <TrackedCta
-                href={BUSINESS.phoneHref}
-                event={CONVERSION_EVENTS.PhoneClick}
-                className="hover:text-gold transition-colors"
-              >
-                {BUSINESS.phone}
-              </TrackedCta>{" "}
-              &mdash; usually same-day
-            </p>
+            <figcaption className="absolute bottom-5 left-5 bg-charcoal/90 text-white px-4 py-2 text-xs tracking-wide rounded-sm">An actual Luxe Window Works installation</figcaption>
+          </figure>
+          <div id="hero-consultation" className="scroll-mt-24 bg-white p-6 sm:p-8 text-charcoal border-t-4 border-gold lg:border-t-0 lg:border-l-4">
+            <p className="text-xs uppercase tracking-[0.14em] text-warm-gray-600 mb-2">Let&apos;s bring your vision home</p>
+            <h2 className="font-serif text-[28px] leading-tight">Your Free In-Home Consultation</h2>
+            <p className="mt-3 mb-5 text-sm leading-relaxed text-warm-gray-600">See samples in your space. Get expert guidance and a quote tailored to your project.</p>
+            <ContactForm compact />
+            <div className="mt-5 pt-4 border-t border-warm-gray-200 flex flex-wrap justify-between gap-3 text-sm">
+              <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="underline underline-offset-4">Call {BUSINESS.phone}</TrackedCta>
+              <TrackedCta href={`sms:${BUSINESS.phoneE164}`} event={CONVERSION_EVENTS.TextClick} className="underline underline-offset-4">Text Us</TrackedCta>
+            </div>
+            <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick} className="block mt-4 text-center text-xs underline underline-offset-4">Prefer to choose a time online?</TrackedCta>
           </div>
         </div>
       </section>
@@ -541,6 +466,13 @@ export default function HomePage() {
           <p className="mt-5 text-sm text-warm-gray-500 font-medium tracking-wide">
             — Brad G.
           </p>
+          <p className="mt-6 text-warm-gray-600 leading-relaxed">
+            Our experience in window treatments began in 2002. We have served North Idaho since 2025,
+            bringing 24 years of hands-on knowledge to every consultation and installation.
+          </p>
+          <Link href="/about" className="inline-block mt-4 font-medium text-charcoal underline underline-offset-4">
+            Meet the experience behind Luxe
+          </Link>
         </div>
       </section>
 
@@ -746,7 +678,7 @@ export default function HomePage() {
               With 24 years consulting, designing, and installing window treatments, Luxe Window Works helps North Idaho homeowners avoid the most common window treatment mistakes: poor measurements, wrong product choices, bad light gaps, harsh glare, and treatments that do not fit the way the room actually lives.
             </p>
             <p>
-              We are not here to push one product. We help you choose what works — for your windows, your home, your budget, and the way you use each room. During the free in-home visit Mark brings samples, walks each window, and explains the next step. Requesting a consultation is not a booked appointment.
+              We are not here to push one product. We help you choose what works — for your windows, your home, your budget, and the way you use each room. During the free in-home visit we bring samples, walk each window, and explain the next step. Book a time online, or request a callback to discuss your project first.
             </p>
           </div>
         </div>

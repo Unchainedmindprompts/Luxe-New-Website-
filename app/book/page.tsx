@@ -7,17 +7,17 @@ import Script from "next/script";
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS, trackConversionEvent } from "@/lib/conversion-events";
 import { readOriginatingPath } from "@/lib/originating-path";
-import { BUSINESS } from "@/lib/constants";
+import { BUSINESS, REVIEWS } from "@/lib/constants";
 import { CalendlyScheduleTracker } from "./CalendlyScheduleTracker";
 
 export default function BookPage() {
   const pathname = usePathname() ?? "/book";
   const [form, setForm] = useState({
     firstName: "",
-    lastName: "",
     phone: "",
     email: "",
-    address: "",
+    city: "",
+    contactMethod: "Phone call",
     message: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -27,9 +27,8 @@ export default function BookPage() {
   function validate() {
     const e: Record<string, string> = {};
     if (!form.firstName.trim()) e.firstName = "Required";
-    if (!form.lastName.trim()) e.lastName = "Required";
     if (!form.phone.trim()) e.phone = "Required";
-    if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email))
+    if (form.email.trim() && !/\S+@\S+\.\S+/.test(form.email))
       e.email = "Valid email required";
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -37,7 +36,7 @@ export default function BookPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!validate()) return;
+    if (submitting || !validate()) return;
     setSubmitting(true);
 
     try {
@@ -46,10 +45,10 @@ export default function BookPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           firstName: form.firstName,
-          lastName: form.lastName,
           email: form.email,
           phone: form.phone,
-          address: form.address,
+          city: form.city,
+          contactMethod: form.contactMethod,
           message: form.message,
           source: "book",
           originatingPath: readOriginatingPath(pathname),
@@ -86,6 +85,10 @@ export default function BookPage() {
         <input
           id={id}
           type={type}
+          autoComplete={id === "firstName" ? "name" : id === "phone" ? "tel" : id === "email" ? "email" : id === "city" ? "address-level2" : undefined}
+          required={id === "firstName" || id === "phone"}
+          aria-invalid={!!errors[id]}
+          aria-describedby={errors[id] ? `${id}-error` : undefined}
           value={form[id]}
           onChange={(e) => setForm((f) => ({ ...f, [id]: e.target.value }))}
           placeholder={placeholder}
@@ -94,7 +97,7 @@ export default function BookPage() {
           }`}
         />
         {errors[id] && (
-          <p className="text-red-500 text-xs mt-1">{errors[id]}</p>
+          <p id={`${id}-error`} className="text-red-500 text-xs mt-1">{errors[id]}</p>
         )}
       </div>
     );
@@ -120,19 +123,20 @@ export default function BookPage() {
         </div>
       </div>
 
-      {/* Scheduler — the primary path. Self-booking converts better than
-          "we'll call you back" because it closes in one sitting instead of
-          depending on a callback landing while the visitor is still warm. The
-          form below stays as a fallback for anyone who would rather be called,
-          and the phone number stays prominent for anyone who would rather
-          talk — three doors, not one. */}
-      <div className="max-w-4xl mx-auto px-4 pt-12">
+      <nav aria-label="Ways to get started" className="max-w-4xl mx-auto px-4 pt-8 flex flex-wrap justify-center gap-3">
+        <a href="#schedule" className="rounded-full bg-gold px-5 py-3 font-semibold text-charcoal">Book a time</a>
+        <a href="#callback" className="rounded-full border border-charcoal px-5 py-3 font-semibold">Request a callback</a>
+        <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="rounded-full border border-charcoal px-5 py-3 font-semibold">Call Us</TrackedCta>
+        <TrackedCta href={`sms:${BUSINESS.phoneE164}`} event={CONVERSION_EVENTS.TextClick} className="rounded-full border border-charcoal px-5 py-3 font-semibold">Text Us</TrackedCta>
+      </nav>
+      {/* Human self-booking remains available alongside the callback form. */}
+      <div id="schedule" className="max-w-4xl mx-auto px-4 pt-12 scroll-mt-24">
         <div className="text-center mb-6">
           <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">
             Pick a time that works for you
           </h2>
           <p className="mt-2 text-warm-gray-600">
-            Choose a slot below and it&apos;s booked — no waiting on a callback.
+            Select a date and time, then complete the booking details to confirm your appointment.
           </p>
         </div>
         {/* Height is generous on purpose. At 700px the widget's own content
@@ -145,7 +149,7 @@ export default function BookPage() {
         <div
           className="calendly-inline-widget rounded-2xl overflow-hidden border border-warm-gray-200 bg-white h-[1180px] sm:h-[1020px] lg:h-[980px]"
           data-url={`${BUSINESS.calendlyUrl}?hide_gdpr_banner=1&background_color=fdfcfa&primary_color=c9a96e&text_color=2e2e2e`}
-          style={{ minWidth: "320px" }}
+          style={{ minWidth: "280px" }}
         />
         {/* lazyOnload keeps a third-party script off the critical path — this
             page's LCP should not wait on Calendly. */}
@@ -168,7 +172,7 @@ export default function BookPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-6xl mx-auto px-4 py-14 grid grid-cols-1 lg:grid-cols-5 gap-12">
+      <div id="callback" className="scroll-mt-24 max-w-6xl mx-auto px-4 py-14 grid grid-cols-1 lg:grid-cols-5 gap-12">
         {/* Form */}
         <div className="lg:col-span-3">
           {submitted ? (
@@ -189,12 +193,11 @@ export default function BookPage() {
                 </svg>
               </div>
               <h2 className="font-serif text-2xl font-bold text-charcoal mb-3">
-                You&apos;re All Set!
+                Request Received
               </h2>
               <p className="text-warm-gray-600 leading-relaxed mb-6">
                 Your request has been received. We&apos;ll be in touch within
-                <strong> 24 hours</strong> to schedule your free in-home
-                consultation.
+                <strong> 24 hours</strong> to discuss your project and arrange your free in-home consultation. Your appointment is confirmed once we agree on a time.
               </p>
               <p className="text-sm text-warm-gray-500 mb-8">
                 Prefer to reach out directly?{" "}
@@ -239,22 +242,27 @@ export default function BookPage() {
               className="bg-white rounded-2xl border border-warm-gray-200 p-8 shadow-sm space-y-5"
             >
               <h2 className="font-serif text-xl font-semibold text-charcoal">
-                Your Information
+                Request a Call or Text
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {field("firstName", "First Name")}
-                {field("lastName", "Last Name")}
-              </div>
-
+              <p className="text-sm text-warm-gray-600">Have a question first? Leave your details and we&apos;ll respond within 24 hours.</p>
+              {field("firstName", "Name")}
               {field("phone", "Phone Number", "tel", "e.g. 208-555-0100")}
-              {field("email", "Email Address", "email", "you@example.com")}
-              {field(
-                "address",
-                "Home Address",
-                "text",
-                "123 Main St, Post Falls, ID"
-              )}
+              {field("city", "City (optional)", "text", "e.g. Post Falls")}
+              {field("email", "Email Address (optional)", "email", "you@example.com")}
+              <fieldset>
+                <legend className="text-sm font-medium text-charcoal mb-2">How should we respond?</legend>
+                <div className="flex gap-5">
+                  {["Phone call", "Text message"].map((method) => (
+                    <label key={method} className="flex items-center gap-2 text-sm">
+                      <input type="radio" name="contactMethod" value={method}
+                        checked={form.contactMethod === method}
+                        onChange={() => setForm((f) => ({ ...f, contactMethod: method }))} />
+                      {method}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
 
               <div>
                 <label
@@ -279,7 +287,7 @@ export default function BookPage() {
               </div>
 
               {errors.form && (
-                <p className="text-red-500 text-sm text-center">{errors.form}</p>
+                <p role="alert" className="text-red-500 text-sm text-center">{errors.form}</p>
               )}
 
               <button
@@ -301,14 +309,14 @@ export default function BookPage() {
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-2xl border border-warm-gray-200 p-7 shadow-sm">
             <h3 className="font-serif text-lg font-semibold text-charcoal mb-5">
-              What Happens Next
+              After Your Callback Request
             </h3>
             <div className="space-y-5">
               {[
                 {
                   num: "1",
-                  title: "We call you",
-                  body: "Within 24 hours, we reach out to introduce ourselves and find a time that works.",
+                  title: "We respond",
+                  body: "Within 24 hours, we call or text as requested to discuss your project and find a time that works.",
                 },
                 {
                   num: "2",
@@ -359,13 +367,11 @@ export default function BookPage() {
               ))}
               <span className="text-white font-semibold text-sm ml-1">5.0</span>
               <span className="text-warm-gray-400 text-sm ml-1">
-                &middot; 14 Google reviews
+                &middot; {BUSINESS.google.reviewCount} Google reviews
               </span>
             </div>
             <p className="text-warm-gray-300 text-sm italic leading-relaxed mt-3 mb-4">
-              &ldquo;Mark was incredibly knowledgeable and patient. He helped us
-              find the perfect solution for our tricky west-facing windows. The
-              installation was flawless.&rdquo;
+              &ldquo;{REVIEWS[0].text}&rdquo; — {REVIEWS[0].author}
             </p>
             <div className="border-t border-white/10 pt-4 space-y-2 text-sm">
               <div className="flex items-center gap-2 text-warm-gray-300">
