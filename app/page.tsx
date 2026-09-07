@@ -398,7 +398,7 @@ export default function HomePage() {
         <div className="relative isolate">
           <div className="absolute inset-x-0 top-0 h-[420px] lg:h-full -z-10">
             <Image src="/images/hero-lake-room.webp"
-              alt="North Idaho lakefront dining room with cellular shades lowered over floor-to-ceiling windows looking onto a mountain lake"
+              alt="Unoccupied North Idaho lakefront dining room with cellular shades lowered over floor-to-ceiling windows overlooking a mountain lake"
               fill className="object-cover object-center" priority sizes="100vw" quality={90} />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/25 to-black/10" />
           </div>
