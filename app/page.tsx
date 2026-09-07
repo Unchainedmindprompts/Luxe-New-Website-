@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import ContactForm from "./contact/ContactForm";
 export const metadata: Metadata = {
   title: "Custom Window Treatments in Coeur d'Alene & Post Falls | Luxe Window Works",
   description:
@@ -392,44 +393,39 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageGraph) }}
       />
 
-      {/* Keep the offer and contact options in the opening screen. */}
-      <section className="bg-warm-white pt-16 md:pt-20">
-        <div className="grid lg:grid-cols-2">
-          <div className="relative h-[240px] sm:h-[320px] lg:h-auto lg:min-h-[540px] overflow-hidden">
+      {/* Full-width room image and a contained consultation card. */}
+      <section className="relative bg-warm-white pt-16 md:pt-20">
+        <div className="relative isolate">
+          <div className="absolute inset-x-0 top-0 h-[420px] lg:h-full -z-10">
             <Image src="/images/hero-lake-room.webp"
               alt="North Idaho lakefront dining room with cellular shades lowered over floor-to-ceiling windows looking onto a mountain lake"
-              fill className="object-cover object-right" priority
-              sizes="(min-width: 1024px) 50vw, 100vw" quality={90} />
+              fill className="object-cover object-center" priority sizes="100vw" quality={90} />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/25 to-black/10" />
           </div>
-          <div className="px-6 py-8 sm:px-10 lg:px-12 lg:py-14 flex flex-col justify-center">
-            <p className="text-sm font-semibold text-warm-gray-600 mb-3">Premium Experience at Every Price Point</p>
-            <h1 className="font-serif text-3xl sm:text-4xl xl:text-5xl text-charcoal leading-tight">
-              Custom Window Treatments &middot; North Idaho
-            </h1>
-            <p className="mt-4 text-lg text-warm-gray-600 leading-relaxed">
-              You don&apos;t need to know what to buy. We bring samples to your home,
-              help you choose for your style and budget, and measure and install everything.
-              The in-home consultation is free.
-            </p>
-            <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick}
-              className="mt-6 inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-charcoal font-semibold px-6 py-4 rounded-full text-base transition-colors">
-              Book My Free In-Home Consultation
-            </TrackedCta>
-            <div className="mt-3 flex flex-wrap gap-3">
-              <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick}
-                className="flex-1 text-center border border-charcoal rounded-full px-4 py-3 font-medium hover:bg-cream">
-                Call {BUSINESS.phone}
-              </TrackedCta>
-              <TrackedCta href={`sms:${BUSINESS.phoneE164}`} event={CONVERSION_EVENTS.TextClick}
-                className="flex-1 text-center border border-charcoal rounded-full px-4 py-3 font-medium hover:bg-cream">
-                Text Us
-              </TrackedCta>
+          <div className="max-w-[1200px] mx-auto px-5 sm:px-8 py-10 lg:py-12 grid lg:grid-cols-[1fr_400px] gap-8 lg:gap-16 items-start">
+            <div className="text-white pt-4 lg:pt-12 min-h-[300px] lg:min-h-0 max-w-[580px]">
+              <p className="text-sm font-medium tracking-wide mb-4">Premium Experience at Every Price Point</p>
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[52px] leading-[1.12]">
+                Custom Window Treatments for North Idaho Homes
+              </h1>
+              <p className="mt-5 text-base sm:text-lg leading-relaxed max-w-lg">
+                We bring the showroom to you. Explore beautiful blinds, shades,
+                and shutters in your own home, with expert measuring and installation.
+              </p>
+              <p className="mt-6 text-sm font-medium">24 years of experience &middot; Free in-home consultation</p>
+              <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+                <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="underline underline-offset-4 py-2">Call {BUSINESS.phone}</TrackedCta>
+                <TrackedCta href={`sms:${BUSINESS.phoneE164}`} event={CONVERSION_EVENTS.TextClick} className="underline underline-offset-4 py-2">Text Us</TrackedCta>
+              </div>
             </div>
-            <p className="mt-5 text-sm font-medium text-charcoal">
-              {BUSINESS.google.rating.toFixed(1)} on Google &middot; {BUSINESS.google.reviewCount} reviews
-              <br />24 years consulting &amp; installing &middot; Lifetime Installation Guarantee
-            </p>
-            <p className="mt-2 text-sm text-warm-gray-600">{SERVICE_AREAS.map((a) => a.name).join(" · ")}</p>
+            <div className="bg-white rounded-lg shadow-xl p-6 sm:p-8 text-charcoal w-full max-w-[440px] lg:max-w-none mx-auto">
+              <h2 className="font-serif text-2xl leading-tight">Your Free In-Home Consultation</h2>
+              <p className="mt-2 mb-5 text-sm leading-relaxed text-warm-gray-600">Tell us a little about your project. We&apos;ll get in touch to arrange a convenient time.</p>
+              <ContactForm compact />
+              <div className="mt-5 pt-4 border-t border-warm-gray-200 text-center">
+                <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick} className="text-sm underline underline-offset-4">Prefer to choose a time online?</TrackedCta>
+              </div>
+            </div>
           </div>
         </div>
       </section>
