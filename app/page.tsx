@@ -411,7 +411,7 @@ export default function HomePage() {
             <figcaption className="absolute bottom-5 left-5 bg-charcoal/90 text-white px-4 py-2 text-xs tracking-wide rounded-sm">An actual Luxe Window Works installation</figcaption>
           </figure>
           <div id="hero-consultation" className="scroll-mt-24 bg-white p-6 sm:p-8 text-charcoal border-t-4 border-gold lg:border-t-0 lg:border-l-4">
-            <p className="text-xs uppercase tracking-[0.14em] text-warm-gray-600 mb-2">Let's bring your vision home</p>
+            <p className="text-xs uppercase tracking-[0.14em] text-warm-gray-600 mb-2">Let&apos;s bring your vision home</p>
             <h2 className="font-serif text-[28px] leading-tight">Your Free In-Home Consultation</h2>
             <p className="mt-3 mb-5 text-sm leading-relaxed text-warm-gray-600">See samples in your space. Get expert guidance and a quote tailored to your project.</p>
             <ContactForm compact />
