@@ -7,7 +7,7 @@ import { BUSINESS } from "@/lib/constants";
 export const metadata: Metadata = {
   title: "Our Work | Custom Window Treatment Projects",
   description:
-    "Explore real blinds, shades, shutters, and outdoor screen projects completed by Mark Abplanalp during 24 years in the window treatment business.",
+    "Explore completed blinds, shades, shutters, and outdoor screen projects from 24 years in the window treatment business.",
   alternates: { canonical: `${BUSINESS.url}/gallery` },
   openGraph: {
     title: "Our Work | Luxe Window Works",
@@ -187,7 +187,7 @@ const schema = {
       url: `${BUSINESS.url}/gallery`,
       name: "Our Work | Custom Window Treatment Projects",
       description:
-        "A selection of real window treatment projects completed during Mark Abplanalp's 24 years in the industry.",
+        "A selection of completed window treatment projects from 24 years in the industry.",
       isPartOf: { "@id": `${BUSINESS.url}/#website` },
       about: { "@id": `${BUSINESS.url}/#business` },
       primaryImageOfPage: {
@@ -280,10 +280,10 @@ export default function GalleryPage() {
           <div className="container-luxe">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-dark">Real Projects · Real Experience</p>
             <div className="grid lg:grid-cols-[1fr_0.72fr] gap-8 lg:gap-16 items-end mt-3">
-              <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-[1.02] text-charcoal">Our work,<br />in real homes.</h1>
+              <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-[1.02] text-charcoal">Our Work</h1>
               <div>
                 <p className="text-lg leading-relaxed text-charcoal">
-                  These are actual projects completed by Mark Abplanalp during 24 years in the window treatment business.
+                  A selection of completed custom window treatment projects from 24 years in the business.
                 </p>
                 <p className="mt-3 text-base leading-relaxed text-warm-gray-600">
                   Every project reflects the same approach: thoughtful recommendations, precise measuring, and professional installation.
