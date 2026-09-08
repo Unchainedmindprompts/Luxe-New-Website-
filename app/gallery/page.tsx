@@ -141,15 +141,15 @@ const shuttersAndBlinds: ProjectImage[] = [
     caption: "Wood blinds coordinated with interior trim",
     productHref: "/products/blinds",
   },
-  {
-    src: "/images/gallery/exterior-shutters-enclosed-porch.webp",
-    alt: "Exterior shutters enclosing a covered porch",
-    caption: "Custom shutters for a covered porch",
-    productHref: "/products/shutters",
-  },
 ];
 
 const outdoor: ProjectImage[] = [
+  {
+    src: "/images/gallery/exterior-shutters-enclosed-porch.webp",
+    alt: "Exterior shutters enclosing a covered porch",
+    caption: "Exterior shutters for a covered porch",
+    productHref: "/products/shutters",
+  },
   {
     src: "/images/gallery/outdoor-louvered-patio-shades.webp",
     alt: "Dark outdoor shades enclosing a timber patio structure",
@@ -327,7 +327,7 @@ export default function GalleryPage() {
 
         <GallerySection id="shades" eyebrow="Light · Privacy · Comfort" title="Custom Shades" intro="From top-down bottom-up cellular shades to glare-controlling solar shades, each solution is selected around the room, the view, and how the customer lives." projects={shades} />
         <GallerySection id="shutters-blinds" eyebrow="Structure · Character · Control" title="Shutters & Blinds" intro="Precisely fitted shutters and blinds add lasting structure to a room while giving the homeowner simple, dependable control over privacy and daylight." projects={shuttersAndBlinds} />
-        <GallerySection id="outdoor" eyebrow="Patios · Porches · Pergolas" title="Outdoor Shade Solutions" intro="Exterior screens make exposed outdoor spaces more comfortable by reducing glare, heat, wind, and unwanted visibility." projects={outdoor} />
+        <GallerySection id="outdoor" eyebrow="Patios · Porches · Pergolas" title="Outdoor Shade Solutions" intro="Exterior screens and shutters make exposed outdoor spaces more comfortable by adding shade, privacy, weather protection, and architectural character." projects={outdoor} />
 
         <section className="bg-charcoal text-white py-16 md:py-20">
           <div className="container-luxe max-w-4xl text-center">
