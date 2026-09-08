@@ -178,11 +178,34 @@ const outdoor: ProjectImage[] = [
 
 const allImages = [...featured, ...shades, ...shuttersAndBlinds, ...outdoor];
 
+const imageDimensions: Record<string, { width: number; height: number }> = {
+  "/images/gallery/flat-panel-roman-shades-timber-great-room.webp": { width: 1800, height: 1013 },
+  "/images/gallery/top-down-bottom-up-trio.webp": { width: 1440, height: 1080 },
+  "/images/gallery/wood-blinds-bedroom.webp": { width: 1440, height: 1082 },
+};
+
+const imageObjects = allImages.map((project) => {
+  const contentUrl = `${BUSINESS.url}${project.src}`;
+  const dimensions = imageDimensions[project.src] ?? { width: 1800, height: 1350 };
+
+  return {
+    "@type": "ImageObject",
+    "@id": `${contentUrl}#image`,
+    contentUrl,
+    url: contentUrl,
+    caption: project.caption,
+    description: project.alt,
+    width: dimensions.width,
+    height: dimensions.height,
+    about: { "@id": `${BUSINESS.url}${project.productHref}#service` },
+  };
+});
+
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "CollectionPage",
+      "@type": "ImageGallery",
       "@id": `${BUSINESS.url}/gallery#webpage`,
       url: `${BUSINESS.url}/gallery`,
       name: "Our Work | Custom Window Treatment Projects",
@@ -190,13 +213,10 @@ const schema = {
         "A selection of completed window treatment projects from 24 years in the industry.",
       isPartOf: { "@id": `${BUSINESS.url}/#website` },
       about: { "@id": `${BUSINESS.url}/#business` },
-      primaryImageOfPage: {
-        "@type": "ImageObject",
-        url: `${BUSINESS.url}/images/luxe-completed-installation.webp`,
-        width: 2048,
-        height: 1152,
-      },
-      image: allImages.map((image) => `${BUSINESS.url}${image.src}`),
+      breadcrumb: { "@id": `${BUSINESS.url}/gallery#breadcrumb` },
+      primaryImageOfPage: { "@id": imageObjects[0]["@id"] },
+      image: imageObjects.map((image) => ({ "@id": image["@id"] })),
+      hasPart: imageObjects.map((image) => ({ "@id": image["@id"] })),
       inLanguage: "en-US",
     },
     {
@@ -212,6 +232,7 @@ const schema = {
         },
       ],
     },
+    ...imageObjects,
   ],
 };
 
