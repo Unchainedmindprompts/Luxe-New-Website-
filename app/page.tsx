@@ -398,8 +398,8 @@ export default function HomePage() {
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 py-8 md:py-10">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-warm-gray-600 mb-3">Custom Window Treatments · North Idaho</p>
           <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] leading-[1.12] text-charcoal max-w-2xl">Custom Window Treatments.<br />Made Simple.</h1>
-            <p className="mt-4 lg:mt-0 max-w-md text-base font-semibold leading-relaxed text-charcoal">We bring the showroom to you. Find the right blinds, shades, and shutters for your home and budget—with expert guidance, measuring, and installation.</p>
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] leading-[1.12] text-charcoal max-w-2xl">The Luxe Experience.<br />Without the Luxury Price Tag.</h1>
+            <p className="mt-4 lg:mt-0 max-w-md text-base font-semibold leading-relaxed text-charcoal">Beautiful custom blinds and shades, professionally measured and installed. We bring the showroom to you—with samples, expert guidance, and options that fit your home and budget.</p>
           </div>
           <a href="#hero-consultation" className="lg:hidden inline-flex mt-5 bg-gold text-charcoal rounded-full px-6 py-3 text-sm font-semibold">Request a Free Consultation</a>
         </div>
@@ -411,9 +411,9 @@ export default function HomePage() {
             <figcaption className="absolute bottom-5 left-5 bg-charcoal/90 text-white px-4 py-2 text-xs tracking-wide rounded-sm">An actual Luxe Window Works installation</figcaption>
           </figure>
           <div id="hero-consultation" className="scroll-mt-24 bg-white p-6 sm:p-8 text-charcoal border-t-4 border-gold lg:border-t-0 lg:border-l-4">
-            <p className="text-xs uppercase tracking-[0.14em] text-warm-gray-600 mb-2">Let&apos;s bring your vision home</p>
+            <p className="text-xs uppercase tracking-[0.14em] text-warm-gray-600 mb-2">The Luxe experience starts at home</p>
             <h2 className="font-serif text-[28px] leading-tight">Your Free In-Home Consultation</h2>
-            <p className="mt-3 mb-5 text-sm leading-relaxed text-warm-gray-600">See samples in your space. Get expert guidance and a quote tailored to your project.</p>
+            <p className="mt-3 mb-5 text-sm leading-relaxed text-warm-gray-600">Explore samples in your home, compare options for your budget, and get a personalized quote. Your consultation is free.</p>
             <ContactForm compact />
             <div className="mt-5 pt-4 border-t border-warm-gray-200 flex flex-wrap justify-between gap-3 text-sm">
               <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="underline underline-offset-4">Call {BUSINESS.phone}</TrackedCta>
@@ -670,15 +670,15 @@ export default function HomePage() {
         <div className="container-luxe max-w-3xl">
           <div className="text-center mb-10">
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-              Why Choose Luxe Window Works?
+              What Makes It the Luxe Experience?
             </h2>
           </div>
           <div className="space-y-6 text-lg text-warm-gray-600 leading-relaxed">
             <p>
-              With 24 years consulting, designing, and installing window treatments, Luxe Window Works helps North Idaho homeowners avoid the most common window treatment mistakes: poor measurements, wrong product choices, bad light gaps, harsh glare, and treatments that do not fit the way the room actually lives.
+              Beautiful window treatments begin with the right guidance. We bring 24 years of experience to your home, helping you compare styles, materials, and features so you can choose confidently within your budget.
             </p>
             <p>
-              We are not here to push one product. We help you choose what works — for your windows, your home, your budget, and the way you use each room. During the free in-home visit we bring samples, walk each window, and explain the next step. Book a time online, or request a callback to discuss your project first.
+              From your first look at samples to the final installation, we handle the details. You get personal guidance, professional measuring and installation, and our lifetime installation guarantee. That is the Luxe experience—thoughtful service and lasting value for your home.
             </p>
           </div>
         </div>
@@ -736,10 +736,10 @@ export default function HomePage() {
       <section className="py-20 md:py-28 bg-charcoal text-white">
         <div className="container-luxe text-center max-w-3xl mx-auto">
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl leading-tight">
-            Let&apos;s Find What Works for Your Home
+            Bring the Luxe Experience Home
           </h2>
           <p className="mt-6 text-lg text-warm-gray-400 leading-relaxed">
-            Tell us what you are trying to solve — privacy, heat, glare, blackout, style, or motorization — and we will help you choose the right treatment for each window.
+            Beautiful blinds and shades. Expert guidance. Options that fit your budget. It all starts with a free in-home consultation.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <TrackedCta
