@@ -61,10 +61,10 @@ const shades: ProjectImage[] = [
     productHref: "/products/cellular-shades",
   },
   {
-    src: "/images/gallery/cellular-shades-stone-fireplace.webp",
-    alt: "Cellular shades installed around a stone fireplace in a vaulted great room",
-    caption: "Cellular shades for a vaulted great room",
-    productHref: "/products/cellular-shades",
+    src: "/images/gallery/flat-panel-roman-shades-vaulted-great-room.webp",
+    alt: "Flat panel Roman shades installed around a stone fireplace in a vaulted great room",
+    caption: "Flat panel Roman shades for a vaulted great room",
+    productHref: "/products/roman-shades",
   },
   {
     src: "/images/gallery/cellular-shades-window-wall.webp",
