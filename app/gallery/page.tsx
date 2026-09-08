@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Our Work | Luxe Window Works",
     description:
-      "Real window treatment projects spanning North Idaho and Central Oregon.",
+      "Real window treatment projects completed during 24 years in the business.",
     url: `${BUSINESS.url}/gallery`,
     images: [
       {
@@ -286,7 +286,7 @@ export default function GalleryPage() {
                   These are actual projects completed by Mark Abplanalp during 24 years in the window treatment business.
                 </p>
                 <p className="mt-3 text-base leading-relaxed text-warm-gray-600">
-                  The portfolio spans Central Oregon and North Idaho. Every project reflects the same approach: thoughtful recommendations, precise measuring, and professional installation.
+                  Every project reflects the same approach: thoughtful recommendations, precise measuring, and professional installation.
                 </p>
               </div>
             </div>
