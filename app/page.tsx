@@ -396,7 +396,7 @@ export default function HomePage() {
       {/* Actual client installation, with an unobstructed view of the shades. */}
       <section className="bg-warm-white pt-16 md:pt-20">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 py-8 md:py-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-warm-gray-600 mb-3">Custom Window Treatments · North Idaho</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold mb-3">Custom Window Treatments · North Idaho</p>
           <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
             <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] leading-[1.12] text-charcoal max-w-2xl">The Luxe Experience.<br />Without the Luxury Price Tag.</h1>
             <p className="mt-4 lg:mt-0 max-w-md text-base font-semibold leading-relaxed text-charcoal">Beautiful custom blinds and shades, professionally measured and installed. We bring the showroom to you—with samples, expert guidance, and options that fit your home and budget.</p>
