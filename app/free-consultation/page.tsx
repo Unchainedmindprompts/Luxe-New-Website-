@@ -4,7 +4,7 @@ import Link from "next/link";
 const BOOK_HREF = "/book";
 
 const TRUST = [
-  { title: "23+ Years Experience", body: "Window-covering expertise" },
+  { title: "24 Years Experience", body: "Window-covering expertise" },
   { title: "Free In-Home Consultation", body: "We bring the showroom to you" },
   { title: "Professional Measuring", body: "Fit handled from the start" },
   { title: "Lifetime Install Guarantee", body: "On installation-related issues" },
@@ -128,21 +128,21 @@ export default function FreeConsultationPage() {
           <div className="order-2 lg:order-1 w-full lg:w-[44%] flex items-center">
             <div className="container-luxe lg:pl-[max(1.25rem,calc((100vw-80rem)/2+1.25rem))] lg:pr-10 xl:pr-14 py-10 sm:py-12 lg:py-16 max-w-xl lg:max-w-none">
               <p className="text-gold text-xs font-semibold uppercase tracking-[0.22em] mb-4">
-                Free In-Home Consultation
+                The Luxe experience—without the luxury price tag.
               </p>
               <h1 className="font-serif text-[1.85rem] sm:text-4xl xl:text-[2.75rem] text-charcoal leading-tight text-balance">
-                Custom Window Treatments, Brought to Your Home.
+                Custom Blinds &amp; Shades, Brought to Your Home.
               </h1>
               <p className="mt-5 text-[15px] sm:text-lg text-warm-gray-700 leading-relaxed">
-                We help you choose the right blinds, shades, shutters, draperies,
-                or motorized options for your space — then professionally measure
-                and install everything.
+                Explore beautiful custom blinds and shades with samples, expert
+                guidance, and options that fit your home and budget. We
+                professionally measure and install everything.
               </p>
               <div className="mt-7">
                 <BookCta>Schedule My Free Consultation</BookCta>
               </div>
               <p className="mt-4 text-sm text-warm-gray-500">
-                No showroom trip. No guesswork.
+                24 years of experience · Lifetime installation guarantee
               </p>
             </div>
           </div>
