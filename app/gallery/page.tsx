@@ -19,7 +19,7 @@ export const metadata: Metadata = {
         url: "/images/luxe-completed-installation.webp",
         width: 2048,
         height: 1152,
-        alt: "Custom cellular shades in a timber great room",
+        alt: "Custom flat panel Roman shades in a timber great room",
       },
     ],
   },
@@ -34,10 +34,10 @@ type ProjectImage = {
 
 const featured: ProjectImage[] = [
   {
-    src: "/images/gallery/cellular-shades-timber-great-room.webp",
-    alt: "Light-filtering cellular shades installed throughout a timber great room",
-    caption: "Cellular shades · Whole-room light control",
-    productHref: "/products/cellular-shades",
+    src: "/images/gallery/flat-panel-roman-shades-timber-great-room.webp",
+    alt: "Flat panel Roman shades installed throughout a timber great room",
+    caption: "Flat panel Roman shades · Whole-room light control",
+    productHref: "/products/roman-shades",
   },
   {
     src: "/images/gallery/layered-shades-open-living-room.webp",
