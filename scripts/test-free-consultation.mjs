@@ -2,7 +2,7 @@
 /**
  * Guards for the /free-consultation Meta landing page.
  *
- * Source-level: every CTA is a relative /book link, the page is noindex+follow,
+ * Source-level: scheduling CTAs link to /book, a tracked phone alternative is available, the page is noindex+follow,
  * Schedule tracking files are untouched, and the landing source does not fire
  * Meta events or name excluded manufacturers.
  *
@@ -89,7 +89,7 @@ test("1  landing files and raster images exist", (t) => {
   t.ok(!page.includes("/images/free-consultation-hero.jpg"), "hero src still points at the old jpg");
 });
 
-test("2  every CTA is a relative next/link to /book", (t) => {
+test("2  scheduling CTAs use /book and questions have a tracked phone alternative", (t) => {
   const page = read(PAGE);
   t.ok(!page.includes("calendly.com"), "landing page embeds or links Calendly");
   t.ok(!/<form[\s>]/i.test(page), "landing page includes a form");
@@ -97,6 +97,9 @@ test("2  every CTA is a relative next/link to /book", (t) => {
 
   t.ok(/const BOOK_HREF = "\/book"/.test(page), "BOOK_HREF is no longer the relative /book path");
   t.ok(/href=\{BOOK_HREF\}/.test(page), "BookCta no longer uses href={BOOK_HREF}");
+  t.ok(page.includes("href={BUSINESS.phoneHref}"), "phone alternative must use the shared business phone");
+  t.ok(page.includes("event={CONVERSION_EVENTS.PhoneClick}"), "phone alternative must track phone clicks");
+  t.ok(page.includes("No measurements or product decisions needed."), "preparation reassurance is missing");
   const ctaUses = [...page.matchAll(/<BookCta[\s>]/g)].length;
   t.ok(ctaUses >= 3, `expected at least 3 BookCta uses, found ${ctaUses}`);
 

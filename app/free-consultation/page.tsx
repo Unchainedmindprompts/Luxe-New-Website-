@@ -1,5 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import { BUSINESS } from "@/lib/constants";
+import { TrackedCta } from "@/components/TrackedCta";
+import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 
 const BOOK_HREF = "/book";
 
@@ -52,7 +55,7 @@ const FAQS = [
   },
   {
     q: "Do I need to know which product I want?",
-    a: "No. You can start with the problem you are trying to solve. We’ll help you compare the options that make sense for the room.",
+    a: "No—and you do not need to measure your windows first. Tell us what you want to improve and the budget you have in mind. We’ll bring samples, compare suitable options, and handle the measuring.",
   },
   {
     q: "Will you do a single window?",
@@ -141,6 +144,13 @@ export default function FreeConsultationPage() {
               <div className="mt-7">
                 <BookCta>Schedule My Free Consultation</BookCta>
               </div>
+              <p className="mt-4 text-sm text-warm-gray-700 leading-relaxed">
+                No measurements or product decisions needed. One window or a whole home—we’ll help you work out the details.
+              </p>
+              <p className="mt-3 text-sm text-warm-gray-700">
+                Have a question first?{" "}
+                <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="font-semibold underline underline-offset-4">Call {BUSINESS.phone}</TrackedCta>
+              </p>
               <p className="mt-4 text-sm text-warm-gray-500">
                 24 years of experience · Lifetime installation guarantee
               </p>

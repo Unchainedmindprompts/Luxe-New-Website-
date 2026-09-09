@@ -66,8 +66,8 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
     placement: "after-content",
   },
   "why-are-window-treatments-so-expensive-a-first-time-buyers-guide-to-smart-stylish-and-budget-friendly-choices": {
-    heading: "Comparing big-box blinds with a custom fit?",
-    body: "Mark brings samples to your home, looks at the windows, and explains what will actually hold up — without a showroom visit or a sales script. The consultation is free.",
+    heading: "Let’s find the right fit for your windows and budget.",
+    body: "You don’t need measurements or a product picked out. Mark brings samples, talks through your priorities, and helps you compare options in your home. The consultation is free.",
     productHref: "/products/blinds",
     productLabel: "See custom blinds",
     bookHref: "/book",

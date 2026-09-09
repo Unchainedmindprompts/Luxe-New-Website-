@@ -3,26 +3,23 @@ title: "Moving Into a New Home? Nobody Warns You About the Window Coverings"
 slug: moving-into-a-new-home-window-coverings-north-idaho
 seoTitle: "Moving Into a New Home? Nobody Warns You About the Window Coverings"
 date: "2026-08-02T00:00:00.000Z"
-dateModified: "2026-08-02"
+dateModified: "2026-09-09"
 author: Mark Abplanalp
 excerpt: "New construction comes with bare glass on every window. Resale comes with whatever the last owner left behind. Here's how long custom window treatments actually take, and how we cover your windows for free while you wait."
-metaDescription: "Custom shades take about four weeks; shutters and drapery up to eight. Luxe Window Works covers your windows with free temporary shades while you wait. Serving Post Falls, Coeur d'Alene, Hayden, Rathdrum and North Idaho."
+metaDescription: "Moving in North Idaho? Plan custom blinds and shades with a free in-home consultation. Free temporary shades in priority rooms when you order with Luxe."
 featuredImage: "/images/moving-into-new-home-hero.webp"
 featuredImageAlt: "Open-plan North Idaho living room on moving day — packing boxes and house keys on the counter, cellular shades lowered across the windows"
 category: Custom Window Coverings
 tags: [new-home, moving, new-construction, home, timelines]
-wordCount: 780
 ---
 
-Buying a home is one of the best days you'll have. Whether it's your first place or the one you've been working toward for twenty years, that walkthrough with the keys in your hand is hard to beat.
+Moving comes with enough decisions. Then your first evening in the new house arrives, and you realize the bedroom windows are bare—or the old blinds don't give you the privacy you need.
 
-And then you have to actually move.
+You don't have to figure out every product or measure every window yourself. We bring samples to your home, help you choose custom blinds and shades for your rooms and budget, and handle measuring and installation.
 
-Packing every dish you own. Praying the boxes marked FRAGILE survive the truck. Scheduling internet, TV, water, [gas and electric](https://www.myavista.com/your-account/moving) — each one with its own hold music, its own four-hour arrival window, and its own version of "we'll have someone out between 8 and 12." You take a day off work. Nobody shows. You call back and start over.
+**When you order with Luxe Window Works, we also provide and install free temporary shades in priority rooms while you wait.** Tell us your move-in date so we can coordinate the timing.
 
-By the time you're standing in your new living room at nine at night surrounded by boxes, the last thing you want is one more thing to handle.
-
-Here's the one most people don't see coming.
+**[See how your free in-home consultation works →](/free-consultation)**
 
 ## Your new home's windows are completely bare
 
@@ -30,11 +27,11 @@ Here's the one most people don't see coming.
 
 If you bought new construction, there's nothing on the windows. Not a blind, not a shade, not a curtain rod. Every window in the house is a clear pane of glass, and that includes your bedroom, your bathroom, and whatever room you were planning to collapse in.
 
-We see it constantly, because [Kootenai County keeps growing](https://www.kcgov.us/1054/Population) and the subdivisions keep going up. Window coverings aren't part of the build, and they aren't in the builder's allowance on most homes out here. You close, you get keys, and the glass is bare.
+We see it constantly, because [Kootenai County keeps growing](https://www.kcgov.us/1054/Population) and the subdivisions keep going up. Check your builder's inclusions before closing: window coverings may not be part of your package. Planning ahead gives you time to choose without making every decision on moving day.
 
-### Resale: window treatments stay with the house
+### Resale: check what is staying
 
-Resale comes with a different problem. Window treatments are built to fit specific windows and mounted to the wall, so they're generally treated as fixtures and usually stay with the home unless the purchase agreement says otherwise — which means you typically inherit whatever the last owner chose. Sometimes that's fine. Often it's twelve-year-old blinds, sun-faded on the south side, with a wand missing and a couple of slats that won't close all the way.
+With a resale home, check which window coverings are included before you plan replacements. What is there may work well—or you may inherit aging blinds, faded fabrics, or treatments that don't give you the privacy you want.
 
 Either way, you end up doing what everyone does — a run to the big box store for a pile of paper temporary shades, and an evening you don't have spent sticking them up crooked.
 
@@ -50,13 +47,13 @@ Most [custom shades](/products/cellular-shades) run about four weeks from the da
 
 [Shutters](/products/shutters) and custom drapery can take up to eight weeks. They're a bigger build, and the extra time goes into the product — [Norman](https://normanusa.com/window-treatments/shutters/) and [Alta](https://www.altawindowfashions.com/) don't pull a shutter off a shelf, they build yours.
 
-Those are real time frames, and you'll have them before you order rather than three weeks in when you're wondering what happened. But it does leave you with a gap — a month or more of bare glass in the rooms where you want it least.
+These are planning estimates, not guaranteed delivery dates. We'll discuss current lead times for your selections before you order. But it does leave you with a gap — a month or more of bare glass in the rooms where you want it least.
 
 ## We cover your windows for free while you wait
 
 When you order with us, we bring temporary shades and put them up ourselves, at no charge, in the rooms that matter most: bedrooms, bathrooms, and your main living spaces.
 
-No store run. No standing on a chair with a box of adhesive strips at the end of a long day. You get privacy the same week you move in, and when your real treatments arrive, we pull the temps down and haul them off.
+No store run. No standing on a chair with a box of adhesive strips at the end of a long day. We'll coordinate temporary-shade installation with you, and when your real treatments arrive, we pull the temps down and haul them off.
 
 It's a small thing. It also happens to be the small thing people thank us for the most.
 
@@ -68,7 +65,7 @@ You'll know when your order is placed, when it ships, and when we're arriving �
 
 ### Honest pricing, quoted once
 
-We don't inflate a list price so we can advertise 40% off it later. You get one straight number for what the product actually costs, quoted the same way for every customer, and it's among the most competitive in North Idaho. If you're comparing quotes, bring us the other one — we'd rather earn it in daylight than win on a gimmick.
+Tell us your budget and which rooms matter most. We'll help you compare suitable products, explain what is included in your quote, and discuss doing the project in stages if that works better. If you're comparing quotes, bring the other one so we can look at the differences in product and scope.
 
 ### Installation guaranteed for as long as you're in the home
 
@@ -86,4 +83,8 @@ If you're building or buying new, our [guide to window coverings for new constru
 
 ## Ready when you are
 
-**[Schedule your free in-home consultation →](/book)**
+You don't need measurements or a product picked out. Start with the rooms you want covered and your move-in date—we'll help with the rest.
+
+**[Explore your free in-home consultation →](/free-consultation)**
+
+Have a question first? **[Call Mark at 208-660-8643](tel:+12086608643).**
