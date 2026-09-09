@@ -398,8 +398,8 @@ export default function HomePage() {
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 py-8 md:py-10">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold mb-3">Custom Window Treatments · North Idaho</p>
           <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] leading-[1.12] text-charcoal max-w-2xl">The Luxe Experience.<br />Without the Luxury Price Tag.</h1>
-            <p className="mt-4 lg:mt-0 max-w-md text-base font-semibold leading-relaxed text-charcoal">Beautiful custom blinds and shades, professionally measured and installed. We bring the showroom to you—with samples, expert guidance, and options that fit your home and budget.</p>
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] leading-[1.12] text-charcoal max-w-2xl text-balance">The Luxe experience.<br />Without the luxury price tag.</h1>
+            <p className="mt-4 lg:mt-0 max-w-md text-base font-semibold leading-relaxed text-charcoal">Beautiful custom blinds and shades, professionally measured and installed. We bring samples to your home and help you compare options that fit your rooms, your style, and your budget.</p>
           </div>
           <a href="#hero-consultation" className="lg:hidden inline-flex mt-5 bg-gold text-charcoal rounded-full px-6 py-3 text-sm font-semibold">Request a Free Consultation</a>
         </div>
@@ -411,9 +411,9 @@ export default function HomePage() {
             <figcaption className="absolute bottom-5 left-5 bg-charcoal/90 text-white px-4 py-2 text-xs tracking-wide rounded-sm">An actual Luxe Window Works installation</figcaption>
           </figure>
           <div id="hero-consultation" className="scroll-mt-24 bg-white p-6 sm:p-8 text-charcoal border-t-4 border-gold lg:border-t-0 lg:border-l-4">
-            <p className="text-xs uppercase tracking-[0.14em] text-warm-gray-600 mb-2">The Luxe experience starts at home</p>
+            <p className="text-xs uppercase tracking-[0.14em] text-warm-gray-600 mb-2">One window or a whole home</p>
             <h2 className="font-serif text-[28px] leading-tight">Your Free In-Home Consultation</h2>
-            <p className="mt-3 mb-5 text-sm leading-relaxed text-warm-gray-600">Explore samples in your home, compare options for your budget, and get a personalized quote. Your consultation is free.</p>
+            <p className="mt-3 mb-5 text-sm leading-relaxed text-warm-gray-600">You don&apos;t need measurements or a product picked out. Tell us what you need help with—we&apos;ll bring samples, talk through your budget, and help you choose.</p>
             <ContactForm compact />
             <div className="mt-5 pt-4 border-t border-warm-gray-200 flex flex-wrap justify-between gap-3 text-sm">
               <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="underline underline-offset-4">Call {BUSINESS.phone}</TrackedCta>
