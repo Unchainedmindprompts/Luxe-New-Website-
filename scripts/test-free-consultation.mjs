@@ -51,11 +51,7 @@ const TRACKING_SHA = "b39c2faffefaa5a8a7dca0418e99b61277804aaeb1c7d71a45af05cf69
 const TRACKER_SHA = "cf739f0be71f32e1dbcbbcbf05e2a2c8dd9190ca2381f2abb5705262d269682e";
 
 const HREF = /href=(["'])([^"']+)\1/g;
-const CTA_LABELS = [
-  "Schedule Free Consultation",
-  "Schedule My Free Consultation",
-  "Schedule My Free In-Home Consultation",
-];
+
 
 test("1  landing files and raster images exist", (t) => {
   t.ok(exists(PAGE), "missing app/free-consultation/page.tsx");
@@ -89,30 +85,23 @@ test("1  landing files and raster images exist", (t) => {
   t.ok(!page.includes("/images/free-consultation-hero.jpg"), "hero src still points at the old jpg");
 });
 
-test("2  scheduling CTAs use /book and questions have a tracked phone alternative", (t) => {
+test("2  inquiries stay on the page, with booking and direct contact alternatives", (t) => {
   const page = read(PAGE);
-  t.ok(!page.includes("calendly.com"), "landing page embeds or links Calendly");
-  t.ok(!/<form[\s>]/i.test(page), "landing page includes a form");
-  t.ok(!page.includes("CalendlyScheduleTracker"), "landing page mounts the Schedule tracker");
-
-  t.ok(/const BOOK_HREF = "\/book"/.test(page), "BOOK_HREF is no longer the relative /book path");
-  t.ok(/href=\{BOOK_HREF\}/.test(page), "BookCta no longer uses href={BOOK_HREF}");
-  t.ok(page.includes("href={BUSINESS.phoneHref}"), "phone alternative must use the shared business phone");
-  t.ok(page.includes("event={CONVERSION_EVENTS.PhoneClick}"), "phone alternative must track phone clicks");
-  t.ok(page.includes("No measurements or product decisions needed."), "preparation reassurance is missing");
-  const ctaUses = [...page.matchAll(/<BookCta[\s>]/g)].length;
-  t.ok(ctaUses >= 3, `expected at least 3 BookCta uses, found ${ctaUses}`);
-
-  const hrefs = [...page.matchAll(HREF)].map((m) => m[2]);
-  t.ok(hrefs.includes("/"), "logo / home exit is missing");
-  t.ok(
-    hrefs.every((h) => h === "/book" || h === "/" || h.startsWith("/images/")),
-    `unexpected href on the landing page: ${hrefs.filter((h) => h !== "/book" && h !== "/" && !h.startsWith("/images/")).join(", ")}`
-  );
-
-  for (const label of CTA_LABELS) {
-    t.ok(page.includes(label), `CTA label missing: ${label}`);
-  }
+  const form = read("app/free-consultation/ConsultationForm.tsx");
+  t.ok(page.includes("<ConsultationForm />"), "landing form must be mounted");
+  t.ok(page.includes('id="request"'), "request anchor is missing");
+  t.ok(!page.includes("calendly.com"), "landing must not load third-party scheduling");
+  t.ok(page.includes('const BOOK_HREF = "/book"'), "booking alternative missing");
+  t.ok(page.includes("href={BUSINESS.phoneHref}"), "shared phone alternative missing");
+  t.ok(page.includes("event={CONVERSION_EVENTS.PhoneClick}"), "phone tracking missing");
+  t.ok(form.includes('fetch("/api/consultation"'), "form must reuse the consultation endpoint");
+  t.ok(form.includes('source: "free-consultation"'), "inquiry source missing");
+  t.ok(form.includes('!response.ok || result.ok !== true'), "success must require server acceptance");
+  t.ok(form.indexOf('!response.ok || result.ok !== true') < form.indexOf('trackConversionEvent(CONVERSION_EVENTS.ContactFormSubmit'), "tracking must follow server acceptance");
+  t.ok(form.includes('role="alert"'), "submission failure must be announced");
+  t.ok(form.includes('No appointment is booked yet.'), "success must distinguish inquiry from appointment");
+  t.ok(form.includes('pending.current'), "duplicate submission guard missing");
+  t.ok(!/fbq\s*\(/.test(form), "form must use shared analytics policy");
 });
 
 test("3  page robots are noindex, follow; sitemap and robots.ts leave the URL fetchable", (t) => {
@@ -155,5 +144,5 @@ if (failures) {
   process.exit(1);
 }
 console.log(
-  "\nPASS — CTAs go to /book; page is noindex,follow; Schedule files unchanged; no Article JSON-LD or excluded brands."
+  "\nPASS — On-page inquiry form and /book alternative; page is noindex,follow; Schedule files unchanged; no Article JSON-LD or excluded brands."
 );
