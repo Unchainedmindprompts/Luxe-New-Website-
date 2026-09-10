@@ -346,6 +346,22 @@ await test("17  honeypot → opaque safe response, no email", async (t) => {
   t.equal(human.body.ok, true, "human honeypot still { ok: true }");
 });
 
+await test("landing inquiry reaches mail with its contact preference and source", async (t) => {
+  for (const contactMethod of ["Phone call", "Text message"]) {
+    const mail = mailSpy();
+    const payload = { firstName: "Landing Test", phone: "208-555-0199", city: "", contactMethod, source: "free-consultation", originatingPath: "/free-consultation" };
+    const result = await processConsultation(payload, { sendEmail: mail.sendEmail, logFailure: () => {} });
+    t.equal(result.status, 200, "name and phone alone are accepted");
+    t.equal(result.body.ok, true, "server confirms delivery");
+    t.equal(mail.sent.length, 1, "one email produced");
+    t.ok(mail.sent[0].text.includes(contactMethod), "selected contact preference reaches the email");
+    t.ok(mail.sent[0].text.includes("/free-consultation"), "landing source reaches the email");
+    const failed = await processConsultation(payload, { sendEmail: async () => ({ error: { name: "test_failure" } }), logFailure: () => {} });
+    t.equal(failed.status, 502, "mail failure is not a successful inquiry");
+    t.ok(failed.body.ok !== true, "no false success on failure");
+  }
+});
+
 await test("18  existing human-form payloads stay compatible", async (t) => {
   const mail = mailSpy();
   const contact = await processConsultation(
