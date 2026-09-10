@@ -41,7 +41,7 @@ export const BUSINESS_STUB = {
 } as const;
 
 /**
- * The nine products that own a `/products/{slug}` route. Derived from the
+ * The products that own a `/products/{slug}` route. Derived from the
  * `PRODUCTS` const rather than restated, so a slug that isn't a real product
  * fails `tsc` instead of minting a dangling `@id` nobody notices until the
  * post-build sweep.
@@ -56,7 +56,7 @@ export type ProductSlug = (typeof PRODUCTS)[number]["slug"];
  * so one taxonomy term has one owner — the same reason the glossary reads
  * Norman's founding year off the brand rather than restating it.
  *
- * It says what the nine product Services and the five area Services have in
+ * It says what the product Services and the five area Services have in
  * common. The `name` on each is what distinguishes them: a category on the
  * product pages, a city on the area pages.
  */

@@ -186,7 +186,7 @@ await test("4  exterior solar → accepted", async (t) => {
   t.equal(result.body.reason_code, "in_service_area", "reason");
 });
 
-await test("5  custom drapery → accepted without Service identity", async (t) => {
+await test("5  custom drapery → accepted with the one Service identity", async (t) => {
   const { result } = await runAgent(
     agentBase({
       productInterests: ["custom draperies"],
@@ -196,10 +196,19 @@ await test("5  custom drapery → accepted without Service identity", async (t) 
   );
   t.equal(result.body.status, "accepted", "drapery is a real consult category");
   t.equal(result.body.reason_code, "in_service_area", "reason");
-  const drapery = consultCategoriesPublic().find((c) => c.id === CONSULT_DRAPERY_CATEGORY_ID);
+  const categories = consultCategoriesPublic();
+  const drapery = categories.find((c) => c.id === CONSULT_DRAPERY_CATEGORY_ID);
   t.ok(drapery, "drapery listed");
-  t.equal(drapery?.canonicalServiceId, null, "no fabricated Service @id");
-  t.equal(drapery?.canonicalProductPage, null, "no fabricated product page");
+  t.equal(
+    drapery?.canonicalServiceId,
+    "https://www.luxewindowworks.com/products/custom-drapery#service",
+    "one drapery Service @id"
+  );
+  t.equal(drapery?.canonicalProductPage, "/products/custom-drapery", "canonical product page");
+  t.ok(
+    !categories.some((c) => c.id === "custom-drapery"),
+    "page slug is not a second consult category"
+  );
 });
 
 await test("6  commercial → soft_accepted / commercial_review", async (t) => {
@@ -470,8 +479,20 @@ await test("discovery  no booking/pricing claims; drapery honest; readiness bloc
   t.ok(!doc.directBookingAvailable && !/calendly/i.test(JSON.stringify(doc)), "no Calendly");
   const drapery = doc.supportedProductCategories.find((c) => c.id === "custom-draperies");
   t.ok(drapery?.offered, "drapery offered");
-  t.equal(drapery?.canonicalServiceId, null, "drapery has no Service @id");
-  t.equal(drapery?.canonicalProductPage, null, "drapery has no product page");
+  t.equal(
+    drapery?.canonicalServiceId,
+    "https://www.luxewindowworks.com/products/custom-drapery#service",
+    "drapery Service @id is the product page"
+  );
+  t.equal(
+    drapery?.canonicalProductPage,
+    "/products/custom-drapery",
+    "drapery product page is published"
+  );
+  t.ok(
+    !doc.supportedProductCategories.some((c) => c.id === "custom-drapery"),
+    "discovery does not mint a second drapery category"
+  );
   const aluminum = doc.supportedProductCategories.find((c) => c.id === "aluminum-shutters");
   t.equal(aluminum?.canonicalServiceId, null, "aluminum shutters still has no Service");
   t.ok(

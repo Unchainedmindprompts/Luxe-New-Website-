@@ -30,9 +30,10 @@ function getProductCardImage(slug: string): string {
  * It also gives the category searches somewhere to land. "Window treatments"
  * and "window coverings" are how people name the whole category rather than a
  * specific product, and until now every page on the site answered to a single
- * product instead. And it gives the nine product pages a hub linking to all of
+ * product instead. And it gives the product pages a hub linking to all of
  * them, which they badly need: Search Console has them at average positions 21
- * to 57 largely because almost nothing pointed at them.
+ * to 57 largely because almost nothing pointed at them. Custom drapery is now
+ * one of those product pages.
  */
 
 const PAGE_URL = `${BUSINESS.url}/products`;
@@ -40,12 +41,12 @@ const PAGE_URL = `${BUSINESS.url}/products`;
 export const metadata: Metadata = {
   title: "Window Treatments & Window Coverings | North Idaho | Luxe Window Works",
   description:
-    "Every window covering we install in North Idaho — blinds, cellular shades, solar shades, roller shades, Roman shades, plantation shutters, and motorization. Custom measured and professionally installed. Free in-home consultation.",
+    "Every window covering we install in North Idaho — blinds, cellular shades, solar shades, roller shades, Roman shades, plantation shutters, custom drapes, and motorization. Custom measured and professionally installed. Free in-home consultation.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Window Treatments & Window Coverings | Luxe Window Works",
     description:
-      "Blinds, shades, plantation shutters, and motorization — custom measured and installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.",
+      "Blinds, shades, plantation shutters, custom drapes, and motorization — custom measured and installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.",
     type: "website",
     url: PAGE_URL,
   },
@@ -119,10 +120,10 @@ export default function ProductsHubPage() {
             Window treatments and window coverings for North Idaho homes.
           </h1>
           <p className="mt-6 text-lg md:text-xl text-warm-gray-600 leading-relaxed">
-            Blinds, shades, plantation shutters, and motorization — every one
-            custom measured to your actual window opening and installed by us,
-            not dropped off in a box. Below is the full range, and what each one
-            is genuinely good at.
+            Blinds, shades, plantation shutters, custom drapes, and motorization
+            — every one custom measured to your actual window opening and
+            installed by us, not dropped off in a box. Below is the full range,
+            and what each one is genuinely good at.
           </p>
         </div>
       </section>
@@ -197,7 +198,9 @@ export default function ProductsHubPage() {
             precise everyday light control, and{" "}
             <strong className="text-charcoal">motorization</strong> on anything
             that is awkward to reach. Roller, Roman, and banded shades are
-            mostly about the look you are after.
+            mostly about the look you are after. Custom drapes and drapery are
+            the soft panels specified in the home when a fabric treatment is
+            the right finish.
           </p>
           <p className="text-warm-gray-600 leading-relaxed text-lg">
             Still deciding?{" "}

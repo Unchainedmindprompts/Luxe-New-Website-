@@ -147,6 +147,13 @@ export const PRODUCTS = [
     shortDescription: "Control hard-to-reach windows by phone, voice, or wall switch. Works with Alexa, Google Home, and Apple HomeKit.",
     icon: "motorization",
   },
+  {
+    name: "Custom Drapes",
+    slug: "custom-drapery",
+    tagline: "See the fabric in your light, then we measure and install.",
+    shortDescription: "Custom drapes and drapery for North Idaho homes — specified in an in-home consultation, measured to the opening, and professionally installed.",
+    icon: "drapery",
+  },
 ] as const;
 
 export const REVIEWS = [

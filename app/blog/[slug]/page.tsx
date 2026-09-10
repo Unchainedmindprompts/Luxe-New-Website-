@@ -567,6 +567,7 @@ function deriveArticleAbout(post: BlogPost): object {
     [/roller-shade|roller-fit|roller-fabric|pucker/, "roller-shades"],
     [/banded-shade|zebra/, "banded-shades"],
     [/roman-shade/, "roman-shades"],
+    [/drapes|drapery/, "custom-drapery"],
     [/motoriz|smart-shade|automation|battery-operated|somfy|bond-bridge/, "motorization"],
     [/shutter|woodlore|bifold-180|plantation|aluminum-interior/, "shutters"],
     [/blind/, "blinds"],
