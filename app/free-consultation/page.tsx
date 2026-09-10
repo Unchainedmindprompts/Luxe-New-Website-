@@ -31,8 +31,8 @@ export default function FreeConsultationPage() {
         <div className="container-luxe grid gap-x-12 gap-y-7 py-8 sm:py-12 lg:grid-cols-[1.12fr_1fr] lg:py-14 xl:gap-x-20">
           <div className="lg:col-start-1 lg:row-start-1">
             <p className="text-sm font-semibold text-gold tracking-wide">POST FALLS · COEUR D’ALENE · HAYDEN</p>
-            <h1 className="mt-4 max-w-xl font-serif text-[2.35rem] leading-[1.12] sm:text-5xl xl:text-[3.5rem] text-balance">Custom blinds &amp; shades.<br />Chosen at home.<br />Installed for you.</h1>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-warm-gray-200">Custom blinds, shades &amp; shutters, brought to your home. Compare samples in your own light. We help you choose, then professionally measure and install.</p>
+            <h1 className="mt-4 max-w-xl font-serif text-[2.35rem] leading-[1.12] sm:text-5xl xl:text-[3.5rem] text-balance">The Luxe Experience.<br />Without the Luxury Price Tag.</h1>
+            <p className="mt-5 max-w-xl text-lg leading-relaxed text-warm-gray-200">Custom blinds and shades, professionally measured and installed. We bring the showroom to you—with options that fit your home and budget.</p>
             <p className="mt-5 text-base font-medium text-white">Free in-home consultation. No obligation to buy.</p>
             <a href="#request" className={`${primary} mt-6 lg:hidden`}>Request a Call or Text <span aria-hidden="true" className="ml-3">→</span></a>
             <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-warm-gray-200">
