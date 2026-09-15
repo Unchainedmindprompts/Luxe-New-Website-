@@ -16,6 +16,7 @@ import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 import { cityRef, northIdahoRef } from "@/lib/cities";
 import { BUSINESS_STUB, OWNER_STUB, productServiceRef } from "@/lib/schema";
 import { productPages } from "@/lib/product-data";
+import { TemporaryShadeOffer } from "@/components/TemporaryShadeOffer";
 
 /**
  * Image for each product card. Pulled from productPages so the homepage card and
@@ -451,6 +452,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <TemporaryShadeOffer requestHref="#hero-consultation" />
 
       {/* 2b. Featured testimonial — early social proof */}
       <section className="py-14 md:py-20 bg-warm-white">

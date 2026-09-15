@@ -5,6 +5,7 @@ import Image from "next/image";
 import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { ConsultationExpect } from "@/components/ConsultationExpect";
+import { TemporaryShadeOffer } from "@/components/TemporaryShadeOffer";
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS, PRODUCTS } from "@/lib/constants";
@@ -303,6 +304,10 @@ export default async function AreaPage({ params }: Props) {
           </p>
         </div>
       </section>
+
+      {slug === "coeur-d-alene" && (
+        <TemporaryShadeOffer location={area.name} requestHref="/free-consultation#request" />
+      )}
 
       {/* Neighborhoods & Housing */}
       <section className="py-16 md:py-20 bg-cream/50">
