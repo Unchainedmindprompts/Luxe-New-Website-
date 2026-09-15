@@ -24,7 +24,7 @@ wordCount: 612
 <li><strong>The Best for Views:</strong> If your window overlooks the stunning scenery of Northern Idaho, a roller shade can be completely retracted, leaving you with an unobstructed view.</li>
 <li><a href="https://normanusa.com/product/soluna-roller-shades/" data-type="link" data-id="https://normanusa.com/product/soluna-roller-shades/">https://normanusa.com/product/soluna-roller-shades/</a></li>
 </ul>
-<hr /><figure><img src="https://i0.wp.com/luxewindowworks.com/wp-content/uploads/2025/07/img_0069.png" alt="Cellular vs. Roller Shades: side-by-side comparison of shade types" /></figure>
+<hr /><figure><img src="/images/IMG_0069.png" alt="Patterned roller shades installed in a Northern Idaho home, showing decorative fabric detail and clean lines" /></figure>
 <h3><strong>Making the Smart Choice: A Room-by-Room Guide</strong></h3>
 <p>To help you decide, here’s a quick guide on where each shade really shines:</p>
 <ul><li><strong>For bedrooms,</strong> think cellular shades for maximum insulation, sound control, and light diffusion. For complete darkness, choose a roller shade system with blackout fabric and side channels.</li>

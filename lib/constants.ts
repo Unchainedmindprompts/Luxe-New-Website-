@@ -31,10 +31,10 @@ export const BUSINESS = {
     { day: "Saturday",  open: "10:00 AM", close: "2:00 PM" },
     { day: "Sunday",    open: null,      close: null },
   ],
-  experience: "Nearly 20 Years",
+  experience: "23 Years of Experience",
   guarantee: "Lifetime Installation Guarantee",
   brands: ["Alta", "Norman", "Lafayette"],
-  url: "https://luxewindowworks.com",
+  url: "https://www.luxewindowworks.com",
 } as const;
 
 export const SERVICE_AREAS = [
@@ -70,49 +70,49 @@ export const PRODUCTS = [
     name: "Cellular Shades",
     slug: "cellular-shades",
     tagline: "Stop losing heat in winter and cool air in summer.",
-    shortDescription: "The most energy-efficient window covering available — honeycomb cells trap air to insulate your home year-round.",
+    shortDescription: "Honeycomb cells trap air to fight Northern Idaho's brutal winters and summer heat — the most energy-efficient window covering available.",
     icon: "cellular",
   },
   {
     name: "Solar Shades",
     slug: "solar-shades",
     tagline: "Enjoy the view without the glare or UV damage.",
-    shortDescription: "Reduce glare and block UV rays while preserving your lake and mountain views.",
+    shortDescription: "Preserve your lake and mountain views while blocking intense glare and the UV rays that fade furniture and floors.",
     icon: "solar",
   },
   {
     name: "Roller Shades",
     slug: "roller-shades",
     tagline: "Clean lines, simple function, modern style.",
-    shortDescription: "Sleek, minimal window coverings that complement any design aesthetic.",
+    shortDescription: "Sleek, minimal window coverings that complement modern construction — popular in Post Falls and Rathdrum's new developments.",
     icon: "roller",
   },
   {
     name: "Banded Shades",
     slug: "banded-shades",
     tagline: "Control light without sacrificing style.",
-    shortDescription: "Alternating sheer and solid bands let you fine-tune light and privacy with a modern look.",
+    shortDescription: "Alternate between full privacy and filtered light throughout the day — ideal for open-plan homes with large windows.",
     icon: "banded",
   },
   {
     name: "Roman Shades",
     slug: "roman-shades",
     tagline: "Timeless elegance that softens any room.",
-    shortDescription: "Fabric folds create a warm, tailored look that adds texture and sophistication.",
+    shortDescription: "Fabric folds add warmth and texture to living spaces — a refined counterpoint to the rugged natural landscape outside.",
     icon: "roman",
   },
   {
     name: "Shutters",
     slug: "shutters",
     tagline: "The permanent upgrade your home deserves.",
-    shortDescription: "Plantation shutters add lasting value, light control, and architectural character.",
+    shortDescription: "A permanent upgrade that adds real estate value, superior light control, and architectural character — built to last decades.",
     icon: "shutters",
   },
   {
     name: "Motorization",
     slug: "motorization",
     tagline: "One tap. Every shade. Perfect position.",
-    shortDescription: "Smart motorized shades you can control from your phone, voice assistant, or the wall.",
+    shortDescription: "Control hard-to-reach windows by phone, voice, or wall switch. Works with Alexa, Google Home, and Apple HomeKit.",
     icon: "motorization",
   },
 ] as const;
@@ -153,6 +153,7 @@ interface NavLink {
 
 export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
   {
     label: "Products",
     href: "/products/cellular-shades",
