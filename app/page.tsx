@@ -393,7 +393,7 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageGraph) }}
       />
 
-      {/* Three equal product panels using Premier supplier photography. */}
+      {/* Actual client installation, with an unobstructed view of the shades. */}
       <section className="bg-warm-white pt-16 md:pt-20">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 py-8 md:py-10">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold mb-3">Custom Window Treatments · North Idaho</p>
@@ -404,31 +404,12 @@ export default function HomePage() {
           <a href="#hero-consultation" className="lg:hidden inline-flex mt-5 bg-gold text-charcoal rounded-full px-6 py-3 text-sm font-semibold">Request a Free Consultation</a>
         </div>
         <div className="relative max-w-[1600px] mx-auto lg:grid lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_400px]">
-          <div className="min-w-0 grid grid-cols-3 gap-px bg-white" aria-label="Roller, cellular and Roman shade styles">
-            {[
-              { name: "Roller", image: "roller", alt: "Premier roller shades filtering daylight through three bathroom windows", position: "50% 35%" },
-              { name: "Cellular", image: "cellular", alt: "Premier cellular shades providing privacy while letting light into a bathroom", position: "35% 35%" },
-              { name: "Roman", image: "roman", alt: "Premier Roman shade with soft fabric folds on a bright window", position: "48% 25%" },
-            ].map((product) => (
-              <figure key={product.image} className="relative min-w-0 h-[260px] sm:h-[400px] lg:h-full lg:min-h-[620px] overflow-hidden">
-                <Image
-                  src={`/images/premier-hero-${product.image}.webp`}
-                  alt={product.alt}
-                  fill
-                  className="object-cover"
-                  style={{ objectPosition: product.position }}
-                  priority
-                  sizes="(min-width:1600px) 400px, (min-width:1024px) 25vw, 33vw"
-                  quality={85}
-                />
-                <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/75 to-transparent" />
-                <figcaption className="absolute inset-x-0 bottom-5 text-center text-white px-1">
-                  <span className="block font-serif text-lg sm:text-2xl">{product.name}</span>
-                  <span className="block mt-1 text-[10px] sm:text-xs uppercase tracking-widest">Shades</span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+          <figure className="relative min-w-0">
+            <div className="relative aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[620px]">
+              <Image src="/images/luxe-completed-installation.webp" alt="Actual Luxe Window Works installation: custom shades filtering daylight in a living room with timber beams and a stone fireplace" fill className="object-cover object-[35%_center]" priority sizes="(min-width:1600px) 1200px, (min-width:1024px) 70vw, 100vw" quality={90} />
+            </div>
+            <figcaption className="absolute bottom-5 left-5 bg-charcoal/90 text-white px-4 py-2 text-xs tracking-wide rounded-sm">An actual Luxe Window Works installation</figcaption>
+          </figure>
           <div id="hero-consultation" className="scroll-mt-24 bg-white p-6 sm:p-8 text-charcoal border-t-4 border-gold lg:border-t-0 lg:border-l-4">
             <p className="text-xs uppercase tracking-[0.14em] text-warm-gray-600 mb-2">One window or a whole home</p>
             <h2 className="font-serif text-[28px] leading-tight">Your Free In-Home Consultation</h2>
