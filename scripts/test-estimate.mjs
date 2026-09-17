@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import { estimateShade } from '../lib/estimate.ts';
+const base = { id: 1, room: '', width: '36', height: '60', quantity: '1', light: 'light', operation: 'cordless' };
+assert.equal(estimateShade(base).cents, 13207);
+assert.equal(estimateShade({ ...base, width: '36.125' }).cents, 14953);
+assert.equal(estimateShade({ ...base, light: 'dark' }).cents, 18982);
+assert.equal(estimateShade({ ...base, operation: 'tdbu' }).cents, 17147);
+assert.equal(estimateShade({ ...base, operation: 'motor' }).cents, 46202);
+assert.equal(estimateShade({ ...base, operation: 'motor-tdbu', quantity: '2' }).cents, 104222);
+for (const patch of [{width:''},{width:'Infinity'},{height:'0'},{width:'97'},{quantity:'1.5'},{quantity:'0'},{operation:'tdbu',height:'85'},{operation:'motor',width:'17'},{operation:'motor-tdbu',width:'31'}]) assert.ok(estimateShade({...base,...patch}).error, JSON.stringify(patch));
+assert.ok(estimateShade({...base,width:'96',height:'96'}).cents);
+assert.ok(estimateShade({...base,width:'19',height:'84',operation:'tdbu'}).cents);
+console.log('PASS: selling prices, size bracket rounding, motor remotes, quantities, invalid inputs and operating limits.');
