@@ -11,3 +11,14 @@ for (const patch of [{width:''},{width:'Infinity'},{height:'0'},{width:'97'},{qu
 assert.ok(estimateShade({...base,width:'96',height:'96'}).cents);
 assert.ok(estimateShade({...base,width:'19',height:'84',operation:'tdbu'}).cents);
 console.log('PASS: selling prices, size bracket rounding, motor remotes, quantities, invalid inputs and operating limits.');
+const zebra = {...base, product: 'zebra'};
+assert.equal(estimateShade(zebra).cents, 23190);
+assert.equal(estimateShade({...zebra,light:'dark'}).cents, 28115);
+assert.equal(estimateShade({...zebra,operation:'motor'}).cents, 43112);
+assert.equal(estimateShade({...zebra,width:'78',height:'78'}).cents, 42575);
+assert.equal(estimateShade({...zebra,width:'78.125',height:'78'}).cents, 47814);
+assert.equal(estimateShade({...zebra,quantity:'2'}).cents, 46380);
+for (const patch of [{operation:'tdbu'},{operation:'motor-tdbu'},{width:'17.5'},{width:'17.75',operation:'motor'},{width:'23.5',height:'70.125'},{width:'97'},{height:'97'}]) assert.ok(estimateShade({...zebra,...patch}).error,JSON.stringify(patch));
+assert.ok(estimateShade({...zebra,width:'17.75',height:'70'}).cents);
+assert.ok(estimateShade({...zebra,width:'23.625',height:'96'}).cents);
+console.log('PASS: Zebra prices, remote/charger, cassette threshold, quantities and operation-specific sizing.');

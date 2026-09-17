@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import EstimateBuilder from './EstimateBuilder';
 export const metadata: Metadata = {
-  title: 'Instant Cellular Shade Estimate | Luxe Window Works',
-  description: 'Explore custom cellular shade pricing for your North Idaho home. Enter your window sizes and compare light control and motorization.',
+  title: 'Instant Cellular & Zebra Shade Estimate | Luxe Window Works',
+  description: 'Explore custom cellular and Zebra shade pricing for your North Idaho home. Enter your window sizes and compare light control and motorization.',
   robots: { index: false, follow: false },
 };
 export default function EstimatePage() {
@@ -22,8 +22,8 @@ export default function EstimatePage() {
     <section className="container-luxe py-16 max-w-4xl"><h2 className="font-serif text-3xl mb-7">A few things worth knowing</h2>
       {[
         ['How should I measure?', 'For a starting estimate, measure the width and height of the window opening in inches. Decimals are welcome—36.5 means 36½ inches. We will take the final measurements before anything is ordered.'],
-        ['What does this estimate include?', 'Your selected ¾-inch smooth cellular shades and operating options, plus professional in-home consultation, measurements, and installation. Motorized estimates include a rechargeable battery and one compatible remote per shade. Sales tax is not included.'],
-        ['Can I choose other fabrics?', 'Absolutely. Prints, linen looks, and other textured fabrics are available at an additional charge. We bring samples so you can compare them in your own light.'],
+        ['What does this estimate include?', 'Your selected cellular or Zebra shades and operating options, plus professional in-home consultation, measurements, and installation. Motorized estimates include a rechargeable battery and one compatible remote per shade. Zebra estimates include a round cassette, sized for the window, and motorized Zebra shades also include a USB charger. Sales tax is not included.'],
+        ['Can I choose other fabrics?', 'Absolutely. Cellular estimates use ¾-inch smooth fabrics. Zebra estimates use Aspen light filtering or Grandby / Leysin room darkening. Additional colors, textures, and fabric styles are available at higher prices. We bring samples so you can compare them in your own light.'],
         ['What if my window needs something different?', 'Large windows, specialty shapes, and other products deserve a closer look. Schedule a free consultation and we will help you find the right fit.'],
       ].map(([q,a]) => <details key={q} className="border-b border-warm-gray-200 py-5"><summary className="cursor-pointer font-semibold">{q}</summary><p className="mt-3 text-warm-gray-700 leading-relaxed">{a}</p></details>)}
     </section>

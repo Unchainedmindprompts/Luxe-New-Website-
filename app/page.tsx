@@ -401,7 +401,7 @@ export default function HomePage() {
             <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] leading-[1.12] text-charcoal max-w-2xl text-balance">The Luxe experience.<br />Without the luxury price tag.</h1>
             <p className="mt-4 lg:mt-0 max-w-md text-base font-semibold leading-relaxed text-charcoal">Beautiful custom blinds and shades, professionally measured and installed. We bring samples to your home and help you compare options that fit your rooms, your style, and your budget.</p>
           </div>
-          <div className="mt-6 flex flex-wrap items-center gap-3"><Link href="/estimate" className="inline-flex rounded-full bg-charcoal text-white px-6 py-3 font-semibold hover:bg-warm-gray-800">Get an Instant Quote <span aria-hidden="true" className="ml-3">→</span></Link><span className="text-sm text-warm-gray-600">Start with cellular shades. No email required.</span></div>
+          <div className="mt-6 flex flex-wrap items-center gap-3"><Link href="/estimate" className="inline-flex rounded-full bg-charcoal text-white px-6 py-3 font-semibold hover:bg-warm-gray-800">Get an Instant Quote <span aria-hidden="true" className="ml-3">→</span></Link><span className="text-sm text-warm-gray-600">Cellular &amp; Zebra shades. No email required.</span></div>
           <a href="#hero-consultation" className="lg:hidden inline-flex mt-5 bg-gold text-charcoal rounded-full px-6 py-3 text-sm font-semibold">Request a Free Consultation</a>
         </div>
         <div className="relative max-w-[1600px] mx-auto lg:grid lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_400px]">
