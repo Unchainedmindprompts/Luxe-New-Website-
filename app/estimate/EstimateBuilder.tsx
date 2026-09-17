@@ -48,9 +48,9 @@ export default function EstimateBuilder({ onProductSelect }: { onProductSelect: 
   const total = results.reduce((sum,r) => sum + (r.cents ?? 0), 0) + remotes.reduce((sum,r) => sum + r.cents, 0);
   const count = shades.reduce((sum,s) => sum + (Number(s.quantity) || 0), 0);
   if (review) return <section className="container-luxe py-12 md:py-16 max-w-4xl" aria-label="Estimate summary">
-    <button type="button" onClick={() => { setReview(false); setFocusTarget({id:'estimate-builder-heading'}); }} className="underline underline-offset-4 mb-6 py-2">← Back to my windows</button>
-    <h2 id="estimate-review-heading" tabIndex={-1} className="font-serif text-3xl md:text-4xl scroll-mt-28">Your estimate, at a glance.</h2>
+    <h2 id="estimate-review-heading" tabIndex={-1} className="font-serif text-3xl md:text-4xl scroll-mt-28 focus:outline-none">Your estimate, at a glance.</h2>
     <p className="mt-3 mb-8 text-warm-gray-700">Review your windows and options. You can edit any window without starting over.</p>
+    <button type="button" onClick={() => { setReview(false); setFocusTarget({id:'estimate-builder-heading'}); }} className="underline underline-offset-4 mb-6 py-2">← Back to my windows</button>
     {!complete && <p role="status" className="rounded-xl bg-cream border border-gold p-4 mb-6">A few window details still need attention. Edit the marked windows to finish your total.</p>}
     <div className="space-y-4">
       {shades.map((shade,index) => <article key={shade.id} className="rounded-2xl border border-warm-gray-200 bg-white p-5 sm:p-6">
@@ -82,11 +82,11 @@ export default function EstimateBuilder({ onProductSelect }: { onProductSelect: 
     </section>
   </section>;
   return <section className="container-luxe pt-12 pb-36 md:pt-16 lg:pb-16" aria-label="Custom window treatment estimate builder">
-    <div className="mb-8 flex flex-wrap items-center justify-between gap-3"><div><p className="text-sm uppercase tracking-[.14em] text-warm-gray-600 mb-2">Your instant estimate</p><h2 id="estimate-builder-heading" tabIndex={-1} className="font-serif text-3xl scroll-mt-28">Let’s start with your windows.</h2></div><span className="rounded-full bg-linen px-4 py-2 text-sm">Blinds &amp; shades</span></div>
+    <div className="mb-8 flex flex-wrap items-center justify-between gap-3"><div><p className="text-sm uppercase tracking-[.14em] text-warm-gray-600 mb-2">Your instant estimate</p><h2 id="estimate-builder-heading" tabIndex={-1} className="font-serif text-3xl scroll-mt-28 focus:outline-none">Let’s start with your windows.</h2></div><span className="rounded-full bg-linen px-4 py-2 text-sm">Blinds &amp; shades</span></div>
     <div className="grid lg:grid-cols-[minmax(0,1fr)_360px] gap-8 items-start">
       <div className="space-y-6">
         {shades.map((shade,index) => <article key={shade.id} onFocusCapture={() => onProductSelect(shade.product ?? 'cellular')} className="bg-white rounded-2xl border border-warm-gray-200 p-5 sm:p-8 shadow-sm">
-          <div className="flex items-center justify-between gap-3 mb-6"><h3 id={`window-heading-${shade.id}`} tabIndex={-1} className="font-serif text-2xl scroll-mt-28 min-w-0 break-words"><span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-linen text-base mr-3">{index+1}</span>{shade.room || `Window ${index+1}`}</h3>{shades.length > 1 && <button type="button" aria-label={`Remove window ${index+1}`} onClick={() => { changeShades(shades.filter(x => x.id !== shade.id)); if(activeId === shade.id) setActiveId(null); setFocusTarget({id:"estimate-builder-heading"}); }} className="text-sm underline underline-offset-4 p-2">Remove</button>}</div>
+          <div className="flex items-center justify-between gap-3 mb-6"><h3 id={`window-heading-${shade.id}`} tabIndex={-1} className="font-serif text-2xl scroll-mt-28 focus:outline-none min-w-0 break-words"><span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-linen text-base mr-3">{index+1}</span>{shade.room || `Window ${index+1}`}</h3>{shades.length > 1 && <button type="button" aria-label={`Remove window ${index+1}`} onClick={() => { changeShades(shades.filter(x => x.id !== shade.id)); if(activeId === shade.id) setActiveId(null); setFocusTarget({id:"estimate-builder-heading"}); }} className="text-sm underline underline-offset-4 p-2">Remove</button>}</div>
           {activeId !== shade.id ? <div>
             <p className="font-semibold">{productNames[shade.product ?? 'cellular']}</p>
             <p className="text-sm mt-2">{shade.width || '—'}″ × {shade.height || '—'}″ · {details(shade).operation} · Qty {shade.quantity || '—'}</p>
@@ -125,7 +125,7 @@ export default function EstimateBuilder({ onProductSelect }: { onProductSelect: 
         </article>)}
         <button type="button" disabled={shades.length>=25} onClick={() => { changeShades([...shades,fresh(nextId)]); setNextId(n=>n+1); editWindow(nextId); }} className="w-full rounded-xl border border-dashed border-warm-gray-400 py-4 font-semibold hover:bg-cream disabled:opacity-50">+ Add another window</button>
         {remotes.length > 0 && <section aria-label="Remote controls" className="rounded-2xl border border-gold/60 bg-cream p-5 sm:p-8">
-          <h3 id="estimate-remotes-heading" tabIndex={-1} className="font-serif text-2xl scroll-mt-28">Your remote controls</h3>
+          <h3 id="estimate-remotes-heading" tabIndex={-1} className="font-serif text-2xl scroll-mt-28 focus:outline-none">Your remote controls</h3>
           <p className="mt-2 text-sm text-warm-gray-700">Your estimate includes a shared remote for each shade group below. Additional remotes are optional.</p>
           {remotes.length > 1 && <p className="mt-2 text-sm text-warm-gray-700">These groups are estimated with separate remotes. We’ll confirm whether any can share a remote during your consultation.</p>}
           {remotes.map(remote => <div key={remote.system} className="mt-5 border-t border-warm-gray-300 pt-5">
