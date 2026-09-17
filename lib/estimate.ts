@@ -1,15 +1,26 @@
+import { rollerWidths, rollerHeights, rollerPrices, rollerUpgrades, rollerSmallRound, rollerLargeRound } from './roller-estimate-prices';
 import { romanWidths, romanHeights, romanPrices, romanUpgrades } from './roman-estimate-prices';
 import { zebraWidths, zebraHeights, zebraPrices, zebraUpgrades, zebraLargeRound } from './zebra-estimate-prices';
 import { widths, heights, prices, upgrades } from './estimate-prices';
 export type Operation = keyof typeof upgrades;
-export type Product = 'cellular' | 'zebra' | 'roman';
+export type Product = 'cellular' | 'zebra' | 'roman' | 'roller';
 export type Shade = { id: number; product?: Product; romanStyle?: 'flat' | 'classic'; room: string; width: string; height: string; quantity: string; light: 'light' | 'dark'; operation: Operation };
 export function estimateShade(shade: Shade): { cents: number; error?: never } | { error: string; cents?: never } {
   const w = Number(shade.width), h = Number(shade.height), q = Number(shade.quantity);
   if (!Number.isFinite(w) || !Number.isFinite(h) || w <= 0 || h <= 0) return { error: 'Enter your window width and height in inches.' };
   if (!Number.isInteger(q) || q < 1 || q > 50) return { error: 'Enter a quantity from 1 to 50.' };
   if (!(shade.operation in upgrades) || !(shade.light in prices)) return { error: 'Choose your shade options.' };
-  if (shade.product && shade.product !== 'cellular' && shade.product !== 'zebra' && shade.product !== 'roman') return { error: 'Choose a shade type.' };
+  if (shade.product && shade.product !== 'cellular' && shade.product !== 'zebra' && shade.product !== 'roman' && shade.product !== 'roller') return { error: 'Choose a shade type.' };
+  if (shade.product === 'roller') {
+    if (shade.operation !== 'cordless' && shade.operation !== 'motor') return { error: 'Roller shades are available with cordless or motorized operation.' };
+    const minW = shade.operation === 'motor' ? 16.5 : 17.75;
+    if (w < minW || w > 96 || h < 12 || h > 96) return { error: `Online roller estimates cover widths ${minW}–96 inches and heights 12–96 inches. We can help quote other sizes.` };
+    if (shade.operation === 'cordless' && w < 23.625 && h > 70) return { error: 'Cordless roller shades under 23⅝ inches wide have a maximum height of 70 inches. Choose motorized or ask us about your window.' };
+    const col = rollerWidths.findIndex(x => x >= w);
+    const row = rollerHeights.findIndex(x => x >= h);
+    const cassette = (w > 78 || h > 78 ? rollerLargeRound : rollerSmallRound)[col];
+    return { cents: (rollerPrices[shade.light][row][col] + rollerUpgrades[shade.operation] + cassette) * q };
+  }
   if (shade.product === 'roman') {
     if (shade.romanStyle && shade.romanStyle !== 'flat' && shade.romanStyle !== 'classic') return { error: 'Choose Flat or Classic Roman shades.' };
     if (shade.operation === 'motor-tdbu') return { error: 'Roman top-down / bottom-up shades use cordless operation.' };
