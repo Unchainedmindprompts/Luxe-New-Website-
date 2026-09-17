@@ -247,7 +247,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </section>
 
-      <div className="container-luxe max-w-4xl pb-12"><Link href="/estimate" className="inline-flex items-center rounded-full bg-charcoal text-white px-7 py-3 font-semibold">Get an Instant Quote <span aria-hidden="true" className="ml-3">→</span></Link><p className="mt-3 text-sm text-warm-gray-600">Instant estimates available for cellular and Zebra shades.</p></div>
+      <div className="container-luxe max-w-4xl pb-12"><Link href="/estimate" className="inline-flex items-center rounded-full bg-charcoal text-white px-7 py-3 font-semibold">Get an Instant Quote <span aria-hidden="true" className="ml-3">→</span></Link><p className="mt-3 text-sm text-warm-gray-600">Instant estimates available for cellular and banded shades.</p></div>
 
       {/* Product image or video */}
       <section className="container-luxe -mt-4 mb-16">
