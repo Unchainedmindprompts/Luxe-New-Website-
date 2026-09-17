@@ -1,13 +1,25 @@
+import { romanWidths, romanHeights, romanPrices, romanUpgrades } from './roman-estimate-prices';
 import { zebraWidths, zebraHeights, zebraPrices, zebraUpgrades, zebraLargeRound } from './zebra-estimate-prices';
 import { widths, heights, prices, upgrades } from './estimate-prices';
 export type Operation = keyof typeof upgrades;
-export type Shade = { id: number; product?: 'cellular' | 'zebra'; room: string; width: string; height: string; quantity: string; light: 'light' | 'dark'; operation: Operation };
+export type Product = 'cellular' | 'zebra' | 'roman';
+export type Shade = { id: number; product?: Product; romanStyle?: 'flat' | 'classic'; room: string; width: string; height: string; quantity: string; light: 'light' | 'dark'; operation: Operation };
 export function estimateShade(shade: Shade): { cents: number; error?: never } | { error: string; cents?: never } {
   const w = Number(shade.width), h = Number(shade.height), q = Number(shade.quantity);
   if (!Number.isFinite(w) || !Number.isFinite(h) || w <= 0 || h <= 0) return { error: 'Enter your window width and height in inches.' };
   if (!Number.isInteger(q) || q < 1 || q > 50) return { error: 'Enter a quantity from 1 to 50.' };
   if (!(shade.operation in upgrades) || !(shade.light in prices)) return { error: 'Choose your shade options.' };
-  if (shade.product && shade.product !== 'cellular' && shade.product !== 'zebra') return { error: 'Choose a shade type.' };
+  if (shade.product && shade.product !== 'cellular' && shade.product !== 'zebra' && shade.product !== 'roman') return { error: 'Choose a shade type.' };
+  if (shade.product === 'roman') {
+    if (shade.romanStyle && shade.romanStyle !== 'flat' && shade.romanStyle !== 'classic') return { error: 'Choose Flat or Classic Roman shades.' };
+    if (shade.operation === 'motor-tdbu') return { error: 'Roman top-down / bottom-up shades use cordless operation.' };
+    const minW = shade.operation === 'motor' ? 22 : shade.operation === 'tdbu' ? 18 : 10;
+    const maxW = shade.operation === 'tdbu' ? 66 : 96;
+    if (w < minW || w > maxW || h < 24 || h > 96) return { error: `Online Roman estimates for this option cover widths ${minW}–${maxW} inches and heights 24–96 inches. We can help quote other sizes.` };
+    if (shade.operation === 'motor' && w * h / 144 > 49.5) return { error: 'This window exceeds the rechargeable Roman motor size limit. Ask us about another option.' };
+    const base = romanPrices[shade.light][romanHeights.findIndex(x => x >= h)][romanWidths.findIndex(x => x >= w)];
+    return { cents: (base + romanUpgrades[shade.operation]) * q };
+  }
   if (shade.product === 'zebra') {
     if (shade.operation !== 'cordless' && shade.operation !== 'motor') return { error: 'Zebra shades are available with cordless or motorized operation.' };
     const minW = shade.operation === 'motor' ? 18 : 17.75;

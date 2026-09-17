@@ -22,3 +22,16 @@ for (const patch of [{operation:'tdbu'},{operation:'motor-tdbu'},{width:'17.5'},
 assert.ok(estimateShade({...zebra,width:'17.75',height:'70'}).cents);
 assert.ok(estimateShade({...zebra,width:'23.625',height:'96'}).cents);
 console.log('PASS: Zebra prices, remote/charger, cassette threshold, quantities and operation-specific sizing.');
+const roman = {...base, product:'roman', romanStyle:'flat'};
+assert.equal(estimateShade(roman).cents,32950);
+assert.equal(estimateShade({...roman,romanStyle:'classic'}).cents,32950);
+assert.equal(estimateShade({...roman,light:'dark'}).cents,36245);
+assert.equal(estimateShade({...roman,operation:'motor'}).cents,60438);
+assert.equal(estimateShade({...roman,operation:'tdbu'}).cents,47321);
+assert.equal(estimateShade({...roman,width:'36.125'}).cents,35994);
+assert.equal(estimateShade({...roman,quantity:'2'}).cents,65900);
+for (const patch of [{width:'9.9'},{height:'23.9'},{height:'97'},{width:'97'},{operation:'tdbu',width:'66.125'},{operation:'motor',width:'21.9'},{operation:'motor',width:'96',height:'75'},{operation:'motor-tdbu'},{romanStyle:'hobbled'}]) assert.ok(estimateShade({...roman,...patch}).error,JSON.stringify(patch));
+assert.ok(estimateShade({...roman,width:'10',height:'24'}).cents);
+assert.ok(estimateShade({...roman,operation:'motor',width:'96',height:'74.25'}).cents);
+assert.ok(estimateShade({...roman,width:'96',height:'96'}).cents);
+console.log('PASS: Roman style parity, lining, motor package, bracket rounding, quantities and size limits.');
