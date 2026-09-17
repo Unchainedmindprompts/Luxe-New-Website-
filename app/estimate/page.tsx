@@ -4,7 +4,7 @@ import { productPages } from '@/lib/product-data';
 export const metadata: Metadata = {
   title: 'Instant Blinds & Shades Estimate | Luxe Window Works',
   description: 'Explore custom cellular, banded (Zebra), Roman, roller shade, and white faux wood blind pricing for your North Idaho home. Enter your window sizes and compare light control and motorization.',
-  robots: { index: false, follow: false },
+  alternates: { canonical: 'https://www.luxewindowworks.com/estimate' },
 };
 export default function EstimatePage() {
   return <>
