@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -235,14 +236,12 @@ export default async function ProductPage({ params }: Props) {
             >
               Get Expert Recommendations
             </TrackedCta>
-            <TrackedCta
-              href={BUSINESS.phoneHref}
-              event={CONVERSION_EVENTS.PhoneClick}
-              className="inline-flex items-center justify-center gap-2 border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-white font-semibold px-8 py-4 rounded-full text-lg transition-all"
-            >
-              Call us: {BUSINESS.phone}
-            </TrackedCta>
+            <Link href="/estimate" className="inline-flex items-center justify-center gap-2 bg-charcoal hover:bg-warm-gray-800 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+              Get an Instant Estimate <span aria-hidden="true">→</span>
+            </Link>
           </div>
+          <p className="mt-4 text-sm text-warm-gray-600">Instant estimates for cellular, banded, Roman, and roller shades, plus white faux wood blinds. Measuring and installation included. No email required.</p>
+          <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="inline-block mt-3 text-sm underline underline-offset-4">Questions? Call {BUSINESS.phone}</TrackedCta>
         </div>
       </section>
 
