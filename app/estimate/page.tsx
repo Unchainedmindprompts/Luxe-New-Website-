@@ -22,7 +22,7 @@ export default function EstimatePage() {
     <section className="container-luxe py-16 max-w-4xl"><h2 className="font-serif text-3xl mb-7">A few things worth knowing</h2>
       {[
         ['How should I measure?', 'For a starting estimate, measure the width and height of the window opening in inches. Decimals are welcome—36.5 means 36½ inches. We will take the final measurements before anything is ordered.'],
-        ['What does this estimate include?', 'Your selected ¾-inch smooth cellular shades and operating options. Motorized estimates include a rechargeable battery and one compatible remote per shade. Installation, shipping, and sales tax are additional and will be included in your final quote.'],
+        ['What does this estimate include?', 'Your selected ¾-inch smooth cellular shades and operating options, plus professional in-home consultation, measurements, and installation. Motorized estimates include a rechargeable battery and one compatible remote per shade. Sales tax is not included.'],
         ['Can I choose other fabrics?', 'Absolutely. Prints, linen looks, and other textured fabrics are available at an additional charge. We bring samples so you can compare them in your own light.'],
         ['What if my window needs something different?', 'Large windows, specialty shapes, and other products deserve a closer look. Schedule a free consultation and we will help you find the right fit.'],
       ].map(([q,a]) => <details key={q} className="border-b border-warm-gray-200 py-5"><summary className="cursor-pointer font-semibold">{q}</summary><p className="mt-3 text-warm-gray-700 leading-relaxed">{a}</p></details>)}
