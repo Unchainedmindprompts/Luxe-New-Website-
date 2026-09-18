@@ -127,6 +127,7 @@ test("8  commercial titles and descriptions are unique", (t) => {
     productPages["roller-shades"].metaTitle,
     productPages.shutters.metaTitle,
     productPages["cellular-shades"].metaTitle,
+    productPages["custom-drapery"].metaTitle,
     areaPages["post-falls"].metaTitle,
     areaPages["coeur-d-alene"].metaTitle,
   ];
@@ -136,6 +137,7 @@ test("8  commercial titles and descriptions are unique", (t) => {
     productPages["roller-shades"].metaDescription,
     productPages.shutters.metaDescription,
     productPages["cellular-shades"].metaDescription,
+    productPages["custom-drapery"].metaDescription,
     areaPages["post-falls"].metaDescription,
     areaPages["coeur-d-alene"].metaDescription,
   ];

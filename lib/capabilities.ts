@@ -24,8 +24,10 @@
  *      invent pages or schema for it.
  *
  * DRAPERY. Custom draperies are a real offering and a valid consultation
- * category. The repository has no drapery product page and no Service `@id`.
- * That absence is recorded here rather than filled in.
+ * category. The canonical product page is `/products/custom-drapery` and the
+ * one Service `@id` is `https://www.luxewindowworks.com/products/custom-drapery#service`.
+ * The consult category id stays `custom-draperies` so agents do not see a
+ * second identity.
  *
  * READINESS. Flipping `CONSULT_READINESS` / `CONSULT_AUTONOMOUS_EXECUTION` to
  * `"request-submission-ready"` is a deliberate claim that durable rate limiting,
@@ -150,8 +152,9 @@ export type ConsultReasonCode = (typeof CONSULT_REASON_CODES)[number];
  *
  * Type-only check against `OfferingId` so adding a product/offering fails
  * `tsc` here until the consult list is updated — the same compile-time
- * discipline as `OFFERINGS` itself. Drapery is not in this list on purpose:
- * it is not an `OfferingId` and must not be forced into that registry.
+ * discipline as `OFFERINGS` itself. `custom-drapery` is an OfferingId with a
+ * product page, but it is not in this list: the consult category remains
+ * `custom-draperies` so agents keep one drapery identity.
  */
 export const CONSULT_OFFERING_CATEGORY_IDS = [
   "blinds",
@@ -167,11 +170,17 @@ export const CONSULT_OFFERING_CATEGORY_IDS = [
 ] as const satisfies readonly OfferingId[];
 
 type ConsultOfferingCategoryId = (typeof CONSULT_OFFERING_CATEGORY_IDS)[number];
-type _AllOfferingsCovered = OfferingId extends ConsultOfferingCategoryId
+type OfferingIdsWithOwnConsultCategory = Exclude<OfferingId, "custom-drapery">;
+type _AllOfferingsCovered = OfferingIdsWithOwnConsultCategory extends ConsultOfferingCategoryId
   ? true
   : never;
 const _allOfferingsCovered: _AllOfferingsCovered = true;
 void _allOfferingsCovered;
+
+type ProductSlug = (typeof PRODUCTS)[number]["slug"];
+type _DraperyHasProductPage = "custom-drapery" extends ProductSlug ? true : never;
+const _draperyHasProductPage: _DraperyHasProductPage = true;
+void _draperyHasProductPage;
 
 export const CONSULT_DRAPERY_CATEGORY_ID = "custom-draperies" as const;
 export type ConsultCategoryId =
@@ -311,14 +320,22 @@ export interface ConsultCategoryPublic {
   readonly canonicalServiceId: string | null;
 }
 
+export const DRAPERY_PRODUCT_SLUG = "custom-drapery" as const;
+export const DRAPERY_PRODUCT_PAGE = `/products/${DRAPERY_PRODUCT_SLUG}` as const;
+export const DRAPERY_SERVICE_ID =
+  `${BUSINESS.url}${DRAPERY_PRODUCT_PAGE}#service` as const;
+
 export function consultCategoriesPublic(): readonly ConsultCategoryPublic[] {
-  const fromPages: ConsultCategoryPublic[] = PRODUCTS.map((product) => ({
-    id: product.slug,
+  const fromPages: ConsultCategoryPublic[] = PRODUCTS.filter(
+    (product) => product.slug !== DRAPERY_PRODUCT_SLUG
+  ).map((product) => ({
+    id: product.slug as ConsultOfferingCategoryId,
     offered: true as const,
     canonicalProductPage: `/products/${product.slug}`,
     // Same URL shape as `productServiceRef` in lib/schema.ts. Built here so
-    // this module does not import the schema graph — and so drapery / aluminum
-    // shutters never receive a fabricated Service `@id`.
+    // this module does not import the schema graph. Drapery is attached once
+    // below under `custom-draperies`, not as a second category from the page
+    // slug. Aluminum shutters still has no Service `@id`.
     canonicalServiceId: `${BUSINESS.url}/products/${product.slug}#service`,
   }));
 
@@ -333,8 +350,8 @@ export function consultCategoriesPublic(): readonly ConsultCategoryPublic[] {
     {
       id: CONSULT_DRAPERY_CATEGORY_ID,
       offered: true,
-      canonicalProductPage: null,
-      canonicalServiceId: null,
+      canonicalProductPage: DRAPERY_PRODUCT_PAGE,
+      canonicalServiceId: DRAPERY_SERVICE_ID,
     },
   ];
 }

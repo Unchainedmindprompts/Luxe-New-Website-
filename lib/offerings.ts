@@ -39,12 +39,15 @@ import {
 } from "@/lib/brands";
 
 /**
- * The nine offerings with a product page, plus the one without.
+ * The ten offerings with a product page, plus the one without.
  *
  * Aluminum shutters is a real offering — Luxe's shutters page lists it and four
  * articles cover it — that has no `/products` route and therefore no canonical
  * Service. Its absence from the Service layer is a fact about the business, so
  * it is recorded here rather than fixed by inventing a page.
+ *
+ * Custom drapery is the opposite case: it now has `/products/custom-drapery`
+ * and one Service `@id`. Manufacturers for that offering are unestablished.
  */
 export type OfferingId = ProductSlug | "aluminum-shutters";
 
@@ -154,6 +157,12 @@ export const OFFERINGS: Record<OfferingId, Offering> = {
   // not evidence for either, and picking one would be a guess wearing a
   // citation. Left unestablished until the copy says it plainly.
   "roller-shades": { manufacturersEvidenced: [] },
+
+  // A blog post names Lafayette Interior Fashions Masterpieces for drapery.
+  // That is one article, not product-page body copy, and it is not enough to
+  // publish a manufacturer relationship here. Left unestablished until Mark
+  // states which lines Luxe actually specifies for custom drapes.
+  "custom-drapery": { manufacturersEvidenced: [] },
 };
 
 /**
