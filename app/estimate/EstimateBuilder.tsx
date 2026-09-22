@@ -75,8 +75,8 @@ export default function EstimateBuilder({ onProductSelect }: { onProductSelect: 
     <section className="bg-charcoal text-white rounded-2xl p-6 sm:p-8 mt-6" aria-label="Estimate total">
       <h3 className="font-serif text-2xl">Your estimated total</h3>
       <p className="font-serif text-4xl sm:text-5xl mt-3 break-words">{complete ? remoteMoney(total) : 'Complete your window details'}</p>
-      <p className="mt-4 text-sm text-white/85">Includes professional in-home consultation, measurements, and installation. Sales tax is not included.</p>
-      <p className="mt-3 text-sm text-white/85">This is an estimate. Your final quote follows a measurement and fabric check.</p>
+      <p className="mt-4 text-sm text-white/85">Includes your selected blinds and shades, professional in-home consultation, measuring, and installation. Sales tax is additional. Some products have a small shipping or tariff surcharge; others have none.</p>
+      <p className="mt-3 text-sm text-white/85">Your final quote will include any applicable charges after we confirm measurements and selections.</p>
       <Link href="/book" className="block text-center bg-gold hover:bg-gold-dark text-charcoal font-semibold px-5 py-4 rounded-full mt-6">Book Your Free In-Home Consultation</Link>
       <p className="text-xs text-white/80 mt-4 text-center">No order or appointment is created by this estimate.</p>
     </section>
@@ -143,7 +143,7 @@ export default function EstimateBuilder({ onProductSelect }: { onProductSelect: 
       </div>
       <aside className="lg:sticky lg:top-28 rounded-2xl overflow-hidden border border-warm-gray-200">
         <div className="bg-charcoal text-white p-7"><p className="text-gold uppercase tracking-[.15em] text-xs mb-3">Your home, your way</p><h2 className="font-serif text-2xl">Your window treatment estimate</h2><div aria-live="polite" aria-atomic="true" className="mt-6">{complete ? <><p className="text-5xl font-serif">{remoteMoney(total)}</p><p className="mt-2 text-sm text-white/80">For {count} custom window {count===1?'treatment':'treatments'}</p></> : <><p className="text-3xl font-serif">Let’s put a number to it.</p><p className="text-sm text-white/80 mt-3">Enter each window’s measurements to see your total.</p></>}</div><button type="button" onClick={openReview} className="mt-6 w-full rounded-full bg-gold text-charcoal font-semibold px-4 py-3">Review My Estimate</button></div>
-        <div className="bg-cream p-7"><p className="text-sm leading-relaxed text-warm-gray-700">Includes your custom blinds and shades, professional in-home consultation, measurements, and installation. Sales tax is not included. Your final quote follows a measurement and fabric check.</p>
+        <div className="bg-cream p-7"><p className="text-sm leading-relaxed text-warm-gray-700">Includes your selected blinds and shades, professional in-home consultation, measuring, and installation. Sales tax is additional. Some products have a small shipping or tariff surcharge; others have none. Your final quote will include any applicable charges after we confirm measurements and selections.</p>
           {remotes.length > 0 && <p className="text-sm mt-4 text-warm-gray-700">Remote controls are counted once in the total, in the Remote controls section. Motorized Banded, Roman, and Roller shades also include a USB charger per shade.</p>}
           <div className="border-t border-warm-gray-300 my-6" /><h3 className="font-serif text-xl">Like what you see?</h3><p className="mt-2 mb-5 text-sm text-warm-gray-700 leading-relaxed">We’ll bring the samples, check the fit, and help you make it yours.</p>
           <Link href="/book" className="block text-center bg-gold hover:bg-gold-dark text-charcoal font-semibold px-4 py-4 rounded-full">Book a Free Consultation</Link>
@@ -154,7 +154,7 @@ export default function EstimateBuilder({ onProductSelect }: { onProductSelect: 
     </div>
     <style>{`@media (max-width: 1023px) { body:has(#estimate-mobile-bar) { padding-bottom: 100px; } html:has(#estimate-mobile-bar) { scroll-padding-bottom: 110px; } }`}</style>
     <div id="estimate-mobile-bar" className="fixed inset-x-0 bottom-0 z-40 border-t border-warm-gray-300 bg-white shadow-lg px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden" aria-label="Quick estimate review">
-      <div className="mx-auto max-w-2xl flex items-center justify-between gap-3"><div className="min-w-0"><p className="text-xs text-warm-gray-600">{complete ? 'Estimated total · before tax' : 'Your estimate'}</p><p className="font-semibold text-lg break-words">{complete ? remoteMoney(total) : 'Details needed'}</p></div><button type="button" onClick={openReview} className="shrink-0 rounded-full bg-charcoal text-white px-4 py-3 text-sm font-semibold">Review My Estimate</button></div>
+      <div className="mx-auto max-w-2xl flex items-center justify-between gap-3"><div className="min-w-0"><p className="text-xs text-warm-gray-600">{complete ? 'Before tax & applicable surcharges' : 'Your estimate'}</p><p className="font-semibold text-lg break-words">{complete ? remoteMoney(total) : 'Details needed'}</p></div><button type="button" onClick={openReview} className="shrink-0 rounded-full bg-charcoal text-white px-4 py-3 text-sm font-semibold">Review My Estimate</button></div>
     </div>
   </section>;
 }
