@@ -2,7 +2,7 @@
  * Contextual product links inside article bodies.
  *
  * Search Console showed the problem this exists to fix: the blog carries 59%
- * of the site's impressions and 75% of its clicks, while the nine product
+ * of the site's impressions and 75% of its clicks, while the product
  * pages sit at average positions 21–57 and drew 8 clicks in twelve months.
  * The cause was structural — 47 of 52 posts contained no in-body link to a
  * product page at all. Every product link on an article came from the header
@@ -55,6 +55,11 @@ const TERMS: ReadonlyArray<readonly [string, string]> = [
   ["dual shades", "banded-shades"],
   ["solar shades", "solar-shades"],
   ["solar shade", "solar-shades"],
+  ["custom drapery", "custom-drapery"],
+  ["custom drapes", "custom-drapery"],
+  ["custom drape", "custom-drapery"],
+  ["drapery", "custom-drapery"],
+  ["drapes", "custom-drapery"],
   ["motorization", "motorization"],
   ["shutters", "shutters"],
   ["blinds", "blinds"],
