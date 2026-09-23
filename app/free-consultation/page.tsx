@@ -4,6 +4,7 @@ import { BUSINESS, REVIEWS } from "@/lib/constants";
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { ConsultationForm } from "./ConsultationForm";
+import { TemporaryShadeOffer } from "@/components/TemporaryShadeOffer";
 
 const BOOK_HREF = "/book";
 const primary = "inline-flex min-h-12 items-center justify-center rounded-lg bg-gold px-6 py-3 font-semibold text-charcoal transition-colors hover:bg-[#dbc08f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold";
@@ -11,6 +12,7 @@ const FAQS = [
   { q: "Is the consultation really free?", a: "Yes. Your in-home consultation is free, with no obligation to buy. We look at your windows, discuss what you want to improve, and help you compare suitable options." },
   { q: "Do I need to measure or choose a product first?", a: "No measurements or product decisions needed. We bring samples and help you compare styles, fabrics, light control, and motorization in your home. We handle the measuring." },
   { q: "Can you help with just one window?", a: "Yes. Single-window projects are welcome, along with room-by-room updates and whole-home installations." },
+  { q: "Can you help with privacy while I wait for my custom window treatments?", a: "Yes. When you order custom window treatments with Luxe, we provide and install free temporary shades in priority rooms. Tell us your move-in date so we can coordinate installation with you. When your custom treatments arrive, we remove the temporary shades as part of the installation." },
   { q: "What will my window treatments cost?", a: "Pricing depends on your window sizes, product, fabric, and operating system. Tell us the budget you have in mind so we can show you appropriate options. You can review the price before deciding to order." },
   { q: "Where do you work?", a: "We serve Post Falls, Coeur d’Alene, Hayden, Rathdrum, Sandpoint, and surrounding North Idaho communities." },
 ];
@@ -34,6 +36,7 @@ export default function FreeConsultationPage() {
             <h1 className="mt-4 max-w-xl font-serif text-[2.35rem] leading-[1.12] sm:text-5xl xl:text-[3.5rem] text-balance">The Luxe Experience.<br />Without the Luxury Price Tag.</h1>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-warm-gray-200">Custom blinds and shades, professionally measured and installed. We bring the showroom to you—with options that fit your home and budget.</p>
             <p className="mt-5 text-base font-medium text-white">Free in-home consultation. No obligation to buy.</p>
+            <p className="mt-4 max-w-xl border-l-2 border-gold pl-4 text-sm leading-relaxed text-warm-gray-200"><strong className="text-white">Moving in with bare windows?</strong> Free temporary shades in priority rooms when you order your custom treatments with Luxe. We’ll coordinate timing with you.</p>
             <a href="#request" className={`${primary} mt-6 lg:hidden`}>Request a Call or Text <span aria-hidden="true" className="ml-3">→</span></a>
             <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-warm-gray-200">
               <span>24 years of experience</span><span>Single-window projects welcome</span>
@@ -53,6 +56,8 @@ export default function FreeConsultationPage() {
           </figure>
         </div>
       </section>
+
+      <TemporaryShadeOffer requestHref="#request" />
 
       <section aria-label="Customer review" className="border-b border-warm-gray-200 bg-cream py-8 sm:py-10">
         <div className="container-luxe grid gap-5 lg:grid-cols-[240px_1fr] lg:gap-12 items-center">
