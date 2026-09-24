@@ -537,11 +537,13 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-          <div className="mt-12 text-center">
-            <Link href="/estimate" className="inline-flex items-center justify-center gap-3 rounded-full bg-charcoal text-white px-7 py-4 font-semibold hover:bg-warm-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
-              Get an Instant Estimate <span aria-hidden="true">→</span>
+          <div className="mt-12 text-center max-w-2xl mx-auto">
+            <h3 className="font-serif text-2xl sm:text-3xl text-charcoal">Not sure where to start?</h3>
+            <p className="mt-4 text-base leading-relaxed text-warm-gray-600">Explore a selection of our best-value blinds and shades, compare options, and get a feel for your budget. Our instant estimator is a simple place to begin.</p>
+            <Link href="/estimate" className="mt-6 inline-flex items-center justify-center gap-3 rounded-full bg-charcoal text-white px-7 py-4 font-semibold hover:bg-warm-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+              Explore the Instant Estimator <span aria-hidden="true">→</span>
             </Link>
-            <p className="mt-4 text-sm leading-relaxed text-warm-gray-600">Explore pricing for blinds and shades. Measuring and installation included. No email required.</p>
+            <p className="mt-4 text-sm leading-relaxed text-warm-gray-600">No pressure. No email required. Professional measuring and installation included in your estimate.</p>
           </div>
         </div>
       </section>
