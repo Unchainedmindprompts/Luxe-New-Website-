@@ -250,7 +250,7 @@ const HOMEPAGE_FAQS = [
   {
     question: "Why do you recommend cellular shades for Northern Idaho homes?",
     answer:
-      "Cellular (honeycomb) shades trap air inside their hexagonal cells, making them the most energy-efficient window covering available — R-values up to 7.86 on double-cell blackout configurations. In Northern Idaho's heating-dominated climate, that translates to meaningfully lower winter heat loss and reduced summer heat gain.",
+      "Cellular (honeycomb) shades trap air inside their hexagonal cells, making them the most energy-efficient window covering available — R-values up to 7.86 on double-cell room darkening configurations. In Northern Idaho's heating-dominated climate, that translates to meaningfully lower winter heat loss and reduced summer heat gain.",
   },
 ] as const;
 
@@ -317,11 +317,11 @@ const PROBLEM_PATHS = [
     alt: "Light-filtering banded shades in a bright sitting room",
   },
   {
-    title: "Better Sleep or Blackout",
+    title: "Better Sleep or Room Darkening",
     body: "Create darker bedrooms and better light control where it matters most.",
     href: "/products/cellular-shades",
     image: "/images/solutions/blackout-bedroom.webp",
-    alt: "Closed cellular blackout shades in a softly lit bedroom",
+    alt: "Closed cellular room darkening shades in a softly lit bedroom",
   },
   {
     title: "Want Motorized Shades",
@@ -341,7 +341,7 @@ const PROCESS_STEPS = [
   },
   {
     title: "We Help You Choose Room by Room",
-    body: "Every window has a different job. We help you think through privacy, glare, insulation, blackout, child safety, motorization, and style.",
+    body: "Every window has a different job. We help you think through privacy, glare, insulation, room darkening, child safety, motorization, and style.",
     image: "/images/process-room-by-room.png",
     alt: "Open-plan North Idaho home with different window treatments matched to each room",
   },
