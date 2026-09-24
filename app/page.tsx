@@ -343,10 +343,8 @@ export default function HomePage() {
               <h1 id="hero-title" className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.1] text-white text-balance">Beautiful options.<br />Personal service.<br />That’s Luxe.</h1>
               <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-white">Discover custom window treatments for your style and budget, with personal guidance from the first samples to the final installation.</p>
               <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-                <Link href="/estimate" className="inline-flex items-center justify-center rounded-full bg-white text-charcoal px-7 py-4 font-semibold hover:bg-cream focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Get an Instant Estimate <span aria-hidden="true" className="ml-3">→</span></Link>
                 <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick} className="inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-charcoal rounded-full px-7 py-4 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Request a Free Consultation</TrackedCta>
               </div>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/90">Explore pricing for blinds and shades. Measuring and installation included. No email required.</p>
             </div>
           </div>
           <p className="absolute z-10 bottom-4 left-6 sm:left-10 rounded-sm bg-charcoal/80 text-white px-3 py-2 text-[11px] sm:text-xs tracking-wide">An actual Luxe Window Works installation</p>
@@ -538,6 +536,12 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="mt-12 text-center">
+            <Link href="/estimate" className="inline-flex items-center justify-center gap-3 rounded-full bg-charcoal text-white px-7 py-4 font-semibold hover:bg-warm-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+              Get an Instant Estimate <span aria-hidden="true">→</span>
+            </Link>
+            <p className="mt-4 text-sm leading-relaxed text-warm-gray-600">Explore pricing for blinds and shades. Measuring and installation included. No email required.</p>
           </div>
         </div>
       </section>
