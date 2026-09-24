@@ -254,6 +254,26 @@ export default function AboutPage() {
                 </span>
               ))}
             </div>
+            <div className="mt-10">
+              <h3 className="font-serif text-2xl md:text-3xl text-charcoal mb-5">
+                More room to enjoy the outdoors
+              </h3>
+              <div className="space-y-6 text-warm-gray-700 leading-relaxed">
+                <p>
+                  Your living space doesn’t have to end at the patio door.{" "}
+                  <Link href="/products/two" className="text-gold-dark hover:text-charcoal transition-colors">TWO’s outdoor shades and aluminum shutters</Link>{" "}
+                  help turn covered patios and decks into more comfortable, private
+                  spaces—giving you more opportunities to relax, entertain, and enjoy the view.
+                </p>
+                <p>
+                  For homeowners who spend winters elsewhere, lockable{" "}
+                  <Link href="/products/aluminum-shutters" className="text-gold-dark hover:text-charcoal transition-colors">Weatherwell Elite aluminum shutters</Link>{" "}
+                  can also add a layer of security while you’re away. We’ll help you
+                  choose the right configuration for your space, balancing shade,
+                  airflow, privacy, and protection.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
