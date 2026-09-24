@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "TWO Shutters & Shades in North Idaho | Luxe Window Works",
   description: "Explore the full TWO collection with Luxe Window Works: interior shutters, roller shades, Weatherwell aluminum shutters, outdoor shades and automation. Free in-home consultation.",
   alternates: { canonical: url },
-  openGraph: { title: "The TWO Collection | Luxe Window Works", description: "Beautiful indoors. More possibilities outside. Custom shutters and shades, measured and installed in North Idaho.", url, images: ["/images/weatherwell-elite/IMG_5252.jpeg"] },
+  openGraph: { title: "The TWO Collection | Luxe Window Works", description: "Beautiful indoors. More possibilities outside. Custom shutters and shades, measured and installed in North Idaho.", url, images: ["/images/weatherwell-elite/IMG_1086.jpeg"] },
 };
 const ranges = [
   { id: "highprofile-classic", name: "Highprofile Classic", category: "Real wood shutters", text: "The warmth of real wood, with painted or stained finishes and a choice of panel styles. A natural place to start when the shutters are part of the room’s character.", source: "highprofile-classic-wood-shutters" },
@@ -36,7 +36,7 @@ export default function TwoCollection() {
           <div className="flex flex-wrap gap-3 mt-8"><Link href="/book" className="rounded-full bg-charcoal text-white px-6 py-4 font-medium">Book a Free Consultation</Link><a href="#collection" className="rounded-full border border-charcoal/30 px-6 py-4 text-charcoal">Explore All Eight Ranges ↓</a></div>
           <p className="mt-6 text-sm text-warm-gray-700">Custom measured · Professionally installed · North Idaho</p>
         </div>
-        <div className="relative min-h-[340px] lg:min-h-[640px]"><Image src="/images/weatherwell-elite/IMG_5252.jpeg" alt="Adjustable aluminum shutters around a timber-framed covered outdoor living area" fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" /></div>
+        <div className="relative min-h-[340px] lg:min-h-[640px]"><Image src="/images/weatherwell-elite/IMG_1086.jpeg" alt="Dark aluminum shutters with sliding and folding panels on a modern home" fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" /></div>
       </div>
     </section>
     <section className="container-luxe pt-12 grid md:grid-cols-3 gap-5">{[{src:"highprofile",label:"Interior shutters"},{src:"colourvue",label:"Roller shades"},{src:"shadesol",label:"Outdoor shades"}].map(x => <div key={x.src}><div className="relative aspect-[4/3] rounded-xl overflow-hidden"><Image src={`/images/two/${x.src}.jpg`} alt={`TWO ${x.label.toLowerCase()} manufacturer inspiration`} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" /></div><p className="font-serif text-xl mt-3 text-charcoal">{x.label}</p></div>)}</section>
