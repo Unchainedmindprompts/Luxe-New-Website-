@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import ContactForm from "./contact/ContactForm";
 export const metadata: Metadata = {
   title: "Custom Window Treatments in Coeur d'Alene & Post Falls | Luxe Window Works",
   description:
@@ -371,28 +370,17 @@ export default function HomePage() {
           </div>
           <div className="mt-6 flex flex-col sm:flex-row sm:flex-wrap gap-3">
             <Link href="/estimate" className="inline-flex items-center justify-center rounded-full bg-charcoal text-white px-7 py-4 font-semibold hover:bg-warm-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">Get an Instant Estimate <span aria-hidden="true" className="ml-3">→</span></Link>
-            <a href="#hero-consultation" className="inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-charcoal rounded-full px-7 py-4 font-semibold">Request a Free Consultation</a>
+            <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick} className="inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-charcoal rounded-full px-7 py-4 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">Request a Free Consultation</TrackedCta>
           </div>
           <p className="mt-3 text-sm text-warm-gray-600">Explore pricing for blinds and shades. Measuring and installation included. No email required.</p>
         </div>
-        <div className="relative max-w-[1600px] mx-auto lg:grid lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_400px]">
+        <div className="relative max-w-[1600px] mx-auto">
           <figure className="relative min-w-0">
-            <div className="relative aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[620px]">
-              <Image src="/images/luxe-completed-installation.webp" alt="Actual Luxe Window Works installation: custom shades filtering daylight in a living room with timber beams and a stone fireplace" fill className="object-cover object-[35%_center]" priority sizes="(min-width:1600px) 1200px, (min-width:1024px) 70vw, 100vw" quality={90} />
+            <div className="relative aspect-[4/3] sm:aspect-[16/9]">
+              <Image src="/images/luxe-completed-installation.webp" alt="Actual Luxe Window Works installation: custom shades filtering daylight in a living room with timber beams and a stone fireplace" fill className="object-cover object-[35%_center]" priority sizes="(min-width:1600px) 1600px, 100vw" quality={90} />
             </div>
             <figcaption className="absolute bottom-5 left-5 bg-charcoal/90 text-white px-4 py-2 text-xs tracking-wide rounded-sm">An actual Luxe Window Works installation</figcaption>
           </figure>
-          <div id="hero-consultation" className="scroll-mt-24 bg-white p-6 sm:p-8 text-charcoal border-t-4 border-gold lg:border-t-0 lg:border-l-4">
-            <p className="text-xs uppercase tracking-[0.14em] text-warm-gray-600 mb-2">One window or a whole home</p>
-            <h2 className="font-serif text-[28px] leading-tight">Your Free In-Home Consultation</h2>
-            <p className="mt-3 mb-5 text-sm leading-relaxed text-warm-gray-600">You don&apos;t need measurements or a product picked out. Tell us what you need help with—we&apos;ll bring samples, talk through your budget, and help you choose.</p>
-            <ContactForm compact />
-            <div className="mt-5 pt-4 border-t border-warm-gray-200 flex flex-wrap justify-between gap-3 text-sm">
-              <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="underline underline-offset-4">Call {BUSINESS.phone}</TrackedCta>
-              <TrackedCta href={`sms:${BUSINESS.phoneE164}`} event={CONVERSION_EVENTS.TextClick} className="underline underline-offset-4">Text Us</TrackedCta>
-            </div>
-            <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick} className="block mt-4 text-center text-xs underline underline-offset-4">Prefer to choose a time online?</TrackedCta>
-          </div>
         </div>
       </section>
 
