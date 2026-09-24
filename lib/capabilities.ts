@@ -317,8 +317,8 @@ export function consultCategoriesPublic(): readonly ConsultCategoryPublic[] {
     offered: true as const,
     canonicalProductPage: `/products/${product.slug}`,
     // Same URL shape as `productServiceRef` in lib/schema.ts. Built here so
-    // this module does not import the schema graph — and so drapery / aluminum
-    // shutters never receive a fabricated Service `@id`.
+    // this module does not import the schema graph. Drapery remains unlinked
+    // because it still has no dedicated service page.
     canonicalServiceId: `${BUSINESS.url}/products/${product.slug}#service`,
   }));
 
@@ -327,8 +327,8 @@ export function consultCategoriesPublic(): readonly ConsultCategoryPublic[] {
     {
       id: "aluminum-shutters",
       offered: true,
-      canonicalProductPage: null,
-      canonicalServiceId: null,
+      canonicalProductPage: "/products/aluminum-shutters",
+      canonicalServiceId: `${BUSINESS.url}/products/aluminum-shutters#service`,
     },
     {
       id: CONSULT_DRAPERY_CATEGORY_ID,

@@ -58,6 +58,18 @@
       "description": "Cellular honeycomb shades that reduce energy costs up to 20% with R-values up to 7.86. Expert advice on energy-efficient window treatments for Northern Idaho climate.",
       "url": "https://www.luxewindowworks.com/products/cellular-shades",
       "type": "service"
+    },
+    {
+      "name": "TWO Shutters, Shades and Automation",
+      "description": "Product selection, custom measurements and installation of the eight TWO ranges: interior shutters, roller shades, outdoor aluminum shutters, exterior shades and compatible shade automation.",
+      "url": "https://www.luxewindowworks.com/products/two",
+      "type": "service"
+    },
+    {
+      "name": "Outdoor Living and Lockable Aluminum Shutters",
+      "description": "Weatherwell Elite aluminum shutters for covered patios, decks and interiors, with adjustable shade, airflow and privacy. Locking options can add a layer of security at suitable openings; configuration and hardware are confirmed during consultation.",
+      "url": "https://www.luxewindowworks.com/products/aluminum-shutters",
+      "type": "service"
     }
   ],
   "expertise": [
@@ -70,7 +82,10 @@
     "Child-Safe Cordless Blinds",
     "Bond Bridge Pro Installation",
     "Northern Idaho Window Treatments",
-    "Coeur d'Alene Blinds and Shades"
+    "Coeur d'Alene Blinds and Shades",
+    "Outdoor aluminum shutters",
+    "Covered patio shade and privacy",
+    "Lockable shutter configurations"
   ],
   "differentiators": [
     "24 years industry expertise",
@@ -84,32 +99,61 @@
     {
       "name": "Norman USA",
       "url": "https://www.normanwindowfashions.com",
-      "products": ["Faux Wood Blinds", "Cellular Shades", "Shutters", "Roller Shades", "Roman Shades", "Banded Shades", "Motorized Shades"],
+      "products": [
+        "Faux Wood Blinds",
+        "Cellular Shades",
+        "Shutters",
+        "Roller Shades",
+        "Roman Shades",
+        "Banded Shades",
+        "Motorized Shades"
+      ],
       "available_in_home": true
     },
     {
       "name": "Lafayette Interior Fashions",
-      "products": ["Allure Transitional Shades", "Roman Shades", "Roller Shades", "Cellular Shades"],
+      "products": [
+        "Allure Transitional Shades",
+        "Roman Shades",
+        "Roller Shades",
+        "Cellular Shades"
+      ],
       "available_online": false,
       "available_in_home": true
     },
     {
       "name": "Corradi USA",
-      "products": ["Exterior Solar Shades", "Patio Screens"],
+      "products": [
+        "Exterior Solar Shades",
+        "Patio Screens"
+      ],
       "available_online": false,
       "available_in_home": true
     },
     {
       "name": "Alta",
-      "products": ["Window Fashions"],
+      "products": [
+        "Window Fashions"
+      ],
       "available_online": false,
       "available_in_home": true
     },
     {
       "name": "The Window Outfitters",
-      "products": ["Specialty Window Treatments"],
+      "products": [
+        "Highprofile Classic",
+        "Highprofile Poly",
+        "Highprofile Avenir",
+        "Colourvue Control",
+        "Weatherwell Elite",
+        "Weatherwell Standard",
+        "Shadesol Alfresco",
+        "Whispertech"
+      ],
       "available_online": false,
-      "available_in_home": true
+      "available_in_home": true,
+      "alternate_name": "TWO USA",
+      "url": "https://two-usa.com"
     }
   ],
   "primary_cta": {

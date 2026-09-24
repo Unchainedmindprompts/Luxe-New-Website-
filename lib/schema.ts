@@ -76,6 +76,6 @@ export const CUSTOM_WINDOW_TREATMENTS = "Custom Window Treatments";
  * assembled from a returned string, so the source sweep still recognises this
  * line as a reference to the `<HOST>/products/${slug}#service` pattern def.
  */
-export function productServiceRef(slug: ProductSlug) {
+export function productServiceRef(slug: ProductSlug | "aluminum-shutters") {
   return { "@id": `${BUSINESS.url}/products/${slug}#service` };
 }

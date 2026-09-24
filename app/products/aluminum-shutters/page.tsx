@@ -5,9 +5,12 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
 import { cityRef } from "@/lib/cities";
+import { TWO_URL, twoProductRef } from "@/lib/two";
 import { CUSTOM_WINDOW_TREATMENTS } from "@/lib/schema";
 const url = `${BUSINESS.url}/products/aluminum-shutters`;
 const faqs = [
+  { q: "Can Weatherwell Elite shutters add security while I am away?", a: "Weatherwell Elite offers key-lock and shoot-bolt options that can add a layer of security to suitable openings. For homeowners who spend winters elsewhere, we help choose the panel configuration and locking hardware for the space. Suitability depends on the opening and installation; shutters are not a guarantee against forced entry." },
+  { q: "Can they help extend my outdoor living space?", a: "Weatherwell Elite can help make covered patios and decks more comfortable and private, with adjustable louvers for shade and airflow. We plan the configuration around exposure and how you want to use the space." },
   { q: "What are Weatherwell Elite shutters?", a: "Weatherwell Elite is TWO’s architectural aluminum shutter system for exterior and interior applications. Luxe Window Works helps you select the configuration, measures your openings and professionally installs your custom shutters in North Idaho." },
   { q: "Can the panels move out of the way?", a: "Depending on the opening, Elite can be configured as sliding, sliding bi-fold, hinged, fixed or Bahama-style panels. We check the space for tracks, panel stacking and mounting before recommending a layout." },
   { q: "How much do custom aluminum shutters cost?", a: "The price depends on opening dimensions, panel configuration, finish and installation requirements. A free consultation lets us measure the space and provide a project-specific quote, including professional installation." },
@@ -23,7 +26,37 @@ export const metadata: Metadata = {
 };
 export default function AluminumShutters() {
   return <>
-    <JsonLd data={[{ "@context": "https://schema.org", "@type": "Service", "@id": `${url}#service`, name: "Custom Aluminum Shutters Service", serviceType: CUSTOM_WINDOW_TREATMENTS, url, provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: SERVICE_AREAS.map(a => cityRef(a.name)), description: "Free in-home consultation, product selection, custom measurement and professional installation of TWO Weatherwell Elite aluminum shutters in North Idaho." }, { "@context": "https://schema.org", "@type": "FAQPage", "@id": `${url}#faq`, mainEntity: faqs.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }]} />
+    <JsonLd data={{ "@context": "https://schema.org", "@graph": [
+      {
+        "@type": "WebPage", "@id": `${url}#webpage`, url, name: metadata.title,
+        description: metadata.description, isPartOf: { "@id": `${BUSINESS.url}/#website` },
+        mainEntity: { "@id": `${url}#service` }, about: twoProductRef("weatherwell-elite"),
+        breadcrumb: { "@id": `${url}#breadcrumb` }, hasPart: { "@id": `${url}#faq` }, inLanguage: "en-US",
+      },
+      {
+        "@type": "Service", "@id": `${url}#service`, name: "Custom Aluminum Shutters Service",
+        serviceType: CUSTOM_WINDOW_TREATMENTS, url,
+        provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: SERVICE_AREAS.map(a => cityRef(a.name)),
+        description: "Consultation, product selection, custom measurement and professional installation of TWO Weatherwell Elite aluminum shutters for North Idaho patios, covered decks and interiors. Configurations provide adjustable shade, privacy and airflow, with lockable options for added security at suitable openings.",
+        mainEntityOfPage: { "@id": `${url}#webpage` },
+        offers: {
+          "@type": "Offer", url,
+          seller: { "@id": `${BUSINESS.url}/#business` },
+          itemOffered: twoProductRef("weatherwell-elite"),
+        },
+      },
+      {
+        "@type": "FAQPage", "@id": `${url}#faq`, isPartOf: { "@id": `${url}#webpage` },
+        mainEntity: faqs.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      },
+      {
+        "@type": "BreadcrumbList", "@id": `${url}#breadcrumb`, itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
+          { "@type": "ListItem", position: 2, name: "TWO Collection", item: TWO_URL },
+          { "@type": "ListItem", position: 3, name: "Weatherwell Elite", item: url },
+        ],
+      },
+    ] }} />
     <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "TWO Collection", href: "/products/two" }, { label: "Weatherwell Elite" }]} />
     <section className="relative bg-charcoal text-white min-h-[630px] flex items-end"><Image src="/images/weatherwell-elite/IMG_1190.jpeg" alt="Weatherwell Elite shutters filtering daylight around a dark covered seating area" fill priority sizes="100vw" className="object-cover" /><div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/5" /><div className="container-luxe relative py-16 md:py-24"><div className="max-w-2xl"><p className="uppercase tracking-[.2em] text-xs text-white">Luxe Window Works · TWO Weatherwell Elite</p><h1 className="font-serif text-4xl sm:text-5xl md:text-6xl leading-[1.1] mt-5">An outdoor space<br />that feels <em>finished.</em></h1><p className="text-lg text-white leading-relaxed mt-7 max-w-xl">Custom aluminum shutters bring adjustable privacy, light and airflow to patios, covered decks and distinctive interiors. Designed around your space. Measured and installed by Luxe Window Works.</p><div className="flex flex-wrap gap-3 mt-8"><Link href="/book" className="rounded-full bg-cream text-charcoal px-6 py-4 font-semibold">Book a Free Consultation</Link><a href="#configurations" className="rounded-full border border-white/70 bg-black/20 text-white px-6 py-4">Explore the Possibilities ↓</a></div></div></div></section>
     <section className="container-luxe py-16 md:py-24"><div className="grid lg:grid-cols-[1fr_1.2fr] gap-10 lg:gap-20"><h2 className="font-serif text-3xl sm:text-4xl text-charcoal">Keep the view.<br />Choose the privacy.</h2><div className="text-lg leading-relaxed text-warm-gray-700"><p>Some afternoons, you want everything open. Other times, you want a little distance from the neighbors or a break from the sun. Weatherwell Elite gives your outdoor space that flexibility.</p><p className="mt-5">Start with how you want to use the space. We’ll work through the panel layout, finish and mounting details with you, then take care of the custom measurements and installation.</p></div></div></section>

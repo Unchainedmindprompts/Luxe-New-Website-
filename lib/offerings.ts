@@ -38,14 +38,7 @@ import {
   THE_WINDOW_OUTFITTERS,
 } from "@/lib/brands";
 
-/**
- * The nine offerings with a product page, plus the one without.
- *
- * Aluminum shutters is a real offering — Luxe's shutters page lists it and four
- * articles cover it — that has no `/products` route and therefore no canonical
- * Service. Its absence from the Service layer is a fact about the business, so
- * it is recorded here rather than fixed by inventing a page.
- */
+/** The nine standard categories and the dedicated aluminum-shutter service. */
 export type OfferingId = ProductSlug | "aluminum-shutters";
 
 /**
@@ -112,6 +105,7 @@ export const OFFERINGS: Record<OfferingId, Offering> = {
       NORMAN_BRAND["@id"],
       ALTA_BRAND["@id"],
       LAFAYETTE_BRAND["@id"],
+      THE_WINDOW_OUTFITTERS["@id"],
     ],
   },
 
@@ -121,11 +115,9 @@ export const OFFERINGS: Record<OfferingId, Offering> = {
 
   },
 
-  // "We install Corradi USA exterior screens on North Idaho patios, decks, and
-  // sun-blasted windows." The only manufacturer named for this offering — which
-  // is not the same as Luxe having said it uses no other, so no exclusive flag.
+  // Corradi exterior screens and TWO Shadesol Alfresco are both visibly offered.
   "exterior-solar-shades": {
-    manufacturersEvidenced: [CORRADI_USA["@id"]],
+    manufacturersEvidenced: [CORRADI_USA["@id"], THE_WINDOW_OUTFITTERS["@id"]],
   },
 
   // "we also carry aluminum shutters by The Window Outfitters". Same reasoning
@@ -144,24 +136,17 @@ export const OFFERINGS: Record<OfferingId, Offering> = {
   // Same: the roman-shades entry names no manufacturer at all.
   "roman-shades": { manufacturersEvidenced: [] },
 
-  // Deliberately empty despite mentions existing, because the mentions
-  // disagree. The only manufacturer names in the product entry are in its
-  // metaDescription ("premium fabrics — Norman, Alta, Lafayette") — no body
-  // copy, no feature, no FAQ. An article's "Brands We Love!" link list names a
-  // different set for roller shades: The Window Outfitters, Lafayette and
-  // Norman, with Alta absent. Two thin sources that contradict each other are
-  // not evidence for either, and picking one would be a guess wearing a
-  // citation. Left unestablished until the copy says it plainly.
-  "roller-shades": { manufacturersEvidenced: [] },
+  // The TWO collection visibly offers Colourvue Control roller shades.
+  "roller-shades": { manufacturersEvidenced: [THE_WINDOW_OUTFITTERS["@id"]] },
 };
 
 /**
- * The canonical Service for an offering, or null where none exists.
+ * The canonical Service for an offering.
  *
  * Derived rather than stored, so it cannot drift from the offering it belongs
  * to: a stored `@id` could be pasted under the wrong key and nothing would
  * catch it. Aluminum shutters uses the canonical Service published by its dedicated page.
  */
 export function offeringServiceRef(id: OfferingId) {
-  return id === "aluminum-shutters" ? { "@id": "https://www.luxewindowworks.com/products/aluminum-shutters#service" } : productServiceRef(id);
+  return productServiceRef(id);
 }

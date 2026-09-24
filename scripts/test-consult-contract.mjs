@@ -5,6 +5,7 @@
  * Local only. Mail and idempotency are mocked. Does not POST to production
  * or preview /api/consultation.
  */
+import { BUSINESS } from "../lib/constants.ts";
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -489,7 +490,8 @@ await test("discovery  no booking/pricing claims; drapery honest; readiness bloc
   t.equal(drapery?.canonicalServiceId, null, "drapery has no Service @id");
   t.equal(drapery?.canonicalProductPage, null, "drapery has no product page");
   const aluminum = doc.supportedProductCategories.find((c) => c.id === "aluminum-shutters");
-  t.equal(aluminum?.canonicalServiceId, null, "aluminum shutters still has no Service");
+  t.equal(aluminum?.canonicalServiceId, `${BUSINESS.url}/products/aluminum-shutters#service`, "aluminum shutters resolves to the published Service");
+  t.equal(aluminum?.canonicalProductPage, "/products/aluminum-shutters", "aluminum shutters has a dedicated product page");
   t.ok(
     doc.supportedProductCategories.some((c) => c.id === "blinds" && c.canonicalServiceId),
     "real product categories keep their Service @id"

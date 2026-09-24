@@ -13,6 +13,7 @@ import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 import { cityRef, northIdahoRef } from "@/lib/cities";
+import { TWO_URL } from "@/lib/two";
 import { BUSINESS_STUB, OWNER_STUB, productServiceRef } from "@/lib/schema";
 
 function StarIcon() {
@@ -127,27 +128,9 @@ const businessNode = {
     // No new entity is introduced — an existing one becomes referenceable.
     "@id": `${BASE}/#window-treatments`,
     name: "Window Treatments",
-    // WHERE A CATALOG ENTRY *IS* A PRODUCT SERVICE, IT SAYS SO BY @id.
-    //
-    // Eight of these leaves were anonymous Services that duplicated a Service
-    // already defined at /products/{slug}#service — the same entity articles
-    // point at through `Article.about` and the /products hub lists. They now
-    // reference it instead, so the homepage catalog and the product pages
-    // describe one set of offerings rather than two that merely look alike.
-    //
-    // The six that stay anonymous are not the same entity as any product page,
-    // and inventing an @id for them would claim a page that does not exist. The
-    // five blinds entries are SUBTYPES of /products/blinds#service, not that
-    // service — matching them would assert that "Wood Blinds" and "Faux Wood
-    // Blinds" are the same thing, which they are not. "Aluminum Shutters" is a
-    // separate specialty offering (The Window Outfitters), deliberately not the
-    // Norman plantation shutters the shutters page defines.
-    //
-    // /products/blinds#service is therefore not referenced from this catalog:
-    // its real counterpart here is the "Blinds" OfferCatalog node, and an
-    // OfferCatalog cannot carry a Service's identity. It stays connected
-    // through the /products hub and the blinds articles.
+    // Product services and the TWO catalog retain their canonical identities.
     itemListElement: [
+      { "@id": `${TWO_URL}#catalog` },
       {
         "@type": "OfferCatalog",
         name: "Blinds",
@@ -175,11 +158,8 @@ const businessNode = {
         "@type": "OfferCatalog",
         name: "Shutters",
         itemListElement: [
-          // The shutters page installs Norman exclusively for interior
-          // shutters, so "Norman Plantation Shutters" and the plantation
-          // shutter service it defines are the same offering under two names.
           { "@type": "Offer", itemOffered: productServiceRef("shutters") },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Aluminum Shutters" } },
+          { "@type": "Offer", itemOffered: productServiceRef("aluminum-shutters") },
         ],
       },
       {

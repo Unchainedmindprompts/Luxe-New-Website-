@@ -4,6 +4,7 @@ import Image from "next/image";
 import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS, PRODUCTS, SERVICE_AREAS } from "@/lib/constants";
+import { TWO_URL } from "@/lib/two";
 import { productPages } from "@/lib/product-data";
 
 /**
@@ -66,20 +67,20 @@ function ProductsHubSchema() {
     inLanguage: "en-US",
     // Each product page defines its own WebPage and Service; reference them by
     // @id rather than restating them here, so there is one definition per node.
-    hasPart: PRODUCTS.map((p) => ({
+    hasPart: [{ "@id": `${TWO_URL}#webpage` }, ...PRODUCTS.map((p) => ({
       "@id": `${BUSINESS.url}/products/${p.slug}#webpage`,
-    })),
+    }))],
     mainEntity: {
       "@type": "ItemList",
       name: "Window Treatments Installed in North Idaho",
-      numberOfItems: PRODUCTS.length,
-      itemListElement: PRODUCTS.map((p, i) => ({
+      numberOfItems: PRODUCTS.length + 1,
+      itemListElement: [...PRODUCTS.map((p, i) => ({
         "@type": "ListItem",
         position: i + 1,
         name: p.name,
         url: `${BUSINESS.url}/products/${p.slug}`,
         item: { "@id": `${BUSINESS.url}/products/${p.slug}#service` },
-      })),
+      })), { "@type": "ListItem", position: PRODUCTS.length + 1, name: "TWO Collection", url: TWO_URL, item: { "@id": `${TWO_URL}#webpage` } }],
     },
   };
 

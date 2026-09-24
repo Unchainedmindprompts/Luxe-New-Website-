@@ -3,29 +3,65 @@ import Image from "next/image";
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
-import { BUSINESS } from "@/lib/constants";
+import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
 import { THE_WINDOW_OUTFITTERS } from "@/lib/brands";
 
-const url = `${BUSINESS.url}/products/two`;
+import { cityRef } from "@/lib/cities";
+import { CUSTOM_WINDOW_TREATMENTS } from "@/lib/schema";
+import { TWO_RANGES as ranges, TWO_URL as url, twoProductRef } from "@/lib/two";
 export const metadata: Metadata = {
   title: "TWO Shutters & Shades in North Idaho | Luxe Window Works",
   description: "Explore the full TWO collection with Luxe Window Works: interior shutters, roller shades, Weatherwell aluminum shutters, outdoor shades and automation. Free in-home consultation.",
   alternates: { canonical: url },
   openGraph: { title: "The TWO Collection | Luxe Window Works", description: "Beautiful indoors. More possibilities outside. Custom shutters and shades, measured and installed in North Idaho.", url, images: ["/images/weatherwell-elite/IMG_1086.jpeg"] },
 };
-const ranges = [
-  { id: "highprofile-classic", name: "Highprofile Classic", category: "Real wood shutters", text: "The warmth of real wood, with painted or stained finishes and a choice of panel styles. A natural place to start when the shutters are part of the room’s character.", source: "highprofile-classic-wood-shutters" },
-  { id: "highprofile-poly", name: "Highprofile Poly", category: "PVC shutters", text: "An easy-care shutter option for kitchens, bathrooms and everyday living. PVC construction brings the plantation-shutter look to spaces where moisture matters.", source: "highprofile-poly" },
-  { id: "highprofile-avenir", name: "Highprofile Avenir", category: "Interior aluminum shutters", text: "A clean, modern profile with the strength of aluminum. For interiors where you want a substantial shutter with a slim, understated finish.", source: "highprofile-avenir" },
-  { id: "colourvue-control", name: "Colourvue Control", category: "Interior roller shades", text: "A simple silhouette that lets the room do the talking. We help you choose fabric, privacy and light control around how you actually use each space.", source: "colourvue-control-roller-shades" },
-  { id: "weatherwell-elite", name: "Weatherwell Elite", category: "Architectural aluminum shutters", text: "Adjustable louvers and flexible panel configurations for patios, covered decks and distinctive interiors. Our featured TWO collection for bringing more comfort and privacy outdoors.", source: "weatherwell-elite" },
-  { id: "weatherwell-standard", name: "Weatherwell Standard", category: "Aluminum shutters", text: "Another option in the Weatherwell family. We compare Standard and Elite against your opening, preferred operation and budget so you get the right system for the project.", source: "weatherwell-standard" },
-  { id: "shadesol-alfresco", name: "Shadesol Alfresco", category: "Outdoor shades", text: "For the patio you love until the afternoon sun arrives. Outdoor fabric shading gives you another way to manage glare and privacy around a covered outdoor space.", source: "shadesol-alfresco-outdoor-shades" },
-  { id: "whispertech", name: "Whispertech", category: "Shade automation", text: "Quiet motorized control for compatible shades. We confirm the motor, power supply and any smart-home hub your project needs, then handle setup and programming.", source: "whispertech" },
-];
 export default function TwoCollection() {
   return <>
-    <JsonLd data={{ "@context": "https://schema.org", "@type": "CollectionPage", "@id": `${url}#webpage`, url, name: "The TWO Collection at Luxe Window Works", isPartOf: { "@id": `${BUSINESS.url}/#website` }, about: { "@id": THE_WINDOW_OUTFITTERS["@id"] }, mainEntity: { "@type": "ItemList", itemListElement: ranges.map((r, i) => ({ "@type": "ListItem", position: i + 1, name: r.name, url: `${url}#${r.id}` })) } }} />
+    <JsonLd data={{ "@context": "https://schema.org", "@graph": [
+      {
+        "@type": "CollectionPage", "@id": `${url}#webpage`, url,
+        name: "The TWO Collection at Luxe Window Works", description: metadata.description,
+        isPartOf: { "@id": `${BUSINESS.url}/#website` },
+        about: [{ "@id": THE_WINDOW_OUTFITTERS["@id"] }, { "@id": `${url}#service` }],
+        breadcrumb: { "@id": `${url}#breadcrumb` }, inLanguage: "en-US",
+        mainEntity: {
+          "@type": "ItemList", name: "TWO shutters, shades and automation", numberOfItems: ranges.length,
+          itemListElement: ranges.map((r, i) => ({ "@type": "ListItem", position: i + 1, name: r.name, url: `${url}#${r.id}`, item: twoProductRef(r.id) })),
+        },
+      },
+      {
+        "@type": "Service", "@id": `${url}#service`, url,
+        name: "TWO Shutters, Shades and Automation Consultation and Installation",
+        serviceType: CUSTOM_WINDOW_TREATMENTS,
+        provider: { "@id": `${BUSINESS.url}/#business` },
+        areaServed: SERVICE_AREAS.map(a => cityRef(a.name)),
+        description: "Personal product guidance, custom measurements and professional installation of TWO interior shutters, roller shades, outdoor aluminum shutters, exterior shades and compatible shade automation in North Idaho.",
+        hasOfferCatalog: { "@id": `${url}#catalog` },
+        mainEntityOfPage: { "@id": `${url}#webpage` },
+      },
+      {
+        "@type": "OfferCatalog", "@id": `${url}#catalog`, name: "The TWO Collection", url,
+        itemListElement: ranges.map(r => ({
+          "@type": "Offer", url: `${url}#${r.id}`,
+          seller: { "@id": `${BUSINESS.url}/#business` },
+          itemOffered: twoProductRef(r.id),
+        })),
+      },
+      ...ranges.map(r => ({
+        "@type": "ProductModel", ...twoProductRef(r.id), name: r.name, category: r.category,
+        description: r.text, url: `${url}#${r.id}`, image: `${BUSINESS.url}/images/two/${r.id}.webp`,
+        manufacturer: { "@id": THE_WINDOW_OUTFITTERS["@id"] },
+        sameAs: [`https://two-usa.com/${r.source}/`],
+        isRelatedTo: { "@id": `${url}#service` },
+      })),
+      {
+        "@type": "BreadcrumbList", "@id": `${url}#breadcrumb`, itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
+          { "@type": "ListItem", position: 2, name: "Products", item: `${BUSINESS.url}/products` },
+          { "@type": "ListItem", position: 3, name: "TWO Collection", item: url },
+        ],
+      },
+    ] }} />
     <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Products", href: "/products" }, { label: "TWO Collection" }]} />
     <section className="bg-cream">
       <div className="grid lg:grid-cols-2 max-w-8xl mx-auto">

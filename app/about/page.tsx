@@ -10,14 +10,14 @@ import { CARRIED_BRANDS } from "@/lib/brands";
 export const metadata: Metadata = {
   title: "About Mark Abplanalp | 24 Years in Window Treatments",
   description:
-    "Mark Abplanalp has installed window treatments since 2002 — from Seattle to Bend to Apple retail. Now serving North Idaho from Post Falls with Luxe Window Works.",
+    "Based in Post Falls, Mark Abplanalp brings 24 years of experience and personal guidance to custom window treatments and outdoor shading projects across North Idaho.",
   alternates: {
     canonical: "https://www.luxewindowworks.com/about",
   },
   openGraph: {
     title: "About Mark Abplanalp | 24 Years in Window Treatments",
     description:
-      "24 years of window treatment expertise. Apple Visitor Center. Union Square. Now Post Falls, Idaho.",
+      "Based in Post Falls, Mark Abplanalp brings 24 years of experience and personal guidance to custom window treatments and outdoor shading projects across North Idaho.",
     url: "https://www.luxewindowworks.com/about",
     images: [
       {
@@ -35,7 +35,7 @@ const personSchema = {
   ...OWNER_STUB,
   jobTitle: "Owner & Window Treatment Specialist",
   description:
-    "Mark Abplanalp has worked in the window treatment industry since 2002 — 24 years of hands-on sales, design, and installation experience across Washington, Oregon, and Idaho. He opened his first window treatment business in Issaquah, Washington in April 2002, expanded into Bend, Oregon in 2015, and in 2023 traveled the country installing high-end window treatments for Apple retail locations including the Apple Visitor Center in Cupertino and Apple Union Square in San Francisco. He launched Luxe Window Works in Post Falls, Idaho in March 2025.",
+    "Owner Mark Abplanalp brings 24 years in custom window treatments to product selection, measuring and installation. Based in Post Falls, he works directly with North Idaho homeowners from consultation through finished installation.",
   url: `${BUSINESS.url}/about`,
   image: `${BUSINESS.url}/images/mark-photo.webp`,
   telephone: BUSINESS.phoneE164,
@@ -59,7 +59,7 @@ const personSchema = {
     // The same Post Falls the area page defines, referenced rather than rebuilt.
     occupationLocation: cityRef("Post Falls"),
     skills:
-      "Custom window treatment design, plantation shutter installation, motorized shade systems, cellular shades, solar shades, roller shades, fenestration consulting, UV mitigation, commercial window treatments, exterior solar shades",
+      "Custom window treatment design, plantation shutter installation, motorized shade systems, cellular shades, solar shades, roller shades, fenestration consulting, UV mitigation, commercial window treatments, exterior solar shades, outdoor aluminum shutters, lockable shutter configurations",
   },
   knowsAbout: [
     "Custom window treatments",
@@ -75,6 +75,10 @@ const personSchema = {
     "UV mitigation",
     "Heat reduction window coverings",
     "Exterior solar shades",
+    "Outdoor aluminum shutters",
+    "Lockable Weatherwell Elite shutter configurations",
+    "Covered patio shade and privacy",
+    "TWO shutters, shades and automation",
     "Alta Window Fashions",
     "Norman Window Fashions",
     "Lafayette Interior Fashions",
@@ -89,7 +93,7 @@ const webpageSchema = {
   url: `${BUSINESS.url}/about`,
   name: "About Mark Abplanalp | 24 Years in Window Treatments",
   description:
-    "Mark Abplanalp has installed window treatments since 2002 — from Seattle to Bend to Apple retail. Now serving North Idaho from Post Falls with Luxe Window Works.",
+    "Based in Post Falls, Mark Abplanalp brings 24 years of experience and personal guidance to custom window treatments and outdoor shading projects across North Idaho.",
   isPartOf: { "@id": `${BUSINESS.url}/#website` },
   about: { "@id": `${BUSINESS.url}/#business` },
   mainEntity: { "@id": `${BUSINESS.url}/#owner` },
