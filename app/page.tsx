@@ -428,6 +428,31 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Featured TWO collection */}
+      <section id="two-collection" aria-labelledby="two-collection-title" className="bg-warm-white py-10 md:py-16 scroll-mt-24">
+        <div className="container-luxe">
+          <div className="grid md:grid-cols-2 overflow-hidden rounded-2xl bg-charcoal">
+            <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[440px]">
+              <Image
+                src="/images/weatherwell-elite/IMG_1086.jpeg"
+                alt="Dark aluminum shutters with folding panels on a modern home"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
+            <div className="flex flex-col justify-center items-start p-8 sm:p-10 lg:p-14 text-white">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">New at Luxe Window Works</p>
+              <h2 id="two-collection-title" className="font-serif text-3xl sm:text-4xl lg:text-5xl leading-tight mt-4">Meet the TWO collection.</h2>
+              <p className="mt-6 text-base sm:text-lg leading-relaxed text-white/90">Interior shutters, roller shades, outdoor aluminum shutters, exterior shades and automation—eight ranges, with Luxe’s personal service.</p>
+              <Link href="/products/two" className="inline-flex items-center justify-center mt-8 rounded-full bg-cream text-charcoal px-7 py-4 font-semibold hover:bg-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+                Explore the Collection <span aria-hidden="true" className="ml-3">→</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 2. Trust Bar */}
       <section className="bg-charcoal text-white py-5">
         <div className="container-luxe">
