@@ -257,24 +257,23 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* The experience behind it */}
+        {/* The experience behind Luxe */}
         <section className="bg-cream border-t border-warm-gray-200 py-16 px-6">
           <div className="max-w-4xl mx-auto">
             <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-6">
-              The experience behind it
+              The experience behind Luxe
             </h2>
             <div className="space-y-6 text-warm-gray-700 leading-relaxed">
               <p>
-                Luxe Window Works is owned by Mark Abplanalp, who has worked in
-                this trade since 2002 — first in Issaquah, Washington, then
-                Bend, Oregon, and in North Idaho since 2025. In 2023, that work
-                included commercial installations at Apple retail locations
-                nationwide, including the Apple Visitor Center in Cupertino and
-                Apple Union Square in San Francisco.
+                With 24 years in custom window treatments, owner Mark Abplanalp
+                brings practical knowledge and personal attention to every project.
+                From choosing the right fabrics and features to measuring and
+                installation, he helps you make confident decisions for your home
+                and budget.
               </p>
               <p>
-                Twenty-four years of measuring and installing is the reason we
-                can put a lifetime guarantee on the work.
+                Based in Post Falls and serving North Idaho, Mark works directly
+                with you from the first consultation through the finished installation.
               </p>
             </div>
           </div>
