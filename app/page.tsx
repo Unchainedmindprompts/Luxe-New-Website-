@@ -11,23 +11,9 @@ export const metadata: Metadata = {
 };
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
-import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
+import { BUSINESS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 import { cityRef, northIdahoRef } from "@/lib/cities";
 import { BUSINESS_STUB, OWNER_STUB, productServiceRef } from "@/lib/schema";
-import { productPages } from "@/lib/product-data";
-
-/**
- * Image for each product card. Pulled from productPages so the homepage card and
- * the product-page hero stay in sync — clicking a card lands on the same photo.
- * Motorization has no still image (uses a YouTube video on its product page),
- * so we fall back to the YouTube thumbnail.
- */
-function getProductCardImage(slug: string): string {
-  const p = productPages[slug];
-  if (p?.image) return p.image;
-  if (p?.video) return `https://img.youtube.com/vi/${p.video.youtubeId}/maxresdefault.jpg`;
-  return "/images/hero-modern-living.webp";
-}
 
 function StarIcon() {
   return (
@@ -278,28 +264,6 @@ const homepageGraph = {
   ],
 };
 
-/** Homepage-only short product descriptions (override of constants for scan-mode). */
-const HOMEPAGE_PRODUCT_COPY: Record<string, string> = {
-  "blinds":
-    "Classic wood, faux wood, and composite blinds for clean light control, privacy, and everyday durability.",
-  "cellular-shades":
-    "Energy-efficient honeycomb shades that help reduce winter heat loss and summer heat gain.",
-  "solar-shades":
-    "Glare and UV control for bright rooms where you still want to preserve the view.",
-  "exterior-solar-shades":
-    "Motorized exterior screens that stop heat before it reaches the glass — ideal for patios, decks, and sun-exposed windows.",
-  "roller-shades":
-    "Clean, modern shades for simple light control and a minimal look.",
-  "banded-shades":
-    "A flexible option for shifting between privacy and filtered light throughout the day.",
-  "roman-shades":
-    "Soft fabric shades that add warmth, texture, and a more finished designer look.",
-  "shutters":
-    "A long-term upgrade with strong light control, architectural character, and lasting value.",
-  "motorization":
-    "Control hard-to-reach or everyday shades by remote, wall switch, app, or smart home system.",
-};
-
 const PROBLEM_PATHS = [
   {
     title: "Too Much Heat or Glare",
@@ -525,49 +489,10 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Products */}
-      <section className="pt-4 pb-16 md:pt-6 md:pb-20 bg-cream">
-        <div className="container-luxe">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-              Solutions for Every Window in Your Home
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {PRODUCTS.map((product) => (
-              <Link
-                key={product.slug}
-                href={`/products/${product.slug}`}
-                className="group bg-white rounded-2xl border border-warm-gray-200/60 overflow-hidden hover:shadow-lg hover:border-gold/30 transition-all flex flex-col"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-warm-gray-100">
-                  <Image
-                    src={getProductCardImage(product.slug)}
-                    alt={`${product.name} — installed by Luxe Window Works`}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
-                  />
-                </div>
-                <div className="p-6 flex flex-col flex-1">
-                  <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold transition-colors">
-                    {product.name}
-                  </h3>
-                  <p className="mt-2 text-sm text-warm-gray-500 leading-relaxed">
-                    {HOMEPAGE_PRODUCT_COPY[product.slug] ?? product.shortDescription}
-                  </p>
-                  <span className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
-                    Learn more
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </span>
-                </div>
-              </Link>
-            ))}
+          <div className="mt-10 text-center">
+            <Link href="/products" className="inline-flex items-center justify-center gap-3 rounded-full bg-charcoal text-white px-7 py-4 font-semibold hover:bg-warm-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+              Explore All Window Treatments <span aria-hidden="true">→</span>
+            </Link>
           </div>
         </div>
       </section>
