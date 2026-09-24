@@ -372,9 +372,9 @@ export default function HomePage() {
             sizes="100vw"
             quality={90}
           />
-          <div aria-hidden="true" className="absolute inset-0 bg-black/50 md:bg-transparent md:bg-gradient-to-r md:from-black/85 md:via-black/55 md:to-black/10" />
+          <div aria-hidden="true" className="absolute inset-0 bg-black/35 md:bg-transparent md:bg-gradient-to-r md:from-black/60 md:via-black/20 md:to-transparent" />
           <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 py-16 md:py-24 lg:py-28 min-h-[640px] md:min-h-[680px] lg:min-h-[740px] flex flex-col justify-center">
-            <div className="max-w-2xl text-white">
+            <div className="max-w-2xl text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.55)]">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/90 mb-5">Custom Window Treatments · North Idaho</p>
               <h1 id="hero-title" className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.1] text-white text-balance">The Luxe experience.<br />Without the luxury price tag.</h1>
               <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-white">Beautiful custom blinds and shades, professionally measured and installed. We bring samples to your home and help you compare options that fit your rooms, your style, and your budget.</p>
