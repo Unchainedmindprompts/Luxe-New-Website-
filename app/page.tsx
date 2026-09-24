@@ -340,8 +340,8 @@ export default function HomePage() {
           <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 py-16 md:py-24 lg:py-28 min-h-[640px] md:min-h-[680px] lg:min-h-[740px] flex flex-col justify-center">
             <div className="max-w-2xl text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.55)]">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/90 mb-5">Custom Window Treatments · North Idaho</p>
-              <h1 id="hero-title" className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.1] text-white text-balance">The Luxe experience.<br />Without the luxury price tag.</h1>
-              <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-white">Beautiful custom blinds and shades, professionally measured and installed. We bring samples to your home and help you compare options that fit your rooms, your style, and your budget.</p>
+              <h1 id="hero-title" className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.1] text-white text-balance">Beautiful options.<br />Personal service.<br />That’s Luxe.</h1>
+              <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-white">Discover custom window treatments for your style and budget, with personal guidance from the first samples to the final installation.</p>
               <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
                 <Link href="/estimate" className="inline-flex items-center justify-center rounded-full bg-white text-charcoal px-7 py-4 font-semibold hover:bg-cream focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Get an Instant Estimate <span aria-hidden="true" className="ml-3">→</span></Link>
                 <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick} className="inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-charcoal rounded-full px-7 py-4 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Request a Free Consultation</TrackedCta>
