@@ -209,6 +209,8 @@ export default function ProductsHubPage() {
         </div>
       </section>
 
+      <section className="container-luxe py-12"><div className="rounded-2xl bg-charcoal text-white p-8 md:p-12"><p className="text-sm uppercase tracking-widest">New at Luxe Window Works</p><h2 className="font-serif text-3xl mt-3">Meet the TWO collection.</h2><p className="mt-4 max-w-2xl text-white/85">Interior shutters, roller shades, outdoor aluminum shutters, exterior shades and automation—eight ranges, with Luxe’s personal service.</p><Link href="/products/two" className="inline-block mt-6 bg-cream text-charcoal rounded-full px-6 py-3 font-medium">Explore the TWO Collection →</Link></div></section>
+
       {/* Where we install — ties the category page to the local pages */}
       <section className="py-16 md:py-20 bg-cream/50">
         <div className="container-luxe max-w-3xl">
