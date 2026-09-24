@@ -115,11 +115,10 @@ export const OFFERINGS: Record<OfferingId, Offering> = {
     ],
   },
 
-  // "We install Norman exclusively for interior shutters", said twice. The only
-  // offering whose copy states exclusivity, and the only one that gets the flag.
+  // Luxe now carries both Norman and TWO interior shutters.
   shutters: {
-    manufacturersEvidenced: [NORMAN_BRAND["@id"]],
-    exclusive: true,
+    manufacturersEvidenced: [NORMAN_BRAND["@id"], THE_WINDOW_OUTFITTERS["@id"]],
+
   },
 
   // "We install Corradi USA exterior screens on North Idaho patios, decks, and
@@ -161,9 +160,8 @@ export const OFFERINGS: Record<OfferingId, Offering> = {
  *
  * Derived rather than stored, so it cannot drift from the offering it belongs
  * to: a stored `@id` could be pasted under the wrong key and nothing would
- * catch it. Aluminum shutters returns null because there is no
- * `/products/aluminum-shutters#service` and this layer must not conjure one.
+ * catch it. Aluminum shutters uses the canonical Service published by its dedicated page.
  */
 export function offeringServiceRef(id: OfferingId) {
-  return id === "aluminum-shutters" ? null : productServiceRef(id);
+  return id === "aluminum-shutters" ? { "@id": "https://www.luxewindowworks.com/products/aluminum-shutters#service" } : productServiceRef(id);
 }

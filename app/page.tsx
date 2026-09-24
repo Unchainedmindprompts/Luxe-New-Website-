@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import ContactForm from "./contact/ContactForm";
 export const metadata: Metadata = {
   title: "Custom Window Treatments in Coeur d'Alene & Post Falls | Luxe Window Works",
   description:
@@ -12,23 +11,9 @@ export const metadata: Metadata = {
 };
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
-import { BUSINESS, PRODUCTS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
+import { BUSINESS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 import { cityRef, northIdahoRef } from "@/lib/cities";
 import { BUSINESS_STUB, OWNER_STUB, productServiceRef } from "@/lib/schema";
-import { productPages } from "@/lib/product-data";
-
-/**
- * Image for each product card. Pulled from productPages so the homepage card and
- * the product-page hero stay in sync — clicking a card lands on the same photo.
- * Motorization has no still image (uses a YouTube video on its product page),
- * so we fall back to the YouTube thumbnail.
- */
-function getProductCardImage(slug: string): string {
-  const p = productPages[slug];
-  if (p?.image) return p.image;
-  if (p?.video) return `https://img.youtube.com/vi/${p.video.youtubeId}/maxresdefault.jpg`;
-  return "/images/hero-modern-living.webp";
-}
 
 function StarIcon() {
   return (
@@ -250,7 +235,7 @@ const HOMEPAGE_FAQS = [
   {
     question: "Why do you recommend cellular shades for Northern Idaho homes?",
     answer:
-      "Cellular (honeycomb) shades trap air inside their hexagonal cells, making them the most energy-efficient window covering available — R-values up to 7.86 on double-cell blackout configurations. In Northern Idaho's heating-dominated climate, that translates to meaningfully lower winter heat loss and reduced summer heat gain.",
+      "Cellular (honeycomb) shades trap air inside their hexagonal cells, making them the most energy-efficient window covering available — R-values up to 7.86 on double-cell room darkening configurations. In Northern Idaho's heating-dominated climate, that translates to meaningfully lower winter heat loss and reduced summer heat gain.",
   },
 ] as const;
 
@@ -279,88 +264,34 @@ const homepageGraph = {
   ],
 };
 
-/** Homepage-only short product descriptions (override of constants for scan-mode). */
-const HOMEPAGE_PRODUCT_COPY: Record<string, string> = {
-  "blinds":
-    "Classic wood, faux wood, and composite blinds for clean light control, privacy, and everyday durability.",
-  "cellular-shades":
-    "Energy-efficient honeycomb shades that help reduce winter heat loss and summer heat gain.",
-  "solar-shades":
-    "Glare and UV control for bright rooms where you still want to preserve the view.",
-  "exterior-solar-shades":
-    "Motorized exterior screens that stop heat before it reaches the glass — ideal for patios, decks, and sun-exposed windows.",
-  "roller-shades":
-    "Clean, modern shades for simple light control and a minimal look.",
-  "banded-shades":
-    "A flexible option for shifting between privacy and filtered light throughout the day.",
-  "roman-shades":
-    "Soft fabric shades that add warmth, texture, and a more finished designer look.",
-  "shutters":
-    "A long-term upgrade with strong light control, architectural character, and lasting value.",
-  "motorization":
-    "Control hard-to-reach or everyday shades by remote, wall switch, app, or smart home system.",
-};
-
-function SunIcon() {
-  return (
-    <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-      <circle cx="12" cy="12" r="4" />
-      <path strokeLinecap="round" d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4" />
-    </svg>
-  );
-}
-
-function EyeIcon() {
-  return (
-    <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M2.5 12s3.5-7 9.5-7 9.5 7 9.5 7-3.5 7-9.5 7S2.5 12 2.5 12z" />
-      <circle cx="12" cy="12" r="2.75" />
-    </svg>
-  );
-}
-
-function MoonIcon() {
-  return (
-    <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M20 15.5A8 8 0 0 1 8.5 4a8 8 0 1 0 11.5 11.5z" />
-    </svg>
-  );
-}
-
-function RemoteIcon() {
-  return (
-    <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-      <rect x="7.5" y="3" width="9" height="18" rx="2" />
-      <path strokeLinecap="round" d="M10.5 8h3M10.5 12h3" />
-      <circle cx="12" cy="16.5" r="0.75" fill="currentColor" />
-    </svg>
-  );
-}
-
 const PROBLEM_PATHS = [
   {
     title: "Too Much Heat or Glare",
     body: "Reduce harsh sun, UV exposure, and room overheating.",
     href: "/products/solar-shades",
-    Icon: SunIcon,
+    image: "/images/solutions/heat-glare.webp",
+    alt: "Solar roller shades softening afternoon sunlight in a warm living room",
   },
   {
     title: "Need More Privacy Without Losing Light",
     body: "Find the right balance of privacy, filtered light, and views.",
     href: "/products/banded-shades",
-    Icon: EyeIcon,
+    image: "/images/solutions/privacy-daylight.webp",
+    alt: "Light-filtering banded shades in a bright sitting room",
   },
   {
-    title: "Better Sleep or Blackout",
+    title: "Better Sleep or Room Darkening",
     body: "Create darker bedrooms and better light control where it matters most.",
     href: "/products/cellular-shades",
-    Icon: MoonIcon,
+    image: "/images/solutions/blackout-bedroom.webp",
+    alt: "Closed cellular room darkening shades in a softly lit bedroom",
   },
   {
     title: "Want Motorized Shades",
     body: "Control everyday or hard-to-reach shades by remote, app, wall switch, or smart home system.",
     href: "/products/motorization",
-    Icon: RemoteIcon,
+    image: "/images/solutions/motorized-shades.webp",
+    alt: "A handheld remote controlling roller shades on tall living room windows",
   },
 ] as const;
 
@@ -373,7 +304,7 @@ const PROCESS_STEPS = [
   },
   {
     title: "We Help You Choose Room by Room",
-    body: "Every window has a different job. We help you think through privacy, glare, insulation, blackout, child safety, motorization, and style.",
+    body: "Every window has a different job. We help you think through privacy, glare, insulation, room darkening, child safety, motorization, and style.",
     image: "/images/process-room-by-room.png",
     alt: "Open-plan North Idaho home with different window treatments matched to each room",
   },
@@ -393,42 +324,34 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageGraph) }}
       />
 
-      {/* Actual client installation, with an unobstructed view of the shades. */}
-      <section className="bg-warm-white pt-16 md:pt-20">
-        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 py-8 md:py-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold mb-3">Custom Window Treatments · North Idaho</p>
-          <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] leading-[1.12] text-charcoal max-w-2xl text-balance">The Luxe experience.<br />Without the luxury price tag.</h1>
-            <p className="mt-4 lg:mt-0 max-w-md text-base font-semibold leading-relaxed text-charcoal">Beautiful custom blinds and shades, professionally measured and installed. We bring samples to your home and help you compare options that fit your rooms, your style, and your budget.</p>
-          </div>
-          <div className="mt-6 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-            <Link href="/estimate" className="inline-flex items-center justify-center rounded-full bg-charcoal text-white px-7 py-4 font-semibold hover:bg-warm-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">Get an Instant Estimate <span aria-hidden="true" className="ml-3">→</span></Link>
-            <a href="#hero-consultation" className="inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-charcoal rounded-full px-7 py-4 font-semibold">Request a Free Consultation</a>
-          </div>
-          <p className="mt-3 text-sm text-warm-gray-600">Explore pricing for blinds and shades. Measuring and installation included. No email required.</p>
-        </div>
-        <div className="relative max-w-[1600px] mx-auto lg:grid lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_400px]">
-          <figure className="relative min-w-0">
-            <div className="relative aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[620px]">
-              <Image src="/images/luxe-completed-installation.webp" alt="Actual Luxe Window Works installation: custom shades filtering daylight in a living room with timber beams and a stone fireplace" fill className="object-cover object-[35%_center]" priority sizes="(min-width:1600px) 1200px, (min-width:1024px) 70vw, 100vw" quality={90} />
+      {/* Full-width hero featuring an actual Luxe installation. */}
+      <section aria-labelledby="hero-title" className="bg-charcoal pt-16 md:pt-20">
+        <div className="relative isolate w-full overflow-hidden">
+          <Image
+            src="/images/luxe-completed-installation.webp"
+            alt="Actual Luxe Window Works installation: custom shades filtering daylight in a living room with timber beams and a stone fireplace"
+            fill
+            className="object-cover object-[35%_center] md:object-center"
+            priority
+            sizes="100vw"
+            quality={90}
+          />
+          <div aria-hidden="true" className="absolute inset-0 bg-black/35 md:bg-transparent md:bg-gradient-to-r md:from-black/60 md:via-black/20 md:to-transparent" />
+          <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 py-16 md:py-24 lg:py-28 min-h-[640px] md:min-h-[680px] lg:min-h-[740px] flex flex-col justify-center">
+            <div className="max-w-2xl text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.55)]">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/90 mb-5">Custom Window Treatments · North Idaho</p>
+              <h1 id="hero-title" className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.1] text-white text-balance">Beautiful options.<br />Personal service.<br />That’s Luxe.</h1>
+              <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-white">Discover custom window treatments for your style and budget, with personal guidance from the first samples to the final installation.</p>
+              <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+                <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick} className="inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-charcoal rounded-full px-7 py-4 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Request a Free Consultation</TrackedCta>
+              </div>
             </div>
-            <figcaption className="absolute bottom-5 left-5 bg-charcoal/90 text-white px-4 py-2 text-xs tracking-wide rounded-sm">An actual Luxe Window Works installation</figcaption>
-          </figure>
-          <div id="hero-consultation" className="scroll-mt-24 bg-white p-6 sm:p-8 text-charcoal border-t-4 border-gold lg:border-t-0 lg:border-l-4">
-            <p className="text-xs uppercase tracking-[0.14em] text-warm-gray-600 mb-2">One window or a whole home</p>
-            <h2 className="font-serif text-[28px] leading-tight">Your Free In-Home Consultation</h2>
-            <p className="mt-3 mb-5 text-sm leading-relaxed text-warm-gray-600">You don&apos;t need measurements or a product picked out. Tell us what you need help with—we&apos;ll bring samples, talk through your budget, and help you choose.</p>
-            <ContactForm compact />
-            <div className="mt-5 pt-4 border-t border-warm-gray-200 flex flex-wrap justify-between gap-3 text-sm">
-              <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="underline underline-offset-4">Call {BUSINESS.phone}</TrackedCta>
-              <TrackedCta href={`sms:${BUSINESS.phoneE164}`} event={CONVERSION_EVENTS.TextClick} className="underline underline-offset-4">Text Us</TrackedCta>
-            </div>
-            <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick} className="block mt-4 text-center text-xs underline underline-offset-4">Prefer to choose a time online?</TrackedCta>
           </div>
+          <p className="absolute z-10 bottom-4 left-6 sm:left-10 rounded-sm bg-charcoal/80 text-white px-3 py-2 text-[11px] sm:text-xs tracking-wide">An actual Luxe Window Works installation</p>
         </div>
       </section>
 
-      {/* 2. Trust Bar */}
+      {/* Trust banner */}
       <section className="bg-charcoal text-white py-5">
         <div className="container-luxe">
           {/* Tighter gaps and a slightly smaller step at md than before:
@@ -456,8 +379,38 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2b. Featured testimonial — early social proof */}
-      <section className="py-14 md:py-20 bg-warm-white">
+      {/* Featured TWO collection */}
+      <section id="two-collection" aria-labelledby="two-collection-title" className="bg-warm-white pt-10 md:pt-16 scroll-mt-24">
+        <div className="max-w-[1600px] mx-auto overflow-hidden bg-charcoal">
+          <div className="grid grid-cols-3 gap-1">
+            {[
+              { src: "/images/two/highprofile-classic.webp", alt: "TWO Highprofile Classic interior wood shutters in a bright sitting room", label: "Interior Shutters" },
+              { src: "/images/two/colourvue-control.webp", alt: "TWO Colourvue Control roller shades in a lakeside living room", label: "Roller Shades" },
+              { src: "/images/weatherwell-elite/IMG_1086.jpeg", alt: "Dark TWO exterior aluminum shutters with folding panels on a modern home", label: "Exterior Shutters" },
+            ].map((item) => (
+              <figure key={item.label} className="min-w-0">
+                <div className="relative aspect-[3/4] sm:aspect-[4/3]">
+                  <Image src={item.src} alt={item.alt} fill sizes="(min-width: 1600px) 533px, 33vw" className="object-cover" />
+                </div>
+                <figcaption className="px-2 py-3 sm:px-5 sm:py-4 text-center text-xs sm:text-base font-medium text-white">{item.label}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <div className="border-t border-white/15 p-6 sm:p-10 lg:px-14 lg:py-12 text-white flex flex-col lg:flex-row lg:items-center lg:justify-between gap-7">
+            <div className="max-w-3xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">New at Luxe Window Works</p>
+              <h2 id="two-collection-title" className="font-serif text-3xl sm:text-4xl lg:text-5xl leading-tight mt-3">Meet the TWO collection.</h2>
+              <p className="mt-4 text-base sm:text-lg leading-relaxed text-white/90">Interior shutters, roller shades, outdoor aluminum shutters, exterior shades and automation—eight ranges, with Luxe’s personal service.</p>
+            </div>
+            <Link href="/products/two" className="inline-flex self-start lg:self-center shrink-0 items-center justify-center rounded-full bg-cream text-charcoal px-7 py-4 font-semibold hover:bg-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+              Explore the Collection <span aria-hidden="true" className="ml-3">→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured testimonial */}
+      <section className="py-10 md:py-14 bg-warm-white">
         <div className="container-luxe max-w-3xl text-center">
           <div className="flex justify-center gap-1 mb-5">
             {[...Array(5)].map((_, i) => (
@@ -480,13 +433,78 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. A Simpler Way to Buy — process explainer */}
+      {/* Find the right treatment */}
+      <section id="find-your-solution" className="py-20 md:py-28 bg-cream scroll-mt-24">
+        <div className="container-luxe">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
+              What Are You Trying to Solve?
+            </h2>
+            <p className="mt-4 text-lg text-warm-gray-600 leading-relaxed">
+              Start with the problem. We&apos;ll help you find the right treatment.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {PROBLEM_PATHS.map((path) => (
+              <Link
+                key={path.title}
+                href={path.href}
+                className="group bg-white rounded-2xl border border-warm-gray-200/60 overflow-hidden hover:shadow-lg hover:border-gold/30 transition-all flex flex-col"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden bg-warm-gray-100">
+                  <Image
+                    src={path.image}
+                    alt={path.alt}
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-6 flex flex-col flex-1">
+                <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold transition-colors leading-snug">
+                  {path.title}
+                </h3>
+                <p className="mt-3 text-sm text-warm-gray-500 leading-relaxed flex-1">
+                  {path.body}
+                </p>
+                <span className="inline-flex items-center gap-1 mt-5 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
+                  See what works
+                  <svg
+                    className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-10 text-center">
+            <Link href="/products" className="inline-flex items-center justify-center gap-3 rounded-full bg-charcoal text-white px-7 py-4 font-semibold hover:bg-warm-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+              Explore All Window Treatments <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Process and the Luxe experience */}
       <section className="py-20 md:py-28 bg-warm-white">
         <div className="container-luxe">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
               A Simpler Way to Buy Custom Window Treatments
             </h2>
+            <p className="mt-4 text-lg text-warm-gray-600 leading-relaxed">
+              Personal guidance from your first look at samples to the final installation. We help you compare styles, materials, and features so you can choose confidently within your budget.
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {PROCESS_STEPS.map((step, i) => (
@@ -519,104 +537,19 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+          <div className="mt-12 text-center max-w-2xl mx-auto">
+            <h3 className="font-serif text-2xl sm:text-3xl text-charcoal">Not sure where to start?</h3>
+            <p className="mt-4 text-base leading-relaxed text-warm-gray-600">Explore a selection of our best-value blinds and shades, compare options, and get a feel for your budget. Our instant estimator is a simple place to begin.</p>
+            <Link href="/estimate" className="mt-6 inline-flex items-center justify-center gap-3 rounded-full bg-charcoal text-white px-7 py-4 font-semibold hover:bg-warm-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+              Explore the Instant Estimator <span aria-hidden="true">→</span>
+            </Link>
+            <p className="mt-4 text-sm leading-relaxed text-warm-gray-600">No pressure. No email required. Professional measuring and installation included in your estimate.</p>
+          </div>
         </div>
       </section>
 
-      {/* 3b. Problem-first — start with the problem, get to the right product */}
+      {/* Customer reviews */}
       <section className="py-20 md:py-28 bg-cream">
-        <div className="container-luxe">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-              What Are You Trying to Solve?
-            </h2>
-            <p className="mt-4 text-lg text-warm-gray-600 leading-relaxed">
-              Start with the problem. We&apos;ll help you find the right treatment.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {PROBLEM_PATHS.map((path) => (
-              <Link
-                key={path.title}
-                href={path.href}
-                className="group bg-white rounded-2xl border border-warm-gray-200/60 p-8 hover:shadow-lg hover:border-gold/30 transition-all flex flex-col"
-              >
-                <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center mb-5 group-hover:bg-gold/20 transition-colors">
-                  <path.Icon />
-                </div>
-                <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold transition-colors leading-snug">
-                  {path.title}
-                </h3>
-                <p className="mt-3 text-sm text-warm-gray-500 leading-relaxed flex-1">
-                  {path.body}
-                </p>
-                <span className="inline-flex items-center gap-1 mt-5 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
-                  See what works
-                  <svg
-                    className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Products */}
-      <section className="py-20 md:py-28 bg-cream">
-        <div className="container-luxe">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-              Solutions for Every Window in Your Home
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {PRODUCTS.map((product) => (
-              <Link
-                key={product.slug}
-                href={`/products/${product.slug}`}
-                className="group bg-white rounded-2xl border border-warm-gray-200/60 overflow-hidden hover:shadow-lg hover:border-gold/30 transition-all flex flex-col"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-warm-gray-100">
-                  <Image
-                    src={getProductCardImage(product.slug)}
-                    alt={`${product.name} — installed by Luxe Window Works`}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
-                  />
-                </div>
-                <div className="p-6 flex flex-col flex-1">
-                  <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold transition-colors">
-                    {product.name}
-                  </h3>
-                  <p className="mt-2 text-sm text-warm-gray-500 leading-relaxed">
-                    {HOMEPAGE_PRODUCT_COPY[product.slug] ?? product.shortDescription}
-                  </p>
-                  <span className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
-                    Learn more
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Reviews */}
-      <section className="py-20 md:py-28 bg-warm-white">
         <div className="container-luxe">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
@@ -669,26 +602,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 6. Why Luxe */}
-      <section className="py-20 md:py-28 bg-cream">
-        <div className="container-luxe max-w-3xl">
-          <div className="text-center mb-10">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-              What Makes It the Luxe Experience?
-            </h2>
-          </div>
-          <div className="space-y-6 text-lg text-warm-gray-600 leading-relaxed">
-            <p>
-              Beautiful window treatments begin with the right guidance. We bring 24 years of experience to your home, helping you compare styles, materials, and features so you can choose confidently within your budget.
-            </p>
-            <p>
-              From your first look at samples to the final installation, we handle the details. You get personal guidance, professional measuring and installation, and our lifetime installation guarantee. That is the Luxe experience—thoughtful service and lasting value for your home.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. Service Areas */}
+      {/* Service areas */}
       <section className="py-16 md:py-20 bg-warm-white">
         <div className="container-luxe">
           <div className="text-center max-w-2xl mx-auto mb-10">
@@ -713,7 +627,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 8. FAQ */}
+      {/* FAQ */}
       <section className="py-16 md:py-20 bg-cream">
         <div className="container-luxe max-w-3xl">
           <div className="text-center mb-10">
@@ -736,7 +650,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 9. Final CTA */}
+      {/* Final consultation invitation */}
       <section className="py-20 md:py-28 bg-charcoal text-white">
         <div className="container-luxe text-center max-w-3xl mx-auto">
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl leading-tight">

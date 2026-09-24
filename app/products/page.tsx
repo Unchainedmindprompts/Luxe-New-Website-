@@ -209,6 +209,8 @@ export default function ProductsHubPage() {
         </div>
       </section>
 
+      <section className="container-luxe py-8"><div className="border-y border-warm-gray-200 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"><p className="text-charcoal"><span className="font-semibold">Discover TWO.</span> Eight ranges of shutters, shades and automation.</p><Link href="/products/two" className="font-semibold text-charcoal underline underline-offset-4 shrink-0">Explore the TWO Collection →</Link></div></section>
+
       {/* Where we install — ties the category page to the local pages */}
       <section className="py-16 md:py-20 bg-cream/50">
         <div className="container-luxe max-w-3xl">
