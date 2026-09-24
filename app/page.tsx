@@ -428,8 +428,36 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Trust banner */}
+      <section className="bg-charcoal text-white py-5">
+        <div className="container-luxe">
+          {/* Tighter gaps and a slightly smaller step at md than before:
+              "24 Years Consulting, Designing & Installing" is long enough that
+              the previous gap-x-8 / text-base combination wrapped "Serving
+              North Idaho" onto a second row around 2000px. */}
+          <div className="flex flex-wrap items-center justify-center gap-x-5 lg:gap-x-7 gap-y-3 text-sm lg:text-[15px]">
+            <span className="text-warm-gray-300">{BUSINESS.experience}</span>
+            <span className="hidden md:inline text-warm-gray-600">|</span>
+            <span className="text-warm-gray-300">{BUSINESS.guarantee}</span>
+            <span className="hidden md:inline text-warm-gray-600">|</span>
+            <div className="flex items-center gap-2">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon key={i} />
+                ))}
+              </div>
+              <span className="text-warm-gray-300">
+                {BUSINESS.google.rating.toFixed(1)} Google Rating
+              </span>
+            </div>
+            <span className="hidden md:inline text-warm-gray-600">|</span>
+            <span className="text-warm-gray-300">Serving North Idaho</span>
+          </div>
+        </div>
+      </section>
+
       {/* Featured TWO collection */}
-      <section id="two-collection" aria-labelledby="two-collection-title" className="bg-warm-white py-10 md:py-16 scroll-mt-24">
+      <section id="two-collection" aria-labelledby="two-collection-title" className="bg-warm-white pt-10 md:pt-16 scroll-mt-24">
         <div className="max-w-[1600px] mx-auto overflow-hidden bg-charcoal">
           <div className="grid grid-cols-3 gap-1">
             {[
@@ -458,36 +486,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2. Trust Bar */}
-      <section className="bg-charcoal text-white py-5">
-        <div className="container-luxe">
-          {/* Tighter gaps and a slightly smaller step at md than before:
-              "24 Years Consulting, Designing & Installing" is long enough that
-              the previous gap-x-8 / text-base combination wrapped "Serving
-              North Idaho" onto a second row around 2000px. */}
-          <div className="flex flex-wrap items-center justify-center gap-x-5 lg:gap-x-7 gap-y-3 text-sm lg:text-[15px]">
-            <span className="text-warm-gray-300">{BUSINESS.experience}</span>
-            <span className="hidden md:inline text-warm-gray-600">|</span>
-            <span className="text-warm-gray-300">{BUSINESS.guarantee}</span>
-            <span className="hidden md:inline text-warm-gray-600">|</span>
-            <div className="flex items-center gap-2">
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <StarIcon key={i} />
-                ))}
-              </div>
-              <span className="text-warm-gray-300">
-                {BUSINESS.google.rating.toFixed(1)} Google Rating
-              </span>
-            </div>
-            <span className="hidden md:inline text-warm-gray-600">|</span>
-            <span className="text-warm-gray-300">Serving North Idaho</span>
-          </div>
-        </div>
-      </section>
-
-      {/* 2b. Featured testimonial — early social proof */}
-      <section className="py-14 md:py-20 bg-warm-white">
+      {/* Featured testimonial */}
+      <section className="py-10 md:py-14 bg-warm-white">
         <div className="container-luxe max-w-3xl text-center">
           <div className="flex justify-center gap-1 mb-5">
             {[...Array(5)].map((_, i) => (
@@ -510,49 +510,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. A Simpler Way to Buy — process explainer */}
-      <section className="py-20 md:py-28 bg-warm-white">
-        <div className="container-luxe">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-              A Simpler Way to Buy Custom Window Treatments
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {PROCESS_STEPS.map((step, i) => (
-              <div
-                key={step.title}
-                className="group bg-white rounded-2xl border border-warm-gray-200/60 shadow-sm overflow-hidden flex flex-col"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-warm-gray-100">
-                  <Image
-                    src={step.image}
-                    alt={step.alt}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(min-width: 768px) 33vw, 100vw"
-                  />
-                </div>
-                <div className="p-8 flex flex-col flex-1">
-                  <div className="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center mb-5">
-                    <span className="font-serif text-lg text-gold font-semibold">
-                      {i + 1}
-                    </span>
-                  </div>
-                  <h3 className="font-serif text-xl text-charcoal leading-snug">
-                    {step.title}
-                  </h3>
-                  <p className="mt-3 text-warm-gray-600 leading-relaxed">
-                    {step.body}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 3b. Problem-first — start with the problem, get to the right product */}
+      {/* Find the right treatment */}
       <section className="py-20 md:py-28 bg-cream">
         <div className="container-luxe">
           <div className="text-center max-w-2xl mx-auto mb-14">
@@ -601,8 +559,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. Products */}
-      <section className="py-20 md:py-28 bg-cream">
+      {/* Products */}
+      <section className="pt-4 pb-16 md:pt-6 md:pb-20 bg-cream">
         <div className="container-luxe">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
@@ -645,8 +603,53 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. Reviews */}
+      {/* Process and the Luxe experience */}
       <section className="py-20 md:py-28 bg-warm-white">
+        <div className="container-luxe">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
+              A Simpler Way to Buy Custom Window Treatments
+            </h2>
+            <p className="mt-4 text-lg text-warm-gray-600 leading-relaxed">
+              Personal guidance from your first look at samples to the final installation. We help you compare styles, materials, and features so you can choose confidently within your budget.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            {PROCESS_STEPS.map((step, i) => (
+              <div
+                key={step.title}
+                className="group bg-white rounded-2xl border border-warm-gray-200/60 shadow-sm overflow-hidden flex flex-col"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden bg-warm-gray-100">
+                  <Image
+                    src={step.image}
+                    alt={step.alt}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                  />
+                </div>
+                <div className="p-8 flex flex-col flex-1">
+                  <div className="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center mb-5">
+                    <span className="font-serif text-lg text-gold font-semibold">
+                      {i + 1}
+                    </span>
+                  </div>
+                  <h3 className="font-serif text-xl text-charcoal leading-snug">
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 text-warm-gray-600 leading-relaxed">
+                    {step.body}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Customer reviews */}
+      <section className="py-20 md:py-28 bg-cream">
         <div className="container-luxe">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
@@ -699,26 +702,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 6. Why Luxe */}
-      <section className="py-20 md:py-28 bg-cream">
-        <div className="container-luxe max-w-3xl">
-          <div className="text-center mb-10">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-              What Makes It the Luxe Experience?
-            </h2>
-          </div>
-          <div className="space-y-6 text-lg text-warm-gray-600 leading-relaxed">
-            <p>
-              Beautiful window treatments begin with the right guidance. We bring 24 years of experience to your home, helping you compare styles, materials, and features so you can choose confidently within your budget.
-            </p>
-            <p>
-              From your first look at samples to the final installation, we handle the details. You get personal guidance, professional measuring and installation, and our lifetime installation guarantee. That is the Luxe experience—thoughtful service and lasting value for your home.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. Service Areas */}
+      {/* Service areas */}
       <section className="py-16 md:py-20 bg-warm-white">
         <div className="container-luxe">
           <div className="text-center max-w-2xl mx-auto mb-10">
@@ -743,7 +727,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 8. FAQ */}
+      {/* FAQ */}
       <section className="py-16 md:py-20 bg-cream">
         <div className="container-luxe max-w-3xl">
           <div className="text-center mb-10">
@@ -766,7 +750,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 9. Final CTA */}
+      {/* Final consultation invitation */}
       <section className="py-20 md:py-28 bg-charcoal text-white">
         <div className="container-luxe text-center max-w-3xl mx-auto">
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl leading-tight">
