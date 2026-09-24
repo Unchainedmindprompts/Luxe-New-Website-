@@ -360,27 +360,32 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageGraph) }}
       />
 
-      {/* Actual client installation, with an unobstructed view of the shades. */}
-      <section className="bg-warm-white pt-16 md:pt-20">
-        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 py-8 md:py-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold mb-3">Custom Window Treatments · North Idaho</p>
-          <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] leading-[1.12] text-charcoal max-w-2xl text-balance">The Luxe experience.<br />Without the luxury price tag.</h1>
-            <p className="mt-4 lg:mt-0 max-w-md text-base font-semibold leading-relaxed text-charcoal">Beautiful custom blinds and shades, professionally measured and installed. We bring samples to your home and help you compare options that fit your rooms, your style, and your budget.</p>
-          </div>
-          <div className="mt-6 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-            <Link href="/estimate" className="inline-flex items-center justify-center rounded-full bg-charcoal text-white px-7 py-4 font-semibold hover:bg-warm-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">Get an Instant Estimate <span aria-hidden="true" className="ml-3">→</span></Link>
-            <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick} className="inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-charcoal rounded-full px-7 py-4 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">Request a Free Consultation</TrackedCta>
-          </div>
-          <p className="mt-3 text-sm text-warm-gray-600">Explore pricing for blinds and shades. Measuring and installation included. No email required.</p>
-        </div>
-        <div className="relative max-w-[1600px] mx-auto">
-          <figure className="relative min-w-0">
-            <div className="relative aspect-[4/3] sm:aspect-[16/9]">
-              <Image src="/images/luxe-completed-installation.webp" alt="Actual Luxe Window Works installation: custom shades filtering daylight in a living room with timber beams and a stone fireplace" fill className="object-cover object-[35%_center]" priority sizes="(min-width:1600px) 1600px, 100vw" quality={90} />
+      {/* Full-width hero featuring an actual Luxe installation. */}
+      <section aria-labelledby="hero-title" className="bg-charcoal pt-16 md:pt-20">
+        <div className="relative isolate w-full overflow-hidden">
+          <Image
+            src="/images/luxe-completed-installation.webp"
+            alt="Actual Luxe Window Works installation: custom shades filtering daylight in a living room with timber beams and a stone fireplace"
+            fill
+            className="object-cover object-[35%_center] md:object-center"
+            priority
+            sizes="100vw"
+            quality={90}
+          />
+          <div aria-hidden="true" className="absolute inset-0 bg-black/50 md:bg-transparent md:bg-gradient-to-r md:from-black/85 md:via-black/55 md:to-black/10" />
+          <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 py-16 md:py-24 lg:py-28 min-h-[640px] md:min-h-[680px] lg:min-h-[740px] flex flex-col justify-center">
+            <div className="max-w-2xl text-white">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/90 mb-5">Custom Window Treatments · North Idaho</p>
+              <h1 id="hero-title" className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.1] text-white text-balance">The Luxe experience.<br />Without the luxury price tag.</h1>
+              <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-white">Beautiful custom blinds and shades, professionally measured and installed. We bring samples to your home and help you compare options that fit your rooms, your style, and your budget.</p>
+              <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+                <Link href="/estimate" className="inline-flex items-center justify-center rounded-full bg-white text-charcoal px-7 py-4 font-semibold hover:bg-cream focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Get an Instant Estimate <span aria-hidden="true" className="ml-3">→</span></Link>
+                <TrackedCta href="/book" event={CONVERSION_EVENTS.ConsultCtaClick} className="inline-flex items-center justify-center bg-gold hover:bg-gold-dark text-charcoal rounded-full px-7 py-4 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Request a Free Consultation</TrackedCta>
+              </div>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/90">Explore pricing for blinds and shades. Measuring and installation included. No email required.</p>
             </div>
-            <figcaption className="absolute bottom-5 left-5 bg-charcoal/90 text-white px-4 py-2 text-xs tracking-wide rounded-sm">An actual Luxe Window Works installation</figcaption>
-          </figure>
+          </div>
+          <p className="absolute z-10 bottom-4 left-6 sm:left-10 rounded-sm bg-charcoal/80 text-white px-3 py-2 text-[11px] sm:text-xs tracking-wide">An actual Luxe Window Works installation</p>
         </div>
       </section>
 
