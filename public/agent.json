@@ -61,7 +61,7 @@
     },
     {
       "name": "TWO Shutters, Shades and Automation",
-      "description": "Product selection, custom measurements and installation of the eight TWO ranges: interior shutters, roller shades, outdoor aluminum shutters, exterior shades and compatible shade automation.",
+      "description": "Product selection, custom measurements and installation of the six TWO product families: interior shutters, roller shades, outdoor aluminum shutters, exterior shades and compatible shade automation.",
       "url": "https://www.luxewindowworks.com/products/two",
       "type": "service"
     },
@@ -143,11 +143,9 @@
       "products": [
         "Highprofile Classic",
         "Highprofile Poly",
-        "Highprofile Avenir",
-        "Colourvue Control",
+        "Colourvue",
         "Weatherwell Elite",
-        "Weatherwell Standard",
-        "Shadesol Alfresco",
+        "Shadesol",
         "Whispertech"
       ],
       "available_online": false,

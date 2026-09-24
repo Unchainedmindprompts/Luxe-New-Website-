@@ -20,8 +20,8 @@ const elite = page('products/aluminum-shutters');
 const home = page('index');
 const hub = page('products');
 const products = collection.nodes.filter(n => n['@type'] === 'ProductModel');
-assert.equal(products.length, 8);
-assert.equal(new Set(products.map(n => n['@id'])).size, 8);
+assert.equal(products.length, 6);
+assert.equal(new Set(products.map(n => n['@id'])).size, 6);
 for (const p of products) {
   assert.equal(p.manufacturer['@id'], 'https://two-usa.com/#organization');
   assert.equal(p.isRelatedTo['@id'], `${two}#service`);
@@ -31,7 +31,7 @@ for (const p of products) {
   assert.equal(p.aggregateRating, undefined);
 }
 const catalog = collection.get(`${two}#catalog`);
-assert.equal(catalog.itemListElement.length, 8);
+assert.equal(catalog.itemListElement.length, 6);
 for (const offer of catalog.itemListElement) {
   assert.equal(offer.seller['@id'], `${base}/#business`);
   assert.ok(products.some(p => p['@id'] === offer.itemOffered['@id']));
@@ -54,4 +54,8 @@ assert.ok(hub.nodes.some(n => n['@type'] === 'ListItem' && n.url === two));
 const about = page('about');
 assert.ok(!about.get(`${base}/#owner`).description.includes('Apple'));
 assert.ok(about.get(`${base}/#owner`).knowsAbout.includes('Outdoor aluminum shutters'));
-console.log('PASS: eight TWO products, provider/manufacturer/catalog links, visible anchors, outdoor FAQ parity, homepage/hub discovery and updated owner schema.');
+console.log('PASS: six TWO products, provider/manufacturer/catalog links, visible anchors, outdoor FAQ parity, homepage/hub discovery and updated owner schema.');
+
+assert.ok(!collection.html.includes("Highprofile Avenir"));
+assert.ok(!collection.html.includes("Weatherwell Standard"));
+for (const name of ["Colourvue Essential", "Colourvue Basic", "Shadesol Complete", "Shadesol Essential"]) assert.ok(collection.html.includes(name));

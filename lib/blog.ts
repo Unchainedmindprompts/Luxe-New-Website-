@@ -176,6 +176,7 @@ function getMarkdownPost(slug: string): BlogPost | null {
     const filePath = join(BLOG_DIR, `${slug}.md`);
     const raw = readFileSync(filePath, "utf-8");
     const { data, content } = parseFrontmatter(raw);
+    if (data.draft === "true") return null;
 
     let faqs: FAQ[] = [];
     try {
@@ -227,7 +228,8 @@ function getAllMarkdownSlugs(): string[] {
   try {
     return readdirSync(BLOG_DIR)
       .filter((f) => f.endsWith(".md"))
-      .map((f) => f.replace(/\.md$/, ""));
+      .map((f) => f.replace(/\.md$/, ""))
+      .filter((slug) => getMarkdownPost(slug) !== null);
   } catch {
     return [];
   }

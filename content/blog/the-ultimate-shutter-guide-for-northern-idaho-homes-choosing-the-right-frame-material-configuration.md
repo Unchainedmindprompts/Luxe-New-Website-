@@ -208,7 +208,6 @@ wordCount: 3700
 <li><a href="/blog/woodlore-plus-shutters-north-idaho">Woodlore Plus shutters in North Idaho — why composite beats wood for Coeur d'Alene homes</a></li>
 <li><a href="/blog/norman-shutters-in-north-idaho-premium-craftsmanship-from-luxe-window-works">Norman shutters in North Idaho — Normandy, Woodlore Plus, and InvisibleTilt design</a></li>
 <li><a href="/blog/the-hidden-value-of-plantation-shutters-in-northern-idaho-homes">The hidden value of plantation shutters for Northern Idaho luxury homes</a></li>
-<li><a href="/blog/aluminum-interior-shutters-for-modern-north-idaho-homes">The future is aluminum — Highprofile Avenir interior shutters for modern homes</a></li>
 <li><a href="/blog/lockable-aluminum-shutters-for-4-season-patios-in-north-idaho">Lockable aluminum exterior shutters for 4-season patios in North Idaho</a></li>
 <li><a href="/blog/norman-bifold-180-shutters-for-bi-folding-doors-in-north-idaho">The Norman BiFold 180 for bi-folding doors in Northern Idaho</a></li>
 <li><a href="/blog/how-to-measure-and-install-plantation-shutters-like-a-pro">How to measure and install plantation shutters like a pro (DIY guide)</a></li>

@@ -115,7 +115,7 @@ export const CORRADI_USA = {
 /**
  * `Organization`, on the same reasoning as Corradi USA — the articles group it
  * with "manufacturers like Norman, Lafayette, and The Window Outfitters". Its
- * product lines (Highprofile Avenir, Weatherwell Elite, ColourVue) are the
+ * product lines (Highprofile Classic, Weatherwell Elite, ColourVue) are the
  * brand-shaped things; the company is not one of them.
  *
  * ONE ENTITY, NOT THREE. "The Window Outfitters", "TWO USA" and the two-usa.com

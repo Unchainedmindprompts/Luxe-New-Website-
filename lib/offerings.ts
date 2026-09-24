@@ -115,7 +115,7 @@ export const OFFERINGS: Record<OfferingId, Offering> = {
 
   },
 
-  // Corradi exterior screens and TWO Shadesol Alfresco are both visibly offered.
+  // Corradi exterior screens and TWO Shadesol are both visibly offered.
   "exterior-solar-shades": {
     manufacturersEvidenced: [CORRADI_USA["@id"], THE_WINDOW_OUTFITTERS["@id"]],
   },
@@ -136,7 +136,7 @@ export const OFFERINGS: Record<OfferingId, Offering> = {
   // Same: the roman-shades entry names no manufacturer at all.
   "roman-shades": { manufacturersEvidenced: [] },
 
-  // The TWO collection visibly offers Colourvue Control roller shades.
+  // The TWO collection visibly offers Colourvue roller shades.
   "roller-shades": { manufacturersEvidenced: [THE_WINDOW_OUTFITTERS["@id"]] },
 };
 

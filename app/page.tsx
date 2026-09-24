@@ -365,7 +365,7 @@ export default function HomePage() {
           <div className="grid grid-cols-3 gap-1">
             {[
               { src: "/images/two/highprofile-classic.webp", alt: "TWO Highprofile Classic interior wood shutters in a bright sitting room", label: "Interior Shutters" },
-              { src: "/images/two/colourvue-control.webp", alt: "TWO Colourvue Control roller shades in a lakeside living room", label: "Roller Shades" },
+              { src: "/images/two/colourvue-living-natural.jpg", alt: "TWO Colourvue roller shades in a bright contemporary living room", label: "Roller Shades" },
               { src: "/images/weatherwell-elite/IMG_1086.jpeg", alt: "Dark TWO exterior aluminum shutters with folding panels on a modern home", label: "Exterior Shutters" },
             ].map((item) => (
               <figure key={item.label} className="min-w-0">
@@ -380,7 +380,7 @@ export default function HomePage() {
             <div className="max-w-3xl">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">New at Luxe Window Works</p>
               <h2 id="two-collection-title" className="font-serif text-3xl sm:text-4xl lg:text-5xl leading-tight mt-3">Meet the TWO collection.</h2>
-              <p className="mt-4 text-base sm:text-lg leading-relaxed text-white/90">Interior shutters, roller shades, outdoor aluminum shutters, exterior shades and automation—eight ranges, with Luxe’s personal service.</p>
+              <p className="mt-4 text-base sm:text-lg leading-relaxed text-white/90">Interior shutters, roller shades, outdoor aluminum shutters, exterior shades and automation—six product families, with Luxe’s personal service.</p>
             </div>
             <Link href="/products/two" className="inline-flex self-start lg:self-center shrink-0 items-center justify-center rounded-full bg-cream text-charcoal px-7 py-4 font-semibold hover:bg-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
               Explore the Collection <span aria-hidden="true" className="ml-3">→</span>

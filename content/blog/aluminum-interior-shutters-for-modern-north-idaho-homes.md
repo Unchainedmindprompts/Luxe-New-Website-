@@ -1,4 +1,5 @@
 ---
+draft: true
 title: "The Future is Aluminum: Why North Idaho's Modern Luxury Homes Demand Highprofile Avenir Interior Shutters"
 slug: aluminum-interior-shutters-for-modern-north-idaho-homes
 date: "2025-10-05T16:18:51.000Z"

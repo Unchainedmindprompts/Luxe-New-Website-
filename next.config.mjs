@@ -228,6 +228,7 @@ const nextConfig = {
     ];
 
     return [
+      { source: "/blog/aluminum-interior-shutters-for-modern-north-idaho-homes", destination: "/products/two", permanent: false },
       ...staticRedirects,
       ...wpRedirects.map((r) => ({
         source: r.source,
