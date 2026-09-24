@@ -301,66 +301,34 @@ const HOMEPAGE_PRODUCT_COPY: Record<string, string> = {
     "Control hard-to-reach or everyday shades by remote, wall switch, app, or smart home system.",
 };
 
-function SunIcon() {
-  return (
-    <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-      <circle cx="12" cy="12" r="4" />
-      <path strokeLinecap="round" d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4" />
-    </svg>
-  );
-}
-
-function EyeIcon() {
-  return (
-    <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M2.5 12s3.5-7 9.5-7 9.5 7 9.5 7-3.5 7-9.5 7S2.5 12 2.5 12z" />
-      <circle cx="12" cy="12" r="2.75" />
-    </svg>
-  );
-}
-
-function MoonIcon() {
-  return (
-    <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M20 15.5A8 8 0 0 1 8.5 4a8 8 0 1 0 11.5 11.5z" />
-    </svg>
-  );
-}
-
-function RemoteIcon() {
-  return (
-    <svg className="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-      <rect x="7.5" y="3" width="9" height="18" rx="2" />
-      <path strokeLinecap="round" d="M10.5 8h3M10.5 12h3" />
-      <circle cx="12" cy="16.5" r="0.75" fill="currentColor" />
-    </svg>
-  );
-}
-
 const PROBLEM_PATHS = [
   {
     title: "Too Much Heat or Glare",
     body: "Reduce harsh sun, UV exposure, and room overheating.",
     href: "/products/solar-shades",
-    Icon: SunIcon,
+    image: "/images/solutions/heat-glare.webp",
+    alt: "Solar roller shades softening afternoon sunlight in a warm living room",
   },
   {
     title: "Need More Privacy Without Losing Light",
     body: "Find the right balance of privacy, filtered light, and views.",
     href: "/products/banded-shades",
-    Icon: EyeIcon,
+    image: "/images/solutions/privacy-daylight.webp",
+    alt: "Light-filtering banded shades in a bright sitting room",
   },
   {
     title: "Better Sleep or Blackout",
     body: "Create darker bedrooms and better light control where it matters most.",
     href: "/products/cellular-shades",
-    Icon: MoonIcon,
+    image: "/images/solutions/blackout-bedroom.webp",
+    alt: "Closed cellular blackout shades in a softly lit bedroom",
   },
   {
     title: "Want Motorized Shades",
     body: "Control everyday or hard-to-reach shades by remote, app, wall switch, or smart home system.",
     href: "/products/motorization",
-    Icon: RemoteIcon,
+    image: "/images/solutions/motorized-shades.webp",
+    alt: "A handheld remote controlling roller shades on tall living room windows",
   },
 ] as const;
 
@@ -511,7 +479,7 @@ export default function HomePage() {
       </section>
 
       {/* Find the right treatment */}
-      <section className="py-20 md:py-28 bg-cream">
+      <section id="find-your-solution" className="py-20 md:py-28 bg-cream scroll-mt-24">
         <div className="container-luxe">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
@@ -526,11 +494,18 @@ export default function HomePage() {
               <Link
                 key={path.title}
                 href={path.href}
-                className="group bg-white rounded-2xl border border-warm-gray-200/60 p-8 hover:shadow-lg hover:border-gold/30 transition-all flex flex-col"
+                className="group bg-white rounded-2xl border border-warm-gray-200/60 overflow-hidden hover:shadow-lg hover:border-gold/30 transition-all flex flex-col"
               >
-                <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center mb-5 group-hover:bg-gold/20 transition-colors">
-                  <path.Icon />
+                <div className="relative aspect-[4/3] overflow-hidden bg-warm-gray-100">
+                  <Image
+                    src={path.image}
+                    alt={path.alt}
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
+                <div className="p-6 flex flex-col flex-1">
                 <h3 className="font-serif text-lg font-semibold text-charcoal group-hover:text-gold transition-colors leading-snug">
                   {path.title}
                 </h3>
@@ -553,6 +528,7 @@ export default function HomePage() {
                     />
                   </svg>
                 </span>
+                </div>
               </Link>
             ))}
           </div>
