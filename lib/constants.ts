@@ -19,7 +19,7 @@ export const BUSINESS = {
   },
   google: {
     rating: 5.0,
-    reviewCount: 18,
+    reviewCount: 19,
     mapsUrl: "https://share.google/pRM5IoXZgRTksImvp",
   },
   /**
