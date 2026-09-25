@@ -5,6 +5,8 @@ import Image from "next/image";
 import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CdaClientReviews from "@/components/CdaClientReviews";
+import PostFallsClientReviews from "@/components/PostFallsClientReviews";
+import HaydenClientReview from "@/components/HaydenClientReview";
 import { ConsultationExpect } from "@/components/ConsultationExpect";
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
@@ -306,6 +308,8 @@ export default async function AreaPage({ params }: Props) {
       </section>
 
       {slug === "coeur-d-alene" && <CdaClientReviews />}
+      {slug === "post-falls" && <PostFallsClientReviews />}
+      {slug === "hayden" && <HaydenClientReview />}
 
       {/* Neighborhoods & Housing */}
       <section className="py-16 md:py-20 bg-cream/50">
