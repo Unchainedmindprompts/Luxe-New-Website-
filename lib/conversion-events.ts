@@ -13,6 +13,8 @@ export const CONVERSION_EVENTS = {
   ContactCtaClick: "ContactCtaClick",
   ProductCtaClick: "ProductCtaClick",
   ContactFormSubmit: "ContactFormSubmit",
+  EstimatorStarted: "EstimatorStarted",
+  EstimatorCompleted: "EstimatorCompleted",
 } as const;
 
 export type ConversionEventName =
@@ -23,6 +25,8 @@ const FORBIDDEN_STANDARD_EVENTS = new Set(["Lead", "Schedule"]);
 export interface ConversionEventParams {
   page_path: string;
   originating_path?: string;
+  value?: number;
+  currency?: "USD";
 }
 
 export function isCustomConversionEvent(name: string): boolean {
@@ -69,6 +73,9 @@ export function trackConversionEvent(
 
   const payload = {
     page_path: params.page_path,
+    ...(typeof params.value === "number" && Number.isFinite(params.value)
+      ? { value: params.value, currency: params.currency ?? "USD" }
+      : {}),
     ...(params.originating_path
       ? { originating_path: params.originating_path }
       : {}),
