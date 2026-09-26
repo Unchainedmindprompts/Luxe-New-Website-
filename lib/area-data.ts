@@ -54,19 +54,19 @@ export const areaPages: Record<string, AreaPageData> = {
     faqs: [
       {
         question: "Do wood or composite shutters hold up better near Lake Coeur d'Alene?",
-        answer: "It depends more on the product quality and finish than the material alone. Standard wood shutters can struggle near the lake — humidity variations cause lesser-finished wood to expand, contract, and eventually warp or crack. But not all wood shutters are equal: Norman's Osmo-finished wood shutters use a hardwax oil treatment that's genuinely durable in high-humidity environments, and they're a real-wood option worth considering for lake-adjacent rooms. Composite options like Norman's Woodlore Plus are still the lower-maintenance choice and carry a lifetime warranty. The short answer: material matters, but the finish and manufacturer quality matter just as much. I'll walk you through both options during the consultation so you can make the right call for your space.",
+        answer: "It depends more on the product quality and finish than the material alone. Standard wood shutters can warp or crack with lake humidity, but Norman's Osmo-finished wood shutters use a hardwax oil treatment that holds up well in high-humidity environments. Composite options like Norman's Woodlore Plus are the lower-maintenance choice and carry a lifetime warranty.",
       },
       {
         question: "My lakefront windows face west and get blinding afternoon sun off the water — what actually works?",
-        answer: "West-facing windows that catch afternoon sun reflecting off Lake Coeur d'Alene are one of the most common challenges I see. A 3% or 5% openness solar shade is the right tool — it cuts glare by 95%+ while keeping your lake view intact. A 3% fabric nearly eliminates glare; a 5% fabric lets in slightly more light with a small tradeoff in glare reduction. Both options look clean and modern and are available in motorized versions so you can adjust them from your phone when the afternoon glare kicks in.",
+        answer: "A 3% or 5% openness solar shade cuts glare by 95%+ while keeping your lake view intact. The 3% fabric nearly eliminates glare; 5% lets in slightly more light. Both are available motorized so you can adjust them from your phone when afternoon glare kicks in.",
       },
       {
-        question: "I have a 1920s craftsman home in downtown CDA with original window frames that aren't square — can you still get a proper fit?",
-        answer: "Yes, and this is one of the most common situations in the historic downtown neighborhoods. Original window frames in craftsman-era homes often have significant variation from top to bottom and side to side — sometimes a quarter inch or more out of square. The key is measuring at multiple points and building the treatment to fit the actual opening, not a standard size. I measure every window individually on every job. It takes longer, but it's the only way to get a clean result in an older home.",
+        question: "My 1920s craftsman home in downtown CDA has original window frames that aren't square — can you still get a proper fit?",
+        answer: "Yes. Original craftsman-era frames often vary a quarter inch or more out of square. The key is measuring at multiple points and building the treatment to fit the actual opening, not a standard size. Mark measures every window individually on every job.",
       },
       {
         question: "Are there window treatment options that work in high-humidity rooms in a Coeur d'Alene lake home?",
-        answer: "Yes. For bathrooms, kitchens, and any rooms adjacent to the lake with high moisture exposure, the right material choices are critical. Composite or faux-wood shutters, aluminum blinds, and synthetic roller shade fabrics all hold up well in humid environments. Avoid real wood blinds and shutters, fabric Roman shades, and woven wood shades in these spaces — they'll absorb moisture, warp, or develop mildew over time. During the consultation I'll flag any high-humidity areas and steer you toward materials that will last.",
+        answer: "Yes. Composite or faux-wood shutters, aluminum blinds, and synthetic roller shade fabrics all hold up well in humid lake-adjacent rooms. Avoid real wood blinds, fabric Roman shades, and woven woods in these spaces — they absorb moisture, warp, or develop mildew.",
       },
     ],
     relatedPosts: [

@@ -210,6 +210,7 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "@id": `${areaUrl}#faq`,
+    isPartOf: { "@id": `${areaUrl}#webpage` },
     speakable: {
       "@type": "SpeakableSpecification",
       cssSelector: [".area-faqs"],
