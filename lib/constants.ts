@@ -19,7 +19,7 @@ export const BUSINESS = {
   },
   google: {
     rating: 5.0,
-    reviewCount: 19,
+    reviewCount: 20,
     mapsUrl: "https://share.google/pRM5IoXZgRTksImvp",
   },
   /**
@@ -43,7 +43,7 @@ export const BUSINESS = {
     { day: "Wednesday", open: "9:00 AM", close: "5:00 PM" },
     { day: "Thursday",  open: "9:00 AM", close: "5:00 PM" },
     { day: "Friday",    open: "9:00 AM", close: "5:00 PM" },
-    { day: "Saturday",  open: "9:00 AM", close: "2:00 PM" },
+    { day: "Saturday",  open: "10:00 AM", close: "2:00 PM" },
     { day: "Sunday",    open: null,      close: null },
   ],
   // "Installer Experience" read as a subcontractor who only hangs what someone
