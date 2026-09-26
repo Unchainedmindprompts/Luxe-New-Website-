@@ -1,10 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import RomanIllustration from './RomanIllustration';
 import { estimateShade, type Shade, type Operation, type Product } from '@/lib/estimate';
 import { estimateRemotes, remoteSystem, type AdditionalRemotes } from '@/lib/estimate-remotes';
 import { BUSINESS } from '@/lib/constants';
+import { trackConversionEvent } from '@/lib/conversion-events';
 const fresh = (id: number): Shade => ({ id, product: 'cellular', room: '', width: '', height: '', quantity: '1', light: 'light', operation: 'cordless' });
 const operations: { value: Operation; title: string; detail: string }[] = [
   { value: 'cordless', title: 'Cordless', detail: 'A gentle lift by hand.' },
@@ -22,6 +23,14 @@ const details = (shade: Shade) => {
 };
 const field = 'mt-2 w-full rounded-xl border border-warm-gray-300 bg-white px-4 py-3 text-base text-charcoal focus:outline-none focus:ring-2 focus:ring-gold';
 export default function EstimateBuilder({ onProductSelect }: { onProductSelect: (product: Product) => void }) {
+  // One funnel entry and completion per visit, including edits/reopened summaries.
+  const started = useRef(false);
+  const completed = useRef(false);
+  const startEstimator = () => {
+    if (started.current) return;
+    started.current = true;
+    trackConversionEvent('EstimatorStarted', { page_path: '/estimate' });
+  };
   const [shades, setShades] = useState<Shade[]>([fresh(1)]);
   const [activeId, setActiveId] = useState<number | null>(1);
   const [review, setReview] = useState(false);
@@ -37,6 +46,7 @@ export default function EstimateBuilder({ onProductSelect }: { onProductSelect: 
   const [nextId, setNextId] = useState(2);
   const [additionalRemotes, setAdditionalRemotes] = useState<AdditionalRemotes>({});
   const changeShades = (items: Shade[]) => {
+    startEstimator();
     setShades(items);
     const active = new Set(items.map(remoteSystem));
     setAdditionalRemotes(previous => Object.fromEntries(Object.entries(previous).filter(([key]) => active.has(key as keyof AdditionalRemotes))));
@@ -47,6 +57,16 @@ export default function EstimateBuilder({ onProductSelect }: { onProductSelect: 
   const complete = results.every(r => !r.error) && remotes.every(r => !r.error);
   const total = results.reduce((sum,r) => sum + (r.cents ?? 0), 0) + remotes.reduce((sum,r) => sum + r.cents, 0);
   const count = shades.reduce((sum,s) => sum + (Number(s.quantity) || 0), 0);
+  useEffect(() => {
+    // A partial total or an incomplete summary is not a completed estimate.
+    if (!review || !complete || completed.current) return;
+    completed.current = true;
+    trackConversionEvent('EstimatorCompleted', {
+      page_path: '/estimate',
+      value: total / 100,
+      currency: 'USD',
+    });
+  }, [review, complete, total]);
   if (review) return <section className="container-luxe py-12 md:py-16 max-w-4xl" aria-label="Estimate summary">
     <h2 id="estimate-review-heading" tabIndex={-1} className="font-serif text-3xl md:text-4xl scroll-mt-28 focus:outline-none">Your estimate, at a glance.</h2>
     <p className="mt-3 mb-8 text-warm-gray-700">Review your windows and options. You can edit any window without starting over.</p>
