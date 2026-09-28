@@ -5,12 +5,12 @@ import { HD_COLLECTIONS } from "@/lib/hunter-douglas";
 export default function HunterDouglasFeature() {
   return (
     <section id="hunter-douglas-collection" aria-labelledby="hunter-douglas-title" className="bg-warm-white pt-10 md:pt-16 scroll-mt-24">
-      <div className="max-w-[1600px] mx-auto overflow-hidden bg-cream">
+      <div className="w-full overflow-hidden bg-cream">
         <div className="grid grid-cols-3 gap-1">
           {HD_COLLECTIONS.map((item) => (
             <Link key={item.id} href={`/products/hunter-douglas#${item.id}`} className="group min-w-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-charcoal">
               <div className="relative aspect-[3/4] sm:aspect-[4/3] overflow-hidden">
-                <Image src={item.image} alt={item.alt} fill sizes="(min-width: 1600px) 533px, 33vw" className="object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.03]" />
+                <Image src={item.image} alt={item.alt} fill sizes="33vw" className="object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.03]" />
               </div>
               <div className="px-1 py-3 sm:px-5 sm:py-4 text-center text-charcoal">
                 <p className="font-serif text-base sm:text-2xl">{item.name}</p>
