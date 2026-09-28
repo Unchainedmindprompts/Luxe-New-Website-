@@ -13,6 +13,7 @@ import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 import { cityRef, northIdahoRef } from "@/lib/cities";
+import HunterDouglasFeature from "@/components/HunterDouglasFeature";
 import { TWO_URL } from "@/lib/two";
 import { BUSINESS_STUB, OWNER_STUB, productServiceRef } from "@/lib/schema";
 
@@ -369,6 +370,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <HunterDouglasFeature />
 
       {/* Featured TWO collection */}
       <section id="two-collection" aria-labelledby="two-collection-title" className="bg-warm-white pt-10 md:pt-16 scroll-mt-24">
