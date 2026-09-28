@@ -1,0 +1,1 @@
+export const ESTIMATE_PRODUCT_SCOPE = 'Estimates apply only to select products supplied through Premier Blinds & Shades. Hunter Douglas, Alta, and Norman products are not included and are quoted separately during your free consultation.';

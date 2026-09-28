@@ -1,4 +1,5 @@
 'use client';
+import { ESTIMATE_PRODUCT_SCOPE } from '@/lib/estimate-copy';
 import { useState } from 'react';
 import Image from 'next/image';
 import RomanIllustration from './RomanIllustration';
@@ -17,6 +18,7 @@ export default function EstimateExperience({ bandedImage, rollerImage }: { bande
             <p>That’s why we created our instant estimator. Explore a selection of our best-value blinds and shades, backed by a limited lifetime warranty, and see how different choices fit your budget.</p>
             <p>Use it to plan your project, explore options, or help make sense of a quote you already have. When you’re ready, we’ll bring samples and a wider range of possibilities to your home.</p>
           </div>
+          <div className="mt-6 rounded-xl border border-gold bg-white p-5 text-charcoal"><p className="font-semibold">Which products does this estimator cover?</p><p className="mt-2 text-sm leading-relaxed">{ESTIMATE_PRODUCT_SCOPE}</p></div>
           <p className="mt-5 text-sm font-semibold leading-relaxed">No pressure. No email required. Professional measuring and installation included in your estimate.</p>
           <a href="#shade-cost-heading" className="inline-block mt-5 py-2 text-sm underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">Just exploring? See example prices for a typical window.</a>
         </div>

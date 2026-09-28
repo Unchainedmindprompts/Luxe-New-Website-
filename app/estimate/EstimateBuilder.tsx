@@ -1,4 +1,5 @@
 'use client';
+import { ESTIMATE_PRODUCT_SCOPE } from '@/lib/estimate-copy';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import RomanIllustration from './RomanIllustration';
@@ -94,6 +95,7 @@ export default function EstimateBuilder({ onProductSelect }: { onProductSelect: 
     </section>}
     <section className="bg-charcoal text-white rounded-2xl p-6 sm:p-8 mt-6" aria-label="Estimate total">
       <h3 className="font-serif text-2xl">Your estimated total</h3>
+      <p className="mt-3 text-sm leading-relaxed text-white/90">{ESTIMATE_PRODUCT_SCOPE}</p>
       <p className="font-serif text-4xl sm:text-5xl mt-3 break-words">{complete ? remoteMoney(total) : 'Complete your window details'}</p>
       <p className="mt-4 text-sm text-white/85">Includes your selected blinds and shades, professional in-home consultation, measuring, and installation. Sales tax is additional. Some products have a small shipping or tariff surcharge; others have none.</p>
       <p className="mt-3 text-sm text-white/85">Your final quote will include any applicable charges after we confirm measurements and selections.</p>
@@ -163,7 +165,7 @@ export default function EstimateBuilder({ onProductSelect }: { onProductSelect: 
       </div>
       <aside className="lg:sticky lg:top-28 rounded-2xl overflow-hidden border border-warm-gray-200">
         <div className="bg-charcoal text-white p-7"><p className="text-gold uppercase tracking-[.15em] text-xs mb-3">Your home, your way</p><h2 className="font-serif text-2xl">Your window treatment estimate</h2><div aria-live="polite" aria-atomic="true" className="mt-6">{complete ? <><p className="text-5xl font-serif">{remoteMoney(total)}</p><p className="mt-2 text-sm text-white/80">For {count} custom window {count===1?'treatment':'treatments'}</p></> : <><p className="text-3xl font-serif">Let’s put a number to it.</p><p className="text-sm text-white/80 mt-3">Enter each window’s measurements to see your total.</p></>}</div><button type="button" onClick={openReview} className="mt-6 w-full rounded-full bg-gold text-charcoal font-semibold px-4 py-3">Review My Estimate</button></div>
-        <div className="bg-cream p-7"><p className="text-sm leading-relaxed text-warm-gray-700">Includes your selected blinds and shades, professional in-home consultation, measuring, and installation. Sales tax is additional. Some products have a small shipping or tariff surcharge; others have none. Your final quote will include any applicable charges after we confirm measurements and selections.</p>
+        <div className="bg-cream p-7"><p className="text-sm font-medium leading-relaxed text-charcoal mb-4">{ESTIMATE_PRODUCT_SCOPE}</p><p className="text-sm leading-relaxed text-warm-gray-700">Includes your selected blinds and shades, professional in-home consultation, measuring, and installation. Sales tax is additional. Some products have a small shipping or tariff surcharge; others have none. Your final quote will include any applicable charges after we confirm measurements and selections.</p>
           {remotes.length > 0 && <p className="text-sm mt-4 text-warm-gray-700">Remote controls are counted once in the total, in the Remote controls section. Motorized Banded, Roman, and Roller shades also include a USB charger per shade.</p>}
           <div className="border-t border-warm-gray-300 my-6" /><h3 className="font-serif text-xl">Like what you see?</h3><p className="mt-2 mb-5 text-sm text-warm-gray-700 leading-relaxed">We’ll bring the samples, check the fit, and help you make it yours.</p>
           <Link href="/book" className="block text-center bg-gold hover:bg-gold-dark text-charcoal font-semibold px-4 py-4 rounded-full">Book a Free Consultation</Link>
