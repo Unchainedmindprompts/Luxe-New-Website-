@@ -378,7 +378,7 @@ export default function HomePage() {
 
       {/* Featured TWO collection */}
       <section id="two-collection" aria-labelledby="two-collection-title" className="bg-warm-white pt-10 md:pt-16 scroll-mt-24">
-        <div className="max-w-[1600px] mx-auto overflow-hidden bg-charcoal">
+        <div className="w-full overflow-hidden bg-charcoal">
           <div className="grid grid-cols-3 gap-1">
             {[
               { src: "/images/two/highprofile-classic.webp", alt: "TWO Highprofile Classic interior wood shutters in a bright sitting room", label: "Interior Shutters" },
@@ -387,7 +387,7 @@ export default function HomePage() {
             ].map((item) => (
               <figure key={item.label} className="min-w-0">
                 <div className="relative aspect-[3/4] sm:aspect-[4/3]">
-                  <Image src={item.src} alt={item.alt} fill sizes="(min-width: 1600px) 533px, 33vw" className="object-cover" />
+                  <Image src={item.src} alt={item.alt} fill sizes="33vw" className="object-cover" />
                 </div>
                 <figcaption className="px-2 py-3 sm:px-5 sm:py-4 text-center text-xs sm:text-base font-medium text-white">{item.label}</figcaption>
               </figure>
