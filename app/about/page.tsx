@@ -104,7 +104,7 @@ const webpageSchema = {
   // for two entities it is not about — and Lafayette, Corradi USA and The
   // Window Outfitters had no identity at all, existing only as display strings
   // in the footer and in the copy a few lines below. This page already names
-  // all five in visible prose, so `mentions` describes what the page does
+  // these manufacturers in visible prose, so `mentions` describes what the page does
   // rather than being a hook chosen for convenience.
   //
   // `mentions` and not `#business.brand`: schema.org's `brand` is the brand
@@ -237,13 +237,14 @@ export default function AboutPage() {
                 banded, and roman shades,{" "}
                 <Link href="/products/shutters" className="text-gold-dark hover:text-charcoal transition-colors">shutters</Link>, and{" "}
                 <Link href="/products/motorization" className="text-gold-dark hover:text-charcoal transition-colors">motorization</Link>{" "}
-                — from Alta, Norman, Lafayette, Corradi USA, and The Window
+                — from Hunter Douglas, Alta, Norman, Lafayette, Corradi USA, and The Window
                 Outfitters. That matters because a company carrying one line has
                 to recommend that line for every window in the house.
               </p>
             </div>
             <div className="flex flex-wrap gap-3 mt-8">
               {[
+                "Hunter Douglas",
                 "Alta Window Fashions",
                 "Norman Window Fashions",
                 "Lafayette Interior Fashions",
