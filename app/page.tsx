@@ -309,7 +309,7 @@ export default function HomePage() {
         <div className="relative isolate w-full overflow-hidden">
           <Image
             src="/images/luxe-completed-installation.webp"
-            alt="Actual Luxe Window Works installation: custom shades filtering daylight in a living room with timber beams and a stone fireplace"
+            alt="Hunter Douglas Vignette Roman Shades installed by Luxe Window Works in a living room with timber beams and a stone fireplace"
             fill
             className="object-cover object-[35%_center] md:object-center"
             priority
@@ -317,7 +317,7 @@ export default function HomePage() {
             quality={90}
           />
           <div aria-hidden="true" className="absolute inset-0 bg-black/35 md:bg-transparent md:bg-gradient-to-r md:from-black/60 md:via-black/20 md:to-transparent" />
-          <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 py-16 md:py-24 lg:py-28 min-h-[640px] md:min-h-[680px] lg:min-h-[740px] flex flex-col justify-center">
+          <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 pt-16 pb-40 md:pt-24 md:pb-36 lg:pt-28 lg:pb-36 min-h-[640px] md:min-h-[680px] lg:min-h-[740px] flex flex-col justify-center">
             <div className="max-w-2xl text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.55)]">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/90 mb-5">Custom Window Treatments · North Idaho</p>
               <h1 id="hero-title" className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.1] text-white text-balance">Beautiful options.<br />Personal service.<br />That’s Luxe.</h1>
@@ -327,7 +327,18 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          <p className="absolute z-10 bottom-4 left-6 sm:left-10 rounded-sm bg-charcoal/80 text-white px-3 py-2 text-[11px] sm:text-xs tracking-wide">An actual Luxe Window Works installation</p>
+          <div className="absolute z-10 bottom-5 left-6 right-6 sm:left-10 sm:right-auto w-fit max-w-[calc(100%-3rem)] rounded-md bg-charcoal/80 px-4 py-3 text-white">
+            <Image
+              src="/images/brands/hunter-douglas-white-horizontal.png"
+              alt="Hunter Douglas"
+              width={2048}
+              height={295}
+              className="h-auto w-[180px] sm:w-[220px]"
+              sizes="(min-width: 640px) 220px, 180px"
+            />
+            <p className="mt-2 text-[11px] sm:text-xs leading-relaxed">Vignette® Roman Shades by Hunter Douglas</p>
+            <p className="mt-1 text-[10px] sm:text-[11px] text-white/80">An actual Luxe Window Works installation</p>
+          </div>
         </div>
       </section>
 
