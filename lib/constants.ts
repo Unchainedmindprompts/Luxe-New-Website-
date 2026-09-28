@@ -51,7 +51,7 @@ export const BUSINESS = {
   // three or it undersells the business.
   experience: "24 Years Consulting, Designing & Installing",
   guarantee: "Lifetime Installation Guarantee",
-  brands: ["Alta", "Norman", "Lafayette", "Corradi USA", "The Window Outfitters"],
+  brands: ["Hunter Douglas", "Alta", "Norman", "Lafayette", "Corradi USA", "The Window Outfitters"],
   url: "https://www.luxewindowworks.com",
 } as const;
 
@@ -191,6 +191,7 @@ export const NAV_LINKS: NavLink[] = [
     href: "/products",
     children: [
       { label: "Our Work", href: "/gallery" },
+      { label: "Hunter Douglas", href: "/products/hunter-douglas" },
       ...PRODUCTS.map((p) => ({ label: p.name, href: `/products/${p.slug}` })),
     ],
   },

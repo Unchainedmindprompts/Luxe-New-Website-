@@ -138,7 +138,7 @@ export default function Footer() {
 
             <div className="mt-6 pt-6 border-t border-warm-gray-800">
               <p className="text-xs text-warm-gray-500 mb-2">Brands We Carry</p>
-              <div className="flex gap-4 text-sm text-warm-gray-400">
+              <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-warm-gray-400">
                 {BUSINESS.brands.map((brand) => (
                   <span key={brand}>{brand}</span>
                 ))}
