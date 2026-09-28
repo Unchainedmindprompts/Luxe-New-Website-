@@ -25,6 +25,8 @@ function StarIcon() {
   );
 }
 
+const hunterDouglasServiceRef = { "@id": `${BUSINESS.url}/products/hunter-douglas#service` };
+
 const BASE = "https://www.luxewindowworks.com";
 
 const businessNode = {
@@ -131,6 +133,7 @@ const businessNode = {
     name: "Window Treatments",
     // Product services and the TWO catalog retain their canonical identities.
     itemListElement: [
+      { "@type": "Offer", url: `${BUSINESS.url}/products/hunter-douglas`, itemOffered: hunterDouglasServiceRef },
       { "@id": `${TWO_URL}#catalog` },
       {
         "@type": "OfferCatalog",

@@ -1,12 +1,7 @@
 import { BUSINESS } from "@/lib/constants";
 
 export const HD_URL = `${BUSINESS.url}/products/hunter-douglas`;
-export const HUNTER_DOUGLAS = {
-  "@type": "Brand",
-  "@id": "https://www.hunterdouglas.com/#brand",
-  name: "Hunter Douglas",
-  url: "https://www.hunterdouglas.com",
-} as const;
+export { HUNTER_DOUGLAS } from "@/lib/brands";
 
 // Product descriptions and photography verified against these official pages.
 export const HD_COLLECTIONS = [

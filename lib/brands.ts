@@ -5,7 +5,7 @@
  * alternateName, url, sameAs, foundingDate) cannot drift between the places
  * that describe the same real-world company.
  *
- * WHERE THESE RENDER, as of this commit: `/about` publishes all five, in the
+ * WHERE THESE RENDER, as of this commit: `/about` publishes all carried manufacturers, in the
  * `mentions` of its WebPage node — the page already names every one of them in
  * visible copy, which is what makes `mentions` a true statement rather than a
  * schema convenience. Everywhere else references them by `@id`:
@@ -132,13 +132,21 @@ export const THE_WINDOW_OUTFITTERS = {
 } as const;
 
 /**
- * The five manufacturers `BUSINESS.brands` names, in the order the About page
+ * The manufacturers `BUSINESS.brands` names, in the order the About page
  * lists them. Exists so the page that publishes these entities does not have
  * to restate which ones they are — not as a registry abstraction, and
  * deliberately not wired into `BUSINESS.brands` or the About page's visible
  * chips, which are display strings doing a different job.
  */
+export const HUNTER_DOUGLAS = {
+  "@type": "Brand",
+  "@id": "https://www.hunterdouglas.com/#brand",
+  name: "Hunter Douglas",
+  url: "https://www.hunterdouglas.com",
+} as const;
+
 export const CARRIED_BRANDS = [
+  HUNTER_DOUGLAS,
   ALTA_BRAND,
   NORMAN_BRAND,
   LAFAYETTE_BRAND,
