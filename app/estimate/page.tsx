@@ -1,3 +1,4 @@
+import { ESTIMATE_PRODUCT_SCOPE } from '@/lib/estimate-copy';
 import Link from 'next/link';
 import { JsonLd } from '@/components/JsonLd';
 import { BUSINESS } from '@/lib/constants';
@@ -8,7 +9,7 @@ import EstimateExperience from './EstimateExperience';
 import { productPages } from '@/lib/product-data';
 export const metadata: Metadata = {
   title: 'Blinds & Shades Cost | Instant Estimate | Luxe Window Works',
-  description: 'How much do cellular, Roman, roller and banded shades cost? Get an instant North Idaho estimate with consultation, measuring and installation included. No email required.',
+  description: 'Estimate select blinds and shades supplied through Premier, with installation included. Hunter Douglas, Alta, and Norman products are quoted separately.',
   alternates: { canonical: 'https://www.luxewindowworks.com/estimate' },
 };
 const pageUrl = `${BUSINESS.url}/estimate`;
@@ -26,7 +27,8 @@ const examplePrice = (product: Product) => {
   return dollars(result.cents);
 };
 const faqs: [string, string][] = [
-  ...examples.map(example => [`How much do ${example.name.toLowerCase()} cost?`, `For one 36-inch-wide by 60-inch-high window, the current estimate is ${examplePrice(example.product)} with cordless operation and ${example.fabric}. This example includes professional in-home consultation, measurements, and installation. Sales tax is additional. Some products have a small shipping or tariff surcharge; others have none. Different sizes, fabrics, and operating options change the price. Enter your own window details above for a tailored estimate.`] as [string, string]),
+  ['Does the estimator include Hunter Douglas, Alta, or Norman products?', ESTIMATE_PRODUCT_SCOPE],
+  ...examples.map(example => [`How much do ${example.name.toLowerCase()} cost?`, `For a select product supplied through Premier Blinds & Shades, the current estimate for one 36-inch-wide by 60-inch-high window is ${examplePrice(example.product)} with cordless operation and ${example.fabric}. This example includes professional in-home consultation, measurements, and installation. Sales tax is additional. Some products have a small shipping or tariff surcharge; others have none. Different sizes, fabrics, and operating options change the price. Enter your own window details above for a tailored estimate. Hunter Douglas, Alta, and Norman products are excluded and quoted separately.`] as [string, string]),
   ['Can I get an instant window shade estimate without an appointment?', 'Yes. Enter your approximate window sizes, choose your products and options, and review your estimate without providing an email address or booking an appointment. Luxe Window Works serves North Idaho, including Post Falls, Coeur d’Alene, Hayden, Rathdrum, and Sandpoint.'],
   ['Is the online estimate a final quote?', 'The online estimate uses real pricing for available products, based on your window sizes and selected options, to help you plan your budget. Your final quote will include any applicable charges after we confirm measurements and selections. The calculator does not place an order or book an appointment.'],
   ['How should I measure?', 'For a starting estimate, measure the width and height of the window opening in inches. Decimals are welcome—36.5 means 36½ inches. We will take the final measurements before anything is ordered.'],
@@ -69,6 +71,7 @@ export default function EstimatePage() {
       <nav aria-label="Breadcrumb" className="text-sm text-warm-gray-600 mb-6"><Link href="/" className="underline">Home</Link><span aria-hidden="true"> / </span><span>Instant Estimate</span></nav>
       <h2 id="shade-cost-heading" tabIndex={-1} className="font-serif text-3xl mb-4 scroll-mt-28">How much do custom blinds and shades cost?</h2>
       <p className="font-semibold text-lg mb-3">Real products. Real prices. A starting point for your home.</p>
+      <p className="text-warm-gray-700 mb-4">{ESTIMATE_PRODUCT_SCOPE}</p>
       <p className="text-warm-gray-700 mb-4">These prices are for one <strong>36″ × 60″ window with cordless operation</strong> and the selections listed below. Each includes professional consultation, measuring, and installation.</p>
       <div className="overflow-x-auto rounded-xl border border-warm-gray-200"><table className="w-full text-left text-sm"><caption className="sr-only">Example installed window treatment estimates for one 36 by 60 inch window</caption><thead className="bg-cream"><tr><th scope="col" className="p-4">Window treatment</th><th scope="col" className="p-4">Included selection</th><th scope="col" className="p-4">Example estimate</th></tr></thead><tbody>{examples.map(example => <tr key={example.product} className="border-t border-warm-gray-200"><th scope="row" className="p-4 font-medium"><Link href={`/products/${example.slug}`} className="underline underline-offset-4">{example.name}</Link></th><td className="p-4">{example.fabric}</td><td className="p-4 whitespace-nowrap font-semibold">{examplePrice(example.product)}</td></tr>)}</tbody></table></div>
       <p className="mt-4 text-sm text-warm-gray-700">These are available products at the sizes and specifications shown. Your window sizes and selections determine your estimate. Additional fabrics and upgrades are available at higher prices. Sales tax and any applicable shipping or tariff surcharges are additional.</p>
