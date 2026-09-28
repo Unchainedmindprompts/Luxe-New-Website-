@@ -64,7 +64,7 @@ export const HD_ADDITIONAL_CATEGORIES = [
     "collections": "Designer Solar Shades",
     "description": "Filter strong sunlight and reduce glare while retaining a view through the fabric. Compare openness levels in your own light.",
     "image": "/images/hunter-douglas/solar-shades.webp",
-    "alt": "alt text here",
+    "alt": "Hunter Douglas Designer Solar Shades filtering daylight in a living room",
     "source": "https://www.hunterdouglas.com/window-treatments/shades"
   },
   {
@@ -73,7 +73,7 @@ export const HD_ADDITIONAL_CATEGORIES = [
     "collections": "Designer Banded Shades",
     "description": "Alternating sheer and solid bands shift past one another, letting you adjust the balance between daylight and privacy.",
     "image": "/images/hunter-douglas/banded-shades.webp",
-    "alt": "alt text here",
+    "alt": "Hunter Douglas Designer Banded Shades with alternating sheer and solid fabric bands",
     "source": "https://www.hunterdouglas.com/window-treatments/shades"
   },
   {
@@ -91,7 +91,7 @@ export const HD_ADDITIONAL_CATEGORIES = [
     "collections": "Luminette® · Skyline® · Somner® · Vertical Solutions®",
     "description": "Explore soft sheers, gliding panels and vertical blinds for wide windows and doors. We help match the treatment to how you use the opening.",
     "image": "/images/hunter-douglas/vertical-treatments.webp",
-    "alt": "Luminette Solar Screen Shades in Dining Room",
+    "alt": "Hunter Douglas Luminette vertical sheer panels in a dining room",
     "source": "https://www.hunterdouglas.com/window-treatments/shades"
   },
   {
@@ -160,6 +160,6 @@ export const HD_ADDITIONAL_CATEGORIES = [
 ] as const;
 
 export const HD_CATEGORIES = [
-  ...HD_COLLECTIONS.map(p => ({ id: p.id, title: p.category, collections: p.id === "silhouette" ? "Silhouette® · Pirouette®" : p.id === "duette" ? "Duette® · Applause®" : "Vignette® · Alustra® Woven Textures® · Carole Fabrics", description: p.description, image: p.image, alt: p.alt })),
+  ...HD_COLLECTIONS.map(p => ({ id: p.id, title: p.category, collections: p.id === "silhouette" ? "Silhouette® · Pirouette®" : p.id === "duette" ? "Duette® · Applause®" : "Vignette® · Alustra® Woven Textures® · Carole Fabrics", description: p.id === "vignette" ? "Fabric folds bring softness and dimension to the window. Compare tailored Roman styles, woven textures and decorative fabrics for your room." : p.id === "silhouette" ? "Sheer fabric and adjustable vanes soften incoming daylight. Explore different vane designs to find your preferred balance of light, view and privacy." : p.description, image: p.image, alt: p.alt })),
   ...HD_ADDITIONAL_CATEGORIES,
 ];
