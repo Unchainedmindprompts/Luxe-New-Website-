@@ -1,0 +1,26 @@
+[
+  {
+    "question": "Does Hunter Douglas PowerView work with Apple Home and Siri?",
+    "answer": "Yes. PowerView Gen 3 connects to Apple Home through Matter using a PowerView Gateway. Setup uses the PowerView app, after which you can operate compatible shades through Apple Home and Siri. Apple Home scenes are created separately from PowerView scenes."
+  },
+  {
+    "question": "Do PowerView shades need a hub or gateway?",
+    "answer": "For nearby control using the PowerView app over Bluetooth or a configured Gen 3 remote, a gateway is not required. A PowerView Gateway is required for Apple Home integration and PowerView away-from-home control. We help choose the right setup for your home and the features you want."
+  },
+  {
+    "question": "Can one PowerView remote operate standard and top-down/bottom-up shades?",
+    "answer": "Yes. The same PowerView Gen 3 remote can operate compatible standard shades and top-down/bottom-up shades. Its arrow buttons adjust the middle rail on top-down/bottom-up shades. Groups and favorite positions are configured during setup so the controls suit your windows and daily routine."
+  },
+  {
+    "question": "What security protections does the Apple Home connection use?",
+    "answer": "Apple Home’s Matter connections use encrypted communication and device authentication. PowerView’s supported integration avoids the need for an unofficial third-party bridge to connect to Apple Home. This describes the Apple Home connection; it does not mean every part of the PowerView system is managed by Apple."
+  },
+  {
+    "question": "Can I save my favorite shade positions?",
+    "answer": "Yes. PowerView Gen 3 supports two favorite positions per shade, available through the remote or app. You can save the balance of daylight and privacy you prefer, then recall it without adjusting each shade by eye. Multiple selected shades can move to their own saved positions."
+  },
+  {
+    "question": "Where can I get Hunter Douglas PowerView shades in North Idaho?",
+    "answer": "Luxe Window Works is a Hunter Douglas dealer serving Post Falls, Coeur d’Alene, Hayden, Rathdrum, and Sandpoint. During a complimentary in-home consultation, Mark helps you compare shade styles, controls, power options, and smart-home requirements before selecting the right setup for your home."
+  }
+]
