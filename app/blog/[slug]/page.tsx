@@ -9,7 +9,7 @@ import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { ARTICLE_PATHWAYS } from "@/lib/article-pathways";
 import { BUSINESS } from "@/lib/constants";
-import { NORMAN_BRAND, ALTA_BRAND } from "@/lib/brands";
+import { NORMAN_BRAND, ALTA_BRAND, HUNTER_DOUGLAS } from "@/lib/brands";
 import { cityRef, northIdahoRef } from "@/lib/cities";
 import { BUSINESS_STUB, OWNER_STUB } from "@/lib/schema";
 import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
@@ -337,6 +337,15 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
    */
   about?: object;
 }> = {
+  "why-we-love-hunter-douglas-powerview-motorized-shades": {
+    about: { "@id": `${BUSINESS.url}/products/motorization#service` },
+    mentions: [{ "@id": HUNTER_DOUGLAS["@id"] }],
+    relatedLink: [`${BUSINESS.url}/products/hunter-douglas`, `${BUSINESS.url}/products/motorization`],
+    citation: [
+      { "@type": "WebPage", url: "https://help.hunterdouglas.com/hc/en-us/articles/39338693415444-Integrate-PowerView-Gen-3-with-Apple-Home-Using-Matter", name: "PowerView Gen 3 Apple Home integration requirements" },
+      { "@type": "WebPage", url: "https://support.apple.com/guide/security/communication-security-sec3a881ccb1/1/web/1", name: "Apple Home communication security" },
+    ],
+  },
   // Move-in article and the new-construction guide serve the same reader at
   // two different depths — this one is the "what nobody told you" primer, that
   // one is the phase-and-budget plan. Linked both ways so the pair reads as a
@@ -887,7 +896,7 @@ export default async function BlogPostPage({ params }: Props) {
                 {post.faqs.map((faq) => (
                   <div key={faq.question}>
                     <dt className="font-serif text-lg md:text-xl text-charcoal leading-snug">
-                      {faq.question}
+                      <h3>{faq.question}</h3>
                     </dt>
                     <dd className="mt-2 text-base md:text-lg text-warm-gray-600 leading-relaxed">
                       {faq.answer}
