@@ -85,7 +85,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.9,
     },
-    ...["/products/hunter-douglas", "/products/two", "/products/aluminum-shutters"].map(path => ({ url: `${baseUrl}${path}`, lastModified: currentDate, changeFrequency: "monthly" as const, priority: 0.8 })),
+    ...["/hunter-douglas-coeur-d-alene", "/products/hunter-douglas", "/products/two", "/products/aluminum-shutters"].map(path => ({ url: `${baseUrl}${path}`, lastModified: currentDate, changeFrequency: "monthly" as const, priority: 0.8 })),
     // Product pages
     {
       url: `${baseUrl}/products`,
