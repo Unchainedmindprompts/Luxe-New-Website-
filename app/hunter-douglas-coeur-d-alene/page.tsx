@@ -45,7 +45,7 @@ export default function HunterDouglasCoeurDAlenePage() {
   return <>
     <JsonLd data={{ "@context": "https://schema.org", "@graph": [
       { "@type": "WebPage", "@id": `${PAGE}#webpage`, url: PAGE, name: "Hunter Douglas Window Treatments in Coeur d’Alene", description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, about: [{ "@id": `${BUSINESS.url}/products/hunter-douglas#service` }, { "@id": HUNTER_DOUGLAS["@id"] }, cityRef("Coeur d'Alene")], spatialCoverage: cityRef("Coeur d'Alene"), breadcrumb: { "@id": `${PAGE}#breadcrumb` }, primaryImageOfPage: { "@id": `${PAGE}#primaryimage` } },
-      { "@type": "ImageObject", "@id": `${PAGE}#primaryimage`, contentUrl: `${BUSINESS.url}${MEDIA}/light-filtering-window-wall.webp`, width: 1800, height: 1013, caption: "Hunter Douglas Installations", creator: { "@id": `${BUSINESS.url}/#business` } },
+      { "@type": "ImageObject", "@id": `${PAGE}#primaryimage`, contentUrl: `${BUSINESS.url}${MEDIA}/light-filtering-window-wall.webp`, width: 1800, height: 1013, caption: "Hunter Douglas Installations", creator: { "@type": "Organization", name: "Luxe Window Works", url: BUSINESS.url }, creditText: "Luxe Window Works" },
       { "@type": "FAQPage", "@id": `${PAGE}#faq`, isPartOf: { "@id": `${PAGE}#webpage` }, mainEntity: faqs.map(f => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })) },
       { "@type": "BreadcrumbList", "@id": `${PAGE}#breadcrumb`, itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url }, { "@type": "ListItem", position: 2, name: "Coeur d’Alene", item: `${BUSINESS.url}/areas/coeur-d-alene` }, { "@type": "ListItem", position: 3, name: "Hunter Douglas", item: PAGE }] },
     ] }} />
