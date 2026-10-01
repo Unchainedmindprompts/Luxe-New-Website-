@@ -35,6 +35,7 @@ export const HD_COLLECTIONS = [
 ] as const;
 
 export const HD_FAQS = [
+  { question: "Does the instant estimator quote Hunter Douglas products?", answer: "No. The instant estimator prices select products supplied through Premier Blinds & Shades. Hunter Douglas products, including PowerView motorization, are quoted separately after we confirm your windows, collections, fabrics, controls, and installation needs." },
   { question: "Does Luxe offer more than Vignette, Silhouette and Duette?", answer: "Yes. Explore Hunter Douglas roller, solar, banded and woven shades, vertical treatments, blinds, shutters, custom drapery and PowerView automation with Luxe. During your consultation, we help narrow the collections and confirm the fabrics, sizes and operating options for your project." },
   { question: "Where can I shop for Hunter Douglas shades in North Idaho?", answer: "Luxe Window Works is a local Hunter Douglas dealer offering free in-home consultations in Post Falls, Coeur d’Alene, Hayden, Rathdrum and Sandpoint. We bring samples to your home, help you compare options, and handle professional measurements and installation." },
   { question: "How do I choose between Vignette, Silhouette and Duette?", answer: "Start with the room. Vignette offers the tailored folds of a Roman shade, Silhouette combines sheer fabric and adjustable vanes for diffused daylight, and Duette uses a cellular construction for added insulation. We help you compare fabrics, privacy and light control in your own space." },

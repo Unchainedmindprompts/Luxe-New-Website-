@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { RelatedDecisionArticles } from "@/components/RelatedDecisionArticles";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
@@ -62,6 +63,13 @@ export default function HunterDouglasPage() {
       </div>
     </section>
     <section className="bg-charcoal text-white py-14 md:py-20"><div className="container-luxe"><div className="max-w-2xl"><p className="text-gold text-xs uppercase tracking-[.18em]">Hunter Douglas design. Luxe care.</p><h2 className="font-serif text-3xl sm:text-4xl mt-4">Every detail, handled.</h2></div><div className="grid md:grid-cols-3 gap-8 lg:gap-14 mt-10">{[{ title: "Samples in your space", text: "Compare colors, textures and light control where you’ll live with them. We bring the showroom to you." }, { title: "Measured to fit", text: "We check the dimensions, mounting depth and practical details before your custom order is placed." }, { title: "Installed with care", text: "One local point of contact, professional installation and Luxe’s lifetime installation guarantee." }].map((x, i) => <div key={x.title}><p className="text-gold text-sm">0{i + 1}</p><h3 className="font-serif text-2xl mt-3">{x.title}</h3><p className="mt-4 text-warm-gray-300 leading-relaxed">{x.text}</p></div>)}</div></div></section>
+    <section className="container-luxe py-14 md:py-20 max-w-3xl">
+      <h2 className="font-serif text-3xl text-charcoal">Hunter Douglas pricing, measured for your home.</h2>
+      <p className="mt-5 text-lg text-warm-gray-700 leading-relaxed">Your collection, fabric, window sizes, and controls shape the quote. We bring samples to homes in Coeur d’Alene, Post Falls, Hayden, Rathdrum, and Sandpoint, then confirm the details before you order. Professional measurements and installation are included.</p>
+      <p className="mt-4 text-warm-gray-700 leading-relaxed">Hunter Douglas is quoted separately from our instant estimator. If PowerView is on your wish list, we’ll also discuss power options and any accessories needed for your preferred controls.</p>
+      <div className="mt-6 flex flex-col items-start gap-4"><Link href="/book" className="font-semibold underline underline-offset-4">Request your Hunter Douglas consultation →</Link><Link href="/products/motorization" className="underline underline-offset-4">Explore motorized shade installation →</Link></div>
+    </section>
+    <RelatedDecisionArticles articles={[{ title: "Why We Love Hunter Douglas PowerView Motorized Shades", slug: "why-we-love-hunter-douglas-powerview-motorized-shades" }]} />
     <section className="container-luxe py-14 md:py-20 max-w-4xl"><h2 className="font-serif text-3xl sm:text-4xl text-charcoal mb-8">A few questions, answered.</h2>{HD_FAQS.map(f => <details key={f.question} className="border-b border-warm-gray-200 py-5"><summary className="cursor-pointer text-charcoal font-semibold text-lg pr-4">{f.question}</summary><p className="mt-4 text-warm-gray-700 leading-relaxed">{f.answer}</p></details>)}</section>
     <section className="bg-cream py-14 md:py-20 text-center"><div className="container-luxe max-w-3xl"><h2 className="font-serif text-3xl sm:text-4xl text-charcoal">Let’s find your kind of beautiful.</h2><p className="mt-6 text-lg text-warm-gray-700 leading-relaxed">See the fabrics. Compare the options. In your own home.<br />Serving Post Falls, Coeur d’Alene, Hayden, Rathdrum and Sandpoint.</p><Link href="/book" className="inline-block mt-8 rounded-full bg-charcoal text-white font-semibold px-8 py-4">Schedule a Free In-Home Consultation</Link><p className="mt-5"><a href={BUSINESS.phoneHref} className="text-charcoal underline underline-offset-4">Call {BUSINESS.phone}</a></p><p className="text-xs text-warm-gray-700 mt-10">Collection photography courtesy of Hunter Douglas. Featured Luxe installation identified separately.</p></div></section>
   </>;
