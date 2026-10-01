@@ -114,6 +114,14 @@ export const PRODUCT_DECISION_ARTICLES: Record<
   ],
   motorization: [
     {
+      title: "Motorized Shade Costs in Post Falls and Coeur d’Alene",
+      slug: "how-much-does-battery-operated-motorized-shades-installation-cost-in-post-falls-coeur-dalene-id",
+    },
+    {
+      title: "Why We Love Hunter Douglas PowerView Motorized Shades",
+      slug: "why-we-love-hunter-douglas-powerview-motorized-shades",
+    },
+    {
       title: "Why Your Motorized Shades Don't Respond Half the Time",
       slug: "why-motorized-shades-fail-in-northern-idaho-and-how-to-fix-them",
     },

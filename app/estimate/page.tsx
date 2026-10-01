@@ -4,6 +4,7 @@ import { JsonLd } from '@/components/JsonLd';
 import { BUSINESS } from '@/lib/constants';
 import { productServiceRef } from '@/lib/schema';
 import { estimateShade, type Product } from '@/lib/estimate';
+import { estimateRemotes } from '@/lib/estimate-remotes';
 import type { Metadata } from 'next';
 import EstimateExperience from './EstimateExperience';
 import { productPages } from '@/lib/product-data';
@@ -26,9 +27,17 @@ const examplePrice = (product: Product) => {
   if (result.cents === undefined) throw new Error(`Invalid cost example: ${product}`);
   return dollars(result.cents);
 };
+const motorizedExamples = examples.filter(example => example.product !== 'faux').map(example => {
+  const shade = { id: 1, product: example.product, room: '', width: '36', height: '60', quantity: '1', light: 'light' as const, operation: 'motor' as const };
+  const result = estimateShade(shade);
+  if (result.cents === undefined) throw new Error(`Invalid motorized cost example: ${example.product}`);
+  const remotes = estimateRemotes([shade]);
+  return { ...example, price: dollars(result.cents + remotes.reduce((sum, remote) => sum + remote.cents, 0)), remote: remotes[0].type };
+});
 const faqs: [string, string][] = [
   ['Does the estimator include Hunter Douglas, Alta, or Norman products?', ESTIMATE_PRODUCT_SCOPE],
   ...examples.map(example => [`How much do ${example.name.toLowerCase()} cost?`, `For a select product supplied through Premier Blinds & Shades, the current estimate for one 36-inch-wide by 60-inch-high window is ${examplePrice(example.product)} with cordless operation and ${example.fabric}. This example includes professional in-home consultation, measurements, and installation. Sales tax is additional. Some products have a small shipping or tariff surcharge; others have none. Different sizes, fabrics, and operating options change the price. Enter your own window details above for a tailored estimate. Hunter Douglas, Alta, and Norman products are excluded and quoted separately.`] as [string, string]),
+  ['How much do motorized shades cost with installation?', `For one 36-inch-wide by 60-inch-high window with the listed light-filtering fabric, rechargeable motor, and one compatible remote, current example estimates are ${motorizedExamples.map(example => `${example.name.toLowerCase()}: ${example.price}`).join('; ')}. Consultation, measurements, and installation are included. Sales tax and any applicable shipping or tariff surcharges are additional. These examples cover select products supplied through Premier Blinds & Shades, not Hunter Douglas, Alta, or Norman. App and voice-control equipment is quoted separately.`],
   ['Can I get an instant window shade estimate without an appointment?', 'Yes. Enter your approximate window sizes, choose your products and options, and review your estimate without providing an email address or booking an appointment. Luxe Window Works serves North Idaho, including Post Falls, Coeur d’Alene, Hayden, Rathdrum, and Sandpoint.'],
   ['Is the online estimate a final quote?', 'The online estimate uses real pricing for available products, based on your window sizes and selected options, to help you plan your budget. Your final quote will include any applicable charges after we confirm measurements and selections. The calculator does not place an order or book an appointment.'],
   ['How should I measure?', 'For a starting estimate, measure the width and height of the window opening in inches. Decimals are welcome—36.5 means 36½ inches. We will take the final measurements before anything is ordered.'],
@@ -75,6 +84,14 @@ export default function EstimatePage() {
       <p className="text-warm-gray-700 mb-4">These prices are for one <strong>36″ × 60″ window with cordless operation</strong> and the selections listed below. Each includes professional consultation, measuring, and installation.</p>
       <div className="overflow-x-auto rounded-xl border border-warm-gray-200"><table className="w-full text-left text-sm"><caption className="sr-only">Example installed window treatment estimates for one 36 by 60 inch window</caption><thead className="bg-cream"><tr><th scope="col" className="p-4">Window treatment</th><th scope="col" className="p-4">Included selection</th><th scope="col" className="p-4">Example estimate</th></tr></thead><tbody>{examples.map(example => <tr key={example.product} className="border-t border-warm-gray-200"><th scope="row" className="p-4 font-medium"><Link href={`/products/${example.slug}`} className="underline underline-offset-4">{example.name}</Link></th><td className="p-4">{example.fabric}</td><td className="p-4 whitespace-nowrap font-semibold">{examplePrice(example.product)}</td></tr>)}</tbody></table></div>
       <p className="mt-4 text-sm text-warm-gray-700">These are available products at the sizes and specifications shown. Your window sizes and selections determine your estimate. Additional fabrics and upgrades are available at higher prices. Sales tax and any applicable shipping or tariff surcharges are additional.</p>
+    </section>
+    <section className="container-luxe pt-12 max-w-4xl" aria-labelledby="motorized-shade-cost-heading">
+      <h2 id="motorized-shade-cost-heading" tabIndex={-1} className="font-serif text-3xl mb-4 scroll-mt-28">How much do motorized shades cost with installation?</h2>
+      <p className="text-warm-gray-700 mb-4">These examples use one <strong>36″ × 60″ window</strong>, the light-filtering fabric listed, a rechargeable motor, and one compatible remote. Consultation, measuring, and installation are included.</p>
+      <p className="text-warm-gray-700 mb-4">{ESTIMATE_PRODUCT_SCOPE}</p>
+      <div className="overflow-x-auto rounded-xl border border-warm-gray-200"><table className="w-full text-left text-sm"><caption className="sr-only">Example motorized shade estimates for one 36 by 60 inch window, including a remote and installation</caption><thead className="bg-cream"><tr><th scope="col" className="p-4">Motorized shade</th><th scope="col" className="p-4">Included selection</th><th scope="col" className="p-4">Example estimate</th></tr></thead><tbody>{motorizedExamples.map(example => <tr key={example.product} className="border-t border-warm-gray-200"><th scope="row" className="p-4 font-medium"><Link href={`/products/${example.slug}`} className="underline underline-offset-4">{example.name}</Link></th><td className="p-4">{example.fabric}; rechargeable motor and one {example.remote}</td><td className="p-4 whitespace-nowrap font-semibold">{example.price}</td></tr>)}</tbody></table></div>
+      <p className="mt-4 text-sm text-warm-gray-700">Sales tax and any applicable shipping or tariff surcharges are additional. App and voice-control equipment is quoted separately. For multiple shades, the estimator groups compatible remotes; multiplying a single-window example may overstate your project total.</p>
+      <p className="mt-5"><Link href="/blog/how-much-does-battery-operated-motorized-shades-installation-cost-in-post-falls-coeur-dalene-id" className="underline underline-offset-4">Read what affects motorized shade pricing</Link></p>
     </section>
     <section className="container-luxe py-16 max-w-4xl"><h2 className="font-serif text-3xl mb-7">Blinds and shades pricing questions</h2>
       {faqs.map(([q,a]) => <details key={q} className="border-b border-warm-gray-200 py-5"><summary className="cursor-pointer font-semibold">{q}</summary><p className="mt-3 text-warm-gray-700 leading-relaxed">{a}</p></details>)}

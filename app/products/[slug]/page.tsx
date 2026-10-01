@@ -5,6 +5,8 @@ import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { ConsultationExpect } from "@/components/ConsultationExpect";
 import { RelatedDecisionArticles } from "@/components/RelatedDecisionArticles";
+import { ProductBuyingGuide } from "@/components/ProductBuyingGuide";
+import { ESTIMATE_PRODUCT_SCOPE } from "@/lib/estimate-copy";
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { PRODUCT_DECISION_ARTICLES } from "@/lib/article-pathways";
@@ -236,11 +238,11 @@ export default async function ProductPage({ params }: Props) {
             >
               Get Expert Recommendations
             </TrackedCta>
-            <Link href="/estimate" className="inline-flex items-center justify-center gap-2 bg-charcoal hover:bg-warm-gray-800 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
-              Get an Instant Estimate <span aria-hidden="true">→</span>
+            <Link href={slug === "shutters" ? "#pricing-guide" : "/estimate"} className="inline-flex items-center justify-center gap-2 bg-charcoal hover:bg-warm-gray-800 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+              {slug === "shutters" ? "See Shutter Pricing Guidance" : "Get an Instant Estimate"} <span aria-hidden="true">→</span>
             </Link>
           </div>
-          <p className="mt-4 text-sm text-warm-gray-600">Instant estimates for cellular, banded, Roman, and roller shades, plus white faux wood blinds. Measuring and installation included. No email required.</p>
+          <p className="mt-4 text-sm text-warm-gray-600">{slug === "shutters" ? "Shutters are quoted after we confirm your windows, frames, materials, and panel layout. Professional measuring and installation included." : `Instant estimates for select cellular, banded, Roman, and roller shades, plus white faux wood blinds. Measuring and installation included. No email required. ${ESTIMATE_PRODUCT_SCOPE}`}</p>
           <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="inline-block mt-3 text-sm underline underline-offset-4">Questions? Call {BUSINESS.phone}</TrackedCta>
         </div>
       </section>
@@ -301,6 +303,8 @@ export default async function ProductPage({ params }: Props) {
           </div>
         )}
       </section>
+
+      <ProductBuyingGuide guide={product.buyingGuide} />
 
       {/* The Problem */}
       <section className="py-16 md:py-20 bg-warm-white">

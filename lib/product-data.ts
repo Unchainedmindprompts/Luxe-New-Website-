@@ -47,6 +47,11 @@ export interface ProductPageData {
   features: string[];
   idealFor: string[];
   localContext: string;
+  buyingGuide?: {
+    heading: string;
+    paragraphs: string[];
+    links: { href: string; label: string }[];
+  };
   faqs: FAQ[];
   metaTitle: string;
   metaDescription: string;
@@ -57,7 +62,7 @@ export const productPages: Record<string, ProductPageData> = {
     slug: "blinds",
     name: "Blinds",
     image: "/images/wood-blinds.jpeg",
-    headline: "Tired of Blinds That Warp, Sag, or Yellow After a Few Idaho Summers?",
+    headline: "Custom Blinds in Coeur d’Alene & Post Falls.",
     subheadline: "Real wood, faux wood, and composite blinds — matched to the right room so they look sharp and stay straight for years. Custom-fit and professionally installed across North Idaho.",
     problem: "Most blinds don't fail because blinds are a bad product — they fail because the wrong material went into the wrong room. Big-box stores sell one-size-fits-all faux wood and let you sort out the rest. Then a few seasons later, the slats on that big south-facing window have bowed in the heat, the budget vinyl has yellowed, or real wood blinds in the bathroom have swelled and stopped tilting. North Idaho is especially hard on the wrong choice: freezing dry winters, intense summer sun on lake-facing glass, and 60-degree temperature swings between January and July.",
     solution: "The fix is matching the material to the window. Faux wood blinds (PVC or vinyl) are lightweight and shrug off moisture — the right call for bathrooms, kitchens, and standard windows. Composite blinds (wood fiber blended with polymer) are heavier and more rigid, holding their shape under heat and UV on large, sunny windows where faux wood would eventually sag. Real wood blinds deliver the warmth and natural grain nothing else matches, ideal for dry living rooms and bedrooms. We carry premium lines from Norman, Alta, and Lafayette, in 2-inch and 2.5-inch slat sizes, with cordless and child-safe lift options. Every set is custom-measured to your exact opening and installed precisely.",
@@ -81,7 +86,31 @@ export const productPages: Record<string, ProductPageData> = {
       "Any window where precise, everyday light and privacy control matters",
     ],
     localContext: "North Idaho's climate punishes the wrong blind material — but rewards the right one. On the bright, lake-facing picture windows common around Coeur d'Alene and Sandpoint, composite blinds hold their shape through summers that bow lesser slats. In bathrooms and lakefront homes with constant humidity, faux wood keeps performing where real wood swells. We match the material to each window's exposure and room — carrying Norman, Alta, and Lafayette so the recommendation is driven by your home, not by whatever a catalog pushes hardest.",
+    buyingGuide: {
+      "heading": "How much do custom blinds cost with installation?",
+      "paragraphs": [
+        "Custom blind pricing depends on the window size, material, finish, and operating system. Start with the instant estimator for standard white faux wood blinds supplied through Premier Blinds & Shades. Real wood, other finishes, and Hunter Douglas, Alta, or Norman products need a separate quote.",
+        "We bring samples to your home in Coeur d’Alene, Post Falls, Hayden, Rathdrum, or Sandpoint, help you compare the options, and take the final measurements before ordering. Your quote includes professional installation backed by our lifetime installation guarantee."
+      ],
+      "links": [
+        {
+          "href": "/estimate",
+          "label": "Estimate white faux wood blinds"
+        },
+        {
+          "href": "/products/hunter-douglas",
+          "label": "Explore Hunter Douglas blinds and shades"
+        },
+        {
+          "href": "/book",
+          "label": "Compare custom blinds in your home"
+        }
+      ]
+    },
     faqs: [
+      {"question": "Do you offer custom blinds and installation in Coeur d’Alene and Post Falls?", "answer": "Yes. Luxe brings samples to your home, helps you choose the material and controls, takes final measurements, and installs your custom blinds. We serve Coeur d’Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. The in-home consultation is free."},
+      {"question": "Can I get a custom blind estimate online?", "answer": "Yes, for select standard white faux wood blinds supplied through Premier Blinds & Shades. The estimate includes consultation, measurements, and installation. Sales tax and any applicable shipping or tariff surcharges are additional. Other materials, finishes, and Hunter Douglas, Alta, or Norman products are quoted separately."},
+
       {
         question: "Faux wood vs. composite blinds — which holds up better in North Idaho?",
         answer: "Both outperform real wood in our climate, but they're not identical. Faux wood (PVC/vinyl) is lightweight and excellent against moisture, ideal for bathrooms, kitchens, and standard windows up to about 6 feet wide. Composite (wood fiber + polymer) is heavier and more rigid, with superior heat and UV resistance — it holds its shape on large, sunny windows where faux wood can bow over a few summers. For big west- or south-facing glass, choose composite; for moisture-prone or budget-conscious rooms, faux wood gives you about 90% of the benefit for less.",
@@ -114,7 +143,7 @@ export const productPages: Record<string, ProductPageData> = {
     slug: "cellular-shades",
     name: "Cellular Shades",
     image: "/images/cellular-shades.webp",
-    headline: "Tired of Watching Your Energy Bills Climb Every Season?",
+    headline: "Cellular Shades for More Comfortable North Idaho Rooms.",
     subheadline: "Cellular shades are the most energy-efficient window covering available — and in Northern Idaho, that matters more than most places.",
     problem: "Northern Idaho doesn't do moderate weather. January mornings hit single digits. July afternoons push into the 90s. And through all of it, your windows are the weakest link in your home's insulation. Single-pane windows in older Coeur d'Alene homes bleed heat all winter long. Even newer double-pane windows in Post Falls subdivisions let more energy escape than most homeowners realize.",
     solution: "Cellular shades — sometimes called honeycomb shades — use a unique structure of air pockets that act as insulation right at the window. The honeycomb cells trap air, creating a barrier between the extreme outdoor temperatures and your living space. Available in single, double, or triple-cell designs, with options from sheer light-filtering to complete blackout.",
@@ -135,7 +164,30 @@ export const productPages: Record<string, ProductPageData> = {
       "Homes with kids or pets (cordless options eliminate safety concerns)",
     ],
     localContext: "In Northern Idaho, cellular shades aren't a luxury — they're practically a necessity. The temperature swings between seasons here are brutal on energy bills. Homeowners in Hayden and Rathdrum with newer construction often assume their windows are efficient enough, but adding cellular shades can make a noticeable difference in both comfort and monthly costs.",
+    buyingGuide: {
+      "heading": "How much do cellular shades cost?",
+      "paragraphs": [
+        "Window size, fabric, light control, and operation determine the price. Our instant estimator lets you compare select ¾-inch smooth cellular shades supplied through Premier Blinds & Shades, including cordless, top-down/bottom-up, and available rechargeable motorized options.",
+        "Estimates include consultation, final measurements, and installation. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas Duette, Alta, and Norman products are quoted separately during a free consultation, where you can compare samples in your own light."
+      ],
+      "links": [
+        {
+          "href": "/estimate",
+          "label": "Estimate cellular shades for your windows"
+        },
+        {
+          "href": "/products/motorization",
+          "label": "Compare motorized shade options"
+        },
+        {
+          "href": "/products/hunter-douglas#duette",
+          "label": "Explore Hunter Douglas Duette shades"
+        }
+      ]
+    },
     faqs: [
+      {"question": "Can I compare cellular shade prices online?", "answer": "Yes. The instant estimator covers select ¾-inch smooth cellular shades supplied through Premier Blinds & Shades. Enter your dimensions and compare fabric and operating options, with consultation, measurements, and installation included. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas Duette, Alta, and Norman are quoted separately."},
+
       {
         question: "Are cellular shades really worth the investment for Northern Idaho homes?",
         answer: "Yes — Northern Idaho's extreme temperature swings make cellular shades one of the most practical upgrades you can make. The honeycomb air-pocket cells act as insulation directly at the window, reducing heat loss in single-digit winter mornings and blocking heat gain through 90°F summers. Homeowners consistently notice a real difference in both comfort and monthly energy costs.",
@@ -247,7 +299,30 @@ export const productPages: Record<string, ProductPageData> = {
       "Minimalists who want function without visual clutter",
     ],
     localContext: "Roller shades are increasingly popular in the newer construction happening around Post Falls, Rathdrum, and Hayden. The clean-lined architecture in these communities pairs naturally with the streamlined look of a quality roller shade. They're also a smart choice for rental properties — durable, easy to maintain, and universally appealing.",
+    buyingGuide: {
+      "heading": "What determines the cost of custom roller shades?",
+      "paragraphs": [
+        "Start with your window dimensions, fabric, and the way you want to operate the shade. The instant estimator prices select roller shades supplied through Premier Blinds & Shades, with light-filtering or room-darkening fabric, a round cassette, and cordless or rechargeable motorized operation.",
+        "Professional consultation, measurements, and installation are included. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas, Alta, and Norman products, other fabrics, and specialty applications are quoted separately."
+      ],
+      "links": [
+        {
+          "href": "/estimate",
+          "label": "Estimate roller shades with installation"
+        },
+        {
+          "href": "/products/motorization",
+          "label": "Explore motorized roller shades"
+        },
+        {
+          "href": "/products/hunter-douglas#roller-shades",
+          "label": "Compare Hunter Douglas roller shades"
+        }
+      ]
+    },
     faqs: [
+      {"question": "Can I get an installed roller shade estimate online?", "answer": "Yes. The instant estimator prices select roller shades supplied through Premier Blinds & Shades with a round cassette and your chosen fabric and operation. Consultation, measurements, and installation are included. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas, Alta, and Norman products are quoted separately."},
+
       {
         question: "What is the difference between light-filtering and blackout roller shades?",
         answer: "Light-filtering roller shades diffuse incoming light, softening glare while keeping a warm glow in the room — ideal for living areas and kitchens. Blackout roller shades have an opaque fabric or backing that blocks virtually all light, making them the right choice for bedrooms, home theaters, and nurseries where sleep quality matters.",
@@ -409,7 +484,31 @@ export const productPages: Record<string, ProductPageData> = {
       "Historically or architecturally significant homes",
     ],
     localContext: "We've been a Norman dealer since 2009, and we bring that experience to North Idaho homes — from historic Coeur d'Alene lakefront properties to new construction in Post Falls, Hayden, and Rathdrum. North Idaho's freeze-thaw cycles can cause window frames to shift subtly out of square over time, which is why precision laser measurement is critical for shutters — our process accounts for those local conditions so the fit stays true for years.",
+    buyingGuide: {
+      "heading": "What affects plantation shutter cost?",
+      "paragraphs": [
+        "Plantation shutters are made for the opening, so a useful quote starts with the dimensions, material, frame, and panel layout. Specialty shapes, door applications, and the way the panels need to open can change the price. We compare those details in your home before preparing your quote.",
+        "Professional measurements and installation are included in your Luxe shutter quote. Shutters are not included in the instant blinds-and-shades estimator. Book a free consultation for pricing on your actual windows, whether you are considering one room or the whole home."
+      ],
+      "links": [
+        {
+          "href": "/book",
+          "label": "Request a plantation shutter quote"
+        },
+        {
+          "href": "/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration",
+          "label": "Compare shutter materials, frames, and layouts"
+        },
+        {
+          "href": "/products/hunter-douglas#shutters",
+          "label": "Explore Hunter Douglas shutter collections"
+        }
+      ]
+    },
     faqs: [
+      {"question": "How much do plantation shutters cost with installation?", "answer": "Your price depends on the window dimensions, material, frame, panel layout, and any specialty shapes or door requirements. We measure your openings and prepare a project-specific quote with professional installation included. The in-home consultation is free."},
+      {"question": "Can I use the instant estimator for plantation shutters?", "answer": "No. The instant estimator covers select blinds and shades, not shutters. Request a free in-home consultation so we can confirm your shutter measurements, material, frame, and configuration before quoting."},
+
       {
         question: "Why does Luxe Window Works install Norman shutters?",
         answer: "We've been a Norman partner since 2009, and now also offer the full TWO interior shutter collection. The quality is consistent, the engineering is thoughtful, and the products perform exactly as promised in real North Idaho homes. Norman manufactures its own components — it even farms its own Paulownia wood for the Normandy line — which means tighter quality control from raw material to finished product. That direct, long-term relationship also gives us real manufacturer access for specifications, custom orders, and warranty support.",
@@ -531,8 +630,8 @@ export const productPages: Record<string, ProductPageData> = {
     headline: "Motorized Shades — One Tap. Every Shade. Perfect Position.",
     subheadline: "Motorized shades, blinds, and drapery you control from your phone, your voice, or the wall — because some things should just be easy. Installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.",
     problem: "You've got windows you can't easily reach — above the stairs, in a vaulted ceiling, behind furniture. Or maybe you want all your shades to go down at sunset without getting up from the couch. Or you travel and want your home to look occupied. Manual shades are fine for accessible windows, but modern homes — and modern life — call for something smarter.",
-    solution: "Motorization transforms any shade into a smart device. Open and close your window treatments with a remote, your phone, your voice through Alexa or Google Home, or programmed schedules tied to sunrise and sunset. Available for cellular shades, roller shades, Roman shades, and banded shades. Battery-powered options mean no hardwiring required in most cases.",
-    expertInsight: "I've watched motorization go from a luxury add-on to one of the most requested features in the window treatment industry. And the technology is genuinely good now. Battery-powered motors from Alta and Norman last 1-2 years on a single charge and are whisper-quiet. The app integration is reliable, and setting up sunrise/sunset schedules is straightforward. My practical advice: if you're motorizing multiple shades in one room, invest in a multi-channel remote or app setup so you can control them as a group. And if you're building new construction, have your electrician run power to your window frames — hardwired motors never need battery changes and can handle heavier shades. I handle the complete setup, programming, and integration so everything works seamlessly from day one.",
+    solution: "Motorization adds powered operation to compatible shades. Open and close your window treatments with a remote, your phone, your voice through Alexa or Google Home, or programmed schedules tied to sunrise and sunset. Available for cellular shades, roller shades, Roman shades, and banded shades. Battery-powered options mean no hardwiring required in most cases.",
+    expertInsight: "I've watched motorization go from a luxury add-on to one of the most requested features in the window treatment industry. And the technology is genuinely good now. My practical advice: if you're motorizing multiple shades in one room, invest in a multi-channel remote or app setup so you can control them as a group. And if you're building new construction, have your electrician run power to your window frames — hardwired motors never need battery changes and can handle heavier shades. I handle the complete setup, programming, and integration so everything works seamlessly from day one.",
     features: [
       "Control via remote, smartphone app, or voice assistant",
       "Compatible with Alexa, Google Home, and Apple HomeKit (brand dependent)",
@@ -551,25 +650,54 @@ export const productPages: Record<string, ProductPageData> = {
       "Vacation homes and rental properties for security (occupied appearance)",
     ],
     localContext: "Motorized window treatments are increasingly popular in Northern Idaho, especially in the new construction happening around Post Falls and Rathdrum. Many of these homes have great rooms with soaring ceilings and large windows that would be impractical to operate manually. For lakefront homes in Coeur d'Alene and Sandpoint, automated sunset schedules mean your privacy shades lower exactly when you need them without lifting a finger.",
+    buyingGuide: {
+      "heading": "How much do motorized shades cost in North Idaho?",
+      "paragraphs": [
+        "The price depends on the shade, window dimensions, motor, and controls. For select products supplied through Premier Blinds & Shades, enter your sizes in our instant estimator and choose motorized operation. Compare the same windows with cordless operation to see what motorization adds to your project.",
+        "The estimate includes professional consultation, measurements, and installation, with the battery and remote details shown in your summary. Sales tax and any applicable shipping or tariff surcharges are additional. App or voice control may need extra equipment; we confirm compatibility and quote that separately.",
+        "Looking at Hunter Douglas PowerView? We help you compare the collection, controls, and power options during a free in-home consultation. Hunter Douglas, Alta, and Norman are quoted separately and are not priced by the instant estimator."
+      ],
+      "links": [
+        {
+          "href": "/estimate",
+          "label": "Estimate select motorized shades"
+        },
+        {
+          "href": "/blog/how-much-does-battery-operated-motorized-shades-installation-cost-in-post-falls-coeur-dalene-id",
+          "label": "Read the motorized shade cost guide"
+        },
+        {
+          "href": "/products/hunter-douglas",
+          "label": "Explore Hunter Douglas and PowerView"
+        },
+        {
+          "href": "/book",
+          "label": "Plan your motorized shade installation"
+        }
+      ]
+    },
     faqs: [
+      {"question": "How much do motorized blinds and shades cost with installation?", "answer": "The total depends on your window sizes, shade style, motor, and controls. Use the instant estimator to compare select products supplied through Premier Blinds & Shades with cordless or motorized operation. Consultation, measurements, and installation are included; sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas, Alta, and Norman are quoted separately."},
+      {"question": "Do you offer Hunter Douglas PowerView motorized shades?", "answer": "Yes. Luxe Window Works is a Hunter Douglas dealer serving North Idaho. We help you choose compatible shades, power options, and controls, then handle professional measurements and installation. PowerView products and any required accessories receive a separate quote during your free consultation; they are not included in the instant estimator."},
+
       {
         // Buyers search this product under five different names and the page
         // answered to one of them. Written as a direct answer because it is
         // also the shape an AI Overview can quote whole.
         question: "What is the difference between motorized shades, motorized blinds, and power shades?",
-        answer: "Mostly just wording — they are all the same idea, a window covering with a motor in it. In the trade, motorized blinds usually means a slatted product like wood, faux wood, or aluminum, where the motor tilts the slats and raises the stack. Motorized shades means a fabric product — cellular, roller, Roman, or banded — where the motor raises and lowers the whole panel. Power shades is a retail term for the same thing. Motorized curtains or motorized drapery means a track system that draws panels open and closed. We install all four across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint, and the motor, remote, and app work the same regardless of which covering you pick — so choose the covering you actually want in the room and let the motor follow.",
+        answer: "Motorized shades move a fabric covering, while motorized blinds operate a slatted covering. Depending on the product, a blind motor may tilt the slats without raising them. Power shades is another name for motorized shades; motorized drapery uses a powered track. We confirm the available movements, controls, and compatibility for the product you choose.",
       },
       {
         question: "Do motorized shades require an electrician to install?",
-        answer: "Not typically. Battery-powered motors from Alta, Norman, and Lafayette require no hardwiring — We install them in a single visit with no construction work needed. Battery motors last 1–2 years per charge. For new construction, we recommend having an electrician run power to window frames if you want hardwired motors, which last indefinitely without battery changes and handle heavier shade fabrics.",
+        answer: "Rechargeable battery-powered shades usually do not require new wiring. For hardwired systems, plan the power supply with your electrician before installation. We help you compare power options and check access for charging during the consultation.",
       },
       {
         question: "What smart home systems are compatible with motorized shades?",
-        answer: "Alta, Norman, and Lafayette all offer motorized models compatible with Amazon Alexa, Google Home, and Apple HomeKit — though exact compatibility varies by product line. We will confirm which specific motor system works with your existing smart home setup during the consultation and handles complete programming and integration after installation.",
+        answer: "Compatibility depends on the motor platform, product generation, and any required hub or gateway. Tell us which phone app or voice assistant you use, and we will confirm the supported setup and accessories before you order.",
       },
       {
         question: "How long do battery-powered motorized shades last on a charge?",
-        answer: "Battery-powered motors typically last 1–2 years under normal daily use. When the battery needs replacing, an LED indicator on the motor or a notification in the app will alert you before it goes dead. The motors are whisper-quiet and perform identically to hardwired versions — the only difference is the occasional battery recharge.",
+        answer: "Charging frequency varies with shade size and weight, the motor and battery, and how often you use the shade. We explain the charging method and the manufacturer’s guidance for your selected system, including how you will reach the battery on high windows.",
       },
       {
         question: "Can I control all my motorized shades in a room with a single command?",
@@ -577,7 +705,7 @@ export const productPages: Record<string, ProductPageData> = {
       },
       {
         question: "What happens if a motorized shade stops working?",
-        answer: "The most common issues — dead batteries or a dropped wireless connection — are easy to fix. True motor failure is rare in quality brands, but if it does happen, virtually every motor we install can still be operated manually as a backup, so you're never stuck with a shade you can't move. We handle warranty claims and service on every installation, so you're not left troubleshooting alone. The motors we use typically outlast the shade fabric itself, which is why we treat motorization as a long-term system investment, not just an add-on.",
+        answer: "Check the battery or power supply and follow the manufacturer’s troubleshooting instructions. Manual operation is not available on every motorized shade, so do not force it by hand. Contact Luxe for help with a system we installed; we can identify the issue and review the applicable manufacturer warranty.",
       },
     ],
     metaTitle: "Motorized Shades in Coeur d'Alene | Voice, App & In-Home Setup",
