@@ -6,14 +6,16 @@ import { readFileSync } from "node:fs";
 const files = [
   "components/ConsultationExpect.tsx", "components/CdaBuyingGuide.tsx", "app/book/layout.tsx",
   "app/hunter-douglas-coeur-d-alene/page.tsx", "lib/area-data.ts",
-  "lib/product-data.ts", "lib/article-pathways.ts",
+  "lib/product-data.ts", "lib/article-pathways.ts", "components/ExteriorShadeOptions.tsx",
 ];
 const thirdPersonService = /\bMark (?:comes|brings|visits|handles|measures|looks|programs|can look)\b|\b(?:with|by) Mark\b|\bHe (?:brings|explains|looks)\b/;
 for (const path of files) {
   assert.ok(!thirdPersonService.test(readFileSync(path, "utf8")), `${path}: third-person service copy returned`);
 }
 const consultation = readFileSync("components/ConsultationExpect.tsx", "utf8");
-assert.ok(consultation.includes("We come to your home{where}. We look at the windows, {samples},"));
+assert.ok(consultation.includes("We come to your home{where}."));
+assert.ok(consultation.includes("We look at the windows, {samples},"));
+assert.ok(consultation.includes("We bring exterior shade samples and assess the patio, covered deck, or window opening."));
 assert.ok(consultation.includes("and explain what will actually work"));
 assert.ok(!consultation.includes("brings samples"));
 const reviews = readFileSync("components/CdaClientReviews.tsx", "utf8");

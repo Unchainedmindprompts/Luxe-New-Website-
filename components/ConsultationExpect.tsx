@@ -11,10 +11,12 @@ export function ConsultationExpect({
   city,
   productName,
   showCtas = true,
+  outdoor = false,
 }: {
   city?: string;
   productName?: string;
   showCtas?: boolean;
+  outdoor?: boolean;
 }) {
   const where = city
     ? ` in ${city}`
@@ -30,9 +32,11 @@ export function ConsultationExpect({
           What happens during the free in-home consultation
         </h2>
         <p className="text-warm-gray-600 leading-relaxed text-lg">
-          We come to your home{where}. We look at the windows, {samples},
-          and explain what will actually work in each room — light, privacy,
-          heat, and how you use the space. There is no showroom visit. The
+          We come to your home{where}. {outdoor ? (
+            <>We bring exterior shade samples and assess the patio, covered deck, or window opening. We review sun exposure, mounting surfaces, privacy and views, power, and compatible controls, then explain the selected system’s operating limits. We take the measurements and prepare a project-specific quote. </>
+          ) : (
+            <>We look at the windows, {samples}, and explain what will actually work in each room — light, privacy, heat, and how you use the space. </>
+          )}There is no showroom visit. The
           consultation is free, and requesting one is not a booked
           appointment. You pick a time after we talk, or you can choose a
           time on the booking page.

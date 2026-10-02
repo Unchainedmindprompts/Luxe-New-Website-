@@ -93,6 +93,10 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
       "@type": "OfferCatalog",
       name: `Window Treatment Services in ${areaName}`,
       itemListElement: [
+        ...(slug === "coeur-d-alene" ? [{
+          "@type": "Offer",
+          itemOffered: { "@id": `${BUSINESS.url}/products/exterior-solar-shades#service` },
+        }] : []),
         {
           "@type": "Offer",
           itemOffered: {

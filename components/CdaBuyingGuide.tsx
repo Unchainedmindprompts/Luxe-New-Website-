@@ -5,6 +5,7 @@ const needs = [
   { title: "Bedrooms and everyday privacy", text: "Explore cellular shades for light control and comfort, or roller shades for a clean fabric finish. We check the fabric and edge coverage against the room’s needs.", href: "/products/cellular-shades", label: "Explore cellular shades", secondHref: "/products/roller-shades", secondLabel: "Compare roller shades" },
   { title: "Adjustable light and an architectural finish", text: "Compare wood, faux wood, and composite blinds with custom plantation shutters. The window opening, material, and how you want to use the room guide the choice.", href: "/products/blinds", label: "Compare custom blinds", secondHref: "/products/shutters", secondLabel: "Explore plantation shutters" },
   { title: "High windows or a new-build plan", text: "Start with how you’ll reach, power, and control each shade. We help you compare compatible motorized systems and coordinate hardwired power planning with your electrician when needed.", href: "/products/motorization", label: "Plan motorized shades" },
+  { title: "A patio you can enjoy in the afternoon", text: "We help you compare exterior fabric shades for glare and daytime privacy around a patio or covered deck. The opening, exposure, and mounting surfaces guide the choice.", href: "/products/exterior-solar-shades", label: "Explore exterior solar and patio shades" },
 ];
 
 export default function CdaBuyingGuide() {
@@ -18,7 +19,7 @@ export default function CdaBuyingGuide() {
         </div>
         <div className="mt-9 grid gap-6 md:grid-cols-2">
           {needs.map((need) => (
-            <article key={need.title} className="rounded-2xl border border-warm-gray-200 bg-cream/50 p-6 sm:p-8">
+            <article key={need.title} className={`rounded-2xl border border-warm-gray-200 bg-cream/50 p-6 sm:p-8 ${need.href === "/products/exterior-solar-shades" ? "md:col-span-2" : ""}`}>
               <h3 className="font-serif text-xl text-charcoal">{need.title}</h3>
               <p className="mt-4 text-warm-gray-600 leading-relaxed">{need.text}</p>
               <div className="mt-5 flex flex-col items-start gap-3">

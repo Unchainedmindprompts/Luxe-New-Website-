@@ -5,6 +5,7 @@ import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { ConsultationExpect } from "@/components/ConsultationExpect";
 import { RelatedDecisionArticles } from "@/components/RelatedDecisionArticles";
+import { ExteriorShadeOptions } from "@/components/ExteriorShadeOptions";
 import { ProductBuyingGuide } from "@/components/ProductBuyingGuide";
 import { CdaProductProof } from "@/components/CdaClientReviews";
 import { ESTIMATE_PRODUCT_SCOPE } from "@/lib/estimate-copy";
@@ -202,6 +203,7 @@ export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const product = productPages[slug];
   if (!product) notFound();
+  const isExterior = slug === "exterior-solar-shades";
 
   return (
     <>
@@ -237,13 +239,13 @@ export default async function ProductPage({ params }: Props) {
               event={CONVERSION_EVENTS.ProductCtaClick}
               className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg"
             >
-              Get Expert Recommendations
+              {isExterior ? "Request an Exterior Shade Quote" : "Get Expert Recommendations"}
             </TrackedCta>
-            <Link href={slug === "shutters" ? "#pricing-guide" : "/estimate"} className="inline-flex items-center justify-center gap-2 bg-charcoal hover:bg-warm-gray-800 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
-              {slug === "shutters" ? "See Shutter Pricing Guidance" : "Get an Instant Estimate"} <span aria-hidden="true">→</span>
+            <Link href={isExterior ? "#exterior-options" : slug === "shutters" ? "#pricing-guide" : "/estimate"} className="inline-flex items-center justify-center gap-2 bg-charcoal hover:bg-warm-gray-800 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+              {isExterior ? "Compare Exterior Shade Options" : slug === "shutters" ? "See Shutter Pricing Guidance" : "Get an Instant Estimate"} <span aria-hidden="true">→</span>
             </Link>
           </div>
-          <p className="mt-4 text-sm text-warm-gray-600">{slug === "shutters" ? "Shutters are quoted after we confirm your windows, frames, materials, and panel layout. Professional measuring and installation included." : `Instant estimates for select cellular, banded, Roman, and roller shades, plus white faux wood blinds. Measuring and installation included. No email required. ${ESTIMATE_PRODUCT_SCOPE}`}</p>
+          <p className="mt-4 text-sm text-warm-gray-600">{isExterior ? "Exterior shades receive a project-specific quote after we review the opening, fabric, mounting, and controls. The consultation is free; your project quote includes professional measuring and installation." : slug === "shutters" ? "Shutters are quoted after we confirm your windows, frames, materials, and panel layout. Professional measuring and installation included." : `Instant estimates for select cellular, banded, Roman, and roller shades, plus white faux wood blinds. Measuring and installation included. No email required. ${ESTIMATE_PRODUCT_SCOPE}`}</p>
           <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="inline-block mt-3 text-sm underline underline-offset-4">Questions? Call {BUSINESS.phone}</TrackedCta>
         </div>
       </section>
@@ -331,7 +333,9 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Mark's Expert Insight */}
+      {isExterior && <ExteriorShadeOptions />}
+
+      {/* Product-specific guidance or owner insight */}
       <section className="py-16 md:py-20 bg-warm-white">
         <div className="container-luxe max-w-3xl">
           <div className="bg-linen/60 border border-warm-gray-200/60 rounded-2xl p-8 md:p-12">
@@ -342,11 +346,11 @@ export default async function ProductPage({ params }: Props) {
                 </svg>
               </div>
               <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">
-                Installer&apos;s Insight
+                {isExterior ? "What We Check Before Recommending a System" : <>Installer&apos;s Insight</>}
               </h2>
             </div>
-            <p className="text-warm-gray-600 leading-relaxed text-[17px] italic">
-              &ldquo;{product.expertInsight}&rdquo;
+            <p className={`text-warm-gray-600 leading-relaxed text-[17px] ${isExterior ? "" : "italic"}`}>
+              {isExterior ? product.expertInsight : <>“{product.expertInsight}”</>}
             </p>
           </div>
         </div>
@@ -393,11 +397,12 @@ export default async function ProductPage({ params }: Props) {
       <section className="py-16 md:py-20 bg-warm-white">
         <div className="container-luxe max-w-3xl">
           <h2 className="font-serif text-2xl sm:text-3xl text-charcoal mb-6">
-            Why {product.name} in Northern Idaho
+            {isExterior ? "Exterior Shades in Coeur d’Alene & North Idaho" : `Why ${product.name} in Northern Idaho`}
           </h2>
           <p className="text-warm-gray-600 leading-relaxed text-lg">
             {product.localContext}
           </p>
+          {isExterior && <p className="mt-5 text-warm-gray-600 leading-relaxed">Explore our <Link href="/areas/coeur-d-alene" className="font-medium text-charcoal underline underline-offset-4 decoration-gold">window treatment service in Coeur d’Alene</Link> to compare options for the rest of your home.</p>}
         </div>
       </section>
 
@@ -456,7 +461,7 @@ export default async function ProductPage({ params }: Props) {
         articles={PRODUCT_DECISION_ARTICLES[slug] ?? []}
       />
 
-      <ConsultationExpect productName={product.name} />
+      <ConsultationExpect productName={product.name} outdoor={isExterior} />
 
       {/* FAQ */}
       <section className="py-16 md:py-20 bg-cream/50">

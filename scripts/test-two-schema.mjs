@@ -24,7 +24,11 @@ assert.equal(products.length, 6);
 assert.equal(new Set(products.map(n => n['@id'])).size, 6);
 for (const p of products) {
   assert.equal(p.manufacturer['@id'], 'https://two-usa.com/#organization');
-  assert.equal(p.isRelatedTo['@id'], `${two}#service`);
+  const related = Array.isArray(p.isRelatedTo) ? p.isRelatedTo : [p.isRelatedTo];
+  const expected = p['@id'] === `${two}#shadesol-alfresco-product`
+    ? [`${two}#service`, `${base}/products/exterior-solar-shades#service`]
+    : [`${two}#service`];
+  assert.deepEqual(related.map(item => item['@id']), expected);
   assert.ok(collection.html.includes(p.name));
   const anchor = p.url.split('#')[1];
   assert.ok(collection.html.includes(`id="${anchor}"`), `Missing visible anchor: ${anchor}`);
