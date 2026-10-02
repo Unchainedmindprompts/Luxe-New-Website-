@@ -76,7 +76,7 @@ export function CdaProductProof({ slug }: { slug: string }) {
       <div className="container-luxe max-w-3xl">
         <p className="text-gold text-sm font-medium uppercase tracking-widest">A Coeur d&apos;Alene client experience</p>
         <h2 id="cda-product-proof" className="mt-4 font-serif text-2xl sm:text-3xl text-charcoal">
-          {review.product} for a Coeur d&apos;Alene home
+          {`${review.product} for a Coeur d'Alene home`}
         </h2>
         <p className="mt-5 text-warm-gray-600 leading-relaxed">{review.summary}</p>
         <blockquote className="mt-6 border-l-2 border-gold pl-5 text-lg text-warm-gray-700 leading-relaxed">

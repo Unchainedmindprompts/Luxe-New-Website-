@@ -42,6 +42,8 @@ for (const [page, id] of [[shutters, "highprofile-classic"], [shutters, "highpro
   assert.ok(two.includes(`id="${id}"`), `TWO target: ${id}`);
 }
 assert.ok(text(shutters).includes("Custom Plantation Shutters in Coeur d’Alene & North Idaho."));
+assert.ok(text(shutters).includes("Norman shutters for a Coeur d'Alene home"));
+assert.ok(text(rollers).includes("Roller shades for a Coeur d'Alene home"));
 assert.ok(hd.includes("Hunter Douglas Collections in North Idaho | Luxe Window Works"));
 assert.ok(localHd.includes("Hunter Douglas Dealer in Coeur d’Alene | Luxe Window Works"));
 assert.ok(localHd.includes('href="/products/hunter-douglas#collections"'));
