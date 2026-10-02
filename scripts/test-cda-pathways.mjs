@@ -1,3 +1,4 @@
+import "./test-service-voice.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
@@ -30,7 +31,7 @@ for (const href of ["/products/blinds", "/products/solar-shades", "/products/cel
 assert.ok(text(area).includes("Luxe Window Works is based in Post Falls"));
 assert.ok(text(area).includes("Mercedes Bull"));
 assert.ok(text(area).includes("C P"));
-assert.ok(text(area).includes("coordinating early measurements with the builder"));
+assert.ok(text(area).includes("coordination of early measurements with the builder"));
 
 for (const [page, id, name] of [[rollers, "cda-roller-shades-review", "Mercedes Bull"], [shutters, "cda-norman-shutters-review", "C P"]]) {
   assert.ok(area.includes(`id="${id}"`), `${id}: target exists`);

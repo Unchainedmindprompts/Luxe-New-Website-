@@ -45,8 +45,8 @@ export const areaPages: Record<string, AreaPageData> = {
     slug: "coeur-d-alene",
     name: "Coeur d'Alene",
     headline: "Custom Window Treatments for Coeur d'Alene Homes",
-    subheadline: "From lakefront estates to downtown bungalows — Mark comes to the house, brings samples, and recommends what will actually work in Coeur d'Alene light.",
-    description: "Luxe Window Works is based in Post Falls and provides custom blinds, shades, shutters, and motorized window treatments throughout Coeur d'Alene. Mark brings samples to your home, helps you compare options in the room, takes professional measurements, and handles installation. Whether you are settling into a new build or updating existing windows, start with how you want the light, privacy, and controls to work.",
+    subheadline: "From lakefront estates to downtown bungalows — we come to your home, bring samples, and recommend what will actually work in Coeur d'Alene light.",
+    description: "Luxe Window Works is based in Post Falls and provides custom blinds, shades, shutters, and motorized window treatments throughout Coeur d'Alene. We bring samples to your home, help you compare options in the room, take professional measurements, and handle installation. Whether you are settling into a new build or updating existing windows, start with how you want the light, privacy, and controls to work.",
     neighborhoods: ["Downtown Coeur d'Alene", "Sanders Beach", "Fernan Hill", "Coeur d'Alene Place", "Riverstone", "Northwest Boulevard", "Canfield Mountain", "Best Hill"],
     housingTypes: "Coeur d'Alene features an eclectic mix of housing — historic craftsman homes downtown, mid-century ranches in established neighborhoods, newer construction in planned communities, and premium lakefront and view properties. Each style has its own window treatment considerations, from the charming but uneven window frames of 1920s bungalows to the massive window walls in contemporary lakefront builds.",
     climateConsiderations: "Lake Coeur d'Alene creates its own microclimate. Homes near the water experience more humidity, which affects material choices (composite shutters over wood for lake-adjacent rooms). West-facing lakefront windows deal with intense afternoon sun reflecting off the water — solar shades with low openness factors are essential. In winter, the lake effect moderates temperatures slightly compared to inland areas, but older homes with original windows still benefit enormously from the insulating properties of cellular shades.",
@@ -62,7 +62,7 @@ export const areaPages: Record<string, AreaPageData> = {
       },
       {
         question: "My 1920s craftsman home in downtown CDA has original window frames that aren't square — can you still get a proper fit?",
-        answer: "Yes. Original craftsman-era frames often vary a quarter inch or more out of square. The key is measuring at multiple points and building the treatment to fit the actual opening, not a standard size. Mark measures every window individually on every job.",
+        answer: "Yes. Original craftsman-era frames often vary a quarter inch or more out of square. The key is measuring at multiple points and building the treatment to fit the actual opening, not a standard size. We measure every window individually on every job.",
       },
       {
         question: "Are there window treatment options that work in high-humidity rooms in a Coeur d'Alene lake home?",
@@ -95,7 +95,7 @@ export const areaPages: Record<string, AreaPageData> = {
       "Lake views and big south-facing glass make solar shades and motorized shades the two we install most often in Coeur d'Alene. Plantation shutters are common in the older homes near downtown, and cellular shades handle the bedrooms in almost every project.",
     localCTA: "Ready to find the right window treatments for your Coeur d'Alene home? We offer free in-home consultations throughout the Coeur d'Alene area — from lakefront properties to downtown neighborhoods.",
     metaTitle: "Custom Window Treatments in Coeur d'Alene | Free In-Home Consultation",
-    metaDescription: "Custom blinds, shades, shutters, and motorized treatments for Coeur d'Alene homes — lakefront, historic, and new construction. Free in-home consultation with Mark.",
+    metaDescription: "Custom blinds, shades, shutters, and motorized treatments for Coeur d'Alene homes — lakefront, historic, and new construction. Free in-home consultation with Luxe Window Works.",
   },
   "post-falls": {
     slug: "post-falls",
@@ -151,7 +151,7 @@ export const areaPages: Record<string, AreaPageData> = {
       "Post Falls homes usually start with cellular shades, because the temperature swings here are sharper without the lake to moderate them. Motorized shades follow close behind — new construction favors tall windows and wide spans that are awkward to reach. Plantation shutters and roman shades round out most whole-home projects.",
     localCTA: "We're based right here in Post Falls and know these neighborhoods well. Schedule a free in-home consultation — we can usually get to Post Falls homes the fastest since it's our home base.",
     metaTitle: "Custom Window Treatments in Post Falls | Free In-Home Consultation",
-    metaDescription: "Luxe Window Works is based in Post Falls. Mark brings samples to your home, measures every window, and installs custom blinds, shades, and shutters. Free in-home consultation.",
+    metaDescription: "Luxe Window Works is based in Post Falls. We bring samples to your home, measure every window, and install custom blinds, shades, and shutters. Free in-home consultation.",
   },
   "hayden": {
     slug: "hayden",

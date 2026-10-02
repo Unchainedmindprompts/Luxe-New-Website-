@@ -34,7 +34,7 @@ export interface ArticlePathway {
 export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
   "faux-wood-vs-composite-blinds-which-holds-up-better-in-northern-idaho": {
     heading: "Not sure which blinds will hold up on your windows?",
-    body: "Mark brings faux wood and composite samples to your home, checks the sun and moisture on each window, and explains what will actually last. The consultation is free.",
+    body: "We bring faux wood and composite samples to your home, check the sun and moisture on each window, and explain what will actually last. The consultation is free.",
     productHref: "/products/blinds",
     productLabel: "See custom blinds",
     bookHref: "/book",
@@ -45,7 +45,7 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
   },
   "why-motorized-shades-fail-in-northern-idaho-and-how-to-fix-them": {
     heading: "Want a motorized system that actually responds?",
-    body: "Mark looks at the windows, the layout, and how you want the shades to run before anyone orders a motor. He explains what will work in your house. The consultation is free.",
+    body: "We look at the windows, the layout, and how you want the shades to run before anyone orders a motor. We explain what will work in your house. The consultation is free.",
     productHref: "/products/motorization",
     productLabel: "See motorization",
     bookHref: "/book",
@@ -56,7 +56,7 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
   },
   "why-big-roller-shades-pucker-and-what-actually-solves-it": {
     heading: "Planning wide roller shades for a North Idaho window?",
-    body: "Mark measures the opening and tells you honestly whether a single shade will stay flat or whether a split system is the better call. The consultation is free.",
+    body: "We measure the opening and tell you honestly whether a single shade will stay flat or whether a split system is the better call. The consultation is free.",
     productHref: "/products/roller-shades",
     productLabel: "See custom roller shades",
     bookHref: "/book",
@@ -67,7 +67,7 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
   },
   "why-are-window-treatments-so-expensive-a-first-time-buyers-guide-to-smart-stylish-and-budget-friendly-choices": {
     heading: "Let’s find the right fit for your windows and budget.",
-    body: "You don’t need measurements or a product picked out. Mark brings samples, talks through your priorities, and helps you compare options in your home. The consultation is free.",
+    body: "You don’t need measurements or a product picked out. We bring samples, talk through your priorities, and help you compare options in your home. The consultation is free.",
     productHref: "/products/blinds",
     productLabel: "See custom blinds",
     bookHref: "/book",
@@ -78,7 +78,7 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
   },
   "smartdrape-patio-door-shades-in-coeur-dalene-post-falls": {
     heading: "Looking at patio-door shades you can walk through?",
-    body: "Mark looks at the door, the stack, and whether motorization is worth it in that room. He brings samples and explains what will actually work. The consultation is free.",
+    body: "We look at the door, the stack, and whether motorization is worth it in that room. We bring samples and explain what will actually work. The consultation is free.",
     productHref: "/products/motorization",
     productLabel: "See motorization and patio-door options",
     bookHref: "/book",
@@ -89,7 +89,7 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
   },
   "how-to-restring-blinds-like-a-pro-step-by-step-guide": {
     heading: "When replacement makes more sense",
-    body: "Restringing can save a good set of blinds. If the slats are warped, the lift is failing, or the material was wrong for the room, Mark can look at the windows and tell you honestly whether repair or replacement is the better spend. The consultation is free.",
+    body: "Restringing can save a good set of blinds. If the slats are warped, the lift is failing, or the material was wrong for the room, we can look at the windows and tell you honestly whether repair or replacement is the better spend. The consultation is free.",
     productHref: "/products/blinds",
     productLabel: "See custom blinds",
     bookHref: "/book",

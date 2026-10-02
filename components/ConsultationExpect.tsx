@@ -20,8 +20,8 @@ export function ConsultationExpect({
     ? ` in ${city}`
     : " across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint";
   const samples = productName
-    ? `brings samples for ${productName.toLowerCase()}`
-    : "brings samples";
+    ? `bring samples for ${productName.toLowerCase()}`
+    : "bring samples";
 
   return (
     <section className="py-16 md:py-20 bg-warm-white">
@@ -30,8 +30,8 @@ export function ConsultationExpect({
           What happens during the free in-home consultation
         </h2>
         <p className="text-warm-gray-600 leading-relaxed text-lg">
-          Mark comes to your home{where}. He looks at the windows, {samples},
-          and explains what will actually work in each room — light, privacy,
+          We come to your home{where}. We look at the windows, {samples},
+          and explain what will actually work in each room — light, privacy,
           heat, and how you use the space. There is no showroom visit. The
           consultation is free, and requesting one is not a booked
           appointment. You pick a time after we talk, or you can choose a

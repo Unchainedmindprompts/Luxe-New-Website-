@@ -14,7 +14,7 @@ export default function CdaBuyingGuide() {
         <div className="max-w-3xl">
           <p className="text-gold text-sm font-medium uppercase tracking-widest">Start with your windows</p>
           <h2 id="cda-buying-guide-heading" className="mt-4 font-serif text-2xl sm:text-3xl text-charcoal">Which window treatments fit your Coeur d&apos;Alene home?</h2>
-          <p className="mt-5 text-lg text-warm-gray-600 leading-relaxed">Luxe is based in Post Falls and serves Coeur d&apos;Alene with free in-home consultations. Mark brings samples to your home, checks the openings, and helps you choose room by room. You can start with a problem to solve or a brand you already like.</p>
+          <p className="mt-5 text-lg text-warm-gray-600 leading-relaxed">Luxe is based in Post Falls and serves Coeur d&apos;Alene with free in-home consultations. We bring samples to your home, check the openings, and help you choose room by room. You can start with a problem to solve or a brand you already like.</p>
         </div>
         <div className="mt-9 grid gap-6 md:grid-cols-2">
           {needs.map((need) => (

@@ -137,7 +137,7 @@ export const productPages: Record<string, ProductPageData> = {
       },
     ],
     metaTitle: "Custom Blinds in Post Falls & Coeur d'Alene | Wood, Faux & Composite",
-    metaDescription: "Custom wood, faux wood, and composite blinds measured and installed for North Idaho homes. Mark brings samples to you. Free in-home consultation in Post Falls, Coeur d'Alene, and Hayden.",
+    metaDescription: "Custom wood, faux wood, and composite blinds measured and installed for North Idaho homes. We bring samples to you. Free in-home consultation in Post Falls, Coeur d'Alene, and Hayden.",
   },
   "cellular-shades": {
     slug: "cellular-shades",
@@ -214,7 +214,7 @@ export const productPages: Record<string, ProductPageData> = {
       },
     ],
     metaTitle: "Cellular Shades in Coeur d'Alene & Post Falls | Energy-Efficient Honeycomb",
-    metaDescription: "Custom cellular honeycomb shades for North Idaho homes. Insulation at the glass, measured and installed by Mark. Free in-home consultation in Coeur d'Alene and Post Falls.",
+    metaDescription: "Custom cellular honeycomb shades for North Idaho homes. Insulation at the glass, measured and installed by us. Free in-home consultation in Coeur d'Alene and Post Falls.",
   },
   "solar-shades": {
     slug: "solar-shades",
@@ -713,6 +713,6 @@ export const productPages: Record<string, ProductPageData> = {
       },
     ],
     metaTitle: "Motorized Shades in Coeur d'Alene | Voice, App & In-Home Setup",
-    metaDescription: "Motorized shades, blinds, and drapery installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Mark programs the system in your home. Free in-home consultation.",
+    metaDescription: "Motorized shades, blinds, and drapery installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. We program the system in your home. Free in-home consultation.",
   },
 };

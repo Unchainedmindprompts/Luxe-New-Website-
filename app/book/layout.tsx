@@ -4,14 +4,14 @@ import { BUSINESS } from "@/lib/constants";
 export const metadata: Metadata = {
   title: "Book a Free Consultation | Luxe Window Works",
   description:
-    "Schedule your free in-home window treatment consultation with Mark Abplanalp. 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint — no pressure.",
+    "Schedule your free in-home window treatment consultation with us. 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint — no pressure.",
   alternates: {
     canonical: "https://www.luxewindowworks.com/book",
   },
   openGraph: {
     title: "Book a Free Consultation | Luxe Window Works",
     description:
-      "Schedule your free in-home window treatment consultation with Mark Abplanalp. Serving Northern Idaho with 24 years of hands-on expertise.",
+      "Schedule your free in-home window treatment consultation with us. Serving Northern Idaho with 24 years of hands-on expertise.",
     url: "https://www.luxewindowworks.com/book",
     type: "website",
     images: [
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Book a Free Consultation | Luxe Window Works",
     description:
-      "Schedule your free in-home window treatment consultation with Mark Abplanalp. Serving Northern Idaho.",
+      "Schedule your free in-home window treatment consultation with us. Serving Northern Idaho.",
     images: ["https://www.luxewindowworks.com/images/hero-modern-living.webp"],
   },
   robots: {
@@ -45,7 +45,7 @@ const webpageSchema = {
   url: PAGE_URL,
   name: "Book a Free Consultation | Luxe Window Works",
   description:
-    "Schedule your free in-home window treatment consultation with Mark Abplanalp. 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint — no pressure.",
+    "Schedule your free in-home window treatment consultation with us. 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint — no pressure.",
   isPartOf: { "@id": `${BUSINESS.url}/#website` },
   about: { "@id": `${BUSINESS.url}/#business` },
   breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },

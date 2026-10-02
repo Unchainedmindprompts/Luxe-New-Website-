@@ -11,7 +11,7 @@ const reviews = [
     id: "cda-roller-shades-review",
     product: "Roller shades",
     href: "/products/roller-shades",
-    summary: "For her Coeur d'Alene roller-shade project, Mercedes highlighted Mark's product knowledge, the smooth process, and the finished look and quality.",
+    summary: "For her Coeur d'Alene roller-shade project, Mercedes highlighted our product knowledge, the smooth process, and the finished look and quality.",
     paragraphs: [
       "Mark made the whole experience seamless. He was very knowledgeable and professional. We could not be happier with the look and quality of product!",
     ],
@@ -21,7 +21,7 @@ const reviews = [
     id: "cda-norman-shutters-review",
     product: "Norman shutters",
     href: "/products/shutters",
-    summary: "For this Coeur d'Alene Norman shutter project, C P described a detailed consultation and Mark coordinating early measurements with the builder so the shutters could be ready before move-in.",
+    summary: "For this Coeur d'Alene Norman shutter project, C P described a detailed consultation and our coordination of early measurements with the builder so the shutters could be ready before move-in.",
     paragraphs: [
       "Mark did an above and beyond job from beginning to end. Great customer service and installation, and we are very happy we decided to go with him. Highly recommended.",
       "We wanted Norman shutters installed and had a multitude of questions. He very patiently spent around two hours with us answering all our questions and making recommendations. He did all the legwork of making arrangements with the builders to get inside the house early to take measurements so that the shutters would be ready in time for before we moved in. He made excellent recommendations in reference to aesthetics, practical daily use of the shutters and from an installer's perspective as he does his own installs.",
