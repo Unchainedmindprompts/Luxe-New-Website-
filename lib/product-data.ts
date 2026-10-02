@@ -317,6 +317,10 @@ export const productPages: Record<string, ProductPageData> = {
         {
           "href": "/products/hunter-douglas#roller-shades",
           "label": "Compare Hunter Douglas roller shades"
+        },
+        {
+          "href": "/products/two#colourvue-control",
+          "label": "Explore TWO Colourvue roller shades"
         }
       ]
     },
@@ -451,17 +455,9 @@ export const productPages: Record<string, ProductPageData> = {
     slug: "shutters",
     name: "Plantation Shutters",
     image: "/images/shutters.jpeg",
-    // Headline and subheadline lead with the product and the place rather than
-    // the manufacturer. Search Console showed this page pulling 11,402
-    // impressions at position 52.9 — most of them Woodlore and Normandy queries
-    // from Pittsburgh-area towns, which converted zero times and never will.
-    // The page named three Norman product lines in its first thirty words and
-    // one city in its first hundred, so it read as a Norman product page that
-    // happens to be in Idaho. The claim itself is unchanged; "plantation
-    // shutters" simply replaces "Norman shutters" at the front, and the five
-    // cities move up into the subheadline. Norman stays as the credential it
-    // is, and the product lines still appear throughout features and FAQs.
-    headline: "Plantation Shutters — The One Window Treatment That Actually Adds Value to Your Home.",
+    // Keep the service and region clear; Norman experience remains in the
+    // subheadline while the page helps compare the current shutter offering.
+    headline: "Custom Plantation Shutters in Coeur d’Alene & North Idaho.",
     subheadline: "Custom plantation shutters measured and installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint — by a Norman dealer since 2009.",
     problem: "Window treatments typically depreciate the moment they're installed — they're decorating, not improving. And most of them need to be replaced every 5-10 years. If you're investing in your home, especially a home you plan to keep or a property where resale value matters, you want something that lasts and actually adds to the home's worth.",
     solution: "Norman plantation shutters are built to last decades. We install Norman interior shutters because the quality is consistent, the engineering is thoughtful, and they hold up to North Idaho's four-season climate. The Normandy line is built from Paulownia — a hardwood with an exceptional strength-to-weight ratio that resists warping through January cold and August heat. The Woodlore and Woodlore Plus composite lines are dimensionally stable and moisture-resistant, the right call for bathrooms, kitchens, and lakefront humidity. Every frame is custom-built to your exact window opening, becomes a permanent part of your home's architecture, and is backed by Norman's limited lifetime warranty. For specialty and exterior applications, we also carry aluminum shutters by The Window Outfitters.",
@@ -502,6 +498,14 @@ export const productPages: Record<string, ProductPageData> = {
         {
           "href": "/products/hunter-douglas#shutters",
           "label": "Explore Hunter Douglas shutter collections"
+        },
+        {
+          "href": "/products/two#highprofile-classic",
+          "label": "Explore TWO Highprofile wood shutters"
+        },
+        {
+          "href": "/products/two#highprofile-poly",
+          "label": "Compare TWO Highprofile Poly shutters"
         }
       ]
     },
@@ -511,7 +515,7 @@ export const productPages: Record<string, ProductPageData> = {
 
       {
         question: "Why does Luxe Window Works install Norman shutters?",
-        answer: "We've been a Norman partner since 2009, and now also offer the full TWO interior shutter collection. The quality is consistent, the engineering is thoughtful, and the products perform exactly as promised in real North Idaho homes. Norman manufactures its own components — it even farms its own Paulownia wood for the Normandy line — which means tighter quality control from raw material to finished product. That direct, long-term relationship also gives us real manufacturer access for specifications, custom orders, and warranty support.",
+        answer: "We've been a Norman partner since 2009. That experience helps us guide material, frame, and panel choices, place custom orders, and help with manufacturer warranty questions. Norman is one of our shutter options, alongside Hunter Douglas and the TWO interior shutter collection. We compare the options around your windows and the way you use each room.",
       },
       {
         question: "What is the difference between Norman's Normandy and Woodlore Plus shutters?",
@@ -538,7 +542,7 @@ export const productPages: Record<string, ProductPageData> = {
         answer: "Yes — Norman backs both the hardwood Normandy line and the Woodlore/Woodlore Plus composite lines with a limited lifetime warranty covering defects in materials and workmanship. As a long-term Norman partner, we're your local point of contact for any warranty question or service need: you call us, not a manufacturer's 800 number.",
       },
     ],
-    metaTitle: "Custom Shutters in North Idaho | Norman Plantation Shutters",
+    metaTitle: "Plantation Shutters in Coeur d’Alene & Post Falls | Luxe Window Works",
     metaDescription: "Custom plantation shutters measured and installed in Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. Norman dealer since 2009. Free in-home consultation.",
   },
   "exterior-solar-shades": {

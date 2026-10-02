@@ -5,6 +5,7 @@ import Image from "next/image";
 import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CdaClientReviews from "@/components/CdaClientReviews";
+import CdaBuyingGuide from "@/components/CdaBuyingGuide";
 import PostFallsClientReviews from "@/components/PostFallsClientReviews";
 import HaydenClientReview from "@/components/HaydenClientReview";
 import { ConsultationExpect } from "@/components/ConsultationExpect";
@@ -308,7 +309,7 @@ export default async function AreaPage({ params }: Props) {
         </div>
       </section>
 
-      {slug === "coeur-d-alene" && <CdaClientReviews />}
+      {slug === "coeur-d-alene" && <><CdaBuyingGuide /><CdaClientReviews /></>}
       {slug === "post-falls" && <PostFallsClientReviews />}
       {slug === "hayden" && <HaydenClientReview />}
 

@@ -10,8 +10,9 @@ import { HUNTER_DOUGLAS } from "@/lib/hunter-douglas";
 
 const PAGE = `${BUSINESS.url}/hunter-douglas-coeur-d-alene`;
 const MEDIA = "/images/hunter-douglas/installations";
-const description = "Hunter Douglas blinds, shades and PowerView automation in Coeur d’Alene. Explore samples at home with Luxe Window Works, with expert measuring and installation.";
+const description = "Hunter Douglas in-home consultations in Coeur d’Alene with Post Falls-based Luxe Window Works. Compare samples, PowerView options, measuring and installation.";
 const faqs = [
+  { question: "Do you have a Hunter Douglas showroom in Coeur d’Alene?", answer: "Luxe Window Works is based in Post Falls and serves Coeur d’Alene through in-home consultations. We do not have a Coeur d’Alene showroom. Mark brings samples to your home so you can compare them in your own light, then handles professional measurements and installation." },
   { question: "Do you offer Hunter Douglas consultations in Coeur d’Alene?", answer: "Yes. Luxe Window Works is an authorized Hunter Douglas dealer serving Coeur d’Alene with free in-home consultations. We bring samples to you, measure your windows and help you compare products, fabrics and controls." },
   { question: "Can I compare Hunter Douglas samples in my home?", answer: "Yes. We help you compare fabrics, colors and textures in your own light, alongside your flooring and furnishings. Tell us which rooms you are considering and any collections that interest you when you book." },
   { question: "How much do Hunter Douglas blinds and shades cost?", answer: "Pricing depends on the collection, fabric, window sizes and operating system. Your consultation includes professional measurements and a quote for your selected products and installation. We can compare options room by room to help you prioritize your budget." },
@@ -30,11 +31,11 @@ const collections = [
 ];
 
 export const metadata: Metadata = {
-  title: "Hunter Douglas in Coeur d’Alene | Luxe Window Works",
+  title: "Hunter Douglas Dealer in Coeur d’Alene | Luxe Window Works",
   description,
   alternates: { canonical: PAGE },
-  openGraph: { title: "Hunter Douglas in Coeur d’Alene | Luxe Window Works", description, url: PAGE, images: [{ url: `${MEDIA}/light-filtering-window-wall.webp`, width: 1800, height: 1013, alt: "Hunter Douglas installation by Luxe Window Works" }] },
-  twitter: { card: "summary_large_image", title: "Hunter Douglas in Coeur d’Alene | Luxe Window Works", description, images: [`${MEDIA}/light-filtering-window-wall.webp`] },
+  openGraph: { title: "Hunter Douglas Dealer in Coeur d’Alene | Luxe Window Works", description, url: PAGE, images: [{ url: `${MEDIA}/light-filtering-window-wall.webp`, width: 1800, height: 1013, alt: "Hunter Douglas installation by Luxe Window Works" }] },
+  twitter: { card: "summary_large_image", title: "Hunter Douglas Dealer in Coeur d’Alene | Luxe Window Works", description, images: [`${MEDIA}/light-filtering-window-wall.webp`] },
 };
 
 function BookButton({ children = "Book Your Free Consultation" }: { children?: React.ReactNode }) {
@@ -54,7 +55,7 @@ export default function HunterDouglasCoeurDAlenePage() {
       <div className="flex flex-col justify-center px-6 py-12 sm:px-10 sm:py-16 xl:px-16 xl:py-20">
         <p className="text-xs uppercase tracking-[.18em] text-warm-gray-700">Your authorized Hunter Douglas dealer</p>
         <h1 className="mt-5 font-serif text-4xl leading-[1.1] text-charcoal sm:text-5xl xl:text-6xl">Hunter Douglas Window Treatments in Coeur d’Alene</h1>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-warm-gray-700">Beautiful light. Privacy when you want it. A finish that feels like home. Explore Hunter Douglas blinds, shades and shutters with an expert in-home consultation from Luxe Window Works.</p>
+        <p className="mt-6 max-w-xl text-lg leading-relaxed text-warm-gray-700">Compare Hunter Douglas blinds, shades, and shutters in your own Coeur d’Alene home. Luxe Window Works is based in Post Falls; Mark brings samples to you and handles the details from product selection through professional installation.</p>
         <div className="mt-8 flex flex-wrap items-center gap-5"><BookButton /><a href="#installations" className="font-semibold underline underline-offset-4">See our installations ↓</a></div>
         <p className="mt-6 text-sm text-warm-gray-700">24 years of experience · Lifetime installation guarantee</p>
       </div>
@@ -70,7 +71,7 @@ export default function HunterDouglasCoeurDAlenePage() {
       <div className="mt-10 grid gap-5 sm:grid-cols-3">{gallery.map(p => <Image key={p.file} src={`${MEDIA}/${p.file}`} alt={p.alt} width={p.width} height={p.height} sizes="(min-width: 640px) 33vw, 100vw" className="aspect-[4/5] w-full rounded-sm object-cover" />)}</div>
     </section>
 
-    <section className="bg-charcoal py-14 text-white md:py-20"><div className="container-luxe"><div className="max-w-2xl"><p className="text-xs uppercase tracking-[.18em] text-gold">Coeur d’Alene, we bring the samples to you</p><h2 className="mt-4 font-serif text-3xl sm:text-4xl">Choose in the light you live in.</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-300">Your windows, furnishings and daily routines guide the choice. We help you compare fabrics, light control and operating systems in your own home, with expert guidance from consultation through installation.</p></div><div className="mt-10 grid gap-8 md:grid-cols-3">{[
+    <section className="bg-charcoal py-14 text-white md:py-20"><div className="container-luxe"><div className="max-w-2xl"><p className="text-xs uppercase tracking-[.18em] text-gold">Coeur d’Alene, we bring the samples to you</p><h2 className="mt-4 font-serif text-3xl sm:text-4xl">Choose in the light you live in.</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-300">There is no showroom trip. Mark visits your Coeur d’Alene home with samples, looks at the windows and furnishings, and talks through privacy, glare, and daily use. You can compare fabrics and operating options in the room where they will be installed.</p></div><div className="mt-10 grid gap-8 md:grid-cols-3">{[
       ["Compare samples", "See colors and textures alongside your floors, walls and furniture. Talk through privacy, glare and how much light you want in each room."],
       ["Get a tailored quote", "We measure your windows, check mounting details and compare your selected products and controls. You’ll know what is included before ordering."],
       ["Enjoy careful installation", "Luxe handles the fit, finishing details and operation of your new treatments, backed by our lifetime installation guarantee."],

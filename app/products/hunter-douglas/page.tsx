@@ -11,7 +11,7 @@ import { HD_CATEGORIES, HD_FAQS, HD_URL, HUNTER_DOUGLAS } from "@/lib/hunter-dou
 const HD_PAGE = `${BUSINESS.url}/products/hunter-douglas`;
 
 export const metadata: Metadata = {
-  title: "Hunter Douglas Dealer in Coeur d’Alene & Post Falls | Luxe Window Works",
+  title: "Hunter Douglas Collections in North Idaho | Luxe Window Works",
   description: "Explore Hunter Douglas shades, blinds, shutters, drapery and PowerView automation with Luxe Window Works. Free in-home consultations, custom measurements and installation in North Idaho.",
   alternates: { canonical: HD_URL },
   openGraph: { title: "Discover Hunter Douglas | Luxe Window Works", description: "Beautiful light. Personal service. Explore Hunter Douglas with your local North Idaho dealer.", url: HD_URL, images: ["/images/luxe-completed-installation.webp"] },
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function HunterDouglasPage() {
   return <>
     <JsonLd data={{ "@context": "https://schema.org", "@graph": [
-      { "@type": "CollectionPage", "@id": `${HD_PAGE}#webpage`, url: HD_URL, name: "Hunter Douglas at Luxe Window Works", description: metadata.description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, about: [{ "@id": HUNTER_DOUGLAS["@id"] }, { "@id": `${HD_PAGE}#service` }], breadcrumb: { "@id": `${HD_PAGE}#breadcrumb` }, mainEntity: { "@type": "ItemList", name: "Hunter Douglas Product Categories", numberOfItems: HD_CATEGORIES.length, itemListElement: HD_CATEGORIES.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.title, url: `${HD_PAGE}#${p.id}` })) } },
+      { "@type": "CollectionPage", "@id": `${HD_PAGE}#webpage`, url: HD_URL, name: "Hunter Douglas Collections in North Idaho", description: metadata.description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, about: [{ "@id": HUNTER_DOUGLAS["@id"] }, { "@id": `${HD_PAGE}#service` }], breadcrumb: { "@id": `${HD_PAGE}#breadcrumb` }, mainEntity: { "@type": "ItemList", name: "Hunter Douglas Product Categories", numberOfItems: HD_CATEGORIES.length, itemListElement: HD_CATEGORIES.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.title, url: `${HD_PAGE}#${p.id}` })) } },
       { "@type": "Service", "@id": `${HD_PAGE}#service`, url: HD_URL, name: "Hunter Douglas Consultation and Installation", serviceType: "Custom Window Treatments", brand: { "@id": HUNTER_DOUGLAS["@id"] }, provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: SERVICE_AREAS.map(a => cityRef(a.name)), description: "In-home Hunter Douglas product guidance, professional measurements and installation in North Idaho.", mainEntityOfPage: { "@id": `${HD_PAGE}#webpage` } },
       { "@type": "FAQPage", "@id": `${HD_PAGE}#faq`, isPartOf: { "@id": `${HD_PAGE}#webpage` }, mainEntity: HD_FAQS.map(f => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })) },
       { "@type": "BreadcrumbList", "@id": `${HD_PAGE}#breadcrumb`, itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url }, { "@type": "ListItem", position: 2, name: "Products", item: `${BUSINESS.url}/products` }, { "@type": "ListItem", position: 3, name: "Hunter Douglas", item: HD_URL }] },
@@ -44,7 +44,7 @@ export default function HunterDouglasPage() {
         <div className="max-w-3xl mb-8">
           <p className="text-xs uppercase tracking-[.18em] text-warm-gray-700">Find your style</p>
           <h2 id="collection-heading" className="font-serif text-3xl sm:text-4xl text-charcoal mt-3">So many ways to make it yours.</h2>
-          <p className="mt-5 text-lg text-warm-gray-700 leading-relaxed">From soft sheers to tailored shutters, explore the possibilities below. We’ll help you compare the collections, fabrics and controls in your own home.</p>
+          <p className="mt-5 text-lg text-warm-gray-700 leading-relaxed">From soft sheers to tailored shutters, explore the Hunter Douglas collections below. We bring samples to homes across Post Falls, Coeur d’Alene, Hayden, Rathdrum, and Sandpoint and help compare fabrics, controls, and installation details.</p>
         </div>
         <nav aria-label="Hunter Douglas product categories" className="flex flex-wrap gap-2 mb-10">
           {HD_CATEGORIES.map(p => <a key={p.id} href={`#${p.id}`} className="rounded-full border border-warm-gray-300 bg-white px-4 py-2 text-sm text-charcoal hover:bg-charcoal hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">{p.title}</a>)}
@@ -69,7 +69,7 @@ export default function HunterDouglasPage() {
       <p className="mt-4 text-warm-gray-700 leading-relaxed">Hunter Douglas is quoted separately from our instant estimator. If PowerView is on your wish list, we’ll also discuss power options and any accessories needed for your preferred controls.</p>
       <div className="mt-6 flex flex-col items-start gap-4"><Link href="/book" className="font-semibold underline underline-offset-4">Request your Hunter Douglas consultation →</Link><Link href="/products/motorization" className="underline underline-offset-4">Explore motorized shade installation →</Link></div>
     </section>
-    <div className="container-luxe pb-10 max-w-3xl"><Link href="/hunter-douglas-coeur-d-alene" className="font-semibold underline underline-offset-4">Hunter Douglas consultations in Coeur d’Alene: see our installations →</Link></div>
+    <div className="container-luxe pb-10 max-w-3xl"><Link href="/hunter-douglas-coeur-d-alene" className="font-semibold underline underline-offset-4">Arrange a Hunter Douglas in-home consultation in Coeur d’Alene →</Link></div>
     <RelatedDecisionArticles articles={[{ title: "Why We Love Hunter Douglas PowerView Motorized Shades", slug: "why-we-love-hunter-douglas-powerview-motorized-shades" }]} />
     <section className="container-luxe py-14 md:py-20 max-w-4xl"><h2 className="font-serif text-3xl sm:text-4xl text-charcoal mb-8">A few questions, answered.</h2>{HD_FAQS.map(f => <details key={f.question} className="border-b border-warm-gray-200 py-5"><summary className="cursor-pointer text-charcoal font-semibold text-lg pr-4">{f.question}</summary><p className="mt-4 text-warm-gray-700 leading-relaxed">{f.answer}</p></details>)}</section>
     <section className="bg-cream py-14 md:py-20 text-center"><div className="container-luxe max-w-3xl"><h2 className="font-serif text-3xl sm:text-4xl text-charcoal">Let’s find your kind of beautiful.</h2><p className="mt-6 text-lg text-warm-gray-700 leading-relaxed">See the fabrics. Compare the options. In your own home.<br />Serving Post Falls, Coeur d’Alene, Hayden, Rathdrum and Sandpoint.</p><Link href="/book" className="inline-block mt-8 rounded-full bg-charcoal text-white font-semibold px-8 py-4">Schedule a Free In-Home Consultation</Link><p className="mt-5"><a href={BUSINESS.phoneHref} className="text-charcoal underline underline-offset-4">Call {BUSINESS.phone}</a></p><p className="text-xs text-warm-gray-700 mt-10">Collection photography courtesy of Hunter Douglas. Featured Luxe installation identified separately.</p></div></section>

@@ -6,6 +6,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { ConsultationExpect } from "@/components/ConsultationExpect";
 import { RelatedDecisionArticles } from "@/components/RelatedDecisionArticles";
 import { ProductBuyingGuide } from "@/components/ProductBuyingGuide";
+import { CdaProductProof } from "@/components/CdaClientReviews";
 import { ESTIMATE_PRODUCT_SCOPE } from "@/lib/estimate-copy";
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
@@ -448,6 +449,8 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </section>
       )}
+
+      <CdaProductProof slug={slug} />
 
       <RelatedDecisionArticles
         articles={PRODUCT_DECISION_ARTICLES[slug] ?? []}
