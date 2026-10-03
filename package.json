@@ -25,10 +25,11 @@
     "prepare": "husky",
     "audit:rendered": "node scripts/audit-rendered-schema.mjs",
     "verify:consult-redis-preview": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./scripts/register-ts-ext.mjs scripts/verify-consult-redis-preview.mjs",
-    "postbuild": "node scripts/audit-rendered-schema.mjs && npm run verify:consult-redis-preview",
+    "postbuild": "node scripts/audit-rendered-schema.mjs && npm run verify:consult-redis-preview && npm run test:video-pages",
     "test:advisor-retired": "node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-advisor-retired.mjs",
     "test:exterior-pathways": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-exterior-pathways.mjs",
-    "test:commercial-pathways": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./scripts/register-ts-ext.mjs scripts/test-commercial-pathways.mjs"
+    "test:commercial-pathways": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./scripts/register-ts-ext.mjs scripts/test-commercial-pathways.mjs",
+    "test:video-pages": "node scripts/test-video-pages.mjs"
   },
   "engines": {
     "node": ">=22.0.0"

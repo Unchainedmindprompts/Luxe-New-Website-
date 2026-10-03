@@ -18,6 +18,8 @@ import { CUSTOM_WINDOW_TREATMENTS } from "@/lib/schema";
 import { productPages } from "@/lib/product-data";
 import type { ProductPageData, ProductVideo } from "@/lib/product-data";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
+import { RelatedVideos } from "@/components/RelatedVideos";
+import { videoRef, videosForService } from "@/lib/videos";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -74,6 +76,7 @@ function ServiceSchema({ product, slug }: { product: ProductPageData; slug: stri
     // fourteen Luxe Services have in common.
     serviceType: CUSTOM_WINDOW_TREATMENTS,
     provider: { "@id": `${BUSINESS.url}/#business` },
+    ...(videosForService(slug).length ? { subjectOf: videosForService(slug).map(videoRef) } : {}),
     // The five cities we actually serve, not the state. "Idaho" spans 480
     // miles; Search Console shows these pages drawing impressions from Idaho
     // Falls and Boise, which are six hours away and will never convert. The
@@ -166,7 +169,6 @@ function VideoSchema({ video }: { video: ProductVideo }) {
     uploadDate: video.uploadDate,
     duration: video.duration,
     embedUrl: `https://www.youtube.com/embed/${video.youtubeId}`,
-    contentUrl: `https://www.youtube.com/watch?v=${video.youtubeId}`,
     publisher: { "@id": "https://www.luxewindowworks.com/#business" },
   };
   return (
@@ -308,6 +310,8 @@ export default async function ProductPage({ params }: Props) {
       </section>
 
       <ProductBuyingGuide guide={product.buyingGuide} />
+
+      <RelatedVideos videos={videosForService(slug)} />
 
       {/* The Problem */}
       <section className="py-16 md:py-20 bg-warm-white">

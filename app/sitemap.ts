@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { getAllSlugs, getPost } from '@/lib/blog'
+import { LUXE_VIDEOS, videoUrl } from '@/lib/videos'
 
 export const revalidate = 3600
 
@@ -186,5 +187,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     // All blog posts — dynamically generated from content/blog
     ...blogPosts,
+    ...LUXE_VIDEOS.map(video => ({
+      url: videoUrl(video),
+      lastModified: video.uploadDate,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
   ]
 }
