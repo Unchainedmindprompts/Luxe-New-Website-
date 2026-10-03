@@ -243,12 +243,16 @@ test("9  old Pixel ID 1655897412521361 does not return", (t) => {
 
 test("10  /book still embeds the official inline widget and wires the listener", (t) => {
   const page = read("app/book/page.tsx");
-  t.ok(page.includes("calendly-inline-widget"), "inline widget class was removed");
+  const embed = read("app/book/CalendlyEmbed.tsx");
+  const lifecycle = read("app/book/calendly-embed.ts");
+  t.ok(page.includes("<CalendlyEmbed"), "book page does not mount the calendar");
+  t.ok(embed.includes("calendly-inline-widget"), "inline widget class was removed");
   t.ok(
-    page.includes("https://assets.calendly.com/assets/external/widget.js"),
+    lifecycle.includes("https://assets.calendly.com/assets/external/widget.js"),
     "official widget.js was removed"
   );
-  t.ok(page.includes('strategy="lazyOnload"'), "lazyOnload strategy was changed");
+  t.ok(lifecycle.includes("calendly.initInlineWidget"), "explicit per-mount initialization is missing");
+  t.ok(embed.includes('data-auto-load="false"'), "one-time auto-scan can duplicate initialization");
   t.ok(page.includes("<CalendlyScheduleTracker"), "book page does not mount the tracker");
   t.ok(!/fbq\(["']track["'],\s*["']Lead["']\)/.test(page), "book fallback form now fires Lead");
   t.ok(!/fbq\(["']track["'],\s*["']Schedule["']\)/.test(page), "book page inlines Schedule itself");
