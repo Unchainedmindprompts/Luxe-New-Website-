@@ -8,7 +8,7 @@ import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
 import { cityRef } from "@/lib/cities";
 import { HD_CATEGORIES, HD_FAQS, HD_URL, HUNTER_DOUGLAS } from "@/lib/hunter-douglas";
 import { RelatedVideos } from "@/components/RelatedVideos";
-import { LUXE_VIDEOS, videoRef } from "@/lib/videos";
+import { videoRef, videosForService } from "@/lib/videos";
 
 const HD_PAGE = `${BUSINESS.url}/products/hunter-douglas`;
 
@@ -20,10 +20,11 @@ export const metadata: Metadata = {
 };
 
 export default function HunterDouglasPage() {
+  const videos = videosForService("hunter-douglas");
   return <>
     <JsonLd data={{ "@context": "https://schema.org", "@graph": [
       { "@type": "CollectionPage", "@id": `${HD_PAGE}#webpage`, url: HD_URL, name: "Hunter Douglas Collections in North Idaho", description: metadata.description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, about: [{ "@id": HUNTER_DOUGLAS["@id"] }, { "@id": `${HD_PAGE}#service` }], breadcrumb: { "@id": `${HD_PAGE}#breadcrumb` }, mainEntity: { "@type": "ItemList", name: "Hunter Douglas Product Categories", numberOfItems: HD_CATEGORIES.length, itemListElement: HD_CATEGORIES.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.title, url: `${HD_PAGE}#${p.id}` })) } },
-      { "@type": "Service", "@id": `${HD_PAGE}#service`, url: HD_URL, name: "Hunter Douglas Consultation and Installation", serviceType: "Custom Window Treatments", brand: { "@id": HUNTER_DOUGLAS["@id"] }, provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: SERVICE_AREAS.map(a => cityRef(a.name)), description: "In-home Hunter Douglas product guidance, professional measurements and installation in North Idaho.", mainEntityOfPage: { "@id": `${HD_PAGE}#webpage` }, subjectOf: LUXE_VIDEOS.map(videoRef) },
+      { "@type": "Service", "@id": `${HD_PAGE}#service`, url: HD_URL, name: "Hunter Douglas Consultation and Installation", serviceType: "Custom Window Treatments", brand: { "@id": HUNTER_DOUGLAS["@id"] }, provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: SERVICE_AREAS.map(a => cityRef(a.name)), description: "In-home Hunter Douglas product guidance, professional measurements and installation in North Idaho.", mainEntityOfPage: { "@id": `${HD_PAGE}#webpage` }, subjectOf: videos.map(videoRef) },
       { "@type": "FAQPage", "@id": `${HD_PAGE}#faq`, isPartOf: { "@id": `${HD_PAGE}#webpage` }, mainEntity: HD_FAQS.map(f => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })) },
       { "@type": "BreadcrumbList", "@id": `${HD_PAGE}#breadcrumb`, itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url }, { "@type": "ListItem", position: 2, name: "Products", item: `${BUSINESS.url}/products` }, { "@type": "ListItem", position: 3, name: "Hunter Douglas", item: HD_URL }] },
     ] }} />
@@ -41,7 +42,7 @@ export default function HunterDouglasPage() {
       </figure>
     </section>
     <section className="container-luxe py-14 md:py-20 text-center max-w-3xl"><p className="uppercase tracking-[.18em] text-xs text-warm-gray-700">Beautiful windows begin with a conversation</p><h2 className="font-serif text-3xl sm:text-4xl text-charcoal mt-4">See the possibilities.<br />Then see them in your home.</h2><p className="mt-6 text-lg leading-relaxed text-warm-gray-700">A photo can catch your eye. Seeing the fabric in your own light is what makes the choice feel easy. We bring the samples, talk through your priorities and help you find the right fit, room by room.</p></section>
-    <RelatedVideos videos={LUXE_VIDEOS} />
+    <RelatedVideos videos={videos} />
     <section id="collections" aria-labelledby="collection-heading" className="scroll-mt-24 bg-cream py-12 md:py-16">
       <div className="container-luxe">
         <div className="max-w-3xl mb-8">

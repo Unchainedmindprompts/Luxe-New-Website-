@@ -8,6 +8,7 @@ const site = "https://www.luxewindowworks.com";
 const cases = [
   { slug: "powerview-roller-shades-west-facing-bedroom", id: "KTcXw-7BbYM", duration: "PT0M48S", date: "2026-10-03T09:50:27-07:00", services: ["roller-shades", "solar-shades", "motorization", "hunter-douglas"] },
   { slug: "vignette-duolite-light-filtering-room-darkening", id: "bo8RyllgYCI", duration: "PT0M58S", date: "2026-10-03T09:58:23-07:00", services: ["roman-shades", "hunter-douglas"] },
+  { slug: "large-scale-commercial-window-shades", id: "Jh-f3d5x7vM", duration: "PT0M37S", date: "2026-10-05T08:34:17-07:00", services: [], subject: "Commercial window shades in a large glass-walled space" },
 ];
 const html = (path) => readFileSync(`.next/server/app/${path}.html`, "utf8");
 const visible = (text) => text.replace(/<script\b[\s\S]*?<\/script>/gi, "");
@@ -34,7 +35,21 @@ for (const item of cases) {
   assert.equal(video.publisher["@id"], `${site}/#business`);
   assert.equal(video.thumbnailUrl, `https://img.youtube.com/vi/${item.id}/maxresdefault.jpg`);
   for (const unverified of ["contentUrl", "creator", "author", "copyrightHolder", "contentLocation", "locationCreated"]) assert.ok(!(unverified in video), `Unverified ${unverified} on ${path}`);
-  assert.deepEqual(video.about.map((ref) => ref["@id"]), item.services.map((slug) => `${site}/products/${slug}#service`));
+  if (item.subject) {
+    assert.deepEqual(video.about, { "@type": "Thing", name: item.subject });
+    assert.equal(video.name, "Large-Scale Commercial Window Shades | Portfolio Highlight");
+    assert.equal(video.description, "A full wall of glass. A clean, coordinated shade installation. This commercial project highlights how window shades can complement the architecture of a large space.");
+    assert.ok(body.includes(`dateTime="${item.date}">October 5, 2026</time>`));
+    const breadcrumb = graph.find((node) => node["@type"] === "BreadcrumbList");
+    assert.equal(breadcrumb.itemListElement[1].item, `${site}/gallery`);
+    assert.ok(!/Hunter Douglas|PowerView|motorized|Apple|Cupertino|installed by|our installation/i.test(JSON.stringify(video)));
+    const brandPage = html("products/hunter-douglas");
+    assert.ok(!visible(brandPage).includes(`href="${path}"`), "Unverified commercial brand association");
+    assert.ok(!JSON.stringify(nodes(brandPage)).includes(`${url}#video`), "Unverified commercial service graph edge");
+  } else {
+    assert.deepEqual(video.about.map((ref) => ref["@id"]), item.services.map((slug) => `${site}/products/${slug}#service`));
+    assert.ok(body.includes(`dateTime="${item.date}">October 3, 2026</time>`));
+  }
   const webpage = graph.find((node) => node["@type"] === "WebPage");
   assert.equal(webpage.mainEntity["@id"], video["@id"]);
   assert.equal(webpage.isPartOf["@id"], `${site}/#website`);
@@ -43,7 +58,13 @@ for (const item of cases) {
   assert.ok(body.includes(`<iframe src="${video.embedUrl}?rel=0&amp;playsinline=1"`));
   assert.ok(body.includes('referrerPolicy="strict-origin-when-cross-origin"'));
   assert.ok(body.includes(`href="https://www.youtube.com/watch?v=${item.id}"`));
-  assert.ok(body.includes(`href="/videos/${cases.find((other) => other.id !== item.id).slug}"`));
+  for (const other of cases.filter((other) => other.id !== item.id)) {
+    assert.ok(body.includes(`href="/videos/${other.slug}"`), `Missing related video ${other.slug}`);
+  }
+  const gallery = html("gallery");
+  assert.ok(visible(gallery).includes(`href="${path}"`), "Missing gallery backlink");
+  const galleryNode = nodes(gallery).find((node) => node["@id"] === `${site}/gallery#webpage`);
+  assert.ok(galleryNode.hasPart.some((ref) => ref["@id"] === video["@id"]), "Missing gallery graph edge");
   assert.ok(body.includes('href="/book"'));
   assert.ok(sitemap.includes(`<loc>${url}</loc>`));
   assert.ok(!body.includes('content="noindex'));

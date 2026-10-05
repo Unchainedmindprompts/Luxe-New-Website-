@@ -13,6 +13,9 @@ export interface LuxeVideo {
   duration: string;
   durationLabel: string;
   serviceSlugs: readonly VideoServiceSlug[];
+  subject?: string;
+  breadcrumb?: { label: string; href: string };
+  ctaDescription?: string;
   details: readonly { label: string; value: string }[];
   paragraphs: readonly string[];
   relatedLinks: readonly { label: string; href: string }[];
@@ -22,6 +25,33 @@ export interface LuxeVideo {
 // Publication times and durations were read from these public YouTube pages.
 // Publisher is known; the original creator and filming location are not.
 export const LUXE_VIDEOS: readonly LuxeVideo[] = [
+  {
+    slug: "large-scale-commercial-window-shades",
+    youtubeId: "Jh-f3d5x7vM",
+    title: "Large-Scale Commercial Window Shades | Portfolio Highlight",
+    shortTitle: "Large-Scale Commercial Window Shades",
+    description: "A full wall of glass. A clean, coordinated shade installation. This commercial project highlights how window shades can complement the architecture of a large space.",
+    uploadDate: "2026-10-05T08:34:17-07:00",
+    // YouTube's public microformat reports 37 seconds (raw media is ~36.1s).
+    duration: "PT0M37S",
+    durationLabel: "37 seconds",
+    serviceSlugs: [],
+    subject: "Commercial window shades in a large glass-walled space",
+    breadcrumb: { label: "Our Work", href: "/gallery" },
+    ctaDescription: "Explore custom window treatments for your North Idaho home or business. Luxe Window Works can help you compare options for your own space.",
+    details: [
+      { label: "Setting", value: "Large commercial interior" },
+      { label: "Windows", value: "A full wall of glass" },
+      { label: "Focus", value: "Coordinated window shades and architecture" },
+    ],
+    paragraphs: [
+      "The broad window wall and repeated shade panels create a coordinated line across the space. Watch the short clip for a closer look at the scale and how the shades sit within the architecture.",
+    ],
+    relatedLinks: [
+      { label: "Browse the project gallery", href: "/gallery" },
+      { label: "Explore window treatment options", href: "/products" },
+    ],
+  },
   {
     slug: "powerview-roller-shades-west-facing-bedroom",
     youtubeId: "KTcXw-7BbYM",

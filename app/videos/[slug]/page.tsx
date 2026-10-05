@@ -40,6 +40,10 @@ export default async function VideoPage({ params }: Props) {
   if (!video) notFound();
   const pageUrl = videoUrl(video);
   const relatedVideos = LUXE_VIDEOS.filter((item) => item.slug !== slug);
+  const breadcrumb = video.breadcrumb ?? { label: "Hunter Douglas", href: "/products/hunter-douglas" };
+  const publishedDate = new Intl.DateTimeFormat("en-US", {
+    month: "long", day: "numeric", year: "numeric", timeZone: "America/Los_Angeles",
+  }).format(new Date(video.uploadDate));
 
   return (
     <>
@@ -67,7 +71,9 @@ export default async function VideoPage({ params }: Props) {
           duration: video.duration,
           embedUrl: videoEmbedUrl(video),
           publisher: { "@id": `${BUSINESS.url}/#business` },
-          about: video.serviceSlugs.map((serviceSlug) => ({ "@id": `${BUSINESS.url}/products/${serviceSlug}#service` })),
+          about: video.subject
+            ? { "@type": "Thing", name: video.subject }
+            : video.serviceSlugs.map((serviceSlug) => ({ "@id": `${BUSINESS.url}/products/${serviceSlug}#service` })),
           mainEntityOfPage: pageUrl,
           inLanguage: "en-US",
         },
@@ -76,12 +82,12 @@ export default async function VideoPage({ params }: Props) {
           "@id": `${BUSINESS.url}/videos/${slug}#breadcrumb`,
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
-            { "@type": "ListItem", position: 2, name: "Hunter Douglas", item: `${BUSINESS.url}/products/hunter-douglas` },
+            { "@type": "ListItem", position: 2, name: breadcrumb.label, item: `${BUSINESS.url}${breadcrumb.href}` },
             { "@type": "ListItem", position: 3, name: video.shortTitle, item: pageUrl },
           ],
         },
       ] }} />
-      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Hunter Douglas", href: "/products/hunter-douglas" }, { label: "Video" }]} />
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, breadcrumb, { label: "Video" }]} />
 
       <section className="bg-cream pb-10 md:pb-14">
         <div className="container-luxe max-w-5xl">
@@ -102,7 +108,7 @@ export default async function VideoPage({ params }: Props) {
             />
           </div>
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-warm-gray-700">
-            <p>Published by {BUSINESS.name} · <time dateTime={video.uploadDate}>October 3, 2026</time></p>
+            <p>Published by {BUSINESS.name} · <time dateTime={video.uploadDate}>{publishedDate}</time></p>
             <a href={`https://www.youtube.com/watch?v=${video.youtubeId}`} target="_blank" rel="noopener noreferrer" className="font-semibold text-charcoal underline underline-offset-4">Watch on YouTube <span className="sr-only">(new tab)</span><span aria-hidden="true">↗</span></a>
           </div>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-warm-gray-700">{video.description}</p>
@@ -130,7 +136,7 @@ export default async function VideoPage({ params }: Props) {
       <RelatedVideos videos={relatedVideos} />
       <section className="container-luxe max-w-3xl py-14 md:py-20 text-center">
         <h2 className="font-serif text-3xl sm:text-4xl text-charcoal">See the options in your own light.</h2>
-        <p className="mt-5 text-lg leading-relaxed text-warm-gray-700">We bring samples, help you compare the choices and take care of measuring and installation. Your Hunter Douglas quote is tailored to your windows, fabrics and controls.</p>
+        <p className="mt-5 text-lg leading-relaxed text-warm-gray-700">{video.ctaDescription ?? "We bring samples, help you compare the choices and take care of measuring and installation. Your Hunter Douglas quote is tailored to your windows, fabrics and controls."}</p>
         <TrackedCta href="/book" event={CONVERSION_EVENTS.ProductCtaClick} className="mt-7 inline-flex rounded-full bg-charcoal px-7 py-4 font-semibold text-white">Book Your Free Consultation</TrackedCta>
       </section>
     </>

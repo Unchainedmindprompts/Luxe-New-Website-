@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
+import { RelatedVideos } from "@/components/RelatedVideos";
 import { BUSINESS } from "@/lib/constants";
+import { LUXE_VIDEOS, videoRef } from "@/lib/videos";
 
 export const metadata: Metadata = {
   title: "Our Work | Custom Window Treatment Projects",
@@ -216,7 +218,7 @@ const schema = {
       breadcrumb: { "@id": `${BUSINESS.url}/gallery#breadcrumb` },
       primaryImageOfPage: { "@id": imageObjects[0]["@id"] },
       image: imageObjects.map((image) => ({ "@id": image["@id"] })),
-      hasPart: imageObjects.map((image) => ({ "@id": image["@id"] })),
+      hasPart: [...imageObjects.map((image) => ({ "@id": image["@id"] })), ...LUXE_VIDEOS.map(videoRef)],
       inLanguage: "en-US",
     },
     {
@@ -349,6 +351,8 @@ export default function GalleryPage() {
         <GallerySection id="shades" eyebrow="Light · Privacy · Comfort" title="Custom Shades" intro="From top-down bottom-up cellular shades to glare-controlling solar shades, each solution is selected around the room, the view, and how the customer lives." projects={shades} />
         <GallerySection id="shutters-blinds" eyebrow="Structure · Character · Control" title="Shutters & Blinds" intro="Precisely fitted shutters and blinds add lasting structure to a room while giving the homeowner simple, dependable control over privacy and daylight." projects={shuttersAndBlinds} />
         <GallerySection id="outdoor" eyebrow="Patios · Porches · Pergolas" title="Outdoor Shade Solutions" intro="Exterior screens and shutters make exposed outdoor spaces more comfortable by adding shade, privacy, weather protection, and architectural character." projects={outdoor} />
+
+        <RelatedVideos videos={LUXE_VIDEOS} />
 
         <section className="bg-charcoal text-white py-16 md:py-20">
           <div className="container-luxe max-w-4xl text-center">
