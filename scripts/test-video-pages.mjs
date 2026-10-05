@@ -9,6 +9,7 @@ const cases = [
   { slug: "powerview-roller-shades-west-facing-bedroom", id: "KTcXw-7BbYM", duration: "PT0M48S", date: "2026-10-03T09:50:27-07:00", services: ["roller-shades", "solar-shades", "motorization", "hunter-douglas"] },
   { slug: "vignette-duolite-light-filtering-room-darkening", id: "bo8RyllgYCI", duration: "PT0M58S", date: "2026-10-03T09:58:23-07:00", services: ["roman-shades", "hunter-douglas"] },
   { slug: "large-scale-commercial-window-shades", id: "Jh-f3d5x7vM", duration: "PT0M37S", date: "2026-10-05T08:34:17-07:00", services: [], subject: "Commercial window shades in a large glass-walled space" },
+  { slug: "corradi-louvered-patio-roof-exterior-shade", id: "GX1DkG5Ku3E", duration: "PT0M49S", date: "2026-10-05T09:06:49-07:00", services: ["exterior-solar-shades"], subject: "Corradi louvered patio roof and exterior side shade" },
 ];
 const html = (path) => readFileSync(`.next/server/app/${path}.html`, "utf8");
 const visible = (text) => text.replace(/<script\b[\s\S]*?<\/script>/gi, "");
@@ -37,18 +38,29 @@ for (const item of cases) {
   for (const unverified of ["contentUrl", "creator", "author", "copyrightHolder", "contentLocation", "locationCreated"]) assert.ok(!(unverified in video), `Unverified ${unverified} on ${path}`);
   if (item.subject) {
     assert.deepEqual(video.about, { "@type": "Thing", name: item.subject });
-    assert.equal(video.name, "Large-Scale Commercial Window Shades | Portfolio Highlight");
-    assert.equal(video.description, "A full wall of glass. A clean, coordinated shade installation. This commercial project highlights how window shades can complement the architecture of a large space.");
     assert.ok(body.includes(`dateTime="${item.date}">October 5, 2026</time>`));
-    const breadcrumb = graph.find((node) => node["@type"] === "BreadcrumbList");
-    assert.equal(breadcrumb.itemListElement[1].item, `${site}/gallery`);
-    assert.ok(!/Hunter Douglas|PowerView|motorized|Apple|Cupertino|installed by|our installation/i.test(JSON.stringify(video)));
     const brandPage = html("products/hunter-douglas");
-    assert.ok(!visible(brandPage).includes(`href="${path}"`), "Unverified commercial brand association");
-    assert.ok(!JSON.stringify(nodes(brandPage)).includes(`${url}#video`), "Unverified commercial service graph edge");
+    assert.ok(!visible(brandPage).includes(`href="${path}"`), `Unverified Hunter Douglas association on ${path}`);
+    assert.ok(!JSON.stringify(nodes(brandPage)).includes(`${url}#video`), `Unverified Hunter Douglas graph edge on ${path}`);
   } else {
     assert.deepEqual(video.about.map((ref) => ref["@id"]), item.services.map((slug) => `${site}/products/${slug}#service`));
     assert.ok(body.includes(`dateTime="${item.date}">October 3, 2026</time>`));
+  }
+  if (item.slug === "large-scale-commercial-window-shades") {
+    assert.equal(video.name, "Large-Scale Commercial Window Shades | Portfolio Highlight");
+    assert.equal(video.description, "A full wall of glass. A clean, coordinated shade installation. This commercial project highlights how window shades can complement the architecture of a large space.");
+    const breadcrumb = graph.find((node) => node["@type"] === "BreadcrumbList");
+    assert.equal(breadcrumb.itemListElement[1].item, `${site}/gallery`);
+    assert.ok(!/Hunter Douglas|PowerView|motorized|Apple|Cupertino|installed by|our installation/i.test(JSON.stringify(video)));
+  }
+  if (item.slug === "corradi-louvered-patio-roof-exterior-shade") {
+    assert.equal(video.name, "Corradi Louvered Patio Roof & Exterior Shade | Outdoor Living");
+    assert.match(video.description, /adjustable roof louvers overhead and a shade along the side of the patio/);
+    assert.ok(body.includes("Adjustable patio roof louvers") && body.includes("Exterior patio shade"));
+    assert.ok(body.includes('href="/products/exterior-solar-shades"') && body.includes('href="/gallery#outdoor"'));
+    const breadcrumb = graph.find((node) => node["@type"] === "BreadcrumbList");
+    assert.equal(breadcrumb.itemListElement[1].item, `${site}/products/exterior-solar-shades`);
+    assert.ok(!/Alba|Bavona|Pergotenda|Somfy|installed by|our installation|North Idaho|Coeur d|Post Falls/i.test(JSON.stringify(video)), "Unverified Corradi model, location or installation attribution");
   }
   const webpage = graph.find((node) => node["@type"] === "WebPage");
   assert.equal(webpage.mainEntity["@id"], video["@id"]);
@@ -76,8 +88,8 @@ for (const item of cases) {
   }
   console.log(`PASS ${path}: identity, verified metadata, crawlable player, reciprocal service links, canonical, sitemap, and no invented attribution`);
 }
-for (const slug of ["exterior-solar-shades", "cellular-shades", "shutters"]) {
+for (const slug of ["exterior-solar-shades", "cellular-shades", "shutters", "motorization"]) {
   const body = visible(html(`products/${slug}`));
-  for (const item of cases) assert.ok(!body.includes(`href="/videos/${item.slug}"`), `Unrelated video injected into ${slug}`);
+  for (const item of cases.filter((item) => !item.services.includes(slug))) assert.ok(!body.includes(`href="/videos/${item.slug}"`), `Unrelated video injected into ${slug}`);
 }
 console.log("PASS video associations stay confined to the relevant services");

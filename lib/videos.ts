@@ -26,6 +26,32 @@ export interface LuxeVideo {
 // Publisher is known; the original creator and filming location are not.
 export const LUXE_VIDEOS: readonly LuxeVideo[] = [
   {
+    slug: "corradi-louvered-patio-roof-exterior-shade",
+    youtubeId: "GX1DkG5Ku3E",
+    title: "Corradi Louvered Patio Roof & Exterior Shade | Outdoor Living",
+    shortTitle: "Corradi Patio Roof & Exterior Shade",
+    description: "More control over sun, shade and your time outside. See a Corradi louvered patio roof and exterior shade in action, with adjustable roof louvers overhead and a shade along the side of the patio.",
+    uploadDate: "2026-10-05T09:06:49-07:00",
+    duration: "PT0M49S",
+    durationLabel: "49 seconds",
+    serviceSlugs: ["exterior-solar-shades"],
+    subject: "Corradi louvered patio roof and exterior side shade",
+    breadcrumb: { label: "Exterior Solar Shades", href: "/products/exterior-solar-shades" },
+    ctaDescription: "We help homeowners throughout Coeur d’Alene, Post Falls and North Idaho explore outdoor shade solutions. We can help you compare options for your own space and how you enjoy being outside.",
+    details: [
+      { label: "Brand", value: "Corradi" },
+      { label: "Overhead", value: "Adjustable patio roof louvers" },
+      { label: "Side coverage", value: "Exterior patio shade" },
+    ],
+    paragraphs: [
+      "Adjustable louvers overhead and an exterior side shade offer two ways to manage sunlight around this patio. The video shows both the roof louvers and side shade moving, giving a closer look at how they work together around an outdoor living space.",
+    ],
+    relatedLinks: [
+      { label: "Explore exterior solar shades", href: "/products/exterior-solar-shades" },
+      { label: "Browse outdoor shade projects", href: "/gallery#outdoor" },
+    ],
+  },
+  {
     slug: "large-scale-commercial-window-shades",
     youtubeId: "Jh-f3d5x7vM",
     title: "Large-Scale Commercial Window Shades | Portfolio Highlight",
