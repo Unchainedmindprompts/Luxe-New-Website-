@@ -69,7 +69,8 @@ wordCount: 1344
 <ul><li><strong>High-End Blinds:</strong> If your blinds are a high-end brand, have complex motorized systems, or are extremely heavy, an incorrect repair could cause more damage.</li>
 <li><strong>Damaged Components:</strong> If the cord is not the only problem—if a pulley is broken, a lock mechanism is cracked, or a slat is warped—restringing won’t solve the problem. A professional installer can often source and replace these components for you.</li>
 <li><strong>Time Is a Factor:</strong> If you're short on time or patience, a professional can complete the job quickly and correctly.</li>
-<li><a href="https://luxewindowworks.com/contact-us/" data-type="link" data-id="https://luxewindowworks.com/contact-us/">https://luxewindowworks.com/contact-us/</a></li>
+<li><a href="https://www.luxewindowworks.com/contact" data-type="link" data-id="https://www.luxewindowworks.com/contact">https://www.luxewindowworks.com/contact</a></li>
 </ul>
-<p>Restringing blinds can feel intimidating at first, but with a little patience, it's a rewarding project that can save you money and keep your home looking its best. The most important things to remember are to take pictures, work slowly, and double-check your cord's path before you tie it all off.</p>
+<p>Tired of fighting with cords? If your blinds are at the end of their life, Luxe Window Works installs new cordless blinds and shades across Post Falls, Coeur d'Alene, Hayden, and Rathdrum. Free in-home consultation. Call or text (208) 660-8643 or book at luxewindowworks.com/book.</p>
+<p>Ordered the wrong size? We cut blinds down to fit and install them, $65 per blind.</p>
 <p>&nbsp;</p>
