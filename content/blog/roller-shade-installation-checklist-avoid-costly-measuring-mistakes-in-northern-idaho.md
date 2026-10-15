@@ -126,7 +126,7 @@ wordCount: 4418
 <p>Whether you're building new construction in Hayden, renovating a historic home in Coeur d'Alene, or simply upgrading your window treatments in Post Falls, the audit comes first. The measurement comes second. The order comes third.</p>
 <p><strong>And if you want someone who's performed this audit hundreds of times to verify your windows will support the roller shades you want, that's exactly what we do.</strong></p>
 <p><strong>Schedule a Pre-Measurement Audit with Luxe Window Works today. We'll assess every window, provide honest recommendations about which solutions will actually perform in your space, and guarantee your measurements before you spend a dime on products. Because in Northern Idaho, where quality and craftsmanship matter, "good enough" has never been good enough.</strong></p>
-<p><strong>Call us at [phone number] or visit luxewindowwork.wpenginepowered.com/ to schedule your complimentary consultation.</strong></p>
+<p><strong>Call us at [phone number] or visit https://www.luxewindowworks.com/book to schedule your complimentary consultation.</strong></p>
 <hr /><p><strong>Proudly serving Northern Idaho homeowners in Coeur d'Alene, Post Falls, Hayden, Hayden Lake, Rathdrum, Sandpoint, and throughout Kootenai County.</strong></p>
 <p><a href="https://luxewindowworks.com/window-coverings-sandpoint-id/" data-type="link" data-id="https://luxewindowworks.com/window-coverings-sandpoint-id/">https://luxewindowworks.com/window-coverings-sandpoint-id/</a></p>
 <p><a href="https://luxewindowworks.com/window-coverings-coeur-d-alene/" data-type="link" data-id="https://luxewindowworks.com/window-coverings-coeur-d-alene/">https://luxewindowworks.com/window-coverings-coeur-d-alene/</a></p>
