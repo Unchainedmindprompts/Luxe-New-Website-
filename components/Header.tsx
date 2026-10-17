@@ -19,12 +19,14 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-charcoal/95 backdrop-blur-sm border-b border-white/10">
       <div className="container-luxe flex items-center justify-between h-16 md:h-20">
         {/* Logo. The mark already reads "LUXE / WINDOW WORKS", so stacking the
-            wordmark under it would repeat the name. "North Idaho" sits beside
-            it behind a hairline rule instead — a lockup rather than a stack —
-            which keeps the local signal without a third line of type. The rule
-            and tagline drop away under sm so the mark never gets crowded on a
-            phone. Explicit width/height are the intrinsic size so Next can
-            reserve space and avoid layout shift; h-* + w-auto does the sizing. */}
+            wordmark under it would repeat the name. The white Hunter Douglas
+            logo sits beside it behind a hairline rule instead — a brand lockup
+            rather than a stack: Luxe is the dealer, Hunter Douglas the carried
+            brand, named beside it now that the business serves a second market
+            where a geographic tagline would mislead. The rule and brand mark
+            drop away under sm so the mark never gets crowded on a phone.
+            Explicit width/height are the intrinsic size so Next can reserve
+            space and avoid layout shift; h-* + w-auto does the sizing. */}
         <Link
           href="/"
           className="flex items-center gap-3 shrink-0"
@@ -43,11 +45,13 @@ export default function Header() {
             aria-hidden="true"
             className="hidden sm:block h-8 md:h-10 w-px bg-white/20"
           />
-          <span className="hidden sm:block text-[10px] md:text-[11px] text-white/60 tracking-[0.2em] uppercase leading-none">
-            North
-            <br />
-            Idaho
-          </span>
+          <Image
+            src="/images/brands/hunter-douglas-white-horizontal.png"
+            alt="Hunter Douglas"
+            width={2048}
+            height={295}
+            className="hidden sm:block h-5 md:h-6 w-auto"
+          />
         </Link>
 
         {/* Desktop Nav */}

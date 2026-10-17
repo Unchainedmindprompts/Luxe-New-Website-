@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import FooterBlurb from "@/components/FooterBlurb";
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
@@ -15,9 +16,13 @@ export default function Footer() {
               <span className="font-serif text-2xl font-bold text-white">
                 Luxe Window Works
               </span>
-              <span className="block text-xs text-warm-gray-500 tracking-widest uppercase mt-0.5">
-                North Idaho
-              </span>
+              <Image
+                src="/images/brands/hunter-douglas-white-horizontal.png"
+                alt="Hunter Douglas"
+                width={2048}
+                height={295}
+                className="block h-4 md:h-5 w-auto mt-1.5"
+              />
             </Link>
             <FooterBlurb />
             <div className="mt-6 space-y-2 text-sm">
