@@ -38,12 +38,24 @@ export interface AreaPageData {
   localCTA: string;
   metaTitle: string;
   metaDescription: string;
+  /**
+   * Set on the Seattle Eastside entries (Washington). Drives the state-aware
+   * schema and the Hunter Douglas service-model copy on the area page: Luxe
+   * serves these cities with Hunter Douglas only, by appointment, with
+   * measuring and installation through Hunter Douglas Installation Services.
+   * Absent on the five North Idaho entries, whose pages carry Luxe's own
+   * measuring, installation, and lifetime installation guarantee.
+   */
+  state?: string;
+  /** Route of this city's Hunter Douglas landing page, e.g. "/hunter-douglas-bellevue". */
+  hdPage?: string;
 }
 
 export const areaPages: Record<string, AreaPageData> = {
   "coeur-d-alene": {
     slug: "coeur-d-alene",
     name: "Coeur d'Alene",
+    hdPage: "/hunter-douglas-coeur-d-alene",
     headline: "Custom Window Treatments for Coeur d'Alene Homes",
     subheadline: "From lakefront estates to downtown bungalows — we come to your home, bring samples, and recommend what will actually work in Coeur d'Alene light.",
     description: "Luxe Window Works is based in Post Falls and provides custom blinds, shades, shutters, and motorized window treatments throughout Coeur d'Alene. We bring samples to your home, help you compare options in the room, take professional measurements, and handle installation. Whether you are settling into a new build or updating existing windows, start with how you want the light, privacy, and controls to work.",
@@ -308,5 +320,189 @@ export const areaPages: Record<string, AreaPageData> = {
     localCTA: "We serve the greater Sandpoint area including lakefront properties, downtown homes, and the Schweitzer corridor. Schedule a free in-home consultation — the drive to Sandpoint is one of our favorites.",
     metaTitle: "Sandpoint Window Treatments | Luxe Window Works",
     metaDescription: "Luxury window treatments for Sandpoint, ID — Lake Pend Oreille waterfront and mountain homes. Free consultation. 24 years consulting, designing, and installing window treatments.",
+  },
+  // Seattle Eastside entries (added October 2026). Hunter Douglas only, served
+  // by appointment from Luxe's Post Falls base: Luxe handles the in-home
+  // consultation and sale; measuring and installation are performed through
+  // Hunter Douglas Installation Services. No North Idaho claims on these pages.
+  bellevue: {
+    slug: "bellevue",
+    name: "Bellevue",
+    state: "Washington",
+    hdPage: "/hunter-douglas-bellevue",
+    headline: "Hunter Douglas Window Treatments for Bellevue Homes",
+    subheadline: "West-facing Lake Washington glass, modern remodels, and whole-home PowerView projects. We bring the Hunter Douglas collection to your Bellevue home by appointment.",
+    description: "Luxe Window Works is based in Post Falls, Idaho and serves Bellevue by appointment with Hunter Douglas window treatments. Owner Mark Abplanalp sold Hunter Douglas on the Eastside for years and brings 20 years as a Hunter Douglas dealer to every consultation. We come to your home with samples, help you compare collections and controls in your own light, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["Medina", "Clyde Hill", "Hunts Point", "West Bellevue", "Bridle Trails", "BelRed", "Crossroads", "Newport Shores", "Somerset"],
+    housingTypes: "Bellevue housing runs from mid-century homes in Bridle Trails and Newport to the large contemporary remodels and new construction of West Bellevue, Medina, and Clyde Hill. Tall glass, open floor plans, and west-facing Lake Washington views are common, and they call for treatments that manage glare and heat without giving up the view.",
+    climateConsiderations: "West-facing Bellevue homes take strong afternoon sun off Lake Washington. Solar and sheer shades with the right openness factor cut glare and UV while keeping the view, and cellular shades help with the heat that builds up on big glass. In the gray months, light-filtering fabrics keep rooms bright without the flat look of a closed blind.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Bellevue?",
+        answer: "No. Luxe is based in Post Falls, Idaho and serves Bellevue by appointment with in-home consultations. We bring Hunter Douglas samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Who measures and installs Hunter Douglas shades in Bellevue?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades themselves carry the Hunter Douglas lifetime warranty.",
+      },
+      {
+        question: "What window treatments handle west-facing Lake Washington glare?",
+        answer: "Sheer shades like Silhouette and solar shades with a lower openness factor are the usual answer: they diffuse or filter the afternoon sun while preserving the view. We compare openness levels in your actual light during the consultation.",
+      },
+    ],
+    productIntro: "In Bellevue, Luxe works exclusively with Hunter Douglas. Silhouette sheer shades and Designer Solar Shades lead for lake-facing glass, PowerView automation ties shades into the smart-home systems Bellevue homes already run, and Duette cellular shades handle comfort on large windows.",
+    localCTA: "Ready to compare Hunter Douglas in your Bellevue home? Book an in-home consultation and we will bring the collection to you.",
+    metaTitle: "Bellevue Hunter Douglas Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas shades, blinds, and PowerView automation for Bellevue, WA homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
+  },
+  kirkland: {
+    slug: "kirkland",
+    name: "Kirkland",
+    state: "Washington",
+    hdPage: "/hunter-douglas-kirkland",
+    headline: "Hunter Douglas Window Treatments for Kirkland Homes",
+    subheadline: "Waterfront light in Juanita and Houghton, family homes in Rose Hill. Hunter Douglas samples in your home, by appointment.",
+    description: "Luxe Window Works is based in Post Falls, Idaho and serves Kirkland by appointment with Hunter Douglas window treatments. Owner Mark Abplanalp sold Hunter Douglas on the Eastside for years and brings 20 years as a Hunter Douglas dealer to every consultation. We bring samples to your home so you can weigh view, privacy, and glare in the rooms themselves, then coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["Juanita", "Houghton", "Rose Hill", "Totem Lake", "Finn Hill", "Market", "Moss Bay", "Everest", "Kingsgate"],
+    housingTypes: "Kirkland mixes waterfront and near-lake homes in Houghton and Juanita with established family neighborhoods in Rose Hill, Finn Hill, and Kingsgate, plus newer townhomes around Totem Lake. Waterfront glass wants view-preserving light control; the family neighborhoods ask more about privacy, durability, and room darkening.",
+    climateConsiderations: "Kirkland's west-facing homes along Lake Washington get bright afternoon sun and reflected glare off the water. Sheer and solar fabrics manage it without closing the view down. Away from the water, the priorities flip to privacy and insulation, where cellular shades and lined Roman shades do the work.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Kirkland?",
+        answer: "No. Luxe is based in Post Falls, Idaho and serves Kirkland by appointment with in-home consultations. We bring Hunter Douglas samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Can I keep my Lake Washington view and still cut the glare?",
+        answer: "Yes. Silhouette sheer shades diffuse the light while keeping a daytime view, and solar shades filter glare and UV at an openness level you choose. Both are available with PowerView automation so the west rooms adjust on a schedule.",
+      },
+      {
+        question: "Who handles installation for Kirkland orders?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
+      },
+    ],
+    productIntro: "In Kirkland, Luxe works exclusively with Hunter Douglas. Silhouette and Luminette sheers suit the lake-facing rooms, Duette cellular shades handle comfort and privacy inland, and PowerView automation is a natural fit for Kirkland's connected homes.",
+    localCTA: "Ready to compare Hunter Douglas in your Kirkland home? Book an in-home consultation and we will bring the collection to you.",
+    metaTitle: "Kirkland Hunter Douglas Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas shades, blinds, and PowerView automation for Kirkland, WA homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
+  },
+  sammamish: {
+    slug: "sammamish",
+    name: "Sammamish",
+    state: "Washington",
+    hdPage: "/hunter-douglas-sammamish",
+    headline: "Hunter Douglas Window Treatments for Sammamish Homes",
+    subheadline: "Big homes, tall windows, two-story great rooms. Hunter Douglas and PowerView, chosen in your home, by appointment.",
+    description: "Luxe Window Works is based in Post Falls, Idaho and serves Sammamish by appointment with Hunter Douglas window treatments. Owner Mark Abplanalp sold Hunter Douglas on the Eastside for years and brings 20 years as a Hunter Douglas dealer to every consultation. We bring samples to your home, plan each room with you, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["Klahanie", "Pine Lake", "Beaver Lake", "Sahalee", "Trossachs", "Aldarra", "Inglewood Hill", "East Lake Sammamish"],
+    housingTypes: "Sammamish is largely newer, larger single-family construction: two-story great rooms, clerestory windows, primary suites with big glass, and open plans throughout Klahanie, Trossachs, and the Pine Lake and Beaver Lake neighborhoods. High and hard-to-reach windows are the norm, which makes motorization a practical choice rather than a luxury.",
+    climateConsiderations: "Large south and west exposures in Sammamish homes build up heat on summer afternoons, and two-story glass is hard to shade by hand. PowerView automation on a schedule handles the daily adjustment, cellular shades add insulation at the glass, and solar fabrics protect floors and furnishings from UV.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Sammamish?",
+        answer: "No. Luxe is based in Post Falls, Idaho and serves Sammamish by appointment with in-home consultations. We bring Hunter Douglas samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "What is the best way to cover two-story windows in a great room?",
+        answer: "Motorized shades are the practical answer for glass you cannot reach. With PowerView automation, Hunter Douglas shades open, close, and tilt by remote, app, or schedule. We plan the power options and controls with you during the consultation.",
+      },
+      {
+        question: "Who measures and installs Hunter Douglas shades in Sammamish?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
+      },
+    ],
+    productIntro: "In Sammamish, Luxe works exclusively with Hunter Douglas. PowerView motorized shades lead for two-story great rooms and hard-to-reach glass, Duette cellular shades handle comfort in large rooms, and Silhouette sheers soften the light in open living spaces.",
+    localCTA: "Ready to compare Hunter Douglas in your Sammamish home? Book an in-home consultation and we will bring the collection to you.",
+    metaTitle: "Sammamish Hunter Douglas Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas shades and PowerView automation for Sammamish, WA homes, including two-story windows. In-home consultations by appointment; installation through Hunter Douglas Installation Services.",
+  },
+  issaquah: {
+    slug: "issaquah",
+    name: "Issaquah",
+    state: "Washington",
+    hdPage: "/hunter-douglas-issaquah",
+    headline: "Hunter Douglas Window Treatments for Issaquah Homes",
+    subheadline: "Newer construction in the Highlands and Talus, mountain light on Squak. Hunter Douglas samples in your home, by appointment.",
+    description: "Luxe Window Works is based in Post Falls, Idaho and serves Issaquah by appointment with Hunter Douglas window treatments. Owner Mark Abplanalp sold Hunter Douglas on the Eastside for years and brings 20 years as a Hunter Douglas dealer to every consultation. We bring samples to your home, help you move past builder-grade coverings room by room, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["Issaquah Highlands", "Talus", "Squak Mountain", "Olde Town", "Gilman", "Providence Point", "Newport Way", "Tibbetts Valley"],
+    housingTypes: "Issaquah housing is dominated by newer planned communities: Issaquah Highlands and Talus homes with tall windows and open plans, hillside homes on Squak Mountain with valley views, and older homes around Olde Town. Many newer homes still wear the builder-grade blinds they were sold with, and upgrading them is the most common Issaquah project.",
+    climateConsiderations: "Issaquah sits against the foothills, so light swings with the season and the slope of the lot. Hillside homes take strong sun on view glass, while shaded north-facing rooms need fabrics that keep what light there is. Cellular shades help with the temperature swings that come with elevation and large windows.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Issaquah?",
+        answer: "No. Luxe is based in Post Falls, Idaho and serves Issaquah by appointment with in-home consultations. We bring Hunter Douglas samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Can you replace the builder-grade blinds in a newer Issaquah home?",
+        answer: "Yes, and it is one of the most common projects we consult on in Issaquah. We help you prioritize room by room, starting where light, privacy, or heat bothers you most, and everything is measured and installed through Hunter Douglas Installation Services.",
+      },
+      {
+        question: "Who measures and installs Hunter Douglas shades in Issaquah?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
+      },
+    ],
+    productIntro: "In Issaquah, Luxe works exclusively with Hunter Douglas. Duette cellular shades and Designer Roller Shades are the workhorses for newer construction, Silhouette sheers suit the view glass on the hillsides, and PowerView automation grows with the home.",
+    localCTA: "Ready to compare Hunter Douglas in your Issaquah home? Book an in-home consultation and we will bring the collection to you.",
+    metaTitle: "Issaquah Hunter Douglas Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas shades, blinds, and PowerView automation for Issaquah, WA homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
+  },
+  renton: {
+    slug: "renton",
+    name: "Renton",
+    state: "Washington",
+    hdPage: "/hunter-douglas-renton",
+    headline: "Hunter Douglas Window Treatments for Renton Homes",
+    subheadline: "Lake views in Kennydale, family neighborhoods in Fairwood and the Highlands. Hunter Douglas samples in your home, by appointment.",
+    description: "Luxe Window Works is based in Post Falls, Idaho and serves Renton by appointment with Hunter Douglas window treatments. Owner Mark Abplanalp sold Hunter Douglas on the Eastside for years and brings 20 years as a Hunter Douglas dealer to every consultation. We bring samples to your home, help you plan whole-home or room-by-room projects around your budget, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["Kennydale", "Fairwood", "Renton Highlands", "Benson Hill", "Cascade", "Talbot Hill", "Downtown Renton", "Gene Coulon Park area"],
+    housingTypes: "Renton housing ranges widely: view homes above Lake Washington in Kennydale, established family neighborhoods in Fairwood and the Renton Highlands, and older homes near downtown. Project sizes range just as widely, from a single primary suite to a whole home at once.",
+    climateConsiderations: "Kennydale and other west-facing Renton homes take afternoon sun off Lake Washington, where solar and sheer fabrics protect the view without the glare. In the valley neighborhoods, privacy and room darkening for shift workers and early sleepers come up constantly, and blackout cellular shades are the usual answer.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Renton?",
+        answer: "No. Luxe is based in Post Falls, Idaho and serves Renton by appointment with in-home consultations. We bring Hunter Douglas samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Can I do a whole home in stages to manage the budget?",
+        answer: "Yes. Many Renton projects start with the rooms that bother you most and add rooms over time. We keep your selections on file so later stages match, and each stage is measured and installed through Hunter Douglas Installation Services.",
+      },
+      {
+        question: "Who measures and installs Hunter Douglas shades in Renton?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
+      },
+    ],
+    productIntro: "In Renton, Luxe works exclusively with Hunter Douglas. Duette cellular shades lead for comfort and blackout bedrooms, Designer Roller and solar shades handle the Kennydale lake glass, and Applause cellular shades offer a value path for whole-home projects.",
+    localCTA: "Ready to compare Hunter Douglas in your Renton home? Book an in-home consultation and we will bring the collection to you.",
+    metaTitle: "Renton Hunter Douglas Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas shades, blinds, and PowerView automation for Renton, WA homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
+  },
+  "maple-valley": {
+    slug: "maple-valley",
+    name: "Maple Valley",
+    state: "Washington",
+    hdPage: "/hunter-douglas-maple-valley",
+    headline: "Hunter Douglas Window Treatments for Maple Valley Homes",
+    subheadline: "Family homes around Lake Wilderness and Cherokee Bay. Hunter Douglas samples in your home, by appointment.",
+    description: "Luxe Window Works is based in Post Falls, Idaho and serves Maple Valley by appointment with Hunter Douglas window treatments. Owner Mark Abplanalp sold Hunter Douglas on the Eastside for years and brings 20 years as a Hunter Douglas dealer to every consultation. We bring samples to your home, focus on the practical questions family homes raise, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["Lake Wilderness", "Cherokee Bay", "Glacier Park", "Ravensdale", "Hobart", "Four Corners", "Summit Park", "Rock Creek"],
+    housingTypes: "Maple Valley is family country: single-family subdivisions around Lake Wilderness and Four Corners, acreage homes out toward Ravensdale and Hobart, and newer construction mixed throughout. Priorities run practical: privacy from close neighbors, blackout bedrooms for kids, cordless operation for safety, and fabrics that hold up to daily family use.",
+    climateConsiderations: "Maple Valley's tree cover and valley floor mean many homes fight for light in winter and want it controlled in summer. Light-filtering cellular and roller shades keep rooms bright without glare, and blackout options matter for bedrooms facing early summer sunrises.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Maple Valley?",
+        answer: "No. Luxe is based in Post Falls, Idaho and serves Maple Valley by appointment with in-home consultations. We bring Hunter Douglas samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Are Hunter Douglas shades safe for homes with young kids?",
+        answer: "Yes. Hunter Douglas offers cordless and motorized operating systems that remove accessible cords, including LiteRise and PowerView automation. We will walk through the safest options for each room during your consultation.",
+      },
+      {
+        question: "Who measures and installs Hunter Douglas shades in Maple Valley?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
+      },
+    ],
+    productIntro: "In Maple Valley, Luxe works exclusively with Hunter Douglas. Cordless Duette cellular shades and Designer Roller Shades suit family homes, blackout options handle kids' bedrooms, and Silhouette sheers soften light in living spaces around Lake Wilderness.",
+    localCTA: "Ready to compare Hunter Douglas in your Maple Valley home? Book an in-home consultation and we will bring the collection to you.",
+    metaTitle: "Maple Valley Hunter Douglas Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas shades, blinds, and PowerView automation for Maple Valley, WA homes. In-home consultations by appointment; installation through Hunter Douglas Installation Services.",
   },
 };

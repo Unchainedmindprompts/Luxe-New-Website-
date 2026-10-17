@@ -86,7 +86,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.9,
     },
-    ...["/hunter-douglas-coeur-d-alene", "/products/hunter-douglas", "/products/two", "/products/aluminum-shutters"].map(path => ({ url: `${baseUrl}${path}`, lastModified: currentDate, changeFrequency: "monthly" as const, priority: 0.8 })),
+    ...["/hunter-douglas-coeur-d-alene", "/hunter-douglas-bellevue", "/hunter-douglas-kirkland", "/hunter-douglas-sammamish", "/hunter-douglas-issaquah", "/hunter-douglas-renton", "/hunter-douglas-maple-valley", "/products/hunter-douglas", "/products/two", "/products/aluminum-shutters"].map(path => ({ url: `${baseUrl}${path}`, lastModified: currentDate, changeFrequency: "monthly" as const, priority: 0.8 })),
     // Product pages
     {
       url: `${baseUrl}/products`,
@@ -181,6 +181,42 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/areas/sandpoint`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/areas/bellevue`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/areas/kirkland`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/areas/sammamish`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/areas/issaquah`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/areas/renton`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/areas/maple-valley`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.7,

@@ -79,6 +79,64 @@ export const CITIES: Record<string, CityEntry> = {
       sameAs: "https://en.wikipedia.org/wiki/Bonner_County,_Idaho",
     },
   },
+  // The Seattle Eastside, added October 2026. Luxe serves these cities with
+  // Hunter Douglas only, by appointment: consultation and sale by Luxe,
+  // measuring and installation through Hunter Douglas Installation Services.
+  // All six sit in King County, Washington.
+  Bellevue: {
+    slug: "bellevue",
+    sameAs: "https://en.wikipedia.org/wiki/Bellevue,_Washington",
+    state: "Washington",
+    county: {
+      name: "King County",
+      sameAs: "https://en.wikipedia.org/wiki/King_County,_Washington",
+    },
+  },
+  Kirkland: {
+    slug: "kirkland",
+    sameAs: "https://en.wikipedia.org/wiki/Kirkland,_Washington",
+    state: "Washington",
+    county: {
+      name: "King County",
+      sameAs: "https://en.wikipedia.org/wiki/King_County,_Washington",
+    },
+  },
+  Sammamish: {
+    slug: "sammamish",
+    sameAs: "https://en.wikipedia.org/wiki/Sammamish,_Washington",
+    state: "Washington",
+    county: {
+      name: "King County",
+      sameAs: "https://en.wikipedia.org/wiki/King_County,_Washington",
+    },
+  },
+  Issaquah: {
+    slug: "issaquah",
+    sameAs: "https://en.wikipedia.org/wiki/Issaquah,_Washington",
+    state: "Washington",
+    county: {
+      name: "King County",
+      sameAs: "https://en.wikipedia.org/wiki/King_County,_Washington",
+    },
+  },
+  Renton: {
+    slug: "renton",
+    sameAs: "https://en.wikipedia.org/wiki/Renton,_Washington",
+    state: "Washington",
+    county: {
+      name: "King County",
+      sameAs: "https://en.wikipedia.org/wiki/King_County,_Washington",
+    },
+  },
+  "Maple Valley": {
+    slug: "maple-valley",
+    sameAs: "https://en.wikipedia.org/wiki/Maple_Valley,_Washington",
+    state: "Washington",
+    county: {
+      name: "King County",
+      sameAs: "https://en.wikipedia.org/wiki/King_County,_Washington",
+    },
+  },
 };
 
 /** The canonical `@id` for a service-area city, or null if it is not one. */

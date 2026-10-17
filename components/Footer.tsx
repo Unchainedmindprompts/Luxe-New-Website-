@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FooterBlurb from "@/components/FooterBlurb";
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS, SERVICE_AREAS, PRODUCTS } from "@/lib/constants";
@@ -18,10 +19,7 @@ export default function Footer() {
                 North Idaho
               </span>
             </Link>
-            <p className="mt-4 text-sm text-warm-gray-400 leading-relaxed">
-              24 years of hands-on expertise in custom window treatments.
-              Serving North Idaho with premium products and a lifetime installation guarantee.
-            </p>
+            <FooterBlurb />
             <div className="mt-6 space-y-2 text-sm">
               <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="flex items-center gap-2 text-warm-gray-300 hover:text-gold transition-colors">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
