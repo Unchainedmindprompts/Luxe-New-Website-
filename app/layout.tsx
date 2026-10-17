@@ -36,18 +36,7 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    "Premium custom window treatments in North Idaho — 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
-  keywords: [
-    "window treatments",
-    "custom blinds",
-    "shutters",
-    "shades",
-    "Northern Idaho",
-    "Coeur d'Alene",
-    "Post Falls",
-    "Hayden",
-    "window coverings",
-  ],
+    "Premium custom window treatments, with 24 years consulting, designing, and installing. Free in-home consultations in North Idaho, and Hunter Douglas sales with certified installation on Seattle's Eastside.",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -55,7 +44,7 @@ export const metadata: Metadata = {
     siteName: BUSINESS.name,
     title: "Luxe Window Works | Custom Window Treatments, North Idaho",
     description:
-      "Premium custom window treatments — 24 years consulting, designing, and installing. Free in-home consultation. Serving North Idaho.",
+      "Premium custom window treatments, with 24 years consulting, designing, and installing. Free in-home consultation. Serving North Idaho and Seattle's Eastside.",
     images: [
       {
         url: `${BUSINESS.url}/share-image?v=20260924`,

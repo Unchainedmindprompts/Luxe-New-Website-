@@ -7,16 +7,16 @@ import { areaPages } from "@/lib/area-data";
 import { cityRef, northIdahoNode } from "@/lib/cities";
 
 export const metadata: Metadata = {
-  title: "Service Areas | Luxe Window Works — Custom Window Treatments in North Idaho",
+  title: "Areas We Serve | Luxe Window Works",
   description:
-    "Luxe Window Works serves North Idaho with custom window treatments, in-home consultations, and professional installation. Explore our service areas: Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.",
+    "Explore the areas Luxe Window Works serves: custom window treatments with in-home consultations and professional installation across North Idaho, and Hunter Douglas service on Seattle's Eastside. Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint, Bellevue, Kirkland, Sammamish, Issaquah, Renton, and Maple Valley.",
   alternates: {
     canonical: `${BUSINESS.url}/areas`,
   },
   openGraph: {
-    title: "Service Areas | Luxe Window Works",
+    title: "Areas We Serve | Luxe Window Works",
     description:
-      "Custom window treatments across North Idaho — Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
+      "Custom window treatments across North Idaho, plus Hunter Douglas service on Seattle's Eastside.",
     type: "website",
     url: `${BUSINESS.url}/areas`,
   },
@@ -31,9 +31,9 @@ function AreasHubSchema() {
     "@type": "CollectionPage",
     "@id": `${areasUrl}#webpage`,
     url: areasUrl,
-    name: "Service Areas — Luxe Window Works",
+    name: "Areas We Serve — Luxe Window Works",
     description:
-      "The North Idaho communities Luxe Window Works serves with custom window treatments, in-home consultations, and professional installation.",
+      "The communities Luxe Window Works serves: North Idaho, with custom window treatments, in-home consultations, and professional installation, and Seattle's Eastside, with Hunter Douglas service by appointment.",
     isPartOf: { "@id": `${BUSINESS.url}/#website` },
     about: { "@id": `${BUSINESS.url}/#business` },
     breadcrumb: { "@id": `${areasUrl}#breadcrumb` },
@@ -43,7 +43,7 @@ function AreasHubSchema() {
     })),
     mainEntity: {
       "@type": "ItemList",
-      name: "North Idaho Service Areas",
+      name: "Service Areas",
       numberOfItems: areasList.length,
       itemListElement: areasList.map((area, i) => ({
         "@type": "ListItem",
@@ -84,8 +84,46 @@ function AreasHubSchema() {
   );
 }
 
+type AreaEntry = (typeof areaPages)[string];
+
+function AreaCard({ area }: { area: AreaEntry }) {
+  return (
+    <Link
+      href={`/areas/${area.slug}`}
+      className="group block bg-white rounded-2xl border border-warm-gray-200/60 p-8 hover:shadow-lg hover:border-gold/30 transition-all"
+    >
+      <h3 className="font-serif text-2xl text-charcoal group-hover:text-gold transition-colors mb-3">
+        {area.name}
+      </h3>
+      <p className="text-warm-gray-600 leading-relaxed mb-6">
+        {area.subheadline}
+      </p>
+      <span className="inline-flex items-center gap-2 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
+        See {area.name} window treatment details
+        <svg
+          className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </span>
+    </Link>
+  );
+}
+
 export default function AreasHubPage() {
   const areasList = Object.values(areaPages);
+  const idahoAreas = areasList.filter((area) => !area.state);
+  const eastsideAreas = areasList.filter(
+    (area) => area.state === "Washington"
+  );
 
   return (
     <>
@@ -101,54 +139,48 @@ export default function AreasHubPage() {
       <section className="pt-20 md:pt-28 pb-12 md:pb-16 bg-warm-white">
         <div className="container-luxe max-w-3xl text-center">
           <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
-            North Idaho
+            Areas We Serve
           </p>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight text-balance">
             The communities we serve.
           </h1>
           <p className="mt-6 text-lg md:text-xl text-warm-gray-600 leading-relaxed">
             Luxe Window Works is based in Post Falls and provides in-home
-            consultations and professional installation across North Idaho. Every
+            consultations and professional installation across North Idaho. We
+            also serve six communities on Seattle&apos;s Eastside with Hunter
+            Douglas, by appointment, with measuring and installation through
+            Hunter Douglas&apos;s own certified installation service. Every
             community below has different homes, different climate stresses on
-            windows, and a different mix of what actually works — click through
+            windows, and a different mix of what actually works. Click through
             to your area to see the specifics.
           </p>
         </div>
       </section>
 
-      {/* Area cards grid */}
+      {/* Area cards, grouped by region */}
       <section className="py-12 md:py-16 bg-cream">
         <div className="container-luxe max-w-5xl">
+          <h2 className="font-serif text-3xl text-charcoal mb-8">
+            North Idaho
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {areasList.map((area) => (
-              <Link
-                key={area.slug}
-                href={`/areas/${area.slug}`}
-                className="group block bg-white rounded-2xl border border-warm-gray-200/60 p-8 hover:shadow-lg hover:border-gold/30 transition-all"
-              >
-                <h2 className="font-serif text-2xl text-charcoal group-hover:text-gold transition-colors mb-3">
-                  {area.name}
-                </h2>
-                <p className="text-warm-gray-600 leading-relaxed mb-6">
-                  {area.subheadline}
-                </p>
-                <span className="inline-flex items-center gap-2 text-sm font-medium text-charcoal group-hover:text-gold transition-colors">
-                  See {area.name} window treatment details
-                  <svg
-                    className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </span>
-              </Link>
+            {idahoAreas.map((area) => (
+              <AreaCard key={area.slug} area={area} />
+            ))}
+          </div>
+
+          <h2 className="font-serif text-3xl text-charcoal mt-16 mb-4">
+            Seattle Eastside
+          </h2>
+          <p className="text-warm-gray-600 leading-relaxed max-w-3xl mb-8">
+            These are Hunter Douglas service areas. Luxe sells Hunter Douglas
+            exclusively on the Eastside, with in-home consultations by
+            appointment and measuring and installation handled through Hunter
+            Douglas Installation Services.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {eastsideAreas.map((area) => (
+              <AreaCard key={area.slug} area={area} />
             ))}
           </div>
         </div>
@@ -161,8 +193,9 @@ export default function AreasHubPage() {
             The broader area we cover
           </h2>
           <p className="text-warm-gray-600 leading-relaxed text-lg mb-4">
-            The five communities above are our primary service areas — where we
-            have the deepest experience and can typically schedule the fastest.
+            The five North Idaho communities above are our primary service
+            areas, where we have the deepest experience and can typically
+            schedule the fastest.
             We also travel throughout Kootenai County and the greater Idaho
             Panhandle for larger projects, including surrounding towns and
             unincorporated areas near Hayden Lake, Lake Coeur d&apos;Alene, and
