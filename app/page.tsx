@@ -624,6 +624,26 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Eastside Hunter Douglas service */}
+      <section className="py-10 md:py-12 bg-cream border-y border-warm-gray-200">
+        <div className="container-luxe flex flex-col items-center gap-5 text-center md:flex-row md:justify-between md:text-left">
+          <div className="max-w-2xl">
+            <h2 className="font-serif text-xl sm:text-2xl text-charcoal leading-tight">
+              Now Serving Seattle&apos;s Eastside for Hunter Douglas
+            </h2>
+            <p className="mt-2 text-warm-gray-600 leading-relaxed">
+              Bellevue, Kirkland, Sammamish, Issaquah, Renton, and Maple Valley: in-home Hunter Douglas consultations by appointment, with measuring and installation through Hunter Douglas Installation Services.
+            </p>
+          </div>
+          <Link
+            href="/eastside"
+            className="shrink-0 bg-charcoal hover:bg-gold text-white px-6 py-3 rounded-full font-medium transition-all hover:shadow-md"
+          >
+            Explore Eastside Service →
+          </Link>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="py-16 md:py-20 bg-cream">
         <div className="container-luxe max-w-3xl">
