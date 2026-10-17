@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import HdCategoryStrip from "@/components/HdCategoryStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { TrackedCta } from "@/components/TrackedCta";
 import { BUSINESS } from "@/lib/constants";
@@ -100,6 +101,7 @@ export default function HunterDouglasMapleValleyPage() {
     ].map(([title, text], i) => <div key={title}><p className="text-sm text-gold">0{i + 1}</p><h3 className="mt-3 font-serif text-2xl">{title}</h3><p className="mt-4 leading-relaxed text-warm-gray-300">{text}</p></div>)}</div></div></section>
 
     <section className="container-luxe py-14 md:py-20"><div className="max-w-2xl"><h2 className="font-serif text-3xl text-charcoal sm:text-4xl">Start with what your room needs.</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-700">You don’t need to choose a collection before we meet. These are a few starting points for your consultation.</p></div><div className="mt-9 grid gap-6 md:grid-cols-3">{collections.map(c => <article key={c.anchor} className="border border-warm-gray-200 bg-cream p-7"><p className="text-sm text-warm-gray-700">{c.collection}</p><h3 className="mt-3 font-serif text-2xl text-charcoal">{c.name}</h3><p className="mt-4 leading-relaxed text-warm-gray-700">{c.text}</p><Link href={`/products/hunter-douglas#${c.anchor}`} className="mt-6 inline-block font-semibold underline underline-offset-4">Explore {c.collection} →</Link></article>)}</div><p className="mt-8 text-warm-gray-700">Prefer roller shades, wood blinds or shutters? <Link href="/products/hunter-douglas#collections" className="font-semibold underline underline-offset-4">Explore the full Hunter Douglas collection.</Link></p></section>
+    <HdCategoryStrip />
 
     <section className="bg-cream py-14 md:py-20"><div className="container-luxe max-w-3xl"><h2 className="font-serif text-3xl text-charcoal sm:text-4xl">Hunter Douglas pricing for your Maple Valley home</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-700">Your window sizes, fabric, collection and controls determine the price. We’ll talk through your priorities at home and prepare a quote for your selected products, with measuring and installation arranged through Hunter Douglas Installation Services.</p><p className="mt-4 leading-relaxed text-warm-gray-700">Focusing on the bedrooms first, or the living spaces your family uses every day? We can help you decide where to start and where cordless or motorized controls matter most.</p><div className="mt-7"><BookButton>Compare Options at Home</BookButton></div></div></section>
 

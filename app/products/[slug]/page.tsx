@@ -7,6 +7,8 @@ import { ConsultationExpect } from "@/components/ConsultationExpect";
 import { RelatedDecisionArticles } from "@/components/RelatedDecisionArticles";
 import { ExteriorShadeOptions } from "@/components/ExteriorShadeOptions";
 import { ProductBuyingGuide } from "@/components/ProductBuyingGuide";
+import EastsideHdBlock from "@/components/EastsideHdBlock";
+import { EASTSIDE_HD } from "@/lib/eastside-hd";
 import { CdaProductProof } from "@/components/CdaClientReviews";
 import { ESTIMATE_PRODUCT_SCOPE } from "@/lib/estimate-copy";
 import { TrackedCta } from "@/components/TrackedCta";
@@ -210,6 +212,11 @@ export default async function ProductPage({ params }: Props) {
   const product = productPages[slug];
   if (!product) notFound();
   const isExterior = slug === "exterior-solar-shades";
+  // The one Eastside connection these pages carry (Mark's routing rule,
+  // Oct 17 2026): a Hunter Douglas only block linking to the HD page,
+  // the /eastside overview and the six HD city pages. Undefined for
+  // categories with no Hunter Douglas line, which render exactly as before.
+  const eastsideHd = EASTSIDE_HD[slug];
 
   return (
     <>
@@ -314,6 +321,13 @@ export default async function ProductPage({ params }: Props) {
       </section>
 
       <ProductBuyingGuide guide={product.buyingGuide} />
+
+      {/* Beside the buying guide's Hunter Douglas mention, on the pages
+          that have one. The remaining categories carry the block ahead of
+          the final CTA below. */}
+      {eastsideHd?.placement === "after-guide" && (
+        <EastsideHdBlock data={eastsideHd} />
+      )}
 
       <RelatedVideos videos={videosForService(slug)} />
 
@@ -491,6 +505,12 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </div>
       </section>
+
+      {/* Categories with no buying guide carry the Eastside Hunter Douglas
+          block here, ahead of the final CTA. */}
+      {eastsideHd?.placement === "before-cta" && (
+        <EastsideHdBlock data={eastsideHd} />
+      )}
 
       {/* CTA */}
       <section className="py-20 md:py-28 bg-charcoal text-white">
