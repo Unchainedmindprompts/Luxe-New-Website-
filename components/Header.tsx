@@ -19,14 +19,14 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-charcoal/95 backdrop-blur-sm border-b border-white/10">
       <div className="container-luxe flex items-center justify-between h-16 md:h-20">
         {/* Logo. The mark already reads "LUXE / WINDOW WORKS", so stacking the
-            wordmark under it would repeat the name. The white Hunter Douglas
-            logo sits beside it behind a hairline rule instead — a brand lockup
-            rather than a stack: Luxe is the dealer, Hunter Douglas the carried
-            brand, named beside it now that the business serves a second market
-            where a geographic tagline would mislead. The rule and brand mark
-            drop away under sm so the mark never gets crowded on a phone.
-            Explicit width/height are the intrinsic size so Next can reserve
-            space and avoid layout shift; h-* + w-auto does the sizing. */}
+            wordmark under it would repeat the name. "Hunter Douglas" sits
+            beside it behind a hairline rule instead, stacked on two lines —
+            a lockup rather than a stack: Luxe is the dealer, Hunter Douglas
+            the carried brand, named beside it now that the business serves a
+            second market where a geographic tagline would mislead. The rule
+            and tagline drop away under sm so the mark never gets crowded on
+            a phone. Explicit width/height are the intrinsic size so Next can
+            reserve space and avoid layout shift; h-* + w-auto does the sizing. */}
         <Link
           href="/"
           className="flex items-center gap-3 shrink-0"
@@ -45,13 +45,11 @@ export default function Header() {
             aria-hidden="true"
             className="hidden sm:block h-8 md:h-10 w-px bg-white/20"
           />
-          <Image
-            src="/images/brands/hunter-douglas-white-horizontal.png"
-            alt="Hunter Douglas"
-            width={2048}
-            height={295}
-            className="hidden sm:block h-5 md:h-6 w-auto"
-          />
+          <span className="hidden sm:block text-[10px] md:text-[11px] text-white/60 tracking-[0.2em] uppercase leading-none">
+            Hunter
+            <br />
+            Douglas
+          </span>
         </Link>
 
         {/* Desktop Nav */}
@@ -88,16 +86,25 @@ export default function Header() {
                 <div className="absolute top-full left-0 pt-2 w-56">
                   {/* Panel follows the bar. A white dropdown falling out of a
                       charcoal header reads as a rendering glitch. */}
-                  <div className="bg-charcoal rounded-lg shadow-xl border border-white/10 py-2">
-                    {link.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className="block px-4 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white transition-colors"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
+                  <div className="bg-charcoal rounded-lg shadow-xl border border-white/10 py-2 max-h-[70vh] overflow-y-auto">
+                    {link.children.map((child) =>
+                      child.heading ? (
+                        <span
+                          key={child.label}
+                          className="block px-4 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/40"
+                        >
+                          {child.label}
+                        </span>
+                      ) : (
+                        <Link
+                          key={child.href}
+                          href={child.href!}
+                          className="block px-4 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white transition-colors"
+                        >
+                          {child.label}
+                        </Link>
+                      )
+                    )}
                   </div>
                 </div>
               )}
@@ -171,16 +178,25 @@ export default function Header() {
                 )}
                 {link.children && openDropdown === link.label && (
                   <div className="pl-4 pb-2 space-y-1">
-                    {link.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className="block py-2 text-sm text-white/60 hover:text-white"
-                        onClick={() => setMobileOpen(false)}
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
+                    {link.children.map((child) =>
+                      child.heading ? (
+                        <span
+                          key={child.label}
+                          className="block pt-3 pb-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/40"
+                        >
+                          {child.label}
+                        </span>
+                      ) : (
+                        <Link
+                          key={child.href}
+                          href={child.href!}
+                          className="block py-2 text-sm text-white/60 hover:text-white"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {child.label}
+                        </Link>
+                      )
+                    )}
                   </div>
                 )}
               </div>

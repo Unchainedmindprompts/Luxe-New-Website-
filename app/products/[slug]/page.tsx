@@ -85,7 +85,11 @@ function ServiceSchema({ product, slug }: { product: ProductPageData; slug: stri
     // These are references to the canonical City entities defined on the area
     // pages, so they resolve to real places rather than to strings that happen
     // to look like town names.
-    areaServed: SERVICE_AREAS.map((area) => cityRef(area.name)),
+    // Idaho cities only: these category pages describe Luxe's own
+    // consultation and installation service across all brands. The Eastside
+    // is a Hunter Douglas market, and that claim lives on the Hunter Douglas
+    // service node, not on the generic categories.
+    areaServed: SERVICE_AREAS.filter((area) => area.state === "ID").map((area) => cityRef(area.name)),
     // The category-specific truth stays exactly as it was — `product.solution`
     // is the honest, hard-won copy for each product and nothing generic should
     // replace it. What it lacked was the shape of the engagement around it, so

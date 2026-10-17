@@ -611,7 +611,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
-            {SERVICE_AREAS.map((area) => (
+            {SERVICE_AREAS.filter((area) => area.state === "ID").map((area) => (
               <Link
                 key={area.slug}
                 href={`/areas/${area.slug}`}

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import FooterBlurb from "@/components/FooterBlurb";
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
@@ -16,13 +15,9 @@ export default function Footer() {
               <span className="font-serif text-2xl font-bold text-white">
                 Luxe Window Works
               </span>
-              <Image
-                src="/images/brands/hunter-douglas-white-horizontal.png"
-                alt="Hunter Douglas"
-                width={2048}
-                height={295}
-                className="block h-4 md:h-5 w-auto mt-1.5"
-              />
+              <span className="block text-xs text-warm-gray-500 tracking-widest uppercase mt-0.5">
+                Hunter Douglas
+              </span>
             </Link>
             <FooterBlurb />
             <div className="mt-6 space-y-2 text-sm">
@@ -73,7 +68,20 @@ export default function Footer() {
               Service Areas
             </h3>
             <ul className="space-y-2.5">
-              {SERVICE_AREAS.map((area) => (
+              {SERVICE_AREAS.filter((area) => area.state === "ID").map((area) => (
+                <li key={area.slug}>
+                  <Link
+                    href={`/areas/${area.slug}`}
+                    className="text-sm text-warm-gray-400 hover:text-gold transition-colors"
+                  >
+                    {area.name}
+                  </Link>
+                </li>
+              ))}
+              <li className="pt-2 text-xs font-semibold uppercase tracking-wider text-warm-gray-500">
+                Seattle Eastside
+              </li>
+              {SERVICE_AREAS.filter((area) => area.state === "WA").map((area) => (
                 <li key={area.slug}>
                   <Link
                     href={`/areas/${area.slug}`}

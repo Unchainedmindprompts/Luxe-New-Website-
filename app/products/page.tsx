@@ -104,7 +104,11 @@ function ProductsHubSchema() {
 }
 
 export default function ProductsHubPage() {
-  const cities = SERVICE_AREAS.map((a) => a.name);
+  // This section's copy is North Idaho installation copy ("plus the
+  // surrounding Kootenai County..."), so its city list stays Idaho-only;
+  // the Eastside is a Hunter Douglas market covered by /eastside.
+  const idahoAreas = SERVICE_AREAS.filter((a) => a.state === "ID");
+  const cities = idahoAreas.map((a) => a.name);
 
   return (
     <>
@@ -222,7 +226,7 @@ export default function ProductsHubPage() {
           </h2>
           <p className="text-warm-gray-600 leading-relaxed text-lg">
             Everything above is measured and installed across{" "}
-            {SERVICE_AREAS.map((area, i) => (
+            {idahoAreas.map((area, i) => (
               <span key={area.slug}>
                 <Link
                   href={`/areas/${area.slug}`}

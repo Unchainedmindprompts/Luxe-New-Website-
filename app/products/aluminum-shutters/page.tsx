@@ -36,7 +36,7 @@ export default function AluminumShutters() {
       {
         "@type": "Service", "@id": `${url}#service`, name: "Custom Aluminum Shutters Service",
         serviceType: CUSTOM_WINDOW_TREATMENTS, url,
-        provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: SERVICE_AREAS.map(a => cityRef(a.name)),
+        provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: SERVICE_AREAS.filter(a => a.state === "ID").map(a => cityRef(a.name)),
         description: "Consultation, product selection, custom measurement and professional installation of TWO Weatherwell Elite aluminum shutters for North Idaho patios, covered decks and interiors. Configurations provide adjustable shade, privacy and airflow, with lockable options for added security at suitable openings.",
         mainEntityOfPage: { "@id": `${url}#webpage` },
         offers: {

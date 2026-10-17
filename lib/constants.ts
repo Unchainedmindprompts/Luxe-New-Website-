@@ -59,27 +59,68 @@ export const SERVICE_AREAS = [
   {
     name: "Coeur d'Alene",
     slug: "coeur-d-alene",
+    state: "ID",
     description: "Premium window treatments for lakeside living and mountain views.",
   },
   {
     name: "Post Falls",
     slug: "post-falls",
+    state: "ID",
     description: "Custom window coverings for Post Falls' growing communities.",
   },
   {
     name: "Hayden",
     slug: "hayden",
+    state: "ID",
     description: "Expert window solutions for Hayden homes and lake properties.",
   },
   {
     name: "Rathdrum",
     slug: "rathdrum",
+    state: "ID",
     description: "Quality window treatments for Rathdrum's expanding neighborhoods.",
   },
   {
     name: "Sandpoint",
     slug: "sandpoint",
+    state: "ID",
     description: "Luxury window coverings for Sandpoint's scenic lakeside homes.",
+  },
+  {
+    name: "Bellevue",
+    slug: "bellevue",
+    state: "WA",
+    description: "Premium Hunter Douglas window treatments for Bellevue's lakeside and in-town homes.",
+  },
+  {
+    name: "Kirkland",
+    slug: "kirkland",
+    state: "WA",
+    description: "Custom Hunter Douglas window coverings for Kirkland's waterfront homes.",
+  },
+  {
+    name: "Sammamish",
+    slug: "sammamish",
+    state: "WA",
+    description: "Hunter Douglas window treatments for Sammamish's lake and plateau homes.",
+  },
+  {
+    name: "Issaquah",
+    slug: "issaquah",
+    state: "WA",
+    description: "Quality Hunter Douglas shades for Issaquah's foothill neighborhoods.",
+  },
+  {
+    name: "Renton",
+    slug: "renton",
+    state: "WA",
+    description: "Hunter Douglas window treatments for Renton's lakeside and hillside homes.",
+  },
+  {
+    name: "Maple Valley",
+    slug: "maple-valley",
+    state: "WA",
+    description: "Custom Hunter Douglas window coverings for Maple Valley's growing communities.",
   },
 ] as const;
 
@@ -180,7 +221,7 @@ export const REVIEWS = [
 interface NavLink {
   label: string;
   href: string;
-  children?: { label: string; href: string }[];
+  children?: { label: string; href?: string; heading?: boolean }[];
 }
 
 export const NAV_LINKS: NavLink[] = [
@@ -198,7 +239,19 @@ export const NAV_LINKS: NavLink[] = [
   {
     label: "Service Areas",
     href: "/areas",
-    children: SERVICE_AREAS.map((a) => ({ label: a.name, href: `/areas/${a.slug}` })),
+    // Idaho markets first, then the Seattle Eastside under its own heading —
+    // the heading entry renders as a label row in the menu, not a link.
+    children: [
+      ...SERVICE_AREAS.filter((a) => a.state === "ID").map((a) => ({
+        label: a.name,
+        href: `/areas/${a.slug}`,
+      })),
+      { label: "Seattle Eastside", heading: true },
+      ...SERVICE_AREAS.filter((a) => a.state === "WA").map((a) => ({
+        label: a.name,
+        href: `/areas/${a.slug}`,
+      })),
+    ],
   },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },

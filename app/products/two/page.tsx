@@ -34,7 +34,7 @@ export default function TwoCollection() {
         name: "TWO Shutters, Shades and Automation Consultation and Installation",
         serviceType: CUSTOM_WINDOW_TREATMENTS,
         provider: { "@id": `${BUSINESS.url}/#business` },
-        areaServed: SERVICE_AREAS.map(a => cityRef(a.name)),
+        areaServed: SERVICE_AREAS.filter(a => a.state === "ID").map(a => cityRef(a.name)),
         description: "Personal product guidance, custom measurements and professional installation of TWO interior shutters, roller shades, outdoor aluminum shutters, exterior shades and compatible shade automation in North Idaho.",
         hasOfferCatalog: { "@id": `${url}#catalog` },
         mainEntityOfPage: { "@id": `${url}#webpage` },
