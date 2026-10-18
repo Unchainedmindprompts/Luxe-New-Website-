@@ -54,6 +54,15 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
     areaLabel: "Custom window treatments in Post Falls",
     placement: "after-content",
   },
+  "cellular-vs-roller-shades": {
+    heading: "Still torn? Bring us the room, not just the window.",
+    body: "Tell us which rooms run cold, which face the view, and how dark you sleep. We will spec cellular where it earns its keep and roller where it looks right, in one plan. The consultation is free.",
+    productHref: "/products/cellular-shades",
+    productLabel: "See cellular shades",
+    bookHref: "/book",
+    bookLabel: "Request a free in-home consultation",
+    placement: "after-content",
+  },
   "blackout-shades-for-better-sleep": {
     heading: "Want a bedroom that stays dark past sunrise?",
     body: "We measure your windows, find where the light is leaking in, and show you the blackout options in your own light before you order anything. The consultation is free.",
@@ -148,6 +157,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
       title: "Blackout Shades for Better Sleep: What Actually Makes a Room Dark",
       slug: "blackout-shades-for-better-sleep",
     },
+    {
+      title: "Cellular vs. Roller Shades: Which One Belongs on Your Windows?",
+      slug: "cellular-vs-roller-shades",
+    },
   ],
   shutters: [
     {
@@ -167,6 +180,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
     {
       title: "Blackout Shades for Better Sleep: What Actually Makes a Room Dark",
       slug: "blackout-shades-for-better-sleep",
+    },
+    {
+      title: "Cellular vs. Roller Shades: Which One Belongs on Your Windows?",
+      slug: "cellular-vs-roller-shades",
     },
   ],
 };

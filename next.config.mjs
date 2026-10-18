@@ -118,6 +118,13 @@ const nextConfig = {
         permanent: true,
       },
       {
+        // Oct 2026: the cellular vs roller comparison was rewritten as a
+        // general both-market decision guide with no city in the title.
+        source: '/blog/cellular-vs-roller-shades-for-northern-idaho-homes',
+        destination: '/blog/cellular-vs-roller-shades',
+        permanent: true,
+      },
+      {
         // Renamed with no entry in the generated map, so it 404s under both
         // the flat and the dated permalink. Same article, current slug.
         source: '/blog/why-your-motorized-shades-dont-respond-half-the-time-and-how-to-actually-fix-it',
