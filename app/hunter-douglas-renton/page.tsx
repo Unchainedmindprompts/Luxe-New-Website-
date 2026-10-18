@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import EastsideReviewsStrip from "@/components/EastsideReviewsStrip";
 import HdCategoryStrip from "@/components/HdCategoryStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { TrackedCta } from "@/components/TrackedCta";
@@ -14,7 +15,7 @@ const MEDIA = "/images/hunter-douglas/installations";
 const HERO = "/images/luxe-completed-installation.webp";
 const description = "Hunter Douglas in-home consultations in Renton, WA with Luxe Window Works. Compare samples and plan room by room at home; measuring and installation through Hunter Douglas Installation Services.";
 const faqs = [
-  { question: "Do you have a Hunter Douglas showroom in Renton?", answer: "Luxe Window Works is based in Post Falls, Idaho and serves Renton by appointment. We do not have a Renton showroom. We bring samples to your home so you can compare them in your own light, and measuring and installation are performed through Hunter Douglas Installation Services by certified installers." },
+  { question: "Do you have a Hunter Douglas showroom in Renton?", answer: "Luxe Window Works serves Renton by appointment. We do not have a Renton showroom. We bring samples to your home so you can compare them in your own light, and measuring and installation are performed through Hunter Douglas Installation Services by certified installers." },
   { question: "Do you offer Hunter Douglas consultations in Renton?", answer: "Yes. Luxe Window Works is an authorized Hunter Douglas dealer serving Renton with free in-home consultations by appointment. Mark, Luxe’s owner, sold Hunter Douglas on the Eastside for years and has been a Hunter Douglas dealer for 20 years." },
   { question: "Can I do my whole home in stages to manage the budget?", answer: "Yes. Many Renton projects start with the rooms that bother you most and add rooms over time. We keep your selections on file so later stages match the first, and each stage is measured and installed through Hunter Douglas Installation Services." },
   { question: "How much do Hunter Douglas blinds and shades cost?", answer: "Pricing depends on the collection, fabric, window sizes and operating system. Your consultation includes a quote for your selected products, and measuring and installation through Hunter Douglas Installation Services are arranged as part of your order. We can compare options room by room, including value collections, to help you prioritize your budget." },
@@ -69,7 +70,7 @@ export default function HunterDouglasRentonPage() {
           <div className="max-w-2xl text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.55)]">
             <p className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-white/90">Hunter Douglas · Renton, Washington</p>
             <h1 className="font-serif text-4xl leading-[1.1] text-white text-balance sm:text-5xl lg:text-6xl">Hunter Douglas Window Treatments in Renton</h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-white sm:text-lg">Compare Hunter Douglas blinds and shades in your own Renton home, planned room by room around your budget. Luxe is based in Post Falls and serves Renton by appointment, with measuring and installation through Hunter Douglas Installation Services.</p>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-white sm:text-lg">Compare Hunter Douglas blinds and shades in your own Renton home, planned room by room around your budget. Serving Renton by appointment, with measuring and installation through Hunter Douglas Installation Services.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <TrackedCta href="/book" event="ConsultCtaClick" className="inline-flex items-center justify-center rounded-full bg-gold px-7 py-4 font-semibold text-charcoal hover:bg-gold-dark">Request a Free Consultation</TrackedCta>
               <a href="#installations" className="px-2 py-4 font-semibold text-white underline underline-offset-4">See our installations ↓</a>
@@ -105,6 +106,7 @@ export default function HunterDouglasRentonPage() {
 
     <section className="bg-cream py-14 md:py-20"><div className="container-luxe max-w-3xl"><h2 className="font-serif text-3xl text-charcoal sm:text-4xl">Hunter Douglas pricing for your Renton home</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-700">Your window sizes, fabric, collection and controls determine the price. We’ll talk through your priorities at home and prepare a quote for your selected products, with measuring and installation arranged through Hunter Douglas Installation Services.</p><p className="mt-4 leading-relaxed text-warm-gray-700">Whole home or one room at a time? We can map the whole project, price it in stages, and start where it matters most.</p><div className="mt-7"><BookButton>Compare Options at Home</BookButton></div></div></section>
 
+    <EastsideReviewsStrip />
     <section className="container-luxe max-w-4xl py-14 md:py-20"><h2 className="mb-8 font-serif text-3xl text-charcoal sm:text-4xl">Your Hunter Douglas questions, answered.</h2>{faqs.map(f => <details key={f.question} className="border-b border-warm-gray-200 py-5"><summary className="cursor-pointer pr-4 text-lg font-semibold text-charcoal">{f.question}</summary><p className="mt-4 leading-relaxed text-warm-gray-700">{f.answer}</p></details>)}</section>
     <section className="bg-cream py-14 text-center md:py-20"><div className="container-luxe max-w-3xl"><h2 className="font-serif text-3xl text-charcoal sm:text-4xl">Let’s find the right light for your home.</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-700">Book your free Hunter Douglas consultation in Renton. We’ll bring the samples and help you take the next step.</p><div className="mt-8"><BookButton /></div><p className="mt-5"><TrackedCta href={BUSINESS.phoneHref} event="PhoneClick" className="underline underline-offset-4">Call {BUSINESS.phone}</TrackedCta></p><p className="mt-8 text-sm text-warm-gray-700"><Link href="/areas/renton" className="underline underline-offset-4">More window treatment options in Renton</Link></p><p className="mt-4 text-sm text-warm-gray-700">New here? Start with the <Link href="/eastside" className="underline underline-offset-4">Eastside overview</Link> to see how Hunter Douglas service works across all six cities.</p><p className="mt-4 text-sm text-warm-gray-700">Hunter Douglas in other cities we serve: {siblings.map((s, i) => <span key={s.href}>{i > 0 && " · "}<Link href={s.href} className="underline underline-offset-4">{s.label}</Link></span>)}</p></div></section>
   </>;
