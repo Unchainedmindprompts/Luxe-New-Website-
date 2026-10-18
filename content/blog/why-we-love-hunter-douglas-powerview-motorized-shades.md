@@ -91,6 +91,8 @@ tags: [Hunter Douglas, PowerView, motorized shades, Apple Home, North Idaho]
 
 We serve homeowners in [Post Falls](/areas/post-falls), [Coeur d’Alene](/areas/coeur-d-alene), [Hayden](/areas/hayden), [Rathdrum](/areas/rathdrum), and [Sandpoint](/areas/sandpoint). Explore our [motorized window treatments](/products/motorization) or [book your free in-home consultation](/book).
 
+On Seattle's Eastside, we bring the same PowerView lineup to [Bellevue](/hunter-douglas-bellevue), [Kirkland](/hunter-douglas-kirkland), [Issaquah](/hunter-douglas-issaquah), [Sammamish](/hunter-douglas-sammamish), [Renton](/hunter-douglas-renton), and [Maple Valley](/hunter-douglas-maple-valley) by appointment, with measuring and installation coordinated through Hunter Douglas Installation Services. [See how Eastside service works](/eastside).
+
 ## Sources and Photography
 
 Technical details: [Hunter Douglas PowerView remote guide](https://help.hunterdouglas.com/hc/en-us/articles/39387912253972-Operate-PowerView-Gen-3-with-the-Remote), [Apple Home integration requirements](https://help.hunterdouglas.com/hc/en-us/articles/39338693415444-Integrate-PowerView-Gen-3-with-Apple-Home-Using-Matter), and [Apple Home communication security](https://support.apple.com/guide/security/communication-security-sec3a881ccb1/1/web/1). Photography courtesy of Hunter Douglas.
