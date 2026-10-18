@@ -22,7 +22,7 @@
 export interface ArticlePathway {
   heading: string;
   body: string;
-  productHref: "/products/blinds" | "/products/motorization" | "/products/roller-shades";
+  productHref: "/products/blinds" | "/products/motorization" | "/products/roller-shades" | "/products/cellular-shades";
   productLabel: string;
   bookHref: "/book";
   bookLabel: string;
@@ -52,6 +52,15 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
     bookLabel: "Request a free in-home consultation",
     areaHref: "/areas/post-falls",
     areaLabel: "Custom window treatments in Post Falls",
+    placement: "after-content",
+  },
+  "blackout-shades-for-better-sleep": {
+    heading: "Want a bedroom that stays dark past sunrise?",
+    body: "We measure your windows, find where the light is leaking in, and show you the blackout options in your own light before you order anything. The consultation is free.",
+    productHref: "/products/cellular-shades",
+    productLabel: "See blackout cellular shades",
+    bookHref: "/book",
+    bookLabel: "Request a free in-home consultation",
     placement: "after-content",
   },
   "why-big-roller-shades-pucker-and-what-actually-solves-it": {
@@ -135,6 +144,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
       title: "Why Big Roller Shades Pucker — and What Actually Solves It",
       slug: "why-big-roller-shades-pucker-and-what-actually-solves-it",
     },
+    {
+      title: "Blackout Shades for Better Sleep: What Actually Makes a Room Dark",
+      slug: "blackout-shades-for-better-sleep",
+    },
   ],
   shutters: [
     {
@@ -150,6 +163,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
     {
       title: "Cellular Shades for Energy Savings in Coeur d'Alene and Post Falls",
       slug: "cellular-shades-for-energy-savings-in-coeur-dalene-post-falls",
+    },
+    {
+      title: "Blackout Shades for Better Sleep: What Actually Makes a Room Dark",
+      slug: "blackout-shades-for-better-sleep",
     },
   ],
 };

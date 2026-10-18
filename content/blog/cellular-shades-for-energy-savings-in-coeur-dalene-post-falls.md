@@ -180,7 +180,7 @@ wordCount: 6320
 <p style="margin:0 0 .5rem;font-weight:600;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:#a8862d;">Continue Exploring Cellular Shades</p>
 <ul style="margin:0 0 .5rem;padding-left:1.25rem;">
 <li><a href="/blog/how-to-clean-honeycomb-shades-safely-pro-installer-guide">How to clean honeycomb shades safely — a pro installer's complete guide</a></li>
-<li><a href="/blog/u-block-blackout-shades-for-better-sleep-in-coeur-dalene">U-Block blackout cellular shades for better sleep in Coeur d'Alene</a></li>
+<li><a href="/blog/blackout-shades-for-better-sleep">Blackout shades for better sleep: what actually makes a room dark</a></li>
 <li><a href="/blog/why-craftsman-homes-feel-cold-in-coeur-dalene-fixed">The Draft Trap: why your Craftsman feels cold (and how cellular shades fix it)</a></li>
 </ul>
 <p style="margin:.5rem 0 0;font-size:.95rem;">Cellular shades are one piece of a broader energy strategy — <a href="/blog/energy-efficient-window-treatments-for-northern-idaho-homes">read our complete guide to energy-efficient window treatments for Northern Idaho</a>.</p>

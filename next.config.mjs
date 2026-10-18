@@ -110,6 +110,14 @@ const nextConfig = {
     const staticRedirects = [
       ...legacyPages,
       {
+        // Oct 2026: the U-Block sleep article was rewritten as a general
+        // blackout-and-sleep guide with no city in the title. The old slug
+        // redirects so its accumulated links land on the new article.
+        source: '/blog/u-block-blackout-shades-for-better-sleep-in-coeur-dalene',
+        destination: '/blog/blackout-shades-for-better-sleep',
+        permanent: true,
+      },
+      {
         // Renamed with no entry in the generated map, so it 404s under both
         // the flat and the dated permalink. Same article, current slug.
         source: '/blog/why-your-motorized-shades-dont-respond-half-the-time-and-how-to-actually-fix-it',
