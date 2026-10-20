@@ -718,25 +718,9 @@ export const productPages: Record<string, ProductPageData> = {
   "specialty-shapes": {
     slug: "specialty-shapes",
     name: "Specialty Shape Shades",
-    // Demonstration videos of fully operable specialty shapes in motion.
-    // Durations read from the source video gallery on Oct 20, 2026;
-    // uploadDate values are placeholders to confirm before publishing.
-    video: {
-      idSlug: "motorized-arch-honeycomb-shade",
-      youtubeId: "qiwxUb3LE-g",
-      title: "Watch a Motorized Arch Shade Open and Close",
-      description: "A fully operable honeycomb shade built for an arched window, raising and lowering with motorization instead of sitting fixed in the opening.",
-      uploadDate: "2026-10-20",
-      duration: "PT1M8S",
-    },
-    secondVideo: {
-      idSlug: "motorized-trapezoid-shades",
-      youtubeId: "WKloEuwBqFo",
-      title: "Watch Motorized Trapezoid Shades in Operation",
-      description: "Trapezoid shades that raise and lower like a standard shade, covering the full angled window when closed and stacking clear of the glass when open.",
-      uploadDate: "2026-10-20",
-      duration: "PT1M1S",
-    },
+    // Videos temporarily removed Oct 20, 2026: the YouTube embeds carried the
+    // fabricator's branding in-frame. Replacement clips to be self-hosted once
+    // clean files are in hand; do not re-add third-party embeds here.
     headline: "Arches, Angles, and Trapezoids That Actually Operate.",
     subheadline: "Fully operable shades for the windows standard shades cannot cover: arches, triangles, trapezoids, and other specialty shapes, custom fabricated to your exact opening and installed by our team in North Idaho.",
     problem: "Every window treatment starts life as a rectangle, which is a problem when your window is not. The usual answers for an arch, a trapezoid, or a big angled great room window are a fixed panel that never moves, a rectangular shade that covers only part of the glass, or a quote so high it ends the conversation. Meanwhile the window that defines the room lets in glare and heat all afternoon, or sits uncovered because nobody offered a shade that actually works on it.",
