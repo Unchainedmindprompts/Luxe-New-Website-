@@ -89,27 +89,23 @@ export const productPages: Record<string, ProductPageData> = {
     buyingGuide: {
       "heading": "How much do custom blinds cost with installation?",
       "paragraphs": [
-        "Custom blind pricing depends on the window size, material, finish, and operating system. Start with the instant estimator for standard white faux wood blinds supplied through Premier Blinds & Shades. Real wood, other finishes, and Hunter Douglas, Alta, or Norman products need a separate quote.",
+        "Custom blind pricing depends on the window size, material, finish, and operating system. We confirm those details against your windows during a free in-home consultation, then prepare a written quote for the exact blinds you choose, from standard white faux wood blinds supplied through Premier Blinds & Shades to real wood, other finishes, and Hunter Douglas, Alta, or Norman products.",
         "We bring samples to your home in Coeur d’Alene, Post Falls, Hayden, Rathdrum, or Sandpoint, help you compare the options, and take the final measurements before ordering. Your quote includes professional installation backed by our lifetime installation guarantee."
       ],
       "links": [
         {
-          "href": "/estimate",
-          "label": "Estimate white faux wood blinds"
+          "href": "/book",
+          "label": "Book a free in-home consultation"
         },
         {
           "href": "/products/hunter-douglas",
           "label": "Explore Hunter Douglas blinds and shades"
-        },
-        {
-          "href": "/book",
-          "label": "Compare custom blinds in your home"
         }
       ]
     },
     faqs: [
       {"question": "Do you offer custom blinds and installation in Coeur d’Alene and Post Falls?", "answer": "Yes. Luxe brings samples to your home, helps you choose the material and controls, takes final measurements, and installs your custom blinds. We serve Coeur d’Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. The in-home consultation is free."},
-      {"question": "Can I get a custom blind estimate online?", "answer": "Yes, for select standard white faux wood blinds supplied through Premier Blinds & Shades. The estimate includes consultation, measurements, and installation. Sales tax and any applicable shipping or tariff surcharges are additional. Other materials, finishes, and Hunter Douglas, Alta, or Norman products are quoted separately."},
+      {"question": "How do I get pricing for custom blinds?", "answer": "Book a free in-home consultation. We bring samples to your home, confirm the material, finish, and operating system against your windows, take final measurements, and prepare a written quote with professional installation included. Sales tax and any applicable shipping or tariff surcharges are additional."},
 
       {
         question: "Faux wood vs. composite blinds — which holds up better in North Idaho?",
@@ -167,13 +163,13 @@ export const productPages: Record<string, ProductPageData> = {
     buyingGuide: {
       "heading": "How much do cellular shades cost?",
       "paragraphs": [
-        "Window size, fabric, light control, and operation determine the price. Our instant estimator lets you compare select ¾-inch smooth cellular shades supplied through Premier Blinds & Shades, including cordless, top-down/bottom-up, and available rechargeable motorized options.",
-        "Estimates include consultation, final measurements, and installation. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas Duette, Alta, and Norman products are quoted separately during a free consultation, where you can compare samples in your own light."
+        "Window size, fabric, light control, and operation determine the price. We price select ¾-inch smooth cellular shades supplied through Premier Blinds & Shades after confirming your windows in your home, including cordless, top-down/bottom-up, and available rechargeable motorized options.",
+        "Your quote includes consultation, final measurements, and installation. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas Duette, Alta, and Norman products are quoted the same way during your free consultation, where you can compare samples in your own light."
       ],
       "links": [
         {
-          "href": "/estimate",
-          "label": "Estimate cellular shades for your windows"
+          "href": "/book",
+          "label": "Book a free in-home consultation"
         },
         {
           "href": "/products/motorization",
@@ -186,7 +182,7 @@ export const productPages: Record<string, ProductPageData> = {
       ]
     },
     faqs: [
-      {"question": "Can I compare cellular shade prices online?", "answer": "Yes. The instant estimator covers select ¾-inch smooth cellular shades supplied through Premier Blinds & Shades. Enter your dimensions and compare fabric and operating options, with consultation, measurements, and installation included. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas Duette, Alta, and Norman are quoted separately."},
+      {"question": "How do I get pricing for cellular shades?", "answer": "Book a free in-home consultation. We confirm your window dimensions, compare fabric and operating options in your own light, and prepare a written quote with consultation, measurements, and installation included. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas Duette, Alta, and Norman are quoted the same way."},
 
       {
         question: "Are cellular shades really worth the investment for Northern Idaho homes?",
@@ -249,6 +245,23 @@ export const productPages: Record<string, ProductPageData> = {
       "Anyone who wants light control without losing their view",
     ],
     localContext: "If you live on the lake or anywhere with western exposure in Northern Idaho, solar shades should be near the top of your list. The summer sun here doesn't set until after 9 PM, and that low-angle evening light creates intense glare that standard curtains can't handle without blocking everything. Solar shades solve this elegantly.",
+    buyingGuide: {
+      "heading": "How much do solar shades cost?",
+      "paragraphs": [
+        "Window size, openness factor, fabric color, and operation determine the price. A 3% or 5% openness fabric for a sun-hammered west-facing window is a different product from a 10% fabric on a shaded north window, so we confirm the exposure and the view you want to keep during a free in-home consultation, then prepare a written quote for your windows.",
+        "Your quote includes professional consultation, measurements, and installation. Sales tax and any applicable shipping or tariff surcharges are additional. Motorized operation for hard-to-reach windows is priced into the same quote once we confirm the power and control options."
+      ],
+      "links": [
+        {
+          "href": "/book",
+          "label": "Book a free in-home consultation"
+        },
+        {
+          "href": "/products/motorization",
+          "label": "Explore motorized shade options"
+        }
+      ]
+    },
     faqs: [
       {
         question: "Will I still be able to see outside through solar shades?",
@@ -302,13 +315,13 @@ export const productPages: Record<string, ProductPageData> = {
     buyingGuide: {
       "heading": "What determines the cost of custom roller shades?",
       "paragraphs": [
-        "Start with your window dimensions, fabric, and the way you want to operate the shade. The instant estimator prices select roller shades supplied through Premier Blinds & Shades, with light-filtering or room-darkening fabric, a round cassette, and cordless or rechargeable motorized operation.",
+        "Start with your window dimensions, fabric, and the way you want to operate the shade. We price select roller shades supplied through Premier Blinds & Shades, with light-filtering or room-darkening fabric, a round cassette, and cordless or rechargeable motorized operation, after confirming your windows during a free consultation.",
         "Professional consultation, measurements, and installation are included. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas, Alta, and Norman products, other fabrics, and specialty applications are quoted separately."
       ],
       "links": [
         {
-          "href": "/estimate",
-          "label": "Estimate roller shades with installation"
+          "href": "/book",
+          "label": "Book a free in-home consultation"
         },
         {
           "href": "/products/motorization",
@@ -325,7 +338,7 @@ export const productPages: Record<string, ProductPageData> = {
       ]
     },
     faqs: [
-      {"question": "Can I get an installed roller shade estimate online?", "answer": "Yes. The instant estimator prices select roller shades supplied through Premier Blinds & Shades with a round cassette and your chosen fabric and operation. Consultation, measurements, and installation are included. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas, Alta, and Norman products are quoted separately."},
+      {"question": "How do I get pricing for roller shades with installation?", "answer": "Book a free in-home consultation. We confirm your fabric and operation choices against your windows and prepare a written quote with consultation, measurements, and installation included. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas, Alta, and Norman products are quoted the same way."},
 
       {
         question: "What is the difference between light-filtering and blackout roller shades?",
@@ -376,6 +389,23 @@ export const productPages: Record<string, ProductPageData> = {
       "Anyone tired of traditional blinds but wanting similar light control",
     ],
     localContext: "Banded shades are a popular choice in the newer subdivisions around Post Falls and Hayden where contemporary design is the norm. They pair especially well with the open floor plans common in Northern Idaho new construction, where a single great room might have windows facing multiple directions with different light needs throughout the day.",
+    buyingGuide: {
+      "heading": "How much do banded shades cost?",
+      "paragraphs": [
+        "Window size, fabric, and operation determine the price, and brand quality matters more with banded shades than with almost any other product we carry: the tension systems that keep the sheer and solid bands aligned are where premium brands separate themselves. We confirm your windows and fabric during a free in-home consultation, then prepare a written quote.",
+        "Your quote includes professional consultation, measurements, and installation. Sales tax and any applicable shipping or tariff surcharges are additional. Motorization is priced into the same quote once we confirm the control options."
+      ],
+      "links": [
+        {
+          "href": "/book",
+          "label": "Book a free in-home consultation"
+        },
+        {
+          "href": "/products/motorization",
+          "label": "Explore motorized shade options"
+        }
+      ]
+    },
     faqs: [
       {
         question: "What are banded shades, and how are they different from regular blinds?",
@@ -426,6 +456,23 @@ export const productPages: Record<string, ProductPageData> = {
       "Kitchens — especially above the sink with a flat Roman in a wipeable fabric",
     ],
     localContext: "Roman shades work beautifully in the craftsman and lodge-style homes that are iconic to the Northern Idaho landscape. In Coeur d'Alene and Sandpoint especially, homeowners gravitate toward natural linen and textured fabrics that complement the wood and stone elements common in our local architecture. They add a layer of refinement without feeling out of place.",
+    buyingGuide: {
+      "heading": "How much do Roman shades cost?",
+      "paragraphs": [
+        "Fabric is the biggest driver of Roman shade pricing, followed by window size, fold style, lining, and operation. A flat fold in a straightforward linen prices very differently from a patterned premium fabric with a blackout lining. We review fabric samples in your room, in your light, during a free in-home consultation, then prepare a written quote for the exact shade.",
+        "Your quote includes professional consultation, measurements, and installation. Sales tax and any applicable shipping or tariff surcharges are additional. Cordless and motorized operation are priced into the same quote once we confirm the lift system."
+      ],
+      "links": [
+        {
+          "href": "/book",
+          "label": "Book a free in-home consultation"
+        },
+        {
+          "href": "/products/motorization",
+          "label": "Explore motorized shade options"
+        }
+      ]
+    },
     faqs: [
       {
         question: "What fabric should I choose for Roman shades in my home?",
@@ -484,7 +531,7 @@ export const productPages: Record<string, ProductPageData> = {
       "heading": "What affects plantation shutter cost?",
       "paragraphs": [
         "Plantation shutters are made for the opening, so a useful quote starts with the dimensions, material, frame, and panel layout. Specialty shapes, door applications, and the way the panels need to open can change the price. We compare those details in your home before preparing your quote.",
-        "Professional measurements and installation are included in your Luxe shutter quote. Shutters are not included in the instant blinds-and-shades estimator. Book a free consultation for pricing on your actual windows, whether you are considering one room or the whole home."
+        "Professional measurements and installation are included in your Luxe shutter quote. Book a free consultation for pricing on your actual windows, whether you are considering one room or the whole home."
       ],
       "links": [
         {
@@ -511,7 +558,7 @@ export const productPages: Record<string, ProductPageData> = {
     },
     faqs: [
       {"question": "How much do plantation shutters cost with installation?", "answer": "Your price depends on the window dimensions, material, frame, panel layout, and any specialty shapes or door requirements. We measure your openings and prepare a project-specific quote with professional installation included. The in-home consultation is free."},
-      {"question": "Can I use the instant estimator for plantation shutters?", "answer": "No. The instant estimator covers select blinds and shades, not shutters. Request a free in-home consultation so we can confirm your shutter measurements, material, frame, and configuration before quoting."},
+      {"question": "How do I get a price for plantation shutters?", "answer": "Request a free in-home consultation so we can confirm your shutter measurements, material, frame, and configuration before quoting. Your written quote includes professional measurements and installation."},
 
       {
         question: "Why does Luxe Window Works install Norman shutters?",
@@ -657,14 +704,14 @@ export const productPages: Record<string, ProductPageData> = {
     buyingGuide: {
       "heading": "How much do motorized shades cost in North Idaho?",
       "paragraphs": [
-        "The price depends on the shade, window dimensions, motor, and controls. For select products supplied through Premier Blinds & Shades, enter your sizes in our instant estimator and choose motorized operation. Compare the same windows with cordless operation to see what motorization adds to your project.",
-        "The estimate includes professional consultation, measurements, and installation, with the battery and remote details shown in your summary. Sales tax and any applicable shipping or tariff surcharges are additional. App or voice control may need extra equipment; we confirm compatibility and quote that separately.",
-        "Looking at Hunter Douglas PowerView? We help you compare the collection, controls, and power options during a free in-home consultation. Hunter Douglas, Alta, and Norman are quoted separately and are not priced by the instant estimator."
+        "The price depends on the shade, window dimensions, motor, and controls. For select products supplied through Premier Blinds & Shades, we price the same windows with cordless and motorized operation during your consultation, so you can see exactly what motorization adds to your project.",
+        "Your quote includes professional consultation, measurements, and installation, with the battery and remote details confirmed for your windows. Sales tax and any applicable shipping or tariff surcharges are additional. App or voice control may need extra equipment; we confirm compatibility and quote that separately.",
+        "Looking at Hunter Douglas PowerView? We help you compare the collection, controls, and power options during a free in-home consultation. Hunter Douglas, Alta, and Norman are quoted separately."
       ],
       "links": [
         {
-          "href": "/estimate",
-          "label": "Estimate select motorized shades"
+          "href": "/book",
+          "label": "Book a free in-home consultation"
         },
         {
           "href": "/blog/how-much-does-battery-operated-motorized-shades-installation-cost-in-post-falls-coeur-dalene-id",
@@ -673,16 +720,12 @@ export const productPages: Record<string, ProductPageData> = {
         {
           "href": "/products/hunter-douglas",
           "label": "Explore Hunter Douglas and PowerView"
-        },
-        {
-          "href": "/book",
-          "label": "Plan your motorized shade installation"
         }
       ]
     },
     faqs: [
-      {"question": "How much do motorized blinds and shades cost with installation?", "answer": "The total depends on your window sizes, shade style, motor, and controls. Use the instant estimator to compare select products supplied through Premier Blinds & Shades with cordless or motorized operation. Consultation, measurements, and installation are included; sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas, Alta, and Norman are quoted separately."},
-      {"question": "Do you offer Hunter Douglas PowerView motorized shades?", "answer": "Yes. Luxe Window Works is a Hunter Douglas dealer serving North Idaho. We help you choose compatible shades, power options, and controls, then handle professional measurements and installation. PowerView products and any required accessories receive a separate quote during your free consultation; they are not included in the instant estimator."},
+      {"question": "How much do motorized blinds and shades cost with installation?", "answer": "The total depends on your window sizes, shade style, motor, and controls. During your free consultation we compare select products supplied through Premier Blinds & Shades with cordless or motorized operation. Consultation, measurements, and installation are included; sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas, Alta, and Norman are quoted separately."},
+      {"question": "Do you offer Hunter Douglas PowerView motorized shades?", "answer": "Yes. Luxe Window Works is a Hunter Douglas dealer serving North Idaho. We help you choose compatible shades, power options, and controls, then handle professional measurements and installation. PowerView products and any required accessories receive a separate quote during your free consultation."},
 
       {
         // Buyers search this product under five different names and the page

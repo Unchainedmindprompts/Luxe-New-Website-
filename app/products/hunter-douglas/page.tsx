@@ -70,7 +70,7 @@ export default function HunterDouglasPage() {
     <section className="container-luxe py-14 md:py-20 max-w-3xl">
       <h2 className="font-serif text-3xl text-charcoal">Hunter Douglas pricing, measured for your home.</h2>
       <p className="mt-5 text-lg text-warm-gray-700 leading-relaxed">Your collection, fabric, window sizes, and controls shape the quote. We bring samples to homes in Coeur d’Alene, Post Falls, Hayden, Rathdrum, and Sandpoint, then confirm the details before you order. Professional measurements and installation are included.</p>
-      <p className="mt-4 text-warm-gray-700 leading-relaxed">Hunter Douglas is quoted separately from our instant estimator. If PowerView is on your wish list, we’ll also discuss power options and any accessories needed for your preferred controls.</p>
+      <p className="mt-4 text-warm-gray-700 leading-relaxed">Every Hunter Douglas quote is prepared for your home after we confirm the collection, fabric, window sizes, and controls. If PowerView is on your wish list, we’ll also discuss power options and any accessories needed for your preferred controls.</p>
       <div className="mt-6 flex flex-col items-start gap-4"><Link href="/book" className="font-semibold underline underline-offset-4">Request your Hunter Douglas consultation →</Link><Link href="/products/motorization" className="underline underline-offset-4">Explore motorized shade installation →</Link></div>
     </section>
     <div className="container-luxe pb-10 max-w-3xl">

@@ -10,7 +10,6 @@ import { ProductBuyingGuide } from "@/components/ProductBuyingGuide";
 import EastsideHdBlock from "@/components/EastsideHdBlock";
 import { EASTSIDE_HD } from "@/lib/eastside-hd";
 import { CdaProductProof } from "@/components/CdaClientReviews";
-import { ESTIMATE_PRODUCT_SCOPE } from "@/lib/estimate-copy";
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { PRODUCT_DECISION_ARTICLES } from "@/lib/article-pathways";
@@ -22,6 +21,20 @@ import type { ProductPageData, ProductVideo } from "@/lib/product-data";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
 import { RelatedVideos } from "@/components/RelatedVideos";
 import { videoRef, videosForService } from "@/lib/videos";
+
+// The hero's secondary CTA points at the on-page pricing guide for every
+// interior product. The instant estimator that used to sit here was retired
+// in Oct 2026; every product is now quoted after a consultation.
+const PRICING_GUIDANCE_LABELS: Record<string, string> = {
+  blinds: "See Blinds Pricing Guidance",
+  "cellular-shades": "See Cellular Shade Pricing Guidance",
+  "solar-shades": "See Solar Shade Pricing Guidance",
+  "roller-shades": "See Roller Shade Pricing Guidance",
+  "banded-shades": "See Banded Shade Pricing Guidance",
+  "roman-shades": "See Roman Shade Pricing Guidance",
+  shutters: "See Shutter Pricing Guidance",
+  motorization: "See Motorization Pricing Guidance",
+};
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -254,11 +267,11 @@ export default async function ProductPage({ params }: Props) {
             >
               {isExterior ? "Request an Exterior Shade Quote" : "Get Expert Recommendations"}
             </TrackedCta>
-            <Link href={isExterior ? "#exterior-options" : slug === "shutters" ? "#pricing-guide" : "/estimate"} className="inline-flex items-center justify-center gap-2 bg-charcoal hover:bg-warm-gray-800 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
-              {isExterior ? "Compare Exterior Shade Options" : slug === "shutters" ? "See Shutter Pricing Guidance" : "Get an Instant Estimate"} <span aria-hidden="true">→</span>
+            <Link href={isExterior ? "#exterior-options" : "#pricing-guide"} className="inline-flex items-center justify-center gap-2 bg-charcoal hover:bg-warm-gray-800 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+              {isExterior ? "Compare Exterior Shade Options" : PRICING_GUIDANCE_LABELS[slug] ?? "See Pricing Guidance"} <span aria-hidden="true">→</span>
             </Link>
           </div>
-          <p className="mt-4 text-sm text-warm-gray-600">{isExterior ? "Exterior shades receive a project-specific quote after we review the opening, fabric, mounting, and controls. The consultation is free; your project quote includes professional measuring and installation." : slug === "shutters" ? "Shutters are quoted after we confirm your windows, frames, materials, and panel layout. Professional measuring and installation included." : `Instant estimates for select cellular, banded, Roman, and roller shades, plus white faux wood blinds. Measuring and installation included. No email required. ${ESTIMATE_PRODUCT_SCOPE}`}</p>
+          <p className="mt-4 text-sm text-warm-gray-600">{isExterior ? "Exterior shades receive a project-specific quote after we review the opening, fabric, mounting, and controls. The consultation is free; your project quote includes professional measuring and installation." : slug === "shutters" ? "Shutters are quoted after we confirm your windows, frames, materials, and panel layout. Professional measuring and installation included." : "Priced for your home after we confirm your windows, fabrics, and operating choices during a free in-home consultation. Professional measuring and installation included."}</p>
           <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="inline-block mt-3 text-sm underline underline-offset-4">Questions? Call {BUSINESS.phone}</TrackedCta>
         </div>
       </section>

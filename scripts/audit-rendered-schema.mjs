@@ -159,9 +159,8 @@ const MUST_EMIT = [
   // structured data at all — the same defect as /about, missed here because
   // this list named the city pages but not the index above them.
   { file: "/areas.html", label: "/areas", entity: `${SITE}/areas#webpage` },
-  { file: "/estimate.html", label: "/estimate", entity: `${SITE}/estimate#webpage` },
-  { file: "/estimate.html", label: "/estimate FAQs", entity: `${SITE}/estimate#faq` },
-  { file: "/estimate.html", label: "/estimate breadcrumbs", entity: `${SITE}/estimate#breadcrumb` },
+  // /estimate was removed in Oct 2026 (the instant estimator retired and the
+  // URL redirects to /book), so it no longer emits entities to audit.
   { file: "/products.html", label: "/products", entity: `${SITE}/products#webpage` },
 ];
 
