@@ -718,9 +718,13 @@ export const productPages: Record<string, ProductPageData> = {
   "specialty-shapes": {
     slug: "specialty-shapes",
     name: "Specialty Shape Shades",
-    // Videos temporarily removed Oct 20, 2026: the YouTube embeds carried the
-    // fabricator's branding in-frame. Replacement clips to be self-hosted once
-    // clean files are in hand; do not re-add third-party embeds here.
+    // Hero image: supplier product photo (triangle honeycomb shade), checked
+    // frame by frame Oct 20, 2026: no branding. Videos removed the same day:
+    // the YouTube embeds carried the fabricator's branding in-frame, and the
+    // unbranded clips are stream-locked; self-host clean files when BCC sends
+    // them. Gallery deliberately unset: the template labels it "Recent
+    // Installs," and supplier photos are not Luxe installs.
+    image: "/images/specialty-shapes.webp",
     headline: "Arches, Angles, and Trapezoids That Actually Operate.",
     subheadline: "Fully operable shades for the windows standard shades cannot cover: arches, triangles, trapezoids, and other specialty shapes, custom fabricated to your exact opening and installed by our team in North Idaho.",
     problem: "Every window treatment starts life as a rectangle, which is a problem when your window is not. The usual answers for an arch, a trapezoid, or a big angled great room window are a fixed panel that never moves, a rectangular shade that covers only part of the glass, or a quote so high it ends the conversation. Meanwhile the window that defines the room lets in glare and heat all afternoon, or sits uncovered because nobody offered a shade that actually works on it.",
