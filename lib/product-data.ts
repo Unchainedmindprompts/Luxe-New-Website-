@@ -753,7 +753,7 @@ export const productPages: Record<string, ProductPageData> = {
     buyingGuide: {
       heading: "How much do specialty shape shades cost?",
       paragraphs: [
-        "Price depends on the shape, the size, the fabric, and how you want to operate the shade, and every piece is fabricated to order, so specialty shapes are not part of the instant estimator. Angled shapes are fabricated from exact measurements; arches are templated in your home during the consultation. Once we have measured, you get a written quote for the finished, installed shade.",
+        "Price depends on the shape, the size, the fabric, and how you want to operate the shade, and every piece is fabricated to order. Angled shapes are fabricated from exact measurements; arches are templated in your home during the consultation. Once we have measured, you get a written quote for the finished, installed shade.",
         "The in-home consultation is free. It covers the measuring, the shape and mount assessment, and fabric samples in your own light, so the quote rests on your actual window rather than a guess from a photo.",
       ],
       links: [
