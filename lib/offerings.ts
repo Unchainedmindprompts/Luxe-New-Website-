@@ -138,6 +138,11 @@ export const OFFERINGS: Record<OfferingId, Offering> = {
 
   // The TWO collection visibly offers Colourvue roller shades.
   "roller-shades": { manufacturersEvidenced: [THE_WINDOW_OUTFITTERS["@id"]] },
+
+  // The specialty-shapes page copy names no manufacturer, and no canonical
+  // brand identity exists in lib/brands.ts for the fabrication behind it.
+  // Unrecorded rather than overstated, per the evidence bar above.
+  "specialty-shapes": { manufacturersEvidenced: [] },
 };
 
 /**

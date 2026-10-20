@@ -163,6 +163,7 @@ export const CONSULT_OFFERING_CATEGORY_IDS = [
   "roman-shades",
   "shutters",
   "motorization",
+  "specialty-shapes",
   "aluminum-shutters",
 ] as const satisfies readonly OfferingId[];
 

@@ -212,6 +212,11 @@ export default async function ProductPage({ params }: Props) {
   const product = productPages[slug];
   if (!product) notFound();
   const isExterior = slug === "exterior-solar-shades";
+  // Quoted-per-project categories have no instant-estimate entry, so their
+  // hero secondary action points at the pricing guide in their buying guide
+  // section instead of /estimate. Shutters set the precedent; specialty
+  // shapes are fabricated to order and priced the same way.
+  const isQuoted = slug === "shutters" || slug === "specialty-shapes";
   // The one Eastside connection these pages carry (Mark's routing rule,
   // Oct 17 2026): a Hunter Douglas only block linking to the HD page,
   // the /eastside overview and the six HD city pages. Undefined for
@@ -254,11 +259,11 @@ export default async function ProductPage({ params }: Props) {
             >
               {isExterior ? "Request an Exterior Shade Quote" : "Get Expert Recommendations"}
             </TrackedCta>
-            <Link href={isExterior ? "#exterior-options" : slug === "shutters" ? "#pricing-guide" : "/estimate"} className="inline-flex items-center justify-center gap-2 bg-charcoal hover:bg-warm-gray-800 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
-              {isExterior ? "Compare Exterior Shade Options" : slug === "shutters" ? "See Shutter Pricing Guidance" : "Get an Instant Estimate"} <span aria-hidden="true">→</span>
+            <Link href={isExterior ? "#exterior-options" : isQuoted ? "#pricing-guide" : "/estimate"} className="inline-flex items-center justify-center gap-2 bg-charcoal hover:bg-warm-gray-800 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+              {isExterior ? "Compare Exterior Shade Options" : slug === "shutters" ? "See Shutter Pricing Guidance" : slug === "specialty-shapes" ? "See Specialty Shape Pricing Guidance" : "Get an Instant Estimate"} <span aria-hidden="true">→</span>
             </Link>
           </div>
-          <p className="mt-4 text-sm text-warm-gray-600">{isExterior ? "Exterior shades receive a project-specific quote after we review the opening, fabric, mounting, and controls. The consultation is free; your project quote includes professional measuring and installation." : slug === "shutters" ? "Shutters are quoted after we confirm your windows, frames, materials, and panel layout. Professional measuring and installation included." : `Instant estimates for select cellular, banded, Roman, and roller shades, plus white faux wood blinds. Measuring and installation included. No email required. ${ESTIMATE_PRODUCT_SCOPE}`}</p>
+          <p className="mt-4 text-sm text-warm-gray-600">{isExterior ? "Exterior shades receive a project-specific quote after we review the opening, fabric, mounting, and controls. The consultation is free; your project quote includes professional measuring and installation." : slug === "shutters" ? "Shutters are quoted after we confirm your windows, frames, materials, and panel layout. Professional measuring and installation included." : slug === "specialty-shapes" ? "Specialty shapes are quoted after we confirm your window's exact shape, measurements, and fabric. Professional measuring and installation included." : `Instant estimates for select cellular, banded, Roman, and roller shades, plus white faux wood blinds. Measuring and installation included. No email required. ${ESTIMATE_PRODUCT_SCOPE}`}</p>
           <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="inline-block mt-3 text-sm underline underline-offset-4">Questions? Call {BUSINESS.phone}</TrackedCta>
         </div>
       </section>

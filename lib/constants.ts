@@ -188,6 +188,13 @@ export const PRODUCTS = [
     shortDescription: "Control hard-to-reach windows by phone, voice, or wall switch. Works with Alexa, Google Home, and Apple HomeKit.",
     icon: "motorization",
   },
+  {
+    name: "Specialty Shape Shades",
+    slug: "specialty-shapes",
+    tagline: "Arches, angles, and trapezoids that actually operate.",
+    shortDescription: "Fully operable shades for shaped windows: arches, triangles, trapezoids, and quarter rounds, custom fabricated to your exact opening instead of covered with a fixed panel.",
+    icon: "cellular",
+  },
 ] as const;
 
 export const REVIEWS = [

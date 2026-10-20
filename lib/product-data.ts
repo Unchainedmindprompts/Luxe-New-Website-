@@ -715,4 +715,105 @@ export const productPages: Record<string, ProductPageData> = {
     metaTitle: "Motorized Shades in Coeur d'Alene | Voice, App & In-Home Setup",
     metaDescription: "Motorized shades, blinds, and drapery installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint. We program the system in your home. Free in-home consultation.",
   },
+  "specialty-shapes": {
+    slug: "specialty-shapes",
+    name: "Specialty Shape Shades",
+    // Demonstration videos of fully operable specialty shapes in motion.
+    // Durations read from the source video gallery on Oct 20, 2026;
+    // uploadDate values are placeholders to confirm before publishing.
+    video: {
+      idSlug: "motorized-arch-honeycomb-shade",
+      youtubeId: "qiwxUb3LE-g",
+      title: "Watch a Motorized Arch Shade Open and Close",
+      description: "A fully operable honeycomb shade built for an arched window, raising and lowering with motorization instead of sitting fixed in the opening.",
+      uploadDate: "2026-10-20",
+      duration: "PT1M8S",
+    },
+    secondVideo: {
+      idSlug: "motorized-trapezoid-shades",
+      youtubeId: "WKloEuwBqFo",
+      title: "Watch Motorized Trapezoid Shades in Operation",
+      description: "Trapezoid shades that raise and lower like a standard shade, covering the full angled window when closed and stacking clear of the glass when open.",
+      uploadDate: "2026-10-20",
+      duration: "PT1M1S",
+    },
+    headline: "Arches, Angles, and Trapezoids That Actually Operate.",
+    subheadline: "Fully operable shades for the windows standard shades cannot cover: arches, triangles, trapezoids, and other specialty shapes, custom fabricated to your exact opening and installed by our team in North Idaho.",
+    problem: "Every window treatment starts life as a rectangle, which is a problem when your window is not. The usual answers for an arch, a trapezoid, or a big angled great room window are a fixed panel that never moves, a rectangular shade that covers only part of the glass, or a quote so high it ends the conversation. Meanwhile the window that defines the room lets in glare and heat all afternoon, or sits uncovered because nobody offered a shade that actually works on it.",
+    solution: "Luxe consults, measures, orders, and installs fully operable specialty shape shades, custom fabricated for the exact shape of your opening. Arches (perfect, imperfect, bullet, and eyebrow), triangles, trapezoids at just about any degree of angle, pentagons, and quarter rounds can all be built as working shades that raise and lower, not fixed panels. They are fabricated in honeycomb fabrics and designed for inside mount, where there are very few size or shape limitations. Motorization and smart home control are available. If you have been told a window cannot take a working shade, this is the service that answers it.",
+    expertInsight: "Here is what surprises most people: the angled shapes are the straightforward ones. A trapezoid, triangle, or pentagon is fabricated from exact measurements, no template needed. Arches are the ones that need a template, and we take it in your home during the consultation, along with the mount depth and clearance checks that decide how cleanly the finished shade sits in the frame. Because these shades are made for inside mount, that measuring visit is where the job is really won or lost, and it is the part we never rush.",
+    features: [
+      "Fully operable: raises and lowers like a regular shade, never a fixed panel",
+      "Arches: perfect, imperfect, bullet, and eyebrow shapes",
+      "Triangles, trapezoids at just about any angle, pentagons, and quarter rounds",
+      "Designed for inside mount, with very few size or shape limitations",
+      "Honeycomb fabrics: the 3/4 inch light filtering pleat is the preferred fabrication material",
+      "Double cell and larger pleats available",
+      "Light filtering, semi-opaque, and room darkening options",
+      "Motorization available, battery operated standard",
+      "Works with Alexa, Google Home, and home automation systems",
+      "Installed by our own team, backed by the lifetime installation guarantee",
+    ],
+    idealFor: [
+      "Trapezoid and angled windows in great rooms and stairwells",
+      "Arched and half-round windows over entry doors and in primary suites",
+      "Shaped windows you were quoted a fixed panel or a partial cover for",
+      "Tall or hard-to-reach shaped windows, where motorization earns its keep",
+      "Any home where the shaped window is the room's focal point and needs real light control",
+    ],
+    localContext: "Shaped glass is everywhere in North Idaho's custom and lodge-style homes: angled walls of glass in vaulted great rooms, arched windows over entries, trapezoid windows following a roofline, from Coeur d'Alene and Post Falls to Sandpoint. Until now the local answer was usually a fixed panel or a shade covering the rectangular part of the window only. An operable shade changes that, and because every one is fabricated to order, the work starts with exact measuring in your home. Installation is by our own team, backed by the lifetime installation guarantee.",
+    buyingGuide: {
+      heading: "How much do specialty shape shades cost?",
+      paragraphs: [
+        "Price depends on the shape, the size, the fabric, and how you want to operate the shade, and every piece is fabricated to order, so specialty shapes are not part of the instant estimator. Angled shapes are fabricated from exact measurements; arches are templated in your home during the consultation. Once we have measured, you get a written quote for the finished, installed shade.",
+        "The in-home consultation is free. It covers the measuring, the shape and mount assessment, and fabric samples in your own light, so the quote rests on your actual window rather than a guess from a photo.",
+      ],
+      links: [
+        {
+          href: "/book",
+          label: "Book a free in-home consultation",
+        },
+        {
+          href: "/products/motorization",
+          label: "Explore motorization and smart home control",
+        },
+        {
+          href: "/products/cellular-shades",
+          label: "Compare standard cellular shades",
+        },
+      ],
+    },
+    faqs: [
+      {
+        question: "Can a shade for an arch or a trapezoid actually open and close?",
+        answer: "Yes. These are fully operable shades that raise and lower, custom fabricated to the shape of your window. That is the difference from the fixed panels and partial covers usually offered for shaped windows: you get real light and privacy control on the whole window, not a cover you live around.",
+      },
+      {
+        question: "What shapes can you cover?",
+        answer: "Virtually any shape: perfect and imperfect arches, bullet and eyebrow arches, triangles, trapezoids at just about any degree of angle, pentagons, and quarter rounds. The shades are designed for inside mount, which has very few size or shape limitations.",
+      },
+      {
+        question: "Does my window need a template?",
+        answer: "Angled shapes do not. Trapezoids, triangles, and pentagons are fabricated from exact measurements taken in your home. Arch shapes do use a template, and we take it during the in-home consultation as part of the measuring process.",
+      },
+      {
+        question: "What fabrics are specialty shape shades made from?",
+        answer: "Honeycomb (cellular) fabrics. The 3/4 inch light filtering pleat is the preferred fabrication material, and double cell and larger pleats are available. Light filtering and semi-opaque fabrics are preferred for shaped fabrication, and room darkening options are available when the room needs them.",
+      },
+      {
+        question: "Can specialty shape shades be motorized?",
+        answer: "Yes. Battery operation with an AA battery wand is the standard power option. Rechargeable battery wands, plug-in transformers, low-voltage hard-wired power, and multi-shade power supplies are also available. The shades are smart home compatible, working with Alexa, Google Home, and drivers for virtually every home automation system. On a tall or hard-to-reach shaped window, motorization is usually the option that makes the shade practical to use every day.",
+      },
+      {
+        question: "How much do specialty shape shades cost?",
+        answer: "It depends on the shape, size, fabric, and operation, and every shade is fabricated to order, so there is no honest price without measurements. Book a free in-home consultation: we measure the window, confirm the shape and mount, and give you a written quote with professional installation included.",
+      },
+      {
+        question: "Who installs specialty shape shades?",
+        answer: "Luxe does. We consult in your home, take the exact measurements (and the arch template, where one is needed), order the custom fabrication, and install the finished shade with our own team. Every installation is backed by the lifetime installation guarantee.",
+      },
+    ],
+    metaTitle: "Specialty Shape Shades in North Idaho | Operable Arches, Angles & Trapezoids",
+    metaDescription: "Fully operable shades for arches, trapezoids, triangles, and other specialty shapes. Custom fabricated, motorization available, measured and installed in North Idaho. Free in-home consultation.",
+  },
 };
