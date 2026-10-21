@@ -644,6 +644,26 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Utah Hunter Douglas and Alta service */}
+      <section className="py-10 md:py-12 bg-cream border-b border-warm-gray-200">
+        <div className="container-luxe flex flex-col items-center gap-5 text-center md:flex-row md:justify-between md:text-left">
+          <div className="max-w-2xl">
+            <h2 className="font-serif text-xl sm:text-2xl text-charcoal leading-tight">
+              Now Serving Utah&apos;s Salt Lake Area for Hunter Douglas &amp; Alta
+            </h2>
+            <p className="mt-2 text-warm-gray-600 leading-relaxed">
+              Salt Lake City, Millcreek, Holladay, Draper, South Jordan, Park City, Heber City, and Midway: in-home consultations by appointment, with measuring and installation through Hunter Douglas Installation Services for both brands.
+            </p>
+          </div>
+          <Link
+            href="/utah"
+            className="shrink-0 bg-charcoal hover:bg-gold text-white px-6 py-3 rounded-full font-medium transition-all hover:shadow-md"
+          >
+            Explore Utah Service →
+          </Link>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="py-16 md:py-20 bg-cream">
         <div className="container-luxe max-w-3xl">

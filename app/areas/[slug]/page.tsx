@@ -79,8 +79,13 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
   // with measuring and installation through Hunter Douglas Installation
   // Services. Their Service node says so rather than borrowing the North
   // Idaho wording (Luxe's own installation, Northern Idaho communities).
+  // Utah entries serve Hunter Douglas and Alta Window Fashions under the
+  // same service model: by appointment, measuring and installation through
+  // Hunter Douglas Installation Services for both brands (Mark, Oct 21, 2026:
+  // one service story in every market, never split by location).
   const state = area.state ?? "Idaho";
   const isEastside = Boolean(area.hdPage) && state === "Washington";
+  const isUtah = state === "Utah";
 
   const serviceSchema = {
     "@context": "https://schema.org",
@@ -93,7 +98,9 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
     serviceType: CUSTOM_WINDOW_TREATMENTS,
     description: isEastside
       ? `Hunter Douglas window treatment consultation and in-home sales in ${areaName}, Washington. Luxe Window Works offers Hunter Douglas cellular shades, sheer shades, roller shades, shutters, and PowerView motorized window treatments in ${areaName} by appointment, with measuring and installation performed through Hunter Douglas Installation Services.`
-      : `Custom window treatment consultation, design, and installation in ${areaName}, Idaho. Luxe Window Works offers cellular shades, plantation shutters, solar shades, roller shades, motorized window treatments, and free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities.`,
+      : isUtah
+        ? `Hunter Douglas and Alta Window Fashions window treatment consultation and in-home sales in ${areaName}, Utah. Luxe Window Works offers cellular shades, sheer shades, roller shades, shutters, and motorized window treatments from Hunter Douglas and Alta Window Fashions in ${areaName} by appointment, with measuring and installation performed through Hunter Douglas Installation Services.`
+        : `Custom window treatment consultation, design, and installation in ${areaName}, Idaho. Luxe Window Works offers cellular shades, plantation shutters, solar shades, roller shades, motorized window treatments, and free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities.`,
     provider: { "@id": `${BUSINESS.url}/#business` },
     // Reference, not a rebuild. The canonical City is defined on this same
     // page (`placeSchema` below) — this points at it.
@@ -251,6 +258,8 @@ export default async function AreaPage({ params }: Props) {
   const area = areaPages[slug];
   if (!area) notFound();
   const isEastside = Boolean(area.hdPage) && area.state === "Washington";
+  const isUtah = area.state === "Utah";
+  const isHdis = isEastside || isUtah;
 
   return (
     <>
@@ -491,9 +500,11 @@ export default async function AreaPage({ params }: Props) {
           <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">Compare custom blinds and shades in your {area.name} home</h2>
           <p className="mt-5 text-lg text-warm-gray-600 leading-relaxed">{isEastside
             ? "We bring the Hunter Douglas collection to you. Compare fabrics, colors, and controls alongside your furnishings in your own light. We handle the consultation and your order; certified measuring and installation are performed through Hunter Douglas Installation Services."
-            : "We bring the showroom to you. Compare fabrics, colors, and controls alongside your furnishings, then let us handle final measurements, ordering, and professional installation."}</p>
+            : isUtah
+              ? "We bring the Hunter Douglas and Alta Window Fashions collections to you. Compare fabrics, colors, and controls alongside your furnishings in your own light. We handle the consultation and your order; certified measuring and installation are performed through Hunter Douglas Installation Services for both brands."
+              : "We bring the showroom to you. Compare fabrics, colors, and controls alongside your furnishings, then let us handle final measurements, ordering, and professional installation."}</p>
           <div className="mt-7 space-y-6">
-            {!isEastside && <div><h3 className="font-serif text-xl text-charcoal">Start with a budget</h3><p className="mt-2 text-warm-gray-600 leading-relaxed">Use our <Link href="/estimate" className="underline underline-offset-4">instant blinds and shades estimator</Link> for select products supplied through Premier Blinds &amp; Shades. Measuring and installation are included; sales tax and any applicable surcharges are additional. Hunter Douglas, Alta, Norman, and shutters are quoted separately.</p></div>}
+            {!isHdis && <div><h3 className="font-serif text-xl text-charcoal">Start with a budget</h3><p className="mt-2 text-warm-gray-600 leading-relaxed">Use our <Link href="/estimate" className="underline underline-offset-4">instant blinds and shades estimator</Link> for select products supplied through Premier Blinds &amp; Shades. Measuring and installation are included; sales tax and any applicable surcharges are additional. Hunter Douglas, Alta, Norman, and shutters are quoted separately.</p></div>}
             <div><h3 className="font-serif text-xl text-charcoal">Explore Hunter Douglas with a local dealer</h3><p className="mt-2 text-warm-gray-600 leading-relaxed">Compare <Link href={area.hdPage ?? "/products/hunter-douglas"} className="underline underline-offset-4">Hunter Douglas shades, blinds, and shutters</Link> during your free in-home consultation. For powered controls, start with our <Link href="/products/motorization" className="underline underline-offset-4">motorized shade options</Link> and we’ll help confirm the right system for your home.</p></div>
           </div>
         </div>
@@ -531,7 +542,7 @@ export default async function AreaPage({ params }: Props) {
               5.0 Stars
             </span>
             <span>{BUSINESS.experience}</span>
-            <span>{isEastside ? "Hunter Douglas Certified Installation" : BUSINESS.guarantee}</span>
+            <span>{isHdis ? "Hunter Douglas Certified Installation" : BUSINESS.guarantee}</span>
           </div>
         </div>
       </section>

@@ -91,6 +91,19 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
+              <li className="pt-2 text-xs font-semibold uppercase tracking-wider text-warm-gray-500">
+                Utah
+              </li>
+              {SERVICE_AREAS.filter((area) => area.state === "UT").map((area) => (
+                <li key={area.slug}>
+                  <Link
+                    href={`/areas/${area.slug}`}
+                    className="text-sm text-warm-gray-400 hover:text-gold transition-colors"
+                  >
+                    {area.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

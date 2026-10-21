@@ -137,6 +137,83 @@ export const CITIES: Record<string, CityEntry> = {
       sameAs: "https://en.wikipedia.org/wiki/King_County,_Washington",
     },
   },
+  // Utah, added October 2026. Luxe serves these cities with Hunter Douglas
+  // and Alta Window Fashions, by appointment: consultation and sale by Luxe,
+  // measuring and installation through Hunter Douglas Installation Services
+  // for both brands. Five cities sit in Salt Lake County, Park City in
+  // Summit County, and Heber City and Midway in Wasatch County.
+  "Salt Lake City": {
+    slug: "salt-lake-city",
+    sameAs: "https://en.wikipedia.org/wiki/Salt_Lake_City",
+    state: "Utah",
+    county: {
+      name: "Salt Lake County",
+      sameAs: "https://en.wikipedia.org/wiki/Salt_Lake_County,_Utah",
+    },
+  },
+  Millcreek: {
+    slug: "millcreek",
+    sameAs: "https://en.wikipedia.org/wiki/Millcreek,_Utah",
+    state: "Utah",
+    county: {
+      name: "Salt Lake County",
+      sameAs: "https://en.wikipedia.org/wiki/Salt_Lake_County,_Utah",
+    },
+  },
+  Holladay: {
+    slug: "holladay",
+    sameAs: "https://en.wikipedia.org/wiki/Holladay,_Utah",
+    state: "Utah",
+    county: {
+      name: "Salt Lake County",
+      sameAs: "https://en.wikipedia.org/wiki/Salt_Lake_County,_Utah",
+    },
+  },
+  Draper: {
+    slug: "draper",
+    sameAs: "https://en.wikipedia.org/wiki/Draper,_Utah",
+    state: "Utah",
+    county: {
+      name: "Salt Lake County",
+      sameAs: "https://en.wikipedia.org/wiki/Salt_Lake_County,_Utah",
+    },
+  },
+  "South Jordan": {
+    slug: "south-jordan",
+    sameAs: "https://en.wikipedia.org/wiki/South_Jordan,_Utah",
+    state: "Utah",
+    county: {
+      name: "Salt Lake County",
+      sameAs: "https://en.wikipedia.org/wiki/Salt_Lake_County,_Utah",
+    },
+  },
+  "Park City": {
+    slug: "park-city",
+    sameAs: "https://en.wikipedia.org/wiki/Park_City,_Utah",
+    state: "Utah",
+    county: {
+      name: "Summit County",
+      sameAs: "https://en.wikipedia.org/wiki/Summit_County,_Utah",
+    },
+  },
+  "Heber City": {
+    slug: "heber-city",
+    sameAs: "https://en.wikipedia.org/wiki/Heber_City,_Utah",
+    state: "Utah",
+    county: {
+      name: "Wasatch County",
+      sameAs: "https://en.wikipedia.org/wiki/Wasatch_County,_Utah",
+    },
+  },
+  Midway: {
+    slug: "midway",
+    sameAs: "https://en.wikipedia.org/wiki/Midway,_Utah",
+    state: "Utah",
+    county: {
+      name: "Wasatch County",
+      sameAs: "https://en.wikipedia.org/wiki/Wasatch_County,_Utah",
+    },
+  },
 };
 
 /** The canonical `@id` for a service-area city, or null if it is not one. */

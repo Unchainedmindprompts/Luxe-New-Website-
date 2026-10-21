@@ -17,7 +17,7 @@
  * appointment. A successful submission means Luxe was asked to follow up.
  *
  * TWO GEOGRAPHY CONCERNS, KEPT APART.
- *   1. Canonical website markets (`SERVICE_AREAS` in lib/constants.ts) — eleven
+ *   1. Canonical website markets (`SERVICE_AREAS` in lib/constants.ts) — nineteen
  *      city pages, Place entities, nav, SEO. Untouched by this contract.
  *   2. Operational consultation eligibility — the larger set of markets Mark
  *      will accept a request from. Agents validate against (2). They must not

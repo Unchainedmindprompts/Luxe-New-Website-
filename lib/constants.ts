@@ -122,6 +122,54 @@ export const SERVICE_AREAS = [
     state: "WA",
     description: "Custom Hunter Douglas window coverings for Maple Valley's growing communities.",
   },
+  {
+    name: "Salt Lake City",
+    slug: "salt-lake-city",
+    state: "UT",
+    description: "Hunter Douglas and Alta window treatments for Salt Lake City's historic and bench homes.",
+  },
+  {
+    name: "Millcreek",
+    slug: "millcreek",
+    state: "UT",
+    description: "Hunter Douglas and Alta window coverings for Millcreek's east bench neighborhoods.",
+  },
+  {
+    name: "Holladay",
+    slug: "holladay",
+    state: "UT",
+    description: "Hunter Douglas and Alta window treatments for Holladay and Olympus Cove homes.",
+  },
+  {
+    name: "Draper",
+    slug: "draper",
+    state: "UT",
+    description: "Hunter Douglas and Alta window treatments for Draper's Corner Canyon and Suncrest homes.",
+  },
+  {
+    name: "South Jordan",
+    slug: "south-jordan",
+    state: "UT",
+    description: "Hunter Douglas and Alta window coverings for South Jordan and Daybreak homes.",
+  },
+  {
+    name: "Park City",
+    slug: "park-city",
+    state: "UT",
+    description: "Hunter Douglas and Alta window treatments for Park City's mountain and second homes.",
+  },
+  {
+    name: "Heber City",
+    slug: "heber-city",
+    state: "UT",
+    description: "Hunter Douglas and Alta window treatments for Heber City's growing valley homes.",
+  },
+  {
+    name: "Midway",
+    slug: "midway",
+    state: "UT",
+    description: "Hunter Douglas and Alta window coverings for Midway's Heber Valley homes.",
+  },
 ] as const;
 
 export const PRODUCTS = [
@@ -239,8 +287,9 @@ export const NAV_LINKS: NavLink[] = [
   {
     label: "Service Areas",
     href: "/areas",
-    // Idaho markets first, then the Seattle Eastside under its own heading —
-    // the heading entry renders as a label row in the menu, not a link.
+    // Idaho markets first, then the Seattle Eastside and Utah under their
+    // own headings — a heading entry renders as a label row in the menu,
+    // not a link.
     children: [
       ...SERVICE_AREAS.filter((a) => a.state === "ID").map((a) => ({
         label: a.name,
@@ -248,6 +297,11 @@ export const NAV_LINKS: NavLink[] = [
       })),
       { label: "Seattle Eastside", heading: true },
       ...SERVICE_AREAS.filter((a) => a.state === "WA").map((a) => ({
+        label: a.name,
+        href: `/areas/${a.slug}`,
+      })),
+      { label: "Utah", heading: true },
+      ...SERVICE_AREAS.filter((a) => a.state === "UT").map((a) => ({
         label: a.name,
         href: `/areas/${a.slug}`,
       })),

@@ -9,14 +9,14 @@ import { cityRef, northIdahoNode } from "@/lib/cities";
 export const metadata: Metadata = {
   title: "Areas We Serve | Luxe Window Works",
   description:
-    "Explore the areas Luxe Window Works serves: custom window treatments with in-home consultations and professional installation across North Idaho, and Hunter Douglas service on Seattle's Eastside. Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint, Bellevue, Kirkland, Sammamish, Issaquah, Renton, and Maple Valley.",
+    "Explore the areas Luxe Window Works serves: custom window treatments with in-home consultations and professional installation across North Idaho, Hunter Douglas service on Seattle's Eastside, and Hunter Douglas and Alta Window Fashions service in the Salt Lake area. Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint, Bellevue, Kirkland, Sammamish, Issaquah, Renton, Maple Valley, Salt Lake City, Millcreek, Holladay, Draper, South Jordan, Park City, Heber City, and Midway.",
   alternates: {
     canonical: `${BUSINESS.url}/areas`,
   },
   openGraph: {
     title: "Areas We Serve | Luxe Window Works",
     description:
-      "Custom window treatments across North Idaho, plus Hunter Douglas service on Seattle's Eastside.",
+      "Custom window treatments across North Idaho, plus Hunter Douglas service on Seattle's Eastside and Hunter Douglas and Alta service in the Salt Lake area.",
     type: "website",
     url: `${BUSINESS.url}/areas`,
   },
@@ -33,7 +33,7 @@ function AreasHubSchema() {
     url: areasUrl,
     name: "Areas We Serve — Luxe Window Works",
     description:
-      "The communities Luxe Window Works serves: North Idaho, with custom window treatments, in-home consultations, and professional installation, and Seattle's Eastside, with Hunter Douglas service by appointment.",
+      "The communities Luxe Window Works serves: North Idaho, with custom window treatments, in-home consultations, and professional installation; Seattle's Eastside, with Hunter Douglas service by appointment; and the Salt Lake area, with Hunter Douglas and Alta Window Fashions service by appointment.",
     isPartOf: { "@id": `${BUSINESS.url}/#website` },
     about: { "@id": `${BUSINESS.url}/#business` },
     breadcrumb: { "@id": `${areasUrl}#breadcrumb` },
@@ -124,6 +124,7 @@ export default function AreasHubPage() {
   const eastsideAreas = areasList.filter(
     (area) => area.state === "Washington"
   );
+  const utahAreas = areasList.filter((area) => area.state === "Utah");
 
   return (
     <>
@@ -148,11 +149,13 @@ export default function AreasHubPage() {
             Luxe Window Works is based in Post Falls and provides in-home
             consultations and professional installation across North Idaho. We
             also serve six communities on Seattle&apos;s Eastside with Hunter
-            Douglas, by appointment, with measuring and installation through
-            Hunter Douglas&apos;s own certified installation service. Every
-            community below has different homes, different climate stresses on
-            windows, and a different mix of what actually works. Click through
-            to your area to see the specifics.
+            Douglas, and eight communities in the Salt Lake area with Hunter
+            Douglas and Alta Window Fashions, by appointment, with measuring
+            and installation through Hunter Douglas&apos;s own certified
+            installation service. The service works the same way in every
+            market we serve. Every community below has different homes,
+            different climate stresses on windows, and a different mix of what
+            actually works. Click through to your area to see the specifics.
           </p>
         </div>
       </section>
@@ -173,13 +176,33 @@ export default function AreasHubPage() {
             Seattle Eastside
           </h2>
           <p className="text-warm-gray-600 leading-relaxed max-w-3xl mb-8">
-            These are Hunter Douglas service areas. Luxe sells Hunter Douglas
-            exclusively on the Eastside, with in-home consultations by
-            appointment and measuring and installation handled through Hunter
-            Douglas Installation Services.
+            These are Hunter Douglas service areas. Luxe leads with Hunter
+            Douglas on the Eastside, with in-home consultations by appointment
+            and measuring and installation handled through Hunter Douglas
+            Installation Services. Alta Window Fashions is also available on
+            the Eastside, measured and installed through the same service.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {eastsideAreas.map((area) => (
+              <AreaCard key={area.slug} area={area} />
+            ))}
+          </div>
+
+          <h2 className="font-serif text-3xl text-charcoal mt-16 mb-4">
+            Utah: Salt Lake Area
+          </h2>
+          <p className="text-warm-gray-600 leading-relaxed max-w-3xl mb-8">
+            These are Hunter Douglas and Alta Window Fashions service areas.
+            Luxe serves Utah by appointment, with in-home consultations and
+            measuring and installation handled through Hunter Douglas
+            Installation Services for both brands. See the{" "}
+            <Link href="/utah" className="text-gold hover:text-gold-dark font-medium">
+              Utah overview
+            </Link>{" "}
+            for how service works across all eight communities.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {utahAreas.map((area) => (
               <AreaCard key={area.slug} area={area} />
             ))}
           </div>

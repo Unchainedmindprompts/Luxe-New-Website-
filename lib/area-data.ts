@@ -39,10 +39,14 @@ export interface AreaPageData {
   metaTitle: string;
   metaDescription: string;
   /**
-   * Set on the Seattle Eastside entries (Washington). Drives the state-aware
-   * schema and the Hunter Douglas service-model copy on the area page: Luxe
-   * serves these cities with Hunter Douglas only, by appointment, with
-   * measuring and installation through Hunter Douglas Installation Services.
+   * Set on the out-of-state entries. Drives the state-aware schema and the
+   * service-model copy on the area page. Washington (Seattle Eastside):
+   * Hunter Douglas only, by appointment, measuring and installation through
+   * Hunter Douglas Installation Services. Utah (Salt Lake area, added
+   * Oct 21, 2026): Hunter Douglas and Alta Window Fashions, by appointment,
+   * with measuring and installation through Hunter Douglas Installation
+   * Services for both brands. Same service story in every market; the copy
+   * never splits how service works by location.
    * Absent on the five North Idaho entries, whose pages carry Luxe's own
    * measuring, installation, and lifetime installation guarantee.
    */
@@ -363,7 +367,7 @@ export const areaPages: Record<string, AreaPageData> = {
       },
       {
         question: "Who measures and installs Hunter Douglas shades in Bellevue?",
-        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades themselves carry the Hunter Douglas lifetime warranty.",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades themselves carry the Hunter Douglas lifetime warranty. The same service also installs Alta Window Fashions products.",
       },
       {
         question: "What window treatments handle west-facing Lake Washington glare?",
@@ -376,7 +380,7 @@ export const areaPages: Record<string, AreaPageData> = {
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
     ],
-    productIntro: "In Bellevue, Luxe works exclusively with Hunter Douglas. Silhouette sheer shades and Designer Solar Shades lead for lake-facing glass, PowerView automation ties shades into the smart-home systems Bellevue homes already run, and Duette cellular shades handle comfort on large windows.",
+    productIntro: "In Bellevue, Luxe leads with Hunter Douglas, and Alta Window Fashions is also available, measured and installed through the same Hunter Douglas Installation Services. Silhouette sheer shades and Designer Solar Shades lead for lake-facing glass, PowerView automation ties shades into the smart-home systems Bellevue homes already run, and Duette cellular shades handle comfort on large windows.",
     localCTA: "Ready to compare Hunter Douglas in your Bellevue home? Book an in-home consultation and we will bring the collection to you.",
     metaTitle: "Bellevue Hunter Douglas Window Treatments | Luxe Window Works",
     metaDescription: "Hunter Douglas shades, blinds, and PowerView automation for Bellevue, WA homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
@@ -403,7 +407,7 @@ export const areaPages: Record<string, AreaPageData> = {
       },
       {
         question: "Who handles installation for Kirkland orders?",
-        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty. The same service also installs Alta Window Fashions products.",
       },
     ],
     relatedPosts: [
@@ -412,7 +416,7 @@ export const areaPages: Record<string, AreaPageData> = {
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
     ],
-    productIntro: "In Kirkland, Luxe works exclusively with Hunter Douglas. Silhouette and Luminette sheers suit the lake-facing rooms, Duette cellular shades handle comfort and privacy inland, and PowerView automation is a natural fit for Kirkland's connected homes.",
+    productIntro: "In Kirkland, Luxe leads with Hunter Douglas, and Alta Window Fashions is also available, measured and installed through the same Hunter Douglas Installation Services. Silhouette and Luminette sheers suit the lake-facing rooms, Duette cellular shades handle comfort and privacy inland, and PowerView automation is a natural fit for Kirkland's connected homes.",
     localCTA: "Ready to compare Hunter Douglas in your Kirkland home? Book an in-home consultation and we will bring the collection to you.",
     metaTitle: "Kirkland Hunter Douglas Window Treatments | Luxe Window Works",
     metaDescription: "Hunter Douglas shades, blinds, and PowerView automation for Kirkland, WA homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
@@ -439,7 +443,7 @@ export const areaPages: Record<string, AreaPageData> = {
       },
       {
         question: "Who measures and installs Hunter Douglas shades in Sammamish?",
-        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty. The same service also installs Alta Window Fashions products.",
       },
     ],
     relatedPosts: [
@@ -448,7 +452,7 @@ export const areaPages: Record<string, AreaPageData> = {
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
     ],
-    productIntro: "In Sammamish, Luxe works exclusively with Hunter Douglas. PowerView motorized shades lead for two-story great rooms and hard-to-reach glass, Duette cellular shades handle comfort in large rooms, and Silhouette sheers soften the light in open living spaces.",
+    productIntro: "In Sammamish, Luxe leads with Hunter Douglas, and Alta Window Fashions is also available, measured and installed through the same Hunter Douglas Installation Services. PowerView motorized shades lead for two-story great rooms and hard-to-reach glass, Duette cellular shades handle comfort in large rooms, and Silhouette sheers soften the light in open living spaces.",
     localCTA: "Ready to compare Hunter Douglas in your Sammamish home? Book an in-home consultation and we will bring the collection to you.",
     metaTitle: "Sammamish Hunter Douglas Window Treatments | Luxe Window Works",
     metaDescription: "Hunter Douglas shades and PowerView automation for Sammamish, WA homes, including two-story windows. In-home consultations by appointment; installation through Hunter Douglas Installation Services.",
@@ -475,7 +479,7 @@ export const areaPages: Record<string, AreaPageData> = {
       },
       {
         question: "Who measures and installs Hunter Douglas shades in Issaquah?",
-        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty. The same service also installs Alta Window Fashions products.",
       },
     ],
     relatedPosts: [
@@ -484,7 +488,7 @@ export const areaPages: Record<string, AreaPageData> = {
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
     ],
-    productIntro: "In Issaquah, Luxe works exclusively with Hunter Douglas. Duette cellular shades and Designer Roller Shades are the workhorses for newer construction, Silhouette sheers suit the view glass on the hillsides, and PowerView automation grows with the home.",
+    productIntro: "In Issaquah, Luxe leads with Hunter Douglas, and Alta Window Fashions is also available, measured and installed through the same Hunter Douglas Installation Services. Duette cellular shades and Designer Roller Shades are the workhorses for newer construction, Silhouette sheers suit the view glass on the hillsides, and PowerView automation grows with the home.",
     localCTA: "Ready to compare Hunter Douglas in your Issaquah home? Book an in-home consultation and we will bring the collection to you.",
     metaTitle: "Issaquah Hunter Douglas Window Treatments | Luxe Window Works",
     metaDescription: "Hunter Douglas shades, blinds, and PowerView automation for Issaquah, WA homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
@@ -511,7 +515,7 @@ export const areaPages: Record<string, AreaPageData> = {
       },
       {
         question: "Who measures and installs Hunter Douglas shades in Renton?",
-        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty. The same service also installs Alta Window Fashions products.",
       },
     ],
     relatedPosts: [
@@ -520,7 +524,7 @@ export const areaPages: Record<string, AreaPageData> = {
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
     ],
-    productIntro: "In Renton, Luxe works exclusively with Hunter Douglas. Duette cellular shades lead for comfort and blackout bedrooms, Designer Roller and solar shades handle the Kennydale lake glass, and Applause cellular shades offer a value path for whole-home projects.",
+    productIntro: "In Renton, Luxe leads with Hunter Douglas, and Alta Window Fashions is also available, measured and installed through the same Hunter Douglas Installation Services. Duette cellular shades lead for comfort and blackout bedrooms, Designer Roller and solar shades handle the Kennydale lake glass, and Applause cellular shades offer a value path for whole-home projects.",
     localCTA: "Ready to compare Hunter Douglas in your Renton home? Book an in-home consultation and we will bring the collection to you.",
     metaTitle: "Renton Hunter Douglas Window Treatments | Luxe Window Works",
     metaDescription: "Hunter Douglas shades, blinds, and PowerView automation for Renton, WA homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
@@ -547,7 +551,7 @@ export const areaPages: Record<string, AreaPageData> = {
       },
       {
         question: "Who measures and installs Hunter Douglas shades in Maple Valley?",
-        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty. The same service also installs Alta Window Fashions products.",
       },
     ],
     relatedPosts: [
@@ -556,9 +560,295 @@ export const areaPages: Record<string, AreaPageData> = {
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
     ],
-    productIntro: "In Maple Valley, Luxe works exclusively with Hunter Douglas. Cordless Duette cellular shades and Designer Roller Shades suit family homes, blackout options handle kids' bedrooms, and Silhouette sheers soften light in living spaces around Lake Wilderness.",
+    productIntro: "In Maple Valley, Luxe leads with Hunter Douglas, and Alta Window Fashions is also available, measured and installed through the same Hunter Douglas Installation Services. Cordless Duette cellular shades and Designer Roller Shades suit family homes, blackout options handle kids' bedrooms, and Silhouette sheers soften light in living spaces around Lake Wilderness.",
     localCTA: "Ready to compare Hunter Douglas in your Maple Valley home? Book an in-home consultation and we will bring the collection to you.",
     metaTitle: "Maple Valley Hunter Douglas Window Treatments | Luxe Window Works",
     metaDescription: "Hunter Douglas shades, blinds, and PowerView automation for Maple Valley, WA homes. In-home consultations by appointment; installation through Hunter Douglas Installation Services.",
+  },
+  // Utah entries (added Oct 21, 2026). Hunter Douglas and Alta Window
+  // Fashions, served by appointment: Luxe handles the in-home consultation
+  // and sale; measuring and installation are performed through Hunter
+  // Douglas Installation Services for both brands. The service story is the
+  // same one used in every market Luxe serves; nothing here splits how
+  // service works by location.
+  "salt-lake-city": {
+    slug: "salt-lake-city",
+    name: "Salt Lake City",
+    state: "Utah",
+    headline: "Hunter Douglas and Alta Window Treatments for Salt Lake City Homes",
+    subheadline: "Historic Avenues homes, Sugar House bungalows, and East Bench glass. We bring both collections to your home by appointment.",
+    description: "Luxe Window Works serves Salt Lake City by appointment with Hunter Douglas and Alta Window Fashions window treatments. We come to your home with samples, help you compare collections and controls in your own light, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["The Avenues", "Capitol Hill", "Sugar House", "Federal Heights", "Yalecrest", "East Bench", "Liberty Wells", "Rose Park", "Marmalade"],
+    housingTypes: "Salt Lake City housing runs from the historic homes of the Avenues and Capitol Hill to Sugar House bungalows, mid-century homes in Liberty Wells and on the East Bench, and larger newer builds along the foothills. Older homes bring original trim and out-of-square openings; the bench neighborhoods bring big view glass facing west over the valley.",
+    climateConsiderations: "Salt Lake City sits at 4,300 feet, and the sun is stronger than the temperature suggests: UV fades floors and furniture fast on west-facing glass. Summer heat builds on the benches in the afternoon, and winter inversions keep cold air settled in the valley for days at a time. Cellular shades insulate at the glass in winter, and solar fabrics cut glare and UV without giving up the valley and mountain views.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Salt Lake City?",
+        answer: "No. Luxe serves Salt Lake City by appointment with in-home consultations. We bring Hunter Douglas and Alta Window Fashions samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Who measures and installs window treatments in Salt Lake City?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's own certified installation service, for both Hunter Douglas and Alta Window Fashions products. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, Hunter Douglas shades carry the Hunter Douglas lifetime warranty, and PowerView carries a five-year warranty.",
+      },
+      {
+        question: "What window treatments handle west-facing valley sun in Salt Lake City?",
+        answer: "Solar shades with the right openness factor are the usual answer: they cut glare and block the UV that fades floors at this elevation while keeping the view. Sheer shades like Silhouette diffuse the same light for a softer look. We compare openness levels in your actual light during the consultation.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "How Much Do Hunter Douglas Window Treatments Cost?",
+        slug: "how-much-do-hunter-douglas-window-treatments-cost",
+      },
+    ],
+    productIntro: "In Salt Lake City, Luxe works with Hunter Douglas and Alta Window Fashions. Duette cellular shades lead for insulation through inversion winters, Silhouette sheers and Designer Solar Shades manage the west-facing view glass, and Alta cellular and roller shades deliver the same clean look at a friendlier price point.",
+    localCTA: "Ready to compare Hunter Douglas and Alta in your Salt Lake City home? Book an in-home consultation and we will bring both collections to you.",
+    metaTitle: "Salt Lake City Hunter Douglas & Alta Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas and Alta Window Fashions shades, blinds, and motorization for Salt Lake City, UT homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
+  },
+  millcreek: {
+    slug: "millcreek",
+    name: "Millcreek",
+    state: "Utah",
+    headline: "Hunter Douglas and Alta Window Treatments for Millcreek Homes",
+    subheadline: "Canyon-rim views, mature trees, and mid-century homes along the east bench. Samples in your home, by appointment.",
+    description: "Luxe Window Works serves Millcreek by appointment with Hunter Douglas and Alta Window Fashions window treatments. We come to your home with samples, help you compare collections and controls in your own light, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["East Mill Creek", "Mount Olympus", "Olympus Cove", "Canyon Rim", "Millcreek Meadows", "East Bench"],
+    housingTypes: "Millcreek is mostly established single-family neighborhoods: mid-century ramblers and split-levels under mature trees in East Mill Creek and Canyon Rim, and larger view homes climbing toward Mount Olympus and Olympus Cove. Big picture windows and sliding doors are common, and many homes are mid-renovation, which makes updated window treatments part of the remodel conversation.",
+    climateConsiderations: "Millcreek sits against the Wasatch foothills, so east-side homes take bright morning sun and west-facing rooms take the full afternoon heat off the valley. Elevation makes UV a year-round issue for furniture and flooring. Cellular shades handle the temperature swing at the glass, and solar shades keep west rooms usable in the late afternoon without closing the view down.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Millcreek?",
+        answer: "No. Luxe serves Millcreek by appointment with in-home consultations. We bring Hunter Douglas and Alta Window Fashions samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Who measures and installs window treatments in Millcreek?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's own certified installation service, for both Hunter Douglas and Alta Window Fashions products. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, Hunter Douglas shades carry the Hunter Douglas lifetime warranty, and PowerView carries a five-year warranty.",
+      },
+      {
+        question: "What works for the large picture windows and sliding doors in Millcreek homes?",
+        answer: "Wide picture windows usually take solar or sheer shades that manage the light without breaking the window into pieces, and sliding doors work well with vertical sheer or panel-style treatments that stack to one side. Wide spans are also where motorization earns its cost, since a shade you can move by remote or schedule actually gets used.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "How Much Do Hunter Douglas Window Treatments Cost?",
+        slug: "how-much-do-hunter-douglas-window-treatments-cost",
+      },
+    ],
+    productIntro: "In Millcreek, Luxe works with Hunter Douglas and Alta Window Fashions. Solar shades and Silhouette sheers lead on the west-facing picture windows, Duette cellular shades handle comfort in the bedrooms, and Alta roller shades are a strong fit for the mid-century homes being renovated across the city.",
+    localCTA: "Ready to compare Hunter Douglas and Alta in your Millcreek home? Book an in-home consultation and we will bring both collections to you.",
+    metaTitle: "Millcreek Hunter Douglas & Alta Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas and Alta Window Fashions shades, blinds, and motorization for Millcreek, UT homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
+  },
+  holladay: {
+    slug: "holladay",
+    name: "Holladay",
+    state: "Utah",
+    headline: "Hunter Douglas and Alta Window Treatments for Holladay Homes",
+    subheadline: "Quiet streets under Mount Olympus, from Holladay Village to Olympus Cove. Both collections in your home, by appointment.",
+    description: "Luxe Window Works serves Holladay by appointment with Hunter Douglas and Alta Window Fashions window treatments. We come to your home with samples, help you compare collections and controls in your own light, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["Olympus Cove", "Holladay Village", "Spring Lane", "Knudsen's Corner", "Walker Lane", "Holladay Hills"],
+    housingTypes: "Holladay mixes established ranch and two-story homes on large, tree-covered lots with the custom and luxury homes of Olympus Cove against the mountain. Many homes have been renovated or rebuilt on their original lots, so window sizes vary house to house, and mountain-facing glass is a feature owners want to protect rather than cover up.",
+    climateConsiderations: "Holladay sits at the mouth of Big Cottonwood Canyon, and canyon winds plus high-elevation sun shape what works here. East and south glass takes intense morning and midday sun, and the mountain backdrop means most owners want glare control that keeps the view. Solar and sheer shades filter the light without darkening the room, and cellular shades add insulation for cold canyon nights.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Holladay?",
+        answer: "No. Luxe serves Holladay by appointment with in-home consultations. We bring Hunter Douglas and Alta Window Fashions samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Who measures and installs window treatments in Holladay?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's own certified installation service, for both Hunter Douglas and Alta Window Fashions products. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, Hunter Douglas shades carry the Hunter Douglas lifetime warranty, and PowerView carries a five-year warranty.",
+      },
+      {
+        question: "How do I control glare without losing my view of Mount Olympus?",
+        answer: "Sheer shades like Silhouette and solar shades at a lower openness factor are built for exactly this: they diffuse or filter the sun while the mountain stays visible. The right openness depends on the direction the glass faces and the time of day the glare hits, which is why we compare samples in the room itself during the consultation.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "How Much Do Hunter Douglas Window Treatments Cost?",
+        slug: "how-much-do-hunter-douglas-window-treatments-cost",
+      },
+    ],
+    productIntro: "In Holladay, Luxe works with Hunter Douglas and Alta Window Fashions. Silhouette sheers and solar shades lead for the mountain-facing glass, Duette cellular shades are the comfort pick for bedrooms, and Alta cellular and roller shades round out renovated homes at a lower price point.",
+    localCTA: "Ready to compare Hunter Douglas and Alta in your Holladay home? Book an in-home consultation and we will bring both collections to you.",
+    metaTitle: "Holladay Hunter Douglas & Alta Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas and Alta Window Fashions shades, blinds, and motorization for Holladay, UT homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
+  },
+  draper: {
+    slug: "draper",
+    name: "Draper",
+    state: "Utah",
+    headline: "Hunter Douglas and Alta Window Treatments for Draper Homes",
+    subheadline: "Corner Canyon trails, Suncrest views, and growing neighborhoods at the south end of the valley. Samples in your home, by appointment.",
+    description: "Luxe Window Works serves Draper by appointment with Hunter Douglas and Alta Window Fashions window treatments. We come to your home with samples, help you compare collections and controls in your own light, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["Corner Canyon", "Suncrest", "South Mountain", "Draper Park", "Crescent View", "Steeple Chase"],
+    housingTypes: "Draper is newer and larger: South Mountain and Corner Canyon custom homes, Suncrest homes on the ridge with views in two directions, and family subdivisions still filling in around Draper Park. Two-story great rooms, tall entry glass, and walls of west-facing windows are standard, and many homes still have the builder-grade blinds they closed with.",
+    climateConsiderations: "Draper catches the point of the mountain winds and full southern exposure. Suncrest and ridge homes take wind and sun from two sides, and west-facing glass overheats great rooms by mid-afternoon. Motorized solar shades on a schedule are the practical answer for tall glass, and cellular shades take the edge off the temperature swings that come with elevation.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Draper?",
+        answer: "No. Luxe serves Draper by appointment with in-home consultations. We bring Hunter Douglas and Alta Window Fashions samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Who measures and installs window treatments in Draper?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's own certified installation service, for both Hunter Douglas and Alta Window Fashions products. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, Hunter Douglas shades carry the Hunter Douglas lifetime warranty, and PowerView carries a five-year warranty.",
+      },
+      {
+        question: "What is the best way to cover two-story windows in a Draper great room?",
+        answer: "Motorized shades are the practical answer for glass you cannot reach. With PowerView automation, Hunter Douglas shades open, close, and tilt by remote, app, or schedule, and Alta offers motorization across much of its line as well. We plan the power options and controls with you during the consultation.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "How Much Do Hunter Douglas Window Treatments Cost?",
+        slug: "how-much-do-hunter-douglas-window-treatments-cost",
+      },
+    ],
+    productIntro: "In Draper, Luxe works with Hunter Douglas and Alta Window Fashions. PowerView motorized shades lead for two-story great rooms and ridge-view glass, solar shades manage the west exposure, and Alta roller and cellular shades cover whole new homes without the budget getting away from you.",
+    localCTA: "Ready to compare Hunter Douglas and Alta in your Draper home? Book an in-home consultation and we will bring both collections to you.",
+    metaTitle: "Draper Hunter Douglas & Alta Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas and Alta Window Fashions shades, blinds, and motorization for Draper, UT homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
+  },
+  "south-jordan": {
+    slug: "south-jordan",
+    name: "South Jordan",
+    state: "Utah",
+    headline: "Hunter Douglas and Alta Window Treatments for South Jordan Homes",
+    subheadline: "Daybreak villages, Jordan River trails, and family homes across the southwest valley. Both collections in your home, by appointment.",
+    description: "Luxe Window Works serves South Jordan by appointment with Hunter Douglas and Alta Window Fashions window treatments. We come to your home with samples, help you compare collections and controls in your own light, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["Daybreak", "South Jordan Parkway", "River Heights", "The District area", "Bingham Creek", "Glenmoor"],
+    housingTypes: "South Jordan is master-planned growth: Daybreak's villages around Oquirrh Lake, newer family subdivisions along South Jordan Parkway, and established homes near Glenmoor and the Jordan River. Open floor plans and large rear glass facing the Oquirrh Mountains are the norm, and most projects start with covering a whole house of bare or builder-grade windows.",
+    climateConsiderations: "South Jordan faces west into the Oquirrhs, so rear glass takes the afternoon sun head-on and sunset glare lands right in the main living spaces. Summers are hot and dry, winters are cold, and the wind comes across the valley floor. Solar shades cut the glare while keeping the mountain sunset, and cellular shades insulate the big rear windows in both seasons.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in South Jordan?",
+        answer: "No. Luxe serves South Jordan by appointment with in-home consultations. We bring Hunter Douglas and Alta Window Fashions samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Who measures and installs window treatments in South Jordan?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's own certified installation service, for both Hunter Douglas and Alta Window Fashions products. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, Hunter Douglas shades carry the Hunter Douglas lifetime warranty, and PowerView carries a five-year warranty.",
+      },
+      {
+        question: "We just bought in Daybreak and every window is bare. Where do we start?",
+        answer: "Start with the rooms you live in most and the west-facing glass, where sun and privacy matter right away, then work through bedrooms and secondary rooms. During the consultation we go room by room, compare Hunter Douglas and Alta options at different price points, and help you phase the project if doing the whole house at once does not fit the budget.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "How Much Do Hunter Douglas Window Treatments Cost?",
+        slug: "how-much-do-hunter-douglas-window-treatments-cost",
+      },
+    ],
+    productIntro: "In South Jordan, Luxe works with Hunter Douglas and Alta Window Fashions. Solar shades lead on the west-facing rear glass, Duette cellular shades handle bedrooms and energy bills, and Alta roller and cellular shades make whole-house Daybreak projects work at a friendlier number.",
+    localCTA: "Ready to compare Hunter Douglas and Alta in your South Jordan home? Book an in-home consultation and we will bring both collections to you.",
+    metaTitle: "South Jordan Hunter Douglas & Alta Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas and Alta Window Fashions shades, blinds, and motorization for South Jordan, UT homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
+  },
+  "park-city": {
+    slug: "park-city",
+    name: "Park City",
+    state: "Utah",
+    headline: "Hunter Douglas and Alta Window Treatments for Park City Homes",
+    subheadline: "Ski homes, second homes, and mountain contemporary builds from Old Town to Deer Valley. Samples in your home, by appointment.",
+    description: "Luxe Window Works serves Park City by appointment with Hunter Douglas and Alta Window Fashions window treatments. We come to your home with samples, help you compare collections and controls in your own light, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["Old Town", "Deer Valley", "Empire Pass", "Park Meadows", "Prospector", "Thaynes Canyon", "Kimball Junction", "Promontory"],
+    housingTypes: "Park City housing is mountain housing: historic Old Town miners' cottages, ski-in condos and estates in Deer Valley and Empire Pass, golf and gated communities like Promontory, and full-time family neighborhoods in Park Meadows and Prospector. Walls of glass face the slopes, ceilings run high, and a large share of homes are second homes that sit empty between visits.",
+    climateConsiderations: "At 7,000 feet the sun is intense in every season, and it reflects off the snow all winter. UV damage is the quiet problem in Park City homes: floors, rugs, and furniture fade behind untreated glass. Motorized solar shades protect a second home on a schedule whether you are there or not, and cellular shades add real insulation against mountain cold.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Park City?",
+        answer: "No. Luxe serves Park City by appointment with in-home consultations. We bring Hunter Douglas and Alta Window Fashions samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Who measures and installs window treatments in Park City?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's own certified installation service, for both Hunter Douglas and Alta Window Fashions products. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, Hunter Douglas shades carry the Hunter Douglas lifetime warranty, and PowerView carries a five-year warranty.",
+      },
+      {
+        question: "Is it worth motorizing shades in a Park City second home?",
+        answer: "It is one of the best use cases for motorization. Motorized shades run on schedules, so the home is protected from sun and UV while you are away, and you can adjust them from your phone before you arrive. On tall slope-facing glass, motorization is also the only practical way to operate the shades day to day.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "How Much Do Hunter Douglas Window Treatments Cost?",
+        slug: "how-much-do-hunter-douglas-window-treatments-cost",
+      },
+    ],
+    productIntro: "In Park City, Luxe works with Hunter Douglas and Alta Window Fashions. Motorized solar shades lead for slope-facing glass and second homes, Duette cellular shades handle insulation and room darkening against early mountain sunrises, and Silhouette sheers soften the light in Old Town and Park Meadows living rooms.",
+    localCTA: "Ready to compare Hunter Douglas and Alta in your Park City home? Book an in-home consultation and we will bring both collections to you.",
+    metaTitle: "Park City Hunter Douglas & Alta Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas and Alta Window Fashions shades, blinds, and motorization for Park City, UT homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
+  },
+  "heber-city": {
+    slug: "heber-city",
+    name: "Heber City",
+    state: "Utah",
+    headline: "Hunter Douglas and Alta Window Treatments for Heber City Homes",
+    subheadline: "A growing valley town on the Wasatch Back, from Main Street to Red Ledges. Both collections in your home, by appointment.",
+    description: "Luxe Window Works serves Heber City by appointment with Hunter Douglas and Alta Window Fashions window treatments. We come to your home with samples, help you compare collections and controls in your own light, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["Downtown Heber", "Red Ledges", "Center Creek", "Lake Creek", "Timber Lakes"],
+    housingTypes: "Heber City is growing fast from a farming town into the Wasatch Back's family hub: established homes along Main Street, new subdivisions spreading across the valley floor, and luxury golf homes at Red Ledges. Mountain views in every direction mean big view windows, and new builds often come with tall glass in great rooms that face Mount Timpanogos.",
+    climateConsiderations: "Heber Valley is high, cold in winter, and bright all year: the valley floor gets strong sun and pooling cold air, and west-facing homes take afternoon glare off the mountains. Cellular shades earn their keep through a Heber winter, and solar shades protect new floors and furnishings from high-elevation UV.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Heber City?",
+        answer: "No. Luxe serves Heber City by appointment with in-home consultations. We bring Hunter Douglas and Alta Window Fashions samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Who measures and installs window treatments in Heber City?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's own certified installation service, for both Hunter Douglas and Alta Window Fashions products. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, Hunter Douglas shades carry the Hunter Douglas lifetime warranty, and PowerView carries a five-year warranty.",
+      },
+      {
+        question: "What works for the tall great-room windows in new Heber City builds?",
+        answer: "For glass that faces Mount Timpanogos, start with solar shades that cut glare and UV while keeping the view, and motorize anything out of easy reach so the shades actually get adjusted. Cellular shades are the better fit for bedrooms and north-facing rooms, where insulation matters more than the view.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "How Much Do Hunter Douglas Window Treatments Cost?",
+        slug: "how-much-do-hunter-douglas-window-treatments-cost",
+      },
+    ],
+    productIntro: "In Heber City, Luxe works with Hunter Douglas and Alta Window Fashions. Duette cellular shades lead for winter insulation, solar shades manage the valley glare on view glass, and Alta roller and cellular shades fit the budgets of the new subdivisions filling in across the valley.",
+    localCTA: "Ready to compare Hunter Douglas and Alta in your Heber City home? Book an in-home consultation and we will bring both collections to you.",
+    metaTitle: "Heber City Hunter Douglas & Alta Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas and Alta Window Fashions shades, blinds, and motorization for Heber City, UT homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
+  },
+  midway: {
+    slug: "midway",
+    name: "Midway",
+    state: "Utah",
+    headline: "Hunter Douglas and Alta Window Treatments for Midway Homes",
+    subheadline: "Swiss-inspired streets, Soldier Hollow views, and quiet second homes in the Heber Valley. Samples in your home, by appointment.",
+    description: "Luxe Window Works serves Midway by appointment with Hunter Douglas and Alta Window Fashions window treatments. We come to your home with samples, help you compare collections and controls in your own light, and coordinate measuring and installation through Hunter Douglas Installation Services, the manufacturer's own certified installation service.",
+    neighborhoods: ["Main Street Midway", "Homestead area", "Soldier Hollow", "Zermatt area", "Dutch Hollow", "Midway Meadows"],
+    housingTypes: "Midway is the Heber Valley's retreat town: Swiss-styled homes along Main Street, farmhouses and acreage properties, resort homes near the Homestead and Zermatt, and second homes tucked against the Wasatch foothills. Windows frame mountain and valley views that owners specifically bought, so treatments have to manage light without taking the view away.",
+    climateConsiderations: "Midway shares the Heber Valley's high-elevation sun and cold winters, with the added factor of second homes that sit unoccupied for stretches at a time. Solar shades block the UV that fades interiors whether anyone is home or not, motorization lets owners adjust shades from anywhere, and cellular shades insulate against valley cold snaps.",
+    faqs: [
+      {
+        question: "Does Luxe Window Works have a showroom in Midway?",
+        answer: "No. Luxe serves Midway by appointment with in-home consultations. We bring Hunter Douglas and Alta Window Fashions samples to your home, and measuring and installation are performed locally through Hunter Douglas Installation Services by certified installers.",
+      },
+      {
+        question: "Who measures and installs window treatments in Midway?",
+        answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's own certified installation service, for both Hunter Douglas and Alta Window Fashions products. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, Hunter Douglas shades carry the Hunter Douglas lifetime warranty, and PowerView carries a five-year warranty.",
+      },
+      {
+        question: "What window treatments protect a Midway second home while it sits empty?",
+        answer: "Solar shades on the sun-facing glass are the first line of defense: they block the UV that fades floors, rugs, and furniture year-round. Motorized shades add schedules and remote control, so the house can be opened up before you arrive and closed down when you leave, without anyone driving out to do it by hand.",
+      },
+    ],
+    relatedPosts: [
+      {
+        title: "How Much Do Hunter Douglas Window Treatments Cost?",
+        slug: "how-much-do-hunter-douglas-window-treatments-cost",
+      },
+    ],
+    productIntro: "In Midway, Luxe works with Hunter Douglas and Alta Window Fashions. Solar shades lead for view glass and UV protection, motorized treatments suit second homes that are not occupied full time, and Duette cellular shades handle the cold valley nights.",
+    localCTA: "Ready to compare Hunter Douglas and Alta in your Midway home? Book an in-home consultation and we will bring both collections to you.",
+    metaTitle: "Midway Hunter Douglas & Alta Window Treatments | Luxe Window Works",
+    metaDescription: "Hunter Douglas and Alta Window Fashions shades, blinds, and motorization for Midway, UT homes. In-home consultations by appointment; measuring and installation through Hunter Douglas Installation Services.",
   },
 };

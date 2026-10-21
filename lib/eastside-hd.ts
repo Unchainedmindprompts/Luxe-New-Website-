@@ -14,6 +14,14 @@
  * one-year installation guarantee belongs to the service. The phrase
  * "lifetime installation guarantee" must never appear here: that promise
  * covers Luxe-installed work in North Idaho only.
+ *
+ * Update (Mark, Oct 21, 2026): Hunter Douglas Installation Services also
+ * installs Alta Window Fashions products, and Alta is offered on the
+ * Eastside by appointment alongside Hunter Douglas. That fact is stated
+ * on the /eastside hub, the six Eastside area pages, and the installation
+ * answers on the six Hunter Douglas city pages. These category blocks
+ * stay Hunter Douglas specific because each one maps to a Hunter Douglas
+ * line; they are not the place the Alta offer is made.
  */
 
 export const EASTSIDE_CITIES = [
