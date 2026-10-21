@@ -33,6 +33,13 @@ export default function HdCategoryStrip() {
             </Link>
           ))}
         </nav>
+        <p className="mt-6 leading-relaxed text-warm-gray-700">
+          Planning a budget first? See{" "}
+          <Link href="/blog/how-much-do-hunter-douglas-window-treatments-cost" className="font-semibold underline underline-offset-4">
+            how much Hunter Douglas window treatments cost
+          </Link>
+          , with the published per-window ranges for each collection.
+        </p>
       </div>
     </section>
   );

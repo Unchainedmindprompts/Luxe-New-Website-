@@ -63,6 +63,15 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
     bookLabel: "Request a free in-home consultation",
     placement: "after-content",
   },
+  "how-much-do-hunter-douglas-window-treatments-cost": {
+    heading: "Want an exact number instead of a range?",
+    body: "Ranges plan a budget. A consultation prices your actual windows: we measure, spec the product and operating system in your own light, and give you a written figure. The consultation is free.",
+    productHref: "/products/motorization",
+    productLabel: "See PowerView motorization",
+    bookHref: "/book",
+    bookLabel: "Request a free in-home consultation",
+    placement: "after-content",
+  },
   "blackout-shades-for-better-sleep": {
     heading: "Want a bedroom that stays dark past sunrise?",
     body: "We measure your windows, find where the light is leaking in, and show you the blackout options in your own light before you order anything. The consultation is free.",
@@ -129,6 +138,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
       title: "Why Are Window Treatments So Expensive?",
       slug: "why-are-window-treatments-so-expensive-a-first-time-buyers-guide-to-smart-stylish-and-budget-friendly-choices",
     },
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
   ],
   motorization: [
     {
@@ -147,6 +160,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
       title: "SmartDrape Patio-Door Shades in Coeur d'Alene and Post Falls",
       slug: "smartdrape-patio-door-shades-in-coeur-dalene-post-falls",
     },
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
   ],
   "roller-shades": [
     {
@@ -161,11 +178,19 @@ export const PRODUCT_DECISION_ARTICLES: Record<
       title: "Cellular vs. Roller Shades: Which One Belongs on Your Windows?",
       slug: "cellular-vs-roller-shades",
     },
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
   ],
   shutters: [
     {
       title: "The Hidden Value of Plantation Shutters in Northern Idaho Homes",
       slug: "the-hidden-value-of-plantation-shutters-in-northern-idaho-homes",
+    },
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
   ],
   "cellular-shades": [
@@ -184,6 +209,40 @@ export const PRODUCT_DECISION_ARTICLES: Record<
     {
       title: "Cellular vs. Roller Shades: Which One Belongs on Your Windows?",
       slug: "cellular-vs-roller-shades",
+    },
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+  ],
+  "solar-shades": [
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+  ],
+  "banded-shades": [
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+  ],
+  "roman-shades": [
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+  ],
+  "exterior-solar-shades": [
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+  ],
+  "specialty-shades": [
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
   ],
 };

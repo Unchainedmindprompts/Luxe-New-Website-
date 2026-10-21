@@ -102,6 +102,10 @@ export const areaPages: Record<string, AreaPageData> = {
         title: "SmartDrape Patio-Door Shades in Coeur d'Alene and Post Falls",
         slug: "smartdrape-patio-door-shades-in-coeur-dalene-post-falls",
       },
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
     ],
     productIntro:
       "Lake views and big south-facing glass make solar shades and motorized shades the two we install most often in Coeur d'Alene. Plantation shutters are common in the older homes near downtown, and cellular shades handle the bedrooms in almost every project.",
@@ -158,6 +162,10 @@ export const areaPages: Record<string, AreaPageData> = {
         title: "Faux Wood vs. Composite Blinds: Which Holds Up Better in Northern Idaho?",
         slug: "faux-wood-vs-composite-blinds-which-holds-up-better-in-northern-idaho",
       },
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
     ],
     productIntro:
       "Post Falls homes usually start with cellular shades, because the temperature swings here are sharper without the lake to moderate them. Motorized shades follow close behind — new construction favors tall windows and wide spans that are awkward to reach. Plantation shutters and roman shades round out most whole-home projects.",
@@ -210,6 +218,10 @@ export const areaPages: Record<string, AreaPageData> = {
         title: "The Smart Shade Showdown: Hardwired vs RF vs IR vs Z-Wave",
         slug: "smart-shade-motorization-guide-for-northern-idaho-homes",
       },
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
     ],
     productIntro:
       "Hayden splits two ways. Lake properties need solar shades for glare and heat off the water, while the family homes along Government Way are mostly cellular shades and wood blinds. Plantation shutters show up in the newer builds on the north end.",
@@ -262,6 +274,10 @@ export const areaPages: Record<string, AreaPageData> = {
         title: "Energy-Efficient Window Treatments for Northern Idaho Homes",
         slug: "energy-efficient-window-treatments-for-northern-idaho-homes",
       },
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
     ],
     productIntro:
       "Rathdrum's new subdivisions mean a lot of bare windows at once, so cellular shades and roller shades cover a whole house without the budget getting away from you. Motorized shades are worth it on anything above a stairwell or out of easy reach.",
@@ -314,6 +330,10 @@ export const areaPages: Record<string, AreaPageData> = {
         title: "Why Performance Solar Shade Fabrics Are Worth Every Penny",
         slug: "why-performance-solar-shade-fabrics-are-worth-every-penny-a-window-pros-honest-take",
       },
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
     ],
     productIntro:
       "Sandpoint homes lean toward big glass and long views, so solar shades and motorized shades lead here — you want the view preserved and the glare gone. Plantation shutters suit the architecture on the older streets above the lake, and cellular shades earn their keep through a Sandpoint winter.",
@@ -350,6 +370,12 @@ export const areaPages: Record<string, AreaPageData> = {
         answer: "Sheer shades like Silhouette and solar shades with a lower openness factor are the usual answer: they diffuse or filter the afternoon sun while preserving the view. We compare openness levels in your actual light during the consultation.",
       },
     ],
+    relatedPosts: [
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+    ],
     productIntro: "In Bellevue, Luxe works exclusively with Hunter Douglas. Silhouette sheer shades and Designer Solar Shades lead for lake-facing glass, PowerView automation ties shades into the smart-home systems Bellevue homes already run, and Duette cellular shades handle comfort on large windows.",
     localCTA: "Ready to compare Hunter Douglas in your Bellevue home? Book an in-home consultation and we will bring the collection to you.",
     metaTitle: "Bellevue Hunter Douglas Window Treatments | Luxe Window Works",
@@ -379,6 +405,12 @@ export const areaPages: Record<string, AreaPageData> = {
         question: "Who handles installation for Kirkland orders?",
         answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
       },
+    ],
+    relatedPosts: [
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
     ],
     productIntro: "In Kirkland, Luxe works exclusively with Hunter Douglas. Silhouette and Luminette sheers suit the lake-facing rooms, Duette cellular shades handle comfort and privacy inland, and PowerView automation is a natural fit for Kirkland's connected homes.",
     localCTA: "Ready to compare Hunter Douglas in your Kirkland home? Book an in-home consultation and we will bring the collection to you.",
@@ -410,6 +442,12 @@ export const areaPages: Record<string, AreaPageData> = {
         answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
       },
     ],
+    relatedPosts: [
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+    ],
     productIntro: "In Sammamish, Luxe works exclusively with Hunter Douglas. PowerView motorized shades lead for two-story great rooms and hard-to-reach glass, Duette cellular shades handle comfort in large rooms, and Silhouette sheers soften the light in open living spaces.",
     localCTA: "Ready to compare Hunter Douglas in your Sammamish home? Book an in-home consultation and we will bring the collection to you.",
     metaTitle: "Sammamish Hunter Douglas Window Treatments | Luxe Window Works",
@@ -439,6 +477,12 @@ export const areaPages: Record<string, AreaPageData> = {
         question: "Who measures and installs Hunter Douglas shades in Issaquah?",
         answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
       },
+    ],
+    relatedPosts: [
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
     ],
     productIntro: "In Issaquah, Luxe works exclusively with Hunter Douglas. Duette cellular shades and Designer Roller Shades are the workhorses for newer construction, Silhouette sheers suit the view glass on the hillsides, and PowerView automation grows with the home.",
     localCTA: "Ready to compare Hunter Douglas in your Issaquah home? Book an in-home consultation and we will bring the collection to you.",
@@ -470,6 +514,12 @@ export const areaPages: Record<string, AreaPageData> = {
         answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
       },
     ],
+    relatedPosts: [
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+    ],
     productIntro: "In Renton, Luxe works exclusively with Hunter Douglas. Duette cellular shades lead for comfort and blackout bedrooms, Designer Roller and solar shades handle the Kennydale lake glass, and Applause cellular shades offer a value path for whole-home projects.",
     localCTA: "Ready to compare Hunter Douglas in your Renton home? Book an in-home consultation and we will bring the collection to you.",
     metaTitle: "Renton Hunter Douglas Window Treatments | Luxe Window Works",
@@ -499,6 +549,12 @@ export const areaPages: Record<string, AreaPageData> = {
         question: "Who measures and installs Hunter Douglas shades in Maple Valley?",
         answer: "Measuring and installation are performed through Hunter Douglas Installation Services, the manufacturer's certified installation network. Measurements are guaranteed for fit, installation carries a one-year installation guarantee from the service, and the shades carry the Hunter Douglas lifetime warranty.",
       },
+    ],
+    relatedPosts: [
+    {
+      title: "How Much Do Hunter Douglas Window Treatments Cost?",
+      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
     ],
     productIntro: "In Maple Valley, Luxe works exclusively with Hunter Douglas. Cordless Duette cellular shades and Designer Roller Shades suit family homes, blackout options handle kids' bedrooms, and Silhouette sheers soften light in living spaces around Lake Wilderness.",
     localCTA: "Ready to compare Hunter Douglas in your Maple Valley home? Book an in-home consultation and we will bring the collection to you.",
