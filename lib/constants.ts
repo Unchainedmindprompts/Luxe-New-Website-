@@ -177,14 +177,14 @@ export const PRODUCTS = [
     name: "Blinds",
     slug: "blinds",
     tagline: "Wood, faux wood, and composite — matched to the room.",
-    shortDescription: "Real wood, faux wood, and composite blinds in 2-inch and 2.5-inch slats — matched to each window so they stay straight through North Idaho's brutal sun and moisture.",
+    shortDescription: "Real wood, faux wood, and composite blinds in 2-inch and 2.5-inch slats — matched to each window so they stay straight through brutal sun and moisture.",
     icon: "blinds",
   },
   {
     name: "Cellular Shades",
     slug: "cellular-shades",
     tagline: "Stop losing heat in winter and cool air in summer.",
-    shortDescription: "Honeycomb cells trap air to fight Northern Idaho's brutal winters and summer heat — the most energy-efficient window covering available.",
+    shortDescription: "Honeycomb cells trap air to fight brutal winters and summer heat — the most energy-efficient window covering available.",
     icon: "cellular",
   },
   {

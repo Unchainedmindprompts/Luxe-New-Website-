@@ -33,7 +33,7 @@ const businessNode = {
   ...BUSINESS_STUB,
   legalName: "Luxe Window Works LLC",
   description:
-    "Premium custom window treatments in North Idaho — 24 years consulting, designing, and installing. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint.",
+    "Premium custom window treatments — 24 years consulting, designing, and installing. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.",
   url: BASE,
   telephone: BUSINESS.phoneE164,
   email: BUSINESS.email,
@@ -183,7 +183,7 @@ const websiteNode = {
   url: BASE,
   name: BUSINESS.name,
   description:
-    "Custom window treatments in Northern Idaho — blinds, shades, shutters, and motorized systems. Free in-home consultation.",
+    "Custom window treatments — blinds, shades, shutters, and motorized systems. Free in-home consultation in North Idaho, on Seattle's Eastside, and in the Salt Lake area.",
   publisher: { "@id": `${BASE}/#business` },
   inLanguage: "en-US",
 };
@@ -194,7 +194,7 @@ const webpageNode = {
   url: BASE,
   name: "Premium Custom Window Treatments in Northern Idaho | Luxe Window Works",
   description:
-    "Custom blinds, shades, shutters, and motorized window treatments in Coeur d'Alene, Post Falls, and Northern Idaho. 24 years consulting, designing, and installing. Lifetime installation guarantee.",
+    "Custom blinds, shades, shutters, and motorized window treatments. 24 years consulting, designing, and installing. Free in-home consultations in North Idaho, on Seattle's Eastside, and in the Salt Lake area.",
   isPartOf: { "@id": `${BASE}/#website` },
   about: { "@id": `${BASE}/#business` },
   mainEntity: { "@id": `${BASE}/#business` },

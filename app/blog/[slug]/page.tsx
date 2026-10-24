@@ -192,9 +192,9 @@ const installationHowToSchema = {
   "@type": "HowTo",
   "@id":
     `${BUSINESS.url}/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works#howto`,
-  name: "How to Get Custom Window Treatments Installed in Northern Idaho",
+  name: "How to Get Custom Window Treatments Installed",
   description:
-    "The Luxe Window Works 5-step process for getting custom window treatments measured, ordered, and professionally installed in Northern Idaho.",
+    "The Luxe Window Works 5-step process for getting custom window treatments measured, ordered, and professionally installed in the areas we serve.",
   totalTime: "P4W",
   supply: [
     {
