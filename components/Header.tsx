@@ -149,9 +149,14 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Nav */}
+      {/* Mobile Nav — the header is fixed, so the open menu must cap its
+          own height and scroll internally (same pattern as the desktop
+          dropdown's max-h/overflow). Without this, expanding Service Areas
+          (19 cities + headings) runs the list past the bottom of the
+          screen with no way to scroll it. overscroll-contain keeps the
+          gesture from chaining to the page behind the menu. */}
       {mobileOpen && (
-        <div className="lg:hidden bg-charcoal border-t border-white/10">
+        <div className="lg:hidden bg-charcoal border-t border-white/10 max-h-[calc(100dvh-4rem)] md:max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain">
           <nav className="container-luxe py-4 space-y-1">
             {NAV_LINKS.map((link) => (
               <div key={link.label}>
