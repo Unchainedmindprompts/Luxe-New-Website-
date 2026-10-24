@@ -55,7 +55,7 @@ export default function FooterBlurb() {
         ? "24 years of hands-on expertise in custom window treatments. Serving North Idaho and the Seattle Eastside with premium Hunter Douglas products, measured and installed through Hunter Douglas Installation Services."
         : utah
           ? "24 years of hands-on expertise in custom window treatments. Serving North Idaho and Utah with Hunter Douglas and Alta Window Fashions products, measured and installed through Hunter Douglas Installation Services."
-          : "24 years of hands-on expertise in custom window treatments. Serving North Idaho with premium products and a lifetime installation guarantee."}
+          : "24 years of hands-on expertise in custom window treatments. Serving North Idaho, Seattle's Eastside, and the Salt Lake area with premium products and professional installation, done to the same standard in every market."}
     </p>
   );
 }

@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           url: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
           width: 1200,
           height: 630,
-          alt: "Luxe Window Works — Custom Window Treatments in Northern Idaho",
+          alt: "Luxe Window Works — Custom Window Treatments",
         },
       ],
     },
@@ -104,7 +104,7 @@ function ServiceSchema({ product, slug }: { product: ProductPageData; slug: stri
     // the constant so it cannot drift from the one on the homepage. No price,
     // lead time, brand, spec or availability is introduced.
     description:
-      `${product.name} for North Idaho homes — consultation, product guidance, ` +
+      `${product.name} for your home — consultation, product guidance, ` +
       `measurement, custom order, and professional installation by ` +
       `${BUSINESS.name}, backed by the ${BUSINESS.guarantee}. ${product.solution}`,
     speakable: {
@@ -419,7 +419,7 @@ export default async function ProductPage({ params }: Props) {
       <section className="py-16 md:py-20 bg-warm-white">
         <div className="container-luxe max-w-3xl">
           <h2 className="font-serif text-2xl sm:text-3xl text-charcoal mb-6">
-            {isExterior ? "Exterior Shades in Coeur d’Alene & North Idaho" : `Why ${product.name} in Northern Idaho`}
+            {isExterior ? "Exterior Shades for Your Home" : `Why ${product.name} for Your Home`}
           </h2>
           <p className="text-warm-gray-600 leading-relaxed text-lg">
             {product.localContext}

@@ -404,8 +404,8 @@ export default function BookPage() {
           </div>
 
           <p className="text-xs text-warm-gray-400 text-center px-2">
-            Serving Coeur d&apos;Alene, Post Falls, Hayden, Rathdrum &amp;
-            Sandpoint, ID
+            Serving North Idaho, Seattle&apos;s Eastside &amp; the Salt Lake
+            area
           </p>
         </div>
       </div>

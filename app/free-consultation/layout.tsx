@@ -5,7 +5,7 @@ const PAGE_URL = "https://www.luxewindowworks.com/free-consultation";
 export const metadata: Metadata = {
   title: "Free In-Home Consultation | Luxe Window Works",
   description:
-    "We help you choose the right blinds, shades, shutters, draperies, or motorized options for your space — then professionally measure and install everything. Serving North Idaho.",
+    "We help you choose the right blinds, shades, shutters, draperies, or motorized options for your space — then professionally measure and install everything. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.",
   alternates: {
     canonical: PAGE_URL,
   },

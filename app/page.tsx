@@ -209,7 +209,7 @@ const HOMEPAGE_FAQS = [
   {
     question: "What areas does Luxe Window Works serve?",
     answer:
-      "We serve Coeur d'Alene, Post Falls, Hayden, Rathdrum, Sandpoint, and the surrounding Kootenai County area. Free in-home consultations are available throughout Northern Idaho.",
+      "We serve North Idaho (Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint), six communities on Seattle's Eastside, and eight communities in the Salt Lake area. Free in-home consultations are available in every market we serve.",
   },
   {
     question: "What's included in the lifetime installation guarantee?",
@@ -290,7 +290,7 @@ const PROCESS_STEPS = [
     title: "We Help You Choose Room by Room",
     body: "Every window has a different job. We help you think through privacy, glare, insulation, room darkening, child safety, motorization, and style.",
     image: "/images/process-room-by-room.png",
-    alt: "Open-plan North Idaho home with different window treatments matched to each room",
+    alt: "Open-plan home with different window treatments matched to each room",
   },
   {
     title: "We Measure and Install Everything",
@@ -323,7 +323,7 @@ export default function HomePage() {
           <div aria-hidden="true" className="absolute inset-0 bg-black/35 md:bg-transparent md:bg-gradient-to-r md:from-black/60 md:via-black/20 md:to-transparent" />
           <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 pt-16 pb-40 md:pt-24 md:pb-36 lg:pt-28 lg:pb-36 min-h-[640px] md:min-h-[680px] lg:min-h-[740px] flex flex-col justify-center">
             <div className="max-w-2xl text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.55)]">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/90 mb-5">Custom Window Treatments · North Idaho</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/90 mb-5">Custom Window Treatments</p>
               <h1 id="hero-title" className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.1] text-white text-balance">Beautiful options.<br />Personal service.<br />That’s Luxe.</h1>
               <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-white">Discover custom window treatments for your style and budget, with personal guidance from the first samples to the final installation.</p>
               <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
@@ -369,7 +369,7 @@ export default function HomePage() {
               </span>
             </div>
             <span className="hidden md:inline text-warm-gray-600">|</span>
-            <span className="text-warm-gray-300">Serving North Idaho</span>
+            <span className="text-warm-gray-300">Serving North Idaho · Seattle's Eastside · Salt Lake Area</span>
           </div>
         </div>
       </section>
@@ -421,7 +421,8 @@ export default function HomePage() {
             — Brad G.
           </p>
           <p className="mt-6 text-warm-gray-600 leading-relaxed">
-            Our experience in window treatments began in 2002. We have served North Idaho since 2025,
+            Our experience in window treatments began in 2002. Luxe opened in North Idaho in 2025
+            and now serves Seattle's Eastside and the Salt Lake area as well,
             bringing 24 years of hands-on knowledge to every consultation and installation.
           </p>
           <Link href="/about" className="inline-block mt-4 font-medium text-charcoal underline underline-offset-4">
@@ -553,7 +554,7 @@ export default function HomePage() {
               What Our Clients Say
             </p>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-              North Idaho Homeowners Trust Luxe Window Works
+              Homeowners Trust Luxe Window Works
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -604,14 +605,15 @@ export default function HomePage() {
         <div className="container-luxe">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-charcoal leading-tight">
-              Proudly Serving North Idaho
+              Proudly Serving Three Markets
             </h2>
             <p className="mt-4 text-warm-gray-500 text-base md:text-lg leading-relaxed">
-              Luxe Window Works provides in-home consultations and professional installation throughout Post Falls, Coeur d&apos;Alene, Hayden, Rathdrum, Sandpoint, and surrounding North Idaho communities.
+              Luxe Window Works provides in-home consultations and professional installation throughout North Idaho, on Seattle&apos;s Eastside, and in the Salt Lake area. Every community we serve is listed on our{" "}
+              <Link href="/areas" className="text-gold-dark hover:text-charcoal underline underline-offset-4 transition-colors">service areas page</Link>.
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
-            {SERVICE_AREAS.filter((area) => area.state === "ID").map((area) => (
+            {SERVICE_AREAS.map((area) => (
               <Link
                 key={area.slug}
                 href={`/areas/${area.slug}`}

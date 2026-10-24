@@ -10,10 +10,10 @@ import { cityRef } from "@/lib/cities";
 import { CUSTOM_WINDOW_TREATMENTS } from "@/lib/schema";
 import { TWO_RANGES as ranges, TWO_URL as url, twoProductRef, twoImage, COLOURVUE_IMAGE } from "@/lib/two";
 export const metadata: Metadata = {
-  title: "TWO Shutters & Shades in North Idaho | Luxe Window Works",
+  title: "TWO Shutters & Shades | Luxe Window Works",
   description: "Explore the TWO collection with Luxe Window Works: interior shutters, roller shades, Weatherwell aluminum shutters, outdoor shades and automation. Free in-home consultation.",
   alternates: { canonical: url },
-  openGraph: { title: "The TWO Collection | Luxe Window Works", description: "Beautiful indoors. More possibilities outside. Custom shutters and shades, measured and installed in North Idaho.", url, images: ["/images/weatherwell-elite/IMG_1086.jpeg"] },
+  openGraph: { title: "The TWO Collection | Luxe Window Works", description: "Beautiful indoors. More possibilities outside. Custom shutters and shades, measured and installed across North Idaho, Seattle's Eastside, and the Salt Lake area.", url, images: ["/images/weatherwell-elite/IMG_1086.jpeg"] },
 };
 export default function TwoCollection() {
   return <>
@@ -35,7 +35,7 @@ export default function TwoCollection() {
         serviceType: CUSTOM_WINDOW_TREATMENTS,
         provider: { "@id": `${BUSINESS.url}/#business` },
         areaServed: SERVICE_AREAS.filter(a => a.state === "ID").map(a => cityRef(a.name)),
-        description: "Personal product guidance, custom measurements and professional installation of TWO interior shutters, roller shades, outdoor aluminum shutters, exterior shades and compatible shade automation in North Idaho.",
+        description: "Personal product guidance, custom measurements and professional installation of TWO interior shutters, roller shades, outdoor aluminum shutters, exterior shades and compatible shade automation in North Idaho, on Seattle's Eastside, and in the Salt Lake area.",
         hasOfferCatalog: { "@id": `${url}#catalog` },
         mainEntityOfPage: { "@id": `${url}#webpage` },
       },
@@ -72,7 +72,7 @@ export default function TwoCollection() {
           <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.12] text-charcoal mt-5">Beautiful indoors.<br /><span className="italic">More possibilities outside.</span></h1>
           <p className="text-lg leading-relaxed text-warm-gray-700 mt-7 max-w-xl">A little more privacy on the patio. Softer light in the living room. Shutters that feel like they belong to the architecture. Discover the TWO collection, with personal guidance from Luxe Window Works.</p>
           <div className="flex flex-wrap gap-3 mt-8"><Link href="/book" className="rounded-full bg-charcoal text-white px-6 py-4 font-medium">Book a Free Consultation</Link><a href="#collection" className="rounded-full border border-charcoal/30 px-6 py-4 text-charcoal">Explore the Collection ↓</a></div>
-          <p className="mt-6 text-sm text-warm-gray-700">Custom measured · Professionally installed · North Idaho</p>
+          <p className="mt-6 text-sm text-warm-gray-700">Custom measured · Professionally installed</p>
         </div>
         <div className="relative min-h-[340px] lg:min-h-[640px]"><Image src="/images/weatherwell-elite/IMG_1086.jpeg" alt="Dark aluminum shutters with sliding and folding panels on a modern home" fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" /></div>
       </div>

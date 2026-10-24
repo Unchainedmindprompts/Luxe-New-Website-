@@ -10,14 +10,14 @@ import { CARRIED_BRANDS } from "@/lib/brands";
 export const metadata: Metadata = {
   title: "About Mark Abplanalp | 24 Years in Window Treatments",
   description:
-    "Based in Post Falls, Mark Abplanalp brings 24 years of experience and personal guidance to custom window treatments and outdoor shading projects across North Idaho.",
+    "Based in Post Falls, Mark Abplanalp brings 24 years of experience and personal guidance to custom window treatments and outdoor shading projects across North Idaho, Seattle's Eastside, and the Salt Lake area.",
   alternates: {
     canonical: "https://www.luxewindowworks.com/about",
   },
   openGraph: {
     title: "About Mark Abplanalp | 24 Years in Window Treatments",
     description:
-      "Based in Post Falls, Mark Abplanalp brings 24 years of experience and personal guidance to custom window treatments and outdoor shading projects across North Idaho.",
+      "Based in Post Falls, Mark Abplanalp brings 24 years of experience and personal guidance to custom window treatments and outdoor shading projects across North Idaho, Seattle's Eastside, and the Salt Lake area.",
     url: "https://www.luxewindowworks.com/about",
     images: [
       {
@@ -35,7 +35,7 @@ const personSchema = {
   ...OWNER_STUB,
   jobTitle: "Owner & Window Treatment Specialist",
   description:
-    "Owner Mark Abplanalp brings 24 years in custom window treatments to product selection, measuring and installation. Based in Post Falls, he works directly with North Idaho homeowners from consultation through finished installation.",
+    "Owner Mark Abplanalp brings 24 years in custom window treatments to product selection, measuring and installation. Based in Post Falls, he works directly with homeowners in North Idaho, on Seattle's Eastside, and in the Salt Lake area from consultation through finished installation.",
   url: `${BUSINESS.url}/about`,
   image: `${BUSINESS.url}/images/mark-photo.webp`,
   telephone: BUSINESS.phoneE164,
@@ -93,7 +93,7 @@ const webpageSchema = {
   url: `${BUSINESS.url}/about`,
   name: "About Mark Abplanalp | 24 Years in Window Treatments",
   description:
-    "Based in Post Falls, Mark Abplanalp brings 24 years of experience and personal guidance to custom window treatments and outdoor shading projects across North Idaho.",
+    "Based in Post Falls, Mark Abplanalp brings 24 years of experience and personal guidance to custom window treatments and outdoor shading projects across North Idaho, Seattle's Eastside, and the Salt Lake area.",
   isPartOf: { "@id": `${BUSINESS.url}/#website` },
   about: { "@id": `${BUSINESS.url}/#business` },
   mainEntity: { "@id": `${BUSINESS.url}/#owner` },
@@ -151,7 +151,7 @@ export default function AboutPage() {
                 Why Luxe Window Works
               </p>
               <h1 className="font-serif text-4xl md:text-5xl text-charcoal leading-tight">
-                Custom Window Treatments for North Idaho Homes
+                Custom Window Treatments, Backed by 24 Years of Experience
               </h1>
               <p>
                 Luxe Window Works measures, sources, and installs custom window
@@ -297,8 +297,9 @@ export default function AboutPage() {
                 and budget.
               </p>
               <p>
-                Based in Post Falls and serving North Idaho, Mark works directly
-                with you from the first consultation through the finished installation.
+                Based in Post Falls, Mark works directly
+                with you from the first consultation through the finished installation,
+                and leads the same standard of service in every market Luxe serves.
               </p>
             </div>
           </div>
@@ -311,7 +312,7 @@ export default function AboutPage() {
               Get a quote
             </h2>
             <p className="text-warm-gray-600 mb-8">
-              Free in-home consultations throughout North Idaho.
+              Free in-home consultations throughout every market we serve.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

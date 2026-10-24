@@ -197,7 +197,7 @@ export default function Footer() {
             <Link href="/privacy" className="hover:text-gold transition-colors">
               Privacy Policy
             </Link>
-            <span>Custom window treatments for North Idaho homes.</span>
+            <span>Custom window treatments for homes in North Idaho, on Seattle's Eastside, and in the Salt Lake area.</span>
           </div>
         </div>
       </div>

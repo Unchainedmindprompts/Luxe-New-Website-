@@ -13,25 +13,25 @@ import { videoRef, videosForService } from "@/lib/videos";
 const HD_PAGE = `${BUSINESS.url}/products/hunter-douglas`;
 
 export const metadata: Metadata = {
-  title: "Hunter Douglas Collections in North Idaho | Luxe Window Works",
-  description: "Explore Hunter Douglas shades, blinds, shutters, drapery and PowerView automation with Luxe Window Works. Free in-home consultations, custom measurements and installation in North Idaho.",
+  title: "Hunter Douglas Collections | Luxe Window Works",
+  description: "Explore Hunter Douglas shades, blinds, shutters, drapery and PowerView automation with Luxe Window Works. Free in-home consultations, custom measurements and installation in North Idaho, on Seattle's Eastside, and in the Salt Lake area.",
   alternates: { canonical: HD_URL },
-  openGraph: { title: "Discover Hunter Douglas | Luxe Window Works", description: "Beautiful light. Personal service. Explore Hunter Douglas with your local North Idaho dealer.", url: HD_URL, images: ["/images/luxe-completed-installation.webp"] },
+  openGraph: { title: "Discover Hunter Douglas | Luxe Window Works", description: "Beautiful light. Personal service. Explore Hunter Douglas with your Hunter Douglas dealer.", url: HD_URL, images: ["/images/luxe-completed-installation.webp"] },
 };
 
 export default function HunterDouglasPage() {
   const videos = videosForService("hunter-douglas");
   return <>
     <JsonLd data={{ "@context": "https://schema.org", "@graph": [
-      { "@type": "CollectionPage", "@id": `${HD_PAGE}#webpage`, url: HD_URL, name: "Hunter Douglas Collections in North Idaho", description: metadata.description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, about: [{ "@id": HUNTER_DOUGLAS["@id"] }, { "@id": `${HD_PAGE}#service` }], breadcrumb: { "@id": `${HD_PAGE}#breadcrumb` }, mainEntity: { "@type": "ItemList", name: "Hunter Douglas Product Categories", numberOfItems: HD_CATEGORIES.length, itemListElement: HD_CATEGORIES.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.title, url: `${HD_PAGE}#${p.id}` })) } },
-      { "@type": "Service", "@id": `${HD_PAGE}#service`, url: HD_URL, name: "Hunter Douglas Consultation and Installation", serviceType: "Custom Window Treatments", brand: { "@id": HUNTER_DOUGLAS["@id"] }, provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: SERVICE_AREAS.map(a => cityRef(a.name)), description: "In-home Hunter Douglas product guidance, professional measurements and installation in North Idaho and on Seattle's Eastside.", mainEntityOfPage: { "@id": `${HD_PAGE}#webpage` }, subjectOf: videos.map(videoRef) },
+      { "@type": "CollectionPage", "@id": `${HD_PAGE}#webpage`, url: HD_URL, name: "Hunter Douglas Collections", description: metadata.description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, about: [{ "@id": HUNTER_DOUGLAS["@id"] }, { "@id": `${HD_PAGE}#service` }], breadcrumb: { "@id": `${HD_PAGE}#breadcrumb` }, mainEntity: { "@type": "ItemList", name: "Hunter Douglas Product Categories", numberOfItems: HD_CATEGORIES.length, itemListElement: HD_CATEGORIES.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.title, url: `${HD_PAGE}#${p.id}` })) } },
+      { "@type": "Service", "@id": `${HD_PAGE}#service`, url: HD_URL, name: "Hunter Douglas Consultation and Installation", serviceType: "Custom Window Treatments", brand: { "@id": HUNTER_DOUGLAS["@id"] }, provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: SERVICE_AREAS.map(a => cityRef(a.name)), description: "In-home Hunter Douglas product guidance, professional measurements and installation in North Idaho, on Seattle's Eastside, and in the Salt Lake area.", mainEntityOfPage: { "@id": `${HD_PAGE}#webpage` }, subjectOf: videos.map(videoRef) },
       { "@type": "FAQPage", "@id": `${HD_PAGE}#faq`, isPartOf: { "@id": `${HD_PAGE}#webpage` }, mainEntity: HD_FAQS.map(f => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })) },
       { "@type": "BreadcrumbList", "@id": `${HD_PAGE}#breadcrumb`, itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url }, { "@type": "ListItem", position: 2, name: "Products", item: `${BUSINESS.url}/products` }, { "@type": "ListItem", position: 3, name: "Hunter Douglas", item: HD_URL }] },
     ] }} />
     <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Products", href: "/products" }, { label: "Hunter Douglas" }]} />
     <section className="bg-cream grid lg:grid-cols-2">
       <div className="px-6 sm:px-10 lg:px-14 xl:px-20 py-12 sm:py-16 lg:py-20 flex flex-col justify-center">
-        <p className="text-xs uppercase tracking-[.18em] text-warm-gray-700">Your North Idaho Hunter Douglas dealer</p>
+        <p className="text-xs uppercase tracking-[.18em] text-warm-gray-700">Your Hunter Douglas dealer</p>
         <h1 className="font-serif text-4xl sm:text-5xl xl:text-6xl leading-[1.08] text-charcoal mt-5">Hunter Douglas.<br /><span className="text-warm-gray-700">The personal<br className="hidden xl:block" /> touch of Luxe.</span></h1>
         <p className="mt-7 text-lg text-warm-gray-700 leading-relaxed max-w-xl">The morning light. The view you love. The privacy you need at the end of the day. Let’s find the Hunter Douglas window treatments that make your home feel right.</p>
         <div className="mt-8 flex flex-wrap gap-4"><Link href="/book" className="rounded-full bg-charcoal text-white px-7 py-4 font-semibold">Book Your Free Consultation</Link><a href="#collections" className="px-2 py-4 font-semibold text-charcoal underline underline-offset-4">Explore the collection ↓</a></div>

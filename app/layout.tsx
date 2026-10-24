@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    "Premium custom window treatments, with 24 years consulting, designing, and installing. Free in-home consultations in North Idaho, and Hunter Douglas sales with certified installation on Seattle's Eastside.",
+    "Premium custom window treatments, with 24 years consulting, designing, and installing. Free in-home consultations in North Idaho, on Seattle's Eastside, and in the Salt Lake area.",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     siteName: BUSINESS.name,
     title: "Luxe Window Works | Custom Window Treatments, North Idaho",
     description:
-      "Premium custom window treatments, with 24 years consulting, designing, and installing. Free in-home consultation. Serving North Idaho and Seattle's Eastside.",
+      "Premium custom window treatments, with 24 years consulting, designing, and installing. Free in-home consultation. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.",
     images: [
       {
         url: `${BUSINESS.url}/share-image?v=20260924`,

@@ -146,7 +146,7 @@ export default function AreasHubPage() {
             The communities we serve.
           </h1>
           <p className="mt-6 text-lg md:text-xl text-warm-gray-600 leading-relaxed">
-            Luxe Window Works is based in Post Falls and provides in-home
+            Luxe Window Works provides in-home
             consultations and professional installation across North Idaho. We
             also serve six communities on Seattle&apos;s Eastside with Hunter
             Douglas, and eight communities in the Salt Lake area with Hunter

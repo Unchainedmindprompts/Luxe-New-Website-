@@ -11,7 +11,7 @@ const webpageSchema = {
   url: PAGE_URL,
   name: "Leave a Review — Luxe Window Works",
   description:
-    "Did Luxe Window Works do a great job for you? A quick Google review helps the next North Idaho homeowner make a confident decision.",
+    "Did Luxe Window Works do a great job for you? A quick Google review helps the next homeowner make a confident decision.",
   isPartOf: { "@id": `${BUSINESS.url}/#website` },
   about: { "@id": `${BUSINESS.url}/#business` },
   breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
@@ -31,7 +31,7 @@ const breadcrumbSchema = {
 export const metadata: Metadata = {
   title: "Leave a Review — Luxe Window Works",
   description:
-    "Did Luxe Window Works do a great job for you? A quick Google review helps the next North Idaho homeowner make a confident decision.",
+    "Did Luxe Window Works do a great job for you? A quick Google review helps the next homeowner make a confident decision.",
   alternates: {
     canonical: "https://www.luxewindowworks.com/leave-a-review",
   },
@@ -53,7 +53,7 @@ export default function LeaveAReviewPage() {
             Thank You
           </p>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight">
-            Help the next North Idaho homeowner decide.
+            Help the next homeowner decide.
           </h1>
           <p className="mt-6 text-lg md:text-xl text-warm-gray-600 leading-relaxed">
             If we did right by you, a quick Google review is the single most
@@ -165,7 +165,7 @@ export default function LeaveAReviewPage() {
           </p>
           <p className="mt-6 font-serif text-2xl text-charcoal">— Mark</p>
           <p className="text-sm text-warm-gray-500 mt-1">
-            Mark Abplanalp · Owner, Luxe Window Works · North Idaho
+            Mark Abplanalp · Owner, Luxe Window Works
           </p>
           <div className="mt-10">
             <Link

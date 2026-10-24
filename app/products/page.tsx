@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { BUSINESS, PRODUCTS, SERVICE_AREAS } from "@/lib/constants";
+import { BUSINESS, PRODUCTS } from "@/lib/constants";
 import { HD_URL } from "@/lib/hunter-douglas";
 import { TWO_URL } from "@/lib/two";
 import { productPages } from "@/lib/product-data";
@@ -40,14 +40,14 @@ function getProductCardImage(slug: string): string {
 const PAGE_URL = `${BUSINESS.url}/products`;
 
 export const metadata: Metadata = {
-  title: "Window Treatments & Window Coverings | North Idaho | Luxe Window Works",
+  title: "Window Treatments & Window Coverings | Luxe Window Works",
   description:
-    "Every window covering we install in North Idaho — blinds, cellular shades, solar shades, roller shades, Roman shades, plantation shutters, and motorization. Custom measured and professionally installed. Free in-home consultation.",
+    "Every window covering we install — blinds, cellular shades, solar shades, roller shades, Roman shades, plantation shutters, and motorization. Custom measured and professionally installed across North Idaho, Seattle's Eastside, and the Salt Lake area. Free in-home consultation.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Window Treatments & Window Coverings | Luxe Window Works",
     description:
-      "Blinds, shades, plantation shutters, and motorization — custom measured and installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.",
+      "Blinds, shades, plantation shutters, and motorization — custom measured and installed across North Idaho, Seattle's Eastside, and the Salt Lake area.",
     type: "website",
     url: PAGE_URL,
   },
@@ -61,7 +61,7 @@ function ProductsHubSchema() {
     url: PAGE_URL,
     name: "Window Treatments & Window Coverings — Luxe Window Works",
     description:
-      "The full range of window treatments Luxe Window Works measures and installs across North Idaho.",
+      "The full range of window treatments Luxe Window Works measures and installs across North Idaho, Seattle's Eastside, and the Salt Lake area.",
     isPartOf: { "@id": `${BUSINESS.url}/#website` },
     about: { "@id": `${BUSINESS.url}/#business` },
     breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
@@ -73,7 +73,7 @@ function ProductsHubSchema() {
     }))],
     mainEntity: {
       "@type": "ItemList",
-      name: "Window Treatments Installed in North Idaho",
+      name: "Window Treatments Installed by Luxe Window Works",
       numberOfItems: PRODUCTS.length + 2,
       itemListElement: [...PRODUCTS.map((p, i) => ({
         "@type": "ListItem",
@@ -104,12 +104,6 @@ function ProductsHubSchema() {
 }
 
 export default function ProductsHubPage() {
-  // This section's copy is North Idaho installation copy ("plus the
-  // surrounding Kootenai County..."), so its city list stays Idaho-only;
-  // the Eastside is a Hunter Douglas market covered by /eastside.
-  const idahoAreas = SERVICE_AREAS.filter((a) => a.state === "ID");
-  const cities = idahoAreas.map((a) => a.name);
-
   return (
     <>
       <ProductsHubSchema />
@@ -122,7 +116,7 @@ export default function ProductsHubPage() {
             Products
           </p>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal leading-tight text-balance">
-            Window treatments and window coverings for North Idaho homes.
+            Window treatments and window coverings for your home.
           </h1>
           <p className="mt-6 text-lg md:text-xl text-warm-gray-600 leading-relaxed">
             Blinds, shades, plantation shutters, and motorization — every one
@@ -225,21 +219,14 @@ export default function ProductsHubPage() {
             Where we install
           </h2>
           <p className="text-warm-gray-600 leading-relaxed text-lg">
-            Everything above is measured and installed across{" "}
-            {idahoAreas.map((area, i) => (
-              <span key={area.slug}>
-                <Link
-                  href={`/areas/${area.slug}`}
-                  className="text-gold hover:text-gold-dark font-medium"
-                >
-                  {area.name}
-                </Link>
-                {i < cities.length - 2 ? ", " : i === cities.length - 2 ? ", and " : ""}
-              </span>
-            ))}
-            , plus the surrounding Kootenai County and Idaho Panhandle
-            communities. Each area page covers what tends to work in that
-            town&apos;s homes and climate.
+            Everything above is measured and installed across North Idaho, on
+            Seattle&apos;s Eastside, and in the Salt Lake area. Each community
+            we serve has its own page covering what tends to work in that
+            town&apos;s homes and climate. See them all on our{" "}
+            <Link href="/areas" className="text-gold hover:text-gold-dark font-medium">
+              service areas page
+            </Link>
+            .
           </p>
         </div>
       </section>

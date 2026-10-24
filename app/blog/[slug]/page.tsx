@@ -935,7 +935,7 @@ export default async function BlogPostPage({ params }: Props) {
               Have Questions About Your Windows?
             </h2>
             <p className="text-warm-gray-500 mb-8">
-              Our team offers free in-home consultations throughout Northern Idaho.
+              Our team offers free in-home consultations throughout the areas we serve.
               Get personalized advice for your specific situation.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
