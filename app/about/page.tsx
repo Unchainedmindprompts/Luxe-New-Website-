@@ -156,11 +156,12 @@ export default function AboutPage() {
               <p>
                 Luxe Window Works measures, sources, and installs custom window
                 treatments in{" "}
-                <Link href="/areas/coeur-d-alene" className="text-gold-dark hover:text-charcoal transition-colors">Coeur d&apos;Alene</Link>,{" "}
-                <Link href="/areas/post-falls" className="text-gold-dark hover:text-charcoal transition-colors">Post Falls</Link>,{" "}
-                <Link href="/areas/hayden" className="text-gold-dark hover:text-charcoal transition-colors">Hayden</Link>,{" "}
-                <Link href="/areas/rathdrum" className="text-gold-dark hover:text-charcoal transition-colors">Rathdrum</Link>, and{" "}
-                <Link href="/areas/sandpoint" className="text-gold-dark hover:text-charcoal transition-colors">Sandpoint</Link>.
+                <Link href="/areas" className="text-gold-dark hover:text-charcoal transition-colors">North Idaho</Link>,{" "}
+                on{" "}
+                <Link href="/eastside" className="text-gold-dark hover:text-charcoal transition-colors">Seattle&apos;s Eastside</Link>,{" "}
+                in{" "}
+                <Link href="/areas/salt-lake-city" className="text-gold-dark hover:text-charcoal transition-colors">Salt Lake City</Link>,
+                and in surrounding communities.
                 Consultations are free and done at your house, because the right
                 recommendation depends on the light, the view, and the actual
                 windows.
