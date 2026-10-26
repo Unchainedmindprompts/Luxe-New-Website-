@@ -346,6 +346,16 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       { "@type": "WebPage", url: "https://support.apple.com/guide/security/communication-security-sec3a881ccb1/1/web/1", name: "Apple Home communication security" },
     ],
   },
+  "hunter-douglas-silhouette-vs-pirouette": {
+    mentions: [{ "@id": HUNTER_DOUGLAS["@id"] }],
+    relatedLink: [`${BUSINESS.url}/products/hunter-douglas`, `${BUSINESS.url}/products/motorization`],
+    citation: [
+      { "@type": "WebPage", url: "https://www.hunterdouglas.com/window-treatments/shades/sheer-shades/silhouette", name: "Hunter Douglas Silhouette sheer shadings: construction, vane sizes, UV protection" },
+      { "@type": "WebPage", url: "https://www.hunterdouglas.com/window-treatments/shades/sheer-shades/pirouette", name: "Hunter Douglas Pirouette window shadings: construction, vane sizes, A Deux" },
+      { "@type": "WebPage", url: "https://www.hunterdouglas.com/powerview", name: "Hunter Douglas PowerView automation" },
+      { "@type": "WebPage", url: "https://www.hunterdouglas.ca/stories/buyers-guides/uv-blocking-window-treatments", name: "Hunter Douglas guide to UV-blocking window treatments" },
+    ],
+  },
   // Move-in article and the new-construction guide serve the same reader at
   // two different depths — this one is the "what nobody told you" primer, that
   // one is the phase-and-budget plan. Linked both ways so the pair reads as a

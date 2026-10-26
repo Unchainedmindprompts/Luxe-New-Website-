@@ -22,7 +22,7 @@
 export interface ArticlePathway {
   heading: string;
   body: string;
-  productHref: "/products/blinds" | "/products/motorization" | "/products/roller-shades" | "/products/cellular-shades";
+  productHref: "/products/blinds" | "/products/motorization" | "/products/roller-shades" | "/products/cellular-shades" | "/products/hunter-douglas";
   productLabel: string;
   bookHref: "/book";
   bookLabel: string;
@@ -68,6 +68,15 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
     body: "Ranges plan a budget. A consultation prices your actual windows: we measure, spec the product and operating system in your own light, and give you a written figure. The consultation is free.",
     productHref: "/products/motorization",
     productLabel: "See PowerView motorization",
+    bookHref: "/book",
+    bookLabel: "Request a free in-home consultation",
+    placement: "after-content",
+  },
+  "hunter-douglas-silhouette-vs-pirouette": {
+    heading: "Want to see both on your own windows?",
+    body: "We bring Silhouette and Pirouette samples to your home, tilt the vanes in your own light against your own view, and price your actual windows. The consultation is free.",
+    productHref: "/products/hunter-douglas",
+    productLabel: "See Hunter Douglas window treatments",
     bookHref: "/book",
     bookLabel: "Request a free in-home consultation",
     placement: "after-content",
@@ -163,6 +172,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
     {
       title: "How Much Do Hunter Douglas Window Treatments Cost?",
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+    {
+      title: "Silhouette vs. Pirouette: Which Hunter Douglas Sheer Shade Is Right for Your Home?",
+      slug: "hunter-douglas-silhouette-vs-pirouette",
     },
   ],
   "roller-shades": [
