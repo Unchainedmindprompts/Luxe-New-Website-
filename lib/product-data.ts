@@ -63,7 +63,7 @@ export const productPages: Record<string, ProductPageData> = {
     name: "Blinds",
     image: "/images/wood-blinds.jpeg",
     headline: "Custom Blinds in Coeur d’Alene & Post Falls.",
-    subheadline: "Real wood, faux wood, and composite blinds — matched to the right room so they look sharp and stay straight for years. Custom-fit and professionally installed across North Idaho.",
+    subheadline: "Real wood, faux wood, and composite blinds — matched to the right room so they look sharp and stay straight for years. Custom-fit and professionally installed across North Idaho, Seattle's Eastside, and the Salt Lake area.",
     problem: "Most blinds don't fail because blinds are a bad product — they fail because the wrong material went into the wrong room. Big-box stores sell one-size-fits-all faux wood and let you sort out the rest. Then a few seasons later, the slats on that big south-facing window have bowed in the heat, the budget vinyl has yellowed, or real wood blinds in the bathroom have swelled and stopped tilting. North Idaho is especially hard on the wrong choice: freezing dry winters, intense summer sun on lake-facing glass, and 60-degree temperature swings between January and July.",
     solution: "The fix is matching the material to the window. Faux wood blinds (PVC or vinyl) are lightweight and shrug off moisture — the right call for bathrooms, kitchens, and standard windows. Composite blinds (wood fiber blended with polymer) are heavier and more rigid, holding their shape under heat and UV on large, sunny windows where faux wood would eventually sag. Real wood blinds deliver the warmth and natural grain nothing else matches, ideal for dry living rooms and bedrooms. We carry premium lines from Norman, Alta, and Lafayette, in 2-inch and 2.5-inch slat sizes, with cordless and child-safe lift options. Every set is custom-measured to your exact opening and installed precisely.",
     expertInsight: "After 24 years installing blinds across the Pacific Northwest, here's what I tell every client: the slickest catalog photo doesn't matter if the material is wrong for your window. I've pulled faux wood blinds out of west-facing living rooms that developed a visible bow after just 3-5 summers — the PVC softens in the heat and gravity does the rest. On those big, bright windows I steer people to composite; I've taken composite slats out after 10-plus summers of direct sun and they were still dead straight. For bathrooms and kitchens it flips — faux wood's moisture resistance is unbeatable and you won't overload the lift mechanism with weight. And one upgrade most people overlook: 2.5-inch slats instead of the standard 2-inch. Fewer, wider slats mean a clearer view, a lower stack height when raised (2-3 more inches of exposed glass), and a clean, plantation-shutter look at a fraction of the cost.",
@@ -137,13 +137,13 @@ export const productPages: Record<string, ProductPageData> = {
       },
     ],
     metaTitle: "Custom Blinds in Post Falls & Coeur d'Alene | Wood, Faux & Composite",
-    metaDescription: "Custom wood, faux wood, and composite blinds measured and installed for North Idaho homes. We bring samples to you. Free in-home consultation in Post Falls, Coeur d'Alene, and Hayden.",
+    metaDescription: "Custom wood, faux wood, and composite blinds measured and installed for your home. We bring samples to you. Free in-home consultation in North Idaho, on Seattle's Eastside, and in the Salt Lake area.",
   },
   "cellular-shades": {
     slug: "cellular-shades",
     name: "Cellular Shades",
     image: "/images/cellular-shades.webp",
-    headline: "Cellular Shades for More Comfortable North Idaho Rooms.",
+    headline: "Cellular Shades for More Comfortable Homes.",
     subheadline: "Cellular shades are the most energy-efficient window covering available — and in Northern Idaho, that matters more than most places.",
     problem: "Northern Idaho doesn't do moderate weather. January mornings hit single digits. July afternoons push into the 90s. And through all of it, your windows are the weakest link in your home's insulation. Single-pane windows in older Coeur d'Alene homes bleed heat all winter long. Even newer double-pane windows in Post Falls subdivisions let more energy escape than most homeowners realize.",
     solution: "Cellular shades — sometimes called honeycomb shades — use a unique structure of air pockets that act as insulation right at the window. The honeycomb cells trap air, creating a barrier between the extreme outdoor temperatures and your living space. Available in single, double, or triple-cell designs, with options from sheer light-filtering to complete blackout.",
@@ -214,7 +214,7 @@ export const productPages: Record<string, ProductPageData> = {
       },
     ],
     metaTitle: "Cellular Shades in Coeur d'Alene & Post Falls | Energy-Efficient Honeycomb",
-    metaDescription: "Custom cellular honeycomb shades for North Idaho homes. Insulation at the glass, measured and installed by us. Free in-home consultation in Coeur d'Alene and Post Falls.",
+    metaDescription: "Custom cellular honeycomb shades for homes in North Idaho, on Seattle's Eastside, and in the Salt Lake area. Insulation at the glass, measured and installed by us. Free in-home consultation.",
   },
   "solar-shades": {
     slug: "solar-shades",
@@ -271,8 +271,8 @@ export const productPages: Record<string, ProductPageData> = {
         answer: "Very well. Solar shade fabrics are typically woven from fiberglass or polyester coated to resist UV degradation — the same sun that damages your floors won't break down the fabric. Northern Idaho's freeze-thaw cycles don't affect them the way they affect wood products. The bigger maintenance consideration is dust: in drier summer months, a light vacuuming with a brush attachment every few months keeps them looking sharp.",
       },
     ],
-    metaTitle: "Solar Shades, North Idaho | Glare & UV for Lake Views",
-    metaDescription: "Custom solar shades for North Idaho lake homes. Cut glare, UV, and heat gain while keeping your view. Free consultation in Coeur d'Alene, Sandpoint, Post Falls.",
+    metaTitle: "Solar Shades | Glare & UV Control That Keeps Your View",
+    metaDescription: "Custom solar shades for lake homes and bright west-facing glass. Cut glare, UV, and heat gain while keeping your view. Free consultation in North Idaho, on Seattle's Eastside, and in the Salt Lake area.",
   },
   "roller-shades": {
     slug: "roller-shades",
@@ -348,8 +348,8 @@ export const productPages: Record<string, ProductPageData> = {
         answer: "Light dusting with a soft brush or vacuum brush attachment handles most routine maintenance. For spot cleaning, blot — don't scrub — with a lightly dampened cloth and mild soap. Never soak the fabric or submerge it in water, which can damage the finish and corrode the roller hardware. The specialty textured fabrics we carry are all treated for durability, but professional cleaning is worth considering for heavily soiled shades rather than risking damage with DIY methods.",
       },
     ],
-    metaTitle: "Custom Roller Shades in North Idaho | Measured and Installed",
-    metaDescription: "Custom roller shades for Coeur d'Alene, Post Falls, and North Idaho homes. Precise measurement, premium fabrics, and professional installation. Free in-home consultation.",
+    metaTitle: "Custom Roller Shades | Measured and Installed",
+    metaDescription: "Custom roller shades for homes in North Idaho, on Seattle's Eastside, and in the Salt Lake area. Precise measurement, premium fabrics, and professional installation. Free in-home consultation.",
   },
   "banded-shades": {
     slug: "banded-shades",
@@ -398,8 +398,8 @@ export const productPages: Record<string, ProductPageData> = {
         answer: "Yes, and motorization pairs especially well with banded shades because the adjustment is so nuanced. Manually finding the exact alignment where the bands are perfectly open or closed requires a little practice. With motorization, you set the precise positions once — fully open, privacy mode, fully closed — and recall them with one tap. It removes any guesswork and makes the light-control flexibility that defines banded shades effortless to use every day.",
       },
     ],
-    metaTitle: "Banded Shades, North Idaho | Modern Zebra & Dual Shades",
-    metaDescription: "Custom banded (zebra) shades for North Idaho homes. Flexible light control with a modern look. Free in-home consultation in Coeur d'Alene, Post Falls, Hayden.",
+    metaTitle: "Banded Shades | Modern Zebra & Dual Shades",
+    metaDescription: "Custom banded (zebra) shades for homes in North Idaho, on Seattle's Eastside, and in the Salt Lake area. Flexible light control with a modern look. Free in-home consultation.",
   },
   "roman-shades": {
     slug: "roman-shades",
@@ -448,8 +448,8 @@ export const productPages: Record<string, ProductPageData> = {
         answer: "Roman shades involve a fabric and a mechanical lift system, which means the fabric will show wear before composite or aluminum products do. That said, quality Roman shades from reputable manufacturers last 10–15 years with normal use. The failure points are typically the lift cords and the lining — both repairable. The fabric itself, if it's a quality woven or linen-type material, holds up well. Where Roman shades genuinely underperform hard blinds is in high-humidity rooms like bathrooms; for those spaces, a moisture-resistant alternative is a smarter call.",
       },
     ],
-    metaTitle: "Roman Shades, North Idaho | Custom Fabric Window Shades",
-    metaDescription: "Custom Roman shades for North Idaho homes. Premium fabrics, expert installation. Free in-home consultation in Coeur d'Alene, Post Falls, Sandpoint.",
+    metaTitle: "Roman Shades | Custom Fabric Window Shades",
+    metaDescription: "Custom Roman shades for homes in North Idaho, on Seattle's Eastside, and in the Salt Lake area. Premium fabrics, expert installation. Free in-home consultation.",
   },
   "shutters": {
     slug: "shutters",
@@ -457,7 +457,7 @@ export const productPages: Record<string, ProductPageData> = {
     image: "/images/shutters.jpeg",
     // Keep the service and region clear; Norman experience remains in the
     // subheadline while the page helps compare the current shutter offering.
-    headline: "Custom Plantation Shutters in Coeur d’Alene & North Idaho.",
+    headline: "Custom Plantation Shutters.",
     subheadline: "Custom plantation shutters measured and installed across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint — by a Norman dealer since 2009.",
     problem: "Window treatments typically depreciate the moment they're installed — they're decorating, not improving. And most of them need to be replaced every 5-10 years. If you're investing in your home, especially a home you plan to keep or a property where resale value matters, you want something that lasts and actually adds to the home's worth.",
     solution: "Norman plantation shutters are built to last decades. We install Norman interior shutters because the quality is consistent, the engineering is thoughtful, and they hold up to North Idaho's four-season climate. The Normandy line is built from Paulownia — a hardwood with an exceptional strength-to-weight ratio that resists warping through January cold and August heat. The Woodlore and Woodlore Plus composite lines are dimensionally stable and moisture-resistant, the right call for bathrooms, kitchens, and lakefront humidity. Every frame is custom-built to your exact window opening, becomes a permanent part of your home's architecture, and is backed by Norman's limited lifetime warranty. For specialty and exterior applications, we also carry aluminum shutters by The Window Outfitters.",
@@ -554,7 +554,7 @@ export const productPages: Record<string, ProductPageData> = {
       { src: "/images/IMG_1422.jpeg", alt: "Exterior solar shade install on a North Idaho home by Luxe Window Works" },
     ],
     headline: "Exterior Solar Shades for Coeur d’Alene Patios & Windows",
-    subheadline: "We help Coeur d’Alene homeowners choose custom exterior shades for patios, covered decks, and sun-facing windows. Compare Corradi USA screens and TWO Shadesol outdoor shades with guidance on fabric, mounting, and compatible controls. We bring samples, take measurements, and handle installation throughout North Idaho.",
+    subheadline: "We help homeowners choose custom exterior shades for patios, covered decks, and sun-facing windows. Compare Corradi USA screens and TWO Shadesol outdoor shades with guidance on fabric, mounting, and compatible controls. We bring samples, take measurements, and handle installation.",
     problem: "Afternoon sun can make a covered deck uncomfortable and add glare and solar heat gain at west- or south-facing windows. For Coeur d’Alene homes with lake views, the goal is often to soften that light without closing off the view. The right approach depends on whether you are shading glass or an outdoor seating area, how the opening is built, and how exposed it is to weather.",
     solution: "Exterior solar shades intercept sunlight outside the glass, helping reduce solar heat gain before it reaches the room. Around a covered patio or deck, retractable fabric shades can soften direct sun and glare while providing daytime privacy. We offer Corradi USA exterior screens and TWO Shadesol outdoor shades, custom-measured for the opening. Fabric, side guides, housing, controls, and installation conditions determine the result; we help you compare the options before ordering.",
     expertInsight: "We start with the opening and how you use the space. A west-facing window and a covered patio can need different fabrics, mounting details, and controls. We check exposure and mounting surfaces, compare view-through and privacy in your light, and confirm the selected system’s operating limits. Motorization can make adjustment easier, but it does not make a fabric shade storm protection.",
@@ -596,15 +596,15 @@ export const productPages: Record<string, ProductPageData> = {
       },
       {
         question: "Do you install exterior shades for Coeur d’Alene patios and covered decks?",
-        answer: "Yes. We offer free in-home consultations, custom measurements, and professional exterior shade installation in Coeur d’Alene and across North Idaho. We check the opening, mounting surfaces, exposure, and how you use the outdoor space. Fabric shades can help manage sun, glare, and daytime privacy; insect screening depends on the fabric and side-guide configuration, and rain protection should not be assumed.",
+        answer: "Yes. We offer free in-home consultations, custom measurements, and professional exterior shade installation in North Idaho, on Seattle's Eastside, and in the Salt Lake area. We check the opening, mounting surfaces, exposure, and how you use the outdoor space. Fabric shades can help manage sun, glare, and daytime privacy; insect screening depends on the fabric and side-guide configuration, and rain protection should not be assumed.",
       },
       {
         question: "How much UV do exterior solar shades block?",
         answer: "UV performance varies by fabric and openness. We use the selected fabric’s published specifications rather than promise one percentage for every exterior shade. A suitable screen can reduce UV exposure, but no shade should be presented as a guarantee against all fading. We help balance light control, view-through, and coverage for your space.",
       },
     ],
-    metaTitle: "Exterior Shades in Coeur d’Alene & North Idaho | Luxe",
-    metaDescription: "Custom exterior and patio shades in Coeur d’Alene and North Idaho. Compare Corradi and TWO Shadesol with free in-home guidance, measuring, and installation.",
+    metaTitle: "Exterior Shades & Patio Shades | Luxe",
+    metaDescription: "Custom exterior and patio shades in North Idaho, on Seattle's Eastside, and in the Salt Lake area. Compare Corradi and TWO Shadesol with free in-home guidance, measuring, and installation.",
   },
   "motorization": {
     slug: "motorization",
@@ -613,7 +613,7 @@ export const productPages: Record<string, ProductPageData> = {
       idSlug: "video-motorization-overview",
       youtubeId: "BTVQo6bRGEw",
       title: "Motorized Window Treatments — Luxe Window Works",
-      description: "See motorized window treatments in action — installed by Luxe Window Works in Northern Idaho. One tap controls every shade in the room. Battery-powered motors, no hardwiring required. Serving Post Falls, Coeur d'Alene, Hayden, and Sandpoint.",
+      description: "See motorized window treatments in action — installed by Luxe Window Works in Northern Idaho. One tap controls every shade in the room. Battery-powered motors, no hardwiring required. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.",
       uploadDate: "2025-08-30",
       duration: "PT53S",
     },
@@ -621,7 +621,7 @@ export const productPages: Record<string, ProductPageData> = {
       idSlug: "video-motorization-2025-08-22",
       youtubeId: "nY_XVjk9Bco",
       title: "The Dog Days Of Summer!",
-      description: "Motorized window shades from Luxe Window Works. Push-button operation, no cords, safe for kids and pets, and perfect for hard-to-reach windows. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint in North Idaho. Free in-home consultations and 24 years consulting, designing, and installing window treatments.",
+      description: "Motorized window shades from Luxe Window Works. Push-button operation, no cords, safe for kids and pets, and perfect for hard-to-reach windows. Serving North Idaho, Seattle's Eastside, and the Salt Lake area. Free in-home consultations and 24 years consulting, designing, and installing window treatments.",
       uploadDate: "2025-08-22",
       duration: "PT9S",
     },
@@ -682,7 +682,7 @@ export const productPages: Record<string, ProductPageData> = {
     },
     faqs: [
       {"question": "How much do motorized blinds and shades cost with installation?", "answer": "The total depends on your window sizes, shade style, motor, and controls. Use the instant estimator to compare select products supplied through Premier Blinds & Shades with cordless or motorized operation. Consultation, measurements, and installation are included; sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas, Alta, and Norman are quoted separately."},
-      {"question": "Do you offer Hunter Douglas PowerView motorized shades?", "answer": "Yes. Luxe Window Works is a Hunter Douglas dealer serving North Idaho. We help you choose compatible shades, power options, and controls, then handle professional measurements and installation. PowerView products and any required accessories receive a separate quote during your free consultation; they are not included in the instant estimator."},
+      {"question": "Do you offer Hunter Douglas PowerView motorized shades?", "answer": "Yes. Luxe Window Works is a Hunter Douglas dealer serving North Idaho, Seattle's Eastside, and the Salt Lake area. We help you choose compatible shades, power options, and controls, then handle professional measurements and installation. PowerView products and any required accessories receive a separate quote during your free consultation; they are not included in the instant estimator."},
 
       {
         // Buyers search this product under five different names and the page

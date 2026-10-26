@@ -14,7 +14,7 @@ const webpageSchema = {
   "@id": `${PAGE_URL}#webpage`,
   url: PAGE_URL,
   name: "Contact | Free In-Home Consultation",
-  description: `Contact ${BUSINESS.name} for a free in-home consultation. Call ${BUSINESS.phone} or fill out our form. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.`,
+  description: `Contact ${BUSINESS.name} for a free in-home consultation. Call ${BUSINESS.phone} or fill out our form. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.`,
   isPartOf: { "@id": `${BUSINESS.url}/#website` },
   about: { "@id": `${BUSINESS.url}/#business` },
   breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
@@ -33,13 +33,13 @@ const breadcrumbSchema = {
 
 export const metadata: Metadata = {
   title: "Contact | Free In-Home Consultation",
-  description: `Contact ${BUSINESS.name} for a free in-home consultation. Call ${BUSINESS.phone} or fill out our form. Serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.`,
+  description: `Contact ${BUSINESS.name} for a free in-home consultation. Call ${BUSINESS.phone} or fill out our form. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.`,
   alternates: {
     canonical: "https://www.luxewindowworks.com/contact",
   },
   openGraph: {
     title: "Contact Luxe Window Works",
-    description: "Schedule your free in-home window treatment consultation in Northern Idaho.",
+    description: "Schedule your free in-home window treatment consultation in North Idaho, on Seattle's Eastside, or in the Salt Lake area.",
     type: "website",
   },
 };

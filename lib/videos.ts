@@ -37,7 +37,7 @@ export const LUXE_VIDEOS: readonly LuxeVideo[] = [
     serviceSlugs: ["exterior-solar-shades"],
     subject: "Corradi louvered patio roof and exterior side shade",
     breadcrumb: { label: "Exterior Solar Shades", href: "/products/exterior-solar-shades" },
-    ctaDescription: "We help homeowners throughout Coeur d’Alene, Post Falls and North Idaho explore outdoor shade solutions. We can help you compare options for your own space and how you enjoy being outside.",
+    ctaDescription: "We help homeowners throughout North Idaho, on Seattle's Eastside, and in the Salt Lake area explore outdoor shade solutions. We can help you compare options for your own space and how you enjoy being outside.",
     details: [
       { label: "Brand", value: "Corradi" },
       { label: "Overhead", value: "Adjustable patio roof louvers" },
@@ -64,7 +64,7 @@ export const LUXE_VIDEOS: readonly LuxeVideo[] = [
     serviceSlugs: [],
     subject: "Commercial window shades in a large glass-walled space",
     breadcrumb: { label: "Our Work", href: "/gallery" },
-    ctaDescription: "Explore custom window treatments for your North Idaho home or business. Luxe Window Works can help you compare options for your own space.",
+    ctaDescription: "Explore custom window treatments for your home or business. Luxe Window Works can help you compare options for your own space.",
     details: [
       { label: "Setting", value: "Large commercial interior" },
       { label: "Windows", value: "A full wall of glass" },
@@ -126,7 +126,7 @@ export const LUXE_VIDEOS: readonly LuxeVideo[] = [
     paragraphs: [
       "This Vignette Duolite shade combines a light-filtering front shade with a room-darkening layer that lowers behind it. Keep the front shade down for softly filtered daylight, then lower the rear layer when you want a darker room.",
       "Both layers tuck into a coordinated fabric-covered cassette headrail for a clean, finished look. The video shows how the two layers work together so you can compare the light-filtering and room-darkening settings.",
-      "We help you choose window treatments around how you use each room. We bring samples to your home, take custom measurements and handle professional installation throughout North Idaho.",
+      "We help you choose window treatments around how you use each room. We bring samples to your home, take custom measurements and handle professional installation in every market we serve.",
     ],
     relatedLinks: [
       { label: "Explore Roman shades", href: "/products/roman-shades" },

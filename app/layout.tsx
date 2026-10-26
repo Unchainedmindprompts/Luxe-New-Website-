@@ -32,7 +32,7 @@ const playfairDisplay = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.luxewindowworks.com"),
   title: {
-    default: "Luxe Window Works | Custom Window Treatments, North Idaho",
+    default: "Luxe Window Works | Custom Window Treatments",
     template: "%s",
   },
   description:
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: BUSINESS.url,
     siteName: BUSINESS.name,
-    title: "Luxe Window Works | Custom Window Treatments, North Idaho",
+    title: "Luxe Window Works | Custom Window Treatments",
     description:
       "Premium custom window treatments, with 24 years consulting, designing, and installing. Free in-home consultation. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.",
     images: [
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Luxe Window Works | Custom Window Treatments, North Idaho",
+    title: "Luxe Window Works | Custom Window Treatments",
     description:
       "Premium custom window treatments — 24 years consulting, designing, and installing. Free in-home consultation.",
     images: [`${BUSINESS.url}/share-image?v=20260924`],

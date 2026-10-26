@@ -23,7 +23,7 @@ export async function GET() {
           <span>Personal service.</span>
           <span>That’s Luxe.</span>
         </div>
-        <div style={{ fontFamily: "Inter", fontSize: 20, lineHeight: 1.5, marginTop: 34, color: "#e1d9cc" }}>Custom window treatments for your North Idaho home.</div>
+        <div style={{ fontFamily: "Inter", fontSize: 20, lineHeight: 1.5, marginTop: 34, color: "#e1d9cc" }}>Custom window treatments for your home.</div>
         <div style={{ fontFamily: "Inter", fontSize: 17, marginTop: "auto", color: "#c7a66a" }}>luxewindowworks.com</div>
       </div>
       {/* eslint-disable-next-line @next/next/no-img-element */}

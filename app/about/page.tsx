@@ -192,7 +192,7 @@ export default function AboutPage() {
                 },
                 {
                   title: "One price, quoted once.",
-                  body: "We don't inflate a list price so we can advertise 40% off it later. You get one number for what the product costs, and it's the same number any other customer would get for the same job. It's also among the most competitive in North Idaho, and we'll look at a competing bid if you have one.",
+                  body: "We don't inflate a list price so we can advertise 40% off it later. You get one number for what the product costs, and it's the same number any other customer would get for the same job. We'll look at a competing bid if you have one.",
                 },
                 {
                   title: "A lifetime installation guarantee.",

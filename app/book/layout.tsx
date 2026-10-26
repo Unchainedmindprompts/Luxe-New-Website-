@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Book a Free Consultation | Luxe Window Works",
     description:
-      "Schedule your free in-home window treatment consultation with us. Serving Northern Idaho with 24 years of hands-on expertise.",
+      "Schedule your free in-home window treatment consultation with us. Serving North Idaho, Seattle's Eastside, and the Salt Lake area, with 24 years of hands-on expertise.",
     url: "https://www.luxewindowworks.com/book",
     type: "website",
     images: [
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Book a Free Consultation | Luxe Window Works",
     description:
-      "Schedule your free in-home window treatment consultation with us. Serving Northern Idaho.",
+      "Schedule your free in-home window treatment consultation with us. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.",
     images: ["https://www.luxewindowworks.com/images/hero-modern-living.webp"],
   },
   robots: {
