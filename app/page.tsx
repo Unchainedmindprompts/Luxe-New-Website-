@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 export const metadata: Metadata = {
-  title: "Custom Window Treatments in Coeur d'Alene & Post Falls | Luxe Window Works",
+  title: "Premium Custom Window Treatments | Luxe Window Works",
   description:
-    "Independent in-home consultations for custom blinds, shades, shutters, and motorization. We bring samples to your home across Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint.",
+    "Independent in-home consultations for custom blinds, shades, shutters, and motorization. We bring samples to your home across North Idaho, on Seattle's Eastside, and in the Salt Lake area.",
   alternates: {
     canonical: "https://www.luxewindowworks.com",
   },
@@ -192,7 +192,7 @@ const webpageNode = {
   "@type": "WebPage",
   "@id": `${BASE}/#webpage`,
   url: BASE,
-  name: "Premium Custom Window Treatments in Northern Idaho | Luxe Window Works",
+  name: "Premium Custom Window Treatments | Luxe Window Works",
   description:
     "Custom blinds, shades, shutters, and motorized window treatments. 24 years consulting, designing, and installing. Free in-home consultations in North Idaho, on Seattle's Eastside, and in the Salt Lake area.",
   isPartOf: { "@id": `${BASE}/#website` },
