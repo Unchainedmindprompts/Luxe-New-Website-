@@ -356,6 +356,16 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       { "@type": "WebPage", url: "https://www.hunterdouglas.ca/stories/buyers-guides/uv-blocking-window-treatments", name: "Hunter Douglas guide to UV-blocking window treatments" },
     ],
   },
+  "alta-vs-hunter-douglas": {
+    mentions: [{ "@id": ALTA_BRAND["@id"] }, { "@id": HUNTER_DOUGLAS["@id"] }],
+    relatedLink: [`${BUSINESS.url}/products/hunter-douglas`, `${BUSINESS.url}/products/motorization`],
+    citation: [
+      { "@type": "WebPage", url: "https://www.altawindowfashions.com", name: "Alta Window Fashions: Hunter Douglas family brand, products and dealers" },
+      { "@type": "WebPage", url: "https://www.altawindowfashions.ca/product/sheer-shadings", name: "Alta Sheer Shadings: construction and BLISS Automation control options" },
+      { "@type": "WebPage", url: "https://blindsmax-spaces.nyc3.digitaloceanspaces.com/product-documents/Alta Bliss 2.0 Automation Product Specifications Guide.pdf", name: "Alta BLISS Automation 2.0 Product Specifications Guide: PowerView Gen 3 compatibility" },
+      { "@type": "WebPage", url: "https://help.hunterdouglas.com/s/article/Lifetime-Limited-Warranty", name: "Hunter Douglas Lifetime Limited Warranty: coverage, cords 7 years, motorized components 5 years" },
+    ],
+  },
   // Move-in article and the new-construction guide serve the same reader at
   // two different depths — this one is the "what nobody told you" primer, that
   // one is the phase-and-budget plan. Linked both ways so the pair reads as a

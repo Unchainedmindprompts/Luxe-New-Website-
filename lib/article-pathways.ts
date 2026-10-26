@@ -81,6 +81,15 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
     bookLabel: "Request a free in-home consultation",
     placement: "after-content",
   },
+  "alta-vs-hunter-douglas": {
+    heading: "Want to price both brands on your own windows?",
+    body: "We bring Hunter Douglas and Alta samples to the same consultation, price both against your actual windows, and help you put each brand where it earns its place. The consultation is free.",
+    productHref: "/products/hunter-douglas",
+    productLabel: "See Hunter Douglas window treatments",
+    bookHref: "/book",
+    bookLabel: "Request a free in-home consultation",
+    placement: "after-content",
+  },
   "blackout-shades-for-better-sleep": {
     heading: "Want a bedroom that stays dark past sunrise?",
     body: "We measure your windows, find where the light is leaking in, and show you the blackout options in your own light before you order anything. The consultation is free.",
@@ -176,6 +185,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
     {
       title: "Silhouette vs. Pirouette: Which Hunter Douglas Sheer Shade Is Right for Your Home?",
       slug: "hunter-douglas-silhouette-vs-pirouette",
+    },
+    {
+      title: "Alta vs. Hunter Douglas: Which Belongs in Your Home?",
+      slug: "alta-vs-hunter-douglas",
     },
   ],
   "roller-shades": [
