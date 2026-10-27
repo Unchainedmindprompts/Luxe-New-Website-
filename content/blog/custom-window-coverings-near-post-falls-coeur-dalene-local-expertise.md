@@ -85,7 +85,7 @@ wordCount: 2500
 
 <h3>Post Falls</h3>
 
-<p>Post Falls is growing fast, and a significant share of that growth is new construction — subdivisions along the Spokane River corridor, new builds in established neighborhoods, and custom homes on larger lots east of town. New construction means fresh starts with empty windows, which is both an opportunity and a responsibility to get the first installation right. Post Falls is Luxe&apos;s home base, and the majority of our consultations happen here.</p>
+<p>Post Falls is growing fast, and a significant share of that growth is new construction — subdivisions along the Spokane River corridor, new builds in established neighborhoods, and custom homes on larger lots east of town. New construction means fresh starts with empty windows, which is both an opportunity and a responsibility to get the first installation right. A large share of our consultations happen right here in Post Falls.</p>
 
 <h3>Coeur d&apos;Alene</h3>
 

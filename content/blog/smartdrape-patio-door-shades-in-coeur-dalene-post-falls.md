@@ -118,4 +118,4 @@ wordCount: 3827
 <p><a href="https://luxewindowworks.com/window-coverings-post-falls-id/" data-type="link" data-id="https://luxewindowworks.com/window-coverings-post-falls-id/">https://luxewindowworks.com/window-coverings-post-falls-id/</a></p>
 <p><a href="https://luxewindowworks.com/window-coverings-hayden-id/" data-type="link" data-id="https://luxewindowworks.com/window-coverings-hayden-id/">https://luxewindowworks.com/window-coverings-hayden-id/</a></p>
 <p><a href="https://luxewindowworks.com/window-coverings-rathdrum-id/" data-type="link" data-id="https://luxewindowworks.com/window-coverings-rathdrum-id/">https://luxewindowworks.com/window-coverings-rathdrum-id/</a></p>
-<p>Installed by Luxe Window Works — proudly based in Post Falls, ID and serving the greater Coeur d’Alene area.</p>
+<p>Installed by Luxe Window Works — serving North Idaho, Seattle's Eastside, and the Salt Lake area.</p>

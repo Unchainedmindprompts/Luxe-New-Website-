@@ -576,7 +576,7 @@ export const productPages: Record<string, ProductPageData> = {
       "Large or hard-to-reach openings where motorized operation helps",
       "Homeowners who want fabric shading they can retract when conditions allow",
     ],
-    localContext: "We are based in Post Falls and serve Coeur d’Alene, Hayden, Rathdrum, Sandpoint, and surrounding North Idaho communities. For a lake-facing window or a covered outdoor space, we assess the actual exposure and mounting conditions rather than using one fabric or system everywhere. Your quote follows a review of the opening, fabric, hardware, power, and controls.",
+    localContext: "Luxe Window Works serves North Idaho, Seattle's Eastside, and the Salt Lake area. For a lake-facing window or a covered outdoor space, we assess the actual exposure and mounting conditions rather than using one fabric or system everywhere. Your quote follows a review of the opening, fabric, hardware, power, and controls.",
     faqs: [
       {
         question: "How are exterior solar shades different from interior solar shades?",

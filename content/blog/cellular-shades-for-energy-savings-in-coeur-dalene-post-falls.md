@@ -200,7 +200,7 @@ wordCount: 6320
 <li>Lost efficiency that costs hundreds of dollars annually in unnecessary utility bills</li>
 </ul>
 <p>You've spent considerable time and money creating your Northern Idaho home. You deserve window treatments that protect that investment through measurable energy savings, long-term durability, and daily comfort—not fabric that looks acceptable but performs poorly.</p>
-<p><strong>Schedule your free, no-obligation in-home consultation with Luxe Window Works today.</strong> I'll personally assess your windows using <strong>The Window Challenge Assessment™</strong>, measure for proper flush inside mount feasibility, explain the specific cellular construction that makes sense for your home's orientation and usage patterns, and provide exact energy savings projections based on your window coverage and current utility costs.</p>
+<p><strong>Schedule your free, no-obligation in-home consultation with Luxe Window Works today.</strong> We'll assess your windows using <strong>The Window Challenge Assessment™</strong>, measure for proper flush inside mount feasibility, explain the specific cellular construction that makes sense for your home's orientation and usage patterns, and provide energy savings projections based on your window coverage and current utility costs.</p>
 <p>No pressure. No generic sales pitch. Just honest, expert guidance from someone who's been perfecting cellular shade installations in homes exactly like yours throughout the Pacific North West and Northern Idaho since 2002.</p>
 <p><strong>Your windows are either protecting your investment or leaking money every single month. Let's make sure they're working for you, not against you.</strong></p>
 <p><strong>Contact Luxe Window Works:</strong> ? 208-660-8643 ? Free in-home consultation and energy assessment ? Lifetime Installation Guarantee on every cellular shade system</p>
@@ -217,5 +217,5 @@ wordCount: 6320
 <p><a href="https://luxewindowworks.com/window-coverings-hayden-id/" data-type="link" data-id="https://luxewindowworks.com/window-coverings-hayden-id/">https://luxewindowworks.com/window-coverings-hayden-id/</a></p>
 <p><a href="https://luxewindowworks.com/window-coverings-rathdrum-id/" data-type="link" data-id="https://luxewindowworks.com/window-coverings-rathdrum-id/">https://luxewindowworks.com/window-coverings-rathdrum-id/</a></p>
 <p><strong>Mark Abplanalp</strong> is the owner and lead window treatment expert at <strong>Luxe Window Works</strong>, serving homeowners across Coeur d'Alene, Post Falls, and North Idaho. With 24 years of experience, Mark specializes in the <strong>thermal performance and mechanical longevity</strong> of custom window treatments.</p>
-<p>Installed by Luxe Window Works — proudly based in Post Falls, ID and serving the greater Coeur d’Alene area.</p>
+<p>Installed by Luxe Window Works — serving North Idaho, Seattle's Eastside, and the Salt Lake area.</p>
 <p>&nbsp;</p>

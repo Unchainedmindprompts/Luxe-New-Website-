@@ -324,4 +324,4 @@ wordCount: 4736
 <p><a href="https://two-usa.com/" data-type="link" data-id="https://two-usa.com/">https://two-usa.com/</a></p>
 <p>\<a href="https://normanusa.com/" data-type="link" data-id="https://normanusa.com/">https://normanusa.com/</a></p>
 <p><a href="https://www.corradiusa.com/us" data-type="link" data-id="https://www.corradiusa.com/us">https://www.corradiusa.com/us</a></p>
-<p>Installed by Luxe Window Works — proudly based in Post Falls, ID and serving the greater Coeur d’Alene area.</p>
+<p>Installed by Luxe Window Works — serving North Idaho, Seattle's Eastside, and the Salt Lake area.</p>

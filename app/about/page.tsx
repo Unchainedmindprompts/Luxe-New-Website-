@@ -10,14 +10,14 @@ import { CARRIED_BRANDS } from "@/lib/brands";
 export const metadata: Metadata = {
   title: "About Mark Abplanalp | 24 Years in Window Treatments",
   description:
-    "Based in Post Falls, Mark Abplanalp brings 24 years of experience and personal guidance to custom window treatments and outdoor shading projects across North Idaho, Seattle's Eastside, and the Salt Lake area.",
+    "Luxe Window Works brings 24 years of experience to custom window treatments and outdoor shading projects across North Idaho, Seattle's Eastside, and the Salt Lake area.",
   alternates: {
     canonical: "https://www.luxewindowworks.com/about",
   },
   openGraph: {
     title: "About Mark Abplanalp | 24 Years in Window Treatments",
     description:
-      "Based in Post Falls, Mark Abplanalp brings 24 years of experience and personal guidance to custom window treatments and outdoor shading projects across North Idaho, Seattle's Eastside, and the Salt Lake area.",
+      "Luxe Window Works brings 24 years of experience to custom window treatments and outdoor shading projects across North Idaho, Seattle's Eastside, and the Salt Lake area.",
     url: "https://www.luxewindowworks.com/about",
     images: [
       {
@@ -35,7 +35,7 @@ const personSchema = {
   ...OWNER_STUB,
   jobTitle: "Owner & Window Treatment Specialist",
   description:
-    "Owner Mark Abplanalp brings 24 years in custom window treatments to product selection, measuring and installation. Based in Post Falls, he works directly with homeowners in North Idaho, on Seattle's Eastside, and in the Salt Lake area from consultation through finished installation.",
+    "Luxe Window Works brings 24 years in custom window treatments to product selection, measuring and installation, serving homeowners in North Idaho, on Seattle's Eastside, and in the Salt Lake area from consultation through finished installation, to the same standard in every market.",
   url: `${BUSINESS.url}/about`,
   image: `${BUSINESS.url}/images/mark-photo.webp`,
   telephone: BUSINESS.phoneE164,
@@ -93,7 +93,7 @@ const webpageSchema = {
   url: `${BUSINESS.url}/about`,
   name: "About Mark Abplanalp | 24 Years in Window Treatments",
   description:
-    "Based in Post Falls, Mark Abplanalp brings 24 years of experience and personal guidance to custom window treatments and outdoor shading projects across North Idaho, Seattle's Eastside, and the Salt Lake area.",
+    "Luxe Window Works brings 24 years of experience to custom window treatments and outdoor shading projects across North Idaho, Seattle's Eastside, and the Salt Lake area.",
   isPartOf: { "@id": `${BUSINESS.url}/#website` },
   about: { "@id": `${BUSINESS.url}/#business` },
   mainEntity: { "@id": `${BUSINESS.url}/#owner` },
@@ -292,15 +292,15 @@ export default function AboutPage() {
             <div className="space-y-6 text-warm-gray-700 leading-relaxed">
               <p>
                 With 24 years in custom window treatments, owner Mark Abplanalp
-                brings practical knowledge and personal attention to every project.
-                From choosing the right fabrics and features to measuring and
-                installation, he helps you make confident decisions for your home
-                and budget.
+                brings practical knowledge and a hands-on standard to Luxe
+                Window Works. From choosing the right fabrics and features to
+                measuring and installation, the Luxe team helps you make
+                confident decisions for your home and budget.
               </p>
               <p>
-                Based in Post Falls, Mark works directly
-                with you from the first consultation through the finished installation,
-                and leads the same standard of service in every market Luxe serves.
+                Luxe Window Works works with you from the first consultation
+                through the finished installation, and holds the same standard
+                of service in every market we serve.
               </p>
             </div>
           </div>

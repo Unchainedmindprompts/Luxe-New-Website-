@@ -11,9 +11,9 @@ import { HUNTER_DOUGLAS } from "@/lib/hunter-douglas";
 
 const PAGE = `${BUSINESS.url}/hunter-douglas-coeur-d-alene`;
 const MEDIA = "/images/hunter-douglas/installations";
-const description = "Hunter Douglas in-home consultations in Coeur d’Alene with Post Falls-based Luxe Window Works. Compare samples, PowerView options, measuring and installation.";
+const description = "Hunter Douglas in-home consultations in Coeur d’Alene with Luxe Window Works. Compare samples, PowerView options, measuring and installation.";
 const faqs = [
-  { question: "Do you have a Hunter Douglas showroom in Coeur d’Alene?", answer: "Luxe Window Works is based in Post Falls and serves Coeur d’Alene through in-home consultations. We do not have a Coeur d’Alene showroom. We bring samples to your home so you can compare them in your own light, then handle professional measurements and installation." },
+  { question: "Do you have a Hunter Douglas showroom in Coeur d’Alene?", answer: "Luxe Window Works serves Coeur d’Alene through in-home consultations. We do not have a Coeur d’Alene showroom. We bring samples to your home so you can compare them in your own light, then handle professional measurements and installation." },
   { question: "Do you offer Hunter Douglas consultations in Coeur d’Alene?", answer: "Yes. Luxe Window Works is an authorized Hunter Douglas dealer serving Coeur d’Alene with free in-home consultations. We bring samples to you, measure your windows and help you compare products, fabrics and controls." },
   { question: "Can I compare Hunter Douglas samples in my home?", answer: "Yes. We help you compare fabrics, colors and textures in your own light, alongside your flooring and furnishings. Tell us which rooms you are considering and any collections that interest you when you book." },
   { question: "How much do Hunter Douglas blinds and shades cost?", answer: "Pricing depends on the collection, fabric, window sizes and operating system. Your consultation includes professional measurements and a quote for your selected products and installation. We can compare options room by room to help you prioritize your budget." },
@@ -56,7 +56,7 @@ export default function HunterDouglasCoeurDAlenePage() {
       <div className="flex flex-col justify-center px-6 py-12 sm:px-10 sm:py-16 xl:px-16 xl:py-20">
         <p className="text-xs uppercase tracking-[.18em] text-warm-gray-700">Your authorized Hunter Douglas dealer</p>
         <h1 className="mt-5 font-serif text-4xl leading-[1.1] text-charcoal sm:text-5xl xl:text-6xl">Hunter Douglas Window Treatments in Coeur d’Alene</h1>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-warm-gray-700">Compare Hunter Douglas blinds, shades, and shutters in your own Coeur d’Alene home. Luxe Window Works is based in Post Falls; we bring samples to you and handle the details from product selection through professional installation.</p>
+        <p className="mt-6 max-w-xl text-lg leading-relaxed text-warm-gray-700">Compare Hunter Douglas blinds, shades, and shutters in your own Coeur d’Alene home. Luxe Window Works brings samples to you and handles the details from product selection through professional installation.</p>
         <div className="mt-8 flex flex-wrap items-center gap-5"><BookButton /><a href="#installations" className="font-semibold underline underline-offset-4">See our installations ↓</a></div>
         <p className="mt-6 text-sm text-warm-gray-700">24 years of experience · Lifetime installation guarantee</p>
       </div>

@@ -143,4 +143,4 @@ wordCount: 4418
 <p><a href="https://two-usa.com/colourvue-control-roller-shades/" data-type="link" data-id="https://two-usa.com/colourvue-control-roller-shades/">https://two-usa.com/colourvue-control-roller-shades/</a></p>
 <p><a href="https://www.lafvb.com/genesis" data-type="link" data-id="https://www.lafvb.com/genesis">https://www.lafvb.com/genesis</a></p>
 <p><a href="https://normanusa.com/product/soluna-roller-shades/" data-type="link" data-id="https://normanusa.com/product/soluna-roller-shades/">https://normanusa.com/product/soluna-roller-shades/</a></p>
-<p>Installed by Luxe Window Works — proudly based in Post Falls, ID and serving the greater Coeur d’Alene area.</p>
+<p>Installed by Luxe Window Works — serving North Idaho, Seattle's Eastside, and the Salt Lake area.</p>

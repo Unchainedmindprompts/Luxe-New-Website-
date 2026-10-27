@@ -98,7 +98,7 @@ export default function FreeConsultationPage() {
             </ul>
             <div className="mt-7 flex items-center gap-4 border-t border-warm-gray-300 pt-6">
               <Image src="/images/mark-photo.webp" alt="Mark Abplanalp, owner of Luxe Window Works" width={72} height={72} className="h-[72px] w-[72px] shrink-0 rounded-full object-cover" />
-              <p className="text-sm leading-relaxed"><strong className="block text-base">Mark Abplanalp · Owner</strong>Based in Post Falls. 24 years of experience helping people choose and install window treatments.</p>
+              <p className="text-sm leading-relaxed"><strong className="block text-base">Mark Abplanalp · Owner</strong>24 years of experience helping homeowners choose and install window treatments.</p>
             </div>
             <a href="#request" className={`${primary} mt-7`}>Request a Call or Text <span aria-hidden="true" className="ml-3">→</span></a>
           </div>
