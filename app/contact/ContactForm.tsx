@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useRef, useState, FormEvent } from "react";
 import { usePathname } from "next/navigation";
 import { CONVERSION_EVENTS, trackConversionEvent, shouldSendMetaCustomEvents } from "@/lib/conversion-events";
 import { readOriginatingPath } from "@/lib/originating-path";
@@ -10,6 +10,7 @@ export default function ContactForm({ compact = false }: { compact?: boolean }) 
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string>("");
+  const startedAt = useRef(Date.now());
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,6 +27,7 @@ export default function ContactForm({ compact = false }: { compact?: boolean }) 
       source: "contact",
       originatingPath: readOriginatingPath(pathname),
       _hp: (formData.get("_hp") as string) || "",
+      elapsedMs: Date.now() - startedAt.current,
     };
 
     setError("");

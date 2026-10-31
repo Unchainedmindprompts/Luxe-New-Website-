@@ -11,6 +11,7 @@ export function ConsultationForm() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const pending = useRef(false);
+  const startedAt = useRef(Date.now());
   const successHeading = useRef<HTMLHeadingElement>(null);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
@@ -37,6 +38,8 @@ export function ConsultationForm() {
           contactMethod: String(data.get("contactMethod") ?? "Phone call"),
           source: "free-consultation",
           originatingPath: "/free-consultation",
+          _hp: String(data.get("_hp") ?? ""),
+          elapsedMs: Date.now() - startedAt.current,
         }),
       });
       const result = await response.json();
@@ -79,6 +82,8 @@ export function ConsultationForm() {
           <label className="block text-sm font-medium" htmlFor="landing-city">City <span className="font-normal text-warm-gray-700">(optional)</span><input id="landing-city" name="city" autoComplete="address-level2" maxLength={100} className={input} /></label>
           <fieldset><legend className="text-sm font-medium">How should we reach you?</legend><div className="mt-2 grid grid-cols-2 gap-3">{["Phone call", "Text message"].map((method, i) => <label key={method} className="flex min-h-12 cursor-pointer items-center gap-2 rounded-lg border border-warm-gray-300 px-3 text-sm has-[:checked]:border-charcoal has-[:checked]:bg-cream"><input type="radio" name="contactMethod" value={method} defaultChecked={i === 0} className="h-4 w-4 accent-charcoal" />{method}</label>)}</div></fieldset>
         </div>
+        {/* Honeypot — hidden from humans, catches bots. */}
+        <input type="text" name="_hp" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }} />
         {error && <p role="alert" className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-800">{error}</p>}
         <button type="submit" disabled={busy} className="mt-5 flex min-h-14 w-full items-center justify-center rounded-lg bg-charcoal px-4 py-4 text-base font-semibold text-white transition-colors hover:bg-black disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-charcoal">{busy ? "Sending your request…" : "Request My Call or Text"}<span aria-hidden="true" className="ml-3">→</span></button>
         <p className="mt-3 text-center text-sm text-warm-gray-700">No obligation. No appointment to choose right now.</p>

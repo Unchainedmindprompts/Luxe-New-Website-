@@ -413,6 +413,52 @@ await test("18  existing human-form payloads stay compatible", async (t) => {
   t.ok(/_hp:\s*\(formData\.get\("_hp"\)/.test(form), "contact form posts the honeypot field");
 });
 
+await test("38  human timing screen drops fast bot submits, keeps human-paced ones", async (t) => {
+  const mail = mailSpy();
+  const base = {
+    name: "Jamie Lee",
+    phone: "208-555-0199",
+    email: "jamie@example.com",
+    needs: "Need shades for the living room.",
+    contactMethod: "Phone call",
+    source: "contact",
+    _hp: "",
+  };
+
+  const fast = await processConsultation(
+    { ...base, elapsedMs: 50 },
+    { sendEmail: mail.sendEmail, logFailure: () => {} }
+  );
+  t.equal(fast.status, 200, "fast submit http");
+  t.equal(fast.body.ok, true, "fast submit still { ok: true }");
+  t.equal(mail.sent.length, 0, "no email for a fast submit");
+
+  const malformed = await processConsultation(
+    { ...base, elapsedMs: "5000" },
+    { sendEmail: mail.sendEmail, logFailure: () => {} }
+  );
+  t.equal(malformed.status, 200, "malformed timer http");
+  t.equal(malformed.body.ok, true, "malformed timer still { ok: true }");
+  t.equal(mail.sent.length, 0, "no email for a malformed timer");
+
+  const humanPaced = await processConsultation(
+    { ...base, elapsedMs: 45000 },
+    { sendEmail: mail.sendEmail, logFailure: () => {} }
+  );
+  t.equal(humanPaced.status, 200, "human-paced http");
+  t.equal(humanPaced.body.ok, true, "human-paced still { ok: true }");
+  t.equal(mail.sent.length, 1, "human-paced submit emails Mark");
+
+  const bookForm = readFileSync(join(ROOT, "app/book/page.tsx"), "utf8");
+  t.ok(/_hp:\s*hp/.test(bookForm), "book form posts the honeypot field");
+  t.ok(/elapsedMs/.test(bookForm), "book form posts the timing field");
+  const landingForm = readFileSync(join(ROOT, "app/free-consultation/ConsultationForm.tsx"), "utf8");
+  t.ok(/name="_hp"/.test(landingForm), "landing form renders the honeypot field");
+  t.ok(/elapsedMs/.test(landingForm), "landing form posts the timing field");
+  const contactForm = readFileSync(join(ROOT, "app/contact/ContactForm.tsx"), "utf8");
+  t.ok(/elapsedMs/.test(contactForm), "contact form posts the timing field");
+});
+
 await test("discovery  no booking/pricing claims; drapery honest; readiness blocked", (t) => {
   const doc = consultationDiscoveryDocument();
   t.equal(doc.id, "request-in-home-consultation", "capability id");

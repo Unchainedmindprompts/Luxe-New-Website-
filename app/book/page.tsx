@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { TrackedCta } from "@/components/TrackedCta";
@@ -20,6 +20,8 @@ export default function BookPage() {
     contactMethod: "Phone call",
     message: "",
   });
+  const startedAt = useRef(Date.now());
+  const [hp, setHp] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -52,6 +54,8 @@ export default function BookPage() {
           message: form.message,
           source: "book",
           originatingPath: readOriginatingPath(pathname),
+          _hp: hp,
+          elapsedMs: Date.now() - startedAt.current,
         }),
       });
 
@@ -268,6 +272,18 @@ export default function BookPage() {
                   className="w-full bg-white border border-warm-gray-200 rounded-lg px-4 py-3 text-sm text-charcoal placeholder:text-warm-gray-400 focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold transition-colors resize-none"
                 />
               </div>
+
+              {/* Honeypot — hidden from humans, catches bots. */}
+              <input
+                type="text"
+                name="_hp"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                value={hp}
+                onChange={(e) => setHp(e.target.value)}
+                style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+              />
 
               {errors.form && (
                 <p role="alert" className="text-red-500 text-sm text-center">{errors.form}</p>

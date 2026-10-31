@@ -334,6 +334,21 @@ export async function processConsultation(
   }
 
   if (!agentIntended) {
+    // Bot screen for the human forms, ported from the KodeCite inquiry fix.
+    // Every current form sends elapsedMs: how long the form was open before
+    // submitting. A present but impossibly fast or malformed timer means a
+    // bot drove the form, so answer with a plain success and send nothing.
+    // Payloads without the field keep the long-standing human contract
+    // (older pages stay compatible), so absence alone never drops a request.
+    const elapsedMs = body.elapsedMs;
+    if (
+      elapsedMs !== undefined &&
+      (typeof elapsedMs !== "number" ||
+        !Number.isFinite(elapsedMs) ||
+        elapsedMs < 3000)
+    ) {
+      return { status: 200, body: { ok: true } };
+    }
     if (notStrings.length > 0) {
       return {
         status: 400,
