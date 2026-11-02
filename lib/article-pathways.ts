@@ -90,6 +90,15 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
     bookLabel: "Request a free in-home consultation",
     placement: "after-content",
   },
+  "does-costco-sell-hunter-douglas": {
+    heading: "Want to see the line Costco cannot sell you?",
+    body: "We bring the full Hunter Douglas line to your home, samples in your own light, measure every window, and price the exact products. The consultation is free.",
+    productHref: "/products/hunter-douglas",
+    productLabel: "See Hunter Douglas window treatments",
+    bookHref: "/book",
+    bookLabel: "Request a free in-home consultation",
+    placement: "after-content",
+  },
   "blackout-shades-for-better-sleep": {
     heading: "Want a bedroom that stays dark past sunrise?",
     body: "We measure your windows, find where the light is leaking in, and show you the blackout options in your own light before you order anything. The consultation is free.",
@@ -160,6 +169,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
       title: "How Much Do Hunter Douglas Window Treatments Cost?",
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
+    {
+      title: "Does Costco Sell Hunter Douglas Shades?",
+      slug: "does-costco-sell-hunter-douglas",
+    },
   ],
   motorization: [
     {
@@ -181,6 +194,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
     {
       title: "How Much Do Hunter Douglas Window Treatments Cost?",
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+    {
+      title: "Does Costco Sell Hunter Douglas Shades?",
+      slug: "does-costco-sell-hunter-douglas",
     },
     {
       title: "Silhouette vs. Pirouette: Which Hunter Douglas Sheer Shade Is Right for Your Home?",
@@ -208,6 +225,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
       title: "How Much Do Hunter Douglas Window Treatments Cost?",
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
+    {
+      title: "Does Costco Sell Hunter Douglas Shades?",
+      slug: "does-costco-sell-hunter-douglas",
+    },
   ],
   shutters: [
     {
@@ -217,6 +238,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
     {
       title: "How Much Do Hunter Douglas Window Treatments Cost?",
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+    {
+      title: "Does Costco Sell Hunter Douglas Shades?",
+      slug: "does-costco-sell-hunter-douglas",
     },
   ],
   "cellular-shades": [
@@ -240,11 +265,19 @@ export const PRODUCT_DECISION_ARTICLES: Record<
       title: "How Much Do Hunter Douglas Window Treatments Cost?",
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
+    {
+      title: "Does Costco Sell Hunter Douglas Shades?",
+      slug: "does-costco-sell-hunter-douglas",
+    },
   ],
   "solar-shades": [
     {
       title: "How Much Do Hunter Douglas Window Treatments Cost?",
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+    {
+      title: "Does Costco Sell Hunter Douglas Shades?",
+      slug: "does-costco-sell-hunter-douglas",
     },
   ],
   "banded-shades": [
@@ -252,11 +285,19 @@ export const PRODUCT_DECISION_ARTICLES: Record<
       title: "How Much Do Hunter Douglas Window Treatments Cost?",
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
+    {
+      title: "Does Costco Sell Hunter Douglas Shades?",
+      slug: "does-costco-sell-hunter-douglas",
+    },
   ],
   "roman-shades": [
     {
       title: "How Much Do Hunter Douglas Window Treatments Cost?",
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+    {
+      title: "Does Costco Sell Hunter Douglas Shades?",
+      slug: "does-costco-sell-hunter-douglas",
     },
   ],
   "exterior-solar-shades": [
@@ -264,11 +305,19 @@ export const PRODUCT_DECISION_ARTICLES: Record<
       title: "How Much Do Hunter Douglas Window Treatments Cost?",
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
     },
+    {
+      title: "Does Costco Sell Hunter Douglas Shades?",
+      slug: "does-costco-sell-hunter-douglas",
+    },
   ],
   "specialty-shades": [
     {
       title: "How Much Do Hunter Douglas Window Treatments Cost?",
       slug: "how-much-do-hunter-douglas-window-treatments-cost",
+    },
+    {
+      title: "Does Costco Sell Hunter Douglas Shades?",
+      slug: "does-costco-sell-hunter-douglas",
     },
   ],
 };
