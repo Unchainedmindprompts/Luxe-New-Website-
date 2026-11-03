@@ -81,6 +81,15 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
     bookLabel: "Request a free in-home consultation",
     placement: "after-content",
   },
+  "are-hunter-douglas-silhouette-shades-worth-it": {
+    heading: "Want to judge Silhouette on your own windows?",
+    body: "We bring the Silhouette samples to your home, so you can tilt the vanes in your own light, check the view and the night privacy for yourself, and price your actual windows. The consultation is free.",
+    productHref: "/products/hunter-douglas",
+    productLabel: "See Hunter Douglas window treatments",
+    bookHref: "/book",
+    bookLabel: "Request a free in-home consultation",
+    placement: "after-content",
+  },
   "alta-vs-hunter-douglas": {
     heading: "Want to price both brands on your own windows?",
     body: "We bring Hunter Douglas and Alta samples to the same consultation, price both against your actual windows, and help you put each brand where it earns its place. The consultation is free.",
@@ -219,6 +228,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
     {
       title: "Silhouette vs. Pirouette: Which Hunter Douglas Sheer Shade Is Right for Your Home?",
       slug: "hunter-douglas-silhouette-vs-pirouette",
+    },
+    {
+      title: "Are Hunter Douglas Silhouette Shades Worth It?",
+      slug: "are-hunter-douglas-silhouette-shades-worth-it",
     },
     {
       title: "Alta vs. Hunter Douglas: Which Belongs in Your Home?",

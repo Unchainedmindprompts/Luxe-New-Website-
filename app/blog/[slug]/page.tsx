@@ -356,6 +356,16 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       { "@type": "WebPage", url: "https://www.hunterdouglas.ca/stories/buyers-guides/uv-blocking-window-treatments", name: "Hunter Douglas guide to UV-blocking window treatments" },
     ],
   },
+  "are-hunter-douglas-silhouette-shades-worth-it": {
+    mentions: [{ "@id": HUNTER_DOUGLAS["@id"] }],
+    relatedLink: [`${BUSINESS.url}/products/hunter-douglas`, `${BUSINESS.url}/products/motorization`],
+    citation: [
+      { "@type": "WebPage", url: "https://www.hunterdouglas.com/window-treatments/shades/sheer-shades/silhouette", name: "Hunter Douglas Silhouette sheer shadings: construction, vane sizes, daytime privacy, Duolite" },
+      { "@type": "WebPage", url: "https://www.hunterdouglas.com/window-treatments/shades", name: "Hunter Douglas shades: fabric and color counts by line, Duette Architella energy efficiency" },
+      { "@type": "WebPage", url: "https://www.hunterdouglas.com/powerview", name: "Hunter Douglas PowerView automation" },
+      { "@type": "WebPage", url: "https://assets.hunterdouglas.com/content/dam/hd-catalog-product-docs/sheer-shadings/multi-product-sheer-shadings/installation-guides/current/SI-NT_PA-AN_IOC_MAY2024_05.10.2024.pdf", name: "Hunter Douglas Silhouette and Nantucket Window Shadings: installation, operation and care guide" },
+    ],
+  },
   "alta-vs-hunter-douglas": {
     mentions: [{ "@id": ALTA_BRAND["@id"] }, { "@id": HUNTER_DOUGLAS["@id"] }],
     relatedLink: [`${BUSINESS.url}/products/hunter-douglas`, `${BUSINESS.url}/products/motorization`],
