@@ -120,6 +120,7 @@ export const areaPages: Record<string, AreaPageData> = {
   "post-falls": {
     slug: "post-falls",
     name: "Post Falls",
+    hdPage: "/hunter-douglas-post-falls",
     headline: "Custom Window Treatments for Post Falls Homes",
     subheadline: "New construction, growing families, and homes that need window coverings that work as hard as you do.",
     description: "Post Falls is one of the fastest-growing cities in Idaho, and it shows. New subdivisions are going up throughout the city, bringing modern architecture, open floor plans, and large windows that need thoughtful treatment. But Post Falls isn't just new construction — established neighborhoods have their own character and their own window treatment needs. Luxe Window Works knows these neighborhoods and the homes in them.",
@@ -180,6 +181,7 @@ export const areaPages: Record<string, AreaPageData> = {
   "hayden": {
     slug: "hayden",
     name: "Hayden",
+    hdPage: "/hunter-douglas-hayden",
     headline: "Custom Window Coverings for Hayden Homes",
     subheadline: "From Hayden Lake properties to the family neighborhoods along Government Way — tailored solutions for every home.",
     description: "Hayden blends the appeal of lakeside living with the convenience of a growing suburban community. Hayden Lake properties present premium window treatment opportunities with lake views that need solar protection, while the residential neighborhoods throughout Hayden feature a mix of established homes and newer construction that each benefit from professional window treatment consultation.",
@@ -236,6 +238,7 @@ export const areaPages: Record<string, AreaPageData> = {
   "rathdrum": {
     slug: "rathdrum",
     name: "Rathdrum",
+    hdPage: "/hunter-douglas-rathdrum",
     headline: "Window Treatments for Rathdrum's Expanding Neighborhoods",
     subheadline: "New homes, new families, and window coverings that match the energy of a growing community.",
     description: "Rathdrum has transformed from a quiet small town into one of Northern Idaho's most exciting growth areas. New subdivisions are bringing hundreds of families into modern, well-designed homes that need equally thoughtful window treatments. Rathdrum's blend of new construction, rural-adjacent properties, and small-town charm creates a unique set of window treatment needs that our 24 years in the trade are well-suited to handle.",
@@ -292,6 +295,7 @@ export const areaPages: Record<string, AreaPageData> = {
   "sandpoint": {
     slug: "sandpoint",
     name: "Sandpoint",
+    hdPage: "/hunter-douglas-sandpoint",
     headline: "Luxury Window Treatments for Sandpoint's Lakeside Living",
     subheadline: "Premium window coverings for one of Idaho's most stunning communities — where every window is a frame for something beautiful.",
     description: "Sandpoint sits at the northern tip of Lake Pend Oreille, one of the largest and deepest lakes in the western United States. The homes here are as impressive as the setting — from historic downtown properties to luxury lakefront estates and mountain-view homes in the surrounding hills. Window treatments in Sandpoint aren't just functional — they're part of the home's relationship with its extraordinary surroundings.",

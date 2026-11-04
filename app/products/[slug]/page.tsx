@@ -11,6 +11,8 @@ import EastsideHdBlock from "@/components/EastsideHdBlock";
 import { EASTSIDE_HD } from "@/lib/eastside-hd";
 import UtahHdBlock from "@/components/UtahHdBlock";
 import { UTAH_HD } from "@/lib/utah-hd";
+import NorthIdahoHdBlock from "@/components/NorthIdahoHdBlock";
+import { NORTH_IDAHO_HD } from "@/lib/north-idaho-hd";
 import { CdaProductProof } from "@/components/CdaClientReviews";
 import { ESTIMATE_PRODUCT_SCOPE } from "@/lib/estimate-copy";
 import { TrackedCta } from "@/components/TrackedCta";
@@ -223,6 +225,12 @@ export default async function ProductPage({ params }: Props) {
   // Douglas block linking to the /utah overview and the eight HD city
   // pages, rendered at the same placements so both markets sit together.
   const utahHd = UTAH_HD[slug];
+  // The North Idaho twin of the blocks above (added Nov 4, 2026): a
+  // Hunter Douglas block linking to the five North Idaho HD city pages,
+  // rendered at the same placements so all three markets sit together.
+  // Copy differs deliberately: Luxe installs in North Idaho, so the
+  // lifetime installation guarantee applies here.
+  const northIdahoHd = NORTH_IDAHO_HD[slug];
 
   return (
     <>
@@ -336,6 +344,9 @@ export default async function ProductPage({ params }: Props) {
       )}
       {utahHd?.placement === "after-guide" && (
         <UtahHdBlock data={utahHd} />
+      )}
+      {northIdahoHd?.placement === "after-guide" && (
+        <NorthIdahoHdBlock data={northIdahoHd} />
       )}
 
       <RelatedVideos videos={videosForService(slug)} />
@@ -522,6 +533,9 @@ export default async function ProductPage({ params }: Props) {
       )}
       {utahHd?.placement === "before-cta" && (
         <UtahHdBlock data={utahHd} />
+      )}
+      {northIdahoHd?.placement === "before-cta" && (
+        <NorthIdahoHdBlock data={northIdahoHd} />
       )}
 
       {/* CTA */}
