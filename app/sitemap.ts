@@ -98,7 +98,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.9,
     },
-    ...["/hunter-douglas-coeur-d-alene", "/hunter-douglas-bellevue", "/hunter-douglas-kirkland", "/hunter-douglas-sammamish", "/hunter-douglas-issaquah", "/hunter-douglas-renton", "/hunter-douglas-maple-valley", "/products/hunter-douglas", "/products/two", "/products/aluminum-shutters"].map(path => ({ url: `${baseUrl}${path}`, lastModified: currentDate, changeFrequency: "monthly" as const, priority: 0.8 })),
+    ...["/hunter-douglas-coeur-d-alene", "/hunter-douglas-bellevue", "/hunter-douglas-kirkland", "/hunter-douglas-sammamish", "/hunter-douglas-issaquah", "/hunter-douglas-renton", "/hunter-douglas-maple-valley", "/hunter-douglas-salt-lake-city", "/hunter-douglas-millcreek", "/hunter-douglas-holladay", "/hunter-douglas-draper", "/hunter-douglas-south-jordan", "/hunter-douglas-park-city", "/hunter-douglas-heber-city", "/hunter-douglas-midway", "/products/hunter-douglas", "/products/two", "/products/aluminum-shutters"].map(path => ({ url: `${baseUrl}${path}`, lastModified: currentDate, changeFrequency: "monthly" as const, priority: 0.8 })),
     // Product pages
     {
       url: `${baseUrl}/products`,

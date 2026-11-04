@@ -9,6 +9,8 @@ import { ExteriorShadeOptions } from "@/components/ExteriorShadeOptions";
 import { ProductBuyingGuide } from "@/components/ProductBuyingGuide";
 import EastsideHdBlock from "@/components/EastsideHdBlock";
 import { EASTSIDE_HD } from "@/lib/eastside-hd";
+import UtahHdBlock from "@/components/UtahHdBlock";
+import { UTAH_HD } from "@/lib/utah-hd";
 import { CdaProductProof } from "@/components/CdaClientReviews";
 import { ESTIMATE_PRODUCT_SCOPE } from "@/lib/estimate-copy";
 import { TrackedCta } from "@/components/TrackedCta";
@@ -217,6 +219,10 @@ export default async function ProductPage({ params }: Props) {
   // the /eastside overview and the six HD city pages. Undefined for
   // categories with no Hunter Douglas line, which render exactly as before.
   const eastsideHd = EASTSIDE_HD[slug];
+  // The Utah twin of the block above (added Nov 4, 2026): a Hunter
+  // Douglas block linking to the /utah overview and the eight HD city
+  // pages, rendered at the same placements so both markets sit together.
+  const utahHd = UTAH_HD[slug];
 
   return (
     <>
@@ -327,6 +333,9 @@ export default async function ProductPage({ params }: Props) {
           the final CTA below. */}
       {eastsideHd?.placement === "after-guide" && (
         <EastsideHdBlock data={eastsideHd} />
+      )}
+      {utahHd?.placement === "after-guide" && (
+        <UtahHdBlock data={utahHd} />
       )}
 
       <RelatedVideos videos={videosForService(slug)} />
@@ -510,6 +519,9 @@ export default async function ProductPage({ params }: Props) {
           block here, ahead of the final CTA. */}
       {eastsideHd?.placement === "before-cta" && (
         <EastsideHdBlock data={eastsideHd} />
+      )}
+      {utahHd?.placement === "before-cta" && (
+        <UtahHdBlock data={utahHd} />
       )}
 
       {/* CTA */}
