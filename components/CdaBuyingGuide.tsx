@@ -36,7 +36,7 @@ export default function CdaBuyingGuide() {
             <div><Link href="/products/shutters" className="font-semibold text-charcoal underline underline-offset-4 decoration-gold">Norman plantation shutters</Link><p className="mt-3 text-warm-gray-600 leading-relaxed">Compare materials, frames, and panel layouts with a Norman dealer since 2009. Read C P&apos;s local shutter experience below.</p></div>
             <div><Link href="/products/two" className="font-semibold text-charcoal underline underline-offset-4 decoration-gold">TWO shutters and shades</Link><p className="mt-3 text-warm-gray-600 leading-relaxed">Explore Highprofile interior shutters, Colourvue roller shades, and outdoor options for patios and covered spaces.</p></div>
           </div>
-          <p className="mt-7 text-sm text-warm-gray-600 leading-relaxed">Hunter Douglas, Norman, and TWO receive a project-specific quote. The instant estimator covers select products supplied through Premier Blinds &amp; Shades.</p>
+          <p className="mt-7 text-sm text-warm-gray-600 leading-relaxed">Every product we carry receives a project-specific quote, prepared after we confirm your windows during a free in-home consultation.</p>
         </div>
       </div>
     </section>

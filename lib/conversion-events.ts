@@ -13,8 +13,6 @@ export const CONVERSION_EVENTS = {
   ContactCtaClick: "ContactCtaClick",
   ProductCtaClick: "ProductCtaClick",
   ContactFormSubmit: "ContactFormSubmit",
-  EstimatorStarted: "EstimatorStarted",
-  EstimatorCompleted: "EstimatorCompleted",
 } as const;
 
 export type ConversionEventName =

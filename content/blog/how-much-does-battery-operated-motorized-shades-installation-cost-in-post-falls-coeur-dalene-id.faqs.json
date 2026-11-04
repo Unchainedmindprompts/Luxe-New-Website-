@@ -1,15 +1,15 @@
 [
   {
     "question": "How much do motorized shades cost in Post Falls and Coeur d’Alene?",
-    "answer": "The cost depends on your window dimensions, shade and fabric, motor, and controls. Luxe’s instant estimator shows current prices for select products supplied through Premier Blinds & Shades, with consultation, measurements, and installation included. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas, Alta, and Norman products are quoted separately."
+    "answer": "The cost depends on your window dimensions, shade and fabric, motor, and controls. During a free in-home consultation we confirm those details and prepare a written estimate for select products supplied through Premier Blinds & Shades, with consultation, measurements, and installation included. Sales tax and any applicable shipping or tariff surcharges are additional. Hunter Douglas, Alta, and Norman products are quoted separately."
   },
   {
     "question": "Does the motorized shade estimate include installation and a remote?",
-    "answer": "Yes. Motorized estimates include professional consultation, measurements, installation, the rechargeable battery, and compatible remotes as shown in the summary. The estimator groups compatible shades; additional remotes are optional and priced separately. App or voice-control equipment may require a separate quote."
+    "answer": "Yes. Motorized estimates include professional consultation, measurements, installation, the rechargeable battery, and compatible remotes as shown in the quote. Compatible shades are grouped by system; additional remotes are optional and priced separately. App or voice-control equipment may require a separate quote."
   },
   {
-    "question": "Can I use the instant estimator for Hunter Douglas or shutters?",
-    "answer": "No. Hunter Douglas, Alta, Norman, and shutters are outside the instant estimator. Request a free in-home consultation for a quote based on the products, dimensions, controls, and installation requirements for your home."
+    "question": "How are Hunter Douglas and shutters priced?",
+    "answer": "Hunter Douglas, Alta, Norman, and shutters are quoted during a free in-home consultation, based on the products, dimensions, controls, and installation requirements for your home."
   },
   {
     "question": "Do battery-operated shades work with Alexa, Google Home, or Apple Home?",
@@ -20,7 +20,7 @@
     "answer": "Charging frequency depends on the motor, battery, shade size and weight, and how often you operate it. We explain the manufacturer’s guidance for the selected system and plan how you will reach the battery on high windows."
   },
   {
-    "question": "Is the online estimate a final quote?",
-    "answer": "No. It is a starting point based on your dimensions and selections. We confirm final measurements, products, installation requirements, and any applicable charges before preparing the final quote. Using the estimator does not place an order or book an appointment."
+    "question": "Is the estimate a final quote?",
+    "answer": "No. It is a starting point based on the dimensions and selections we review with you. We confirm final measurements, products, installation requirements, and any applicable charges before preparing the final quote. An estimate does not place an order or book an appointment."
   }
 ]

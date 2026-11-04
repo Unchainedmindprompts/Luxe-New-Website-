@@ -110,6 +110,16 @@ const nextConfig = {
     const staticRedirects = [
       ...legacyPages,
       {
+        // Oct 2026: the instant estimator was retired. It spoke to
+        // price-first shoppers, and every product is now quoted after an
+        // in-home consultation instead. The URL redirects to booking so the
+        // links in older articles and external pages land on the
+        // consultation rather than a 404.
+        source: '/estimate',
+        destination: '/book',
+        permanent: true,
+      },
+      {
         // Oct 2026: the U-Block sleep article was rewritten as a general
         // blackout-and-sleep guide with no city in the title. The old slug
         // redirects so its accumulated links land on the new article.
