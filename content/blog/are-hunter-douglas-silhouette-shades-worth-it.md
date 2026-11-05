@@ -51,7 +51,7 @@ A worth-it article that never says no is an advertisement. Here is where the ans
 
 **When the job is blackout.** It belongs on this list even though it came up above: the standard product diffuses light, it does not eliminate it. A bedroom Silhouette ordered without the room-darkening version is the wrong purchase, and it is an easy mistake to make if nobody tells you.
 
-**When the job is insulation.** Sheers are not insulation products. Hunter Douglas positions its Duette honeycomb line as the energy answer, and calls Duette Architella the most energy efficient style available. If cutting heat loss at the glass is the main job, Duette is the honest recommendation, and it earns its own article in this series.
+**When the job is insulation.** Sheers are not insulation products. Hunter Douglas positions its Duette honeycomb line as the energy answer, and calls Duette Architella the most energy efficient style available. If cutting heat loss at the glass is the main job, Duette is the honest recommendation, and it earns [its own article in this series](/blog/duette-honeycomb-shades-cost-quality-downsides).
 
 **When the job is the lowest price.** Silhouette is a premium product with a premium range, and no honest framing changes that. If the budget is the main constraint, the better move is a value line inside the Hunter Douglas family, such as Alta, rather than stretching a Silhouette into a room it was not bought for.
 

@@ -366,6 +366,21 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       { "@type": "WebPage", url: "https://assets.hunterdouglas.com/content/dam/hd-catalog-product-docs/sheer-shadings/multi-product-sheer-shadings/installation-guides/current/SI-NT_PA-AN_IOC_MAY2024_05.10.2024.pdf", name: "Hunter Douglas Silhouette and Nantucket Window Shadings: installation, operation and care guide" },
     ],
   },
+  "duette-honeycomb-shades-cost-quality-downsides": {
+    mentions: [
+      { "@id": HUNTER_DOUGLAS["@id"] },
+      { "@type": "WebPage", url: "https://www.hunterdouglas.com/window-treatments/shades/cellular-shades/duette", name: "Hunter Douglas Duette honeycomb shades" },
+    ],
+    relatedLink: [`${BUSINESS.url}/products/hunter-douglas`, `${BUSINESS.url}/products/cellular-shades`],
+    citation: [
+      { "@type": "WebPage", url: "https://www.hunterdouglas.com/window-treatments/shades/cellular-shades/duette", name: "Hunter Douglas Duette honeycomb shades: honeycomb construction, Architella, LightLock, Duolite" },
+      { "@type": "WebPage", url: "https://www.hunterdouglas.com/stories/buyers-guides/insulating-shades", name: "Hunter Douglas insulating shades guide: AERC ratings, Architella median U-factor 0.24 vs 0.36 standard honeycomb" },
+      { "@type": "WebPage", url: "https://www.hunterdouglas.com/faqs/duette-vs-applause", name: "Hunter Douglas FAQ: the difference between Duette and Applause shades" },
+      { "@type": "WebPage", url: "https://www.hunterdouglas.com/stories/buyers-guides/home-theater-window-treatments", name: "Hunter Douglas home theater window treatments guide: Duette sound absorption up to 70 percent" },
+      { "@type": "WebPage", url: "https://www.energy.gov/energysaver/energy-efficient-window-coverings", name: "U.S. Department of Energy, Energy Saver: energy efficient window coverings" },
+      { "@type": "WebPage", url: "https://www.hunterdouglas.com/powerview", name: "Hunter Douglas PowerView automation" },
+    ],
+  },
   "alta-vs-hunter-douglas": {
     mentions: [{ "@id": ALTA_BRAND["@id"] }, { "@id": HUNTER_DOUGLAS["@id"] }],
     relatedLink: [`${BUSINESS.url}/products/hunter-douglas`, `${BUSINESS.url}/products/motorization`],

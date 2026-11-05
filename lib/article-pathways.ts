@@ -90,6 +90,15 @@ export const ARTICLE_PATHWAYS: Record<string, ArticlePathway> = {
     bookLabel: "Request a free in-home consultation",
     placement: "after-content",
   },
+  "duette-honeycomb-shades-cost-quality-downsides": {
+    heading: "Want to feel what Duette does on your own windows?",
+    body: "We bring the Duette samples to your home, hold the fabrics against your coldest glass, and price your actual windows, including what Architella and LightLock would add where they earn it. The consultation is free.",
+    productHref: "/products/hunter-douglas",
+    productLabel: "See Hunter Douglas window treatments",
+    bookHref: "/book",
+    bookLabel: "Request a free in-home consultation",
+    placement: "after-content",
+  },
   "alta-vs-hunter-douglas": {
     heading: "Want to price both brands on your own windows?",
     body: "We bring Hunter Douglas and Alta samples to the same consultation, price both against your actual windows, and help you put each brand where it earns its place. The consultation is free.",
@@ -234,6 +243,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
       slug: "are-hunter-douglas-silhouette-shades-worth-it",
     },
     {
+      title: "Duette Honeycomb Shades: Cost, Quality, and the Downsides",
+      slug: "duette-honeycomb-shades-cost-quality-downsides",
+    },
+    {
       title: "Alta vs. Hunter Douglas: Which Belongs in Your Home?",
       slug: "alta-vs-hunter-douglas",
     },
@@ -310,6 +323,10 @@ export const PRODUCT_DECISION_ARTICLES: Record<
     {
       title: "Does Costco Sell Hunter Douglas Shades?",
       slug: "does-costco-sell-hunter-douglas",
+    },
+    {
+      title: "Duette Honeycomb Shades: Cost, Quality, and the Downsides",
+      slug: "duette-honeycomb-shades-cost-quality-downsides",
     },
   ],
   "solar-shades": [
