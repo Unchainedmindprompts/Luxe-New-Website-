@@ -124,6 +124,10 @@ wordCount: 1832
 
 <p>Yes — Norman's <strong>PerfectTilt™ G4</strong> motorization is available across the Woodlore® Plus line. Battery-powered, smart-home integration via iPhone/iPad/standard remotes, and especially valuable on hard-to-reach windows (high clerestories, tall picture windows above stairwells) or large window arrays where manual operation becomes a chore.</p>
 
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>Related reading:</strong> See <a href="/products/norman">Norman shutters and blinds at Luxe Window Works</a> for the full lineup, read our overview of <a href="/blog/norman-shutters-in-north-idaho-premium-craftsmanship-from-luxe-window-works">Norman shutters in North Idaho</a>, see how the <a href="/blog/norman-bifold-180-shutters-for-bi-folding-doors-in-north-idaho">Norman BiFold 180 works on bi-folding doors</a>, and compare frames and materials in <a href="/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration">the Ultimate Shutter Guide</a>.</p>
+</div>
+
 <h2>Book a Consultation</h2>
 
 <p>If you're shopping shutters in Coeur d'Alene, Post Falls, Hayden, Rathdrum, or Sandpoint and you want an honest construction breakdown — not a sales pitch — text or call me at <strong>208-660-8643</strong> or <a href="/book">book a free in-home consultation here</a>. I'll bring physical samples of Woodlore® Plus, Normandy hardwood, and a basic composite so you can feel the difference, and we'll walk every window in the home together. No pressure, no upsell — just the right product for your specific windows and climate.</p>

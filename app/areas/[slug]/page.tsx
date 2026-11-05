@@ -505,6 +505,9 @@ export default async function AreaPage({ params }: Props) {
               : "We bring the showroom to you. Compare fabrics, colors, and controls alongside your furnishings, then let us handle final measurements, ordering, and professional installation."}</p>
           <div className="mt-7 space-y-6">
             <div><h3 className="font-serif text-xl text-charcoal">Explore Hunter Douglas with a local dealer</h3><p className="mt-2 text-warm-gray-600 leading-relaxed">Compare <Link href={area.hdPage ?? "/products/hunter-douglas"} className="underline underline-offset-4">Hunter Douglas shades, blinds, and shutters</Link> during your free in-home consultation. For powered controls, start with our <Link href="/products/motorization" className="underline underline-offset-4">motorized shade options</Link> and we’ll help confirm the right system for your home.</p></div>
+            {area.normanPage && (
+              <div><h3 className="font-serif text-xl text-charcoal">Explore Norman shutters with a local dealer</h3><p className="mt-2 text-warm-gray-600 leading-relaxed">Luxe has installed <Link href={area.normanPage} className="underline underline-offset-4">Norman plantation shutters</Link> in North Idaho homes since 2009. Compare the Normandy hardwood and Woodlore Plus composite lines in your own light during your free in-home consultation, and see why precise measurement matters for shutters in our freeze-thaw climate.</p></div>
+            )}
           </div>
         </div>
       </section>

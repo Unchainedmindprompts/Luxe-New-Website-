@@ -43,6 +43,9 @@ wordCount: 1689
 <p>In our part of the world, homes are often designed to take full advantage of the natural beauty around us. <strong>Norman PerfectSheer Shades</strong> are the perfect complement to this design philosophy.</p>
 <p>In the summer, they provide essential heat and glare protection for large windows while still letting in soft, ambient light. In the winter, their insulating properties help keep the warmth inside. They are the ideal choice for preserving your view of the mountains or the lake while still ensuring privacy and comfort.</p>
 <p>Whether you have a unique window size or a specific design vision, the custom sizing and vast fabric options of <strong>Norman PerfectSheer Shades</strong> ensure a perfect match for any window in your home, from a grand living room to a private sunroom.</p>
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>Related reading:</strong> Explore <a href="/products/norman">Norman shutters and blinds at Luxe Window Works</a> to see the full Norman range, read about <a href="/blog/norman-shutters-in-north-idaho-premium-craftsmanship-from-luxe-window-works">Norman shutters in North Idaho</a> for rooms where a shutter fits better than a shade, and compare <a href="/blog/woodlore-plus-shutters-north-idaho">Woodlore Plus composite shutters</a> for moisture-prone spaces.</p>
+</div>
 <hr /><h2><strong>Schedule Your Consultation Today</strong></h2>
 <p>Your home is your sanctuary. Don't settle for anything less than a window treatment that enhances your lifestyle and reflects your unique taste.</p>
 <p>Discover how <strong>Norman PerfectSheer Shades</strong> can elevate your home's aesthetic, provide unparalleled comfort, and create the perfect ambiance.</p>

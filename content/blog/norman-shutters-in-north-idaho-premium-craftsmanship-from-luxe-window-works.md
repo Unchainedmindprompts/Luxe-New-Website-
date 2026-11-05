@@ -171,6 +171,10 @@ wordCount: 2600
 
 <p>Norman shutter costs vary based on window size, shutter line (Normandy vs. Woodlore Plus), louver size, and the number of windows being covered. Woodlore and Woodlore Plus shutters are more accessible price-wise than Normandy hardwood while still delivering the full Norman quality and warranty. For accurate pricing, the best step is a free in-home consultation where we measure your windows and provide an exact quote — no surprises. We serve <a href="/areas/coeur-d-alene">Coeur d'Alene</a>, <a href="/areas/post-falls">Post Falls</a>, Hayden, <a href="/areas/sandpoint">Sandpoint</a>, <a href="/areas/rathdrum">Rathdrum</a>, and surrounding North Idaho communities.</p>
 
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>Related reading:</strong> Start with <a href="/products/norman">Norman shutters and blinds at Luxe Window Works</a> for the full Norman lineup, then compare <a href="/blog/woodlore-plus-shutters-north-idaho">Woodlore Plus shutters in North Idaho</a>, see how the <a href="/blog/norman-bifold-180-shutters-for-bi-folding-doors-in-north-idaho">Norman BiFold 180 handles bi-folding doors</a>, and work through <a href="/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration">the Ultimate Shutter Guide for frame, material, and configuration choices</a>.</p>
+</div>
+
 <h2>Schedule Your Free Norman Shutter Consultation in North Idaho</h2>
 
 <p>Norman shutters are a significant investment in your home's comfort, aesthetics, and long-term value. Getting them right requires precise measurement, honest product guidance, and installation experience that comes from doing this work — not reading about it.</p>

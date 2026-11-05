@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS, PRODUCTS } from "@/lib/constants";
 import { HD_URL } from "@/lib/hunter-douglas";
+import { NORMAN_URL } from "@/lib/norman";
 import { TWO_URL } from "@/lib/two";
 import { productPages } from "@/lib/product-data";
 
@@ -68,20 +69,20 @@ function ProductsHubSchema() {
     inLanguage: "en-US",
     // Each product page defines its own WebPage and Service; reference them by
     // @id rather than restating them here, so there is one definition per node.
-    hasPart: [{ "@id": `${BUSINESS.url}/products/hunter-douglas#webpage` }, { "@id": `${TWO_URL}#webpage` }, ...PRODUCTS.map((p) => ({
+    hasPart: [{ "@id": `${BUSINESS.url}/products/hunter-douglas#webpage` }, { "@id": `${TWO_URL}#webpage` }, { "@id": `${NORMAN_URL}#webpage` }, ...PRODUCTS.map((p) => ({
       "@id": `${BUSINESS.url}/products/${p.slug}#webpage`,
     }))],
     mainEntity: {
       "@type": "ItemList",
       name: "Window Treatments Installed by Luxe Window Works",
-      numberOfItems: PRODUCTS.length + 2,
+      numberOfItems: PRODUCTS.length + 3,
       itemListElement: [...PRODUCTS.map((p, i) => ({
         "@type": "ListItem",
         position: i + 1,
         name: p.name,
         url: `${BUSINESS.url}/products/${p.slug}`,
         item: { "@id": `${BUSINESS.url}/products/${p.slug}#service` },
-      })), { "@type": "ListItem", position: PRODUCTS.length + 1, name: "TWO Collection", url: TWO_URL, item: { "@id": `${TWO_URL}#webpage` } }, { "@type": "ListItem", position: PRODUCTS.length + 2, name: "Hunter Douglas Collection", url: HD_URL, item: { "@id": `${BUSINESS.url}/products/hunter-douglas#webpage` } }],
+      })), { "@type": "ListItem", position: PRODUCTS.length + 1, name: "TWO Collection", url: TWO_URL, item: { "@id": `${TWO_URL}#webpage` } }, { "@type": "ListItem", position: PRODUCTS.length + 2, name: "Hunter Douglas Collection", url: HD_URL, item: { "@id": `${BUSINESS.url}/products/hunter-douglas#webpage` } }, { "@type": "ListItem", position: PRODUCTS.length + 3, name: "Norman Collection", url: NORMAN_URL, item: { "@id": `${NORMAN_URL}#webpage` } }],
     },
   };
 
@@ -211,6 +212,7 @@ export default function ProductsHubPage() {
 
       <section className="container-luxe pt-8"><div className="bg-cream p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"><p className="text-charcoal"><span className="font-semibold">Discover Hunter Douglas.</span> Beautiful fabrics, thoughtful light control and Luxe’s personal service.</p><Link href="/products/hunter-douglas" className="font-semibold text-charcoal underline underline-offset-4 shrink-0">Explore the Collection →</Link></div></section>
       <section className="container-luxe py-8"><div className="border-y border-warm-gray-200 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"><p className="text-charcoal"><span className="font-semibold">Discover TWO.</span> Six product families of shutters, shades and automation.</p><Link href="/products/two" className="font-semibold text-charcoal underline underline-offset-4 shrink-0">Explore the TWO Collection →</Link></div></section>
+      <section className="container-luxe pb-8"><div className="bg-cream p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"><p className="text-charcoal"><span className="font-semibold">Discover Norman.</span> Normandy hardwood, Woodlore Plus composite, and InvisibleTilt shutters, from a Norman dealer since 2009.</p><Link href="/products/norman" className="font-semibold text-charcoal underline underline-offset-4 shrink-0">Explore the Norman Collection →</Link></div></section>
 
       {/* Where we install — ties the category page to the local pages */}
       <section className="py-16 md:py-20 bg-cream/50">

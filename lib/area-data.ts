@@ -53,6 +53,13 @@ export interface AreaPageData {
   state?: string;
   /** Route of this city's Hunter Douglas landing page, e.g. "/hunter-douglas-bellevue". */
   hdPage?: string;
+  /**
+   * Route of the Norman brand hub. Set only on the North Idaho entries
+   * whose FAQ and insight copy already names Norman shutters (Coeur
+   * d'Alene, Hayden), so the compare section can link the hub from the
+   * market where Luxe's Norman work runs. Absent everywhere else.
+   */
+  normanPage?: string;
 }
 
 export const areaPages: Record<string, AreaPageData> = {
@@ -60,6 +67,7 @@ export const areaPages: Record<string, AreaPageData> = {
     slug: "coeur-d-alene",
     name: "Coeur d'Alene",
     hdPage: "/hunter-douglas-coeur-d-alene",
+    normanPage: "/products/norman",
     headline: "Custom Window Treatments for Coeur d'Alene Homes",
     subheadline: "From lakefront estates to downtown bungalows — we come to your home, bring samples, and recommend what will actually work in Coeur d'Alene light.",
     description: "Luxe Window Works provides custom blinds, shades, shutters, and motorized window treatments throughout Coeur d'Alene. We bring samples to your home, help you compare options in the room, take professional measurements, and handle installation. Whether you are settling into a new build or updating existing windows, start with how you want the light, privacy, and controls to work.",
@@ -182,6 +190,7 @@ export const areaPages: Record<string, AreaPageData> = {
     slug: "hayden",
     name: "Hayden",
     hdPage: "/hunter-douglas-hayden",
+    normanPage: "/products/norman",
     headline: "Custom Window Coverings for Hayden Homes",
     subheadline: "From Hayden Lake properties to the family neighborhoods along Government Way — tailored solutions for every home.",
     description: "Hayden blends the appeal of lakeside living with the convenience of a growing suburban community. Hayden Lake properties present premium window treatment opportunities with lake views that need solar protection, while the residential neighborhoods throughout Hayden feature a mix of established homes and newer construction that each benefit from professional window treatment consultation.",

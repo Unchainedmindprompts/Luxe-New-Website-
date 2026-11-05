@@ -539,6 +539,10 @@ export const productPages: Record<string, ProductPageData> = {
           "label": "Request a plantation shutter quote"
         },
         {
+          "href": "/products/norman",
+          "label": "Explore Norman shutters with Luxe Window Works"
+        },
+        {
           "href": "/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration",
           "label": "Compare shutter materials, frames, and layouts"
         },

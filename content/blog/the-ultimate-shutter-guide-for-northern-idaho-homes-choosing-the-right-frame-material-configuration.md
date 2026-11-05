@@ -220,6 +220,10 @@ wordCount: 3700
 <p><strong>Ready to explore your options?</strong> Contact us for a consultation — no pressure, just practical guidance from someone who's seen every configuration, every obstruction, and every shutter material in real Northern Idaho homes.</p>
 <p>luxewindowworks.com &nbsp;|&nbsp; 208-660-8643 &nbsp;|&nbsp; mark@luxewindowworks.com</p>
 
+<div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
+<p style="margin:0;font-size:.95rem;"><strong>Related reading:</strong> See <a href="/products/norman">Norman shutters and blinds at Luxe Window Works</a> for the full lineup, read our overview of <a href="/blog/norman-shutters-in-north-idaho-premium-craftsmanship-from-luxe-window-works">Norman shutters in North Idaho</a>, compare <a href="/blog/woodlore-plus-shutters-north-idaho">Woodlore Plus shutters in North Idaho</a>, and see how the <a href="/blog/norman-bifold-180-shutters-for-bi-folding-doors-in-north-idaho">Norman BiFold 180 works on bi-folding doors</a>.</p>
+</div>
+
 <h2>About the Author</h2>
 <p>Mark Abplanalp is the owner of Luxe Window Works, a trusted custom window covering dealer serving Northern Idaho. With over 24 years of hands-on industry experience — including measuring, installing, and consulting — Mark brings clarity to complex decisions. He's worked with top brands including Hunter Douglas, Alta, Norman, and Graber, and specializes in helping homeowners choose the right solutions for their space, style, and climate.</p>
 <p>Proudly serving Coeur d'Alene, Post Falls, Hayden, Rathdrum, and Sandpoint, Idaho.</p>

@@ -270,16 +270,16 @@ export const PRODUCT_DECISION_ARTICLES: Record<
       slug: "the-hidden-value-of-plantation-shutters-in-northern-idaho-homes",
     },
     {
-      title: "How Much Do Hunter Douglas Window Treatments Cost?",
-      slug: "how-much-do-hunter-douglas-window-treatments-cost",
+      title: "The Ultimate Shutter Guide for Northern Idaho Homes: Choosing the Right Frame, Material & Configuration",
+      slug: "the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration",
     },
     {
-      title: "What Blinds Are Better Than Hunter Douglas?",
-      slug: "what-blinds-are-better-than-hunter-douglas",
+      title: "Woodlore Plus Shutters in North Idaho: Why Composite Beats Wood for Coeur d'Alene Homes",
+      slug: "woodlore-plus-shutters-north-idaho",
     },
     {
-      title: "Does Costco Sell Hunter Douglas Shades?",
-      slug: "does-costco-sell-hunter-douglas",
+      title: "Norman Shutters in North Idaho: Premium Craftsmanship from Luxe Window Works",
+      slug: "norman-shutters-in-north-idaho-premium-craftsmanship-from-luxe-window-works",
     },
   ],
   "cellular-shades": [
