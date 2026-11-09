@@ -14,6 +14,7 @@ import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
 import { cityRef, northIdahoRef } from "@/lib/cities";
 import HunterDouglasFeature from "@/components/HunterDouglasFeature";
+import HomeHeroMedia from "@/components/HomeHeroMedia";
 import { TWO_URL } from "@/lib/two";
 import { BUSINESS_STUB, OWNER_STUB, productServiceRef } from "@/lib/schema";
 
@@ -311,15 +312,7 @@ export default function HomePage() {
       {/* Full-width hero featuring an actual Luxe installation. */}
       <section aria-labelledby="hero-title" className="bg-charcoal pt-16 md:pt-20">
         <div className="relative isolate w-full overflow-hidden">
-          <Image
-            src="/images/luxe-completed-installation.webp"
-            alt="Hunter Douglas Vignette Roman Shades installed by Luxe Window Works in a living room with timber beams and a stone fireplace"
-            fill
-            className="object-cover object-[35%_center] md:object-center"
-            priority
-            sizes="100vw"
-            quality={90}
-          />
+          <HomeHeroMedia src="/videos/runway-hero-lowering.mp4" poster="/images/runway-hero-open.jpg" />
           <div aria-hidden="true" className="absolute inset-0 bg-black/35 md:bg-transparent md:bg-gradient-to-r md:from-black/60 md:via-black/20 md:to-transparent" />
           <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 pt-16 pb-40 md:pt-24 md:pb-36 lg:pt-28 lg:pb-36 min-h-[640px] md:min-h-[680px] lg:min-h-[740px] flex flex-col justify-center">
             <div className="max-w-2xl text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.55)]">
