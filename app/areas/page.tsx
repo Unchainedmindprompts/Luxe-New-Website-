@@ -4,7 +4,7 @@ import { JsonLd } from "@/components/JsonLd";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { BUSINESS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
-import { cityRef, northIdahoNode } from "@/lib/cities";
+import { cityRef, kootenaiCountyNode, northIdahoNode } from "@/lib/cities";
 
 export const metadata: Metadata = {
   title: "Areas We Serve | Luxe Window Works",
@@ -26,61 +26,49 @@ function AreasHubSchema() {
   const areasUrl = `${BUSINESS.url}/areas`;
   const areasList = Object.values(areaPages);
 
-  const collectionPageSchema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "@id": `${areasUrl}#webpage`,
-    url: areasUrl,
-    name: "Areas We Serve — Luxe Window Works",
-    description:
-      "The communities Luxe Window Works serves: North Idaho, with custom window treatments, in-home consultations, and professional installation; Seattle's Eastside, with Hunter Douglas service by appointment; and the Salt Lake area, with Hunter Douglas and Alta Window Fashions service by appointment.",
-    isPartOf: { "@id": `${BUSINESS.url}/#website` },
-    about: { "@id": `${BUSINESS.url}/#business` },
-    breadcrumb: { "@id": `${areasUrl}#breadcrumb` },
-    inLanguage: "en-US",
-    hasPart: areasList.map((area) => ({
-      "@id": `${BUSINESS.url}/areas/${area.slug}#webpage`,
-    })),
-    mainEntity: {
-      "@type": "ItemList",
-      name: "Service Areas",
-      numberOfItems: areasList.length,
-      itemListElement: areasList.map((area, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        // Reference only. Each city is defined on its own /areas/{slug} page,
-        // which is the URL its @id names — the hub lists them, it does not
-        // own them.
-        item: cityRef(area.name),
-      })),
-    },
-  };
-
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "@id": `${areasUrl}#breadcrumb`,
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
-      { "@type": "ListItem", position: 2, name: "Service Areas", item: areasUrl },
-    ],
-  };
-
-  // Plain <script>, not next/script. <Script> defers to the client, so the
-  // JSON-LD landed only in the RSC flight payload and never in the HTML a
-  // crawler reads — this page was publishing zero structured data. Same defect
-  // that hit /about and the city pages; this index was missed because the
-  // audit's must-emit list did not name it. It does now.
   return (
-    <>
-      <JsonLd data={collectionPageSchema} />
-      {/* This hub is where North Idaho is defined — the region has no
-          /areas/{slug} route of its own, and this is the page that actually
-          represents it. Everywhere else references the @id. Same shape the
-          area detail pages use for their canonical City. */}
-      <JsonLd data={{ "@context": "https://schema.org", ...northIdahoNode() }} />
-      <JsonLd data={breadcrumbSchema} />
-    </>
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "CollectionPage",
+            "@id": `${areasUrl}#webpage`,
+            url: areasUrl,
+            name: "Areas We Serve — Luxe Window Works",
+            description:
+              "The communities Luxe Window Works serves: North Idaho, with custom window treatments, in-home consultations, and professional installation; Seattle's Eastside, with Hunter Douglas service by appointment; and the Salt Lake area, with Hunter Douglas and Alta Window Fashions service by appointment.",
+            isPartOf: { "@id": `${BUSINESS.url}/#website` },
+            about: { "@id": `${BUSINESS.url}/#business` },
+            breadcrumb: { "@id": `${areasUrl}#breadcrumb` },
+            inLanguage: "en-US",
+            hasPart: areasList.map((area) => ({
+              "@id": `${BUSINESS.url}/areas/${area.slug}#webpage`,
+            })),
+            mainEntity: {
+              "@type": "ItemList",
+              name: "Service Areas",
+              numberOfItems: areasList.length,
+              itemListElement: areasList.map((area, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                item: cityRef(area.name),
+              })),
+            },
+          },
+          northIdahoNode(),
+          kootenaiCountyNode(),
+          {
+            "@type": "BreadcrumbList",
+            "@id": `${areasUrl}#breadcrumb`,
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
+              { "@type": "ListItem", position: 2, name: "Service Areas", item: areasUrl },
+            ],
+          },
+        ],
+      }}
+    />
   );
 }
 

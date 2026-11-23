@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { JsonLd } from "@/components/JsonLd";
 import { ConsultationExpect } from "@/components/ConsultationExpect";
 import { RelatedDecisionArticles } from "@/components/RelatedDecisionArticles";
 import { ExteriorShadeOptions } from "@/components/ExteriorShadeOptions";
@@ -53,73 +54,97 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = productPages[slug];
   if (!product) return {};
 
+  const pageUrl = `${BUSINESS.url}/products/${slug}`;
+  const ogImageUrl = product.image
+    ? `${BUSINESS.url}${product.image}`
+    : product.video
+      ? `https://img.youtube.com/vi/${product.video.youtubeId}/maxresdefault.jpg`
+      : `${BUSINESS.url}/images/hero-modern-living.webp`;
+
   return {
     title: product.metaTitle,
     description: product.metaDescription,
     alternates: {
-      canonical: `https://www.luxewindowworks.com/products/${slug}`,
+      canonical: pageUrl,
     },
     openGraph: {
       title: product.metaTitle,
       description: product.metaDescription,
+      url: pageUrl,
       type: "website",
       images: [
         {
-          url: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
-          width: 1200,
-          height: 630,
-          alt: "Luxe Window Works — Custom Window Treatments",
+          url: ogImageUrl,
+          alt: `${product.name} — ${BUSINESS.name}`,
         },
       ],
     },
   };
 }
 
-function ServiceSchema({ product, slug }: { product: ProductPageData; slug: string }) {
-  const schema = {
-    "@context": "https://schema.org",
+function buildVideoNode(pageUrl: string, video: ProductVideo) {
+  return {
+    "@type": "VideoObject",
+    "@id": `${pageUrl}#${video.idSlug}`,
+    name: video.title,
+    description: video.description,
+    thumbnailUrl: `https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg`,
+    uploadDate: video.uploadDate,
+    duration: video.duration,
+    embedUrl: `https://www.youtube.com/embed/${video.youtubeId}`,
+    publisher: { "@id": `${BUSINESS.url}/#business` },
+  };
+}
+
+function ProductGraphSchema({ product, slug }: { product: ProductPageData; slug: string }) {
+  const pageUrl = `${BUSINESS.url}/products/${slug}`;
+  const ogImageUrl = product.image
+    ? `${BUSINESS.url}${product.image}`
+    : product.video
+      ? `https://img.youtube.com/vi/${product.video.youtubeId}/maxresdefault.jpg`
+      : `${BUSINESS.url}/images/hero-modern-living.webp`;
+
+  const inlineVideoRefs = [
+    ...(product.video ? [{ "@id": `${pageUrl}#${product.video.idSlug}` }] : []),
+    ...(product.secondVideo ? [{ "@id": `${pageUrl}#${product.secondVideo.idSlug}` }] : []),
+  ];
+  const allSubjectVideos = [...videosForService(slug).map(videoRef), ...inlineVideoRefs];
+
+  const webpageNode = {
+    "@type": "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: product.metaTitle,
+    description: product.metaDescription,
+    isPartOf: { "@id": `${BUSINESS.url}/#website` },
+    about: { "@id": `${BUSINESS.url}/#business` },
+    mainEntity: { "@id": `${pageUrl}#service` },
+    breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: ogImageUrl,
+    },
+    inLanguage: "en-US",
+  };
+
+  const breadcrumbNode = {
+    "@type": "BreadcrumbList",
+    "@id": `${pageUrl}#breadcrumb`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
+      { "@type": "ListItem", position: 2, name: "Products", item: `${BUSINESS.url}/products` },
+      { "@type": "ListItem", position: 3, name: product.name, item: pageUrl },
+    ],
+  };
+
+  const serviceNode = {
     "@type": "Service",
-    "@id": `${BUSINESS.url}/products/${slug}#service`,
-    // "{X} Installation" described a subcontractor who hangs what someone else
-    // sold. Luxe consults, guides the selection, measures, orders the
-    // custom-made goods and installs them — lib/constants.ts says so in as many
-    // words, and warns that installer-only phrasing "undersells the business".
-    // The area pages have always described it correctly; these nine were the
-    // ones claiming a fifth of the job.
-    //
-    // The @id is untouched. This entity is the same entity — it now says what
-    // it always meant.
+    "@id": `${pageUrl}#service`,
     name: `Custom ${product.name} Service`,
-    // Shared with the area Services, which have used this phrase all along.
-    // The name distinguishes the category; the serviceType says what all
-    // fourteen Luxe Services have in common.
     serviceType: CUSTOM_WINDOW_TREATMENTS,
     provider: { "@id": `${BUSINESS.url}/#business` },
-    ...(videosForService(slug).length ? { subjectOf: videosForService(slug).map(videoRef) } : {}),
-    // The five cities we actually serve, not the state. "Idaho" spans 480
-    // miles; Search Console shows these pages drawing impressions from Idaho
-    // Falls and Boise, which are six hours away and will never convert. The
-    // area pages have carried city-level data all along — the product pages,
-    // which are the ones meant to win local searches, claimed the whole state.
-    // These are references to the canonical City entities defined on the area
-    // pages, so they resolve to real places rather than to strings that happen
-    // to look like town names.
-    // Idaho cities only: these category pages describe Luxe's own
-    // consultation and installation service across all brands. The Eastside
-    // is a Hunter Douglas market, and that claim lives on the Hunter Douglas
-    // service node, not on the generic categories.
+    ...(allSubjectVideos.length ? { subjectOf: allSubjectVideos } : {}),
     areaServed: SERVICE_AREAS.filter((area) => area.state === "ID").map((area) => cityRef(area.name)),
-    // The category-specific truth stays exactly as it was — `product.solution`
-    // is the honest, hard-won copy for each product and nothing generic should
-    // replace it. What it lacked was the shape of the engagement around it, so
-    // that goes in front of it rather than over it.
-    //
-    // Every step named here is already asserted elsewhere on the site: the
-    // free consultation in the page CTAs and the area-page Offer, product
-    // guidance in "Get Expert Recommendations", measurement and custom order
-    // throughout the product copy, and the guarantee in BUSINESS — read from
-    // the constant so it cannot drift from the one on the homepage. No price,
-    // lead time, brand, spec or availability is introduced.
     description:
       `${product.name} for your home — consultation, product guidance, ` +
       `measurement, custom order, and professional installation by ` +
@@ -130,82 +155,10 @@ function ServiceSchema({ product, slug }: { product: ProductPageData; slug: stri
     },
   };
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
-}
-
-function WebPageSchema({ product, slug }: { product: ProductPageData; slug: string }) {
-  const pageUrl = `${BUSINESS.url}/products/${slug}`;
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "@id": `${pageUrl}#webpage`,
-    url: pageUrl,
-    name: product.metaTitle,
-    description: product.metaDescription,
-    isPartOf: { "@id": `${BUSINESS.url}/#website` },
-    about: { "@id": `${BUSINESS.url}/#business` },
-    mainEntity: { "@id": `${pageUrl}#service` },
-    breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
-    inLanguage: "en-US",
-  };
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
-}
-
-function BreadcrumbSchema({ product, slug }: { product: ProductPageData; slug: string }) {
-  const pageUrl = `${BUSINESS.url}/products/${slug}`;
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "@id": `${pageUrl}#breadcrumb`,
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
-      { "@type": "ListItem", position: 2, name: "Products", item: `${BUSINESS.url}/products` },
-      { "@type": "ListItem", position: 3, name: product.name, item: pageUrl },
-    ],
-  };
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
-}
-
-function VideoSchema({ video }: { video: ProductVideo }) {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "VideoObject",
-    "@id": `https://www.luxewindowworks.com/#${video.idSlug}`,
-    name: video.title,
-    description: video.description,
-    thumbnailUrl: `https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg`,
-    uploadDate: video.uploadDate,
-    duration: video.duration,
-    embedUrl: `https://www.youtube.com/embed/${video.youtubeId}`,
-    publisher: { "@id": "https://www.luxewindowworks.com/#business" },
-  };
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
-}
-
-function FAQSchema({ product }: { product: ProductPageData }) {
-  const schema = {
-    "@context": "https://schema.org",
+  const faqNode = {
     "@type": "FAQPage",
+    "@id": `${pageUrl}#faq`,
+    isPartOf: { "@id": `${pageUrl}#webpage` },
     mainEntity: product.faqs.map((faq) => ({
       "@type": "Question",
       name: faq.question,
@@ -217,9 +170,18 @@ function FAQSchema({ product }: { product: ProductPageData }) {
   };
 
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@graph": [
+          webpageNode,
+          breadcrumbNode,
+          serviceNode,
+          faqNode,
+          ...(product.video ? [buildVideoNode(pageUrl, product.video)] : []),
+          ...(product.secondVideo ? [buildVideoNode(pageUrl, product.secondVideo)] : []),
+        ],
+      }}
     />
   );
 }
@@ -247,12 +209,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <WebPageSchema product={product} slug={slug} />
-      <BreadcrumbSchema product={product} slug={slug} />
-      <ServiceSchema product={product} slug={slug} />
-      <FAQSchema product={product} />
-      {product.video && <VideoSchema video={product.video} />}
-      {product.secondVideo && <VideoSchema video={product.secondVideo} />}
+      <ProductGraphSchema product={product} slug={slug} />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },

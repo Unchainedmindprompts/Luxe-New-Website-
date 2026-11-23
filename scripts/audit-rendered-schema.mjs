@@ -266,6 +266,158 @@ if (articleChecked === 0) {
   failures.push("No BlogPosting nodes found in rendered blog HTML to verify author/publisher inlining");
 }
 
+// ── 5. Single @graph script per indexable route, WebPage/Breadcrumb/Logo/ISO/FAQ/H1 parity ──
+const WEBPAGE_TYPES = new Set([
+  "WebPage",
+  "CollectionPage",
+  "ContactPage",
+  "ImageGallery",
+  "AboutPage",
+]);
+const ISO_OFFSET_RE = /(?:Z|[+-]\d{2}:\d{2})$/;
+
+function normalizeVisibleText(str) {
+  return String(str || "")
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&apos;|&#x27;|&#39;|&lsquo;|&rsquo;/g, "'")
+    .replace(/&quot;|&#34;|&ldquo;|&rdquo;/g, '"')
+    .replace(/&ndash;/g, "–")
+    .replace(/&mdash;/g, "—")
+    .replace(/&reg;/g, "®")
+    .replace(/&trade;/g, "™")
+    .replace(/&frac12;|&#189;/g, "½")
+    .replace(/&nbsp;|&#160;/g, " ")
+    .replace(/[‘’]/g, "'")
+    .replace(/[“”]/g, '"')
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+for (const f of files) {
+  const rel = f.replace(APP_DIR, "");
+  if (rel === "/_not-found.html" || rel === "/_global-error.html") continue;
+
+  const html = readFileSync(f, "utf-8");
+  const blocks = publicJsonLd(html);
+
+  // Paid noindex landing page intentionally stays schema-free (Decision #4).
+  if (rel === "/free-consultation.html") {
+    if (blocks.length !== 0) {
+      failures.push(`/free-consultation.html should emit 0 JSON-LD blocks, found ${blocks.length}`);
+    }
+    continue;
+  }
+
+  // 5a. Exactly 1 <script type="application/ld+json"> with @graph per indexable page
+  if (blocks.length !== 1) {
+    failures.push(`${rel} emits ${blocks.length} JSON-LD <script> tags (expected exactly 1 @graph block)`);
+    continue;
+  }
+  const graph = blocks[0]["@graph"];
+  if (!Array.isArray(graph)) {
+    failures.push(`${rel} JSON-LD root does not use @graph array`);
+    continue;
+  }
+
+  // 5b. Exactly 1 visible <h1> per indexable page
+  const htmlNoScripts = html
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<style[\s\S]*?<\/style>/gi, "");
+  const h1Count = (htmlNoScripts.match(/<h1\b[^>]*>/gi) || []).length;
+  if (h1Count !== 1) {
+    failures.push(`${rel} renders ${h1Count} <h1> elements (expected exactly 1)`);
+  }
+
+  const visibleText = normalizeVisibleText(html);
+
+  // 5c. WebPage-family node + mainEntity + no about === mainEntity + BreadcrumbList
+  let hasWebPage = false;
+  let hasBreadcrumb = false;
+  for (const node of graph) {
+    if (!node || typeof node !== "object") continue;
+    const types = [].concat(node["@type"] || []);
+
+    if (types.some((t) => WEBPAGE_TYPES.has(t))) {
+      hasWebPage = true;
+      if (!node.mainEntity) {
+        failures.push(`${rel} WebPage node ${node["@id"] || ""} is missing mainEntity`);
+      } else {
+        const mainId = typeof node.mainEntity === "object" ? node.mainEntity["@id"] : null;
+        if (mainId && node.about) {
+          const aboutList = Array.isArray(node.about) ? node.about : [node.about];
+          if (aboutList.some((a) => a && typeof a === "object" && a["@id"] === mainId)) {
+            failures.push(`${rel} WebPage node duplicates mainEntity (${mainId}) inside about`);
+          }
+        }
+      }
+    }
+
+    if (types.includes("BreadcrumbList")) {
+      hasBreadcrumb = true;
+      for (const item of node.itemListElement || []) {
+        if (item?.item === `${SITE}/`) {
+          failures.push(`${rel} BreadcrumbList uses trailing-slash root ${SITE}/ instead of ${SITE}`);
+        }
+      }
+    }
+
+    // 5d. #business.logo raster + >= 112x112
+    if (node["@id"] === `${SITE}/#business` && node.logo) {
+      const logoUrl = String(node.logo.url || "").split("?")[0];
+      if (logoUrl.endsWith(".svg")) {
+        failures.push(`#business.logo must be raster, got SVG: ${node.logo.url}`);
+      }
+      if (!(Number(node.logo.width) >= 112 && Number(node.logo.height) >= 112)) {
+        failures.push(
+          `#business.logo dimensions (${node.logo.width}x${node.logo.height}) violate 112x112 minimum`
+        );
+      }
+    }
+
+    // 5e. ISO 8601 timezone checks on BlogPosting and VideoObject
+    if (types.includes("BlogPosting")) {
+      const dp = String(node.datePublished || "");
+      const dm = String(node.dateModified || "");
+      if (!ISO_OFFSET_RE.test(dp)) {
+        failures.push(`${rel} BlogPosting.datePublished lacks explicit timezone: ${dp}`);
+      }
+      if (!ISO_OFFSET_RE.test(dm)) {
+        failures.push(`${rel} BlogPosting.dateModified lacks explicit timezone: ${dm}`);
+      }
+      if (ISO_OFFSET_RE.test(dp) && ISO_OFFSET_RE.test(dm) && dp.endsWith("Z") !== dm.endsWith("Z")) {
+        failures.push(`${rel} BlogPosting mixes UTC Z and local offset (${dp} vs ${dm})`);
+      }
+    }
+
+    if (types.includes("VideoObject") && node.uploadDate) {
+      const ud = String(node.uploadDate);
+      if (!ISO_OFFSET_RE.test(ud)) {
+        failures.push(`${rel} VideoObject.uploadDate lacks explicit timezone: ${ud}`);
+      }
+    }
+
+    // 5f. 100% FAQPage Question.name parity with visible DOM text
+    if (types.includes("FAQPage")) {
+      for (const q of node.mainEntity || []) {
+        const qNorm = normalizeVisibleText(q?.name || "");
+        if (!qNorm || !visibleText.includes(qNorm)) {
+          failures.push(`${rel} FAQPage question not found in visible DOM: ${JSON.stringify(q?.name)}`);
+        }
+      }
+    }
+  }
+
+  if (!hasWebPage) {
+    failures.push(`${rel} does not emit a WebPage-family node`);
+  }
+  if (rel !== "/index.html" && !hasBreadcrumb) {
+    failures.push(`${rel} does not emit a BreadcrumbList node`);
+  }
+}
+
 // ── Report ────────────────────────────────────────────────────────────────
 const totalBlocks = [...perFileBlockCount.values()].reduce((a, b) => a + b, 0);
 console.log(

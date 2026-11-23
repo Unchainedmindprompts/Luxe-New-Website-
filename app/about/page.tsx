@@ -1,29 +1,32 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { JsonLd } from "@/components/JsonLd";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import Link from "next/link";
 import { BUSINESS } from "@/lib/constants";
 import { OWNER_STUB } from "@/lib/schema";
 import { cityRef } from "@/lib/cities";
 import { CARRIED_BRANDS } from "@/lib/brands";
 
+const PAGE_URL = `${BUSINESS.url}/about`;
+
 export const metadata: Metadata = {
   title: "About Mark Abplanalp | 24 Years in Window Treatments",
   description:
     "Luxe Window Works brings 24 years of experience to custom window treatments and outdoor shading projects across North Idaho, Seattle's Eastside, and the Salt Lake area.",
   alternates: {
-    canonical: "https://www.luxewindowworks.com/about",
+    canonical: PAGE_URL,
   },
   openGraph: {
     title: "About Mark Abplanalp | 24 Years in Window Treatments",
     description:
       "Luxe Window Works brings 24 years of experience to custom window treatments and outdoor shading projects across North Idaho, Seattle's Eastside, and the Salt Lake area.",
-    url: "https://www.luxewindowworks.com/about",
+    url: PAGE_URL,
     images: [
       {
-        url: "/images/mark-photo.webp",
-        width: 1200,
-        height: 630,
+        url: `${BUSINESS.url}/images/mark-photo.webp`,
+        width: 1024,
+        height: 1536,
         alt: "Mark Abplanalp, Owner of Luxe Window Works",
       },
     ],
@@ -31,12 +34,11 @@ export const metadata: Metadata = {
 };
 
 const personSchema = {
-  "@context": "https://schema.org",
   ...OWNER_STUB,
   jobTitle: "Owner & Window Treatment Specialist",
   description:
     "Luxe Window Works brings 24 years in custom window treatments to product selection, measuring and installation, serving homeowners in North Idaho, on Seattle's Eastside, and in the Salt Lake area from consultation through finished installation, to the same standard in every market.",
-  url: `${BUSINESS.url}/about`,
+  url: PAGE_URL,
   image: `${BUSINESS.url}/images/mark-photo.webp`,
   telephone: BUSINESS.phoneE164,
   email: BUSINESS.email,
@@ -48,15 +50,11 @@ const personSchema = {
     addressCountry: "US",
   },
   worksFor: { "@id": `${BUSINESS.url}/#business` },
-  // LinkedIn belongs on the Person, not on the business: it is a personal
-  // profile (/in/…), not a company page. The business sameAs on the homepage
-  // carries the accounts that represent the company itself.
   sameAs: ["https://www.linkedin.com/in/mark-abplanalp-46a272371/"],
   hasOccupation: {
     "@type": "Occupation",
     name: "Window Treatment Specialist",
     startDate: "2002",
-    // The same Post Falls the area page defines, referenced rather than rebuilt.
     occupationLocation: cityRef("Post Falls"),
     skills:
       "Custom window treatment design, plantation shutter installation, motorized shade systems, cellular shades, solar shades, roller shades, fenestration consulting, UV mitigation, commercial window treatments, exterior solar shades, outdoor aluminum shutters, lockable shutter configurations",
@@ -78,6 +76,8 @@ const personSchema = {
     "Outdoor aluminum shutters",
     "Lockable Weatherwell Elite shutter configurations",
     "Covered patio shade and privacy",
+    "Hunter Douglas window treatments",
+    "PowerView automation",
     "TWO shutters, shades and automation",
     "Alta Window Fashions",
     "Norman Window Fashions",
@@ -87,46 +87,45 @@ const personSchema = {
 };
 
 const webpageSchema = {
-  "@context": "https://schema.org",
   "@type": "WebPage",
-  "@id": `${BUSINESS.url}/about#webpage`,
-  url: `${BUSINESS.url}/about`,
+  "@id": `${PAGE_URL}#webpage`,
+  url: PAGE_URL,
   name: "About Mark Abplanalp | 24 Years in Window Treatments",
   description:
     "Luxe Window Works brings 24 years of experience to custom window treatments and outdoor shading projects across North Idaho, Seattle's Eastside, and the Salt Lake area.",
   isPartOf: { "@id": `${BUSINESS.url}/#website` },
   about: { "@id": `${BUSINESS.url}/#business` },
   mainEntity: { "@id": `${BUSINESS.url}/#owner` },
-  // THIS PAGE IS WHERE THE MANUFACTURERS ARE DEFINED.
-  //
-  // They had no home before: Norman and Alta were published inside one blog
-  // post's mentions — which worked, but made an arbitrary article load-bearing
-  // for two entities it is not about — and Lafayette, Corradi USA and The
-  // Window Outfitters had no identity at all, existing only as display strings
-  // in the footer and in the copy a few lines below. This page already names
-  // these manufacturers in visible prose, so `mentions` describes what the page does
-  // rather than being a hook chosen for convenience.
-  //
-  // `mentions` and not `#business.brand`: schema.org's `brand` is the brand
-  // "maintained by" an organization. Luxe maintains none of these; it carries
-  // their products. The distinction is the whole business truth here.
-  //
-  // Full nodes, spread — this is the one place they are published. Every other
-  // page reaches them by @id.
+  breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
+  primaryImageOfPage: {
+    "@type": "ImageObject",
+    url: `${BUSINESS.url}/images/mark-photo.webp`,
+    width: 1024,
+    height: 1536,
+  },
   mentions: CARRIED_BRANDS,
   inLanguage: "en-US",
+};
+
+const breadcrumbSchema = {
+  "@type": "BreadcrumbList",
+  "@id": `${PAGE_URL}#breadcrumb`,
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
+    { "@type": "ListItem", position: 2, name: "About", item: PAGE_URL },
+  ],
 };
 
 export default function AboutPage() {
   return (
     <>
-      {/* JsonLd, not next/script. <Script> defers to the client, so this
-          page's schema lived only in the RSC payload and never appeared in the
-          server-rendered HTML a crawler receives — meaning the owner Person
-          entity, the site's whole E-E-A-T signal, was effectively invisible.
-          JsonLd emits a real <script type="application/ld+json"> during SSR. */}
-      <JsonLd data={personSchema} />
-      <JsonLd data={webpageSchema} />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [personSchema, webpageSchema, breadcrumbSchema],
+        }}
+      />
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "About" }]} />
       {/* A div, not <main>: the layout already provides the single <main>
           landmark, and nesting a second one is invalid and confuses the
           "skip to main content" target. */}

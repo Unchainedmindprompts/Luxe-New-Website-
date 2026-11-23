@@ -1,24 +1,36 @@
 {
   "schema_version": "1.0",
   "name": "Luxe Window Works",
-  "description": "Custom window treatment specialist serving Northern Idaho. Custom blinds, shades, shutters, and motorized window coverings with lifetime installation guarantee.",
+  "description": "Custom window treatment specialist headquartered in Post Falls, Idaho, serving North Idaho, Seattle's Eastside, and Utah's Salt Lake area. Custom blinds, shades, shutters, and motorized window coverings via free in-home consultations.",
   "url": "https://www.luxewindowworks.com",
   "contact": {
     "name": "Mark Abplanalp",
     "title": "Owner & Window Treatment Specialist",
     "phone": "(208) 660-8643",
     "address": "2972 N Pavo Ln, Post Falls, ID 83854",
-    "hours": "Mon-Fri 9am-5pm, Sat 9am-2pm",
+    "hours": "Mon-Fri 9am-5pm, Sat 10am-2pm",
     "service_area": [
       "Coeur d'Alene, ID",
       "Post Falls, ID",
       "Hayden, ID",
-      "Hayden Lake, ID",
       "Rathdrum, ID",
       "Sandpoint, ID",
       "Kootenai County, ID",
       "Northern Idaho",
-      "Inland Northwest"
+      "Bellevue, WA",
+      "Kirkland, WA",
+      "Sammamish, WA",
+      "Issaquah, WA",
+      "Renton, WA",
+      "Maple Valley, WA",
+      "Salt Lake City, UT",
+      "Millcreek, UT",
+      "Holladay, UT",
+      "Draper, UT",
+      "South Jordan, UT",
+      "Park City, UT",
+      "Heber City, UT",
+      "Midway, UT"
     ]
   },
   "capabilities": [
@@ -38,7 +50,7 @@
     {
       "name": "Custom Blinds & Shades",
       "description": "Custom-fitted cellular, roller, solar, roman, and banded shades for any window size or shape including arches, skylights, and specialty angles.",
-      "url": "https://www.luxewindowworks.com/",
+      "url": "https://www.luxewindowworks.com/products",
       "type": "service"
     },
     {
@@ -96,6 +108,21 @@
     "Smart home motorization specialist"
   ],
   "manufacturer_partners": [
+    {
+      "name": "Hunter Douglas",
+      "url": "https://www.hunterdouglas.com",
+      "products": [
+        "Silhouette Sheer Shades",
+        "Pirouette Sheer Shades",
+        "Duette Cellular Shades",
+        "Vignette Modern Roman Shades",
+        "Designer Roller & Solar Shades",
+        "Plantation Shutters",
+        "PowerView Automation"
+      ],
+      "available_online": false,
+      "available_in_home": true
+    },
     {
       "name": "Norman USA",
       "url": "https://www.normanwindowfashions.com",

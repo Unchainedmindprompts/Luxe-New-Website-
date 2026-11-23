@@ -11,18 +11,30 @@ const url = `${BUSINESS.url}/products/aluminum-shutters`;
 const faqs = [
   { q: "Can Weatherwell Elite shutters add security while I am away?", a: "Weatherwell Elite offers key-lock and shoot-bolt options that can add a layer of security to suitable openings. For homeowners who spend winters elsewhere, we help choose the panel configuration and locking hardware for the space. Suitability depends on the opening and installation; shutters are not a guarantee against forced entry." },
   { q: "Can they help extend my outdoor living space?", a: "Weatherwell Elite can help make covered patios and decks more comfortable and private, with adjustable louvers for shade and airflow. We plan the configuration around exposure and how you want to use the space." },
-  { q: "What are Weatherwell Elite shutters?", a: "Weatherwell Elite is TWO’s architectural aluminum shutter system for exterior and interior applications. Luxe Window Works helps you select the configuration, measures your openings and professionally installs your custom shutters in North Idaho, on Seattle's Eastside, and in the Salt Lake area." },
+  { q: "What are Weatherwell Elite shutters?", a: "Weatherwell Elite is TWO’s architectural aluminum shutter system for exterior and interior applications. Luxe Window Works helps you select the configuration, measures your openings and professionally installs your custom shutters across North Idaho — Post Falls, Coeur d’Alene, Hayden, Rathdrum and Sandpoint." },
   { q: "Can the panels move out of the way?", a: "Depending on the opening, Elite can be configured as sliding, sliding bi-fold, hinged, fixed or Bahama-style panels. We check the space for tracks, panel stacking and mounting before recommending a layout." },
   { q: "How much do custom aluminum shutters cost?", a: "The price depends on opening dimensions, panel configuration, finish and installation requirements. A free consultation lets us measure the space and provide a project-specific quote, including professional installation." },
   { q: "Can I use them to add privacy to a covered patio?", a: "Yes. Adjustable louvers let you change the balance of privacy, light and airflow. We look at sightlines from neighboring homes and how you use the space before planning the panels." },
   { q: "Will shutters turn my patio into an insulated room?", a: "No. Aluminum shutters provide adjustable screening; they are not an insulated, airtight window system. We will discuss the exposure and intended use of your space so expectations match the installation." },
-  { q: "Where does Luxe Window Works install them?", a: "We provide consultations, measurements and installation in North Idaho, on Seattle's Eastside, and in the Salt Lake area. Installation workmanship is guaranteed in every market we serve; manufacturer product warranty terms are separate." },
+  { q: "Where does Luxe Window Works install them?", a: "We provide consultations, measurements and installation across North Idaho — Post Falls, Coeur d’Alene, Hayden, Rathdrum and Sandpoint. Our lifetime installation workmanship guarantee covers our installation; manufacturer product warranty terms are separate." },
 ];
 export const metadata: Metadata = {
   title: "Weatherwell Elite Aluminum Shutters | Luxe Window Works",
   description: "Custom Weatherwell Elite aluminum shutters for patios, covered decks and interiors. Photos and free in-home consultations from Luxe Window Works.",
   alternates: { canonical: url },
-  openGraph: { title: "Weatherwell Elite | Luxe Window Works", description: "More privacy. Adjustable light. An outdoor space that feels finished.", url, images: ["/images/weatherwell-elite/IMG_1190.jpeg"] },
+  openGraph: {
+    title: "Weatherwell Elite | Luxe Window Works",
+    description: "More privacy. Adjustable light. An outdoor space that feels finished.",
+    url,
+    images: [
+      {
+        url: `${BUSINESS.url}/images/weatherwell-elite/IMG_1190.jpeg`,
+        width: 2048,
+        height: 1536,
+        alt: "Weatherwell Elite shutters filtering daylight around a dark covered seating area",
+      },
+    ],
+  },
 };
 export default function AluminumShutters() {
   return <>
@@ -31,7 +43,14 @@ export default function AluminumShutters() {
         "@type": "WebPage", "@id": `${url}#webpage`, url, name: metadata.title,
         description: metadata.description, isPartOf: { "@id": `${BUSINESS.url}/#website` },
         mainEntity: { "@id": `${url}#service` }, about: twoProductRef("weatherwell-elite"),
-        breadcrumb: { "@id": `${url}#breadcrumb` }, hasPart: { "@id": `${url}#faq` }, inLanguage: "en-US",
+        breadcrumb: { "@id": `${url}#breadcrumb` }, hasPart: { "@id": `${url}#faq` },
+        primaryImageOfPage: {
+          "@type": "ImageObject",
+          url: `${BUSINESS.url}/images/weatherwell-elite/IMG_1190.jpeg`,
+          width: 2048,
+          height: 1536,
+        },
+        inLanguage: "en-US",
       },
       {
         "@type": "Service", "@id": `${url}#service`, name: "Custom Aluminum Shutters Service",

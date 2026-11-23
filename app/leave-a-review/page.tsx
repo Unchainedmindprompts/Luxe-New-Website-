@@ -1,30 +1,35 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { JsonLd } from "@/components/JsonLd";
 import { BUSINESS } from "@/lib/constants";
 
 const PAGE_URL = `${BUSINESS.url}/leave-a-review`;
 
-const webpageSchema = {
+const reviewPageGraph = {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  "@id": `${PAGE_URL}#webpage`,
-  url: PAGE_URL,
-  name: "Leave a Review — Luxe Window Works",
-  description:
-    "Did Luxe Window Works do a great job for you? A quick Google review helps the next homeowner make a confident decision.",
-  isPartOf: { "@id": `${BUSINESS.url}/#website` },
-  about: { "@id": `${BUSINESS.url}/#business` },
-  breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
-  inLanguage: "en-US",
-};
-
-const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "@id": `${PAGE_URL}#breadcrumb`,
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
-    { "@type": "ListItem", position: 2, name: "Leave a Review", item: PAGE_URL },
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${PAGE_URL}#webpage`,
+      url: PAGE_URL,
+      name: "Leave a Review — Luxe Window Works",
+      description:
+        "Did Luxe Window Works do a great job for you? A quick Google review helps the next homeowner make a confident decision.",
+      isPartOf: { "@id": `${BUSINESS.url}/#website` },
+      about: { "@id": `${BUSINESS.url}/#window-treatments` },
+      mainEntity: { "@id": `${BUSINESS.url}/#business` },
+      breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
+      inLanguage: "en-US",
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${PAGE_URL}#breadcrumb`,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
+        { "@type": "ListItem", position: 2, name: "Leave a Review", item: PAGE_URL },
+      ],
+    },
   ],
 };
 
@@ -33,7 +38,14 @@ export const metadata: Metadata = {
   description:
     "Did Luxe Window Works do a great job for you? A quick Google review helps the next homeowner make a confident decision.",
   alternates: {
-    canonical: "https://www.luxewindowworks.com/leave-a-review",
+    canonical: PAGE_URL,
+  },
+  openGraph: {
+    title: "Leave a Review — Luxe Window Works",
+    description:
+      "Did Luxe Window Works do a great job for you? A quick Google review helps the next homeowner make a confident decision.",
+    url: PAGE_URL,
+    type: "website",
   },
   robots: {
     index: true,
@@ -44,10 +56,15 @@ export const metadata: Metadata = {
 export default function LeaveAReviewPage() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <JsonLd data={reviewPageGraph} />
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Leave a Review" },
+        ]}
+      />
       {/* Hero */}
-      <section className="bg-warm-white pt-20 md:pt-28 pb-12 md:pb-16">
+      <section className="bg-warm-white pt-10 md:pt-14 pb-12 md:pb-16">
         <div className="container-luxe max-w-3xl text-center">
           <p className="text-gold font-medium text-sm uppercase tracking-widest mb-4">
             Thank You
@@ -127,7 +144,7 @@ export default function LeaveAReviewPage() {
               <span className="text-gold font-semibold mt-0.5 shrink-0">→</span>
               <span>
                 <strong className="text-charcoal">Where you are</strong> —
-                Coeur d&apos;Alene, Post Falls, Hayden, Sandpoint, Rathdrum. Local
+                Coeur d&apos;Alene, Post Falls, Hayden, Sandpoint, Rathdrum, Seattle&apos;s Eastside, or the Salt Lake area. Local
                 buyers look for reviews from their town.
               </span>
             </li>

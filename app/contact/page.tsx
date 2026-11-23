@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { JsonLd } from "@/components/JsonLd";
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS } from "@/lib/constants";
@@ -8,26 +9,35 @@ import ContactForm from "./ContactForm";
 
 const PAGE_URL = `${BUSINESS.url}/contact`;
 
-const webpageSchema = {
+const contactGraph = {
   "@context": "https://schema.org",
-  "@type": "ContactPage",
-  "@id": `${PAGE_URL}#webpage`,
-  url: PAGE_URL,
-  name: "Contact | Free In-Home Consultation",
-  description: `Contact ${BUSINESS.name} for a free in-home consultation. Call ${BUSINESS.phone} or fill out our form. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.`,
-  isPartOf: { "@id": `${BUSINESS.url}/#website` },
-  about: { "@id": `${BUSINESS.url}/#business` },
-  breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
-  inLanguage: "en-US",
-};
-
-const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "@id": `${PAGE_URL}#breadcrumb`,
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
-    { "@type": "ListItem", position: 2, name: "Contact", item: PAGE_URL },
+  "@graph": [
+    {
+      "@type": "ContactPage",
+      "@id": `${PAGE_URL}#webpage`,
+      url: PAGE_URL,
+      name: "Contact | Free In-Home Consultation",
+      description: `Contact ${BUSINESS.name} for a free in-home consultation. Call ${BUSINESS.phone} or fill out our form. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.`,
+      isPartOf: { "@id": `${BUSINESS.url}/#website` },
+      about: { "@id": `${BUSINESS.url}/#window-treatments` },
+      mainEntity: { "@id": `${BUSINESS.url}/#business` },
+      breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        url: `${BUSINESS.url}/images/area-hero-living-room.webp`,
+        width: 1200,
+        height: 960,
+      },
+      inLanguage: "en-US",
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${PAGE_URL}#breadcrumb`,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
+        { "@type": "ListItem", position: 2, name: "Contact", item: PAGE_URL },
+      ],
+    },
   ],
 };
 
@@ -35,20 +45,28 @@ export const metadata: Metadata = {
   title: "Contact | Free In-Home Consultation",
   description: `Contact ${BUSINESS.name} for a free in-home consultation. Call ${BUSINESS.phone} or fill out our form. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.`,
   alternates: {
-    canonical: "https://www.luxewindowworks.com/contact",
+    canonical: PAGE_URL,
   },
   openGraph: {
     title: "Contact Luxe Window Works",
     description: "Schedule your free in-home window treatment consultation in North Idaho, on Seattle's Eastside, or in the Salt Lake area.",
+    url: PAGE_URL,
     type: "website",
+    images: [
+      {
+        url: `${BUSINESS.url}/images/area-hero-living-room.webp`,
+        width: 1200,
+        height: 960,
+        alt: "Sunlit living room with sheer horizontal shades across floor-to-ceiling windows",
+      },
+    ],
   },
 };
 
 export default function ContactPage() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <JsonLd data={contactGraph} />
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
@@ -132,7 +150,7 @@ export default function ContactPage() {
                     <p className="font-medium text-charcoal">Location</p>
                     <p className="text-warm-gray-600">{BUSINESS.address.full}</p>
                     <p className="text-sm text-warm-gray-500 mt-1">
-                      Serving Coeur d&apos;Alene, Post Falls, Hayden, Rathdrum & Sandpoint
+                      Serving North Idaho, Seattle&apos;s Eastside &amp; the Salt Lake area
                     </p>
                   </div>
                 </div>

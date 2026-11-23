@@ -13,8 +13,10 @@ import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS, PRODUCTS } from "@/lib/constants";
 import { areaPages } from "@/lib/area-data";
+import { ALTA_BRAND, NORMAN_BRAND } from "@/lib/brands";
 import { cityPlaceNode, cityRef } from "@/lib/cities";
-import { CUSTOM_WINDOW_TREATMENTS } from "@/lib/schema";
+import { HUNTER_DOUGLAS } from "@/lib/hunter-douglas";
+import { CUSTOM_WINDOW_TREATMENTS, productServiceRef } from "@/lib/schema";
 import type { AreaPageData } from "@/lib/area-data";
 
 interface Props {
@@ -29,22 +31,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const area = areaPages[slug];
   if (!area) return {};
+  const pageUrl = `${BUSINESS.url}/areas/${slug}`;
 
   return {
     title: area.metaTitle,
     description: area.metaDescription,
     alternates: {
-      canonical: `https://www.luxewindowworks.com/areas/${slug}`,
+      canonical: pageUrl,
     },
     openGraph: {
       title: area.metaTitle,
       description: area.metaDescription,
+      url: pageUrl,
       type: "website",
       images: [
         {
-          url: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
+          url: `${BUSINESS.url}/images/area-hero-living-room.webp`,
           width: 1200,
-          height: 630,
+          height: 960,
           alt: `Luxe Window Works — Custom Window Treatments in ${area.name}, ${area.state ?? "Idaho"}`,
         },
       ],
@@ -55,14 +59,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
   const areaName = area.name;
   const areaUrl = `${BUSINESS.url}/areas/${slug}`;
+  const state = area.state ?? "Idaho";
+  const isEastside = Boolean(area.hdPage) && state === "Washington";
+  const isUtah = state === "Utah";
+  const isHdis = isEastside || isUtah;
+  const hasVisibleFaqs = Boolean(area.faqs && area.faqs.length > 0);
+  const placeSchema = cityPlaceNode(areaName);
 
-  // Note on entity resolution: the area page does NOT re-declare a LocalBusiness
-  // node. The canonical #business entity is emitted once on the homepage. Both
-  // the WebPage and Service nodes below reference it by @id only — this is the
-  // strict single-source pattern that eliminates NAP drift risk entirely.
+  const interiorProductOffers = PRODUCTS.filter(
+    (p) => p.slug !== "exterior-solar-shades"
+  ).map((p) => ({
+    "@type": "Offer",
+    itemOffered: productServiceRef(p.slug),
+  }));
 
-  const webpageSchema = {
-    "@context": "https://schema.org",
+  const webpageNode = {
     "@type": "WebPage",
     "@id": `${areaUrl}#webpage`,
     url: areaUrl,
@@ -72,184 +83,97 @@ function AreaSchema({ area, slug }: { area: AreaPageData, slug: string }) {
     about: { "@id": `${BUSINESS.url}/#business` },
     mainEntity: { "@id": `${areaUrl}#service` },
     breadcrumb: { "@id": `${areaUrl}#breadcrumb` },
+    ...(hasVisibleFaqs ? { hasPart: { "@id": `${areaUrl}#faq` } } : {}),
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: `${BUSINESS.url}/images/area-hero-living-room.webp`,
+      width: 1200,
+      height: 960,
+    },
     inLanguage: "en-US",
   };
 
-  // Eastside (Washington) entries serve Hunter Douglas only, by appointment,
-  // with measuring and installation through Hunter Douglas Installation
-  // Services. Their Service node says so rather than borrowing the North
-  // Idaho wording (Luxe's own installation, Northern Idaho communities).
-  // Utah entries serve Hunter Douglas and Alta Window Fashions under the
-  // same service model: by appointment, measuring and installation through
-  // Hunter Douglas Installation Services for both brands (Mark, Oct 21, 2026:
-  // one service story in every market, never split by location).
-  const state = area.state ?? "Idaho";
-  const isEastside = Boolean(area.hdPage) && state === "Washington";
-  const isUtah = state === "Utah";
-
-  const serviceSchema = {
-    "@context": "https://schema.org",
+  const serviceNode = {
     "@type": "Service",
     "@id": `${areaUrl}#service`,
+    url: areaUrl,
     name: `Custom Window Treatments in ${areaName}, ${state}`,
-    // Was a string literal here and nowhere else. The product Services now
-    // classify themselves with the same phrase, so it gets one owner rather
-    // than two copies free to drift apart.
     serviceType: CUSTOM_WINDOW_TREATMENTS,
+    brand: isHdis
+      ? [{ "@id": HUNTER_DOUGLAS["@id"] }, { "@id": ALTA_BRAND["@id"] }]
+      : [
+          { "@id": HUNTER_DOUGLAS["@id"] },
+          { "@id": NORMAN_BRAND["@id"] },
+          { "@id": ALTA_BRAND["@id"] },
+        ],
     description: isEastside
-      ? `Hunter Douglas window treatment consultation and in-home sales in ${areaName}, Washington. Luxe Window Works offers Hunter Douglas cellular shades, sheer shades, roller shades, shutters, and PowerView motorized window treatments in ${areaName} by appointment, with measuring and installation performed through Hunter Douglas Installation Services.`
+      ? `Hunter Douglas and Alta Window Fashions window treatment consultation and in-home sales in ${areaName}, Washington. Luxe Window Works offers cellular shades, sheer shades, roller shades, shutters, and PowerView motorized window treatments in ${areaName} by appointment, with measuring and installation performed through Hunter Douglas Installation Services.`
       : isUtah
         ? `Hunter Douglas and Alta Window Fashions window treatment consultation and in-home sales in ${areaName}, Utah. Luxe Window Works offers cellular shades, sheer shades, roller shades, shutters, and motorized window treatments from Hunter Douglas and Alta Window Fashions in ${areaName} by appointment, with measuring and installation performed through Hunter Douglas Installation Services.`
-        : `Custom window treatment consultation, design, and installation in ${areaName}, Idaho. Luxe Window Works offers cellular shades, plantation shutters, solar shades, roller shades, motorized window treatments, and free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities.`,
+        : `Custom window treatment consultation, design, and installation in ${areaName}, Idaho. Luxe Window Works offers cellular shades, plantation shutters, solar shades, roller shades, motorized window treatments, exterior solar shades, and free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities.`,
     provider: { "@id": `${BUSINESS.url}/#business` },
-    // Reference, not a rebuild. The canonical City is defined on this same
-    // page (`placeSchema` below) — this points at it.
     areaServed: cityRef(areaName),
+    mainEntityOfPage: { "@id": `${areaUrl}#webpage` },
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: `Window Treatment Services in ${areaName}`,
-      itemListElement: [
-        ...(slug === "coeur-d-alene" ? [{
-          "@type": "Offer",
-          itemOffered: { "@id": `${BUSINESS.url}/products/exterior-solar-shades#service` },
-        }] : []),
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Cellular Shade Installation in ${areaName}`,
-            description: `Energy-efficient honeycomb cellular shades custom-fitted for ${areaName} homes. Reduces energy costs and controls light year-round.`,
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Plantation Shutter Installation in ${areaName}`,
-            description: `Custom-measured plantation shutters for ${areaName} homes. Lasting value, precise light control, and architectural character.`,
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Solar Shade Installation in ${areaName}`,
-            description: `UV-blocking solar shades that preserve ${areaName} lake and mountain views while eliminating glare and heat gain.`,
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Motorized Window Treatment Installation in ${areaName}`,
-            description: `Smart motorized shades for ${areaName} homes — controllable by phone, voice assistant, or wall switch.`,
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: `Free In-Home Window Treatment Consultation in ${areaName}`,
-            description: `Free in-home consultation for ${areaName} homeowners. We assess your windows, show product samples, and recommend the right solution with no pressure.`,
-          },
-        },
-      ],
+      name: isHdis
+        ? `Hunter Douglas & Alta Window Treatments in ${areaName}`
+        : `Window Treatment Services in ${areaName}`,
+      itemListElement: isHdis
+        ? [
+            { "@type": "Offer", itemOffered: productServiceRef("hunter-douglas") },
+            ...interiorProductOffers,
+          ]
+        : [
+            { "@type": "Offer", itemOffered: productServiceRef("hunter-douglas") },
+            { "@type": "Offer", itemOffered: productServiceRef("norman") },
+            { "@type": "Offer", itemOffered: productServiceRef("exterior-solar-shades") },
+            ...interiorProductOffers,
+          ],
     },
-    offers: {
-      "@type": "Offer",
-      name: "Free In-Home Consultation",
-      price: "0",
-      priceCurrency: "USD",
-      description: `Free in-home window treatment consultation for ${areaName} homeowners.`,
-      seller: { "@id": `${BUSINESS.url}/#business` },
-    },
+    offers: { "@id": `${BUSINESS.url}/#free-consultation-offer` },
   };
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
+  const breadcrumbNode = {
     "@type": "BreadcrumbList",
     "@id": `${areaUrl}#breadcrumb`,
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
+      { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
       { "@type": "ListItem", position: 2, name: "Service Areas", item: `${BUSINESS.url}/areas` },
       { "@type": "ListItem", position: 3, name: areaName, item: areaUrl },
     ],
   };
 
-  const faqItems = area.faqs && area.faqs.length > 0
-    ? area.faqs.map((faq) => ({
-        "@type": "Question",
-        name: faq.question,
-        acceptedAnswer: { "@type": "Answer", text: faq.answer },
-      }))
-    : [
-        {
-          "@type": "Question",
-          name: `Who does custom window treatments in ${areaName}, Idaho?`,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: `Luxe Window Works consults, designs, and installs custom window treatments in ${areaName}, Idaho. Founded by Mark Abplanalp — who has worked in the window treatment industry since 2002 — Luxe offers free in-home consultations, professional installation, and a lifetime workmanship guarantee. Call ${BUSINESS.phone} to schedule.`,
-          },
+  const faqNode = hasVisibleFaqs
+    ? {
+        "@type": "FAQPage",
+        "@id": `${areaUrl}#faq`,
+        isPartOf: { "@id": `${areaUrl}#webpage` },
+        speakable: {
+          "@type": "SpeakableSpecification",
+          cssSelector: [".area-faqs"],
         },
-        {
+        mainEntity: area.faqs!.map((faq) => ({
           "@type": "Question",
-          name: `What window treatments work best for ${areaName} homes?`,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: `For ${areaName} homes, cellular shades are the top choice for energy efficiency given Northern Idaho's extreme temperature swings. Solar shades are essential for lake and mountain-view properties to control glare without losing the view. Plantation shutters add long-term value and work well in both historic and newer construction. Motorized shades are increasingly popular for hard-to-reach windows and smart home integration.`,
-          },
-        },
-        {
-          "@type": "Question",
-          name: `Does Luxe Window Works offer free consultations in ${areaName}?`,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: `Yes. Luxe Window Works offers free in-home consultations throughout ${areaName} and surrounding Northern Idaho communities. During the consultation we assess your windows, show product samples, and provide honest recommendations with no pressure and no hidden costs. Call ${BUSINESS.phone} or book online to schedule.`,
-          },
-        },
-        {
-          "@type": "Question",
-          name: `How long does window treatment installation take in ${areaName}?`,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: `Most custom window treatment orders take 3 to 4 weeks from ordering to installation in ${areaName}. Custom drapes and plantation shutters typically run 6 to 8 weeks depending on the manufacturer. Contact Luxe Window Works at ${BUSINESS.phone} for current lead times on your specific product.`,
-          },
-        },
-      ];
-
-  /**
-   * THE CANONICAL CITY, DEFINED HERE.
-   *
-   * `/areas/{slug}#place` is this page's own URL, so this is where the entity
-   * belongs — the hub and every other page now reference it rather than
-   * rebuilding it. Null only if a route ever exists without a registry entry,
-   * in which case nothing is emitted rather than a half-formed place.
-   */
-  const placeSchema = cityPlaceNode(areaName);
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "@id": `${areaUrl}#faq`,
-    isPartOf: { "@id": `${areaUrl}#webpage` },
-    speakable: {
-      "@type": "SpeakableSpecification",
-      cssSelector: [".area-faqs"],
-    },
-    mainEntity: faqItems,
-  };
+          name: faq.question,
+          acceptedAnswer: { "@type": "Answer", text: faq.answer },
+        })),
+      }
+    : null;
 
   return (
-    <>
-      {/* JsonLd, not next/script — see the same fix on /about. All five area
-          pages were shipping their Service entity only in the RSC payload, so
-          the local service schema for every city was uncrawlable. */}
-      <JsonLd data={webpageSchema} />
-      {placeSchema && <JsonLd data={{ "@context": "https://schema.org", ...placeSchema }} />}
-      <JsonLd data={serviceSchema} />
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={faqSchema} />
-    </>
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@graph": [
+          webpageNode,
+          ...(placeSchema ? [placeSchema] : []),
+          serviceNode,
+          breadcrumbNode,
+          ...(faqNode ? [faqNode] : []),
+        ],
+      }}
+    />
   );
 }
 
@@ -479,7 +403,7 @@ export default async function AreaPage({ params }: Props) {
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
-            {PRODUCTS.map((product) => (
+            {(isHdis ? PRODUCTS.filter((p) => p.slug !== "exterior-solar-shades") : PRODUCTS).map((product) => (
               <Link
                 key={product.slug}
                 href={`/products/${product.slug}`}
@@ -499,7 +423,7 @@ export default async function AreaPage({ params }: Props) {
         <div className="container-luxe max-w-3xl">
           <h2 className="font-serif text-2xl sm:text-3xl text-charcoal">Compare custom blinds and shades in your {area.name} home</h2>
           <p className="mt-5 text-lg text-warm-gray-600 leading-relaxed">{isEastside
-            ? "We bring the Hunter Douglas collection to you. Compare fabrics, colors, and controls alongside your furnishings in your own light. We handle the consultation and your order; certified measuring and installation are performed through Hunter Douglas Installation Services."
+            ? "We bring the Hunter Douglas and Alta Window Fashions collections to you. Compare fabrics, colors, and controls alongside your furnishings in your own light. We handle the consultation and your order; certified measuring and installation are performed through Hunter Douglas Installation Services for both brands."
             : isUtah
               ? "We bring the Hunter Douglas and Alta Window Fashions collections to you. Compare fabrics, colors, and controls alongside your furnishings in your own light. We handle the consultation and your order; certified measuring and installation are performed through Hunter Douglas Installation Services for both brands."
               : "We bring the showroom to you. Compare fabrics, colors, and controls alongside your furnishings, then let us handle final measurements, ordering, and professional installation."}</p>

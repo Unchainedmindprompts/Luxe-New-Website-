@@ -7,8 +7,10 @@ import HdCategoryStrip from "@/components/HdCategoryStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { TrackedCta } from "@/components/TrackedCta";
 import { BUSINESS } from "@/lib/constants";
+import { ALTA_BRAND } from "@/lib/brands";
 import { cityRef } from "@/lib/cities";
 import { HUNTER_DOUGLAS } from "@/lib/hunter-douglas";
+import { CUSTOM_WINDOW_TREATMENTS } from "@/lib/schema";
 
 const PAGE = `${BUSINESS.url}/hunter-douglas-heber-city`;
 const MEDIA = "/images/hunter-douglas/installations";
@@ -46,8 +48,8 @@ export const metadata: Metadata = {
   title: "Hunter Douglas Dealer in Heber City | Luxe Window Works",
   description,
   alternates: { canonical: PAGE },
-  openGraph: { title: "Hunter Douglas Dealer in Heber City | Luxe Window Works", description, url: PAGE, images: [{ url: HERO, width: 2048, height: 1152, alt: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works" }] },
-  twitter: { card: "summary_large_image", title: "Hunter Douglas Dealer in Heber City | Luxe Window Works", description, images: [HERO] },
+  openGraph: { title: "Hunter Douglas Dealer in Heber City | Luxe Window Works", description, url: PAGE, images: [{ url: `${BUSINESS.url}${HERO}`, width: 2048, height: 1152, alt: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works" }] },
+  twitter: { card: "summary_large_image", title: "Hunter Douglas Dealer in Heber City | Luxe Window Works", description, images: [`${BUSINESS.url}${HERO}`] },
 };
 
 function BookButton({ children = "Book Your Free Consultation" }: { children?: React.ReactNode }) {
@@ -57,8 +59,9 @@ function BookButton({ children = "Book Your Free Consultation" }: { children?: R
 export default function HunterDouglasHeberCityPage() {
   return <>
     <JsonLd data={{ "@context": "https://schema.org", "@graph": [
-      { "@type": "WebPage", "@id": `${PAGE}#webpage`, url: PAGE, name: "Hunter Douglas Window Treatments in Heber City", description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, about: [{ "@id": `${BUSINESS.url}/products/hunter-douglas#service` }, { "@id": HUNTER_DOUGLAS["@id"] }, cityRef("Heber City")], spatialCoverage: cityRef("Heber City"), breadcrumb: { "@id": `${PAGE}#breadcrumb` }, primaryImageOfPage: { "@id": `${PAGE}#primaryimage` } },
-      { "@type": "ImageObject", "@id": `${PAGE}#primaryimage`, contentUrl: `${BUSINESS.url}${HERO}`, width: 2048, height: 1152, caption: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works", creator: { "@type": "Organization", name: "Luxe Window Works", url: BUSINESS.url }, creditText: "Luxe Window Works" },
+      { "@type": "WebPage", "@id": `${PAGE}#webpage`, url: PAGE, name: "Hunter Douglas Window Treatments in Heber City", description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, mainEntity: { "@id": `${PAGE}#service` }, about: [{ "@id": `${BUSINESS.url}/products/hunter-douglas#service` }, { "@id": HUNTER_DOUGLAS["@id"] }, { "@id": ALTA_BRAND["@id"] }, cityRef("Heber City")], spatialCoverage: cityRef("Heber City"), breadcrumb: { "@id": `${PAGE}#breadcrumb` }, hasPart: { "@id": `${PAGE}#faq` }, primaryImageOfPage: { "@id": `${PAGE}#primaryimage` }, inLanguage: "en-US" },
+      { "@type": "Service", "@id": `${PAGE}#service`, url: PAGE, name: "Hunter Douglas Window Treatments in Heber City", serviceType: CUSTOM_WINDOW_TREATMENTS, brand: [{ "@id": HUNTER_DOUGLAS["@id"] }, { "@id": ALTA_BRAND["@id"] }], provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: cityRef("Heber City"), description, mainEntityOfPage: { "@id": `${PAGE}#webpage` }, offers: { "@id": `${BUSINESS.url}/#free-consultation-offer` } },
+      { "@type": "ImageObject", "@id": `${PAGE}#primaryimage`, contentUrl: `${BUSINESS.url}${HERO}`, width: 2048, height: 1152, caption: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works", creator: { "@id": `${BUSINESS.url}/#business` }, creditText: "Luxe Window Works" },
       { "@type": "FAQPage", "@id": `${PAGE}#faq`, isPartOf: { "@id": `${PAGE}#webpage` }, mainEntity: faqs.map(f => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })) },
       { "@type": "BreadcrumbList", "@id": `${PAGE}#breadcrumb`, itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url }, { "@type": "ListItem", position: 2, name: "Heber City", item: `${BUSINESS.url}/areas/heber-city` }, { "@type": "ListItem", position: 3, name: "Hunter Douglas", item: PAGE }] },
     ] }} />

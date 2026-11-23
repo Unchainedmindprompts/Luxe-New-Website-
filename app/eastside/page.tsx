@@ -6,8 +6,10 @@ import EastsideReviewsStrip from "@/components/EastsideReviewsStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { TrackedCta } from "@/components/TrackedCta";
 import { BUSINESS } from "@/lib/constants";
+import { ALTA_BRAND } from "@/lib/brands";
 import { cityRef } from "@/lib/cities";
 import { HUNTER_DOUGLAS } from "@/lib/hunter-douglas";
+import { CUSTOM_WINDOW_TREATMENTS } from "@/lib/schema";
 
 const PAGE = `${BUSINESS.url}/eastside`;
 const HERO = "/images/luxe-completed-installation.webp";
@@ -39,8 +41,8 @@ export const metadata: Metadata = {
   title: "Hunter Douglas Dealer for Seattle’s Eastside | Luxe Window Works",
   description,
   alternates: { canonical: PAGE },
-  openGraph: { title: "Hunter Douglas Dealer for Seattle’s Eastside | Luxe Window Works", description, url: PAGE, images: [{ url: HERO, width: 2048, height: 1152, alt: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works" }] },
-  twitter: { card: "summary_large_image", title: "Hunter Douglas Dealer for Seattle’s Eastside | Luxe Window Works", description, images: [HERO] },
+  openGraph: { title: "Hunter Douglas Dealer for Seattle’s Eastside | Luxe Window Works", description, url: PAGE, images: [{ url: `${BUSINESS.url}${HERO}`, width: 2048, height: 1152, alt: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works" }] },
+  twitter: { card: "summary_large_image", title: "Hunter Douglas Dealer for Seattle’s Eastside | Luxe Window Works", description, images: [`${BUSINESS.url}${HERO}`] },
 };
 
 function BookButton({ children = "Book Your Free Consultation" }: { children?: React.ReactNode }) {
@@ -50,8 +52,9 @@ function BookButton({ children = "Book Your Free Consultation" }: { children?: R
 export default function EastsidePage() {
   return <>
     <JsonLd data={{ "@context": "https://schema.org", "@graph": [
-      { "@type": "WebPage", "@id": `${PAGE}#webpage`, url: PAGE, name: "Hunter Douglas Window Treatments for Seattle’s Eastside", description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, about: [{ "@id": `${BUSINESS.url}/products/hunter-douglas#service` }, { "@id": HUNTER_DOUGLAS["@id"] }, ...CITIES.map(c => cityRef(c))], spatialCoverage: CITIES.map(c => cityRef(c)), breadcrumb: { "@id": `${PAGE}#breadcrumb` }, primaryImageOfPage: { "@id": `${PAGE}#primaryimage` } },
-      { "@type": "ImageObject", "@id": `${PAGE}#primaryimage`, contentUrl: `${BUSINESS.url}${HERO}`, width: 2048, height: 1152, caption: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works", creator: { "@type": "Organization", name: "Luxe Window Works", url: BUSINESS.url }, creditText: "Luxe Window Works" },
+      { "@type": "WebPage", "@id": `${PAGE}#webpage`, url: PAGE, name: "Hunter Douglas Window Treatments for Seattle’s Eastside", description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, mainEntity: { "@id": `${PAGE}#service` }, about: [{ "@id": `${BUSINESS.url}/products/hunter-douglas#service` }, { "@id": HUNTER_DOUGLAS["@id"] }, { "@id": ALTA_BRAND["@id"] }, ...CITIES.map(c => cityRef(c))], spatialCoverage: CITIES.map(c => cityRef(c)), breadcrumb: { "@id": `${PAGE}#breadcrumb` }, hasPart: { "@id": `${PAGE}#faq` }, primaryImageOfPage: { "@id": `${PAGE}#primaryimage` }, inLanguage: "en-US" },
+      { "@type": "Service", "@id": `${PAGE}#service`, url: PAGE, name: "Hunter Douglas & Alta Window Treatments for Seattle’s Eastside", serviceType: CUSTOM_WINDOW_TREATMENTS, brand: [{ "@id": HUNTER_DOUGLAS["@id"] }, { "@id": ALTA_BRAND["@id"] }], provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: CITIES.map(c => cityRef(c)), description, mainEntityOfPage: { "@id": `${PAGE}#webpage` }, offers: { "@id": `${BUSINESS.url}/#free-consultation-offer` } },
+      { "@type": "ImageObject", "@id": `${PAGE}#primaryimage`, contentUrl: `${BUSINESS.url}${HERO}`, width: 2048, height: 1152, caption: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works", creator: { "@id": `${BUSINESS.url}/#business` }, creditText: "Luxe Window Works" },
       { "@type": "FAQPage", "@id": `${PAGE}#faq`, isPartOf: { "@id": `${PAGE}#webpage` }, mainEntity: faqs.map(f => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })) },
       { "@type": "BreadcrumbList", "@id": `${PAGE}#breadcrumb`, itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url }, { "@type": "ListItem", position: 2, name: "Eastside", item: PAGE }] },
     ] }} />
@@ -64,7 +67,7 @@ export default function EastsidePage() {
           <div className="max-w-2xl text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.55)]">
             <p className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-white/90">Hunter Douglas · Seattle’s Eastside</p>
             <h1 className="font-serif text-4xl leading-[1.1] text-white text-balance sm:text-5xl lg:text-6xl">Hunter Douglas Window Treatments for Seattle’s Eastside</h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-white sm:text-lg">Compare Hunter Douglas blinds, shades, and shutters in your own Eastside home. Your consultation is with a dealer who has sold Hunter Douglas for 20 years, including years here on the Eastside, and measuring and installation are handled by Hunter Douglas’s own certified installation service.</p>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-white sm:text-lg">Compare Hunter Douglas blinds, shades, and shutters in your own Eastside home. Your consultation is with a dealer who has sold Hunter Douglas for 20 years, and measuring and installation are handled by Hunter Douglas’s own certified installation service.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <TrackedCta href="/book" event="ConsultCtaClick" className="inline-flex items-center justify-center rounded-full bg-gold px-7 py-4 font-semibold text-charcoal hover:bg-gold-dark">Request a Free Consultation</TrackedCta>
               <a href="#cities" className="px-2 py-4 font-semibold text-white underline underline-offset-4">Find your city ↓</a>

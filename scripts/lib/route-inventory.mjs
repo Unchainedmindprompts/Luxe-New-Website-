@@ -43,6 +43,7 @@ export const GENERATED_ROUTES = new Set([
   "/robots.txt",
   "/sitemap.xml",
   "/manifest.webmanifest",
+  "/share-image",
 ]);
 
 /** Route-handler paths — real endpoints, but never pages. */

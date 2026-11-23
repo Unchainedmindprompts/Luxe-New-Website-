@@ -145,32 +145,6 @@ wordCount: 2600
 
 <p>As a long-term Norman partner, we're your local point of contact for any warranty questions or service needs. If something ever needs attention, you call us — not a manufacturer's 800 number.</p>
 
-<h2>Common Questions About Norman Shutters in North Idaho</h2>
-
-<h3>How long do Norman shutters actually last?</h3>
-
-<p>Norman shutters are built to last the life of the home when installed correctly. Normandy hardwood shutters use Paulownia, which resists warping under normal conditions. Woodlore and Woodlore Plus composite shutters use an engineered core that stays dimensionally stable across North Idaho's temperature swings and humidity changes. Norman backs both lines with a limited lifetime warranty. We've installed Norman shutters that have been performing without issue for more than a decade. The key is proper installation — shutters measured and mounted precisely will operate smoothly for decades.</p>
-
-<h3>Are Norman shutters good for bathrooms and kitchens?</h3>
-
-<p>Woodlore and Woodlore Plus shutters are excellent choices for bathrooms and kitchens. These composite shutters are moisture-resistant — they won't warp, swell, or crack from steam and humidity. Woodlore Plus specifically is engineered with a polymer-reinforced core that handles the steam exposure a bathroom with a walk-in shower produces regularly. The painted finish is also easier to wipe clean than a wood grain surface. For bathrooms and kitchens, we specify Woodlore Plus rather than Normandy hardwood, which is better suited to living rooms, bedrooms, and low-moisture environments.</p>
-
-<h3>What's the difference between 3.5-inch and 4.5-inch louvers?</h3>
-
-<p>Louver size affects both the appearance and function of your shutters. Smaller 3.5-inch louvers create a more traditional look with more horizontal lines across the window — a good fit for smaller windows or rooms with a classic aesthetic. Larger 4.5-inch louvers open up the view more, create a cleaner and more contemporary look, and are popular in living rooms and bedrooms with larger windows. Practically speaking, 4.5-inch louvers let in significantly more light and offer a wider open view than 3.5-inch louvers at the same tilt position. For most modern North Idaho homes, 4.5-inch louvers are the more popular choice.</p>
-
-<h3>Can Norman shutters be installed on doors?</h3>
-
-<p>Yes. Norman manufactures bi-fold shutters designed for door applications. The Norman Bi-Fold 180 shutter folds completely flat against the wall when the door needs to be fully opened, which is essential for French doors, patio doors, and entry doors where a panel blocking the doorway isn't acceptable. For sliding patio doors, Norman offers bypass shutters that slide horizontally. These applications require precise measurement because doors flex and move differently than fixed windows, making professional installation especially important here.</p>
-
-<h3>How do Norman shutters compare to plantation shutters from big-box stores?</h3>
-
-<p>The difference is significant. Big-box <a href="/products/shutters">plantation shutters</a> are typically built with lower-grade materials, measured by the homeowner (introducing error risk), and installed by general contractors rather than window treatment specialists. The result is often shutters that don't close flush, have visible light gaps, operate stiffly, or show warping and finish failure within a few years. Norman <a href="/products/shutters">shutters</a> are custom-built to your exact window measurements, engineered from premium materials, and installed by someone who does this every week. Norman's limited lifetime warranty is backed by the manufacturer — not just the retailer — which matters when you need service years down the line.</p>
-
-<h3>What does a Norman shutter installation typically cost in Coeur d'Alene or Post Falls?</h3>
-
-<p>Norman shutter costs vary based on window size, shutter line (Normandy vs. Woodlore Plus), louver size, and the number of windows being covered. Woodlore and Woodlore Plus shutters are more accessible price-wise than Normandy hardwood while still delivering the full Norman quality and warranty. For accurate pricing, the best step is a free in-home consultation where we measure your windows and provide an exact quote — no surprises. We serve <a href="/areas/coeur-d-alene">Coeur d'Alene</a>, <a href="/areas/post-falls">Post Falls</a>, Hayden, <a href="/areas/sandpoint">Sandpoint</a>, <a href="/areas/rathdrum">Rathdrum</a>, and surrounding North Idaho communities.</p>
-
 <div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
 <p style="margin:0;font-size:.95rem;"><strong>Related reading:</strong> Start with <a href="/products/norman">Norman shutters and blinds at Luxe Window Works</a> for the full Norman lineup, then compare <a href="/blog/woodlore-plus-shutters-north-idaho">Woodlore Plus shutters in North Idaho</a>, see how the <a href="/blog/norman-bifold-180-shutters-for-bi-folding-doors-in-north-idaho">Norman BiFold 180 handles bi-folding doors</a>, and work through <a href="/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration">the Ultimate Shutter Guide for frame, material, and configuration choices</a>.</p>
 </div>

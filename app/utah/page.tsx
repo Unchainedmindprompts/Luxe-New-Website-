@@ -5,8 +5,10 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { TrackedCta } from "@/components/TrackedCta";
 import { BUSINESS } from "@/lib/constants";
+import { ALTA_BRAND } from "@/lib/brands";
 import { cityRef } from "@/lib/cities";
 import { HUNTER_DOUGLAS } from "@/lib/hunter-douglas";
+import { CUSTOM_WINDOW_TREATMENTS } from "@/lib/schema";
 
 const PAGE = `${BUSINESS.url}/utah`;
 const HERO = "/images/luxe-completed-installation.webp";
@@ -40,8 +42,8 @@ export const metadata: Metadata = {
   title: "Hunter Douglas & Alta Dealer for the Salt Lake Area | Luxe Window Works",
   description,
   alternates: { canonical: PAGE },
-  openGraph: { title: "Hunter Douglas & Alta Dealer for the Salt Lake Area | Luxe Window Works", description, url: PAGE, images: [{ url: HERO, width: 2048, height: 1152, alt: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works" }] },
-  twitter: { card: "summary_large_image", title: "Hunter Douglas & Alta Dealer for the Salt Lake Area | Luxe Window Works", description, images: [HERO] },
+  openGraph: { title: "Hunter Douglas & Alta Dealer for the Salt Lake Area | Luxe Window Works", description, url: PAGE, images: [{ url: `${BUSINESS.url}${HERO}`, width: 2048, height: 1152, alt: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works" }] },
+  twitter: { card: "summary_large_image", title: "Hunter Douglas & Alta Dealer for the Salt Lake Area | Luxe Window Works", description, images: [`${BUSINESS.url}${HERO}`] },
 };
 
 function BookButton({ children = "Book Your Free Consultation" }: { children?: React.ReactNode }) {
@@ -51,8 +53,9 @@ function BookButton({ children = "Book Your Free Consultation" }: { children?: R
 export default function UtahPage() {
   return <>
     <JsonLd data={{ "@context": "https://schema.org", "@graph": [
-      { "@type": "WebPage", "@id": `${PAGE}#webpage`, url: PAGE, name: "Hunter Douglas and Alta Window Treatments for the Salt Lake Area", description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, about: [{ "@id": `${BUSINESS.url}/products/hunter-douglas#service` }, { "@id": HUNTER_DOUGLAS["@id"] }, ...CITIES.map(c => cityRef(c))], spatialCoverage: CITIES.map(c => cityRef(c)), breadcrumb: { "@id": `${PAGE}#breadcrumb` }, primaryImageOfPage: { "@id": `${PAGE}#primaryimage` } },
-      { "@type": "ImageObject", "@id": `${PAGE}#primaryimage`, contentUrl: `${BUSINESS.url}${HERO}`, width: 2048, height: 1152, caption: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works", creator: { "@type": "Organization", name: "Luxe Window Works", url: BUSINESS.url }, creditText: "Luxe Window Works" },
+      { "@type": "WebPage", "@id": `${PAGE}#webpage`, url: PAGE, name: "Hunter Douglas and Alta Window Treatments for the Salt Lake Area", description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, mainEntity: { "@id": `${PAGE}#service` }, about: [{ "@id": `${BUSINESS.url}/products/hunter-douglas#service` }, { "@id": HUNTER_DOUGLAS["@id"] }, { "@id": ALTA_BRAND["@id"] }, ...CITIES.map(c => cityRef(c))], spatialCoverage: CITIES.map(c => cityRef(c)), breadcrumb: { "@id": `${PAGE}#breadcrumb` }, hasPart: { "@id": `${PAGE}#faq` }, primaryImageOfPage: { "@id": `${PAGE}#primaryimage` }, inLanguage: "en-US" },
+      { "@type": "Service", "@id": `${PAGE}#service`, url: PAGE, name: "Hunter Douglas & Alta Window Treatments for the Salt Lake Area", serviceType: CUSTOM_WINDOW_TREATMENTS, brand: [{ "@id": HUNTER_DOUGLAS["@id"] }, { "@id": ALTA_BRAND["@id"] }], provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: CITIES.map(c => cityRef(c)), description, mainEntityOfPage: { "@id": `${PAGE}#webpage` }, offers: { "@id": `${BUSINESS.url}/#free-consultation-offer` } },
+      { "@type": "ImageObject", "@id": `${PAGE}#primaryimage`, contentUrl: `${BUSINESS.url}${HERO}`, width: 2048, height: 1152, caption: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works", creator: { "@id": `${BUSINESS.url}/#business` }, creditText: "Luxe Window Works" },
       { "@type": "FAQPage", "@id": `${PAGE}#faq`, isPartOf: { "@id": `${PAGE}#webpage` }, mainEntity: faqs.map(f => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })) },
       { "@type": "BreadcrumbList", "@id": `${PAGE}#breadcrumb`, itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url }, { "@type": "ListItem", position: 2, name: "Utah", item: PAGE }] },
     ] }} />
@@ -65,7 +68,7 @@ export default function UtahPage() {
           <div className="max-w-2xl text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.55)]">
             <p className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-white/90">Hunter Douglas · Alta Window Fashions · Utah</p>
             <h1 className="font-serif text-4xl leading-[1.1] text-white text-balance sm:text-5xl lg:text-6xl">Hunter Douglas and Alta Window Treatments for the Salt Lake Area</h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-white sm:text-lg">Compare Hunter Douglas and Alta Window Fashions blinds and shades in your own Utah home. Your consultation is with a dealer who has sold Hunter Douglas for 20 years, and measuring and installation are handled by Hunter Douglas's own certified installation service for both brands.</p>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-white sm:text-lg">Compare Hunter Douglas and Alta Window Fashions blinds and shades in your own Utah home. Your consultation is with a dealer who has sold Hunter Douglas for 20 years, and measuring and installation are handled by Hunter Douglas&apos;s own certified installation service for both brands.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <TrackedCta href="/book" event="ConsultCtaClick" className="inline-flex items-center justify-center rounded-full bg-gold px-7 py-4 font-semibold text-charcoal hover:bg-gold-dark">Request a Free Consultation</TrackedCta>
               <a href="#cities" className="px-2 py-4 font-semibold text-white underline underline-offset-4">Find your city ↓</a>
@@ -77,11 +80,11 @@ export default function UtahPage() {
     </section>
 
     <section id="cities" className="container-luxe scroll-mt-24 py-14 md:py-20">
-      <div className="mb-8 max-w-2xl"><p className="text-xs uppercase tracking-[.18em] text-warm-gray-700">Eight Utah communities</p><h2 className="mt-3 font-serif text-3xl text-charcoal sm:text-4xl">Two brands, city by city</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-700">One service model across Utah, tuned to each community's homes. Choose your city for local details and starting points.</p></div>
+      <div className="mb-8 max-w-2xl"><p className="text-xs uppercase tracking-[.18em] text-warm-gray-700">Eight Utah communities</p><h2 className="mt-3 font-serif text-3xl text-charcoal sm:text-4xl">Two brands, city by city</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-700">One service model across Utah, tuned to each community&apos;s homes. Choose your city for local details and starting points.</p></div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{cities.map(c => <article key={c.href} className="border border-warm-gray-200 bg-cream p-7"><h3 className="font-serif text-2xl text-charcoal">{c.name}</h3><p className="mt-4 leading-relaxed text-warm-gray-700">{c.text}</p><Link href={c.href} className="mt-6 inline-block font-semibold underline underline-offset-4">Hunter Douglas in {c.name} →</Link></article>)}</div>
     </section>
 
-    <section className="bg-charcoal py-14 text-white md:py-20"><div className="container-luxe"><div className="max-w-2xl"><p className="text-xs uppercase tracking-[.18em] text-gold">How Utah service works</p><h2 className="mt-4 font-serif text-3xl sm:text-4xl">No showroom. No guesswork.</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-300">Luxe Window Works serves Utah by appointment, the same way it serves every market. Luxe handles selection and pricing with you, and Hunter Douglas's own certified installation service handles the measuring and installation locally, for Hunter Douglas and Alta products alike, backed by the manufacturer.</p></div><div className="mt-10 grid gap-8 md:grid-cols-3">{[
+    <section className="bg-charcoal py-14 text-white md:py-20"><div className="container-luxe"><div className="max-w-2xl"><p className="text-xs uppercase tracking-[.18em] text-gold">How Utah service works</p><h2 className="mt-4 font-serif text-3xl sm:text-4xl">No showroom. No guesswork.</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-300">Luxe Window Works serves Utah by appointment, the same way it serves every market. Luxe handles selection and pricing with you, and Hunter Douglas&apos;s own certified installation service handles the measuring and installation locally, for Hunter Douglas and Alta products alike, backed by the manufacturer.</p></div><div className="mt-10 grid gap-8 md:grid-cols-3">{[
       ["Consultation in your home", "We visit your home with samples from both brands, look at the windows and furnishings, and talk through glare, privacy and daily use. You compare fabrics and operating options in the room where they will be installed, and get a tailored quote for your selected products."],
       ["Professional measuring, guaranteed", "A certified installer from Hunter Douglas Installation Services takes precise measurements for your selected products, guaranteed for fit, before your order is placed."],
       ["Certified installation, manufacturer-backed", "Your treatments are installed through Hunter Douglas Installation Services by certified installers, backed by a one-year installation guarantee from the service, the Hunter Douglas lifetime warranty on Hunter Douglas shades, and a five-year warranty on PowerView."],
@@ -106,6 +109,6 @@ export default function UtahPage() {
 
     <section className="container-luxe max-w-4xl py-14 md:py-20"><h2 className="mb-8 font-serif text-3xl text-charcoal sm:text-4xl">Your Utah Hunter Douglas and Alta questions, answered.</h2>{faqs.map(f => <details key={f.question} className="border-b border-warm-gray-200 py-5"><summary className="cursor-pointer pr-4 text-lg font-semibold text-charcoal">{f.question}</summary><p className="mt-4 leading-relaxed text-warm-gray-700">{f.answer}</p></details>)}</section>
 
-    <section className="bg-cream py-14 text-center md:py-20"><div className="container-luxe max-w-3xl"><h2 className="font-serif text-3xl text-charcoal sm:text-4xl">Let's find the right light for your Utah home.</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-700">Book your free consultation in the Salt Lake area. We will bring the samples and help you take the next step.</p><div className="mt-8"><BookButton /></div><p className="mt-5"><TrackedCta href={BUSINESS.phoneHref} event="PhoneClick" className="underline underline-offset-4">Call {BUSINESS.phone}</TrackedCta></p><p className="mt-8 text-sm text-warm-gray-700"><Link href="/areas" className="underline underline-offset-4">See all the areas we serve</Link> · Start with our largest Utah city: <Link href="/hunter-douglas-salt-lake-city" className="underline underline-offset-4">Hunter Douglas in Salt Lake City</Link></p></div></section>
+    <section className="bg-cream py-14 text-center md:py-20"><div className="container-luxe max-w-3xl"><h2 className="font-serif text-3xl text-charcoal sm:text-4xl">Let&apos;s find the right light for your Utah home.</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-700">Book your free consultation in the Salt Lake area. We will bring the samples and help you take the next step.</p><div className="mt-8"><BookButton /></div><p className="mt-5"><TrackedCta href={BUSINESS.phoneHref} event="PhoneClick" className="underline underline-offset-4">Call {BUSINESS.phone}</TrackedCta></p><p className="mt-8 text-sm text-warm-gray-700"><Link href="/areas" className="underline underline-offset-4">See all the areas we serve</Link> · Start with our largest Utah city: <Link href="/hunter-douglas-salt-lake-city" className="underline underline-offset-4">Hunter Douglas in Salt Lake City</Link></p></div></section>
   </>;
 }

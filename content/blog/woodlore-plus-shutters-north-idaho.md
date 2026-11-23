@@ -102,28 +102,6 @@ wordCount: 1832
   <li><strong>Plan motorization at design time.</strong> Retrofitting motors later costs more than building them in. If you have any hard-to-reach windows, decide now.</li>
 </ol>
 
-<h2>Common Questions About Woodlore® Plus Shutters</h2>
-
-<h3>Will these shutters sag or warp over time?</h3>
-
-<p>Woodlore® Plus is designed for durability, but no shutter should be described as unable to sag or warp under every condition. Correct sizing, installation, exposure, and care matter. Review Norman's warranty and choose the waterproof option where prolonged water exposure is expected.</p>
-
-<h3>How easy are these to keep clean?</h3>
-
-<p>Routine care is straightforward, but follow Norman's cleaning instructions for the exact finish and configuration. Avoid soaking a standard wood-composite panel; a waterproof option is available for locations with prolonged water exposure.</p>
-
-<h3>Will I lose my view when the louvers are open?</h3>
-
-<p>Not meaningfully. Panels are available up to 36 inches wide and stack tightly when fully open, preserving most of the glass area. With InvisibleTilt® you get an extra visual benefit — no center bar interrupting the view.</p>
-
-<h3>Can these be customized for odd window shapes or sizes?</h3>
-
-<p>Yes. Norman offers specialty shapes and custom color options. Available sizes and configurations have limits, so we confirm the measurements and manufacturer specifications for arches, angles, and other unusual openings before ordering.</p>
-
-<h3>Are motorized options available?</h3>
-
-<p>Yes — Norman's <strong>PerfectTilt™ G4</strong> motorization is available across the Woodlore® Plus line. Battery-powered, smart-home integration via iPhone/iPad/standard remotes, and especially valuable on hard-to-reach windows (high clerestories, tall picture windows above stairwells) or large window arrays where manual operation becomes a chore.</p>
-
 <div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 .25rem .25rem 0;">
 <p style="margin:0;font-size:.95rem;"><strong>Related reading:</strong> See <a href="/products/norman">Norman shutters and blinds at Luxe Window Works</a> for the full lineup, read our overview of <a href="/blog/norman-shutters-in-north-idaho-premium-craftsmanship-from-luxe-window-works">Norman shutters in North Idaho</a>, see how the <a href="/blog/norman-bifold-180-shutters-for-bi-folding-doors-in-north-idaho">Norman BiFold 180 works on bi-folding doors</a>, and compare frames and materials in <a href="/blog/the-ultimate-shutter-guide-for-northern-idaho-homes-choosing-the-right-frame-material-configuration">the Ultimate Shutter Guide</a>.</p>
 </div>

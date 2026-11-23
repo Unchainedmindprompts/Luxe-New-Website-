@@ -183,36 +183,6 @@ wordCount: 2250
 
 <p>You also get real manufacturer warranties backed by a local installer who will come out if there's ever an issue. That kind of support doesn't exist when you order online or from a big-box store.</p>
 
-<h2>FAQs: Moisture-Proof Window Treatments in North Idaho</h2>
-
-<h3>Can I use real wood blinds in my bathroom?</h3>
-
-<p>No. Real wood blinds absorb moisture from steam and humidity, which causes slats to warp, crack, and eventually fall apart. Even with an exhaust fan, bathroom moisture is too much for wood. Use faux wood blinds or vinyl shutters instead.</p>
-
-<h3>What's the best window treatment for a window above the kitchen sink?</h3>
-
-<p>High-quality faux wood blinds made from solid polymer are your best option. They handle direct splashes and steam without warping or peeling, and you can wipe them down as needed. Vinyl shutters are also excellent if you want a more permanent solution.</p>
-
-<h3>Are faux wood blinds actually waterproof?</h3>
-
-<p>Premium faux wood blinds made from solid polymer or high-grade composite are moisture-resistant throughout the entire slat, not just on the surface. Cheap big-box faux wood has a thin vinyl coating over a particle board core that fails quickly in wet conditions. Quality brands like Alta, Norman, and Lafayette are built differently.</p>
-
-<h3>What window treatments work best in a lake home with large view windows?</h3>
-
-<p>Solar or screen shades made from moisture-resistant materials give you UV protection and glare control while preserving your lake views. For privacy at night, add <a href="/products/motorization">motorized</a> roller shades or drapery. Choose materials specifically rated for moisture exposure since lake homes have higher ambient humidity year-round.</p>
-
-<h3>How do I prevent mildew on my window coverings?</h3>
-
-<p>Use non-porous materials like vinyl, solid polymer faux wood, or moisture-resistant fabrics. Avoid real wood, untreated fabric, and woven materials in bathrooms, kitchens, and other high-moisture areas. Make sure exhaust fans are working properly, and wipe down your window treatments periodically to prevent buildup.</p>
-
-<h3>Do vinyl shutters look cheap compared to wood shutters?</h3>
-
-<p>Quality vinyl or composite <a href="/products/shutters">shutters</a> have a smooth, painted finish that looks virtually identical to painted wood shutters. Most people can't tell the difference in person. The advantage is they maintain that appearance permanently — no warping, cracking, or peeling, even in bathrooms and kitchens.</p>
-
-<h3>Can motorized shades be moisture-resistant?</h3>
-
-<p>Yes. <a href="/products/motorization">Motorized</a> roller shades can be ordered with moisture-resistant fabrics and sealed mechanisms that protect the motor from humidity. This is especially popular in lake homes with large window expanses where you want convenient control without sacrificing durability.</p>
-
 <h2>Work With a Local Moisture-Proof Window Treatment Expert</h2>
 
 <p>Every home in Northern Idaho has different moisture challenges. Your bathroom might have excellent ventilation. Your kitchen might get direct steam from a cooktop near the window. Your lake home might deal with humidity year-round.</p>

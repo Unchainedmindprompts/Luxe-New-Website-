@@ -5,13 +5,14 @@ import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { ArticlePathway } from "@/components/ArticlePathway";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { JsonLd } from "@/components/JsonLd";
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { ARTICLE_PATHWAYS } from "@/lib/article-pathways";
-import { BUSINESS } from "@/lib/constants";
+import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
 import { NORMAN_BRAND, ALTA_BRAND, HUNTER_DOUGLAS } from "@/lib/brands";
-import { cityRef, northIdahoRef } from "@/lib/cities";
-import { BUSINESS_STUB, OWNER_STUB } from "@/lib/schema";
+import { cityRef, kootenaiCountyRef, northIdahoRef } from "@/lib/cities";
+import { BUSINESS_STUB, OWNER_STUB, toPacificIso } from "@/lib/schema";
 import { getPost, getAllSlugs, getReadingTime } from "@/lib/blog";
 import { addInternalLinks } from "@/lib/internal-links";
 import type { BlogPost } from "@/lib/blog";
@@ -29,8 +30,6 @@ interface Props {
 
 /** Per-slug keyword overrides for articles that need exact keyword targeting */
 const SLUG_KEYWORDS: Record<string, string> = {
-  "what-is-an-entity-graph":
-    "entity graph, schema markup, local SEO, structured data, knowledge graph, local business SEO, JSON-LD, schema.org",
   // Carried over verbatim from the hand-written designer route, which set its
   // own keywords rather than using the derived set.
   "designer-window-treatments-coeur-dalene-post-falls":
@@ -50,32 +49,51 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Post Not Found" };
   }
 
+  const pageUrl = `${BUSINESS.url}/blog/${slug}`;
   const description = post.metaDescription || post.excerpt;
   const keywords = SLUG_KEYWORDS[slug];
-  // Use seoTitle for the <title> tag when present; the long display title remains
-  // the H1 on-page. Decouples SERP truncation from reader-facing copy.
   const titleForTag = post.seoTitle || post.title;
+  const publishedTime = toPacificIso(post.date);
+  const modifiedTime = toPacificIso(post.dateModified || post.date);
+  const absFeaturedImage = post.featuredImage
+    ? post.featuredImage.startsWith("http")
+      ? post.featuredImage
+      : `${BUSINESS.url}${post.featuredImage}`
+    : undefined;
+
   return {
     title: titleForTag,
     description,
     ...(keywords && { keywords }),
     alternates: {
-      canonical: `${BUSINESS.url}/blog/${slug}`,
+      canonical: pageUrl,
     },
     openGraph: {
       title: titleForTag,
       description,
+      url: pageUrl,
       type: "article",
-      publishedTime: post.date,
+      publishedTime,
+      modifiedTime,
       authors: [post.author],
-      images: post.featuredImage ? [{ url: post.featuredImage }] : undefined,
+      images: absFeaturedImage
+        ? [
+            {
+              url: absFeaturedImage,
+              ...(post.featuredImageWidth && post.featuredImageHeight
+                ? { width: post.featuredImageWidth, height: post.featuredImageHeight }
+                : {}),
+              alt: post.featuredImageAlt || post.title,
+            },
+          ]
+        : undefined,
       tags: post.tags,
     },
     twitter: {
       card: "summary_large_image",
       title: titleForTag,
       description,
-      images: post.featuredImage ? [post.featuredImage] : undefined,
+      images: absFeaturedImage ? [absFeaturedImage] : undefined,
     },
   };
 }
@@ -188,10 +206,12 @@ function articleUrlTransform(url: string): string {
 
 /** HowTo schema — 5-step installation process */
 const installationHowToSchema = {
-  "@context": "https://schema.org",
   "@type": "HowTo",
   "@id":
     `${BUSINESS.url}/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works#howto`,
+  isPartOf: {
+    "@id": `${BUSINESS.url}/blog/your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works#webpage`,
+  },
   name: "How to Get Custom Window Treatments Installed",
   description:
     "The Luxe Window Works 5-step process for getting custom window treatments measured, ordered, and professionally installed in the areas we serve.",
@@ -244,9 +264,11 @@ const installationHowToSchema = {
 };
 
 const highPressureHowToSchema = {
-  "@context": "https://schema.org",
   "@type": "HowTo",
   "@id": `${BUSINESS.url}/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry#howto`,
+  isPartOf: {
+    "@id": `${BUSINESS.url}/blog/stop-selling-shades-like-youre-at-a-car-dealership-why-high-pressure-sales-hurt-homeowners-and-the-industry#webpage`,
+  },
   name: "5 Tips for Navigating Window Treatment Sales Without Getting Pressured",
   description: "How to protect yourself from high-pressure window treatment sales tactics and make a confident, informed decision.",
   totalTime: "PT5M",
@@ -295,11 +317,9 @@ const SLUG_SCHEMA: Record<string, object[]> = {
    */
   "designer-window-treatments-coeur-dalene-post-falls": [
     {
-      "@context": "https://schema.org",
       "@type": "Review",
       "@id": `${BUSINESS.url}/#review-caroline-didiego`,
       url: "https://maps.app.goo.gl/LK59b24y9xTy7Jcw8",
-      datePublished: "2025-11-09",
       reviewBody:
         "Outstanding experience with Mark at Luxe Window Works! As designers we love to work with professionals to implement our designs. We always have very 'custom' requirements, and that was certainly the case with Mark and Luxe Window Works. Mark paid super close attention during the ordering process, and it really paid off! Our design criteria was realized meticulously, and Mark's installation was thorough (and fast!), with the end result exceeding our expectations. Window treatments can make or break an interior design, so it's mandatory to have a resource that offers a curated selection of the best made, proven quality products, as Luxe does. In the end it saves time and money, and results in very happy clients. And we all want happy clients!",
       reviewRating: {
@@ -314,6 +334,9 @@ const SLUG_SCHEMA: Record<string, object[]> = {
         jobTitle: "Interior Designer",
       },
       itemReviewed: { "@id": `${BUSINESS.url}/#business` },
+      subjectOf: {
+        "@id": `${BUSINESS.url}/blog/designer-window-treatments-coeur-dalene-post-falls#article`,
+      },
     },
   ],
   "your-complete-guide-to-custom-blinds-installation-in-northern-idaho-with-luxe-window-works": [
@@ -412,23 +435,7 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       // article mentions them.
       { "@id": NORMAN_BRAND["@id"] },
       { "@id": ALTA_BRAND["@id"] },
-      // Avista and the DOE were dropped from mentions. Avista appears once, about
-      // utility hookups, and does not define what the article is about; the body
-      // link stays. The DOE stays in the graph where it belongs — as publisher of
-      // the cited fact sheet — rather than also claiming to be a subject of the
-      // article. Mentions that overreach get discounted, so the honest set is
-      // the smaller one.
-      {
-        "@type": "AdministrativeArea",
-        "@id": "https://www.kcgov.us/#administrativearea",
-        name: "Kootenai County",
-        url: "https://www.kcgov.us",
-        containedInPlace: { "@type": "State", name: "Idaho" },
-        sameAs: [
-          "https://www.kcgov.us/1054/Population",
-          "https://en.wikipedia.org/wiki/Kootenai_County,_Idaho",
-        ],
-      },
+      kootenaiCountyRef(),
     ],
     citation: [
       {
@@ -461,44 +468,6 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
   // Preserves the subject the hand-written route declared before migration.
   "designer-window-treatments-coeur-dalene-post-falls": {
     about: { "@id": `${BUSINESS.url}/areas/coeur-d-alene#service` },
-  },
-  // Also carried over from a hand-written route. This one is about structured
-  // data itself rather than window coverings, so the generic catalog subject
-  // would have been actively wrong. Three concept nodes, two corroborated by
-  // external references, exactly as the route declared them.
-  "what-is-an-entity-graph": {
-    about: [
-      {
-        "@type": "Thing",
-        name: "Entity Graph",
-        sameAs: "https://en.wikipedia.org/wiki/Knowledge_graph",
-      },
-      { "@type": "Thing", name: "Structured Data", sameAs: "https://schema.org" },
-      { "@type": "Thing", name: "Local SEO" },
-    ],
-  },
-  "are-costco-window-treatments-worth-it-a-local-dealer-tells-you-the-truth": {
-    citation: [
-      {
-        "@type": "DiscussionForumPosting",
-        "@id": "https://www.reddit.com/r/Costco/comments/1lk91hv/costco_window_treatments_whats_your_option/",
-        url: "https://www.reddit.com/r/Costco/comments/1lk91hv/costco_window_treatments_whats_your_option/",
-        headline: "Costco window treatments — what's your option?",
-        datePublished: "2025-05-01T00:00:00Z",
-        author: {
-          "@type": "Person",
-          name: "Neutrinos25",
-          url: "https://www.reddit.com/user/Neutrinos25/",
-        },
-        isPartOf: { "@type": "WebSite", name: "Reddit", url: "https://www.reddit.com" },
-      },
-    ],
-    mentions: [
-      { "@id": `${BUSINESS.url}/blog/why-custom-window-treatments-in-coeur-d-alene-and-post-falls-don-t-have-to-cost-twice-what-they-should#article` },
-    ],
-    relatedLink: [
-      `${BUSINESS.url}/blog/why-custom-window-treatments-in-coeur-d-alene-and-post-falls-don-t-have-to-cost-twice-what-they-should`,
-    ],
   },
   "woodlore-plus-shutters-north-idaho": {
     citation: [
@@ -560,7 +529,7 @@ const SLUG_ARTICLE_EXTENSIONS: Record<string, {
       // resolves site-wide; the post-build sweep is what guarantees that.
       { "@id": NORMAN_BRAND["@id"] },
       { "@type": "Organization", name: "California Air Resources Board", sameAs: "https://ww2.arb.ca.gov" },
-      { "@type": "Organization", name: "U.S. Department of Energy", sameAs: "https://www.energy.gov" },
+      { "@id": "https://www.energy.gov/#organization" },
       { "@type": "Organization", name: "U.S. Environmental Protection Agency", sameAs: "https://www.epa.gov" },
       {
         "@type": "DefinedTerm",
@@ -617,70 +586,73 @@ function deriveArticleAbout(post: BlogPost): object {
     [/motoriz|smart-shade|automation|battery-operated|somfy|bond-bridge/, "motorization"],
     [/shutter|woodlore|bifold-180|plantation|aluminum-interior/, "shutters"],
     [/blind/, "blinds"],
+    [/hunter-douglas|silhouette|pirouette|duette/, "hunter-douglas"],
+    [/norman/, "norman"],
   ];
   for (const [pattern, productSlug] of productMap) {
     if (pattern.test(slug)) {
       return { "@id": `${BUSINESS.url}/products/${productSlug}#service` };
     }
   }
-  // Fall back to the business's own window treatment catalog rather than an
-  // anonymous Thing. An anonymous node connects to nothing and reinforces
-  // nothing; the catalog is a real entity defined once on the homepage, so a
-  // topical article now points at something the rest of the graph knows about.
   return { "@id": `${BUSINESS.url}/#window-treatments` };
 }
 
 function ArticleSchema({ post }: { post: BlogPost }) {
   const extensions = SLUG_ARTICLE_EXTENSIONS[post.slug];
-  const baseMentions: object[] = [
-    // Was a full anonymous AdministrativeArea rebuilt on all 51 articles that
-    // reach this line. It is one region, defined on /areas, so every article
-    // now points at the same entity instead of describing its own.
-    northIdahoRef(),
-    cityRef("Coeur d'Alene"),
-    cityRef("Post Falls"),
-    cityRef("Hayden"),
-    cityRef("Rathdrum"),
-    cityRef("Sandpoint"),
-  ];
+  const searchableText = `${post.title} ${post.excerpt} ${post.content}`.toLowerCase();
+
+  const dynamicPlaceMentions: object[] = [];
+  if (/north(?:ern)?\s+idaho/.test(searchableText)) {
+    dynamicPlaceMentions.push(northIdahoRef());
+  }
+  if (/kootenai\s+county/.test(searchableText)) {
+    dynamicPlaceMentions.push(kootenaiCountyRef());
+  }
+  for (const area of SERVICE_AREAS) {
+    const cityLower = area.name.toLowerCase();
+    const altCity = cityLower.replace(/['’]/g, "");
+    if (searchableText.includes(cityLower) || searchableText.includes(altCity)) {
+      dynamicPlaceMentions.push(cityRef(area.name));
+    }
+  }
+
+  const seenMentionIds = new Set<string>();
+  const mergedMentions: object[] = [];
+  for (const item of [...dynamicPlaceMentions, ...(extensions?.mentions ?? [])]) {
+    const id = (item as { "@id"?: string })["@id"];
+    if (id) {
+      if (seenMentionIds.has(id)) continue;
+      seenMentionIds.add(id);
+    }
+    mergedMentions.push(item);
+  }
 
   const pageUrl = `${BUSINESS.url}/blog/${post.slug}`;
   const articleSubject = extensions?.about ?? deriveArticleAbout(post);
   const imageUrl = post.featuredImage?.startsWith("http")
     ? post.featuredImage
     : `${BUSINESS.url}${post.featuredImage ?? ""}`;
+  const datePublishedIso = toPacificIso(post.date);
+  const dateModifiedIso = toPacificIso(post.dateModified || post.date);
 
-  /**
-   * The page as an entity, distinct from the article as a work. Without this
-   * the article was a rich but free-floating object: mainEntityOfPage was a
-   * bare URL string pointing at nothing declared, so nothing tied the article
-   * to the website, the breadcrumb or the image. This is the hinge that joins
-   * them.
-   */
-  const webpageSchema = {
-    "@context": "https://schema.org",
+  const webpageNode = {
     "@type": "WebPage",
     "@id": `${pageUrl}#webpage`,
     url: pageUrl,
     name: post.seoTitle || post.title,
     description: post.metaDescription || post.excerpt,
     isPartOf: { "@id": `${BUSINESS.url}/#website` },
-    about: articleSubject,
     mainEntity: { "@id": `${pageUrl}#article` },
     breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
+    ...(post.faqs.length > 0 && { hasPart: { "@id": `${pageUrl}#faq` } }),
     ...(post.featuredImage && {
       primaryImageOfPage: { "@id": `${pageUrl}#primaryimage` },
     }),
     inLanguage: "en-US",
   };
 
-  /**
-   * Dimensions come from the file rather than the previous hard-coded
-   * 1200x630, which was wrong for every post — this one's hero is 1672x941.
-   */
-  const primaryImageSchema = post.featuredImage
+  const primaryImageNode = post.featuredImage
     ? {
-        "@context": "https://schema.org",
         "@type": "ImageObject",
         "@id": `${pageUrl}#primaryimage`,
         url: imageUrl,
@@ -692,14 +664,13 @@ function ArticleSchema({ post }: { post: BlogPost }) {
       }
     : null;
 
-  const schema = {
-    "@context": "https://schema.org",
+  const articleNode = {
     "@type": "BlogPosting",
     "@id": `${pageUrl}#article`,
     headline: post.title,
     description: post.excerpt,
-    datePublished: post.date,
-    dateModified: (() => { const d = post.dateModified || post.date; return d.includes("T") ? d : `${d}T00:00:00-07:00`; })(),
+    datePublished: datePublishedIso,
+    dateModified: dateModifiedIso,
     wordCount: post.wordCount,
     articleSection: post.category,
     keywords: deriveKeywords(post),
@@ -708,60 +679,54 @@ function ArticleSchema({ post }: { post: BlogPost }) {
     // Canonical Person / business nodes stay on /about and /; the @ids still join.
     author: OWNER_STUB,
     publisher: BUSINESS_STUB,
-    // Resolves to the WebPage node above rather than a bare URL string.
     mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
-    // ${BUSINESS.url}/blog is the Blog entity the /blog route already defines
-    // and the ID the whole site already uses. Minting a competing
-    // /blog#collection would have split one collection into two.
     isPartOf: { "@id": `${BUSINESS.url}/blog` },
     about: articleSubject,
-    mentions: [...baseMentions, ...(extensions?.mentions ?? [])],
+    ...(mergedMentions.length > 0 && { mentions: mergedMentions }),
     ...(extensions?.citation && { citation: extensions.citation }),
     ...(extensions?.relatedLink && { relatedLink: extensions.relatedLink }),
     speakable: {
       "@type": "SpeakableSpecification",
       cssSelector: ["h1", ".post-excerpt"],
     },
-    // References the ImageObject defined above instead of restating an
-    // anonymous copy of it inline.
     ...(post.featuredImage && { image: { "@id": `${pageUrl}#primaryimage` } }),
   };
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
+  const breadcrumbNode = {
     "@type": "BreadcrumbList",
-    "@id": `${BUSINESS.url}/blog/${post.slug}#breadcrumb`,
+    "@id": `${pageUrl}#breadcrumb`,
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
       { "@type": "ListItem", position: 2, name: "Blog", item: `${BUSINESS.url}/blog` },
-      { "@type": "ListItem", position: 3, name: post.title, item: `${BUSINESS.url}/blog/${post.slug}` },
+      { "@type": "ListItem", position: 3, name: post.title, item: pageUrl },
     ],
   };
 
-  const faqSchema = post.faqs.length > 0 ? {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "@id": `${pageUrl}#faq`,
-    isPartOf: { "@id": `${pageUrl}#webpage` },
-    mainEntity: post.faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
-      },
-    })),
-  } : null;
+  const faqNode =
+    post.faqs.length > 0
+      ? {
+          "@type": "FAQPage",
+          "@id": `${pageUrl}#faq`,
+          isPartOf: { "@id": `${pageUrl}#webpage` },
+          mainEntity: post.faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: faq.answer,
+            },
+          })),
+        }
+      : null;
 
-  const additionalSchemas = SLUG_SCHEMA[post.slug] || [];
+  const additionalNodes = SLUG_SCHEMA[post.slug] || [];
 
-  const reviewSchema = post.review?.reviewerName
+  const reviewNode = post.review?.reviewerName
     ? {
-        "@context": "https://schema.org",
         "@type": "Review",
         "@id": `${BUSINESS.url}/#review-${post.slug}`,
         ...(post.review.reviewUrl && { url: post.review.reviewUrl }),
-        ...(post.review.reviewDate && { datePublished: post.review.reviewDate }),
+        ...(post.review.reviewDate && { datePublished: toPacificIso(post.review.reviewDate) }),
         reviewBody: post.review.reviewBody,
         reviewRating: {
           "@type": "Rating",
@@ -775,50 +740,25 @@ function ArticleSchema({ post }: { post: BlogPost }) {
           ...(post.review.reviewerJobTitle && { jobTitle: post.review.reviewerJobTitle }),
         },
         itemReviewed: { "@id": `${BUSINESS.url}/#business` },
-        subjectOf: { "@id": `${BUSINESS.url}/blog/${post.slug}` },
+        subjectOf: { "@id": `${pageUrl}#article` },
       }
     : null;
 
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-      />
-      {primaryImageSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(primaryImageSchema) }}
-        />
-      )}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      {faqSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      )}
-      {reviewSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
-        />
-      )}
-      {additionalSchemas.map((s, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }}
-        />
-      ))}
-    </>
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@graph": [
+          webpageNode,
+          articleNode,
+          ...(primaryImageNode ? [primaryImageNode] : []),
+          breadcrumbNode,
+          ...(faqNode ? [faqNode] : []),
+          ...(reviewNode ? [reviewNode] : []),
+          ...additionalNodes,
+        ],
+      }}
+    />
   );
 }
 
@@ -849,7 +789,7 @@ export default async function BlogPostPage({ params }: Props) {
                 {post.category}
               </span>
               <span className="text-warm-gray-400">·</span>
-              <time className="text-warm-gray-500 text-sm" dateTime={post.date}>
+              <time className="text-warm-gray-500 text-sm" dateTime={toPacificIso(post.date)}>
                 {new Date(post.date).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",

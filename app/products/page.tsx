@@ -55,8 +55,8 @@ export const metadata: Metadata = {
 };
 
 function ProductsHubSchema() {
+  const aluminumUrl = `${BUSINESS.url}/products/aluminum-shutters`;
   const collectionPageSchema = {
-    "@context": "https://schema.org",
     "@type": "CollectionPage",
     "@id": `${PAGE_URL}#webpage`,
     url: PAGE_URL,
@@ -66,41 +66,82 @@ function ProductsHubSchema() {
     isPartOf: { "@id": `${BUSINESS.url}/#website` },
     about: { "@id": `${BUSINESS.url}/#business` },
     breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: `${BUSINESS.url}/share-image?v=20260924`,
+      width: 1200,
+      height: 630,
+    },
     inLanguage: "en-US",
-    // Each product page defines its own WebPage and Service; reference them by
-    // @id rather than restating them here, so there is one definition per node.
-    hasPart: [{ "@id": `${BUSINESS.url}/products/hunter-douglas#webpage` }, { "@id": `${TWO_URL}#webpage` }, { "@id": `${NORMAN_URL}#webpage` }, ...PRODUCTS.map((p) => ({
-      "@id": `${BUSINESS.url}/products/${p.slug}#webpage`,
-    }))],
+    hasPart: [
+      { "@id": `${BUSINESS.url}/products/hunter-douglas#webpage` },
+      { "@id": `${BUSINESS.url}/products/two#webpage` },
+      { "@id": `${BUSINESS.url}/products/norman#webpage` },
+      { "@id": `${aluminumUrl}#webpage` },
+      ...PRODUCTS.map((p) => ({
+        "@id": `${BUSINESS.url}/products/${p.slug}#webpage`,
+      })),
+    ],
     mainEntity: {
       "@type": "ItemList",
       name: "Window Treatments Installed by Luxe Window Works",
-      numberOfItems: PRODUCTS.length + 3,
-      itemListElement: [...PRODUCTS.map((p, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        name: p.name,
-        url: `${BUSINESS.url}/products/${p.slug}`,
-        item: { "@id": `${BUSINESS.url}/products/${p.slug}#service` },
-      })), { "@type": "ListItem", position: PRODUCTS.length + 1, name: "TWO Collection", url: TWO_URL, item: { "@id": `${TWO_URL}#webpage` } }, { "@type": "ListItem", position: PRODUCTS.length + 2, name: "Hunter Douglas Collection", url: HD_URL, item: { "@id": `${BUSINESS.url}/products/hunter-douglas#webpage` } }, { "@type": "ListItem", position: PRODUCTS.length + 3, name: "Norman Collection", url: NORMAN_URL, item: { "@id": `${NORMAN_URL}#webpage` } }],
+      numberOfItems: PRODUCTS.length + 4,
+      itemListElement: [
+        ...PRODUCTS.map((p, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: p.name,
+          url: `${BUSINESS.url}/products/${p.slug}`,
+          item: { "@id": `${BUSINESS.url}/products/${p.slug}#service` },
+        })),
+        {
+          "@type": "ListItem",
+          position: PRODUCTS.length + 1,
+          name: "TWO Collection",
+          url: TWO_URL,
+          item: { "@id": `${BUSINESS.url}/products/two#webpage` },
+        },
+        {
+          "@type": "ListItem",
+          position: PRODUCTS.length + 2,
+          name: "Hunter Douglas Collection",
+          url: HD_URL,
+          item: { "@id": `${BUSINESS.url}/products/hunter-douglas#webpage` },
+        },
+        {
+          "@type": "ListItem",
+          position: PRODUCTS.length + 3,
+          name: "Norman Collection",
+          url: NORMAN_URL,
+          item: { "@id": `${BUSINESS.url}/products/norman#webpage` },
+        },
+        {
+          "@type": "ListItem",
+          position: PRODUCTS.length + 4,
+          name: "Weatherwell Elite Aluminum Shutters",
+          url: aluminumUrl,
+          item: { "@id": `${aluminumUrl}#service` },
+        },
+      ],
     },
   };
 
   const breadcrumbSchema = {
-    "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "@id": `${PAGE_URL}#breadcrumb`,
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
+      { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
       { "@type": "ListItem", position: 2, name: "Products", item: PAGE_URL },
     ],
   };
 
   return (
-    <>
-      <JsonLd data={collectionPageSchema} />
-      <JsonLd data={breadcrumbSchema} />
-    </>
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@graph": [collectionPageSchema, breadcrumbSchema],
+      }}
+    />
   );
 }
 

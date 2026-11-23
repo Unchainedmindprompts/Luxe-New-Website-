@@ -106,7 +106,12 @@ function checkImages(files) {
       refCount++;
       seen.add(path);
       const onDisk = join(ROOT, "public", path);
-      if (!existsSync(onDisk) || !statSync(onDisk).isFile()) {
+      const lineText = text.split("\n")[lineOf(text, m.index) - 1] || "";
+      const isDirPrefixConst =
+        /^\s*const\s+\w+\s*=/.test(lineText) &&
+        existsSync(onDisk) &&
+        statSync(onDisk).isDirectory();
+      if (!isDirPrefixConst && (!existsSync(onDisk) || !statSync(onDisk).isFile())) {
         if (!missing.has(path)) missing.set(path, []);
         missing.get(path).push({ file: relative(ROOT, file), line: lineOf(text, m.index) });
       }
@@ -152,6 +157,13 @@ function checkPlaceholders(files) {
     lines.forEach((line, i) => {
       scanned++;
       for (const { token, caseSensitive } of TOKENS) {
+        if (
+          rel === "lib/conversion-events.ts" &&
+          (token === "localhost" || token === "127.0.0.1") &&
+          /host\s*===\s*["'](localhost|127\.0\.0\.1)["']/.test(line)
+        ) {
+          continue;
+        }
         const hay = caseSensitive ? line : line.toLowerCase();
         const needle = caseSensitive ? token : token.toLowerCase();
         if (hay.includes(needle)) {

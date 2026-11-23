@@ -13,7 +13,19 @@ export const metadata: Metadata = {
   title: "TWO Shutters & Shades | Luxe Window Works",
   description: "Explore the TWO collection with Luxe Window Works: interior shutters, roller shades, Weatherwell aluminum shutters, outdoor shades and automation. Free in-home consultation.",
   alternates: { canonical: url },
-  openGraph: { title: "The TWO Collection | Luxe Window Works", description: "Beautiful indoors. More possibilities outside. Custom shutters and shades, measured and installed across North Idaho, Seattle's Eastside, and the Salt Lake area.", url, images: ["/images/weatherwell-elite/IMG_1086.jpeg"] },
+  openGraph: {
+    title: "The TWO Collection | Luxe Window Works",
+    description: "Beautiful indoors. More possibilities outside. Custom shutters and shades, measured and installed across North Idaho — Post Falls, Coeur d'Alene, Hayden, Rathdrum, and Sandpoint.",
+    url,
+    images: [
+      {
+        url: `${BUSINESS.url}/images/weatherwell-elite/IMG_1086.jpeg`,
+        width: 900,
+        height: 900,
+        alt: "Dark aluminum shutters with sliding and folding panels on a modern home",
+      },
+    ],
+  },
 };
 export default function TwoCollection() {
   return <>
@@ -23,7 +35,14 @@ export default function TwoCollection() {
         name: "The TWO Collection at Luxe Window Works", description: metadata.description,
         isPartOf: { "@id": `${BUSINESS.url}/#website` },
         about: [{ "@id": THE_WINDOW_OUTFITTERS["@id"] }, { "@id": `${url}#service` }],
-        breadcrumb: { "@id": `${url}#breadcrumb` }, inLanguage: "en-US",
+        breadcrumb: { "@id": `${url}#breadcrumb` },
+        primaryImageOfPage: {
+          "@type": "ImageObject",
+          url: `${BUSINESS.url}/images/weatherwell-elite/IMG_1086.jpeg`,
+          width: 900,
+          height: 900,
+        },
+        inLanguage: "en-US",
         mainEntity: {
           "@type": "ItemList", name: "TWO shutters, shades and automation", numberOfItems: ranges.length,
           itemListElement: ranges.map((r, i) => ({ "@type": "ListItem", position: i + 1, name: r.name, url: `${url}#${r.id}`, item: twoProductRef(r.id) })),
@@ -35,7 +54,7 @@ export default function TwoCollection() {
         serviceType: CUSTOM_WINDOW_TREATMENTS,
         provider: { "@id": `${BUSINESS.url}/#business` },
         areaServed: SERVICE_AREAS.filter(a => a.state === "ID").map(a => cityRef(a.name)),
-        description: "Personal product guidance, custom measurements and professional installation of TWO interior shutters, roller shades, outdoor aluminum shutters, exterior shades and compatible shade automation in North Idaho, on Seattle's Eastside, and in the Salt Lake area.",
+        description: "Personal product guidance, custom measurements and professional installation of TWO interior shutters, roller shades, outdoor aluminum shutters, exterior shades and compatible shade automation across North Idaho — Post Falls, Coeur d'Alene, Hayden, Rathdrum, and Sandpoint.",
         hasOfferCatalog: { "@id": `${url}#catalog` },
         mainEntityOfPage: { "@id": `${url}#webpage` },
       },

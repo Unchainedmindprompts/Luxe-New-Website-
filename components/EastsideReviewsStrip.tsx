@@ -27,8 +27,8 @@ export default function EastsideReviewsStrip() {
         <p className="mt-5 text-lg leading-relaxed text-warm-gray-700">
           Luxe Window Works holds a {BUSINESS.google.rating.toFixed(1)} rating across{" "}
           {BUSINESS.google.reviewCount} Google reviews. A review belongs to the business, not
-          to one service area: the same dealer and the same standard, in North Idaho and on
-          the Eastside.
+          to one service area: the same dealer and the same standard, in every market we
+          serve.
         </p>
         <div className="mt-9 grid gap-6 md:grid-cols-2">
           {reviews.map((review) => (

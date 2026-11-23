@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 import { TrackedCta } from "@/components/TrackedCta";
 import { CONVERSION_EVENTS } from "@/lib/conversion-events";
 import { BUSINESS, SERVICE_AREAS, REVIEWS } from "@/lib/constants";
-import { cityRef, northIdahoRef } from "@/lib/cities";
+import { cityRef, kootenaiCountyRef, northIdahoRef } from "@/lib/cities";
 import HunterDouglasFeature from "@/components/HunterDouglasFeature";
 import { TWO_URL } from "@/lib/two";
 import { BUSINESS_STUB, OWNER_STUB, productServiceRef } from "@/lib/schema";
@@ -33,27 +33,52 @@ const businessNode = {
   ...BUSINESS_STUB,
   legalName: "Luxe Window Works LLC",
   description:
-    "Premium custom window treatments — 24 years consulting, designing, and installing. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.",
+    "Custom window treatments by in-home consultation — 24 years consulting, designing, and installing, backed by our Lifetime Installation Guarantee. Headquartered in Post Falls, ID, serving North Idaho, Seattle's Eastside, and the Salt Lake area.",
   url: BASE,
   telephone: BUSINESS.phoneE164,
   email: BUSINESS.email,
   priceRange: "$$",
   foundingDate: "2025",
+  publicAccess: false,
   image: {
     "@type": "ImageObject",
-    url: `${BASE}/images/hero-lake-room.webp`,
-    contentUrl: `${BASE}/images/hero-lake-room.webp`,
-    width: 1672,
-    height: 941,
+    url: `${BASE}/images/luxe-completed-installation.webp`,
+    contentUrl: `${BASE}/images/luxe-completed-installation.webp`,
+    width: 2048,
+    height: 1152,
   },
   logo: {
     "@type": "ImageObject",
     "@id": `${BASE}/#logo`,
-    url: `${BASE}/icon.png`,
-    contentUrl: `${BASE}/icon.png`,
+    url: `${BASE}/images/luxe-logo.webp`,
+    contentUrl: `${BASE}/images/luxe-logo.webp`,
+    width: 925,
+    height: 388,
     caption: "Luxe Window Works",
   },
   founder: { "@id": `${BASE}/#owner` },
+  knowsAbout: [
+    "Custom window treatments",
+    "Plantation shutters",
+    "Cellular honeycomb shades",
+    "Solar shades and exterior solar screens",
+    "Roller, Roman, and banded shades",
+    "Motorized window treatments",
+    "Hunter Douglas window treatments and PowerView automation",
+    "Alta Window Fashions",
+    "Norman Window Fashions",
+    "Lafayette Interior Fashions",
+    "Corradi USA exterior shading systems",
+    "The Window Outfitters (TWO USA) shutters and outdoor shades",
+  ],
+  makesOffer: {
+    "@type": "Offer",
+    "@id": `${BASE}/#free-consultation-offer`,
+    name: "Free In-Home Window Treatment Consultation",
+    price: "0",
+    priceCurrency: "USD",
+    url: `${BASE}/book`,
+  },
   address: {
     "@type": "PostalAddress",
     streetAddress: BUSINESS.address.street,
@@ -68,23 +93,8 @@ const businessNode = {
     longitude: BUSINESS.geo.lng,
   },
   areaServed: [
-    // Everything here is a reference except the county. The five cities are
-    // defined on their own /areas/{slug} pages; North Idaho is defined on the
-    // /areas hub, which has no {slug} of its own but is the page that
-    // represents the region. Their county containment moved into
-    // lib/cities.ts so it travels with the entity instead of living only on
-    // this page.
-    //
-    // Kootenai County stays a literal node: it is a different geographic
-    // concept from the region, it has no page of its own, and collapsing it
-    // into North Idaho would claim the two are the same place.
     northIdahoRef(),
-    {
-      "@type": "AdministrativeArea",
-      name: "Kootenai County",
-      sameAs: "https://en.wikipedia.org/wiki/Kootenai_County,_Idaho",
-      containedInPlace: { "@type": "State", name: "Idaho" },
-    },
+    kootenaiCountyRef(),
     ...SERVICE_AREAS.map((area) => cityRef(area.name)),
   ],
   openingHoursSpecification: [
@@ -139,11 +149,7 @@ const businessNode = {
         "@type": "OfferCatalog",
         name: "Blinds",
         itemListElement: [
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Horizontal Blinds" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Wood Blinds" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Faux Wood Blinds", url: `${BASE}/products/blinds` } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Composite Blinds" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Composite Wood Blinds" } },
+          { "@type": "Offer", itemOffered: productServiceRef("blinds") },
         ],
       },
       {
@@ -196,11 +202,13 @@ const webpageNode = {
   description:
     "Custom blinds, shades, shutters, and motorized window treatments. 24 years consulting, designing, and installing. Free in-home consultations in North Idaho, on Seattle's Eastside, and in the Salt Lake area.",
   isPartOf: { "@id": `${BASE}/#website` },
-  about: { "@id": `${BASE}/#business` },
+  about: { "@id": `${BASE}/#window-treatments` },
   mainEntity: { "@id": `${BASE}/#business` },
   primaryImageOfPage: {
     "@type": "ImageObject",
-    url: `${BASE}/images/hero-lake-room.webp`,
+    url: `${BASE}/share-image?v=20260924`,
+    width: 1200,
+    height: 630,
   },
   inLanguage: "en-US",
 };
@@ -369,7 +377,7 @@ export default function HomePage() {
               </span>
             </div>
             <span className="hidden md:inline text-warm-gray-600">|</span>
-            <span className="text-warm-gray-300">Serving North Idaho · Seattle's Eastside · Salt Lake Area</span>
+            <span className="text-warm-gray-300">Serving North Idaho · Seattle&apos;s Eastside · Salt Lake Area</span>
           </div>
         </div>
       </section>
@@ -422,7 +430,7 @@ export default function HomePage() {
           </p>
           <p className="mt-6 text-warm-gray-600 leading-relaxed">
             Our experience in window treatments began in 2002. Luxe opened in North Idaho in 2025
-            and now serves Seattle's Eastside and the Salt Lake area as well,
+            and now serves Seattle&apos;s Eastside and the Salt Lake area as well,
             bringing 24 years of hands-on knowledge to every consultation and installation.
           </p>
           <Link href="/about" className="inline-block mt-4 font-medium text-charcoal underline underline-offset-4">

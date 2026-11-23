@@ -69,21 +69,7 @@ wordCount: 2400
 <p><strong>The best value isn't in the biggest discount — it's in the right solution from someone you trust.</strong></p>
 <h3>Trust Is the Only Real Differentiator</h3>
 <p>In a market where products are increasingly comparable and pricing is more transparent, trust is what sets professionals apart. When you work with someone who listens, advises honestly, and prioritizes your satisfaction over their commission, that relationship is worth far more than a fake 50% off deal that evaporates when they walk out the door.</p>
-<h2>Common Questions About Choosing a Window Treatment Company</h2>
-<h3>How can I tell if a sales rep is using high-pressure tactics?</h3>
-<p>Watch for artificial urgency, vague pricing, and resistance to letting you think things over. If you feel uncomfortable, rushed, or manipulated — trust that feeling. A good consultant gives you space and clarity, not stress.</p>
-<h3>Is it normal to get a quote and take time before deciding?</h3>
-<p>Absolutely — and it's smart. Comparing quotes, researching products, and discussing options with your family are all part of making a confident decision. Any rep who pressures you to decide on the spot is prioritizing their timeline, not yours.</p>
-<h3>What should I ask during a window treatment consultation?</h3>
-<p>Ask about product durability, warranty terms, installation timelines, and whether the team has experience with your specific situation — oversized windows, motorization, historic homes, or unusual frame conditions. A knowledgeable consultant will welcome every one of those questions.</p>
-<h3>How do I know if a discount is real or just a sales tactic?</h3>
-<p>If the offer expires the moment the rep leaves your house, it was never a real discount. Legitimate promotions have clear timelines and don't punish you for taking a few days to think. Ask for any offer in writing and confirm it's still valid if you follow up later.</p>
-<h3>What's the difference between a consultation and a sales pitch?</h3>
-<p>A consultation is about discovery — understanding your needs, your space, and your goals. A pitch is about closing — getting you to commit as quickly as possible. A real consultation leaves you informed and confident. A pitch leaves you pressured and uncertain.</p>
-<h3>Should I get multiple quotes before deciding?</h3>
-<p>Yes, especially for larger projects. Two or three quotes help you understand pricing ranges, product options, and service quality. Just make sure you're comparing equivalent specs — fabric grade, motorization options, and installation quality all vary significantly between providers.</p>
-<h3>Can I trust online reviews when choosing a window treatment company?</h3>
-<p>Reviews are useful, but look for patterns over time. Consistent feedback about communication, quality, and follow-through is more reliable than a handful of perfect five-star reviews. Pay attention to how a company responds to negative reviews — that reveals a lot about their professionalism and accountability.</p>
+
 <h2>5 Tips for Navigating Window Treatment Sales</h2>
 <h3>Tip 1: Never Sign on the First Visit — Unless You're Completely Confident</h3>
 <p>There's no legitimate reason you need to commit the same day a rep walks through your door. Take time to review the quote, compare options, and sleep on it. A trustworthy company will respect that. If they push back, that's your signal to walk away.</p>

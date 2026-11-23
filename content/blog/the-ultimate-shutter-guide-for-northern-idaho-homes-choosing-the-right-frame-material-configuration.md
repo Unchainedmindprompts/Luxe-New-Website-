@@ -162,29 +162,6 @@ wordCount: 3700
 </ol>
 <p>For most homeowners, the trade-off is worth it — shutters provide year-round benefits while tilt-in cleaning is occasional — but it's your call to make with full information.</p>
 
-<h2>Common Questions About Plantation Shutters in Northern Idaho Homes</h2>
-
-<h3>Can I still open my window for airflow in summer if I have shutters?</h3>
-<p>Yes, absolutely. Shutters are mounted on hinges, so you can swing the panels fully open to expose the window and operate it normally for fresh air. What shutters do affect is the tilt-in cleaning feature on double-hung windows. If you have inside-mounted shutters, you won't be able to tilt the sash inward for cleaning. If you rely heavily on that feature, discuss it with your installer — an outside-mount L-frame is the only configuration that preserves tilt-in functionality.</p>
-
-<h3>Will plantation shutters block my view of the lake?</h3>
-<p>When the louvers are fully open, you'll have nearly unobstructed views — the louvers lie flat and the frame is minimal. However, the shutter frame itself will always be visible around the perimeter. If you have a prized lake view, consider using shutters only on windows where privacy and light control matter more than sightlines, and choosing solar shades or no treatment at all on your lake-view windows. Alternatively, choose 4.5-inch louvers and minimal framing to maximize the view when open.</p>
-
-<h3>What shutter material is best for high-humidity areas in Northern Idaho?</h3>
-<p>For bathrooms, kitchens, laundry rooms, and lakefront homes in Northern Idaho, poly (PVC/polyresin) or aluminum shutters are the best choices. Both materials are moisture-resistant and won't warp, crack, or swell with humidity changes. Real wood shutters should be avoided anywhere with consistent steam or condensation. Composite shutters handle occasional moisture reasonably well but aren't ideal for daily steam exposure. When in doubt, aluminum shutters offer the highest moisture resistance with the longest lifespan — and they're priced competitively with composite.</p>
-
-<h3>How much window depth do I need for plantation shutters?</h3>
-<p>The key measurement is 2.5 inches of depth inside your window opening, measured from the front of the frame to the glass or nearest obstruction. Here's what makes this surprisingly simple: all standard louver sizes — 2.5-inch, 3.5-inch, and 4.5-inch — require the same 2.5 inches of clearance. The measurement is taken from the center of the T-post, so louvers extend equally forward and backward. If you have 2.5 inches of depth, you can choose any louver size based purely on aesthetics. If your depth is less than 2.5 inches, an outside-mount L-frame eliminates the depth concern entirely.</p>
-
-<h3>What is the difference between a Z-frame and an L-frame shutter?</h3>
-<p>A Z-frame is designed for inside-mount installations on windows without existing trim — it serves as both the shutter frame and the finished trim edge. It's ideal when you have drywall returns and want a built-in, architectural look. An L-frame is designed for outside-mount installations or windows with limited depth — it mounts to the wall or trim surface rather than inside the opening. The key practical difference: Z-frames require adequate window depth and work best on untrimmed windows; L-frames give you more flexibility for shallow windows, out-of-square openings, and windows where you want to preserve tilt-in cleaning functionality.</p>
-
-<h3>Do I need a divider rail on tall shutter panels?</h3>
-<p>For panels over 60 inches tall, a divider rail is strongly recommended — especially in poly or composite materials. Tall panels without structural support can flex and sag over time, which affects both appearance and operation. A divider rail adds a horizontal bar that splits the panel into upper and lower sections, each tilting independently, while also adding rigidity that prevents long-term sagging. If you don't like the visual break of a divider rail, ask about split tilt with hidden control — it gives you independent top/bottom operation without the visible rail, though it requires more precise manufacturing.</p>
-
-<h3>Are aluminum shutters more expensive than composite shutters?</h3>
-<p>No — and this surprises most homeowners. Interior aluminum shutters are priced competitively with composite shutters, not significantly more expensive. Many people assume aluminum is a premium upgrade with a premium price tag, but that's not how the market works for interior shutters. The real difference is performance: aluminum shutters are completely moisture-proof, won't sag or warp, and require virtually zero maintenance over their lifespan. If you're choosing between composite and aluminum and durability matters to you, aluminum is often the smarter long-term value — especially for lakefront homes or high-moisture environments in Northern Idaho.</p>
-
 <h2>Mark's Top 5 Tips for Choosing Shutters in Northern Idaho</h2>
 
 <h3>Tip 1: Understand that 2.5 inches of depth works for any louver size</h3>

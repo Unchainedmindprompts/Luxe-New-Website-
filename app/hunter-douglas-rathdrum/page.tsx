@@ -9,6 +9,7 @@ import { TrackedCta } from "@/components/TrackedCta";
 import { BUSINESS } from "@/lib/constants";
 import { cityRef } from "@/lib/cities";
 import { HUNTER_DOUGLAS } from "@/lib/hunter-douglas";
+import { CUSTOM_WINDOW_TREATMENTS } from "@/lib/schema";
 
 const PAGE = `${BUSINESS.url}/hunter-douglas-rathdrum`;
 const MEDIA = "/images/hunter-douglas/installations";
@@ -43,8 +44,8 @@ export const metadata: Metadata = {
   title: "Hunter Douglas Dealer in Rathdrum | Luxe Window Works",
   description,
   alternates: { canonical: PAGE },
-  openGraph: { title: "Hunter Douglas Dealer in Rathdrum | Luxe Window Works", description, url: PAGE, images: [{ url: HERO, width: 2048, height: 1152, alt: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works" }] },
-  twitter: { card: "summary_large_image", title: "Hunter Douglas Dealer in Rathdrum | Luxe Window Works", description, images: [HERO] },
+  openGraph: { title: "Hunter Douglas Dealer in Rathdrum | Luxe Window Works", description, url: PAGE, images: [{ url: `${BUSINESS.url}${HERO}`, width: 2048, height: 1152, alt: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works" }] },
+  twitter: { card: "summary_large_image", title: "Hunter Douglas Dealer in Rathdrum | Luxe Window Works", description, images: [`${BUSINESS.url}${HERO}`] },
 };
 
 function BookButton({ children = "Book Your Free Consultation" }: { children?: React.ReactNode }) {
@@ -54,8 +55,9 @@ function BookButton({ children = "Book Your Free Consultation" }: { children?: R
 export default function HunterDouglasRathdrumPage() {
   return <>
     <JsonLd data={{ "@context": "https://schema.org", "@graph": [
-      { "@type": "WebPage", "@id": `${PAGE}#webpage`, url: PAGE, name: "Hunter Douglas Window Treatments in Rathdrum", description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, about: [{ "@id": `${BUSINESS.url}/products/hunter-douglas#service` }, { "@id": HUNTER_DOUGLAS["@id"] }, cityRef("Rathdrum")], spatialCoverage: cityRef("Rathdrum"), breadcrumb: { "@id": `${PAGE}#breadcrumb` }, primaryImageOfPage: { "@id": `${PAGE}#primaryimage` } },
-      { "@type": "ImageObject", "@id": `${PAGE}#primaryimage`, contentUrl: `${BUSINESS.url}${HERO}`, width: 2048, height: 1152, caption: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works", creator: { "@type": "Organization", name: "Luxe Window Works", url: BUSINESS.url }, creditText: "Luxe Window Works" },
+      { "@type": "WebPage", "@id": `${PAGE}#webpage`, url: PAGE, name: "Hunter Douglas Window Treatments in Rathdrum", description, isPartOf: { "@id": `${BUSINESS.url}/#website` }, mainEntity: { "@id": `${PAGE}#service` }, about: [{ "@id": `${BUSINESS.url}/products/hunter-douglas#service` }, { "@id": HUNTER_DOUGLAS["@id"] }, cityRef("Rathdrum")], spatialCoverage: cityRef("Rathdrum"), breadcrumb: { "@id": `${PAGE}#breadcrumb` }, hasPart: { "@id": `${PAGE}#faq` }, primaryImageOfPage: { "@id": `${PAGE}#primaryimage` }, inLanguage: "en-US" },
+      { "@type": "Service", "@id": `${PAGE}#service`, url: PAGE, name: "Hunter Douglas Window Treatments in Rathdrum", serviceType: CUSTOM_WINDOW_TREATMENTS, brand: { "@id": HUNTER_DOUGLAS["@id"] }, provider: { "@id": `${BUSINESS.url}/#business` }, areaServed: cityRef("Rathdrum"), description, mainEntityOfPage: { "@id": `${PAGE}#webpage` }, offers: { "@id": `${BUSINESS.url}/#free-consultation-offer` } },
+      { "@type": "ImageObject", "@id": `${PAGE}#primaryimage`, contentUrl: `${BUSINESS.url}${HERO}`, width: 2048, height: 1152, caption: "Hunter Douglas Vignette Roman Shades installed by Luxe Window Works", creator: { "@id": `${BUSINESS.url}/#business` }, creditText: "Luxe Window Works" },
       { "@type": "FAQPage", "@id": `${PAGE}#faq`, isPartOf: { "@id": `${PAGE}#webpage` }, mainEntity: faqs.map(f => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })) },
       { "@type": "BreadcrumbList", "@id": `${PAGE}#breadcrumb`, itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url }, { "@type": "ListItem", position: 2, name: "Rathdrum", item: `${BUSINESS.url}/areas/rathdrum` }, { "@type": "ListItem", position: 3, name: "Hunter Douglas", item: PAGE }] },
     ] }} />
@@ -102,7 +104,7 @@ export default function HunterDouglasRathdrumPage() {
     <section className="container-luxe py-14 md:py-20"><div className="max-w-2xl"><h2 className="font-serif text-3xl text-charcoal sm:text-4xl">Start with what your room needs.</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-700">You don’t need to choose a collection before we meet. These are a few starting points for your consultation.</p></div><div className="mt-9 grid gap-6 md:grid-cols-3">{collections.map(c => <article key={c.anchor} className="border border-warm-gray-200 bg-cream p-7"><p className="text-sm text-warm-gray-700">{c.collection}</p><h3 className="mt-3 font-serif text-2xl text-charcoal">{c.name}</h3><p className="mt-4 leading-relaxed text-warm-gray-700">{c.text}</p><Link href={`/products/hunter-douglas#${c.anchor}`} className="mt-6 inline-block font-semibold underline underline-offset-4">Explore {c.collection} →</Link></article>)}</div><p className="mt-8 text-warm-gray-700">Prefer roller shades, wood blinds or shutters? <Link href="/products/hunter-douglas#collections" className="font-semibold underline underline-offset-4">Explore the full Hunter Douglas collection.</Link></p></section>
     <HdCategoryStrip />
 
-    <section className="bg-cream py-14 md:py-20"><div className="container-luxe max-w-3xl"><h2 className="font-serif text-3xl text-charcoal sm:text-4xl">Hunter Douglas pricing for your Rathdrum home</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-700">Your window sizes, fabric, collection and controls determine the price. We’ll talk through your priorities, measure professionally and prepare a quote that includes installation.</p><p className="mt-4 leading-relaxed text-warm-gray-700">Working through a whole new house at once? Rathdrum's new subdivisions often mean a full set of bare windows, so we can compare options room by room and keep the project inside the budget you set.</p><div className="mt-7"><BookButton>Compare Options at Home</BookButton></div></div></section>
+    <section className="bg-cream py-14 md:py-20"><div className="container-luxe max-w-3xl"><h2 className="font-serif text-3xl text-charcoal sm:text-4xl">Hunter Douglas pricing for your Rathdrum home</h2><p className="mt-5 text-lg leading-relaxed text-warm-gray-700">Your window sizes, fabric, collection and controls determine the price. We’ll talk through your priorities, measure professionally and prepare a quote that includes installation.</p><p className="mt-4 leading-relaxed text-warm-gray-700">Working through a whole new house at once? Rathdrum&apos;s new subdivisions often mean a full set of bare windows, so we can compare options room by room and keep the project inside the budget you set.</p><div className="mt-7"><BookButton>Compare Options at Home</BookButton></div></div></section>
 
     <NorthIdahoReviewsStrip />
     <section className="container-luxe max-w-4xl py-14 md:py-20"><h2 className="mb-8 font-serif text-3xl text-charcoal sm:text-4xl">Your Hunter Douglas questions, answered.</h2>{faqs.map(f => <details key={f.question} className="border-b border-warm-gray-200 py-5"><summary className="cursor-pointer pr-4 text-lg font-semibold text-charcoal">{f.question}</summary><p className="mt-4 leading-relaxed text-warm-gray-700">{f.answer}</p></details>)}</section>

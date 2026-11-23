@@ -119,7 +119,7 @@ export default function FreeConsultationPage() {
         <p className="mt-5 text-sm text-warm-gray-200">Free consultation · Professional measuring · Lifetime installation guarantee</p>
       </section>
       <footer className="bg-charcoal border-t border-white/15 py-6 text-warm-gray-200">
-        <div className="container-luxe flex flex-col gap-3 text-sm sm:flex-row sm:justify-between"><p>Luxe Window Works · Serving North Idaho, Seattle's Eastside & the Salt Lake Area</p><Link href="/privacy" className="underline underline-offset-4">Privacy policy</Link></div>
+        <div className="container-luxe flex flex-col gap-3 text-sm sm:flex-row sm:justify-between"><p>Luxe Window Works · Serving North Idaho, Seattle&apos;s Eastside &amp; the Salt Lake Area</p><Link href="/privacy" className="underline underline-offset-4">Privacy policy</Link></div>
       </footer>
       <nav aria-label="Contact Luxe Window Works" className="fixed inset-x-0 bottom-0 z-40 flex gap-3 border-t border-warm-gray-200 bg-white px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-lg md:hidden">
         <TrackedCta href={BUSINESS.phoneHref} event={CONVERSION_EVENTS.PhoneClick} className="inline-flex min-h-12 items-center justify-center rounded-lg border border-charcoal px-5 font-semibold">Call</TrackedCta>

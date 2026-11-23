@@ -30,21 +30,42 @@ export const metadata: Metadata = {
   description:
     "How Luxe Window Works collects, uses, and protects information from visitors to luxewindowworks.com — including what our contact forms collect and which third-party services we use.",
   alternates: { canonical: PAGE_URL },
+  openGraph: {
+    title: "Privacy Policy | Luxe Window Works",
+    description:
+      "How Luxe Window Works collects, uses, and protects visitor information.",
+    url: PAGE_URL,
+    type: "website",
+  },
   robots: { index: true, follow: true },
 };
 
 const schema = {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  "@id": `${PAGE_URL}#webpage`,
-  url: PAGE_URL,
-  name: "Privacy Policy — Luxe Window Works",
-  description:
-    "How Luxe Window Works collects, uses, and protects visitor information.",
-  isPartOf: { "@id": `${BUSINESS.url}/#website` },
-  about: { "@id": `${BUSINESS.url}/#business` },
-  inLanguage: "en-US",
-  datePublished: "2026-08-04",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${PAGE_URL}#webpage`,
+      url: PAGE_URL,
+      name: "Privacy Policy — Luxe Window Works",
+      description:
+        "How Luxe Window Works collects, uses, and protects visitor information.",
+      isPartOf: { "@id": `${BUSINESS.url}/#website` },
+      about: { "@id": `${BUSINESS.url}/#website` },
+      mainEntity: { "@id": `${BUSINESS.url}/#business` },
+      breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
+      inLanguage: "en-US",
+      datePublished: "2026-08-04T00:00:00-07:00",
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${PAGE_URL}#breadcrumb`,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
+        { "@type": "ListItem", position: 2, name: "Privacy Policy", item: PAGE_URL },
+      ],
+    },
+  ],
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

@@ -20,7 +20,7 @@ export const BUSINESS = {
   google: {
     rating: 5.0,
     reviewCount: 20,
-    mapsUrl: "https://share.google/pRM5IoXZgRTksImvp",
+    mapsUrl: "https://www.google.com/maps?cid=13008922668104288642",
   },
   /**
    * Calendly event embedded on /book. Deliberately the only place this URL

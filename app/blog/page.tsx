@@ -6,73 +6,81 @@ export const dynamicParams = false;
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { JsonLd } from "@/components/JsonLd";
 import { BUSINESS } from "@/lib/constants";
 import { getAllPosts, getReadingTime } from "@/lib/blog";
 
+const PAGE_URL = `${BUSINESS.url}/blog`;
+const DESCRIPTION = `Expert window treatment advice from ${BUSINESS.name}. Buying guides, product comparisons, and installation insights for homes in North Idaho, Seattle's Eastside, and the Salt Lake area.`;
+
 export const metadata: Metadata = {
   title: "Blog | Window Treatment Tips & Guides",
-  description: `Expert window treatment advice from ${BUSINESS.name}. Tips on choosing the right blinds, shades, and shutters for Northern Idaho homes.`,
+  description: DESCRIPTION,
   alternates: {
-    canonical: "https://www.luxewindowworks.com/blog",
+    canonical: PAGE_URL,
   },
   openGraph: {
     title: "Blog | Luxe Window Works",
-    description: "Expert window treatment advice for Northern Idaho homeowners.",
+    description: DESCRIPTION,
+    url: PAGE_URL,
     type: "website",
     images: [
       {
-        url: "https://www.luxewindowworks.com/images/hero-modern-living.webp",
+        url: `${BUSINESS.url}/images/area-hero-living-room.webp`,
         width: 1200,
-        height: 630,
-        alt: "Luxe Window Works — Custom Window Treatments in Northern Idaho",
+        height: 960,
+        alt: "Sunlit living room with sheer horizontal shades across floor-to-ceiling windows",
       },
     ],
   },
 };
 
 function BlogListSchema() {
-  const pageUrl = `${BUSINESS.url}/blog`;
-  const webpageSchema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "@id": `${pageUrl}#webpage`,
-    url: pageUrl,
-    name: "Blog | Window Treatment Tips & Guides",
-    description: `Expert window treatment advice from ${BUSINESS.name}. Tips on choosing the right blinds, shades, and shutters for Northern Idaho homes.`,
-    isPartOf: { "@id": `${BUSINESS.url}/#website` },
-    about: { "@id": `${BUSINESS.url}/#business` },
-    mainEntity: { "@id": `${pageUrl}` },
-    breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
-    inLanguage: "en-US",
-  };
-  const blogSchema = {
-    "@context": "https://schema.org",
-    "@type": "Blog",
-    "@id": `${pageUrl}`,
-    name: "Luxe Window Works Blog",
-    description:
-      "Expert window treatment advice, buying guides, and design inspiration from 24 years of hands-on experience in Northern Idaho homes — by Mark Abplanalp, owner of Luxe Window Works.",
-    url: pageUrl,
-    inLanguage: "en-US",
-    author: { "@id": `${BUSINESS.url}/#owner` },
-    publisher: { "@id": `${BUSINESS.url}/#business` },
-  };
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "@id": `${pageUrl}#breadcrumb`,
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${BUSINESS.url}/` },
-      { "@type": "ListItem", position: 2, name: "Blog", item: pageUrl },
-    ],
-  };
-
   return (
-    <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-    </>
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "CollectionPage",
+            "@id": `${PAGE_URL}#webpage`,
+            url: PAGE_URL,
+            name: "Blog | Window Treatment Tips & Guides",
+            description: DESCRIPTION,
+            isPartOf: { "@id": `${BUSINESS.url}/#website` },
+            about: { "@id": `${BUSINESS.url}/#business` },
+            mainEntity: { "@id": `${PAGE_URL}` },
+            breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
+            primaryImageOfPage: {
+              "@type": "ImageObject",
+              url: `${BUSINESS.url}/images/area-hero-living-room.webp`,
+              width: 1200,
+              height: 960,
+            },
+            inLanguage: "en-US",
+          },
+          {
+            "@type": "Blog",
+            "@id": `${PAGE_URL}`,
+            name: "Luxe Window Works Blog",
+            description:
+              "Expert window treatment advice, buying guides, and design inspiration from 24 years of hands-on experience — by Mark Abplanalp, owner of Luxe Window Works.",
+            url: PAGE_URL,
+            inLanguage: "en-US",
+            author: { "@id": `${BUSINESS.url}/#owner` },
+            publisher: { "@id": `${BUSINESS.url}/#business` },
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": `${PAGE_URL}#breadcrumb`,
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: BUSINESS.url },
+              { "@type": "ListItem", position: 2, name: "Blog", item: PAGE_URL },
+            ],
+          },
+        ],
+      }}
+    />
   );
 }
 
@@ -207,7 +215,7 @@ export default function BlogPage() {
           </h1>
           <p className="mt-4 text-lg text-warm-gray-200 leading-relaxed">
             Expert advice, buying guides, and design inspiration from 24 years
-            of hands-on experience in Northern Idaho homes.
+            of hands-on window treatment experience.
           </p>
         </div>
       </section>
@@ -224,8 +232,8 @@ export default function BlogPage() {
             Have Questions About Your Windows?
           </h2>
           <p className="text-warm-gray-500 mb-8">
-            We offer free in-home consultations throughout Northern Idaho.
-            Get personalized advice for your specific situation.
+            We offer free in-home consultations in North Idaho, on Seattle&apos;s Eastside, and in the Salt Lake area.
+            Get personalized advice for your specific windows.
           </p>
           <Link
             href="/book"

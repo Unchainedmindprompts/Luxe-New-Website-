@@ -18,10 +18,10 @@ export const metadata: Metadata = {
     url: `${BUSINESS.url}/gallery`,
     images: [
       {
-        url: "/images/luxe-completed-installation.webp",
-        width: 2048,
-        height: 1152,
-        alt: "Custom flat panel Roman shades in a timber great room",
+        url: `${BUSINESS.url}/images/gallery/flat-panel-roman-shades-timber-great-room.webp`,
+        width: 1800,
+        height: 1013,
+        alt: "Flat panel Roman shades installed throughout a timber great room",
       },
     ],
   },
@@ -215,6 +215,16 @@ const schema = {
         "A selection of completed window treatment projects from 24 years in the industry.",
       isPartOf: { "@id": `${BUSINESS.url}/#website` },
       about: { "@id": `${BUSINESS.url}/#business` },
+      mainEntity: {
+        "@type": "ItemList",
+        name: "Completed Custom Window Treatment Projects",
+        numberOfItems: imageObjects.length,
+        itemListElement: imageObjects.map((image, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          item: { "@id": image["@id"] },
+        })),
+      },
       breadcrumb: { "@id": `${BUSINESS.url}/gallery#breadcrumb` },
       primaryImageOfPage: { "@id": imageObjects[0]["@id"] },
       image: imageObjects.map((image) => ({ "@id": image["@id"] })),

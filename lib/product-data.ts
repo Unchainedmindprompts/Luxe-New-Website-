@@ -665,7 +665,7 @@ export const productPages: Record<string, ProductPageData> = {
       youtubeId: "BTVQo6bRGEw",
       title: "Motorized Window Treatments — Luxe Window Works",
       description: "See motorized window treatments in action — installed by Luxe Window Works in Northern Idaho. One tap controls every shade in the room. Battery-powered motors, no hardwiring required. Serving North Idaho, Seattle's Eastside, and the Salt Lake area.",
-      uploadDate: "2025-08-30",
+      uploadDate: "2025-08-30T00:00:00-07:00",
       duration: "PT53S",
     },
     secondVideo: {
@@ -673,7 +673,7 @@ export const productPages: Record<string, ProductPageData> = {
       youtubeId: "nY_XVjk9Bco",
       title: "The Dog Days Of Summer!",
       description: "Motorized window shades from Luxe Window Works. Push-button operation, no cords, safe for kids and pets, and perfect for hard-to-reach windows. Serving North Idaho, Seattle's Eastside, and the Salt Lake area. Free in-home consultations and 24 years consulting, designing, and installing window treatments.",
-      uploadDate: "2025-08-22",
+      uploadDate: "2025-08-22T00:00:00-07:00",
       duration: "PT9S",
     },
     // Motorization is the largest block of unmet local demand in Search

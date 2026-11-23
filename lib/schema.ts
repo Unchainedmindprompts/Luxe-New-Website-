@@ -76,6 +76,41 @@ export const CUSTOM_WINDOW_TREATMENTS = "Custom Window Treatments";
  * assembled from a returned string, so the source sweep still recognises this
  * line as a reference to the `<HOST>/products/${slug}#service` pattern def.
  */
-export function productServiceRef(slug: ProductSlug | "aluminum-shutters") {
+export function productServiceRef(
+  slug: ProductSlug | "aluminum-shutters" | "hunter-douglas" | "norman"
+) {
   return { "@id": `${BUSINESS.url}/products/${slug}#service` };
+}
+
+/**
+ * Normalizes any YYYY-MM-DD or ISO 8601 timestamp into an explicit
+ * America/Los_Angeles ISO 8601 string (automatically applying -08:00 PST vs
+ * -07:00 PDT for the specific date).
+ */
+export function toPacificIso(raw: string): string {
+  const trimmed = raw.trim();
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/.test(trimmed)) {
+    return trimmed;
+  }
+  const instant = /^\d{4}-\d{2}-\d{2}$/.test(trimmed)
+    ? new Date(`${trimmed}T12:00:00Z`)
+    : new Date(trimmed);
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/Los_Angeles",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+      timeZoneName: "longOffset",
+    })
+      .formatToParts(instant)
+      .map((p) => [p.type, p.value])
+  );
+  const offset = (parts.timeZoneName || "GMT-08:00").replace("GMT", "") || "-08:00";
+  const hh = parts.hour === "24" ? "00" : parts.hour;
+  return `${parts.year}-${parts.month}-${parts.day}T${hh}:${parts.minute}:${parts.second}${offset}`;
 }

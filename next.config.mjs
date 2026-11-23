@@ -61,6 +61,15 @@ const nextConfig = {
     ];
   },
 
+  async rewrites() {
+    return [
+      {
+        source: "/.well-known/agent.json",
+        destination: "/agent.json",
+      },
+    ];
+  },
+
   async redirects() {
     // Everything Search Console reported under "Not found (404)" on 2026-08-04.
     // Nearly all of it is the old WordPress top-level structure — product and

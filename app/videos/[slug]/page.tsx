@@ -58,6 +58,10 @@ export default async function VideoPage({ params }: Props) {
           isPartOf: { "@id": `${BUSINESS.url}/#website` },
           mainEntity: { "@id": `${BUSINESS.url}/videos/${slug}#video` },
           breadcrumb: { "@id": `${BUSINESS.url}/videos/${slug}#breadcrumb` },
+          primaryImageOfPage: {
+            "@type": "ImageObject",
+            url: videoThumbnail(video),
+          },
           inLanguage: "en-US",
         },
         {
@@ -87,7 +91,7 @@ export default async function VideoPage({ params }: Props) {
           ],
         },
       ] }} />
-      <Breadcrumbs items={[{ label: "Home", href: "/" }, breadcrumb, { label: "Video" }]} />
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, breadcrumb, { label: video.shortTitle }]} />
 
       <section className="bg-cream pb-10 md:pb-14">
         <div className="container-luxe max-w-5xl">

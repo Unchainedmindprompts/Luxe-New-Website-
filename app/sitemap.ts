@@ -1,25 +1,26 @@
 import { MetadataRoute } from 'next'
 import { getAllSlugs, getPost } from '@/lib/blog'
+import { toPacificIso } from '@/lib/schema'
 import { LUXE_VIDEOS, videoUrl } from '@/lib/videos'
 
 export const revalidate = 3600
 
+// Deterministic baseline timestamp for static routes rather than new Date() on every crawl.
+const STATIC_LAST_MODIFIED = '2026-11-22T00:00:00-08:00'
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.luxewindowworks.com'
-  const currentDate = new Date().toISOString()
+  const currentDate = STATIC_LAST_MODIFIED
 
   const slugs = await getAllSlugs()
   const posts = await Promise.all(slugs.map((s) => getPost(s)))
 
   const blogPosts: MetadataRoute.Sitemap = slugs.map((slug, i) => {
     const post = posts[i]
+    const rawDate = post?.dateModified || post?.date
     return {
       url: `${baseUrl}/blog/${slug}`,
-      lastModified: post?.dateModified
-        ? new Date(post.dateModified).toISOString()
-        : post?.date
-        ? new Date(post.date).toISOString()
-        : currentDate,
+      lastModified: rawDate ? toPacificIso(rawDate) : currentDate,
       changeFrequency: 'monthly',
       priority: 0.6,
     }

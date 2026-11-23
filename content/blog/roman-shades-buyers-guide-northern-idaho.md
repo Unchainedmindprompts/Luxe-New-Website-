@@ -198,32 +198,6 @@ wordCount: 2850
 
 <p>These ranges reflect professional fabrication, custom sizing, professional installation, and a lifetime installation guarantee. They do not reflect big-box or online-only pricing, which typically comes without professional measuring, installation, or warranty support.</p>
 
-<h2>Frequently Asked Questions</h2>
-
-<h3>Are roman shades hard to clean?</h3>
-
-<p>Flat roman shades are the easiest to maintain — a light vacuum with a brush attachment and occasional spot cleaning keeps them looking fresh for years. Hobbled and waterfall styles require more care because the folds collect dust. Avoid machine washing roman shades — the fabric can shrink or warp. Most quality roman shades can be professionally dry cleaned when needed, but with regular vacuuming, most homeowners go years without needing it.</p>
-
-<h3>Do roman shades work for large windows?</h3>
-
-<p>Yes, but with limitations. Roman shades work best on windows up to about 72 inches wide. Beyond that, the fabric can bow or the shade can become heavy and difficult to operate manually. For very wide windows — common in Northern Idaho luxury builds — consider splitting the opening into two narrower roman shades side by side, or switching to motorization, which handles heavier shades easily.</p>
-
-<h3>How long do roman shades last?</h3>
-
-<p>A professionally fabricated roman shade from a quality manufacturer, properly installed and maintained, should last 10–15 years. The fabric typically shows wear before the hardware fails. UV exposure accelerates fading — using a UV-protective liner or solar fabric on sun-facing windows extends fabric life significantly.</p>
-
-<h3>Can roman shades be used in a home with kids or pets?</h3>
-
-<p>Yes — with the right configuration. Choose cordless or motorized operation to eliminate cord hazards (federal safety standards now require this on most new window coverings). Fabric-wise, look for durable, washable options if the shades will be in high-traffic areas. Avoid delicate fabrics like silk blends in rooms where kids or pets regularly interact with the window.</p>
-
-<h3>Are roman shades energy efficient?</h3>
-
-<p>More than roller shades, less than cellular shades. The key variable is the lining. A roman shade with a standard lining provides minimal insulation. A roman shade with a blackout or thermal lining provides meaningful insulation — reducing heat loss in winter and heat gain in summer. For maximum energy efficiency in Northern Idaho&apos;s climate, cellular shades remain the best performer. But a lined roman shade significantly outperforms an unlined one and is a solid choice for rooms where aesthetics are the priority alongside reasonable energy performance.</p>
-
-<h3>Can I put roman shades in a room that already has drapes?</h3>
-
-<p>Absolutely — this is one of the best design combinations available. Roman shades under drapes is a classic layered window treatment: the roman shade handles daily light control and privacy, while the drapes frame the window and provide full blackout when pulled closed. It&apos;s a particularly popular combination in primary bedrooms and formal living rooms.</p>
-
 <div style="background:#faf6ed;border-left:4px solid #c9a961;padding:1rem 1.25rem;margin:2rem 0;border-radius:0 .25rem .25rem 0;">
 <p style="margin:0 0 .5rem;font-weight:600;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:#a8862d;">Continue Exploring Soft Treatments</p>
 <ul style="margin:0;padding-left:1.25rem;">

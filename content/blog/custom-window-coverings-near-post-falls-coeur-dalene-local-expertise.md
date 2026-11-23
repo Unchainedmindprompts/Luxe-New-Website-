@@ -125,26 +125,4 @@ wordCount: 2500
 
 <p>Also watch for consultants who push a single product solution without asking detailed questions about your home, your light needs, and your priorities. Every room is different. A consultant who recommends the same product for your bedroom, your kitchen, and your lakefront living room without explanation is not drawing on deep product knowledge — they are selling what is easiest.</p>
 
-<h2>Frequently Asked Questions</h2>
-
-<h3>What is the best type of window covering for a Northern Idaho home?</h3>
-
-<p>There is no single best option — it depends on the room, the window size, the light conditions, and how the space is used. Cellular shades are the strongest performers for energy efficiency in Northern Idaho&apos;s climate. Roller shades work well for clean modern interiors and wide spans. Shutters offer the best long-term durability and light control. A good consultation will match the treatment to the specific conditions of each window rather than applying one solution to the whole house.</p>
-
-<h3>How much do custom window coverings cost near Post Falls and Coeur d&apos;Alene?</h3>
-
-<p>Custom window coverings vary widely based on product type, window size, and whether motorization is included. A single cellular shade for a standard window typically starts around $300–$500 installed. A whole-home project covering multiple rooms can range from $3,000 to well over $10,000 depending on scope and product selection. The in-home consultation gives you an accurate number for your specific situation without obligation.</p>
-
-<h3>Is it worth hiring a local window treatment specialist instead of going to a big box store?</h3>
-
-<p>For simple, standard windows in low-stakes rooms, big box options can work. For custom sizes, difficult mounting conditions, high-end interiors, or any situation where the installation needs to be right the first time, a local specialist is worth the difference in cost. The measurement accuracy, product knowledge, and installation guarantee that come with a professional installation are not available at a retail store.</p>
-
-<h3>How long does a custom window covering installation take in Northern Idaho?</h3>
-
-<p>Most residential installations are completed in a single visit once the products arrive. Lead times from order to installation typically run three to five weeks depending on the manufacturer and product. Rush options are available on select products. The in-home consultation includes a realistic timeline based on what you are ordering.</p>
-
-<h3>Do you serve Hayden, Rathdrum, and Sandpoint in addition to Post Falls and Coeur d&apos;Alene?</h3>
-
-<p>Yes. Luxe Window Works serves homeowners across Northern Idaho including Post Falls, Coeur d&apos;Alene, Hayden, Rathdrum, and Sandpoint. The in-home consultation is available throughout the service area at no charge.</p>
-
 <p><strong>Mark Abplanalp</strong> is the owner of Luxe Window Works and has spent 24 years selling and installing window treatments across the Pacific Northwest. Luxe Window Works offers free in-home consultations throughout Northern Idaho. <a href="/book">Book your consultation</a> and get personalized recommendations for your specific home — no pressure, no obligation.</p>
